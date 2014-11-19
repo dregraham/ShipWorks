@@ -124,7 +124,9 @@
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(411, 546);
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -136,6 +138,7 @@
             // 
             // mainPanel
             // 
+            this.mainPanel.Controls.Add(this.wizardPageFinishAddAccount);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -348,7 +351,7 @@
             this.wizardPageFinishOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinishOlt.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinishOlt.Name = "wizardPageFinishOlt";
-            this.wizardPageFinishOlt.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageFinishOlt.Size = new System.Drawing.Size(579, 474);
             this.wizardPageFinishOlt.TabIndex = 0;
             this.wizardPageFinishOlt.Title = "Setup Complete";
             // 
@@ -666,7 +669,7 @@
             this.wizardPageFinishAddAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageFinishAddAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageFinishAddAccount.Name = "wizardPageFinishAddAccount";
-            this.wizardPageFinishAddAccount.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageFinishAddAccount.Size = new System.Drawing.Size(579, 474);
             this.wizardPageFinishAddAccount.TabIndex = 0;
             this.wizardPageFinishAddAccount.Title = "Setup Complete";
             // 
@@ -856,6 +859,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(579, 581);
+            this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "UpsSetupWizard";

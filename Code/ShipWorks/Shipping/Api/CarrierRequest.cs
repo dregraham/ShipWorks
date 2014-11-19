@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Api
         /// Gets or sets the native request (WSDL generated proxy-class, raw XML, etc.) that the carrier request is representing. 
         /// </summary>
         /// <value>The native request.</value>
-        public object NativeRequest { get; protected set; }
+        public virtual object NativeRequest { get; protected set; }
 
         /// <summary>
         /// Gets the shipment entity.

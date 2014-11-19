@@ -9,11 +9,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsOpenAccountErrorCode
     {
+        [Description("Unknown Error")]
+        UnknownError = 0,
+
         [Description("Missing required field(s)")]
-        MissingRequiredFields = 0,
+        MissingRequiredFields = 1,
 
         [Description("The request to open a new UPS account failed because pickup address is not valid for SMART Pickup")]
-        SmartPickupError = 1
+        SmartPickupError = 2
 
     }
 }

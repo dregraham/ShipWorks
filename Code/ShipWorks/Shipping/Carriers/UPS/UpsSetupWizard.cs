@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
+using Apitron.PDF.Rasterizer;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
@@ -275,7 +276,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     Pages.Remove(wizardPageAccount);
                 }
 
-                // TODO: May need to remove the rates page too
+                Pages.Remove(wizardPageRates);
             }
 
             // If the account list page is present, that means we arent creating accounts from this wizard flow directly
@@ -773,20 +774,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 if (upsBillingContactInfoControl.SameAsPickup)
                 {
                     CreateAccount();
-                    e.NextPage = wizardPageRates;
+                    e.NextPage = Pages[Pages.Count - 1]; // Go to last page.
                 }
             }
             catch (UpsOpenAccountException ex)
             {
-                if (ex.ErrorCode == UpsOpenAccountErrorCode.MissingRequiredFields)
+                if (ex.ErrorCode != UpsOpenAccountErrorCode.MissingRequiredFields)
                 {
-                    // The person control already showed a message, cancel and return.
-                    e.NextPage = CurrentPage;
+                    // If MissingRequiredFields, The person control already showed a message, cancel and return.
+                    MessageHelper.ShowMessage(this, ex.Message);
                 }
-                else
-                {
-                    throw;
-                }
+                e.NextPage = CurrentPage;
             }
         }
 
@@ -802,15 +800,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountException ex)
             {
-                if (ex.ErrorCode == UpsOpenAccountErrorCode.MissingRequiredFields)
+                if (ex.ErrorCode != UpsOpenAccountErrorCode.MissingRequiredFields)
                 {
-                    // The person control already showed a message, cancel and return.
-                    e.NextPage = CurrentPage;
+                    // If MissingRequiredFields, The person control already showed a message, cancel and return.
+                    MessageHelper.ShowMessage(this, ex.Message);
                 }
-                else
-                {
-                    throw;
-                }
+                e.NextPage = CurrentPage;
             }
         }
 
@@ -895,6 +890,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Creates the account.
+        /// </summary>
+        /// <exception cref="System.NotImplementedException"></exception>
+        private void CreateAccount()
+        {
+            string newAccountNumber = OpenUpsAccount(new UpsClerk(upsAccount));
+            if (!string.IsNullOrEmpty(newAccountNumber))
+            {
+                RegisterAccount(newAccountNumber);
+            }
+        }
+
+        /// <summary>
         /// Creates the ups account. Note the recursive call to correct the address.
         /// </summary>
         /// <param name="clerk">The clerk.</param>
@@ -902,19 +910,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private string OpenUpsAccount(IUpsClerk clerk)
         {
             return OpenUpsAccount(clerk, false);
-        }
-
-        /// <summary>
-        /// Creates the account.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        private void CreateAccount()
-        {
-            string newAccountNumber = OpenUpsAccount(new UpsClerk());
-            if (!string.IsNullOrEmpty(newAccountNumber))
-            {
-                RegisterAccount(newAccountNumber);
-            }
         }
 
         /// <summary>

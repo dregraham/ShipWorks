@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
 
             requestManipulators = new List<ICarrierRequestManipulator>() { firstManipulator.Object, secondManipulator.Object };
 
-            testObject = new UpsOpenAccountRequest(requestManipulators, upsService.Object, responseFactory.Object, new OpenAccountRequest());
+            testObject = new UpsOpenAccountRequest(requestManipulators, upsService.Object, responseFactory.Object, new OpenAccountRequest(), new UpsAccountEntity());
         }
 
         [TestMethod]

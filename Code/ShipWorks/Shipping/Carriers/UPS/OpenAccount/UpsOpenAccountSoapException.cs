@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Extract the numeric errror code from the Stamps.com exception
         /// </summary>
-        public void ParseException(SoapException ex)
+        private void ParseException(SoapException ex)
         {
             message = "";
 
@@ -52,28 +52,36 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                     throw new UpsOpenAccountException("SMART Pickup Exception", UpsOpenAccountErrorCode.SmartPickupError);
                 }
 
-                // Find the first message node
-                foreach (XElement messageNode in faultNode.Descendants().Where(e => e.Name.LocalName == "message"))
+                XElement errorDescriptionElement = faultNode.Descendants(nameSpace + "Description").FirstOrDefault();
+                if (errorDescriptionElement != null)
                 {
-                    if (messageNode != null)
+                    message = errorDescriptionElement.Value;
+                }
+                else
+                {
+                    // Find the first message node
+                    foreach (XElement messageNode in faultNode.Descendants().Where(e => e.Name.LocalName == "message"))
                     {
-                        string text = (string) messageNode;
-
-                        text = Regex.Replace(text, "@.*?'", "'", RegexOptions.Singleline);
-                        text = Regex.Replace(text, "@.*?$", "", RegexOptions.Singleline);
-
-                        text = text.Trim();
-                        if (!text.EndsWith(".", StringComparison.InvariantCulture))
+                        if (messageNode != null)
                         {
-                            text += ".";
-                        }
+                            string text = (string)messageNode;
 
-                        if (message.Length > 0)
-                        {
-                            message += "\n";
-                        }
+                            text = Regex.Replace(text, "@.*?'", "'", RegexOptions.Singleline);
+                            text = Regex.Replace(text, "@.*?$", "", RegexOptions.Singleline);
 
-                        message += text;
+                            text = text.Trim();
+                            if (!text.EndsWith(".", StringComparison.InvariantCulture))
+                            {
+                                text += ".";
+                            }
+
+                            if (message.Length > 0)
+                            {
+                                message += "\n";
+                            }
+
+                            message += text;
+                        }
                     }
                 }
             }

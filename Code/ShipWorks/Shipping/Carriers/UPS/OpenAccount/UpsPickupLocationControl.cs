@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             request.PickupAddress.Phone.Number = upsAccountEntity.Phone;
             request.PickupAddress.PostalCode = upsAccountEntity.PostalCode;
             request.PickupAddress.StateProvinceCode = upsAccountEntity.StateProvCode;
-            request.PickupAddress.StreetAddress = personAdapter.StreetAll;
+            request.PickupAddress.StreetAddress = personAdapter.StreetAll.Replace("\r\n", ", ");
         }
     }
 }

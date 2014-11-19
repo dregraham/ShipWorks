@@ -99,6 +99,7 @@
             this.sameAsPickupYes.TabStop = true;
             this.sameAsPickupYes.Text = "Yes";
             this.sameAsPickupYes.UseVisualStyleBackColor = true;
+            this.sameAsPickupYes.Checked = true;
             // 
             // sameAsPickupNo
             // 
