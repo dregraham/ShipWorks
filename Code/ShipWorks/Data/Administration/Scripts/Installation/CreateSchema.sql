@@ -1782,8 +1782,7 @@ CREATE TABLE [dbo].[FilterNode]
 [FilterSequenceID] [bigint] NOT NULL,
 [FilterNodeContentID] [bigint] NOT NULL,
 [Created] [datetime] NOT NULL,
-[Purpose] [int] NOT NULL,
-[State] [tinyint] NOT NULL
+[Purpose] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNode] on [dbo].[FilterNode]'
@@ -1793,10 +1792,6 @@ GO
 PRINT N'Creating index [IX_FilterNode_ParentFilterNodeID] on [dbo].[FilterNode]'
 GO
 CREATE NONCLUSTERED INDEX [IX_FilterNode_ParentFilterNodeID] ON [dbo].[FilterNode] ([ParentFilterNodeID])
-GO
-PRINT N'Creating index [IX_FilterNode_State] on [dbo].[FilterNode]'
-GO
-CREATE NONCLUSTERED INDEX [IX_FilterNode_State] ON [dbo].[FilterNode] ([State])
 GO
 PRINT N'Creating [dbo].[FilterLayout]'
 GO
@@ -1913,12 +1908,17 @@ CREATE TABLE [dbo].[Filter]
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
-[Definition] [xml] NULL
+[Definition] [xml] NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
+GO
+PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO

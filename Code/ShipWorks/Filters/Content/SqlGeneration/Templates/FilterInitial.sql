@@ -1,4 +1,12 @@
-if EXISTS(SELECT * FROM FilterNode WHERE FilterNodeID = @filterNodeID and [State] = 0)
+if EXISTS
+(
+	SELECT * FROM FilterNode n
+	INNER JOIN FilterSequence s
+	ON n.FilterSequenceID = s.FilterSequenceID
+	INNER JOIN Filter f
+	ON s.FilterID = f.FilterID
+	WHERE FilterNodeID = @filterNodeID and f.[State] = 0
+)
 BEGIN
 	UPDATE FilterNodeContent
 	  SET [Status] = 1,

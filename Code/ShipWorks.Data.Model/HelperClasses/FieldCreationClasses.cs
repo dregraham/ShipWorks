@@ -7397,6 +7397,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.Definition);}
 		}
+		/// <summary>Creates a new FilterEntity.State field instance</summary>
+		public static EntityField2 State
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.State);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterLayoutEntity</summary>
@@ -7466,11 +7471,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Purpose
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeFieldIndex.Purpose);}
-		}
-		/// <summary>Creates a new FilterNodeEntity.State field instance</summary>
-		public static EntityField2 State
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(FilterNodeFieldIndex.State);}
 		}
 	}
 

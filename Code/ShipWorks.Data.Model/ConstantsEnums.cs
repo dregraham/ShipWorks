@@ -3439,6 +3439,8 @@ namespace ShipWorks.Data.Model
 		IsFolder,
 		///<summary>Definition. </summary>
 		Definition,
+		///<summary>State. </summary>
+		State,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3485,8 +3487,6 @@ namespace ShipWorks.Data.Model
 		Created,
 		///<summary>Purpose. </summary>
 		Purpose,
-		///<summary>State. </summary>
-		State,
 		/// <summary></summary>
 		AmountOfFields
 	}

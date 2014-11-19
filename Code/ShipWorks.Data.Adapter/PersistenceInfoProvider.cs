@@ -1257,13 +1257,14 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FilterEntity's mappings</summary>
 		private void InitFilterEntityMappings()
 		{
-			base.AddElementMapping( "FilterEntity", "ShipWorksLocal", @"dbo", "Filter", 6 );
+			base.AddElementMapping( "FilterEntity", "ShipWorksLocal", @"dbo", "Filter", 7 );
 			base.AddElementFieldMapping( "FilterEntity", "FilterID", "FilterID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FilterEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "FilterEntity", "Name", "Name", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "FilterEntity", "FilterTarget", "FilterTarget", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 3 );
 			base.AddElementFieldMapping( "FilterEntity", "IsFolder", "IsFolder", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 4 );
 			base.AddElementFieldMapping( "FilterEntity", "Definition", "Definition", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "FilterEntity", "State", "State", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 6 );
 		}
 		/// <summary>Inits FilterLayoutEntity's mappings</summary>
 		private void InitFilterLayoutEntityMappings()
@@ -1278,7 +1279,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FilterNodeEntity's mappings</summary>
 		private void InitFilterNodeEntityMappings()
 		{
-			base.AddElementMapping( "FilterNodeEntity", "ShipWorksLocal", @"dbo", "FilterNode", 8 );
+			base.AddElementMapping( "FilterNodeEntity", "ShipWorksLocal", @"dbo", "FilterNode", 7 );
 			base.AddElementFieldMapping( "FilterNodeEntity", "FilterNodeID", "FilterNodeID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FilterNodeEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "FilterNodeEntity", "ParentFilterNodeID", "ParentFilterNodeID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -1286,7 +1287,6 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FilterNodeEntity", "FilterNodeContentID", "FilterNodeContentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 4 );
 			base.AddElementFieldMapping( "FilterNodeEntity", "Created", "Created", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 5 );
 			base.AddElementFieldMapping( "FilterNodeEntity", "Purpose", "Purpose", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 6 );
-			base.AddElementFieldMapping( "FilterNodeEntity", "State", "State", false, (int)SqlDbType.TinyInt, 0, 0, 3, false, "", null, typeof(System.Byte), 7 );
 		}
 		/// <summary>Inits FilterNodeColumnSettingsEntity's mappings</summary>
 		private void InitFilterNodeColumnSettingsEntityMappings()
