@@ -25,14 +25,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 express1TargetedText = "No more switching between accounts to get the lowest rates!";
             }
 
-            this.signUpForExpeditedControl.DiscountText = "ShipWorks and IntuiShip can now save you up to 46% on USPS Priority Mail and Priority Mail " +
-                                                          "Express shipments, all through one single Stamps.com account. " + express1TargetedText 
+            this.signUpForExpeditedControl.DiscountText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
+                                                          "IntuiShip, all through one single Stamps.com account. " + express1TargetedText 
                                                           + Environment.NewLine + Environment.NewLine + "To get these discounts, you " +
                                                           "just need to open a free Stamps.com account which will enable you to easily print both USPS Priority Mail " +
                                                           "and Priority Mail Express labels and First Class shipping labels, all within one account.";
 
-            this.convertToExpeditedControl.DescriptionText = "ShipWorks and IntuiShip can now save you up to 46% on USPS Priority Mail and " +
-                                                             "Priority Mail Express shipments, all through one single Stamps.com account. No " +
+            this.convertToExpeditedControl.DescriptionText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
+                                                             "IntuiShip, all through one single Stamps.com account. No " +
                                                              "more switching between accounts to get the lowest rates!" + Environment.NewLine + Environment.NewLine + 
                                                              "ShipWorks offers these discounted rates through IntuiShip, a partner of the USPS.";
 
