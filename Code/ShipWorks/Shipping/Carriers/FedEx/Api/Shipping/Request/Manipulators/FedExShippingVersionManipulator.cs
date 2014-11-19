@@ -46,7 +46,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 Minor = 0,
                 Intermediate = 0
             };
-
         }
 
         /// <summary>

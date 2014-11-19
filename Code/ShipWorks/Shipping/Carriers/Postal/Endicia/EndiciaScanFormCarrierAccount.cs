@@ -142,6 +142,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Shipment has to be processed and not yet voided
                 ShipmentFields.Processed == true & ShipmentFields.Voided == false &
 
+                // Shipment isn't a return
+                ShipmentFields.ReturnShipment == false &
+
                 // Has to not have been scanned yet and is for the selected account
                 EndiciaShipmentFields.ScanFormBatchID == DBNull.Value &
                 EndiciaShipmentFields.EndiciaAccountID == accountEntity.EndiciaAccountID &
