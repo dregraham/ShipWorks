@@ -1196,7 +1196,7 @@ namespace ShipWorks.Filters.Controls
                 FilterCount count = FilterContentManager.GetCount(quickFilterNode.FilterNodeID);
                 if (count != null)
                 {
-                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.State == (int)FilterNodeState.Enabled);
+                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int)FilterState.Enabled);
                     
                     if (count.Status == FilterCountStatus.Ready)
                     {

@@ -21,7 +21,7 @@ namespace ShipWorks.Filters.Controls
         FilterNodeEntity filterNode;
         FilterCount filterCount;
 
-        private FilterNodeState? previousFilterState;
+        private FilterState? previousFilterState;
 
         /// <summary>
         /// Constructor
@@ -93,10 +93,10 @@ namespace ShipWorks.Filters.Controls
         public void UpdateStyle()
         {
             // We have a previous state, so only toggle the style if the state has changed
-            if (!previousFilterState.HasValue || previousFilterState != (FilterNodeState) filterNode.State)
+            if (!previousFilterState.HasValue || previousFilterState != (FilterState) filterNode.Filter.State)
             {
-                ToggleStyle((FilterNodeState) filterNode.State);
-                previousFilterState = (FilterNodeState) filterNode.State;
+                ToggleStyle((FilterState) filterNode.Filter.State);
+                previousFilterState = (FilterState) filterNode.Filter.State;
             }
         }
 
@@ -106,9 +106,9 @@ namespace ShipWorks.Filters.Controls
         /// font/color.
         /// </summary>
         /// <param name="filterState">State of the filter.</param>
-        private void ToggleStyle(FilterNodeState filterState)
+        private void ToggleStyle(FilterState filterState)
         {
-            bool isFilterDisabled = filterState == (byte)FilterNodeState.Disabled;
+            bool isFilterDisabled = filterState == (byte)FilterState.Disabled;
 
             // We need to use a new disabled font each time we toggle since it's disposable and the
             // FilterTreeGridRow is not

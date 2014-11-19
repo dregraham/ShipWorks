@@ -31,6 +31,7 @@ namespace ShipWorks.Filters.Management
             filter.FilterTarget = (int) target;
             filter.IsFolder = false;
             filter.Definition = null;
+            filter.State = (int) FilterState.Enabled;
 
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Parent = null;
@@ -53,7 +54,6 @@ namespace ShipWorks.Filters.Management
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
             node.Purpose = (int)FilterNodePurpose.Quick;
-            node.State = (int)FilterNodeState.Enabled;
 
             return node;
         }

@@ -218,7 +218,7 @@ namespace ShipWorks.Actions.Tasks
             // Alert the user if they have chosen to use a disabled filter
             if (restrictFilter.Checked &&
                 entity.FilterConditionNodeID != restrictFilterCombo.SelectedFilterNodeID &&
-                restrictFilterCombo.SelectedFilterNode.State != (byte) FilterNodeState.Enabled)
+                restrictFilterCombo.SelectedFilterNode.Filter.State != (byte)FilterState.Enabled)
             {
                 DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
                         "The selected filter has been disabled.\n\nDo you want to use this filter anyway?");

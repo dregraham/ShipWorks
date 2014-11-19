@@ -93,6 +93,7 @@ namespace ShipWorks.Filters.Search
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = false;
                     filter.Definition = null;
+                    filter.State = (int) FilterState.Enabled;
                     adapter.SaveAndRefetch(filter);
 
                     FilterSequenceEntity sequence = new FilterSequenceEntity();
@@ -121,7 +122,6 @@ namespace ShipWorks.Filters.Search
                     node.FilterNodeContent = content;
                     node.Created = DateTime.UtcNow;
                     node.Purpose = (int) FilterNodePurpose.Search;
-                    node.State = (int) FilterNodeState.Enabled;
                     adapter.SaveAndRefetch(node);
                 }
                 finally

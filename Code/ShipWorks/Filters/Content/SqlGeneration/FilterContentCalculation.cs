@@ -48,7 +48,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
                 filterDefinition = GetEffectiveFilterDefinition(node);
                 filterSqlContext = new SqlGenerationContext(filterDefinition.FilterTarget);
 
-                if (filterDefinition.IsEmpty() || node.State == (byte)FilterNodeState.Disabled)
+                if (filterDefinition.IsEmpty() || node.Filter.State == (byte)FilterState.Disabled)
                 {
                     filterSqlPredicate = "WHERE 1 = 2";
                 }

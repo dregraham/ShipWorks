@@ -193,7 +193,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 // Adjust font for disabled nodes
-                if (filterTreeRow.FilterNode.State == (byte) FilterNodeState.Disabled)
+                if (filterTreeRow.FilterNode.Filter.State == (byte) FilterState.Disabled)
                 {
                     using (DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont))
                     {

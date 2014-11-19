@@ -463,7 +463,7 @@ namespace ShipWorks.Actions.Tasks
             if (inputSourceFilter.SelectedFilterNode != null)
             {
                 task.Entity.InputFilterNodeID = inputSourceFilter.SelectedFilterNode.FilterNodeID;
-                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.State != (byte) FilterNodeState.Enabled &&
+                usesDisabledFilter = inputSourceFilter.SelectedFilterNode.Filter.State != (byte) FilterState.Enabled &&
                     inputSourceFilter.SelectedFilterNodeID != initialInputFilterNodeId;
             }
             else

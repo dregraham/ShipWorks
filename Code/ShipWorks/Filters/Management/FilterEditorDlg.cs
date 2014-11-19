@@ -60,7 +60,7 @@ namespace ShipWorks.Filters.Management
 
             appliesTo.Text = EnumHelper.GetDescription((FilterTarget) filter.FilterTarget);
             appliesToImage.Image = FilterHelper.GetFilterImage((FilterTarget) filter.FilterTarget);
-            enabled.Checked = filterNode.State == (int)FilterNodeState.Enabled;
+            enabled.Checked = filterNode.Filter.State == (int)FilterState.Enabled;
             
             // Verify its OK for this user to edit this filter
             if (!FilterHelper.IsMyFilter(filterNode))
@@ -187,7 +187,7 @@ namespace ShipWorks.Filters.Management
             }
 
             filter.Name = filterName.Text.Trim();
-            filterNode.State = enabled.Checked ? (byte)FilterNodeState.Enabled : (byte)FilterNodeState.Disabled;
+            filterNode.Filter.State = enabled.Checked ? (byte)FilterState.Enabled : (byte)FilterState.Disabled;
             
             // Save the condition
             if (!conditionControl.SaveDefinitionToFilter())
@@ -219,7 +219,7 @@ namespace ShipWorks.Filters.Management
         {
             get
             {
-                return filterNode.State == (int) FilterNodeState.Enabled && !enabled.Checked;
+                return filterNode.Filter.State == (int)FilterState.Enabled && !enabled.Checked;
             }
         }
 

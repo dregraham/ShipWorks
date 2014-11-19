@@ -393,7 +393,7 @@ namespace ShipWorks.Filters.Controls
                 Color itemColor = foreColor;
                 
                 DisabledFilterFont disabledFont = new DisabledFilterFont(Font);
-                bool isFilterDisabled = selectedNode.State == (byte) FilterNodeState.Disabled;
+                bool isFilterDisabled = selectedNode.Filter.State == (byte)FilterState.Disabled;
                 if (isFilterDisabled)
                 {
                     itemFont = disabledFont.Font;

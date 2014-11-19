@@ -141,7 +141,7 @@ namespace ShipWorks.Actions.Triggers
 
             // We want to throw an exception if the trigger is using a disabled filter
             FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(FilterNodeID);
-            if (filterNode.State == (byte) FilterNodeState.Disabled)
+            if (filterNode.Filter.State == (byte)FilterState.Disabled)
             {
                 throw new FilterContentActionTriggerException("A disabled filter has been selected as a trigger.");
             }

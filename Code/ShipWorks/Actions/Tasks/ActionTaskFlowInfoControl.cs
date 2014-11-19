@@ -149,7 +149,7 @@ namespace ShipWorks.Actions.Tasks
                     
                     filterCount.Left = filterName.Right - 3;
 
-                    filterDisplayManager.ToggleDisplay(filterNode.State == (byte)FilterNodeState.Enabled);
+                    filterDisplayManager.ToggleDisplay(filterNode.Filter.State == (byte)FilterState.Enabled);
 
                     FilterCount count = FilterContentManager.GetCount(filterNode.FilterNodeID);
                     if (count != null)
