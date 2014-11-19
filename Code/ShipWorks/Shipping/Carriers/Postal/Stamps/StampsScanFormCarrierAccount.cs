@@ -141,6 +141,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Shipment has to be processed and not yet voided
                 ShipmentFields.Processed == true & ShipmentFields.Voided == false &
 
+                // Shipment isn't a return
+                ShipmentFields.ReturnShipment == false &
+
                 // Has to not have been scanned yet and is for the selected account
                 StampsShipmentFields.ScanFormBatchID == DBNull.Value &
                 StampsShipmentFields.StampsAccountID == accountEntity.StampsAccountID &

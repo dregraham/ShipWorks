@@ -61,9 +61,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <exception cref="StampsException">Only Stamps.com accounts can be converted.</exception>
         public void Initialize(StampsAccountEntity stampsAccount)
         {
-            if (stampsAccount.StampsReseller != (int)StampsResellerType.None)
+            if (stampsAccount.StampsReseller == (int)StampsResellerType.Express1)
             {
-                throw new StampsException("Only Stamps.com accounts can be converted.");
+                throw new StampsException("Express1 accounts cannot be converted.");
             }
 
             accountToConvert = stampsAccount;
