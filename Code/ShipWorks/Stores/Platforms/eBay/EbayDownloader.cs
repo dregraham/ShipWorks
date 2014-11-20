@@ -285,6 +285,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         // Detatch it from the order
                         affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+                        // Make sure the detachment works both ways
+                        Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
 
                         // Deleted all the attributes
                         foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
