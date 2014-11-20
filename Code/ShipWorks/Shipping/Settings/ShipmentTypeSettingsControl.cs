@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Gets whether any of the rules use disabled filters
         /// </summary>
-        public virtual bool AreAnyRuleFiltersDisabled
+        public virtual bool AreAnyPrintRuleFiltersDisabled
         {
             get
             {
@@ -202,6 +202,14 @@ namespace ShipWorks.Shipping.Settings
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith
         {
             get { return ((IPrintWithTemplates) printOutputControl).TemplatesToPrintWith; }
+        }
+
+        public bool AreAnyShipRuleFiltersDisabled
+        {
+            get
+            {
+                return defaultsControl.AreAnyRuleFiltersDisabled;
+            }
         }
 
         /// <summary>

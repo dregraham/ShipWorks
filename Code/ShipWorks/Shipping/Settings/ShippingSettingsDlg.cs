@@ -26,7 +26,10 @@ namespace ShipWorks.Shipping.Settings
         // The tab page currently displayed in the settings.  So it looks like it remains the same when 
         // switching between service types.
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
-        private bool usedDisabledFilters;
+        private bool usedDisabledGeneralShipRule;
+        private bool usedDisabledCarrierShipRule = false;
+        private bool usedDisabledCarrierPrintRule = false;
+        
 
         /// <summary>
         /// Constructor
@@ -55,7 +58,7 @@ namespace ShipWorks.Shipping.Settings
             blankPhone.Text = settings.BlankPhoneNumber;
 
             originControl.Initialize();
-            usedDisabledFilters = providerRulesControl.AreAnyRuleFiltersDisabled;
+            usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
 
             LoadShipmentTypePages();
         }
@@ -193,7 +196,6 @@ namespace ShipWorks.Shipping.Settings
         private void OnOptionPageDeselecting(object sender, OptionControlCancelEventArgs e)
         {
             if (e.OptionPage == null || 
-                e.OptionPage == optionControl.SelectedPage || 
                 e.OptionPage.Controls.Count != 1)
             {
                 return;
@@ -204,6 +206,12 @@ namespace ShipWorks.Shipping.Settings
             if (settingsControl != null)
             {
                 if (!AllowDisabledPrintingFiltersToBeSaved(settingsControl))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                if (!AllowDisabledFilterInCarrierRuleToBeSaved(settingsControl))
                 {
                     e.Cancel = true;
                     return;
@@ -256,13 +264,14 @@ namespace ShipWorks.Shipping.Settings
             {
                 settingsControl.RefreshContent();
                 settingsControl.CurrentPage = settingsTabPage;
-                usedDisabledFilters = settingsControl.AreAnyRuleFiltersDisabled;
+                usedDisabledCarrierPrintRule = settingsControl.AreAnyPrintRuleFiltersDisabled;
+                usedDisabledCarrierShipRule = settingsControl.AreAnyShipRuleFiltersDisabled;
             }
 
             if (e.OptionPage == optionPageGeneral)
             {
                 originControl.Initialize();
-                usedDisabledFilters = providerRulesControl.AreAnyRuleFiltersDisabled;
+                usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
             }
         }
 
@@ -349,9 +358,24 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private bool AllowDisabledFiltersToBeSaved()
         {
-            return optionControl.SelectedPage == optionPageGeneral ?
-                AllowDisabledShippingFiltersToBeSaved() :
-                AllowDisabledPrintingFiltersToBeSaved(optionControl.SelectedPage.Controls.OfType<ShipmentTypeSettingsControl>().FirstOrDefault());
+            if (optionControl.SelectedPage == optionPageGeneral)
+            {
+                return AllowDisabledShippingFiltersToBeSaved();
+            }
+            else
+            {
+                ShipmentTypeSettingsControl currentControl = optionControl.SelectedPage.Controls.OfType<ShipmentTypeSettingsControl>().FirstOrDefault();
+
+                return AllowDisabledPrintingFiltersToBeSaved(currentControl) && AllowDisabledFilterInCarrierRuleToBeSaved(currentControl);
+            }
+        }
+
+        private bool AllowDisabledFilterInCarrierRuleToBeSaved(ShipmentTypeSettingsControl settingsControl)
+        {
+            return settingsControl == null ||
+                   !settingsControl.AreAnyShipRuleFiltersDisabled ||
+                   usedDisabledCarrierShipRule ||
+                   DoesUserWantToSaveDisabledFilters("shipping");
         }
 
         /// <summary>
@@ -360,8 +384,8 @@ namespace ShipWorks.Shipping.Settings
         private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
         {
             return settingsControl == null ||
-                   !settingsControl.AreAnyRuleFiltersDisabled ||
-                   usedDisabledFilters ||
+                   !settingsControl.AreAnyPrintRuleFiltersDisabled ||
+                   usedDisabledCarrierPrintRule ||
                    DoesUserWantToSaveDisabledFilters("printing");
         }
 
@@ -371,7 +395,7 @@ namespace ShipWorks.Shipping.Settings
         private bool AllowDisabledShippingFiltersToBeSaved()
         {
             return !providerRulesControl.AreAnyRuleFiltersDisabled ||
-                usedDisabledFilters ||
+                usedDisabledGeneralShipRule ||
                 DoesUserWantToSaveDisabledFilters("shipping");
         }
 

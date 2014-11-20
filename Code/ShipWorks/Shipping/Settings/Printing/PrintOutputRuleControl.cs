@@ -183,8 +183,7 @@ namespace ShipWorks.Shipping.Settings.Printing
         {
             get
             {
-                return filterCombo.SelectedFilterNode != null &&
-                    filterCombo.SelectedFilterNode.Filter.State != (int)FilterState.Enabled;
+                return filterCombo.IsSelectedFilterDisabled;
             }
         }
 

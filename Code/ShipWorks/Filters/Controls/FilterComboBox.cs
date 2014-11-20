@@ -221,6 +221,22 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is selected filter disabled.
+        /// </summary>
+        public bool IsSelectedFilterDisabled
+        {
+            get
+            {
+                if (selectedNode != null)
+                {
+                    return selectedNode.Filter.State == (byte)FilterState.Disabled;                    
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// When a filter is selected, we close the drop down
         /// </summary>
         private void OnFilterSelected(object sender, EventArgs e)

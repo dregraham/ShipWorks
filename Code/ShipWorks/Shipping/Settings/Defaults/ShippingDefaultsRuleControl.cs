@@ -65,6 +65,17 @@ namespace ShipWorks.Shipping.Settings.Defaults
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is filter disabled.
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.IsSelectedFilterDisabled;
+            }
+        }
+
+        /// <summary>
         /// Initialize the control to work with the settings of the given rule
         /// </summary>
         public void Initialize(ShippingDefaultsRuleEntity rule)

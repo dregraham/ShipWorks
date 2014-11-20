@@ -38,6 +38,17 @@ namespace ShipWorks.Shipping.Settings.Defaults
         }
 
         /// <summary>
+        /// Gets a value indicating whether [are any rule filters disabled].
+        /// </summary>
+        public bool AreAnyRuleFiltersDisabled
+        {
+            get
+            {
+                return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
         /// Load the settings for the given shipment type
         /// </summary>
         public void LoadSettings(ShipmentType shipmentType)
