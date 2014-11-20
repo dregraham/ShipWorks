@@ -250,25 +250,34 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Try to set the culture of the application to us-EN
+        /// Try to set the culture and UI culture of the application to us-EN
+        /// </summary>
+        private static void TrySetUsEnglish()
+        {
+            CultureInfo defaultEnglishCulture = new CultureInfo("en-US", false);
+            TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentCulture", "culture");
+            TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentUICulture", "UI culture");
+        }
+
+        /// <summary>
+        /// Try to set a culture setting to en-US
         /// </summary>
         /// <remarks>This method has to use reflection because the necessary method on CultureInfo exists in .NET 4.5
         /// but not in .NET 4.  Since we install 4.5 by default on Windows Vista and higher, this should work for most
         /// customers.</remarks>
-        private static void TrySetUsEnglish()
+        private static void TrySetCulture(CultureInfo defaultEnglishCulture, string setCultureMethodName, string operationDescription)
         {
             // Attempt to set the culture of ShipWorks to us-EN, since we rely on certain settings
-            var member = typeof (CultureInfo).GetProperty("DefaultThreadCurrentCulture", 
-                                                          BindingFlags.Static | BindingFlags.Public | BindingFlags.SetProperty);
+            var member = typeof (CultureInfo).GetProperty(setCultureMethodName,
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.SetProperty);
             if (member == null)
             {
-                log.Info("Could not set culture to default en-US.");
+                log.Info(string.Format("Could not set {0} to default en-US.", operationDescription));
             }
             else
             {
-                log.Info("Setting culture of ShipWorks to default en-US...");
-                CultureInfo defaultUsEnglishCulture = new CultureInfo("en-US", false);
-                member.SetValue(null, defaultUsEnglishCulture , null);
+                log.Info(string.Format("Setting {0} of ShipWorks to default en-US...", operationDescription));
+                member.SetValue(null, defaultEnglishCulture, null);
             }
         }
 
