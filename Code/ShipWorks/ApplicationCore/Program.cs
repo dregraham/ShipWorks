@@ -254,9 +254,18 @@ namespace ShipWorks
         /// </summary>
         private static void TrySetUsEnglish()
         {
-            CultureInfo defaultEnglishCulture = new CultureInfo("en-US", false);
-            TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentCulture");
-            TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentUICulture");
+            try
+            {
+                CultureInfo defaultEnglishCulture = new CultureInfo("en-US", false);
+                TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentCulture");
+                TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentUICulture");
+            }
+            catch (Exception ex)
+            {
+                // It shouldn't be a problem if an exception was thrown here because we should find out later
+                // if ShipWorks can't work with the current culture
+                log.Warn("An error occurred while trying to set culture.", ex);
+            }
         }
 
         /// <summary>
