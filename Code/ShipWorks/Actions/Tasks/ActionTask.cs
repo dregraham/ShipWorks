@@ -184,13 +184,14 @@ namespace ShipWorks.Actions.Tasks
 
             // If the task is new, we have to save it right away to get its PK.  The "SaveExtraState" can sometimes
             // potentially need to use its PK.
+            bool isNew = taskEntity.IsNew;
             if (taskEntity.IsNew)
             {
                 taskEntity.ActionID = action.ActionID;
                 adapter.SaveAndRefetch(taskEntity);
             }
 
-            SaveFilterReferences(action);
+            SaveFilterReferences(action, isNew);
 
             SaveExtraState(action, adapter);
 
@@ -202,7 +203,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// Save the references we have to filters from the run condition and data source
         /// </summary>
-        private void SaveFilterReferences(ActionEntity action)
+        private void SaveFilterReferences(ActionEntity action, bool isNew)
         {
             long originalConditionID = 0;
             long originalInputID = 0;
@@ -220,36 +221,31 @@ namespace ShipWorks.Actions.Tasks
             long newConditionID = taskEntity.FilterCondition ? taskEntity.FilterConditionNodeID : 0;
             long newInputID = (taskEntity.InputSource == (int) ActionTaskInputSource.FilterContents) ? taskEntity.InputFilterNodeID : 0;
 
-            if (newConditionID != originalConditionID)
+            UpdateObjectReferenceIfNecessary(action, isNew, newConditionID, originalConditionID, "ActionTaskCondition");
+            UpdateObjectReferenceIfNecessary(action, isNew, newInputID, originalInputID, "ActionTaskInput");
+        }
+
+        /// <summary>
+        /// Update the object reference, if necessary
+        /// </summary>
+        private void UpdateObjectReferenceIfNecessary(ActionEntity action, bool isNew, long newId, long originalId, string description)
+        {
+            if (!isNew && newId == originalId)
             {
-                if (newConditionID  > 0)
-                {
-                    ObjectReferenceManager.SetReference(
-                        taskEntity.ActionTaskID,
-                        "ActionTaskCondition",
-                        newConditionID,
-                        GetObjectReferenceReason(action));
-                }
-                else
-                {
-                    ObjectReferenceManager.ClearReference(taskEntity.ActionTaskID, "ActionTaskCondition");
-                }
+                return;
             }
 
-            if (newInputID != originalInputID)
+            if (newId > 0)
             {
-                if (newInputID > 0)
-                {
-                    ObjectReferenceManager.SetReference(
-                        taskEntity.ActionTaskID,
-                        "ActionTaskInput",
-                        newInputID,
-                        GetObjectReferenceReason(action));
-                }
-                else
-                {
-                    ObjectReferenceManager.ClearReference(taskEntity.ActionTaskID, "ActionTaskInput");
-                }
+                ObjectReferenceManager.SetReference(
+                    taskEntity.ActionTaskID,
+                    description,
+                    newId,
+                    GetObjectReferenceReason(action));
+            }
+            else
+            {
+                ObjectReferenceManager.ClearReference(taskEntity.ActionTaskID, description);
             }
         }
 
