@@ -364,6 +364,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 // add a -C to denote a locally combined order
                 newOrder.ApplyOrderNumberPostfix("-C");
+                newOrder.CombinedLocally = true;
                 newOrder.EbayOrderID = 0;
             }
 
