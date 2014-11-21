@@ -795,7 +795,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                upsPickupLocationControl.SaveToRequest(openAccountRequest);
+                upsPickupLocationControl.SavePickupInfoToAccountAndRequest(openAccountRequest, upsAccount);
                 CreateAccount();
             }
             catch (UpsOpenAccountException ex)

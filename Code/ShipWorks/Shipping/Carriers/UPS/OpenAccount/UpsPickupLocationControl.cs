@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Saves to request.
         /// </summary>
-        public void SaveToRequest(OpenAccountRequest request)
+        public void SavePickupInfoToAccountAndRequest(OpenAccountRequest request, UpsAccountEntity upsAccount)
         {
             if (request.PickupAddress == null)
             {
@@ -47,20 +47,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 throw new UpsOpenAccountException("Required fields missing.", UpsOpenAccountErrorCode.MissingRequiredFields);
             }
 
-            UpsAccountEntity upsAccountEntity = new UpsAccountEntity();
-
             // Adding to account because address fields can't be accessed directly.
-            PersonAdapter personAdapter = new PersonAdapter(upsAccountEntity, "");
+            PersonAdapter personAdapter = new PersonAdapter(upsAccount, "");
             pickupLocationPersonControl.SaveToEntity(personAdapter);
             
-            request.PickupAddress.City = upsAccountEntity.City;
-            request.PickupAddress.CompanyName = upsAccountEntity.Company;
+            request.PickupAddress.City = upsAccount.City;
+            request.PickupAddress.CompanyName = upsAccount.Company;
             request.PickupAddress.ContactName = pickupLocationPersonControl.FullName;
-            request.PickupAddress.CountryCode = upsAccountEntity.CountryCode;
-            request.PickupAddress.EmailAddress = upsAccountEntity.Email;
-            request.PickupAddress.Phone.Number = upsAccountEntity.Phone;
-            request.PickupAddress.PostalCode = upsAccountEntity.PostalCode;
-            request.PickupAddress.StateProvinceCode = upsAccountEntity.StateProvCode;
+            request.PickupAddress.CountryCode = upsAccount.CountryCode;
+            request.PickupAddress.EmailAddress = upsAccount.Email;
+            request.PickupAddress.Phone.Number = upsAccount.Phone;
+            request.PickupAddress.PostalCode = upsAccount.PostalCode;
+            request.PickupAddress.StateProvinceCode = upsAccount.StateProvCode;
             request.PickupAddress.StreetAddress = personAdapter.StreetAll.Replace("\r\n", ", ");
         }
     }
