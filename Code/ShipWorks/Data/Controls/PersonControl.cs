@@ -640,7 +640,7 @@ namespace ShipWorks.Data.Controls
 
                     if (line3.Length > maxStreet3)
                     {
-                        line3 = line3.Substring(09, maxStreet3);
+                        line3 = line3.Substring(0, maxStreet3);
                     }
 
                     person.Street1 = line1;
