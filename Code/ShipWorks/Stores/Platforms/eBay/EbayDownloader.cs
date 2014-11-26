@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -1051,14 +1052,48 @@ namespace ShipWorks.Stores.Platforms.Ebay
             else
             {
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
-                    EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
+                EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
 
                 EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
                 SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                EbayOrderEntity ebayOrder = collection.FirstOrDefault();
 
-                return collection.FirstOrDefault();
+                if (ebayOrder==null)
+                {
+                    ebayOrder = GetCombinedOrder(identifier, prefetch);
+                }
+
+                return ebayOrder;
             }
         }
+
+        /// <summary>
+        /// Gets the locally combined order if it exists.
+        /// </summary>
+        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, PrefetchPath2 prefetch)
+        {
+            EbayOrderEntity ebayOrder = null;
+
+            if (identifier.EbayOrderID != 0)
+            {
+                LinqMetaData metaData = new LinqMetaData(SqlAdapter.Default);
+                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity = metaData
+                    .EbayCombinedOrderRelation
+                    .FirstOrDefault(relation => relation.EbayOrderID == identifier.EbayOrderID && relation.StoreID == Store.StoreID);
+
+                if (ebayCombinedOrderRelationEntity != null)
+                {
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(EbayOrderFields.OrderID == ebayCombinedOrderRelationEntity.OrderID);
+
+                    EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
+                    SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                    ebayOrder = collection.FirstOrDefault();
+                }
+            }
+
+            return ebayOrder;
+        }
+
 
         /// <summary>
         /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID

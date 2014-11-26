@@ -1807,6 +1807,25 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayCombinedOrderRelation.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum EbayCombinedOrderRelationFieldIndex:int
+	{
+		///<summary>EbayCombinedOrderRelationID. </summary>
+		EbayCombinedOrderRelationID,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>EbayOrderID. </summary>
+		EbayOrderID,
+		///<summary>StoreID. </summary>
+		StoreID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EbayOrder.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9689,6 +9708,8 @@ namespace ShipWorks.Data.Model
 		DownloadEntity,
 		///<summary>DownloadDetail</summary>
 		DownloadDetailEntity,
+		///<summary>EbayCombinedOrderRelation</summary>
+		EbayCombinedOrderRelationEntity,
 		///<summary>EbayOrder</summary>
 		EbayOrderEntity,
 		///<summary>EbayOrderItem</summary>

@@ -30,6 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
+			toReturn.Add(this.EbayCombinedOrderRelationEntityUsingOrderID);
 			toReturn.Add(this.EbayOrderItemEntityUsingLocalEbayOrderID);
 
 
@@ -37,6 +38,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 		}
 
 		#region Class Property Declarations
+
+		/// <summary>Returns a new IEntityRelation object, between EbayOrderEntity and EbayCombinedOrderRelationEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayOrder.OrderID - EbayCombinedOrderRelation.OrderID
+		/// </summary>
+		public virtual IEntityRelation EbayCombinedOrderRelationEntityUsingOrderID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayCombinedOrderRelation" , true);
+				relation.AddEntityFieldPair(EbayOrderFields.OrderID, EbayCombinedOrderRelationFields.OrderID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayCombinedOrderRelationEntity", false);
+				return relation;
+			}
+		}
 
 		/// <summary>Returns a new IEntityRelation object, between EbayOrderEntity and EbayOrderItemEntity over the 1:n relation they have, using the relation between the fields:
 		/// EbayOrder.OrderID - EbayOrderItem.LocalEbayOrderID

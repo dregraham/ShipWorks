@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((163 + 0));
+			base.InitClass((164 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -87,6 +87,7 @@ namespace ShipWorks.Data.Adapter
 			InitDimensionsProfileEntityMappings();
 			InitDownloadEntityMappings();
 			InitDownloadDetailEntityMappings();
+			InitEbayCombinedOrderRelationEntityMappings();
 			InitEbayOrderEntityMappings();
 			InitEbayOrderItemEntityMappings();
 			InitEbayStoreEntityMappings();
@@ -650,6 +651,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "DownloadDetailEntity", "ExtraBigIntData2", "ExtraBigIntData2", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
 			base.AddElementFieldMapping( "DownloadDetailEntity", "ExtraBigIntData3", "ExtraBigIntData3", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
 			base.AddElementFieldMapping( "DownloadDetailEntity", "ExtraStringData1", "ExtraStringData1", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 8 );
+		}
+		/// <summary>Inits EbayCombinedOrderRelationEntity's mappings</summary>
+		private void InitEbayCombinedOrderRelationEntityMappings()
+		{
+			base.AddElementMapping( "EbayCombinedOrderRelationEntity", "ShipWorksLocal", @"dbo", "EbayCombinedOrderRelation", 4 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "EbayCombinedOrderRelationID", "EbayCombinedOrderRelationID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "EbayOrderID", "EbayOrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 3 );
 		}
 		/// <summary>Inits EbayOrderEntity's mappings</summary>
 		private void InitEbayOrderEntityMappings()

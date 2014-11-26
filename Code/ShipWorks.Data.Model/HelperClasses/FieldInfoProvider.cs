@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (163 + 0));
+			base.InitClass( (164 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -88,6 +88,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitDimensionsProfileEntityInfos();
 			InitDownloadEntityInfos();
 			InitDownloadDetailEntityInfos();
+			InitEbayCombinedOrderRelationEntityInfos();
 			InitEbayOrderEntityInfos();
 			InitEbayOrderItemEntityInfos();
 			InitEbayStoreEntityInfos();
@@ -620,6 +621,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("DownloadDetailEntity", "ExtraBigIntData2", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DownloadDetailFieldIndex.ExtraBigIntData2, 0, 0, 19);
 			base.AddElementFieldInfo("DownloadDetailEntity", "ExtraBigIntData3", typeof(Nullable<System.Int64>), false, false, false, true,  (int)DownloadDetailFieldIndex.ExtraBigIntData3, 0, 0, 19);
 			base.AddElementFieldInfo("DownloadDetailEntity", "ExtraStringData1", typeof(System.String), false, false, false, true,  (int)DownloadDetailFieldIndex.ExtraStringData1, 50, 0, 0);
+		}
+		/// <summary>Inits EbayCombinedOrderRelationEntity's FieldInfo objects</summary>
+		private void InitEbayCombinedOrderRelationEntityInfos()
+		{
+			base.AddElementFieldInfo("EbayCombinedOrderRelationEntity", "EbayCombinedOrderRelationID", typeof(System.Int64), true, false, true, false,  (int)EbayCombinedOrderRelationFieldIndex.EbayCombinedOrderRelationID, 0, 0, 19);
+			base.AddElementFieldInfo("EbayCombinedOrderRelationEntity", "OrderID", typeof(System.Int64), false, true, false, false,  (int)EbayCombinedOrderRelationFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("EbayCombinedOrderRelationEntity", "EbayOrderID", typeof(System.Int64), false, false, false, false,  (int)EbayCombinedOrderRelationFieldIndex.EbayOrderID, 0, 0, 19);
+			base.AddElementFieldInfo("EbayCombinedOrderRelationEntity", "StoreID", typeof(System.Int64), false, true, false, false,  (int)EbayCombinedOrderRelationFieldIndex.StoreID, 0, 0, 19);
 		}
 		/// <summary>Inits EbayOrderEntity's FieldInfo objects</summary>
 		private void InitEbayOrderEntityInfos()
