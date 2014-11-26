@@ -450,7 +450,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <param name="combinedOrderRelations">The combined order relations.</param>
         /// <param name="ebayOrderId">The ebay order identifier.</param>
         /// <param name="storeId">The store identifier.</param>
-        private void AddCombinedOrderRelation(EntityCollection<EbayCombinedOrderRelationEntity> combinedOrderRelations, long ebayOrderId, long storeId)
+        private static void AddCombinedOrderRelation(EntityCollection<EbayCombinedOrderRelationEntity> combinedOrderRelations, long ebayOrderId, long storeId)
         {
             combinedOrderRelations.Add(new EbayCombinedOrderRelationEntity()
             {

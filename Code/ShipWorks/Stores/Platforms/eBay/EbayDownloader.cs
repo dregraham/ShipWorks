@@ -1085,9 +1085,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 {
                     RelationPredicateBucket bucket = new RelationPredicateBucket(EbayOrderFields.OrderID == ebayCombinedOrderRelationEntity.OrderID);
 
-                    EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
-                    SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
-                    ebayOrder = collection.FirstOrDefault();
+                    using (EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>())
+                    {
+                        SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                        ebayOrder = collection.FirstOrDefault();
+                    }
                 }
             }
 
