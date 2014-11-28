@@ -623,7 +623,9 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         void OnGridKeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode & Keys.Delete) == Keys.Delete)
+            // This used to be a bitwise comparison, but the MSDN docs discourage that: http://msdn.microsoft.com/en-us/library/system.windows.forms.keys(v=vs.110).aspx
+            // We had a situation where a customer's volume keys were triggering the delete, and the period key would cause it as well.
+            if (e.KeyCode == Keys.Delete)
             {
                 if (DeleteKeyPressed != null)
                 {

@@ -1,6 +1,8 @@
 require 'albacore'
 require 'win32/registry'
 require "securerandom"
+require 'date'
+require 'fileutils'
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
@@ -200,6 +202,29 @@ namespace :build do
 	end	
 end
 
+
+def DeleteOldTestRuns(testType)
+	# Delete the actual file containing the test results from a previous run
+	print "Deleting previous #{testType} results...\r\n\r\n"
+	Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
+	File.delete("TestResults/#{testType}-results.trx") if File.exist?("TestResults/#{testType}-results.trx")
+		
+	# Delete previous test result directories to keep disk space under control otherwise
+	# there could be GBs of test result files hanging around since each test run contains 
+	# the ShipWorks binaries (this results in 100+ MB of space being # reclaimed for each 
+	# test run that gets deleted)
+	print "Deleting test results older than 4 days...\r\n"
+	deletedCount = 0
+	Dir["TestResults/*/"].map {|d|
+			if (File.stat(d).mtime < (DateTime.now - 4).to_time)
+				puts "Deleting " + d + "\r\n" 
+				FileUtils.rm_r d					
+				deletedCount = deletedCount + 1
+			end
+		}
+	print "Deleted the results for #{deletedCount} previous test run(s).\r\n\r\n"
+end
+
 ########################################################################
 ## Tasks to run unit tests with MsTest (using Albacore library)
 ########################################################################
@@ -221,10 +246,9 @@ namespace :test do
 
 	desc "Execute unit tests"
 	mstest :units do |mstest|
-		print "Deleting previous units results...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		File.delete("TestResults/units-results.trx") if File.exist?("TestResults/units-results.trx")
-
+		# Delete results from any previous test runs
+		DeleteOldTestRuns("units")
+		
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 		mstest.parameters = "/noisolation", "/detail:errormessage", "/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", "/resultsfile:TestResults/units-results.trx"
@@ -232,9 +256,8 @@ namespace :test do
 	
 	desc "Execute integration tests"
 	mstest :integration, :categoryFilter do |mstest, args|
-		print "Deleting previous result...\r\n\r\n"
-		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		File.delete("TestResults/integration-results.trx") if File.exist?("TestResults/integration-results.trx")
+		# Delete results from any previous test runs
+		DeleteOldTestRuns("integration")
 		
 		categoryParameter = ""
 		if args != nil and args.categoryFilter != nil and args.categoryFilter != ""
