@@ -73,6 +73,7 @@ namespace ShipWorks.Filters.Management
                     BuildListReferenceMessage(references, "'.*' task for action '(?<name>.*)'", "The following actions include tasks that will not run as expected:"),
                     BuildShippingProviderRuleMessage(references),
                     BuildListReferenceMessage(references, "Print settings '.*' for '(?<name>.*)'", "These providers include printing rules that will no longer apply if you continue:"),
+                    BuildListReferenceMessage(references, "Shipment defaults for '(?<name>.*)'", "Shipping rules for the following carriers will not apply:")
                 }
                 .Where(x => !string.IsNullOrEmpty(x))
                 .Aggregate((x, y) => x + Environment.NewLine + Environment.NewLine + y);
