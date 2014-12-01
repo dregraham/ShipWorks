@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
+    /// <summary>
+    /// Control to define UPS Pickup Schedule
+    /// </summary>
     public partial class UpsPickupScheduleControl : UserControl
     {
         private const string timeFormat = "HHmmss";
@@ -22,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             EnumHelper.BindComboBox<UpsPickupOption>(pickupOption);
             EnumHelper.BindComboBox<UpsPickupLocation>(pickupLocation);
             BindPickupStartDates();
+
+            UpdatePanelVisibility();
         }
 
         /// <summary>
@@ -75,7 +81,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         private void OnChangedPickupOption(object sender, EventArgs e)
         {
-            pickupDateTimePanel.Visible = IsPickupOptionRequired();
+            UpdatePanelVisibility();
+        }
+
+        /// <summary>
+        /// Updates the panel visibilities based on pickup selection.
+        /// </summary>
+        private void UpdatePanelVisibility()
+        {
+            bool isPickupOptionRequired = IsPickupOptionRequired();
+            pickupDateTimePanel.Visible = isPickupOptionRequired;
+            feeInfoPanel.Visible = isPickupOptionRequired;
 
             // Shop if pickup option is day specific pickup (99)
             pickUpDay.Visible = (UpsPickupOption)pickupOption.SelectedValue == UpsPickupOption.DaySpecificPickup;
@@ -180,6 +196,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             {
                 pickupDays.Add(dayCode);
             }
+        }
+
+        /// <summary>
+        /// Called when [fee link clicked].
+        /// </summary>
+        private void OnFeeLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000035267-installing-ups-using-the-ups-setup-wizard", this);
         }
     }
 }

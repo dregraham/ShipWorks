@@ -46,11 +46,9 @@
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.wizardPageFinishOlt = new ShipWorks.UI.Wizard.WizardPage();
-            this.linkUpsOlt = new System.Windows.Forms.Label();
-            this.linkUps = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.labelUps1 = new System.Windows.Forms.Label();
-            this.labelSetupComplete = new System.Windows.Forms.Label();
+            this.labelSetupComplete3 = new System.Windows.Forms.Label();
+            this.labelSetupComplete2 = new System.Windows.Forms.Label();
+            this.labelSetupComplete1 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.wizardPageRates = new ShipWorks.UI.Wizard.WizardPage();
             this.upsRateTypeControl = new ShipWorks.Shipping.Carriers.UPS.UpsAccountRateTypeControl();
@@ -75,7 +73,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.accountControl = new ShipWorks.Shipping.Carriers.UPS.UpsAccountManagerControl();
             this.wizardPageFinishAddAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.label4 = new System.Windows.Forms.Label();
+            this.congratsLabel = new System.Windows.Forms.Label();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.wizardPageOpenAccountCharacteristics = new ShipWorks.UI.Wizard.WizardPage();
             this.helpAccountCharacteristics = new System.Windows.Forms.PictureBox();
@@ -93,6 +91,11 @@
             this.wizardPageOpenAccountBusinessInfo = new ShipWorks.UI.Wizard.WizardPage();
             this.helpBusinessInformation = new System.Windows.Forms.PictureBox();
             this.upsBusinessInfoControl = new ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsBusinessInfoControl();
+            this.wizardPageFinishCreateAccountRegistrationFailed = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelCreateAccountRegistrationFailed4 = new System.Windows.Forms.Label();
+            this.labelCreateAccountRegistrationFailed2 = new System.Windows.Forms.Label();
+            this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
+            this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -120,6 +123,7 @@
             this.wizardPageOpenAccountPickupLocation.SuspendLayout();
             this.wizardPageOpenAccountBusinessInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.helpBusinessInformation)).BeginInit();
+            this.wizardPageFinishCreateAccountRegistrationFailed.SuspendLayout();
             this.SuspendLayout();
             // 
             // next
@@ -138,7 +142,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinishAddAccount);
+            this.mainPanel.Controls.Add(this.wizardPageFinishCreateAccountRegistrationFailed);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -254,7 +258,7 @@
             this.wizardPageLicense.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageLicense.Location = new System.Drawing.Point(0, 0);
             this.wizardPageLicense.Name = "wizardPageLicense";
-            this.wizardPageLicense.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageLicense.Size = new System.Drawing.Size(579, 474);
             this.wizardPageLicense.TabIndex = 0;
             this.wizardPageLicense.Title = "UPS Developer Kit Access License";
             this.wizardPageLicense.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnSteppingNextAgreement);
@@ -263,7 +267,7 @@
             // printAgreement
             // 
             this.printAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.printAgreement.Location = new System.Drawing.Point(381, 356);
+            this.printAgreement.Location = new System.Drawing.Point(381, 415);
             this.printAgreement.Name = "printAgreement";
             this.printAgreement.Size = new System.Drawing.Size(113, 23);
             this.printAgreement.TabIndex = 3;
@@ -276,7 +280,7 @@
             this.radioDeclineAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.radioDeclineAgreement.AutoSize = true;
             this.radioDeclineAgreement.Checked = true;
-            this.radioDeclineAgreement.Location = new System.Drawing.Point(24, 382);
+            this.radioDeclineAgreement.Location = new System.Drawing.Point(24, 441);
             this.radioDeclineAgreement.Name = "radioDeclineAgreement";
             this.radioDeclineAgreement.Size = new System.Drawing.Size(196, 17);
             this.radioDeclineAgreement.TabIndex = 2;
@@ -289,7 +293,7 @@
             // 
             this.radioAcceptAgreement.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.radioAcceptAgreement.AutoSize = true;
-            this.radioAcceptAgreement.Location = new System.Drawing.Point(24, 359);
+            this.radioAcceptAgreement.Location = new System.Drawing.Point(24, 418);
             this.radioAcceptAgreement.Name = "radioAcceptAgreement";
             this.radioAcceptAgreement.Size = new System.Drawing.Size(166, 17);
             this.radioAcceptAgreement.TabIndex = 1;
@@ -304,7 +308,7 @@
             this.licenseAgreement.Location = new System.Drawing.Point(24, 3);
             this.licenseAgreement.Name = "licenseAgreement";
             this.licenseAgreement.ReadOnly = true;
-            this.licenseAgreement.Size = new System.Drawing.Size(470, 350);
+            this.licenseAgreement.Size = new System.Drawing.Size(470, 409);
             this.licenseAgreement.TabIndex = 0;
             this.licenseAgreement.Text = "";
             // 
@@ -316,7 +320,7 @@
             this.wizardPageAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccount.Name = "wizardPageAccount";
-            this.wizardPageAccount.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageAccount.Size = new System.Drawing.Size(579, 474);
             this.wizardPageAccount.TabIndex = 0;
             this.wizardPageAccount.Title = "UPS Account";
             this.wizardPageAccount.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccount);
@@ -341,11 +345,9 @@
             // 
             // wizardPageFinishOlt
             // 
-            this.wizardPageFinishOlt.Controls.Add(this.linkUpsOlt);
-            this.wizardPageFinishOlt.Controls.Add(this.linkUps);
-            this.wizardPageFinishOlt.Controls.Add(this.label2);
-            this.wizardPageFinishOlt.Controls.Add(this.labelUps1);
-            this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete);
+            this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete3);
+            this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete2);
+            this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete1);
             this.wizardPageFinishOlt.Description = "You are now ready to use UPS with ShpWorks.";
             this.wizardPageFinishOlt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageFinishOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -355,60 +357,28 @@
             this.wizardPageFinishOlt.TabIndex = 0;
             this.wizardPageFinishOlt.Title = "Setup Complete";
             // 
-            // linkUpsOlt
+            // labelSetupComplete3
             // 
-            this.linkUpsOlt.AutoSize = true;
-            this.linkUpsOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkUpsOlt.ForeColor = System.Drawing.Color.Blue;
-            this.linkUpsOlt.Location = new System.Drawing.Point(427, 108);
-            this.linkUpsOlt.Name = "linkUpsOlt";
-            this.linkUpsOlt.Size = new System.Drawing.Size(55, 13);
-            this.linkUpsOlt.TabIndex = 4;
-            this.linkUpsOlt.Text = "click here.";
-            this.linkUpsOlt.Visible = false;
-            this.linkUpsOlt.Click += new System.EventHandler(this.OnLinkUpsOnlineTools);
+            this.labelSetupComplete3.Location = new System.Drawing.Point(21, 185);
+            this.labelSetupComplete3.Name = "labelSetupComplete3";
+            this.labelSetupComplete3.Size = new System.Drawing.Size(438, 32);
+            this.labelSetupComplete3.TabIndex = 2;
             // 
-            // linkUps
+            // labelSetupComplete2
             // 
-            this.linkUps.AutoSize = true;
-            this.linkUps.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkUps.ForeColor = System.Drawing.Color.Blue;
-            this.linkUps.Location = new System.Drawing.Point(55, 51);
-            this.linkUps.Name = "linkUps";
-            this.linkUps.Size = new System.Drawing.Size(79, 13);
-            this.linkUps.TabIndex = 3;
-            this.linkUps.Text = "www.ups.com.";
-            this.linkUps.Visible = false;
-            this.linkUps.Click += new System.EventHandler(this.OnLinkUpsHome);
+            this.labelSetupComplete2.Location = new System.Drawing.Point(21, 88);
+            this.labelSetupComplete2.Name = "labelSetupComplete2";
+            this.labelSetupComplete2.Size = new System.Drawing.Size(438, 32);
+            this.labelSetupComplete2.TabIndex = 1;
             // 
-            // label2
+            // labelSetupComplete1
             // 
-            this.label2.Location = new System.Drawing.Point(21, 81);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(438, 71);
-            this.label2.TabIndex = 2;
-            this.label2.Text = resources.GetString("label2.Text");
-            this.label2.Visible = false;
-            // 
-            // labelUps1
-            // 
-            this.labelUps1.Location = new System.Drawing.Point(21, 38);
-            this.labelUps1.Name = "labelUps1";
-            this.labelUps1.Size = new System.Drawing.Size(438, 32);
-            this.labelUps1.TabIndex = 1;
-            this.labelUps1.Text = "Thank you for registering your UPS Account. To learn more about UPS services, ple" +
-    "ase";
-            this.labelUps1.Visible = false;
-            // 
-            // labelSetupComplete
-            // 
-            this.labelSetupComplete.AutoSize = true;
-            this.labelSetupComplete.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSetupComplete.Location = new System.Drawing.Point(20, 10);
-            this.labelSetupComplete.Name = "labelSetupComplete";
-            this.labelSetupComplete.Size = new System.Drawing.Size(246, 13);
-            this.labelSetupComplete.TabIndex = 0;
-            this.labelSetupComplete.Text = "ShipWorks is now setup to connect to UPS!";
+            this.labelSetupComplete1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSetupComplete1.Location = new System.Drawing.Point(20, 10);
+            this.labelSetupComplete1.Name = "labelSetupComplete1";
+            this.labelSetupComplete1.Size = new System.Drawing.Size(525, 28);
+            this.labelSetupComplete1.TabIndex = 0;
+            this.labelSetupComplete1.Text = "ShipWorks is now setup to connect to UPS!";
             // 
             // label1
             // 
@@ -431,7 +401,7 @@
             this.wizardPageRates.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageRates.Location = new System.Drawing.Point(0, 0);
             this.wizardPageRates.Name = "wizardPageRates";
-            this.wizardPageRates.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageRates.Size = new System.Drawing.Size(579, 474);
             this.wizardPageRates.TabIndex = 0;
             this.wizardPageRates.Title = "UPS Rate Display";
             this.wizardPageRates.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRates);
@@ -453,7 +423,7 @@
             this.wizardPageOptionsOlt.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptionsOlt.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptionsOlt.Name = "wizardPageOptionsOlt";
-            this.wizardPageOptionsOlt.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOptionsOlt.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOptionsOlt.TabIndex = 0;
             this.wizardPageOptionsOlt.Title = "UPS Settings";
             this.wizardPageOptionsOlt.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOptionsOlt);
@@ -485,7 +455,7 @@
             this.wizardPageWelcomeWorldShip.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcomeWorldShip.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcomeWorldShip.Name = "wizardPageWelcomeWorldShip";
-            this.wizardPageWelcomeWorldShip.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageWelcomeWorldShip.Size = new System.Drawing.Size(579, 474);
             this.wizardPageWelcomeWorldShip.TabIndex = 0;
             this.wizardPageWelcomeWorldShip.Title = "Setup UPS WorldShip";
             this.wizardPageWelcomeWorldShip.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWelcome);
@@ -618,7 +588,7 @@
             this.wizardPageOptionsWorldShip.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptionsWorldShip.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptionsWorldShip.Name = "wizardPageOptionsWorldShip";
-            this.wizardPageOptionsWorldShip.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOptionsWorldShip.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOptionsWorldShip.TabIndex = 0;
             this.wizardPageOptionsWorldShip.Title = "UPS Settings";
             this.wizardPageOptionsWorldShip.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextOptionsWorldShip);
@@ -640,7 +610,7 @@
             this.wizardPageAccountList.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountList.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountList.Name = "wizardPageAccountList";
-            this.wizardPageAccountList.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageAccountList.Size = new System.Drawing.Size(579, 474);
             this.wizardPageAccountList.TabIndex = 0;
             this.wizardPageAccountList.Title = "UPS Accounts";
             // 
@@ -663,7 +633,7 @@
             // 
             // wizardPageFinishAddAccount
             // 
-            this.wizardPageFinishAddAccount.Controls.Add(this.label4);
+            this.wizardPageFinishAddAccount.Controls.Add(this.congratsLabel);
             this.wizardPageFinishAddAccount.Description = "ShipWorks is now setup to use your account.";
             this.wizardPageFinishAddAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageFinishAddAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -673,15 +643,15 @@
             this.wizardPageFinishAddAccount.TabIndex = 0;
             this.wizardPageFinishAddAccount.Title = "Setup Complete";
             // 
-            // label4
+            // congratsLabel
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(24, 9);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(258, 13);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "ShipWorks is now setup to use your account!";
+            this.congratsLabel.AutoSize = true;
+            this.congratsLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.congratsLabel.Location = new System.Drawing.Point(24, 9);
+            this.congratsLabel.Name = "congratsLabel";
+            this.congratsLabel.Size = new System.Drawing.Size(258, 13);
+            this.congratsLabel.TabIndex = 1;
+            this.congratsLabel.Text = "ShipWorks is now setup to use your account!";
             // 
             // wizardPageOpenAccountCharacteristics
             // 
@@ -724,7 +694,7 @@
             this.wizardPageOpenAccountShipmentCharacteristics.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOpenAccountShipmentCharacteristics.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOpenAccountShipmentCharacteristics.Name = "wizardPageOpenAccountShipmentCharacteristics";
-            this.wizardPageOpenAccountShipmentCharacteristics.Size = new System.Drawing.Size(579, 415);
+            this.wizardPageOpenAccountShipmentCharacteristics.Size = new System.Drawing.Size(579, 474);
             this.wizardPageOpenAccountShipmentCharacteristics.TabIndex = 0;
             this.wizardPageOpenAccountShipmentCharacteristics.Title = "UPS Shipment Characteristics";
             this.wizardPageOpenAccountShipmentCharacteristics.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextWizardPageOpenAccountShipmentCharacteristics);
@@ -797,7 +767,7 @@
             this.pickupSchedule.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.pickupSchedule.Location = new System.Drawing.Point(23, 11);
             this.pickupSchedule.Name = "pickupSchedule";
-            this.pickupSchedule.Size = new System.Drawing.Size(369, 296);
+            this.pickupSchedule.Size = new System.Drawing.Size(496, 296);
             this.pickupSchedule.TabIndex = 0;
             // 
             // wizardPageOpenAccountPickupLocation
@@ -854,6 +824,58 @@
             this.upsBusinessInfoControl.Size = new System.Drawing.Size(446, 366);
             this.upsBusinessInfoControl.TabIndex = 0;
             // 
+            // wizardPageFinishCreateAccountRegistrationFailed
+            // 
+            this.wizardPageFinishCreateAccountRegistrationFailed.Controls.Add(this.labelCreateAccountRegistrationFailed4);
+            this.wizardPageFinishCreateAccountRegistrationFailed.Controls.Add(this.labelCreateAccountRegistrationFailed2);
+            this.wizardPageFinishCreateAccountRegistrationFailed.Controls.Add(this.labelCreateAccountRegistrationFailed3);
+            this.wizardPageFinishCreateAccountRegistrationFailed.Controls.Add(this.labelCreateAccountRegistrationFailed1);
+            this.wizardPageFinishCreateAccountRegistrationFailed.Description = "ShipWorks created your UPS Account, but not currently registered.";
+            this.wizardPageFinishCreateAccountRegistrationFailed.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageFinishCreateAccountRegistrationFailed.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageFinishCreateAccountRegistrationFailed.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageFinishCreateAccountRegistrationFailed.Name = "wizardPageFinishCreateAccountRegistrationFailed";
+            this.wizardPageFinishCreateAccountRegistrationFailed.Size = new System.Drawing.Size(579, 474);
+            this.wizardPageFinishCreateAccountRegistrationFailed.TabIndex = 0;
+            this.wizardPageFinishCreateAccountRegistrationFailed.Title = "Setup Complete";
+            // 
+            // labelCreateAccountRegistrationFailed4
+            // 
+            this.labelCreateAccountRegistrationFailed4.Location = new System.Drawing.Point(20, 216);
+            this.labelCreateAccountRegistrationFailed4.Name = "labelCreateAccountRegistrationFailed4";
+            this.labelCreateAccountRegistrationFailed4.Size = new System.Drawing.Size(438, 32);
+            this.labelCreateAccountRegistrationFailed4.TabIndex = 6;
+            this.labelCreateAccountRegistrationFailed4.Text = "Please watch your email for a confirmation from UPS with more information on how " +
+    "to use your account.";
+            // 
+            // labelCreateAccountRegistrationFailed2
+            // 
+            this.labelCreateAccountRegistrationFailed2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCreateAccountRegistrationFailed2.Location = new System.Drawing.Point(20, 52);
+            this.labelCreateAccountRegistrationFailed2.Name = "labelCreateAccountRegistrationFailed2";
+            this.labelCreateAccountRegistrationFailed2.Size = new System.Drawing.Size(438, 51);
+            this.labelCreateAccountRegistrationFailed2.TabIndex = 5;
+            this.labelCreateAccountRegistrationFailed2.Text = "The new UPS account is currently not registered within the ShipWorks software. To" +
+    " add this account later, select \"USE an existing UPS account\" and enter ###### a" +
+    "s your UPS account number.";
+            // 
+            // labelCreateAccountRegistrationFailed3
+            // 
+            this.labelCreateAccountRegistrationFailed3.Location = new System.Drawing.Point(20, 150);
+            this.labelCreateAccountRegistrationFailed3.Name = "labelCreateAccountRegistrationFailed3";
+            this.labelCreateAccountRegistrationFailed3.Size = new System.Drawing.Size(438, 32);
+            this.labelCreateAccountRegistrationFailed3.TabIndex = 4;
+            this.labelCreateAccountRegistrationFailed3.Text = "Your new UPS account number: XXXXX";
+            // 
+            // labelCreateAccountRegistrationFailed1
+            // 
+            this.labelCreateAccountRegistrationFailed1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCreateAccountRegistrationFailed1.Location = new System.Drawing.Point(20, 5);
+            this.labelCreateAccountRegistrationFailed1.Name = "labelCreateAccountRegistrationFailed1";
+            this.labelCreateAccountRegistrationFailed1.Size = new System.Drawing.Size(525, 28);
+            this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
+            this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
+            // 
             // UpsSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -880,7 +902,8 @@
             this.wizardPageOptionsOlt,
             this.wizardPageOptionsWorldShip,
             this.wizardPageFinishOlt,
-            this.wizardPageFinishAddAccount});
+            this.wizardPageFinishAddAccount,
+            this.wizardPageFinishCreateAccountRegistrationFailed});
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "UPS Setup Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
@@ -905,7 +928,6 @@
             this.wizardPageLicense.PerformLayout();
             this.wizardPageAccount.ResumeLayout(false);
             this.wizardPageFinishOlt.ResumeLayout(false);
-            this.wizardPageFinishOlt.PerformLayout();
             this.wizardPageRates.ResumeLayout(false);
             this.wizardPageOptionsOlt.ResumeLayout(false);
             this.wizardPageWelcomeWorldShip.ResumeLayout(false);
@@ -927,6 +949,7 @@
             this.wizardPageOpenAccountPickupLocation.ResumeLayout(false);
             this.wizardPageOpenAccountBusinessInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.helpBusinessInformation)).EndInit();
+            this.wizardPageFinishCreateAccountRegistrationFailed.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -944,11 +967,8 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinishOlt;
         private ShipWorks.Data.Controls.PersonControl personControl;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelSetupComplete;
-        private System.Windows.Forms.Label labelUps1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label linkUpsOlt;
-        private System.Windows.Forms.Label linkUps;
+        private System.Windows.Forms.Label labelSetupComplete1;
+        private System.Windows.Forms.Label labelSetupComplete2;
         private ShipWorks.UI.Wizard.WizardPage wizardPageRates;
         private ShipWorks.Shipping.Carriers.UPS.UpsAccountRateTypeControl upsRateTypeControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPageOptionsOlt;
@@ -961,7 +981,7 @@
         private System.Windows.Forms.Label label3;
         private UpsAccountManagerControl accountControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinishAddAccount;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label congratsLabel;
         private System.Windows.Forms.PictureBox pictureBoxWorldShip;
         private System.Windows.Forms.Label labelWorldShipImportant;
         private System.Windows.Forms.Label labelWorldShipInfo2;
@@ -997,5 +1017,11 @@
         private System.Windows.Forms.PictureBox helpShipmentCharacteristics;
         private System.Windows.Forms.PictureBox helpBusinessInformation;
         private System.Windows.Forms.PictureBox helpPickupLocation;
+        private System.Windows.Forms.Label labelSetupComplete3;
+        private UI.Wizard.WizardPage wizardPageFinishCreateAccountRegistrationFailed;
+        private System.Windows.Forms.Label labelCreateAccountRegistrationFailed4;
+        private System.Windows.Forms.Label labelCreateAccountRegistrationFailed2;
+        private System.Windows.Forms.Label labelCreateAccountRegistrationFailed3;
+        private System.Windows.Forms.Label labelCreateAccountRegistrationFailed1;
     }
 }

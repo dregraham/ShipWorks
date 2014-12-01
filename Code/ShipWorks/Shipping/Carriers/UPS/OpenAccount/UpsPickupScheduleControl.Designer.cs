@@ -49,8 +49,12 @@
             this.pickupLocation = new System.Windows.Forms.ComboBox();
             this.labelPickupLocation = new System.Windows.Forms.Label();
             this.labelPickupLocationHeader = new System.Windows.Forms.Label();
+            this.feeInfoPanel = new System.Windows.Forms.Panel();
+            this.feeLink = new System.Windows.Forms.LinkLabel();
+            this.feesMayApplyLabel = new System.Windows.Forms.Label();
             this.pickUpDay.SuspendLayout();
             this.pickupDateTimePanel.SuspendLayout();
+            this.feeInfoPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelPickupOptions
@@ -235,14 +239,6 @@
             // 
             // pickupStartDate
             // 
-            this.pickupStartDate.FormattingEnabled = true;
-            this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
-            this.pickupStartDate.Name = "pickupStartDate";
-            this.pickupStartDate.Size = new System.Drawing.Size(184, 21);
-            this.pickupStartDate.TabIndex = 20;
-            // 
-            // pickupStartDate
-            // 
             this.pickupStartDate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.pickupStartDate.FormattingEnabled = true;
             this.pickupStartDate.Location = new System.Drawing.Point(124, 106);
@@ -278,10 +274,41 @@
             this.labelPickupLocationHeader.TabIndex = 19;
             this.labelPickupLocationHeader.Text = "Pickup Location Information";
             // 
+            // feeInfoPanel
+            // 
+            this.feeInfoPanel.Controls.Add(this.feeLink);
+            this.feeInfoPanel.Controls.Add(this.feesMayApplyLabel);
+            this.feeInfoPanel.Location = new System.Drawing.Point(252, 22);
+            this.feeInfoPanel.Name = "feeInfoPanel";
+            this.feeInfoPanel.Size = new System.Drawing.Size(200, 19);
+            this.feeInfoPanel.TabIndex = 20;
+            // 
+            // feeLink
+            // 
+            this.feeLink.AutoSize = true;
+            this.feeLink.Location = new System.Drawing.Point(103, 0);
+            this.feeLink.Margin = new System.Windows.Forms.Padding(0);
+            this.feeLink.Name = "feeLink";
+            this.feeLink.Size = new System.Drawing.Size(29, 13);
+            this.feeLink.TabIndex = 1;
+            this.feeLink.TabStop = true;
+            this.feeLink.Text = "here";
+            this.feeLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnFeeLinkClicked);
+            // 
+            // feesMayApplyLabel
+            // 
+            this.feesMayApplyLabel.AutoSize = true;
+            this.feesMayApplyLabel.Location = new System.Drawing.Point(0, 0);
+            this.feesMayApplyLabel.Name = "feesMayApplyLabel";
+            this.feesMayApplyLabel.Size = new System.Drawing.Size(202, 13);
+            this.feesMayApplyLabel.TabIndex = 0;
+            this.feesMayApplyLabel.Text = "Fees may apply, click here for more info.";
+            // 
             // UpsPickupScheduleControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.feeInfoPanel);
             this.Controls.Add(this.labelPickupLocationHeader);
             this.Controls.Add(this.pickupDateTimePanel);
             this.Controls.Add(this.pickUpDay);
@@ -289,11 +316,13 @@
             this.Controls.Add(this.labelPickupOptions);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsPickupScheduleControl";
-            this.Size = new System.Drawing.Size(369, 338);
+            this.Size = new System.Drawing.Size(581, 338);
             this.pickUpDay.ResumeLayout(false);
             this.pickUpDay.PerformLayout();
             this.pickupDateTimePanel.ResumeLayout(false);
             this.pickupDateTimePanel.PerformLayout();
+            this.feeInfoPanel.ResumeLayout(false);
+            this.feeInfoPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,6 +351,9 @@
         private System.Windows.Forms.Label labelPickupLocation;
         private System.Windows.Forms.ComboBox pickupStartDate;
         private System.Windows.Forms.Label labelPickupLocationHeader;
+        private System.Windows.Forms.Panel feeInfoPanel;
+        private System.Windows.Forms.LinkLabel feeLink;
+        private System.Windows.Forms.Label feesMayApplyLabel;
 
     }
 }

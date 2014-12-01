@@ -16,7 +16,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         MissingRequiredFields = 1,
 
         [Description("The request to open a new UPS account failed because pickup address is not valid for SMART Pickup")]
-        SmartPickupError = 2
+        SmartPickupError = 2,
+
+        [Description("Account created but not registered.")]
+        NotRegistered = 3
 
     }
 }

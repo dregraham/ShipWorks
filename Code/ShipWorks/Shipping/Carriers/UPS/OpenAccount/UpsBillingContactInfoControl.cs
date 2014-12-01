@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             get
             {
-                return sameAsPickupYes.Checked;
+                return sameAsPickup.Checked;
             }
         }
         /// <summary>
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// </summary>
         private void CopyBillingInfoToPickupInfo(OpenAccountRequest request)
         {
-            if (sameAsPickupYes.Checked)
+            if (sameAsPickup.Checked)
             {
                 if (request.PickupAddress == null)
                 {
