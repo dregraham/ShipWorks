@@ -21,7 +21,7 @@
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>e:\jenkins-builds\create-branch-workflow</customWorkspace>
+  <customWorkspace>e:\jenkins-builds\delete-branch-workflow</customWorkspace>
   <builders>
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
       <command>echo &quot;Deleting jobs for $env:FEATURE_NAME&quot;
@@ -59,7 +59,18 @@ $deleteViewUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &qu
 # Make the request to delete the feature view
 $request = [net.webRequest]::create($deleteViewUrl)
 $request.Method = &quot;POST&quot;
-$request.getResponse()</command>
+$request.getResponse()
+
+
+# Delete the source code directory from disk
+$jobSourceDirectory = "\\intjenkins\C$\jenkins-builds\" + $env:FEATURE_NAME
+if (Test-Path -Path $jobSourceDirectory)
+{
+    echo "Deleting source directory for $env:FEATURE_NAME..."
+    rm -Force -Recurse $jobSourceDirectory
+    echo "Source directory for $env:FEATURE_NAME has been deleted"
+}
+</command>
     </hudson.plugins.powershell.PowerShell>
   </builders>
   <publishers/>

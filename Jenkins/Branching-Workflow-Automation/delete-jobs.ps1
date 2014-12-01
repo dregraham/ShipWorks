@@ -41,3 +41,13 @@ $deleteViewUrl = "http://john-pc:8181/view/" + $env:FEATURE_NAME + "/doDelete"
 $request = [net.webRequest]::create($deleteViewUrl)
 $request.Method = "POST"
 $request.getResponse()
+
+
+# Delete the source code directory from disk
+$jobSourceDirectory = "\\intjenkins\C$\jenkins-builds\" + $env:FEATURE_NAME
+if (Test-Path -Path $jobSourceDirectory)
+{
+    echo "Deleting source directory for $env:FEATURE_NAME..."
+    rm -Force -Recurse $jobSourceDirectory
+    echo "Source directory for $env:FEATURE_NAME has been deleted"
+}
