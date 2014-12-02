@@ -205,6 +205,13 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Should disabled filters be hidden
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool HideDisabledFilters { get; set; }
+
+        /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
         /// </summary>
         [DefaultValue(null)]
@@ -552,7 +559,7 @@ namespace ShipWorks.Filters.Controls
         private void LoadChildren(FilterNodeEntity filterNode, FilterTreeGridRow parentRow)
         {
             // Go through each of the children in order
-            foreach (FilterNodeEntity childNode in filterNode.ChildNodes)
+            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(x => !HideDisabledFilters || x.Filter.State == (int) FilterState.Enabled))
             {
                 FilterTreeGridRow row = CreateRow(childNode);
                 parentRow.NestedRows.Add(row);
@@ -814,7 +821,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Update the display text for all nodes that use the given filter
         /// </summary>
-        public void UpdateFilterName(FilterEntity filter)
+        public void UpdateFilter(FilterEntity filter)
         {
             foreach (FilterNodeEntity node in FilterHelper.GetNodesUsingFilter(filter))
             {
@@ -822,10 +829,23 @@ namespace ShipWorks.Filters.Controls
                 // skip it as there's nothing to update.
                 if (nodeOwnerMap.ContainsKey(node))
                 {
-                    GridCell gridCell = GetGridRow(node).Cells[0];
+                    FilterTreeGridRow gridRow = GetGridRow(node);
 
-                    gridCell.Text = filter.Name;
-                    gridCell.Image = FilterHelper.GetFilterImage(node);
+                    if (filter.State != (int) FilterState.Enabled && HideDisabledFilters)
+                    {
+                        if (gridRow.Selected)
+                        {
+                            SelectFirstNode();
+                        }
+
+                        gridRow.Remove();
+                    }
+                    else
+                    {
+                        GridCell gridCell = gridRow.Cells[0];
+                        gridCell.Text = filter.Name;
+                        gridCell.Image = FilterHelper.GetFilterImage(node);   
+                    }
                 }
             }
 
