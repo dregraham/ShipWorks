@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using Apitron.PDF.Rasterizer;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
@@ -37,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         ShipmentType shipmentType;
         bool forceAccountOnly;
 
-        string upsLicense = null;
+        string upsLicense;
 
         // The ups shipper we are creating
         UpsAccountEntity upsAccount = new UpsAccountEntity();
@@ -65,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new InvalidOperationException("ShipmentTypeCode must be UPS");
             }
 
-            this.shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
             this.forceAccountOnly = forceAccountOnly;
         }
 
@@ -85,8 +82,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 wizardPageLicense,
                 wizardPageOpenAccountCharacteristics,
                 wizardPageAccount,
-                wizardPageOpenAccountShipmentCharacteristics,
-                wizardPageOpenAccountBusinessInfo,
                 wizardPageOpenAccountPickupSchedule,
                 wizardPageOpenAccountPageBillingContactInfo,
                 wizardPageOpenAccountPickupLocation,
@@ -107,8 +102,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 Pages.Remove(wizardPageWelcomeOlt);
                 Pages.Remove(wizardPageOpenAccountCharacteristics);
-                Pages.Remove(wizardPageOpenAccountShipmentCharacteristics);
-                Pages.Remove(wizardPageOpenAccountBusinessInfo);
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
@@ -259,12 +252,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // If this is for an existing account, remove the open account wizards.
             if (existingAccount.Checked)
             {
-                Pages.Remove(wizardPageOpenAccountBusinessInfo);
                 Pages.Remove(wizardPageOpenAccountCharacteristics);
                 Pages.Remove(wizardPageOpenAccountPageBillingContactInfo);
                 Pages.Remove(wizardPageOpenAccountPickupLocation);
                 Pages.Remove(wizardPageOpenAccountPickupSchedule);
-                Pages.Remove(wizardPageOpenAccountShipmentCharacteristics);
             }
             else
             {
@@ -372,7 +363,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Begin the printing process
         /// </summary>
-        private void OnPrintAgreement(object sender, System.EventArgs e)
+        private void OnPrintAgreement(object sender, EventArgs e)
         {
             PrintUtility.PrintText(this, "ShipWorks - UPS License Agreement", upsLicense, true);
         }
@@ -739,29 +730,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
-        /// <summary>
-        /// Stepping next from the WorldShip options page
-        /// </summary>
-        private void OnStepNextBusinessInfo(object sender, WizardStepEventArgs e)
-        {
-            try
-            {
-                upsBusinessInfoControl.SaveToRequest(openAccountRequest);
-            }
-            catch (UpsOpenAccountException ex)
-            {
-                if (ex.ErrorCode == UpsOpenAccountErrorCode.MissingRequiredFields)
-                {
-                    MessageHelper.ShowMessage(this, ex.Message);
-                    e.NextPage = CurrentPage;
-                }
-                else
-                {
-                    throw;
-                }
-            }
-        }
-
         /// <summary> 
         /// Called when [stepping into open account business info]. 
         /// </summary> 
@@ -848,19 +816,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="e">The <see cref="WizardStepEventArgs" /> instance containing the event data.</param>
         private void OnStepNextWizardPageOpenAccountCharacteristics(object sender, WizardStepEventArgs e)
         {
-            accountCharacteristics.SaveToRequest(openAccountRequest); 
-        }
-
-        /// <summary>
-        /// Called when [step next wizard page open account shipment characteristics].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="WizardStepEventArgs" /> instance containing the event data.</param>
-        private void OnStepNextWizardPageOpenAccountShipmentCharacteristics(object sender, WizardStepEventArgs e)
-        {
             try
             {
                 shipmentCharacteristics.SaveToRequest(openAccountRequest);
+                accountCharacteristics.SaveToRequest(openAccountRequest);
+                upsBusinessInfoControl.SaveToRequest(openAccountRequest);
             }
             catch (UpsOpenAccountException ex)
             {

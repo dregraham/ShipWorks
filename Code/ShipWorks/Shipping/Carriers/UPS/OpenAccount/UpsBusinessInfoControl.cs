@@ -34,20 +34,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             {
                 request.AccountCharacteristics = new AccountCharacteristicsType();
             }
-            if (request.AccountCharacteristics.BusinessInformation == null)
+            if (Visible)
             {
-                request.AccountCharacteristics.BusinessInformation = new BusinessInformationType();
+                if (request.AccountCharacteristics.BusinessInformation == null)
+                {
+                    request.AccountCharacteristics.BusinessInformation = new BusinessInformationType();
+                }
+
+                request.AccountCharacteristics.BusinessInformation.Industry = new CodeOnlyType
+                {
+                    Code = EnumHelper.GetApiValue((UpsBusinessIndustry)industry.SelectedValue)
+                };
+
+                request.AccountCharacteristics.BusinessInformation.NumberOfEmployees = new CodeOnlyType
+                {
+                    Code = EnumHelper.GetApiValue((UpsNumberOfEmployees)numberOfEmployees.SelectedValue)
+                };
             }
-
-            request.AccountCharacteristics.BusinessInformation.Industry = new CodeOnlyType
+            else
             {
-                Code = EnumHelper.GetApiValue((UpsBusinessIndustry)industry.SelectedValue)
-            };
-
-            request.AccountCharacteristics.BusinessInformation.NumberOfEmployees = new CodeOnlyType
-            {
-                Code = EnumHelper.GetApiValue((UpsNumberOfEmployees)numberOfEmployees.SelectedValue)
-            };
+                request.AccountCharacteristics.BusinessInformation = null;
+            }
         }
     }
 }

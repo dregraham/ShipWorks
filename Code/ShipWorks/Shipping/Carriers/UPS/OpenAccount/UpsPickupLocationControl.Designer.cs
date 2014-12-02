@@ -38,9 +38,9 @@
             this.labelPickupLocationHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPickupLocationHeader.Location = new System.Drawing.Point(3, 0);
             this.labelPickupLocationHeader.Name = "labelPickupLocationHeader";
-            this.labelPickupLocationHeader.Size = new System.Drawing.Size(158, 13);
+            this.labelPickupLocationHeader.Size = new System.Drawing.Size(93, 13);
             this.labelPickupLocationHeader.TabIndex = 0;
-            this.labelPickupLocationHeader.Text = "Pickup Location Information";
+            this.labelPickupLocationHeader.Text = "Pickup Address";
             // 
             // pickupLocationPersonControl
             // 

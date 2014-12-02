@@ -272,7 +272,7 @@
             this.labelPickupLocationHeader.Name = "labelPickupLocationHeader";
             this.labelPickupLocationHeader.Size = new System.Drawing.Size(166, 13);
             this.labelPickupLocationHeader.TabIndex = 19;
-            this.labelPickupLocationHeader.Text = "Pickup Location Information";
+            this.labelPickupLocationHeader.Text = "Schedule Your Pickups";
             // 
             // feeInfoPanel
             // 

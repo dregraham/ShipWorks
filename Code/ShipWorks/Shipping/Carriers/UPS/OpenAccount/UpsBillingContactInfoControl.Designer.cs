@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.labelBillingContactInfoHeader = new System.Windows.Forms.Label();
-            this.billingContactPersonControl = new ShipWorks.Data.Controls.PersonControl();
             this.sameAsPickup = new System.Windows.Forms.CheckBox();
+            this.billingContactPersonControl = new ShipWorks.Data.Controls.PersonControl();
             this.SuspendLayout();
             // 
             // labelBillingContactInfoHeader
@@ -39,9 +39,22 @@
             this.labelBillingContactInfoHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelBillingContactInfoHeader.Location = new System.Drawing.Point(3, 0);
             this.labelBillingContactInfoHeader.Name = "labelBillingContactInfoHeader";
-            this.labelBillingContactInfoHeader.Size = new System.Drawing.Size(158, 13);
+            this.labelBillingContactInfoHeader.Size = new System.Drawing.Size(89, 13);
             this.labelBillingContactInfoHeader.TabIndex = 0;
-            this.labelBillingContactInfoHeader.Text = "Billing Contact Information";
+            this.labelBillingContactInfoHeader.Text = "Billing Address";
+            // 
+            // sameAsPickup
+            // 
+            this.sameAsPickup.AutoSize = true;
+            this.sameAsPickup.Checked = true;
+            this.sameAsPickup.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.sameAsPickup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sameAsPickup.Location = new System.Drawing.Point(11, 356);
+            this.sameAsPickup.Name = "sameAsPickup";
+            this.sameAsPickup.Size = new System.Drawing.Size(244, 17);
+            this.sameAsPickup.TabIndex = 3;
+            this.sameAsPickup.Text = "This address is also my pickup address";
+            this.sameAsPickup.UseVisualStyleBackColor = true;
             // 
             // billingContactPersonControl
             // 
@@ -66,19 +79,6 @@
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.billingContactPersonControl.Size = new System.Drawing.Size(355, 336);
             this.billingContactPersonControl.TabIndex = 1;
-            // 
-            // sameAsPickup
-            // 
-            this.sameAsPickup.AutoSize = true;
-            this.sameAsPickup.Checked = true;
-            this.sameAsPickup.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.sameAsPickup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sameAsPickup.Location = new System.Drawing.Point(11, 356);
-            this.sameAsPickup.Name = "sameAsPickup";
-            this.sameAsPickup.Size = new System.Drawing.Size(244, 17);
-            this.sameAsPickup.TabIndex = 3;
-            this.sameAsPickup.Text = "This address is also my pickup address";
-            this.sameAsPickup.UseVisualStyleBackColor = true;
             // 
             // UpsBillingContactInfoControl
             // 
