@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the person control associated with the Stamps.com account.
         /// </summary>
-        protected PersonControl PersonControl
+        protected AutofillPersonControl PersonControl
         {
             get { return personControl; }
         }

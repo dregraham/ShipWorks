@@ -59,7 +59,7 @@
             this.stampsUsageType = new System.Windows.Forms.ComboBox();
             this.labelUsageType = new System.Windows.Forms.Label();
             this.labelAccount = new System.Windows.Forms.Label();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageNewAccountCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.stampsRegistrationSecuritySettingsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.StampsRegistrationSecuritySettingsControl();
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
@@ -316,7 +316,7 @@
             this.wizardPageAccountAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountAddress.Name = "wizardPageAccountAddress";
-            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 507);
             this.wizardPageAccountAddress.TabIndex = 0;
             this.wizardPageAccountAddress.Title = "Account Registration";
             this.wizardPageAccountAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountAddress);
@@ -461,7 +461,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 92);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(355, 302);
+            this.personControl.Size = new System.Drawing.Size(355, 324);
             this.personControl.TabIndex = 1;
             // 
             // wizardPageNewAccountCredentials
@@ -609,6 +609,6 @@
         private System.Windows.Forms.Label labelTerms1;
         private System.Windows.Forms.CheckBox termsCheckBox;
         private System.Windows.Forms.Label labelTerms;
-        private Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
     }
 }
