@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using ShipWorks.ApplicationCore.Interaction;
@@ -13,6 +14,7 @@ using log4net;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using System.Diagnostics;
+using ShipWorks.SqlServer.Common.Data;
 
 namespace ShipWorks.Users.Audit
 {
@@ -24,6 +26,8 @@ namespace ShipWorks.Users.Audit
     public static class AuditProcessor
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AuditProcessor));
+
+        private const string auditProcessingAppLockName = "AuditProcessorRunning";
 
         static Guid idleWorkGuid;
 
@@ -67,29 +71,78 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private static void AsyncProcessAudits()
         {
-            // If we skip any due to locking, then don't try them again during this pass.  Otherwise we could
-            // keep trying them over and over in quick succession while another SW was working on it.
-            List<long> skippedDueToLock = new List<long>();
+            log.Info("Starting AsyncProcessAudits at " + DateTime.Now);
+            bool lockAcquired = false;
 
-            while (true)
+            using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
             {
-                // Grab count at a time (arbitrary) number, but we keep looping until they are gone
-                AuditCollection audits = GetUndeterminedAudits(100);
-
-                // If there arent any left that we havn't already tried, get out. This would also return if there arent any in the first place
-                if (audits.Select(a => a.AuditID).Except(skippedDueToLock).Count() == 0)
+                try
                 {
-                    break;
-                }
-
-                foreach (AuditEntity audit in audits)
-                {
-                    if (!ProcessAudit(audit))
+                    lockAcquired = SqlAppLockUtility.AcquireLock(sqlConnection, auditProcessingAppLockName);
+                    if (!lockAcquired)
                     {
-                        skippedDueToLock.Add(audit.AuditID);
+                        log.Info("AsyncProcessAudits  was unable to acquire an app lock.  Processing must already be being done by someone else.");
+                        return;
+                    }
+
+                    log.Info("Acquired AsyncProcessAudits app lock. ");
+
+                    // If we skip any due to locking, then don't try them again during this pass.  Otherwise we could
+                    // keep trying them over and over in quick succession while another SW was working on it.
+                    List<long> skippedDueToLock = new List<long>();
+
+                    while (true)
+                    {
+                        // Grab count at a time (arbitrary) number, but we keep looping until they are gone
+                        AuditCollection audits = GetUndeterminedAudits(100);
+
+                        // If there arent any left that we havn't already tried, get out. This would also return if there arent any in the first place
+                        if (audits.Select(a => a.AuditID).Except(skippedDueToLock).Count() == 0)
+                        {
+                            break;
+                        }
+
+                        foreach (AuditEntity audit in audits)
+                        {
+                            if (!ProcessAudit(audit))
+                            {
+                                skippedDueToLock.Add(audit.AuditID);
+                            }
+                        }
+                    }
+                }
+                catch (AuditMissingObjectLabelException objectLabelMissingException)
+                {
+                    // There's nothing we can do about these...the user will always crash until we remote in to delete the audit.  So just do that now.
+                    try
+                    {
+                        log.Error(objectLabelMissingException);
+                        SqlAdapter.Default.DeleteEntity(new AuditEntity(objectLabelMissingException.AuditID));
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error("While attempting to delete an audit with missing object labels, an exception occurred.", ex);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // If an exception happens while processing audits, there's nothing the user can do about it...  Crashing doesn't help them either...
+                    // So log it and carry on.
+                    log.Error("An exception occurred while processing Audits.", ex);
+                }
+                finally
+                {
+                    log.Info("Releasing AsyncProcessAudits app lock. ");
+
+                    if (lockAcquired)
+                    {
+                        SqlAppLockUtility.ReleaseLock(sqlConnection, auditProcessingAppLockName);
                     }
                 }
             }
+
+
+            log.Info("Leaving AsyncProcessAudits at " + DateTime.Now);
         }
 
         /// <summary>
@@ -304,7 +357,7 @@ namespace ShipWorks.Users.Audit
                     })
                 {
                     // Get the changs as related to the parent.  
-                    Dictionary<long, AuditChangeType> rolledupChanges = RollupChildChanges(childType, changeCatalog);
+                    Dictionary<long, AuditChangeType> rolledupChanges = RollupChildChanges(childType, changeCatalog, audit.AuditID);
 
                     // Remove this child set from the change catalog
                     changeCatalog.Remove(childType);
@@ -388,7 +441,7 @@ namespace ShipWorks.Users.Audit
                                     long? customerID = ObjectLabelManager.GetLabel(orderID).ParentID;
                                     if (customerID == null)
                                     {
-                                        throw new InvalidOperationException(string.Format("CustomerID was not logged to order {0} in ObjectLabel.", orderID));
+                                        throw new AuditMissingObjectLabelException(string.Format("CustomerID was not logged to order {0} in ObjectLabel.", orderID), audit.AuditID);
                                     }
 
                                     if (customerID.Value != customerChange.Key)
@@ -450,7 +503,7 @@ namespace ShipWorks.Users.Audit
         /// the parent already has its own change in the changeCatalog, then nothing is done.  If a change for the parent is rolled up, it always an update.  See content
         /// for why.
         /// </summary>
-        private static Dictionary<long, AuditChangeType> RollupChildChanges(EntityType childType, Dictionary<EntityType, Dictionary<long, AuditChangeType>> changeCatalog)
+        private static Dictionary<long, AuditChangeType> RollupChildChanges(EntityType childType, Dictionary<EntityType, Dictionary<long, AuditChangeType>> changeCatalog, long auditID)
         {
             Dictionary<long, AuditChangeType> parentChanges = null;
 
@@ -464,7 +517,7 @@ namespace ShipWorks.Users.Audit
                     long? parentID = ObjectLabelManager.GetLabel(change.Key).ParentID;
                     if (parentID == null)
                     {
-                        throw new InvalidOperationException(string.Format("Parent for {0} not set in ObjectLabel", change.Key));
+                        throw new AuditMissingObjectLabelException(string.Format("Parent for {0} not set in ObjectLabel", change.Key), auditID);
                     }
 
                     EntityType parentType = EntityUtility.GetEntityType(parentID.Value);
