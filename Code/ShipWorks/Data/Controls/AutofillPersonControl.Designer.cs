@@ -38,7 +38,7 @@
             // copyAddressLabel
             // 
             this.copyAddressLabel.AutoSize = true;
-            this.copyAddressLabel.Location = new System.Drawing.Point(3, 1);
+            this.copyAddressLabel.Location = new System.Drawing.Point(2, 1);
             this.copyAddressLabel.Name = "copyAddressLabel";
             this.copyAddressLabel.Size = new System.Drawing.Size(94, 13);
             this.copyAddressLabel.TabIndex = 1;
@@ -48,15 +48,15 @@
             // 
             this.storeSelectorPanel.Controls.Add(this.storeAddressLink);
             this.storeSelectorPanel.Controls.Add(this.copyAddressLabel);
-            this.storeSelectorPanel.Location = new System.Drawing.Point(4, 4);
+            this.storeSelectorPanel.Location = new System.Drawing.Point(0, 4);
             this.storeSelectorPanel.Name = "storeSelectorPanel";
-            this.storeSelectorPanel.Size = new System.Drawing.Size(339, 17);
+            this.storeSelectorPanel.Size = new System.Drawing.Size(345, 17);
             this.storeSelectorPanel.TabIndex = 2;
             // 
             // storeAddressLink
             // 
             this.storeAddressLink.AutoSize = true;
-            this.storeAddressLink.Location = new System.Drawing.Point(94, 1);
+            this.storeAddressLink.Location = new System.Drawing.Point(93, 1);
             this.storeAddressLink.Name = "storeAddressLink";
             this.storeAddressLink.Size = new System.Drawing.Size(30, 13);
             this.storeAddressLink.TabIndex = 2;

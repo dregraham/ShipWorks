@@ -111,6 +111,14 @@ namespace ShipWorks.Data.Controls
         }
 
         /// <summary>
+        /// Load the given entity into the control
+        /// </summary>
+        public void LoadEntity(PersonAdapter person)
+        {
+            personControl.LoadEntity(person);
+        }
+
+        /// <summary>
         /// Save the data from the controls into the given entity. The original list of loaded people is
         /// left alone.
         /// </summary>
@@ -151,7 +159,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void LoadStoreAddresIntoPersonControl(StoreEntity store)
         {
-            personControl.LoadEntity(new PersonAdapter(store, string.Empty));
+            LoadEntity(new PersonAdapter(store, string.Empty));
         }
     }
 }
