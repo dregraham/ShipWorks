@@ -205,6 +205,13 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Should disabled filters be hidden
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool HideDisabledFilters { get; set; }
+
+        /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
         /// </summary>
         [DefaultValue(null)]
@@ -552,7 +559,7 @@ namespace ShipWorks.Filters.Controls
         private void LoadChildren(FilterNodeEntity filterNode, FilterTreeGridRow parentRow)
         {
             // Go through each of the children in order
-            foreach (FilterNodeEntity childNode in filterNode.ChildNodes)
+            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(x => !HideDisabledFilters || x.Filter.State == (int) FilterState.Enabled))
             {
                 FilterTreeGridRow row = CreateRow(childNode);
                 parentRow.NestedRows.Add(row);
