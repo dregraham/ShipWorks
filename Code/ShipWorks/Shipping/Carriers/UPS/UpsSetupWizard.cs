@@ -791,29 +791,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountException ex)
             {
-                switch (ex.ErrorCode)
-                {
-                    case UpsOpenAccountErrorCode.MissingRequiredFields:
-                        // If MissingRequiredFields, The person control already showed a message, cancel and return.
-                        e.NextPage = CurrentPage;
-                        break;
-
-                    case UpsOpenAccountErrorCode.UnknownError:
-                    case UpsOpenAccountErrorCode.SmartPickupError:
-                        MessageHelper.ShowMessage(this, ex.Message);
-                        e.NextPage = CurrentPage;
-                        break;
-
-                    case UpsOpenAccountErrorCode.NotRegistered:
-                        Pages.Remove(wizardPageFinishOlt);
-                        Pages.Add(wizardPageFinishCreateAccountRegistrationFailed);
-                        e.NextPage = wizardPageFinishCreateAccountRegistrationFailed;
-
-                        labelCreateAccountRegistrationFailed2.Text = string.Format("The new UPS account is currently not registered within the ShipWorks software.  To add this account later, select “Use an existing UPS account” and enter {0} as your UPS account number.", upsAccount.AccountNumber);
-                        labelCreateAccountRegistrationFailed3.Text = string.Format("Your new UPS account number:  {0}", upsAccount.AccountNumber);
-
-                        break;
-                }
+                HandleOpenAccountException(e, ex);
             }
         }
 
@@ -829,12 +807,37 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
             catch (UpsOpenAccountException ex)
             {
-                if (ex.ErrorCode != UpsOpenAccountErrorCode.MissingRequiredFields)
-                {
+                HandleOpenAccountException(e, ex);
+            }
+        }
+
+        /// <summary>
+        /// Handles the open account exception.
+        /// </summary>
+        private void HandleOpenAccountException(WizardStepEventArgs wizardStepEventArgs, UpsOpenAccountException openAccountException)
+        {
+            switch (openAccountException.ErrorCode)
+            {
+                case UpsOpenAccountErrorCode.MissingRequiredFields:
                     // If MissingRequiredFields, The person control already showed a message, cancel and return.
-                    MessageHelper.ShowMessage(this, ex.Message);
-                }
-                e.NextPage = CurrentPage;
+                    wizardStepEventArgs.NextPage = CurrentPage;
+                    break;
+
+                case UpsOpenAccountErrorCode.NotRegistered:
+                    Pages.Remove(wizardPageFinishOlt);
+                    Pages.Add(wizardPageFinishCreateAccountRegistrationFailed);
+                    wizardStepEventArgs.NextPage = wizardPageFinishCreateAccountRegistrationFailed;
+                    FinishCancels = true;
+
+                    labelCreateAccountRegistrationFailed2.Text = string.Format("The new UPS account is currently not registered within the ShipWorks software.  To add this account later, select “Use an existing UPS account” and enter {0} as your UPS account number.", upsAccount.AccountNumber);
+                    labelCreateAccountRegistrationFailed3.Text = string.Format("Your new UPS account number:  {0}", upsAccount.AccountNumber);
+
+                    break;
+
+                default:
+                    MessageHelper.ShowMessage(this, openAccountException.Message);
+                    wizardStepEventArgs.NextPage = CurrentPage;
+                    break;
             }
         }
 

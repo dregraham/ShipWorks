@@ -128,9 +128,7 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(411, 546);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -142,7 +140,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinishCreateAccountRegistrationFailed);
+            this.mainPanel.Controls.Add(this.wizardPageOpenAccountPickupLocation);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -788,7 +786,7 @@
             this.upsPickupLocationControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.upsPickupLocationControl.Location = new System.Drawing.Point(64, 20);
             this.upsPickupLocationControl.Name = "upsPickupLocationControl";
-            this.upsPickupLocationControl.Size = new System.Drawing.Size(446, 366);
+            this.upsPickupLocationControl.Size = new System.Drawing.Size(446, 415);
             this.upsPickupLocationControl.TabIndex = 0;
             // 
             // wizardPageOpenAccountBusinessInfo
@@ -881,7 +879,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(579, 581);
-            this.ControlBox = false;
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "UpsSetupWizard";

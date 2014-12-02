@@ -347,6 +347,8 @@ namespace ShipWorks.UI.Wizard
 		{
 			InitializeComponent();
 
+            FinishCancels = false;
+
             // Create our page collection 
             pageCollection = new WizardPageCollection(this);
 		}
@@ -613,6 +615,15 @@ namespace ShipWorks.UI.Wizard
         }
 
         /// <summary>
+        /// If true, canceling 
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [finish cancels]; otherwise, <c>false</c>.
+        /// </value>
+        public bool FinishCancels { get; set; }
+        
+
+        /// <summary>
         /// Show the page at the given index
         /// </summary>
         private WizardPage ShowPage(int index)
@@ -791,7 +802,7 @@ namespace ShipWorks.UI.Wizard
                 }
 
                 next.Text = "Finish";
-                next.DialogResult = DialogResult.OK;
+                next.DialogResult = FinishCancels ? DialogResult.Cancel : DialogResult.OK;
             }
             else
             {
