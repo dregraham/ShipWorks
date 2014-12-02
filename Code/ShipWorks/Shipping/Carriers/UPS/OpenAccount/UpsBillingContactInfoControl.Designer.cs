@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.labelBillingContactInfoHeader = new System.Windows.Forms.Label();
-            this.billingContactPersonControl = new ShipWorks.Data.Controls.PersonControl();
+            this.billingContactPersonControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.sameAsPickup = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
@@ -64,8 +64,9 @@
             | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.billingContactPersonControl.Size = new System.Drawing.Size(355, 336);
+            this.billingContactPersonControl.Size = new System.Drawing.Size(355, 352);
             this.billingContactPersonControl.TabIndex = 1;
+            this.billingContactPersonControl.Resize += new System.EventHandler(this.OnBillingContactPersonControlResize);
             // 
             // sameAsPickup
             // 
@@ -73,7 +74,7 @@
             this.sameAsPickup.Checked = true;
             this.sameAsPickup.CheckState = System.Windows.Forms.CheckState.Checked;
             this.sameAsPickup.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.sameAsPickup.Location = new System.Drawing.Point(11, 356);
+            this.sameAsPickup.Location = new System.Drawing.Point(11, 371);
             this.sameAsPickup.Name = "sameAsPickup";
             this.sameAsPickup.Size = new System.Drawing.Size(244, 17);
             this.sameAsPickup.TabIndex = 3;
@@ -89,7 +90,7 @@
             this.Controls.Add(this.labelBillingContactInfoHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsBillingContactInfoControl";
-            this.Size = new System.Drawing.Size(369, 389);
+            this.Size = new System.Drawing.Size(369, 399);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -98,7 +99,7 @@
         #endregion
 
         private System.Windows.Forms.Label labelBillingContactInfoHeader;
-        private Data.Controls.PersonControl billingContactPersonControl;
+        private Data.Controls.AutofillPersonControl billingContactPersonControl;
         private System.Windows.Forms.CheckBox sameAsPickup;
     }
 }

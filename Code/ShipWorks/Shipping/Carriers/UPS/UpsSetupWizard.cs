@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using Apitron.PDF.Rasterizer;
+using ShipWorks.Data.Controls;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
@@ -383,12 +384,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         private void OnLinkOpenAccount(object sender, EventArgs e)
         {
             string url = "https://www.ups.com/myups/info/openacct";
-         
-            if (personControl.CountryCode == "CA")
+
+            PersonAdapter personAdapter = new PersonAdapter();
+            personControl.SaveToEntity(personAdapter);
+
+            if (personAdapter.CountryCode == "CA")
             {
                 url = "https://www.ups.com/one-to-one/login?loc=en_CA";
             }
-            else if (personControl.CountryCode == "PR")
+            else if (personAdapter.CountryCode == "PR")
             {
                 url = "https://www.ups.com/one-to-one/login?loc=en_PR";
             }

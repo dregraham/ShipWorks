@@ -44,7 +44,7 @@
             this.radioAcceptAgreement = new System.Windows.Forms.RadioButton();
             this.licenseAgreement = new System.Windows.Forms.RichTextBox();
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageFinishOlt = new ShipWorks.UI.Wizard.WizardPage();
             this.labelSetupComplete3 = new System.Windows.Forms.Label();
             this.labelSetupComplete2 = new System.Windows.Forms.Label();
@@ -965,7 +965,7 @@
         private System.Windows.Forms.RadioButton radioAcceptAgreement;
         private System.Windows.Forms.RichTextBox licenseAgreement;
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinishOlt;
-        private ShipWorks.Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelSetupComplete1;
         private System.Windows.Forms.Label labelSetupComplete2;

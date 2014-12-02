@@ -48,12 +48,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             }
 
             // Adding to account because address fields can't be accessed directly.
-            PersonAdapter personAdapter = new PersonAdapter(upsAccount, "");
+            PersonAdapter personAdapter = new PersonAdapter();
             pickupLocationPersonControl.SaveToEntity(personAdapter);
-            
+
+            PersonAdapter.Copy(personAdapter, new PersonAdapter(upsAccount, ""));
+
             request.PickupAddress.City = upsAccount.City;
             request.PickupAddress.CompanyName = upsAccount.Company;
-            request.PickupAddress.ContactName = pickupLocationPersonControl.FullName;
+            request.PickupAddress.ContactName = personAdapter.UnparsedName;
             request.PickupAddress.CountryCode = upsAccount.CountryCode;
             request.PickupAddress.EmailAddress = upsAccount.Email;
             request.PickupAddress.Phone.Number = upsAccount.Phone;
