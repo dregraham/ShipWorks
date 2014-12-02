@@ -340,7 +340,7 @@ namespace ShipWorks.Filters.Management
             if (result == FilterEditingResult.OK)
             {
                 // It has changed, update the tree
-                ActiveFilterTree.UpdateFilterName(selected.Filter);
+                ActiveFilterTree.UpdateFilter(selected.Filter);
             }
 
             if (result == FilterEditingResult.Error)
@@ -381,7 +381,7 @@ namespace ShipWorks.Filters.Management
                 layoutContext.SaveFilter(filter);
 
                 // The only thing that could have changed is the name
-                ActiveFilterTree.UpdateFilterName(filter);
+                ActiveFilterTree.UpdateFilter(filter);
             }
             catch (FilterException ex)
             {
