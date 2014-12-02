@@ -83,7 +83,7 @@
             this.cardType = new System.Windows.Forms.ComboBox();
             this.labelCardType = new System.Windows.Forms.Label();
             this.labelEndiciaFee = new System.Windows.Forms.Label();
-            this.personCreditCard = new ShipWorks.Data.Controls.PersonControl();
+            this.personCreditCard = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageFinish = new ShipWorks.UI.Wizard.WizardPage();
             this.panelBuyPostage = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
@@ -1157,7 +1157,7 @@
         private System.Windows.Forms.TextBox challengeQuestion;
         private System.Windows.Forms.Label labelChallengeQuestion;
         private System.Windows.Forms.Label labelEndiciaFee;
-        private ShipWorks.Data.Controls.PersonControl personCreditCard;
+        private ShipWorks.Data.Controls.AutofillPersonControl personCreditCard;
         private System.Windows.Forms.Label labelCardType;
         private System.Windows.Forms.ComboBox cardExpireYear;
         private System.Windows.Forms.ComboBox cardExpireMonth;
