@@ -145,7 +145,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
-
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Account", account.AccountNumber);
             checker.Check("Full Name", account.FirstName);

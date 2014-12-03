@@ -316,7 +316,7 @@
             this.wizardPageAccountAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountAddress.Name = "wizardPageAccountAddress";
-            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 507);
+            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 485);
             this.wizardPageAccountAddress.TabIndex = 0;
             this.wizardPageAccountAddress.Title = "Account Registration";
             this.wizardPageAccountAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountAddress);
@@ -329,7 +329,7 @@
             this.panelTerms.Controls.Add(this.labelTerms1);
             this.panelTerms.Controls.Add(this.termsCheckBox);
             this.panelTerms.Controls.Add(this.labelTerms);
-            this.panelTerms.Location = new System.Drawing.Point(23, 396);
+            this.panelTerms.Location = new System.Drawing.Point(23, 410);
             this.panelTerms.Name = "panelTerms";
             this.panelTerms.Size = new System.Drawing.Size(494, 59);
             this.panelTerms.TabIndex = 2;
@@ -459,10 +459,11 @@
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.personControl.Location = new System.Drawing.Point(23, 92);
+            this.personControl.Location = new System.Drawing.Point(23, 86);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(355, 324);
+            this.personControl.Size = new System.Drawing.Size(355, 325);
             this.personControl.TabIndex = 1;
+            this.personControl.Resize += new System.EventHandler(this.OnPersonControlResize);
             // 
             // wizardPageNewAccountCredentials
             // 

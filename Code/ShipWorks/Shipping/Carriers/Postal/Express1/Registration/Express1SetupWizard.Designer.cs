@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.personControl.Size = new System.Drawing.Size(358, 344);
+            this.personControl.Size = new System.Drawing.Size(358, 356);
             this.personControl.TabIndex = 1;
             // 
             // wizardPageAgreement
