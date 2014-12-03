@@ -46,6 +46,8 @@ namespace ShipWorks.Data.Controls
                 Height = Height - personControl.Top;
                 personControl.Location = new Point(0, 0);
             }
+
+            storeAddressLink.TabStop = false;
         }
 
         /// <summary>

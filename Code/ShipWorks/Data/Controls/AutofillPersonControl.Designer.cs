@@ -64,7 +64,6 @@
             this.storeAddressLink.Name = "storeAddressLink";
             this.storeAddressLink.Size = new System.Drawing.Size(32, 13);
             this.storeAddressLink.TabIndex = 2;
-            this.storeAddressLink.TabStop = true;
             this.storeAddressLink.Text = "store";
             this.storeAddressLink.Click += new System.EventHandler(this.OnStoreAddressLinkClick);
             // 
