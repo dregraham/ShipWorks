@@ -104,24 +104,24 @@ namespace ShipWorks.Users.Audit
 
                         foreach (AuditEntity audit in audits)
                         {
-                            if (!ProcessAudit(audit))
+                            try
                             {
-                                skippedDueToLock.Add(audit.AuditID);
+                                if (!ProcessAudit(audit))
+                                {
+                                    skippedDueToLock.Add(audit.AuditID);
+                                }
+                            }
+                            catch (AuditMissingObjectLabelException objectLabelMissingException)
+                            {
+                                HandleAuditMissingObjectLabelException(objectLabelMissingException);
+                            }
+                            catch (Exception ex)
+                            {
+                                // If an exception happens while processing audits, there's nothing the user can do about it...  Crashing doesn't help them either...
+                                // So log it and carry on.
+                                log.Error("An exception occurred while processing Audits.", ex);
                             }
                         }
-                    }
-                }
-                catch (AuditMissingObjectLabelException objectLabelMissingException)
-                {
-                    // There's nothing we can do about these...the user will always crash until we remote in to delete the audit.  So just do that now.
-                    try
-                    {
-                        log.Error(objectLabelMissingException);
-                        SqlAdapter.Default.DeleteEntity(new AuditEntity(objectLabelMissingException.AuditID));
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error("While attempting to delete an audit with missing object labels, an exception occurred.", ex);
                     }
                 }
                 catch (Exception ex)
@@ -132,17 +132,33 @@ namespace ShipWorks.Users.Audit
                 }
                 finally
                 {
-                    log.Info("Releasing AsyncProcessAudits app lock. ");
-
                     if (lockAcquired)
                     {
+                        log.Info("Releasing AsyncProcessAudits app lock. ");
                         SqlAppLockUtility.ReleaseLock(sqlConnection, auditProcessingAppLockName);
                     }
                 }
             }
 
-
             log.Info("Leaving AsyncProcessAudits at " + DateTime.Now);
+        }
+
+        /// <summary>
+        /// Handles logging and deletion of offending audit
+        /// </summary>
+        /// <param name="objectLabelMissingException"></param>
+        private static void HandleAuditMissingObjectLabelException(AuditMissingObjectLabelException objectLabelMissingException)
+        {
+            // There's nothing we can do about these...the user will always crash until we remote in to delete the audit.  So just do that now.
+            try
+            {
+                log.Error(objectLabelMissingException);
+                DeletionService.DeleteAudit(objectLabelMissingException.AuditID);
+            }
+            catch (Exception ex)
+            {
+                log.Error("While attempting to delete an audit with missing object labels, an exception occurred.", ex);
+            }
         }
 
         /// <summary>
