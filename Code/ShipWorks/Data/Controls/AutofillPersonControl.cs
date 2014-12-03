@@ -140,10 +140,8 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnStoreAddressLinkClick(object sender, EventArgs e)
         {
-            using (ContextMenu menu = BuildAddressMenu())
-            {
-                menu.Show(storeAddressLink, new Point(0, ((Control)sender).Height));   
-            }
+            ContextMenu menu = BuildAddressMenu();
+            menu.Show(storeAddressLink, new Point(0, ((Control)sender).Height));
         }
 
         /// <summary>

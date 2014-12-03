@@ -60,7 +60,6 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
         }
 
-
         /// <summary>
         /// Stepping next from the settings page
         /// </summary>

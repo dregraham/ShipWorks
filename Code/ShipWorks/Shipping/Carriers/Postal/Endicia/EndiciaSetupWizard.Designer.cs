@@ -147,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountType);
+            this.mainPanel.Controls.Add(this.wizardPagePayment);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -282,7 +282,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 9);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(358, 344);
+            this.personControl.Size = new System.Drawing.Size(358, 358);
             this.personControl.TabIndex = 0;
             // 
             // wizardPagePasswords
