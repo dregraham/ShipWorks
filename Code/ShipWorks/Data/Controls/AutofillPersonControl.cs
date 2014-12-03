@@ -159,7 +159,15 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void LoadStoreAddresIntoPersonControl(StoreEntity store)
         {
-            LoadEntity(new PersonAdapter(store, string.Empty));
+            string originalName = personControl.FullName;
+
+            // Create a copy of the address so that any changes cannot be accidentally saved back into the store
+            PersonAdapter addressCopy = new PersonAdapter();
+            PersonAdapter.Copy(new PersonAdapter(store, string.Empty), addressCopy);
+
+            LoadEntity(addressCopy);
+
+            personControl.FullName = originalName;
         }
     }
 }

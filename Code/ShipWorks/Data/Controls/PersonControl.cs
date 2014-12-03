@@ -697,6 +697,10 @@ namespace ShipWorks.Data.Controls
 
                 return fullName.Text;
             }
+            set
+            {
+                fullName.Text = value;
+            }
         }
 
         /// <summary>
