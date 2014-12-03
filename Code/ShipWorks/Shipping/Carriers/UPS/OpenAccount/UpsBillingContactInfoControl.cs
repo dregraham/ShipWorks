@@ -20,14 +20,21 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
     /// </summary>
     public partial class UpsBillingContactInfoControl : UserControl
     {
+        private int originalPersonControlHeight;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsBillingContactInfoControl" /> class.
         /// </summary>
         public UpsBillingContactInfoControl()
         {
             InitializeComponent();
+
+            originalPersonControlHeight = billingContactPersonControl.Height;
         }
 
+        /// <summary>
+        /// Is the billing address the same as the pickup address
+        /// </summary>
         public bool SameAsPickup
         {
             get
@@ -35,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 return sameAsPickup.Checked;
             }
         }
+
         /// <summary>
         /// Saves to request.
         /// </summary>
@@ -64,12 +72,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 request.BillingAddress.Phone = new PhoneType();
             }
 
-            PersonAdapter personAdapter = new PersonAdapter(upsAccount, "");
+            PersonAdapter personAdapter = new PersonAdapter();
             billingContactPersonControl.SaveToEntity(personAdapter);
+
+            PersonAdapter.Copy(personAdapter, new PersonAdapter(upsAccount, ""));
 
             request.BillingAddress.City = upsAccount.City;
             request.BillingAddress.CompanyName = upsAccount.Company;
-            request.BillingAddress.ContactName = billingContactPersonControl.FullName;
+            request.BillingAddress.ContactName = personAdapter.UnparsedName;
             request.BillingAddress.CountryCode = upsAccount.CountryCode;
             request.BillingAddress.EmailAddress = upsAccount.Email;
             request.BillingAddress.Phone.Number = upsAccount.Phone;
@@ -105,7 +115,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 request.PickupAddress.StateProvinceCode = request.BillingAddress.StateProvinceCode;
                 request.PickupAddress.StreetAddress = request.BillingAddress.StreetAddress;
             }
+        }
 
+        /// <summary>
+        /// Update the location of controls below the billing contact control when it resizes
+        /// </summary>
+        private void OnBillingContactPersonControlResize(object sender, EventArgs e)
+        {
+            sameAsPickup.Top = sameAsPickup.Top - (originalPersonControlHeight - billingContactPersonControl.Height);
         }
     }
 }

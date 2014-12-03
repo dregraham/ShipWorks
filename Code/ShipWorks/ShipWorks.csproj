@@ -615,6 +615,12 @@
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
+    <Compile Include="Data\Controls\AutofillPersonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Controls\AutofillPersonControl.Designer.cs">
+      <DependentUpon>AutofillPersonControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
@@ -7171,6 +7177,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Controls\AutofillPersonControl.resx">
+      <DependentUpon>AutofillPersonControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.resx">
       <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>

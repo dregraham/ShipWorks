@@ -44,7 +44,7 @@
             this.radioAcceptAgreement = new System.Windows.Forms.RadioButton();
             this.licenseAgreement = new System.Windows.Forms.RichTextBox();
             this.wizardPageAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageFinishOlt = new ShipWorks.UI.Wizard.WizardPage();
             this.labelSetupComplete3 = new System.Windows.Forms.Label();
             this.labelSetupComplete2 = new System.Windows.Forms.Label();
@@ -132,7 +132,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOpenAccountCharacteristics);
+            this.mainPanel.Controls.Add(this.wizardPageAccount);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -330,7 +330,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 8);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(358, 363);
+            this.personControl.Size = new System.Drawing.Size(358, 400);
             this.personControl.TabIndex = 6;
             // 
             // wizardPageFinishOlt
@@ -905,7 +905,7 @@
         private System.Windows.Forms.RadioButton radioAcceptAgreement;
         private System.Windows.Forms.RichTextBox licenseAgreement;
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinishOlt;
-        private ShipWorks.Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelSetupComplete1;
         private System.Windows.Forms.Label labelSetupComplete2;

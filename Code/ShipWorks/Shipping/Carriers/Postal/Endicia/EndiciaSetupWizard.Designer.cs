@@ -39,7 +39,7 @@
             this.pictureBoxDazzleNote = new System.Windows.Forms.PictureBox();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPagePasswords = new ShipWorks.UI.Wizard.WizardPage();
             this.labelTerms1 = new System.Windows.Forms.Label();
             this.linkEndiciaTerms = new ShipWorks.UI.Controls.LinkControl();
@@ -147,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountType);
+            this.mainPanel.Controls.Add(this.wizardPagePayment);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -282,7 +282,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 9);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(358, 344);
+            this.personControl.Size = new System.Drawing.Size(358, 358);
             this.personControl.TabIndex = 0;
             // 
             // wizardPagePasswords
@@ -1139,7 +1139,7 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageAccountType;
         private System.Windows.Forms.Label labelInfo1;
         private ShipWorks.UI.Wizard.WizardPage wizardPageAddress;
-        private ShipWorks.Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePasswords;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePayment;
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinish;
