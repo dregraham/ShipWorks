@@ -768,7 +768,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
             bool isSampleOnly = UseTestServer && account.StampsReseller != (int)StampsResellerType.Express1;
 
-            if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope)
+            if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
                 // Envelopes don't support thermal
                 thermalType = null;
