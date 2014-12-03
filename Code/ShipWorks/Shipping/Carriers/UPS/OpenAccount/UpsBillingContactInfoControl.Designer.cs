@@ -39,9 +39,9 @@
             this.labelBillingContactInfoHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelBillingContactInfoHeader.Location = new System.Drawing.Point(3, 0);
             this.labelBillingContactInfoHeader.Name = "labelBillingContactInfoHeader";
-            this.labelBillingContactInfoHeader.Size = new System.Drawing.Size(158, 13);
+            this.labelBillingContactInfoHeader.Size = new System.Drawing.Size(89, 13);
             this.labelBillingContactInfoHeader.TabIndex = 0;
-            this.labelBillingContactInfoHeader.Text = "Billing Contact Information";
+            this.labelBillingContactInfoHeader.Text = "Billing Address";
             // 
             // billingContactPersonControl
             // 
