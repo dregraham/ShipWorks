@@ -38,6 +38,7 @@
             // copyAddressLabel
             // 
             this.copyAddressLabel.AutoSize = true;
+            this.copyAddressLabel.BackColor = System.Drawing.Color.Transparent;
             this.copyAddressLabel.Location = new System.Drawing.Point(2, 1);
             this.copyAddressLabel.Name = "copyAddressLabel";
             this.copyAddressLabel.Size = new System.Drawing.Size(94, 13);
@@ -46,8 +47,8 @@
             // 
             // storeSelectorPanel
             // 
-            this.storeSelectorPanel.Controls.Add(this.storeAddressLink);
             this.storeSelectorPanel.Controls.Add(this.copyAddressLabel);
+            this.storeSelectorPanel.Controls.Add(this.storeAddressLink);
             this.storeSelectorPanel.Location = new System.Drawing.Point(0, 4);
             this.storeSelectorPanel.Name = "storeSelectorPanel";
             this.storeSelectorPanel.Size = new System.Drawing.Size(345, 17);
@@ -56,6 +57,7 @@
             // storeAddressLink
             // 
             this.storeAddressLink.AutoSize = true;
+            this.storeAddressLink.BackColor = System.Drawing.Color.Transparent;
             this.storeAddressLink.Location = new System.Drawing.Point(93, 1);
             this.storeAddressLink.Name = "storeAddressLink";
             this.storeAddressLink.Size = new System.Drawing.Size(30, 13);
@@ -69,6 +71,7 @@
             this.personControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.personControl.FullName = "";
             this.personControl.Location = new System.Drawing.Point(0, 22);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(346, 385);
