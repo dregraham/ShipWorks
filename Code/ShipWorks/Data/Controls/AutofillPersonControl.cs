@@ -119,14 +119,6 @@ namespace ShipWorks.Data.Controls
         }
 
         /// <summary>
-        /// Save the data from the controls into the saved entity.
-        /// </summary>
-        public void SaveToEntity()
-        {
-            personControl.SaveToEntity();
-        }
-
-        /// <summary>
         /// Save the data from the controls into the given entity. The original list of loaded people is
         /// left alone.
         /// </summary>

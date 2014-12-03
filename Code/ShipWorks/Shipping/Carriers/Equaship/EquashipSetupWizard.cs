@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             account.Username = username.Text.Trim();
             account.Password = SecureText.Encrypt(password.Text.Trim(), account.Username);
 
-            personControl.SaveToEntity();
+            personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
             try
             {

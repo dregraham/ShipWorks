@@ -412,7 +412,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         private void OnStepNextAccount(object sender, WizardStepEventArgs e)
         {
-            personControl.SaveToEntity();
+            personControl.SaveToEntity(new PersonAdapter(upsAccount, string.Empty));
             upsAccount.AccountNumber = EnteredAccountNumber();
 
             // Edition check
