@@ -598,6 +598,12 @@ namespace :db do
 		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:redeployassemblies"
 		sh command
 	end
+
+	desc "Regenerate filters to the given database"
+	task :deploy do |t, args|
+		command = ".\\Artifacts\\Application\\ShipWorks.exe \/cmd:regenerateallfilters"
+		sh command
+	end
 end
 
 namespace :setup do
