@@ -18,6 +18,6 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_EbayCombinedOrderRelation] ON [dbo].[EbayCo
 GO
 PRINT N'Adding foreign keys to [dbo].[EbayCombinedOrderRelation]'
 GO
-ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID])
-ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[EbayStore] ([StoreID])
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[EbayStore] ([StoreID]) ON DELETE CASCADE
 GO
