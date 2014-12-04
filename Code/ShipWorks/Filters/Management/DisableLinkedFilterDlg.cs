@@ -67,26 +67,46 @@ namespace ShipWorks.Filters.Management
         /// </summary>
         private static string BuildReferenceMessage(List<string> references)
         {
-            return new[] 
-                {
-                    BuildListReferenceMessage(references, "The trigger for action '(?<name>.*)'", "The following actions will no longer run if you continue:"),
-                    BuildListReferenceMessage(references, "'.*' task for action '(?<name>.*)'", "The following actions include tasks that will not run as expected:"),
-                    BuildShippingProviderRuleMessage(references),
-                    BuildListReferenceMessage(references, "Print settings '.*' for '(?<name>.*)'", "These providers include printing rules that will no longer apply if you continue:"),
-                    BuildListReferenceMessage(references, "Shipment defaults for '(?<name>.*)'", "Shipping rules for the following carriers will not apply:")
-                }
-                .Where(x => !string.IsNullOrEmpty(x))
-                .Aggregate((x, y) => x + Environment.NewLine + Environment.NewLine + y);
+            List<string> messages = new List<string>
+            {
+                BuildListReferenceMessage(references, "The trigger for action '(?<name>.*)'", "The following actions will no longer run if you continue:"),
+                BuildListReferenceMessage(references, "'.*' task for action '(?<name>.*)'", "The following actions include tasks that will not run as expected:"),                
+                BuildListReferenceMessage(references, "Print settings '.*' for '(?<name>.*)'", "These providers include printing rules that will no longer apply if you continue:"),                
+                BuildShippingRuleMessage(references)
+            };
+
+            return messages.Where(x => !string.IsNullOrEmpty(x))
+                           .Aggregate((x, y) => x + Environment.NewLine + Environment.NewLine + y);
         }
 
         /// <summary>
-        /// Build the message for shipping provider rules
+        /// Build the message for shipping rules
         /// </summary>
-        private static string BuildShippingProviderRuleMessage(IEnumerable<string> references)
+        private static string BuildShippingRuleMessage(IEnumerable<string> references)
         {
-            return references.Any(x => string.Equals(x, "Default shipping provider rules", StringComparison.Ordinal)) ?
-                "There are shipping rules that will no longer apply if request is completed." :
-                string.Empty;
+            List<string> messageLines = new List<string>();
+
+            if (references.ToList().Any(x => string.Equals(x, "Default shipping provider rules", StringComparison.Ordinal)))
+            {
+                messageLines.Add("Shipping rules for the following carriers will not apply:");
+                messageLines.Add("  - General");
+            }
+
+            if (!messageLines.Any())
+            {
+                // There weren't any general shipping rules that were impacted, so we need to 
+                // write out the full message
+                messageLines.Add(BuildListReferenceMessage(references, "Shipment defaults for '(?<name>.*)'", "Shipping rules for the following carriers will not apply:"));
+            }
+            else
+            {
+                // We've already written the header for general shipping rules, so we just need to add
+                // the other carriers.
+                messageLines.AddRange(GetReferenceNames(references, "Shipment defaults for '(?<name>.*)'"));
+
+            }
+
+            return messageLines.Aggregate((x, y) => x + Environment.NewLine + y);
         }
 
         /// <summary>
@@ -94,11 +114,7 @@ namespace ShipWorks.Filters.Management
         /// </summary>
         private static string BuildListReferenceMessage(IEnumerable<string> references, string messageMatcher, string sectionTitle)
         {
-            Regex triggerRegex = new Regex(messageMatcher);
-            List<string> triggerReferences = references.Select(x => triggerRegex.Match(x))
-                .Where(x => x.Success)
-                .Select(x => "  - " + x.Groups["name"].Value)
-                .ToList();
+            List<string> triggerReferences = GetReferenceNames(references, messageMatcher);
 
             if (triggerReferences.Any())
             {
@@ -108,6 +124,20 @@ namespace ShipWorks.Filters.Management
             }
 
             return string.Empty;
+        }
+
+        /// <summary>
+        /// A helper method to extract named references from a collection strings that is used when building 
+        /// up the list of topics that reference a filter.
+        /// </summary>
+        private static List<string> GetReferenceNames(IEnumerable<string> references, string messageMatcher)
+        {
+            Regex triggerRegex = new Regex(messageMatcher);
+            List<string> triggerReferences = references.Select(x => triggerRegex.Match(x))
+                                                       .Where(x => x.Success)
+                                                       .Select(x => "  - " + x.Groups["name"].Value)
+                                                       .ToList();
+            return triggerReferences;
         }
     }
 }
