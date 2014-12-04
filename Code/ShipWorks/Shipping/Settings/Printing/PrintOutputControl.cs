@@ -218,6 +218,17 @@ namespace ShipWorks.Shipping.Settings.Printing
         }
 
         /// <summary>
+        /// Gets a value indicating whether there are any rule filters that have changed.
+        /// </summary>
+        public bool AreAnyRuleFiltersChanged
+        {
+            get
+            {
+                return panelMain.Controls.OfType<PrintOutputGroupControl>().Any(r => r.AreAnyRuleFiltersChanged);
+            }
+        }
+
+        /// <summary>
         /// Return all the template id's that the user has chosen to be used as templaets to print with
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith

@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Settings.Printing
         /// Raised when reloading of groups is required, like when a concurrency exception indicates that our local stuff is out-of-sync
         /// </summary>
         public event EventHandler ReloadRequired;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -270,6 +270,17 @@ namespace ShipWorks.Shipping.Settings.Printing
             get
             {
                 return panelMain.Controls.OfType<PrintOutputRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
+        /// Gets whether any of the rules' filters have changed
+        /// </summary>
+        public bool AreAnyRuleFiltersChanged
+        {
+            get
+            {
+                return panelMain.Controls.OfType<PrintOutputRuleControl>().Any(r => r.HasFilterChanged);
             }
         }
 
