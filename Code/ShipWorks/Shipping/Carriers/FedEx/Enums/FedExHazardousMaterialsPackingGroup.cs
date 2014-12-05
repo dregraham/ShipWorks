@@ -20,6 +20,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         II = 2,
 
         [Description("III")]
-        III = 3
+        III = 3,
+
+        [Description("N/A")]
+        NotApplicable = 4
     }
 }

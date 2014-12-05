@@ -152,8 +152,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                                 Id = package.HazardousMaterialNumber,
                                 HazardClass = package.HazardousMaterialClass,
                                 ProperShippingName = package.HazardousMaterialProperName,
-                                PackingGroup = GetApiPackingGroup(package),
-                                PackingGroupSpecified = true
+                                TechnicalName = package.HazardousMaterialTechnicalName,
                             },
                             Quantity = new HazardousCommodityQuantityDetail()
                             {
@@ -165,6 +164,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                     }
                 }
             };
+
+            if (package.HazardousMaterialPackingGroup != (int) FedExHazardousMaterialsPackingGroup.NotApplicable)
+            {
+                dangerousGoods.Containers[0].HazardousCommodities[0].Description.PackingGroup = GetApiPackingGroup(package);
+                dangerousGoods.Containers[0].HazardousCommodities[0].Description.PackingGroupSpecified = true;
+            }
 
             dangerousGoods.Packaging = new HazardousCommodityPackagingDetail()
             {
