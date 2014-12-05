@@ -6297,6 +6297,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialQuanityUnits);}
 		}
+		/// <summary>Creates a new FedExPackageEntity.HazardousMaterialTechnicalName field instance</summary>
+		public static EntityField2 HazardousMaterialTechnicalName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfileEntity</summary>
