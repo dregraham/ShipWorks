@@ -994,7 +994,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExPackageEntity's mappings</summary>
 		private void InitFedExPackageEntityMappings()
 		{
-			base.AddElementMapping( "FedExPackageEntity", "ShipWorksLocal", @"dbo", "FedExPackage", 33 );
+			base.AddElementMapping( "FedExPackageEntity", "ShipWorksLocal", @"dbo", "FedExPackage", 34 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "FedExPackageID", "FedExPackageID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "Weight", "Weight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 2 );
@@ -1028,6 +1028,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialPackingGroup", "HazardousMaterialPackingGroup", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 30 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialQuantityValue", "HazardousMaterialQuantityValue", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 31 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialQuanityUnits", "HazardousMaterialQuanityUnits", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 32 );
+			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialTechnicalName", "HazardousMaterialTechnicalName", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 33 );
 		}
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
 		private void InitFedExProfileEntityMappings()
