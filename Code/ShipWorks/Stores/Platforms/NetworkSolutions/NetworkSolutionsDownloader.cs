@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
+using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
@@ -19,6 +20,9 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
     /// </summary>
     public class NetworkSolutionsDownloader : StoreDownloader
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(NetworkSolutionsDownloader));
+
         NetworkSolutionsStatusCodeProvider statusProvider;
 
         /// <summary>
@@ -98,6 +102,12 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private void LoadOrder(OrderType nsOrder)
         {
+            if (string.IsNullOrWhiteSpace(nsOrder.OrderNumber))
+            {
+                log.InfoFormat("Order with OrderId '{0}' did not have an order number.  Skipping it and continuing to the next order.", nsOrder.OrderId);
+                return;
+            }
+
             long networkSolutionsOrderId = nsOrder.OrderId;
 
             NetworkSolutionsOrderEntity order = (NetworkSolutionsOrderEntity)InstantiateOrder(new NetworkSolutionsOrderIdentifier(networkSolutionsOrderId));

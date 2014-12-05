@@ -608,7 +608,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode & Keys.Delete) == Keys.Delete)
+            if (e.KeyCode == Keys.Delete)
             {
                 if (entityGrid.SelectedElements.Count > 0)
                 {

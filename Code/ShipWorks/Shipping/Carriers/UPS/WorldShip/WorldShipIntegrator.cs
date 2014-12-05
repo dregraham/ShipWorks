@@ -55,18 +55,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 }
             }
 
-            // Check to see if we have a network shared path to WorldShip
-            string worldShipPath = WorldShipUtility.GetWorldShipNetworkPath();
-            if (string.IsNullOrWhiteSpace(worldShipPath))
+            // Get the ini location.  We'll use it to get the import/export location
+            string worldShipIniFilename = WorldShipUtility.GetWorldShipIniPath();
+            if (string.IsNullOrWhiteSpace(worldShipIniFilename))
             {
-                // We couldn't find a network path, try for a local path
-                worldShipPath = WorldShipUtility.GetWorldShipExePath();
-                if (string.IsNullOrWhiteSpace(worldShipPath))
-                {
-                    // We didn't find WorldShip on this computer...throw to let the user know
-                    throw new WorldShipIntegratorException("ShipWorks could not find WorldShip installed on this computer.");
-                }
+                // We didn't find WorldShip on this computer...throw to let the user know
+                throw new WorldShipIntegratorException("ShipWorks could not find WorldShip installed on this computer.");
             }
+
+            // Get the path of the Ini file
+            string worldShipIniPath = Path.GetFullPath(worldShipIniFilename);
 
             try
             {
@@ -81,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             }
 
             // Define the path/filenames for the dat files
-            string datFilePath = Path.Combine(worldShipPath, "ImpExp\\Shipment");
+            string datFilePath = Path.Combine(worldShipIniPath, "ImpExp\\Shipment");
             string exportDatPathAndFilename = Path.Combine(datFilePath, ExportDatFilename);
             string importDatPathAndFilename = Path.Combine(datFilePath, ImportDatFilename);
             string importForKeyedDataPathAndFilename = Path.Combine(datFilePath, ImportForKeyedDatFilename);
@@ -100,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             try
             {
                 // Check WorldShip ini files and adds settings for DSN, settings, and dat files.  Does not modify if settings have values.
-                IniFile wsIni = new IniFile(Path.Combine(worldShipPath, "wstdShipmain.ini"));
+                IniFile wsIni = new IniFile(Path.Combine(worldShipIniPath, "wstdShipmain.ini"));
                 wsIni.WriteValue("Preferences", "HandsOffMapName", ImportDatFilename.Replace(".dat", string.Empty));
                 wsIni.WriteIniValueIfMissing("Preferences", "HandsOffWaitTime", "00:01");
                 wsIni.WriteIniValueIfMissing("Preferences", "HandsOffCheckDuplicatePKey", "Yes");
@@ -108,11 +106,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 wsIni.WriteIniValueIfMissing("Preferences", "HandsOffShipperKey", "1");
 
                 // Update the auto export settings
-                wsIni = new IniFile(Path.Combine(worldShipPath, "wstdAutoExportMaps.ini"));
+                wsIni = new IniFile(Path.Combine(worldShipIniPath, "wstdAutoExportMaps.ini"));
                 wsIni.WriteValue("AutoExportShipments", "ExportMapName", exportDatPathAndFilename);
 
                 // Update the Shipuser settings
-                wsIni = new IniFile(Path.Combine(worldShipPath, "wstdShipuser.ini"));
+                wsIni = new IniFile(Path.Combine(worldShipIniPath, "wstdShipuser.ini"));
                 wsIni.WriteValue("UPS OnLine Connect", "AutoExportRecent", ExportDatFilename.Replace(".dat", string.Empty));
                 wsIni.WriteValue("UPS OnLine Connect", "KeyedRecent", ImportForKeyedDatFilename.Replace(".dat", string.Empty));
                 wsIni.WriteValue("Database", "activeImportMap", importDatPathAndFilename);

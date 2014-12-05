@@ -538,6 +538,12 @@
     <Compile Include="ApplicationCore\MainForm.UIHeartbeat.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.Designer.cs">
+      <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="ApplicationCore\MessageBoxes\DateTimeFormatRequiredDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -640,6 +646,10 @@
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
     <Compile Include="Data\Administration\Retry\SqlAdapterRetry.cs" />
+    <EmbeddedResource Include="ApplicationCore\MessageBoxes\ListSeparatorFormatRequiredDlg.resx">
+      <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
@@ -6170,6 +6180,7 @@
     <Compile Include="Data\Administration\DetailedDatabaseSetupWizard.Designer.cs">
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7540,9 +7551,11 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControl.resx">
       <DependentUpon>UspsAutomaticDiscountControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.resx">
       <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsCreateAccount.resx">
       <DependentUpon>UpsCreateAccount.cs</DependentUpon>
@@ -10862,6 +10875,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.2.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />

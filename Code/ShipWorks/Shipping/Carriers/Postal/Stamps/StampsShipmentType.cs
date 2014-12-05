@@ -475,7 +475,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
                     shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
 
-                    List<RateResult> express1Rates = new StampsApiSession().GetRates(shipment);
+                    List<RateResult> express1Rates = new StampsApiSession(new Express1StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector()).GetRates(shipment);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
                                                                                                       ((PostalRateSelection)er.OriginalTag).ServiceType == (PostalServiceType)shipment.Postal.Service
                                                                                                       && ((PostalRateSelection)er.OriginalTag).ConfirmationType == (PostalConfirmationType)shipment.Postal.Confirmation);

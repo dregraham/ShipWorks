@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -424,7 +425,7 @@ namespace ShipWorks.Tests.AddressValidation
             {
             });
 
-            Assert.AreEqual("Error communicating with Address Validation Server.", sampleOrder.ShipAddressValidationError);
+            Assert.IsTrue(sampleOrder.ShipAddressValidationError.StartsWith("Error communicating with Address Validation Server.", StringComparison.InvariantCulture));
         }
 
         [TestMethod]
