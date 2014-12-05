@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             return string.Format("{1} ({2} miles) {0}{3}{0}{4}, {5} {6}",
                 Environment.NewLine,
                 contact.CompanyName,
-                Decimal.Round(distanceAndLocation.Distance.Value, 2),
+                Math.Round(distanceAndLocation.Distance.Value, 2),
                 string.Join(Environment.NewLine, address.StreetLines),
                 address.City,
                 address.StateOrProvinceCode,
