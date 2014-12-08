@@ -287,6 +287,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 fedExPackageEntity.HazardousMaterialNumber = string.Empty;
                 fedExPackageEntity.HazardousMaterialPackingGroup = 0;
                 fedExPackageEntity.HazardousMaterialProperName = string.Empty;
+                fedExPackageEntity.HazardousMaterialTechnicalName = string.Empty;
                 fedExPackageEntity.HazardousMaterialQuanityUnits = 0;
                 fedExPackageEntity.HazardousMaterialQuantityValue = 0;
             }

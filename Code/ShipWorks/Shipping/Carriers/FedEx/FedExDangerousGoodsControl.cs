@@ -48,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             hazardousMaterialId.ApplyMultiText(package.HazardousMaterialNumber);
             hazardClass.ApplyMultiText(package.HazardousMaterialClass);
             hazardousMaterialProperName.ApplyMultiText(package.HazardousMaterialProperName);
+            hazardousMaterialTechnicalName.ApplyMultiText(package.HazardousMaterialTechnicalName);
             hazardousMaterialPackingGroup.ApplyMultiValue((FedExHazardousMaterialsPackingGroup)package.HazardousMaterialPackingGroup);
             hazardousMaterialQuantityValue.ApplyMultiText(package.HazardousMaterialQuantityValue.ToString());
 
@@ -76,6 +77,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 hazardousMaterialId.ReadMultiText(t => package.HazardousMaterialNumber = t);
                 hazardClass.ReadMultiText(t => package.HazardousMaterialClass = t);
                 hazardousMaterialProperName.ReadMultiText(t => package.HazardousMaterialProperName = t);
+                hazardousMaterialTechnicalName.ReadMultiText(t => package.HazardousMaterialTechnicalName = t);
                 hazardousMaterialPackingGroup.ReadMultiValue(v => package.HazardousMaterialPackingGroup = (int) v);
                 hazardousMaterialQuantityValue.ReadMultiText(t => package.HazardousMaterialQuantityValue = ReadDoubleValue(t));
 

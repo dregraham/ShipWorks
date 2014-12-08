@@ -2982,6 +2982,8 @@ namespace ShipWorks.Data.Model
 		HazardousMaterialQuantityValue,
 		///<summary>HazardousMaterialQuanityUnits. </summary>
 		HazardousMaterialQuanityUnits,
+		///<summary>HazardousMaterialTechnicalName. </summary>
+		HazardousMaterialTechnicalName,
 		/// <summary></summary>
 		AmountOfFields
 	}

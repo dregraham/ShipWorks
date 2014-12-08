@@ -231,8 +231,8 @@ namespace ShipWorks.SqlServer.General
             SqlCommand cmd = con.CreateCommand();
 
             cmd.CommandText = @"
-                INSERT INTO Dirty (RowVersion) VALUES (DEFAULT)
-                DELETE Dirty";
+                SET DEADLOCK_PRIORITY -5
+                update Dirty set Count = 1";
 
             cmd.ExecuteNonQuery();
         }

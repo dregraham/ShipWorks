@@ -54,7 +54,8 @@ CREATE TABLE [dbo].[FedExPackage]
 [HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [HazardousMaterialPackingGroup] [int] NOT NULL,
 [HazardousMaterialQuantityValue] [float] NOT NULL,
-[HazardousMaterialQuanityUnits] [int] NOT NULL
+[HazardousMaterialQuanityUnits] [int] NOT NULL,
+[HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -289,7 +290,8 @@ ALTER TABLE [dbo].[ActionQueueSelection] ADD CONSTRAINT [PK_ActionQueueSelection
 GO
 PRINT N'Creating index [IX_ActionQueueSelection_ActionQueueID] on [dbo].[ActionQueueSelection]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID], [ObjectID])
+
 GO
 PRINT N'Creating [dbo].[ActionQueueStep]'
 GO
@@ -319,6 +321,11 @@ PRINT N'Creating primary key [PK_QueueStep] on [dbo].[ActionQueueStep]'
 GO
 ALTER TABLE [dbo].[ActionQueueStep] ADD CONSTRAINT [PK_QueueStep] PRIMARY KEY CLUSTERED  ([ActionQueueStepID])
 GO
+PRINT N'Creating index [IX_ActionQueueStep_ActionQueue] on [dbo].[ActionQueueStep]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueStep_ActionQueue] ON [dbo].[ActionQueueStep] ([ActionQueueID], [StepIndex])
+GO
+
 PRINT N'Creating [dbo].[ActionTask]'
 GO
 CREATE TABLE [dbo].[ActionTask]
@@ -3839,7 +3846,8 @@ PRINT N'Creating [dbo].[Dirty]'
 GO
 CREATE TABLE [dbo].[Dirty]
 (
-[RowVersion] [timestamp] NOT NULL
+[RowVersion] [timestamp] NOT NULL,
+[Count] [bigint] NULL
 )
 GO
 PRINT N'Creating [dbo].[EmailAccount]'
