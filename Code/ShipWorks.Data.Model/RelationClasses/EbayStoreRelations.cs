@@ -30,7 +30,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		public override List<IEntityRelation> GetAllRelations()
 		{
 			List<IEntityRelation> toReturn = base.GetAllRelations();
-
+			toReturn.Add(this.EbayCombinedOrderRelationEntityUsingStoreID);
 
 
 			return toReturn;
@@ -49,6 +49,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(EbayStoreFields.StoreID, DownloadFields.StoreID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayStoreEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("DownloadEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between EbayStoreEntity and EbayCombinedOrderRelationEntity over the 1:n relation they have, using the relation between the fields:
+		/// EbayStore.StoreID - EbayCombinedOrderRelation.StoreID
+		/// </summary>
+		public virtual IEntityRelation EbayCombinedOrderRelationEntityUsingStoreID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "EbayCombinedOrderRelation" , true);
+				relation.AddEntityFieldPair(EbayStoreFields.StoreID, EbayCombinedOrderRelationFields.StoreID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayStoreEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EbayCombinedOrderRelationEntity", false);
 				return relation;
 			}
 		}
