@@ -981,6 +981,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialPackingGroup", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialPackingGroup, 0, 0, 10);
 			base.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuantityValue", typeof(System.Double), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuantityValue, 0, 0, 38);
 			base.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialQuanityUnits", typeof(System.Int32), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, 0, 0, 10);
+			base.AddElementFieldInfo("FedExPackageEntity", "HazardousMaterialTechnicalName", typeof(System.String), false, false, false, false,  (int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, 64, 0, 0);
 		}
 		/// <summary>Inits FedExProfileEntity's FieldInfo objects</summary>
 		private void InitFedExProfileEntityInfos()

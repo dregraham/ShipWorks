@@ -561,6 +561,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("HazardousMaterialQuanityUnits", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("HazardousMaterialTechnicalName", fieldHashtable);
 		}
 		#endregion
 
@@ -1030,6 +1033,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, true); }
 			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialQuanityUnits, value); }
+		}
+
+		/// <summary> The HazardousMaterialTechnicalName property of the Entity FedExPackage<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExPackage"."HazardousMaterialTechnicalName"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String HazardousMaterialTechnicalName
+		{
+			get { return (System.String)GetValue((int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, true); }
+			set	{ SetValue((int)FedExPackageFieldIndex.HazardousMaterialTechnicalName, value); }
 		}
 
 

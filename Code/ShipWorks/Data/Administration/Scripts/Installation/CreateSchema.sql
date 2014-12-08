@@ -54,7 +54,8 @@ CREATE TABLE [dbo].[FedExPackage]
 [HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [HazardousMaterialPackingGroup] [int] NOT NULL,
 [HazardousMaterialQuantityValue] [float] NOT NULL,
-[HazardousMaterialQuanityUnits] [int] NOT NULL
+[HazardousMaterialQuanityUnits] [int] NOT NULL,
+[HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'

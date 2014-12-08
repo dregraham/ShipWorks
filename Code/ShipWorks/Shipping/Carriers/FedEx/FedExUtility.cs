@@ -248,6 +248,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.HazardousMaterialClass = string.Empty;
             package.HazardousMaterialPackingGroup = (int) FedExHazardousMaterialsPackingGroup.Default;
             package.HazardousMaterialProperName = string.Empty;
+            package.HazardousMaterialTechnicalName = string.Empty;
             package.HazardousMaterialQuanityUnits = (int) FedExHazardousMaterialsQuantityUnits.Kilogram;
             package.HazardousMaterialQuantityValue = 0;
 
