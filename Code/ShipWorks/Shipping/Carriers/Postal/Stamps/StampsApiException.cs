@@ -41,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     case 0x002b0601: return "The username or password entered is not correct.";
                     case 0x80040414: return "There is not enough postage in your account.";
                     case 0x005f0302: return "This account is already a reseller account.";
+                    case 0x005f0301: return "This account is a multi-user account. Multi-user accounts are not eligible to be migrated to a reseller account.";
                 }
                 
                 SoapException baseEx = base.InnerException as SoapException;
