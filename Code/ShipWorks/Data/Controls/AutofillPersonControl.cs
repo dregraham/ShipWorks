@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 
 namespace ShipWorks.Data.Controls
 {
@@ -21,6 +23,8 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public AutofillPersonControl()
         {
+            UseUsStoresOnly = false;
+
             InitializeComponent();
 
             Load += OnLoad;
@@ -31,15 +35,19 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (DesignMode)
+            // Checking DesignMode was not working. I don't like this either...
+            if (DesignMode || Process.GetCurrentProcess().ProcessName == "devenv")
             {
                 return;
             }
 
-            List<StoreEntity> stores = StoreManager.GetAllStores();
-            if (stores.Count == 1)
+            List<StoreEntity> stores = StoreManager.GetAllStores().Where(s => UseUsStoresOnly == false || s.CountryCode == "US").ToList();
+            if (stores.Count() <= 1)
             {
-                LoadStoreAddresIntoPersonControl(stores.First());
+                if (stores.Any())
+                {
+                    LoadStoreAddresIntoPersonControl(stores.First());
+                }
 
                 storeSelectorPanel.Visible = false;
 
@@ -49,6 +57,15 @@ namespace ShipWorks.Data.Controls
 
             storeAddressLink.TabStop = false;
         }
+
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use us stores only].
+        /// </summary>
+        [DefaultValue(false)]
+        [Browsable(true)]
+        [Category("Misc")]
+        public bool UseUsStoresOnly { get; set; }
 
         /// <summary>
         /// Set which fields are available for editing
@@ -144,7 +161,7 @@ namespace ShipWorks.Data.Controls
         private ContextMenu BuildAddressMenu()
         {
             ContextMenu menu = new ContextMenu();
-            menu.MenuItems.AddRange(StoreManager.GetAllStores().Select(CreateMenuItem).ToArray());
+            menu.MenuItems.AddRange(StoreManager.GetAllStores().Where(s => UseUsStoresOnly == false || s.CountryCode == "US").Select(CreateMenuItem).ToArray());
             return menu;
         }
 

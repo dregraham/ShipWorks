@@ -54,6 +54,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             }
 
             SaveBillingInfoToAccountAndRequest(request, upsAccount);
+
+            if (upsAccount.CountryCode != "US")
+            {
+                throw new UpsOpenAccountException("Shipworks can only create US accounts. To create an account for another country, please register your new account on the UPS website.");
+            }
+
             CopyBillingInfoToPickupInfo(request);
         }
 

@@ -205,6 +205,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Size = new System.Drawing.Size(358, 356);
             this.personControl.TabIndex = 1;
+            this.personControl.UseUsStoresOnly = true;
             // 
             // wizardPageAgreement
             // 
@@ -384,6 +385,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.personCreditCard.Name = "personCreditCard";
             this.personCreditCard.Size = new System.Drawing.Size(358, 183);
             this.personCreditCard.TabIndex = 3;
+            this.personCreditCard.UseUsStoresOnly = true;
             this.personCreditCard.Resize += new System.EventHandler(this.OnPersonCreditCardResize);
             // 
             // wizardPageFinish

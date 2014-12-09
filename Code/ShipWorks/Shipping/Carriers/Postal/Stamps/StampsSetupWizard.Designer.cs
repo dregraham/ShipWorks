@@ -82,7 +82,9 @@
             // 
             // next
             // 
+            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(374, 557);
+            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -94,7 +96,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountAddress);
+            this.mainPanel.Controls.Add(this.wizardPageStampsAccount);
             this.mainPanel.Size = new System.Drawing.Size(542, 485);
             // 
             // etchBottom
@@ -463,6 +465,7 @@
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(355, 325);
             this.personControl.TabIndex = 1;
+            this.personControl.UseUsStoresOnly = true;
             this.personControl.Resize += new System.EventHandler(this.OnPersonControlResize);
             // 
             // wizardPageNewAccountCredentials

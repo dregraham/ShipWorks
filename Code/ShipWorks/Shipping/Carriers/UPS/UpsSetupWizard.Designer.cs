@@ -132,7 +132,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccount);
+            this.mainPanel.Controls.Add(this.wizardPageOpenAccountPickupLocation);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -711,7 +711,7 @@
             // upsBillingContactInfoControl
             // 
             this.upsBillingContactInfoControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upsBillingContactInfoControl.Location = new System.Drawing.Point(64, 20);
+            this.upsBillingContactInfoControl.Location = new System.Drawing.Point(24, 12);
             this.upsBillingContactInfoControl.Name = "upsBillingContactInfoControl";
             this.upsBillingContactInfoControl.Size = new System.Drawing.Size(446, 440);
             this.upsBillingContactInfoControl.TabIndex = 0;
@@ -765,7 +765,7 @@
             // upsPickupLocationControl
             // 
             this.upsPickupLocationControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upsPickupLocationControl.Location = new System.Drawing.Point(64, 20);
+            this.upsPickupLocationControl.Location = new System.Drawing.Point(24, 12);
             this.upsPickupLocationControl.Name = "upsPickupLocationControl";
             this.upsPickupLocationControl.Size = new System.Drawing.Size(446, 415);
             this.upsPickupLocationControl.TabIndex = 0;
