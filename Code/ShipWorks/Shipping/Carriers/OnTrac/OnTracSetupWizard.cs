@@ -29,7 +29,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public OnTracSetupWizard()
         {
             InitializeComponent();
-            contactInformation.UseUsStoresOnly = true;
         }
 
         /// <summary>

@@ -23,8 +23,6 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public AutofillPersonControl()
         {
-            UseUsStoresOnly = false;
-
             InitializeComponent();
 
             Load += OnLoad;
@@ -41,13 +39,10 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
-            List<StoreEntity> stores = StoreManager.GetAllStores().Where(s => UseUsStoresOnly == false || s.CountryCode == "US").ToList();
-            if (stores.Count() <= 1)
+            List<StoreEntity> stores = StoreManager.GetAllStores();
+            if (stores.Count == 1)
             {
-                if (stores.Any())
-                {
-                    LoadStoreAddresIntoPersonControl(stores.First());
-                }
+                LoadStoreAddresIntoPersonControl(stores.First());
 
                 storeSelectorPanel.Visible = false;
 
@@ -57,15 +52,6 @@ namespace ShipWorks.Data.Controls
 
             storeAddressLink.TabStop = false;
         }
-
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [use us stores only].
-        /// </summary>
-        [DefaultValue(false)]
-        [Browsable(true)]
-        [Category("Misc")]
-        public bool UseUsStoresOnly { get; set; }
 
         /// <summary>
         /// Set which fields are available for editing
@@ -161,7 +147,7 @@ namespace ShipWorks.Data.Controls
         private ContextMenu BuildAddressMenu()
         {
             ContextMenu menu = new ContextMenu();
-            menu.MenuItems.AddRange(StoreManager.GetAllStores().Where(s => UseUsStoresOnly == false || s.CountryCode == "US").Select(CreateMenuItem).ToArray());
+            menu.MenuItems.AddRange(StoreManager.GetAllStores().Select(CreateMenuItem).ToArray());
             return menu;
         }
 

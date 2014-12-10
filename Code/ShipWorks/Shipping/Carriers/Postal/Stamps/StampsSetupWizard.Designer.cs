@@ -465,7 +465,6 @@
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(355, 325);
             this.personControl.TabIndex = 1;
-            this.personControl.UseUsStoresOnly = true;
             this.personControl.Resize += new System.EventHandler(this.OnPersonControlResize);
             // 
             // wizardPageNewAccountCredentials

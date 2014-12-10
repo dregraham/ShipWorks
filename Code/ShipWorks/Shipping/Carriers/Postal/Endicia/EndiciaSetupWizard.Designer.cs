@@ -284,7 +284,6 @@
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 358);
             this.personControl.TabIndex = 0;
-            this.personControl.UseUsStoresOnly = true;
             // 
             // wizardPagePasswords
             // 
