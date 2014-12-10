@@ -68,6 +68,11 @@ namespace Interapptive.Shared.Business
                 return "VI";
             }
 
+            if (string.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                return "US";
+            }
+
             // Check for lowercase codes
             if (name.Length <= 2)
             {
