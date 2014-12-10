@@ -244,6 +244,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             registration.MailingAddress = new PersonAdapter();
             personControl.SaveToEntity(registration.MailingAddress);
 
+            if (registration.MailingAddress.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             // pre-load these details into the CC controls
             personCreditCard.LoadEntity(registration.MailingAddress);
 

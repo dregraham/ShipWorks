@@ -227,6 +227,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             PersonAdapter updatedStampsAccountAdapter = new PersonAdapter(StampsAccount, string.Empty);
             personControl.SaveToEntity(updatedStampsAccountAdapter);
 
+            if (StampsAccount.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Full Name", StampsAccount.FirstName);
             checker.Check("Street Address", StampsAccount.Street1);
