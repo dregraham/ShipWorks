@@ -68,6 +68,12 @@ namespace Interapptive.Shared.Business
                 return "VI";
             }
 
+            // Some carts send down variations of the US country name
+            if (string.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                return "US";
+            }
+
             // Check for lowercase codes
             if (name.Length <= 2)
             {
@@ -579,7 +585,7 @@ namespace Interapptive.Shared.Business
             countries.Add("South Korea", "KR");
             countries.Add("Kuwait", "KW");
             countries.Add("Kyrgyzstan", "KG");
-            countries.Add("Lao", "LA");
+            countries.Add("Laos", "LA");
             countries.Add("Lebanon", "LB");
             countries.Add("Latvia", "LV");
             countries.Add("Lesotho", "LS");
