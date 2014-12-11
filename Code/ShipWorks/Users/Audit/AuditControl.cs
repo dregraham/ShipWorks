@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -253,7 +254,14 @@ namespace ShipWorks.Users.Audit
         {
             if (Visible)
             {
-                AuditProcessor.ProcessAudits();
+                try
+                {
+                    AuditProcessor.ProcessAudits();
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+                }
             }
         }
 
@@ -434,26 +442,33 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void UpdateQueryFilter()
         {
-            RelationPredicateBucket bucket = new RelationPredicateBucket();
-
-            lock (searchCriteriaLock)
+            try
             {
-                // Search options critiera
-                bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchOptionsCriteria));
+                RelationPredicateBucket bucket = new RelationPredicateBucket();
 
-                // Related To Object (Search text) criteria
-                if (lockedSearchTextCriteria != null)
+                lock (searchCriteriaLock)
                 {
-                    bucket.PredicateExpression.AddWithAnd(lockedSearchTextCriteria);
+                    // Search options critiera
+                    bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchOptionsCriteria));
+
+                    // Related To Object (Search text) criteria
+                    if (lockedSearchTextCriteria != null)
+                    {
+                        bucket.PredicateExpression.AddWithAnd(lockedSearchTextCriteria);
+                    }
+                    else if (relatedToBox.Checked)
+                    {
+                        bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchTextCriteria));
+                    }
                 }
-                else if (relatedToBox.Checked)
-                {
-                    bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchTextCriteria));
-                }
+
+                // Apply the bucket to the gateway
+                entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, bucket));
             }
-
-            // Apply the bucket to the gateway
-            entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, bucket));
+            catch (SqlException ex)
+            {
+                log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+            }
         }
 
         /// <summary>

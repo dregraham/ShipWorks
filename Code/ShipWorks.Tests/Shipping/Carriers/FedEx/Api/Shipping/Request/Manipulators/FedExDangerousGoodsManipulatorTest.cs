@@ -760,6 +760,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
+        public void Manipulate_HazardousCommoditiesPackingGroupIsNotSpecified_WhenOptionIsHazardousMaterials_AndPackingGroupIsNotApplicable_Test()
+        {
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Packages[0].HazardousMaterialPackingGroup = (int)FedExHazardousMaterialsPackingGroup.NotApplicable;
+            shipmentEntity.FedEx.Packages[0].DangerousGoodsType = (int)FedExDangerousGoodsMaterialType.HazardousMaterials;
+
+            testObject.Manipulate(carrierRequest.Object);
+
+            DangerousGoodsDetail dangerousGoods = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DangerousGoodsDetail;
+            Assert.IsFalse(dangerousGoods.Containers[0].HazardousCommodities[0].Description.PackingGroupSpecified);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenHazardousCommoditiesPackingGroupIsNotRecognized_AndOptionIsHazardousMaterials_Test()
         {

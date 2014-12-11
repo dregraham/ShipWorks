@@ -183,6 +183,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				case "InsurancePolicyEntity": return EntityType.InsurancePolicyEntity;
+				case "EbayCombinedOrderRelationEntity": return EntityType.EbayCombinedOrderRelationEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

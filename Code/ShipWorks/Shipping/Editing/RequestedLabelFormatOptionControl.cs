@@ -23,9 +23,7 @@ namespace ShipWorks.Shipping.Editing
             SetSettingsMovedMessageLocation();
 
             SetDisplayMode(DisplayMode.LanguageSelection);
-        }
-
-        public bool State { get; set; }
+        }        
 
         /// <summary>
         /// Remove the specified formats from the list of options

@@ -66,9 +66,23 @@ namespace ShipWorks.Data
                     DeleteCustomer(entityID);
                     break;
 
+                case EntityType.AuditEntity:
+                    DeleteAudit(entityID);
+                    break;
+
                 default:
                     throw new InvalidOperationException("Invalid entity type " + entityID);
             }
+        }
+
+        /// <summary>
+        /// Delete the specified audit
+        /// </summary>
+        public static void DeleteAudit(long auditID)
+        {
+            DeleteWithCascade(EntityType.AuditEntity, auditID, SqlAdapter.Default);
+
+            DataProvider.RemoveEntity(auditID);
         }
 
         /// <summary>

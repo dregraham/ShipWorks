@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((163 + 0));
+			base.InitClass((164 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -87,6 +87,7 @@ namespace ShipWorks.Data.Adapter
 			InitDimensionsProfileEntityMappings();
 			InitDownloadEntityMappings();
 			InitDownloadDetailEntityMappings();
+			InitEbayCombinedOrderRelationEntityMappings();
 			InitEbayOrderEntityMappings();
 			InitEbayOrderItemEntityMappings();
 			InitEbayStoreEntityMappings();
@@ -651,6 +652,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "DownloadDetailEntity", "ExtraBigIntData3", "ExtraBigIntData3", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
 			base.AddElementFieldMapping( "DownloadDetailEntity", "ExtraStringData1", "ExtraStringData1", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 8 );
 		}
+		/// <summary>Inits EbayCombinedOrderRelationEntity's mappings</summary>
+		private void InitEbayCombinedOrderRelationEntityMappings()
+		{
+			base.AddElementMapping( "EbayCombinedOrderRelationEntity", "ShipWorksLocal", @"dbo", "EbayCombinedOrderRelation", 4 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "EbayCombinedOrderRelationID", "EbayCombinedOrderRelationID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "EbayOrderID", "EbayOrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
+			base.AddElementFieldMapping( "EbayCombinedOrderRelationEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 3 );
+		}
 		/// <summary>Inits EbayOrderEntity's mappings</summary>
 		private void InitEbayOrderEntityMappings()
 		{
@@ -994,7 +1004,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExPackageEntity's mappings</summary>
 		private void InitFedExPackageEntityMappings()
 		{
-			base.AddElementMapping( "FedExPackageEntity", "ShipWorksLocal", @"dbo", "FedExPackage", 33 );
+			base.AddElementMapping( "FedExPackageEntity", "ShipWorksLocal", @"dbo", "FedExPackage", 34 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "FedExPackageID", "FedExPackageID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "Weight", "Weight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 2 );
@@ -1028,6 +1038,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialPackingGroup", "HazardousMaterialPackingGroup", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 30 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialQuantityValue", "HazardousMaterialQuantityValue", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 31 );
 			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialQuanityUnits", "HazardousMaterialQuanityUnits", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 32 );
+			base.AddElementFieldMapping( "FedExPackageEntity", "HazardousMaterialTechnicalName", "HazardousMaterialTechnicalName", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 33 );
 		}
 		/// <summary>Inits FedExProfileEntity's mappings</summary>
 		private void InitFedExProfileEntityMappings()
