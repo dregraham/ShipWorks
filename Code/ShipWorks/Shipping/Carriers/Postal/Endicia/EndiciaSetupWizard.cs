@@ -266,7 +266,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             if (person.CountryCode != "US")
             {
-                MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                MessageHelper.ShowInformation(this, "USPS only supports US addresses.");
                 e.NextPage = CurrentPage;
                 return;
             }

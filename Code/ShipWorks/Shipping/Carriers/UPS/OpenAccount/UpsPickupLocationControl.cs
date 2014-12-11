@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             if (upsAccount.CountryCode != "US")
             {
-                throw new UpsOpenAccountException("Shipworks can only create US accounts. To create an account for another country, please register your new account on the UPS website.");
+                throw new UpsOpenAccountException("ShipWorks can only create US accounts. To create an account for another country, please register your new account on the UPS website.");
             }
 
             request.PickupAddress.City = upsAccount.City;

@@ -124,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (personAdapter.CountryCode != "US")
             {
-                MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                MessageHelper.ShowInformation(this, "OnTrac only supports US addresses.");
                 e.NextPage = CurrentPage;
                 return;
             }
