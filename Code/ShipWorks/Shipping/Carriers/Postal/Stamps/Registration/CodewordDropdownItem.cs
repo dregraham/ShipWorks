@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// </summary>
         /// <param name="stampsCodewordType">Type of the stamps codeword.</param>
         /// <param name="questionText">The question text.</param>
-        public CodewordDropdownItem(CodewordType stampsCodewordType, string questionText)
+        public CodewordDropdownItem(CodewordType2 stampsCodewordType, string questionText)
         {
             CodewordType = stampsCodewordType;
             QuestionText = questionText;
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <value>
         /// The type of the codeword.
         /// </value>
-        public CodewordType CodewordType { get; set; }
+        public CodewordType2 CodewordType { get; set; }
 
         /// <summary>
         /// Gets or sets the question text.

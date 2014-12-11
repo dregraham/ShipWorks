@@ -8,7 +8,7 @@ using System.Web.Services.Protocols;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {

@@ -5,7 +5,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using log4net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private string ServiceUrl
         {
-            get { return useTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV39.asmx" : "https://swsim.stamps.com/swsim/swsimv39.asmx"; }
+            get { return useTestServer ? "https://swsim.testing.stamps.com/swsim/SwsimV40.asmx" : "https://swsim.stamps.com/swsim/SwsimV40.asmx"; }
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             
             try
             {
-                using (SwsimV39 webService = CreateWebService("ChangePlan"))
+                using (SwsimV40 webService = CreateWebService("ChangePlan"))
                 {
                     webService.Url = ServiceUrl;
                     webService.ChangePlan(authenticator, ExpeditedPlanID, promoCode, out purchaseStatus, out transactionID, out rejectionReason);
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // certificate before transmitting our credentials
             CheckCertificate();
 
-            using (SwsimV39 webService = CreateWebService("GetContractType"))
+            using (SwsimV40 webService = CreateWebService("GetContractType"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -163,9 +163,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV39 CreateWebService(string logName)
+        private SwsimV40 CreateWebService(string logName)
         {
-            SwsimV39 webService = new SwsimV39(new LogEntryFactory().GetLogEntry(ApiLogSource.UspsStamps, logName, LogActionType.Other))
+            SwsimV40 webService = new SwsimV40(new LogEntryFactory().GetLogEntry(ApiLogSource.UspsStamps, logName, LogActionType.Other))
             {
                 Url = ServiceUrl
             };
@@ -189,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV39 webService = CreateWebService("Authenticate"))
+                using (SwsimV40 webService = CreateWebService("Authenticate"))
                 {
                     string auth = webService.AuthenticateUser(new Credentials
                     {

@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Get the account info for the given Stamps.com user name
         /// </summary>
-        AccountInfo GetAccountInfo(StampsAccountEntity account);
+        object GetAccountInfo(StampsAccountEntity account);
 
         /// <summary>
         /// Changes the contract associated with the given account based on the contract type provided.
@@ -44,12 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// Get the rates for the given shipment based on its settings
         /// </summary>
         List<RateResult> GetRates(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Cleans the address of the given person using the specified stamps account
-        /// </summary>
-        Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch);
-
+        
         /// <summary>
         /// Registers a new account with Stamps.com.
         /// </summary>

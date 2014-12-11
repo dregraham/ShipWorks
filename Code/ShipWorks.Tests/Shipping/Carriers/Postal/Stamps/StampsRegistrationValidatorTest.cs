@@ -33,10 +33,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
                 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
                                 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()
@@ -67,10 +67,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()

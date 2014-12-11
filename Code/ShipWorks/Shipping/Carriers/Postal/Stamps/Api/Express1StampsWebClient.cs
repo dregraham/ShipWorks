@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29;
 using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
 using ShipWorks.Data.Model.EntityClasses;
@@ -24,8 +24,27 @@ using log4net;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
+using Microsoft.Web.Services3;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.AccountInfo;
+using Address = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Address;
+using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ContentTypeV2;
+using CreateIndiciumModeV1 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.CreateIndiciumModeV1;
+using Credentials = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Credentials;
+using CustomsLine = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.CustomsLine;
+using CustomsV2 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.CustomsV2;
+using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.EltronPrinterDPIType;
+using ImageType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ImageType;
+using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.NonDeliveryOption;
+using PackageTypeV6 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.PackageTypeV6;
+using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.PurchaseStatus;
+using RegistrationStatus = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.RegistrationStatus;
+using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ResidentialDeliveryIndicatorType;
+using ServiceType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ServiceType;
+using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.StatusCodes;
+using UrlType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.UrlType;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 {
@@ -37,8 +56,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         private readonly ILog log;
         private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
-
-        static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
         // Maps stamps.com usernames to their latest authenticator tokens
         static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
@@ -141,6 +158,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         }
 
         /// <summary>
+        /// Changes the contract associated with the given account based on the contract type provided.
+        /// </summary>
+        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        {
+            throw new InvalidOperationException("An Express1 contract cannot be changed.");
+        }
+
+        /// <summary>
+        /// Checks with Stamps.com API to get the contract type of the account.
+        /// </summary>
+        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        {
+            throw new InvalidOperationException("The contract type is not applicable for Express1.");
+        }
+
+        /// <summary>
         /// Makes a request to the specified url, and determines it's CertificateSecurityLevel
         /// </summary>
         private void CheckCertificate(string url)
@@ -167,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Get the account info for the given Stamps.com user name
         /// </summary>
-        public AccountInfo GetAccountInfo(StampsAccountEntity account)
+        public object GetAccountInfo(StampsAccountEntity account)
         {
             return AuthenticationWrapper(() => { return GetAccountInfoInternal(account); }, account);
         }
@@ -190,22 +223,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
 
             return accountInfo;
-        }
-
-        /// <summary>
-        /// Changes the contract associated with the given account based on the contract type provided.
-        /// </summary>
-        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
-        {
-            throw new InvalidOperationException("An Express1 contract cannot be changed.");
-        }
-
-        /// <summary>
-        /// Checks with Stamps.com API to get the contract type of the account.
-        /// </summary>
-        public StampsAccountContractType GetContractType(StampsAccountEntity account)
-        {
-            throw new InvalidOperationException("The contract type is not applicable for Express1.");
         }
 
         /// <summary>
@@ -247,7 +264,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            WebServices.PostageBalance postageBalance;
+            WebServices.v29.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
@@ -286,7 +303,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
                 foreach (RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
-                    PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
+                    PostalServiceType serviceType = StampsUtility.GetPostalServiceType(ConvertServiceType(stampsRate.ServiceType));
 
                     RateResult baseRate = null;
 
@@ -372,6 +389,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
         }
 
+
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
         /// </summary>
@@ -417,7 +435,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Cleans the address of the given person using the specified stamps account
         /// </summary>
-        public Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
+        private Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
             return AuthenticationWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
         }
@@ -471,48 +489,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public StampsRegistrationResult RegisterAccount(StampsRegistration registration)
         {
-            // Output parameters supplied to the request
-            string suggestedUserName = string.Empty;
-            int userId = 0;
-            string promoUrl = string.Empty;
-
-            try
-            {
-                RegistrationStatus registrationStatus = RegistrationStatus.Fail;
-
-                using (SwsimV29 webService = CreateWebService("RegisterAccount"))
-                {
-                    // Note: API docs say the address must be cleansed prior to registering the account, but the API 
-                    // for cleansing an address assumes there are existing credentials. Question is out to Stamps.com 
-                    // on this, but haven't heard anything back as of 11/8/2012.
-                    registrationStatus = webService.RegisterAccount
-                        (
-                            integrationID,
-                            registration.UserName,
-                            registration.Password,
-                            registration.FirstCodewordType,
-                            registration.FirstCodewordValue,
-                            registration.SecondCodewordType,
-                            registration.SecondCodewordValue,
-                            registration.PhysicalAddress,
-                            null,
-                            registration.MachineInfo,
-                            registration.Email,
-                            registration.UsageType,
-                            registration.PromoCode,
-                            (object)registration.CreditCard ?? registration.AchAccount,
-                            out suggestedUserName,
-                            out userId,
-                            out promoUrl
-                        );
-                }
-
-                return new StampsRegistrationResult(registrationStatus, suggestedUserName, promoUrl);
-            }
-            catch (Exception ex)
-            {
-                throw new StampsRegistrationException("Stamps.com encountered an error trying to register your account:\n\n" + ex.Message, ex);
-            }
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -664,7 +641,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
-            WebServices.PostageBalance postageBalance;
+            WebServices.v29.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Stamps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
@@ -1131,7 +1108,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            rate.PackageType = StampsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            WebServices.PackageTypeV6 packageTypeV6 = StampsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
             rate.Length = shipment.Postal.DimsLength;
@@ -1173,7 +1151,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV11 rate = CreateRateForRating(shipment, account);
-            rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
+            rate.ServiceType = ConvertServiceType(StampsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal";
 
             List<AddOnV4> addOns = new List<AddOnV4>();
@@ -1249,7 +1227,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             CustomsV2 customs = new CustomsV2();
 
             // Content type
-            customs.ContentType = StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType);
+            customs.ContentType = ConvertCodewordType(StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
             if (customs.ContentType == ContentTypeV2.Other)
             {
                 if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)
@@ -1322,7 +1300,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     {
                         log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
 
-                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int) StampsResellerType.Express1))
+                        if (triesLeft > 0 && IsStaleAuthenticator(ex))
                         {
                             AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
                         }
@@ -1358,7 +1336,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Indicates if the exception represents an authenticator that has gone stale
         /// </summary>
-        private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
+        private static bool IsStaleAuthenticator(SoapException ex)
         {
 
             // Express1 does not return error codes...
@@ -1370,6 +1348,191 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Converts a current ServiceType to a v29 ServiceType
+        /// </summary>
+        private static WebServices.v29.ServiceType ConvertServiceType(WebServices.ServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case WebServices.ServiceType.USFC:
+                    return WebServices.v29.ServiceType.USFC;
+                case WebServices.ServiceType.USPM:
+                    return WebServices.v29.ServiceType.USPM;
+                case WebServices.ServiceType.USXM:
+                    return WebServices.v29.ServiceType.USXM;
+                case WebServices.ServiceType.USMM:
+                    return WebServices.v29.ServiceType.USMM;
+                case WebServices.ServiceType.USBP:
+                    return WebServices.v29.ServiceType.USBP;
+                case WebServices.ServiceType.USLM:
+                    return WebServices.v29.ServiceType.USLM;
+                case WebServices.ServiceType.USEMI:
+                    return WebServices.v29.ServiceType.USEMI;
+                case WebServices.ServiceType.USPMI:
+                    return WebServices.v29.ServiceType.USPMI;
+                case WebServices.ServiceType.USFCI:
+                    return WebServices.v29.ServiceType.USFCI;
+                case WebServices.ServiceType.USCM:
+                    return WebServices.v29.ServiceType.USCM;
+                case WebServices.ServiceType.USPS:
+                    return WebServices.v29.ServiceType.USPS;
+
+                case WebServices.ServiceType.DHLPE:
+                case WebServices.ServiceType.DHLPG:
+                case WebServices.ServiceType.DHLPPE:
+                case WebServices.ServiceType.DHLPPG:
+                case WebServices.ServiceType.DHLBPME:
+                case WebServices.ServiceType.DHLBPMG:
+                default:
+                    throw new ArgumentOutOfRangeException("serviceType");
+            }
+        }
+
+        /// <summary>
+        /// Converts a v29 ServiceType to the ServiceType
+        /// </summary>
+        private static WebServices.ServiceType ConvertServiceType(WebServices.v29.ServiceType serviceType)
+        {
+            switch (serviceType)
+            {
+                case WebServices.v29.ServiceType.USFC:
+                    return WebServices.ServiceType.USFC;
+                case WebServices.v29.ServiceType.USPM:
+                    return WebServices.ServiceType.USPM;
+                case WebServices.v29.ServiceType.USXM:
+                    return WebServices.ServiceType.USXM;
+                case WebServices.v29.ServiceType.USMM:
+                    return WebServices.ServiceType.USMM;
+                case WebServices.v29.ServiceType.USBP:
+                    return WebServices.ServiceType.USBP;
+                case WebServices.v29.ServiceType.USLM:
+                    return WebServices.ServiceType.USLM;
+                case WebServices.v29.ServiceType.USEMI:
+                    return WebServices.ServiceType.USEMI;
+                case WebServices.v29.ServiceType.USPMI:
+                    return WebServices.ServiceType.USPMI;
+                case WebServices.v29.ServiceType.USFCI:
+                    return WebServices.ServiceType.USFCI;
+                case WebServices.v29.ServiceType.USCM:
+                    return WebServices.ServiceType.USCM;
+                case WebServices.v29.ServiceType.USPS:
+                    return WebServices.ServiceType.USPS;
+                default:
+                    throw new ArgumentOutOfRangeException("serviceType");
+            }
+        }
+
+        /// <summary>
+        /// Gets the v29 version of the CodewordType
+        /// </summary>
+        private static WebServices.v29.CodewordType ConvertCodewordType(WebServices.CodewordType2 codewordType2)
+        {
+            switch (codewordType2)
+            {
+                case CodewordType2.MothersMaidenName:
+                    return WebServices.v29.CodewordType.MothersMaidenName;
+                case CodewordType2.PetsName:
+                    return WebServices.v29.CodewordType.PetsName;
+                case CodewordType2.BirthCity:
+                    return WebServices.v29.CodewordType.BirthCity;
+                case CodewordType2.Last4SocialSecurityNumber:
+                    return WebServices.v29.CodewordType.Last4SocialSecurityNumber;
+                case CodewordType2.Last4DriversLicense:
+                    return WebServices.v29.CodewordType.Last4DriversLicense;
+
+                case CodewordType2.StreetName:
+                case CodewordType2.FirstSchoolsName:
+                case CodewordType2.FirstCarsMakeModel:
+                case CodewordType2.FathersBirthplace:
+                case CodewordType2.HighSchoolMascot:
+                case CodewordType2.Undefined:
+                    throw new ArgumentOutOfRangeException("codewordType2");
+                default:
+                    throw new ArgumentOutOfRangeException("codewordType2");
+            }
+        }
+
+        /// <summary>
+        /// Gets the v29 version of the CodewordType
+        /// </summary>
+        private static WebServices.v29.PackageTypeV6 ConvertPackageType(WebServices.PackageTypeV6 packageType)
+        {
+            switch (packageType)
+            {
+                case PackageTypeV6.Postcard:
+                    return WebServices.v29.PackageTypeV6.Postcard;
+                case PackageTypeV6.Letter:
+                    return WebServices.v29.PackageTypeV6.Letter;
+                case PackageTypeV6.LargeEnvelopeorFlat:
+                    return WebServices.v29.PackageTypeV6.LargeEnvelopeorFlat;
+                case PackageTypeV6.ThickEnvelope:
+                    return WebServices.v29.PackageTypeV6.ThickEnvelope;
+                case PackageTypeV6.Package:
+                    return WebServices.v29.PackageTypeV6.Package;
+                case PackageTypeV6.FlatRateBox:
+                    return WebServices.v29.PackageTypeV6.FlatRateBox;
+                case PackageTypeV6.SmallFlatRateBox:
+                    return WebServices.v29.PackageTypeV6.SmallFlatRateBox;
+                case PackageTypeV6.LargeFlatRateBox:
+                    return WebServices.v29.PackageTypeV6.LargeFlatRateBox;
+                case PackageTypeV6.FlatRateEnvelope:
+                    return WebServices.v29.PackageTypeV6.FlatRateEnvelope;
+                case PackageTypeV6.FlatRatePaddedEnvelope:
+                    return WebServices.v29.PackageTypeV6.FlatRatePaddedEnvelope;
+                case PackageTypeV6.LargePackage:
+                    return WebServices.v29.PackageTypeV6.LargePackage;
+                case PackageTypeV6.OversizedPackage:
+                    return WebServices.v29.PackageTypeV6.OversizedPackage;
+                case PackageTypeV6.RegionalRateBoxA:
+                    return WebServices.v29.PackageTypeV6.RegionalRateBoxA;
+                case PackageTypeV6.RegionalRateBoxB:
+                    return WebServices.v29.PackageTypeV6.RegionalRateBoxB;
+                case PackageTypeV6.LegalFlatRateEnvelope:
+                    return WebServices.v29.PackageTypeV6.LegalFlatRateEnvelope;
+                case PackageTypeV6.RegionalRateBoxC:
+                    return WebServices.v29.PackageTypeV6.RegionalRateBoxC;
+                default:
+                    throw new ArgumentOutOfRangeException("packageType");
+            }
+        }
+
+        /// <summary>
+        /// Gets the v29 version of the ContentType
+        /// </summary>
+        private static WebServices.v29.ContentTypeV2 ConvertCodewordType(WebServices.ContentTypeV2 contentType)
+        {
+            switch (contentType)
+            {
+                case WebServices.ContentTypeV2.CommercialSample:
+                    return WebServices.v29.ContentTypeV2.CommercialSample;
+                case WebServices.ContentTypeV2.Gift:
+                    return WebServices.v29.ContentTypeV2.Gift;
+                case WebServices.ContentTypeV2.Document:
+                    return WebServices.v29.ContentTypeV2.Document;
+                case WebServices.ContentTypeV2.ReturnedGoods:
+                    return WebServices.v29.ContentTypeV2.ReturnedGoods;
+                case WebServices.ContentTypeV2.Other:
+                    return WebServices.v29.ContentTypeV2.Other;
+                case WebServices.ContentTypeV2.Merchandise:
+                    return WebServices.v29.ContentTypeV2.Merchandise;
+                case WebServices.ContentTypeV2.HumanitarianDonation:
+                    return WebServices.v29.ContentTypeV2.HumanitarianDonation;
+                case WebServices.ContentTypeV2.DangerousGoods:
+                    return WebServices.v29.ContentTypeV2.DangerousGoods;
+                default:
+                    throw new ArgumentOutOfRangeException("contentType");
+            }
+        }
+
+        /// <summary>
+        /// Gets the Url, but not implemented for Express1Stamps
+        /// </summary>
+        public string GetUrl(StampsAccountEntity account, WebServices.UrlType urlType)
+        {
+            throw new NotImplementedException();
         }
     }
 }
