@@ -235,18 +235,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
-            if (!personControl.ValidateRequiredFields())
-            {
-                e.NextPage = CurrentPage;
-                return;
-            }
-
             registration.MailingAddress = new PersonAdapter();
             personControl.SaveToEntity(registration.MailingAddress);
 
             if (registration.MailingAddress.CountryCode != "US")
             {
                 MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
+            if (!personControl.ValidateRequiredFields())
+            {
                 e.NextPage = CurrentPage;
                 return;
             }
