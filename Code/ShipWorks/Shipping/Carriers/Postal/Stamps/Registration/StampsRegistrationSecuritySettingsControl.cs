@@ -102,6 +102,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
             securityQuestions.Add(new CodewordDropdownItem(CodewordType2.Last4SocialSecurityNumber, "What are the last 4 digits of your social security number?"));
             securityQuestions.Add(new CodewordDropdownItem(CodewordType2.MothersMaidenName, "What is your mother's maiden name?"));
             securityQuestions.Add(new CodewordDropdownItem(CodewordType2.PetsName, "What is your pet's name?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FathersBirthplace, "What is your father's birthplace?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FirstCarsMakeModel, "What is the make and model of your first car?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FirstSchoolsName, "What is name of the first school you attended?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.HighSchoolMascot, "What was your high school mascot?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.StreetName, "What is your street name?"));
 
             comboBox.Items.Add("Choose one");
             comboBox.Items.AddRange(securityQuestions.ToArray());
