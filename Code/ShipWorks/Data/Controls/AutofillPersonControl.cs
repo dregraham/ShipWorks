@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral;
 
 namespace ShipWorks.Data.Controls
 {
@@ -31,7 +33,8 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (DesignMode)
+            // Checking DesignMode was not working. I don't like this either...
+            if (DesignMode || Process.GetCurrentProcess().ProcessName == "devenv")
             {
                 return;
             }

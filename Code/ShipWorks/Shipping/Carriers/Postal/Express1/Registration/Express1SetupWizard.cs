@@ -235,14 +235,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
+            registration.MailingAddress = new PersonAdapter();
+            personControl.SaveToEntity(registration.MailingAddress);
+
+            if (registration.MailingAddress.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "Only US addresses are supported.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             if (!personControl.ValidateRequiredFields())
             {
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            registration.MailingAddress = new PersonAdapter();
-            personControl.SaveToEntity(registration.MailingAddress);
 
             // pre-load these details into the CC controls
             personCreditCard.LoadEntity(registration.MailingAddress);

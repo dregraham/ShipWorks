@@ -53,6 +53,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             PersonAdapter.Copy(personAdapter, new PersonAdapter(upsAccount, ""));
 
+            if (upsAccount.CountryCode != "US")
+            {
+                throw new UpsOpenAccountException("Shipworks can only create US accounts. To create an account for another country, please register your new account on the UPS website.");
+            }
+
             request.PickupAddress.City = upsAccount.City;
             request.PickupAddress.CompanyName = upsAccount.Company;
             request.PickupAddress.ContactName = personAdapter.UnparsedName;

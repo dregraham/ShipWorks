@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPagePayment);
+            this.mainPanel.Controls.Add(this.wizardPageAddress);
             this.mainPanel.Size = new System.Drawing.Size(625, 460);
             // 
             // etchBottom
@@ -184,11 +184,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Residential) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone) 
@@ -203,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.personControl.Size = new System.Drawing.Size(358, 356);
+            this.personControl.Size = new System.Drawing.Size(358, 392);
             this.personControl.TabIndex = 1;
             // 
             // wizardPageAgreement
