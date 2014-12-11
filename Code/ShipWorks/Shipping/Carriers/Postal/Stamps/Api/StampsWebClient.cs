@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Interapptive.Shared.Collections;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
-using System.Globalization;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml;
 using Interapptive.Shared.Net;
 using System.Net;
 using ShipWorks.ApplicationCore.Logging;
@@ -20,27 +15,24 @@ using ShipWorks.Data.Connection;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
 using log4net;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 {
     /// <summary>
     /// Central point where API stuff goes through for stamps.com
     /// </summary>
-    public class StampsApiSession
+    public class StampsWebClient : IStampsWebClient
     {
         private readonly ILog log;
         private readonly LogEntryFactory logEntryFactory;
@@ -57,27 +49,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         // Cleansed address map so we don't do common addresses over and over again
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
-        // Express1 API service connection info 
-        static Express1StampsConnectionDetails express1StampsConnectionDetails = new Express1StampsConnectionDetails();
-
         private readonly ICertificateInspector certificateInspector;
-        
+        private readonly StampsResellerType stampsResellerType;
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsApiSession"/> class.
+        /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
         /// </summary>
-        public StampsApiSession()
-            : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
+        /// <param name="stampsResellerType">Type of the stamps reseller.</param>
+        public StampsWebClient(StampsResellerType stampsResellerType)
+            : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsApiSession" /> class.
+        /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
         /// </summary>
-        public StampsApiSession(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        /// <param name="accountRepository">The account repository.</param>
+        /// <param name="logEntryFactory">The log entry factory.</param>
+        /// <param name="certificateInspector">The certificate inspector.</param>
+        /// <param name="stampsResellerType">Type of the stamps reseller.</param>
+        public StampsWebClient(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
-            this.log = LogManager.GetLogger(typeof(StampsApiSession));
+            this.log = LogManager.GetLogger(typeof(StampsWebClient));
             this.certificateInspector = certificateInspector;
+            this.stampsResellerType = stampsResellerType;
         }
 
         /// <summary>
@@ -100,31 +96,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV29 CreateWebService(string logName, StampsResellerType stampsResellerType)
+        private SwsimV29 CreateWebService(string logName)
         {
-            return CreateWebService(logName, stampsResellerType, LogActionType.Other);
+            return CreateWebService(logName, LogActionType.Other);
         }
 
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV29 CreateWebService(string logName, StampsResellerType stampsResellerType, LogActionType logActionType)
+        private SwsimV29 CreateWebService(string logName, LogActionType logActionType)
         {
-            SwsimV29 webService;
-            if (stampsResellerType == StampsResellerType.Express1)
+            SwsimV29 webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
             {
-                webService = new Express1StampsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
-                {
-                    Url = express1StampsConnectionDetails.ServiceUrl
-                };
-            }
-            else
-            {
-                webService = new SwsimV29(logEntryFactory.GetLogEntry(ApiLogSource.UspsStamps, logName, logActionType))
-                    {
-                        Url = ServiceUrl
-                    };
-            }
+                Url = ServiceUrl
+            };
 
             return webService;
         }
@@ -132,12 +117,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Authenticate the given user with Stamps.com.  If 
         /// </summary>
-        public void AuthenticateUser(string username, string password, StampsResellerType stampsResellerType)
+        public void AuthenticateUser(string username, string password)
         {
             try
             {
-                bool isExpress1 = stampsResellerType == StampsResellerType.Express1;
-
                 // Output parameters from stamps.com
                 DateTime lastLoginTime = new DateTime();
                 bool clearCredential = false;
@@ -145,13 +128,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
 
-                using (SwsimV29 webService = CreateWebService("Authenticate", stampsResellerType))
+                using (SwsimV29 webService = CreateWebService("Authenticate"))
                 {
-                    CheckCertificate(webService.Url, isExpress1);
+                    CheckCertificate(webService.Url);
 
                     string auth = webService.AuthenticateUser(new Credentials
                     {
-                        IntegrationID = isExpress1 ? new Guid(express1StampsConnectionDetails.ApiKey) : integrationID,
+                        IntegrationID = integrationID,
                         Username = username,
                         Password = password
                     }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired);
@@ -172,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Makes a request to the specified url, and determines it's CertificateSecurityLevel
         /// </summary>
-        private void CheckCertificate(string url, bool isExpress1)
+        private void CheckCertificate(string url)
         {
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
 
@@ -188,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
-                string description = EnumHelper.GetDescription(isExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Stamps);
+                string description = EnumHelper.GetDescription(ShipmentTypeCode.Stamps);
                 throw new StampsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
@@ -208,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             AccountInfo accountInfo;
 
-            using (SwsimV29 webService = CreateWebService("GetAccountInfo", (StampsResellerType)account.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("GetAccountInfo"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -258,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             string url;
 
-            using (SwsimV29 webService = CreateWebService("GetURL", (StampsResellerType)account.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("GetURL"))
             {
                 string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -287,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             bool miRequired_Unused;
 
-            using (SwsimV29 webService = CreateWebService("PurchasePostage", (StampsResellerType)account.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("PurchasePostage"))
             {
                 string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -416,9 +399,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             List<RateV11> rateResults = new List<RateV11>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates", (StampsResellerType)account.StampsReseller, LogActionType.GetRates))
+            using (SwsimV29 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
-                CheckCertificate(webService.Url, shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps);
+                CheckCertificate(webService.Url);
 
                 RateV11[] ratesArray;
 
@@ -478,7 +461,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             Address[] candidates;
             StatusCodes statusCodes;
 
-            using (SwsimV29 webService = CreateWebService("CleanseAddress", (StampsResellerType)account.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("CleanseAddress"))
             {
                 string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -515,7 +498,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RegistrationStatus registrationStatus = RegistrationStatus.Fail;
 
-                using (SwsimV29 webService = CreateWebService("RegisterAccount", StampsResellerType.None))
+                using (SwsimV29 webService = CreateWebService("RegisterAccount"))
                 {
                     // Note: API docs say the address must be cleansed prior to registering the account, but the API 
                     // for cleansing an address assumes there are existing credentials. Question is out to Stamps.com 
@@ -585,43 +568,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV29 webService = CreateWebService("ScanForm", (StampsResellerType)stampsAccountEntity.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
-                (
-                    GetAuthenticator(stampsAccountEntity),
-                    stampsTransactions.ToArray(),
-                    CreateScanFormAddress(person),
-                    ImageType.Png,
-                    false, // Don't print instructions
-                    null,
-                    false,
-                    out scanFormStampsId,
-                    out scanFormUrl
-                );
+                    (
+                        GetAuthenticator(stampsAccountEntity),
+                        stampsTransactions.ToArray(),
+                        CreateScanFormAddress(person),
+                        ImageType.Png,
+                        false, // Don't print instructions
+                        null,
+                        false,
+                        out scanFormStampsId,
+                        out scanFormUrl
+                    );
             }
 
-            if (stampsAccountEntity.StampsReseller == (int)StampsResellerType.Express1)
+
+            if (scanFormUrl.Contains(" "))
             {
-                XDocument response = XDocument.Parse("<ScanForm/>");
-                response.Root.Add(scanFormStampsId.Split(new[] { ' ' }).Select(x => new XElement("TransactionId", x)));
-                response.Root.Add(scanFormUrl.Split(new[] { ' ' }).Select(x => new XElement("Url", x)));
-                return response;
+                // According to the docs, there is a chance that there could be multiple URLs; the first
+                // URL contains the actual SCAN form though
+                scanFormUrl = scanFormUrl.Split(new char[] { ' ' })[0];
             }
-            else
-            {
-                if (scanFormUrl.Contains(" "))
-                {
-                    // According to the docs, there is a chance that there could be multiple URLs; the first
-                    // URL contains the actual SCAN form though
-                    scanFormUrl = scanFormUrl.Split(new char[] { ' ' })[0];
-                }
 
-                string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormStampsId, scanFormUrl);
-                XDocument response = XDocument.Parse(responseXml);
+            string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormStampsId, scanFormUrl);
+            XDocument response = XDocument.Parse(responseXml);
 
-                return response;
-            }
+            return response;
         }
 
         /// <summary>
@@ -643,7 +617,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
-            using (SwsimV29 webService = CreateWebService("Void", (StampsResellerType)account.StampsReseller))
+            using (SwsimV29 webService = CreateWebService("Void"))
             {
                 string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -672,7 +646,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller),
+                                    StampsAccountManager.GetResellerName(stampsResellerType),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -774,7 +748,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to Stamps.com as of v. 22
-                using (SwsimV29 webService = CreateWebService("Process", (StampsResellerType)account.StampsReseller))
+                using (SwsimV29 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -801,7 +775,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV29 webService = CreateWebService("Process", (StampsResellerType)account.StampsReseller))
+                using (SwsimV29 webService = CreateWebService("Process"))
                 {
                     string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
                         ref tracking,
@@ -1374,9 +1348,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     {
                         log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
 
-                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int) StampsResellerType.Express1))
+                        if (triesLeft > 0 && IsStaleAuthenticator(ex))
                         {
-                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
                         }
                         else
                         {
@@ -1399,7 +1373,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
             {
-                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
+                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username));
 
                 auth = usernameAuthenticatorMap[account.Username];
             }
@@ -1410,38 +1384,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Indicates if the exception represents an authenticator that has gone stale
         /// </summary>
-        private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
+        private static bool IsStaleAuthenticator(SoapException ex)
         {
-            if (isExpress1)
+            long code = StampsApiException.GetErrorCode(ex);
+
+            switch (code)
             {
-                // Express1 does not return error codes...
-                switch (ex.Message)
-                {
-                    case "Invalid authentication info":
-                    case "Unable to authenticate user.":
-                        return true;
-                }
-
-                return false;
+                case 0x002b0201: // Invalid
+                case 0x002b0202: // Expired
+                case 0x004C0105: // Expired
+                case 0x00500102: // Expired
+                case 0x8004E112: // Expired
+                case 0x002b0203: // Invalid
+                case 0x002b0204: // Out of sync
+                    return true;
             }
-            else
-            {
-                long code = StampsApiException.GetErrorCode(ex);
 
-                switch (code)
-                {
-                    case 0x002b0201: // Invalid
-                    case 0x002b0202: // Expired
-                    case 0x004C0105: // Expired
-                    case 0x00500102: // Expired
-                    case 0x8004E112: // Expired
-                    case 0x002b0203: // Invalid
-                    case 0x002b0204: // Out of sync
-                        return true;
-                }
-
-                return false;
-            }
+            return false;
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
@@ -11,11 +8,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     /// </summary>
     public class StampsRegistrationGateway : IStampsRegistrationGateway
     {
+        private readonly StampsResellerType resellerType;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsRegistrationGateway"/> class.
         /// </summary>
-        public StampsRegistrationGateway()
-        { }
+        public StampsRegistrationGateway(StampsResellerType resellerType)
+        {
+            this.resellerType = resellerType;
+        }
 
         /// <summary>
         /// Registers an account with Stamps.com.
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <returns>A StampsRegistrationResult object.</returns>
         public StampsRegistrationResult Register(StampsRegistration registration)
         {
-            StampsRegistrationResult result = new StampsApiSession().RegisterAccount(registration);
+            StampsRegistrationResult result = new StampsWebClient(resellerType).RegisterAccount(registration);
 
             if (!result.IsSuccessful)
             {

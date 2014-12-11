@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>The available postage balance remaining.</returns>
         public decimal GetBalance()
         {
-            StampsApiSession client = new StampsApiSession();
+            IStampsWebClient client = CreateWebClient();
             AccountInfo accountInfo = client.GetAccountInfo(account);
 
             // Make a note of the control total for purchasing purposes
@@ -66,9 +67,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // to populate this value
                 GetBalance();
             }
-            
-            StampsApiSession client = new StampsApiSession();
+
+            IStampsWebClient client = CreateWebClient();
             client.PurchasePostage(account, amount, controlTotal);
+        }
+
+        /// <summary>
+        /// Creates the web client for communicating with the carrier API.
+        /// </summary>
+        /// <returns>An instance of an IStampsWebClient based on teh shipment type code.</returns>
+        private IStampsWebClient CreateWebClient()
+        {
+            StampsShipmentType stampsType = ShipmentTypeManager.GetType(ShipmentTypeCode) as StampsShipmentType;
+            return stampsType.CreateWebClient();
         }
     }
 }

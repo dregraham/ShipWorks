@@ -4,6 +4,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
@@ -41,6 +42,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets the type of the reseller.
+        /// </summary>
+        public override StampsResellerType ResellerType
+        {
+            get { return StampsResellerType.StampsExpedited; }
+        }
+
+        /// <summary>
         /// Create the settings control for stamps.com
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
@@ -63,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            List<RateResult> stampsRates = new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).GetRates(shipment);
+            List<RateResult> stampsRates = CreateWebClient().GetRates(shipment);
             
             RateGroup rateGroup = new RateGroup(stampsRates);
             AddUspsRatePromotionFootnote(shipment, rateGroup);
@@ -113,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).ProcessShipment(shipment);
+                CreateWebClient().ProcessShipment(shipment);
             }
             catch (StampsException ex)
             {

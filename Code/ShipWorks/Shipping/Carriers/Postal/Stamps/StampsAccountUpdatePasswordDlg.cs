@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
@@ -46,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsApiSession().AuthenticateUser(account.Username, password.Text, (StampsResellerType)account.StampsReseller);
+                new StampsWebClient((StampsResellerType)account.StampsReseller).AuthenticateUser(account.Username, password.Text);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

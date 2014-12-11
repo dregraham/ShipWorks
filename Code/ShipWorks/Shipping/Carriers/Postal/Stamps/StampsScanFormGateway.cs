@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -75,7 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = new StampsApiSession().CreateScanForm(stampsShipments, accountEntity);
+            XDocument xDocument = new StampsWebClient((StampsResellerType)accountEntity.StampsReseller).CreateScanForm(stampsShipments, accountEntity);
 
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())

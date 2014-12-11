@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
@@ -288,7 +289,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsApiSession.UseTestServer ?
+                return StampsWebClient.UseTestServer ?
                     TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
             }
         }
@@ -300,7 +301,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsApiSession.UseTestServer ?
+                return StampsWebClient.UseTestServer ?
                     TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
             }
         }
@@ -312,7 +313,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsApiSession.UseTestServer ?
+                return StampsWebClient.UseTestServer ?
                     TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
             }
         }
