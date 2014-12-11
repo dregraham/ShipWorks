@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         public const int OrdersPageSize = 50;
 
         // 250 is the max that BigCommerce allows for retrieving order products
-        public const int OrderProductsPageSize = 250;
+        public const int MaxPageSize = 250;
 
         // .Net doesn't have 509 as a supported Http Status Code, so needed our own constant
         public const int MaxRequestsPerHourLimitReachedStatusCode = 509;
