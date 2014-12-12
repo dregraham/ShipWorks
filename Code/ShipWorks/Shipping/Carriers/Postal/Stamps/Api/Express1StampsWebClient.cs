@@ -484,15 +484,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             return address;
         }
-
-        /// <summary>
-        /// Registers a new account with Stamps.com.
-        /// </summary>
-        public StampsRegistrationResult RegisterAccount(StampsRegistration registration)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// Creates the scan form.
         /// </summary>
@@ -1305,14 +1297,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 default:
                     throw new ArgumentOutOfRangeException("contentType");
             }
-        }
-
-        /// <summary>
-        /// Gets the Url, but not implemented for Express1Stamps
-        /// </summary>
-        public string GetUrl(StampsAccountEntity account, WebServices.UrlType urlType)
-        {
-            throw new NotImplementedException();
         }
     }
 }
