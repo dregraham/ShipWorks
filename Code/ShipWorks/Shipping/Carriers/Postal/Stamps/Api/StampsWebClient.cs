@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Interapptive.Shared.Utility;
@@ -834,228 +835,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
             string[] labelUrls = labelUrl.Split(' ');
-
-            SaveLabelImages(shipment, labelUrls);
+            SaveLabels(shipment, labelUrls);
         }
 
         /// <summary>
-        /// Save the label images for each URL
+        /// Uses the label URLs to saves the label(s) for the given shipment.
         /// </summary>
-        private void SaveLabelImages(ShipmentEntity shipment, string[] labelUrls)
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="labelUrls">The URLs that labels need to be requested from.</param>
+        private void SaveLabels(ShipmentEntity shipment, IEnumerable<string> labelUrls)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-
-            // Domestic
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
-            {
-                // For APO/FPO, the customs docs come in the next two images
-                if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && PostalUtility.IsMilitaryPostalCode(shipment.ShipPostalCode))
-                {
-                    // They come down different depending on form type
-                    if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
-                    {
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1030, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1597, 1005));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1030, 1597, 1005));
-                    }
-                    else
-                    {
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(198, 123, 1202, 772));
-                    }
-                }
-                else
-                {
-                    // The bottom half of Guam are instructions we do not need.
-                    if (shipment.ShipCountryCode == "GU" || shipment.ShipStateProvCode == "GU")
-                    {
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1600, 1010));                        
-                    }
-                    else
-                    {
-                        // First one is always the primary
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", Rectangle.Empty);   
-                    }
-                }
-            }
-            // International services require some trickdickery
-            else
-            {
-                if (shipment.ActualLabelFormat != null)
-                {
-                    // If the labels are thermal, just save them all, marking the first as the primary
-                    for (int i = 0; i < labelUrls.Length; i++)
-                    {
-                        string labelName = i == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", i);
-                        SaveLabelImage(shipment, labelUrls[i], labelName, new Rectangle());
-                    }
-                }
-                // First-class labels are always a single label
-                else if (serviceType == PostalServiceType.InternationalFirst ||
-
-                    // Internatioanl priority flat rate can be the same size as a first-class.  We can tell when this happens
-                    // b\c we get only 2 urls (instead of 4).  the 2nd is a duplicate of the first in the cases ive seen, and we dont need it
-                    (serviceType == PostalServiceType.InternationalPriority && labelUrls.Length <= 2))
-                {
-                    SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(198, 123, 1202, 772));
-                }
-                else
-                {
-                    // typical situation not including continuation pages
-                    if (labelUrls.Length < 4)
-                    {
-                        // The first 2 images represent 4 labels that need cropped out. The 3rd url will be the instructions, that we don't need
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1600, 1010));
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1075, 1600, 1010));
-
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1600, 1010));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1075, 1600, 1010));
-                    }
-                    else
-                    {
-                        // there are Continuation forms to deal with.  We are going to assume there's a single continuation page
-                        // last URL is for instructions that aren't needed
-
-                        // primary + continuation
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPrimary", new Rectangle(0, 0, 1600, 1010));
-                        SaveLabelImage(shipment, labelUrls[0], "LabelPart2", new Rectangle(0, 1075, 1600, 1010));
-
-                        // secondary + continuation
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart3", new Rectangle(0, 0, 1600, 1010));
-                        SaveLabelImage(shipment, labelUrls[1], "LabelPart4", new Rectangle(0, 1075, 1600, 1010));
-
-                        // tertiary (Dispatch Note)
-                        SaveLabelImage(shipment, labelUrls[2], "LabelPart5", new Rectangle(0, 0, 1600, 1010));
-
-                        // create a blank png so that the sender's copy and continuation page are separate from the Dispatch Note
-                        if (shipment.ActualLabelFormat == null)
-                        {
-                            using (Image blankImage = CreateBlankImage(new Rectangle(0, 0, 1600, 1010)))
-                            {
-                                SaveLabelImage(shipment, "LabelPartBlank", blankImage);
-                            }
-                        }
-
-                        // Sender's Copy + continuation
-                        SaveLabelImage(shipment, labelUrls[3], "LabelPart6", new Rectangle(0, 0, 1600, 1010));
-                        SaveLabelImage(shipment, labelUrls[3], "LabelPart7", new Rectangle(0, 1075, 1600, 1010));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Creates a blank label of the size specified by the rectangle
-        /// </summary>
-        private static Image CreateBlankImage(Rectangle rectangle)
-        {
-            // Cate an image and fill it white
-            Image image = new Bitmap(rectangle.Width, rectangle.Height);
-            using (Graphics g = Graphics.FromImage(image))
-            {
-                g.FillRectangle(Brushes.White, rectangle);
-            }
-
-            return image;
-        }
-
-        /// <summary>
-        /// Saves a label Image to the database
-        /// </summary>
-        private static void SaveLabelImage(ShipmentEntity shipment, string name, Image labelImage)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                Debug.Assert(adapter.InSystemTransaction);
-
-                using (MemoryStream imageStream = new MemoryStream())
-                {
-                    labelImage.Save(imageStream, ImageFormat.Png);
-                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Save the primary shipping label image for the given shipment
-        /// </summary>
-        private void SaveLabelImage(ShipmentEntity shipment, string url, string name, Rectangle crop)
-        {
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                Debug.Assert(adapter.InSystemTransaction);
-
-                // Standard images
-                if (shipment.ActualLabelFormat == null)
-                {
-                    using (Image imageOriginal = DownloadLabelImage(url))
-                    {
-                        Image imageCropped;
-
-                        // If not cropping save it as-is
-                        if (crop == Rectangle.Empty)
-                        {
-                            imageCropped = imageOriginal;
-                        }
-                        else
-                        {
-                            // For endicia we are just cropping off the "Cut here along line", and its at the same spot on every label that needs it
-                            imageCropped = DisplayHelper.CropImage(imageOriginal, crop.X, crop.Y, crop.Width, crop.Height);
-                        }
-
-                        using (MemoryStream imageStream = new MemoryStream())
-                        {
-                            imageCropped.Save(imageStream, ImageFormat.Png);
-
-                            DataResourceManager.CreateFromBytes(imageStream.ToArray(), shipment.ShipmentID, name);
-                        }
-
-                        // Make sure cropped get's disposed in case we created it.  If it's the same as original it's ok, b\c Dispose is allowed to be called
-                        // multiple times.
-                        imageCropped.Dispose();
-                    }
-                }
-                // Thermal image
-                else
-                {
-                    using (WebClient webClient = new WebClient())
-                    {
-                        byte[] thermalData = webClient.DownloadData(url);
-
-                        DataResourceManager.CreateFromBytes(thermalData, shipment.ShipmentID, name);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Download the stamps.com label image from the given URL
-        /// </summary>
-        private Image DownloadLabelImage(string url)
-        {
-            Image imageLabel;
-
+            List<Label> labels = new List<Label>();
             try
             {
-                WebRequest request = WebRequest.Create(url);
-                using (WebResponse response = request.GetResponse())
-                {
-                    using (Stream stream = response.GetResponseStream())
-                    {
-                        imageLabel = Image.FromStream(stream);
-                    }
-                }
+                labels = new LabelFactory().CreateLabels(shipment, labelUrls.ToList()).ToList();
+                labels.ForEach(l => l.Save());
             }
-            catch (Exception ex)
+            finally
             {
-                log.Error(string.Format("Failed processing stamps image at URL '{0}'", url), ex);
-
-                throw;
+                labels.ForEach(l => l.Dispose());
             }
-
-            return imageLabel;
         }
-
+        
         /// <summary>
         /// Creates a scan form address (which is entirely different that the address object the rest of the API uses).
         /// </summary>
@@ -1113,7 +914,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 address.PostalCode = person.PostalCode;
             }
 
-            address.Country = AdjustCountryCode(person.CountryCode);
+            address.Country = CountryCodeCleanser.CleanseCountryCode(person.CountryCode);
 
             if (person.CountryCode == "US")
             {
@@ -1134,20 +935,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             RateV15 rate = new RateV15();
 
-            string fromZipCode = string.Empty;
-            string toZipCode = string.Empty;
-            string toCountry = string.Empty;
-
-            fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
-            toZipCode = shipment.ShipPostalCode;
-            toCountry = AdjustCountryCode(shipment.ShipCountryCode);
+            string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
+            string toZipCode = shipment.ShipPostalCode;
+            string toCountry = CountryCodeCleanser.CleanseCountryCode(shipment.ShipCountryCode);
 
             // Swap the to/from for return shipments.
             if (shipment.ReturnShipment)
             {
                 rate.FromZIPCode = toZipCode;
                 rate.ToZIPCode = fromZipCode;
-                rate.ToCountry = AdjustCountryCode(shipment.OriginCountryCode);
+                rate.ToCountry = CountryCodeCleanser.CleanseCountryCode(shipment.OriginCountryCode);
             }
             else
             {
@@ -1174,26 +971,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.DeclaredValue = shipment.CustomsValue;
 
             return rate;
-        }
-
-        /// <summary>
-        /// Adjust the country code for stamps.com processing
-        /// </summary>
-        private static string AdjustCountryCode(string code)
-        {
-            // Stamps.com does not like UK.. only GB
-            if (code == "UK")
-            {
-                code = "GB";
-            }
-
-            // Puerto Rico is treated as the United States by Stamps
-            if (code == "PR" || code == "VI")
-            {
-                return "US";
-            }
-
-            return code;
         }
 
         /// <summary>
