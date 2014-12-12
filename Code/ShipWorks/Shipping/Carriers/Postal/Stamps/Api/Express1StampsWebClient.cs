@@ -1000,7 +1000,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             CustomsV2 customs = new CustomsV2();
 
             // Content type
-            customs.ContentType = ConvertCodewordType(StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
+            customs.ContentType = ConvertContentType(StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
             if (customs.ContentType == ContentTypeV2.Other)
             {
                 if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)
@@ -1196,37 +1196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     throw new ArgumentOutOfRangeException("serviceType");
             }
         }
-
-        /// <summary>
-        /// Gets the v29 version of the CodewordType
-        /// </summary>
-        private static WebServices.v29.CodewordType ConvertCodewordType(WebServices.CodewordType2 codewordType2)
-        {
-            switch (codewordType2)
-            {
-                case CodewordType2.MothersMaidenName:
-                    return WebServices.v29.CodewordType.MothersMaidenName;
-                case CodewordType2.PetsName:
-                    return WebServices.v29.CodewordType.PetsName;
-                case CodewordType2.BirthCity:
-                    return WebServices.v29.CodewordType.BirthCity;
-                case CodewordType2.Last4SocialSecurityNumber:
-                    return WebServices.v29.CodewordType.Last4SocialSecurityNumber;
-                case CodewordType2.Last4DriversLicense:
-                    return WebServices.v29.CodewordType.Last4DriversLicense;
-
-                case CodewordType2.StreetName:
-                case CodewordType2.FirstSchoolsName:
-                case CodewordType2.FirstCarsMakeModel:
-                case CodewordType2.FathersBirthplace:
-                case CodewordType2.HighSchoolMascot:
-                case CodewordType2.Undefined:
-                    throw new ArgumentOutOfRangeException("codewordType2");
-                default:
-                    throw new ArgumentOutOfRangeException("codewordType2");
-            }
-        }
-
+        
         /// <summary>
         /// Gets the v29 version of the CodewordType
         /// </summary>
@@ -1274,7 +1244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Gets the v29 version of the ContentType
         /// </summary>
-        private static WebServices.v29.ContentTypeV2 ConvertCodewordType(WebServices.ContentTypeV2 contentType)
+        private static WebServices.v29.ContentTypeV2 ConvertContentType(WebServices.ContentTypeV2 contentType)
         {
             switch (contentType)
             {
