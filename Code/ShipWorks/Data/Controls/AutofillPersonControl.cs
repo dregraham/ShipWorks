@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Controls
             List<StoreEntity> stores = StoreManager.GetAllStores();
             if (stores.Count == 1)
             {
-                LoadStoreAddresIntoPersonControl(stores.First());
+                OnStoreClick(stores.First());
 
                 storeSelectorPanel.Visible = false;
 
@@ -156,13 +156,13 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private MenuItem CreateMenuItem(StoreEntity store)
         {
-            return new MenuItem(store.StoreName, (sender, args) => LoadStoreAddresIntoPersonControl(store));
+            return new MenuItem(store.StoreName, (sender, args) => OnStoreClick(store));
         }
 
         /// <summary>
         /// Load the address of the store into the person control
         /// </summary>
-        private void LoadStoreAddresIntoPersonControl(StoreEntity store)
+        private void OnStoreClick(StoreEntity store)
         {
             string originalName = personControl.FullName;
 
@@ -173,6 +173,8 @@ namespace ShipWorks.Data.Controls
             LoadEntity(addressCopy);
 
             personControl.FullName = originalName;
+
+            personControl.ForceContentChanged();
         }
     }
 }

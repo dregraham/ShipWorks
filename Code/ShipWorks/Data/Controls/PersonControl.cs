@@ -968,19 +968,21 @@ namespace ShipWorks.Data.Controls
             if (!isLoadingEntities &&
                 (sender == street || sender == country || sender == postalCode || sender == state || sender == city))
             {
-                ResetAddressValidationStatus();
+                ForceContentChanged();
             }
-
-            if (ContentChanged != null)
+            else
             {
-                ContentChanged(this, EventArgs.Empty);
+                if (ContentChanged != null)
+                {
+                    ContentChanged(this, EventArgs.Empty);
+                }
             }
         }
 
         /// <summary>
         /// Reset the validation details of all addresses
         /// </summary>
-        private void ResetAddressValidationStatus()
+        public void ForceContentChanged()
         {
             if (loadedPeople == null)
             {
@@ -1004,6 +1006,11 @@ namespace ShipWorks.Data.Controls
             shouldSaveAddressSuggestions = true;
 
             UpdateValidationUI();
+
+            if (ContentChanged != null)
+            {
+                ContentChanged(this, EventArgs.Empty);
+            }
         }
 
         /// <summary>
