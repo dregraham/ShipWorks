@@ -530,6 +530,8 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             // Get the order shipping addresses
             RestRequest request = new RestRequest();
             request.Resource = order.shipping_addresses.resource;
+            request.AddParameter("limit", BigCommerceConstants.MaxPageSize);
+
             RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(BigCommerceWebClientApiCall.GetShippingAddress, request, progressReporter);
             List<BigCommerceAddress> shipToAddressesRestResponse = throttler.ExecuteRequest<RestRequest, List<BigCommerceAddress>>(requestThrottleArgs, MakeRequest<RestRequest, List<BigCommerceAddress>>);
             order.OrderShippingAddresses = shipToAddressesRestResponse;
@@ -663,7 +665,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     };
 
                     // Add the paging params
-                    request.AddParameter("limit", BigCommerceConstants.OrderProductsPageSize);
+                    request.AddParameter("limit", BigCommerceConstants.MaxPageSize);
                     request.AddParameter("page", page);
 
                     RequestThrottleParameters requestThrottleArgs =
@@ -682,7 +684,7 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
                     products.AddRange(pageOfProductsRestResponse);
 
                     // If the number returned is less than the page size, we know we are on the last page, break out of the loop
-                    if (pageOfProductsRestResponse.Count < BigCommerceConstants.OrderProductsPageSize)
+                    if (pageOfProductsRestResponse.Count < BigCommerceConstants.MaxPageSize)
                     {
                         break;
                     }
