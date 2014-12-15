@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -85,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An IScanFormGateway object.</returns>
         public virtual IScanFormGateway GetGateway()
         {
-            return new StampsScanFormGateway();
+            return new StampsScanFormGateway(new StampsWebClient((StampsResellerType)accountEntity.StampsReseller));
         }
         
         /// <summary>
