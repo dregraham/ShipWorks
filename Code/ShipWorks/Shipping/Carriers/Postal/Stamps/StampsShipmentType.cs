@@ -355,14 +355,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     Express1Utilities.IsPostageSavingService(stampsRateDetail.ServiceType))
                 {
                     // See if Express1 returned a rate for this service
-                    RateResult discountedRate = null;
-                    if (discountedRates != null && discountedRates.Any(e1r => e1r.Selectable))
-                    {
-                        discountedRate = discountedRates.Where(e1r => e1r.Selectable).FirstOrDefault(e1r =>
-                                        ((PostalRateSelection) e1r.OriginalTag).ServiceType == stampsRateDetail.ServiceType && ((PostalRateSelection) e1r.OriginalTag).ConfirmationType == stampsRateDetail.ConfirmationType);
-
-                        discountedRate.ShipmentType = stampsRate.ShipmentType;
-                    }
+                    RateResult discountedRate = DetermineDiscountedRate(discountedRates, stampsRateDetail, stampsRate);
 
                     // If Express1 returned a rate, check to make sure it is a lower amount
                     if (discountedRate != null && discountedRate.Amount <= stampsRate.Amount)
@@ -372,10 +365,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     else
                     {
                         finalRates.Add(stampsRate);
-                    }                    
+                    }
                 }
                 else
                 {
+                    RateResult discountedRate = DetermineDiscountedRate(discountedRates, stampsRateDetail, stampsRate);
+                    if (discountedRate != null)
+                    {
+                        stampsRate.ProviderLogo = discountedRate.ProviderLogo;
+                    }
+
                     finalRates.Add(stampsRate);
                 }
             }
@@ -403,6 +402,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             return finalGroup;
+        }
+
+        /// <summary>
+        /// Determines and returns a discounted RateResult if one exists.
+        /// </summary>
+        private static RateResult DetermineDiscountedRate(List<RateResult> discountedRates, PostalRateSelection stampsRateDetail, RateResult stampsRate)
+        {
+            RateResult discountedRate = null;
+            if (stampsRateDetail != null && discountedRates != null && discountedRates.Any(express1Rate => express1Rate.Selectable == stampsRate.Selectable))
+            {
+                discountedRate = discountedRates.Where(express1Rate => express1Rate.Selectable == stampsRate.Selectable)
+                                                .FirstOrDefault(express1Rate => ((PostalRateSelection)express1Rate.OriginalTag).ServiceType == stampsRateDetail.ServiceType &&
+                                                                                ((PostalRateSelection)express1Rate.OriginalTag).ConfirmationType == stampsRateDetail.ConfirmationType);
+
+                if (discountedRate != null)
+                {
+                    discountedRate.ShipmentType = stampsRate.ShipmentType;
+                }
+            }
+
+            return discountedRate;
         }
 
         /// <summary>
