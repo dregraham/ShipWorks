@@ -167,6 +167,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     }
                 }
 
+                // Todo - we may want to restrict this...
+                if (shipmentType == ShipmentTypeCode.Stamps || shipmentType == ShipmentTypeCode.Usps)
+                {
+                    services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(service => ShipmentTypeManager.IsStampsDhl(service)).Select(entry => entry.Value));
+                }
+
                 return services;
             }
         }

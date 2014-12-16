@@ -90,7 +90,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 case PostalServiceType.InternationalPriority: return ServiceType.USPMI;
                 case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
                 case PostalServiceType.CriticalMail: return ServiceType.USCM;
-
+                case PostalServiceType.DhlParcelExpedited: return ServiceType.DHLPE;
+                case PostalServiceType.DhlParcelStandard: return ServiceType.DHLPG;
+                case PostalServiceType.DhlParcelPlusExpedited: return ServiceType.DHLPPE;
+                case PostalServiceType.DhlParcelPlusStandard: return ServiceType.DHLPPE;
+                case PostalServiceType.DhlBpmExpedited: return ServiceType.DHLBPME;
+                case PostalServiceType.DhlBpmStandard: return ServiceType.DHLBPMG;
 
                 default:
                     throw new ShippingException(string.Format("Stamps.com does not support {0}.", EnumHelper.GetDescription(postalServiceType)));

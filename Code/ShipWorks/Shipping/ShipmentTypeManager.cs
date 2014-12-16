@@ -275,6 +275,25 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Determines whether [is stamps DHL] [the specified postal service].
+        /// </summary>
+        public static bool IsStampsDhl(PostalServiceType postalService)
+        {
+            switch (postalService)
+            {
+                case PostalServiceType.DhlParcelExpedited:
+                case PostalServiceType.DhlParcelStandard:
+                case PostalServiceType.DhlParcelPlusExpedited:
+                case PostalServiceType.DhlParcelPlusStandard:
+                case PostalServiceType.DhlBpmExpedited:
+                case PostalServiceType.DhlBpmStandard:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)
         /// </summary>
         public static bool IsEndiciaConsolidator(PostalServiceType service)
