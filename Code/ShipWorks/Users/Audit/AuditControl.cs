@@ -262,6 +262,20 @@ namespace ShipWorks.Users.Audit
                 {
                     log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
                 }
+                catch (Exception ex)
+                {
+                    // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
+                    // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                    // handled there.
+                    if (ex.InnerException != null && ex.InnerException is SqlException)
+                    {
+                        log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex.InnerException);
+                    }
+                    else
+                    {
+                        log.Error("An unexpected exception type was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+                    }
+                }
             }
         }
 
@@ -468,6 +482,20 @@ namespace ShipWorks.Users.Audit
             catch (SqlException ex)
             {
                 log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+            }
+            catch (Exception ex)
+            {
+                // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
+                // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                // handled there.
+                if (ex.InnerException != null && ex.InnerException is SqlException)
+                {
+                    log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex.InnerException);
+                }
+                else
+                {
+                    log.Error("An unexpected exception type was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+                }
             }
         }
 
