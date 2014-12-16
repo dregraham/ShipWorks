@@ -154,6 +154,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.DownloadDetailEntity:
 					toReturn = this.DownloadDetail;
 					break;
+				case ShipWorks.Data.Model.EntityType.EbayCombinedOrderRelationEntity:
+					toReturn = this.EbayCombinedOrderRelation;
+					break;
 				case ShipWorks.Data.Model.EntityType.EbayOrderEntity:
 					toReturn = this.EbayOrder;
 					break;
@@ -741,6 +744,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<DownloadDetailEntity> DownloadDetail
 		{
 			get { return new DataSource2<DownloadDetailEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting EbayCombinedOrderRelationEntity instances in the database.</summary>
+		public DataSource2<EbayCombinedOrderRelationEntity> EbayCombinedOrderRelation
+		{
+			get { return new DataSource2<EbayCombinedOrderRelationEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting EbayOrderEntity instances in the database.</summary>
