@@ -1849,7 +1849,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL
@@ -4021,7 +4021,7 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 [ParentID] [bigint] NULL,
 [ObjectType] [int] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
@@ -4472,9 +4472,9 @@ GO
 CREATE TABLE [dbo].[ShippingSettings]
 (
 [ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Activated] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Configured] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Excluded] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultType] [int] NOT NULL,
 [BlankPhoneOption] [int] NOT NULL,
 [BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

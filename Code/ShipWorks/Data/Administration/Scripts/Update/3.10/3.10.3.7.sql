@@ -106,6 +106,14 @@ PRINT N'Dropping constraints from [dbo].[Shipment]'
 GO
 ALTER TABLE [dbo].[Shipment] DROP CONSTRAINT [PK_Shipment]
 GO
+PRINT N'Dropping index [IX_FilterNodeContentDirty_ColumnsUpdated] from [dbo].[FilterNodeContentDirty]'
+GO
+DROP INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty]
+GO
+PRINT N'Dropping index [IX_FilterNodeContentDirty_ParentIDObjectType] from [dbo].[FilterNodeContentDirty]'
+GO
+DROP INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty]
+GO
 PRINT N'Dropping index [IX_Shipment_OrderID] from [dbo].[Shipment]'
 GO
 DROP INDEX [IX_Shipment_OrderID] ON [dbo].[Shipment]
@@ -245,6 +253,28 @@ ALTER TABLE [dbo].[Shipment] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Shipment]'
 GO
+PRINT N'Altering [dbo].[FilterNodeContent]'
+GO
+ALTER TABLE [dbo].[FilterNodeContent] ALTER COLUMN [ColumnMask] [varbinary] (100) NOT NULL
+GO
+PRINT N'Altering [dbo].[FilterNodeContentDirty]'
+GO
+ALTER TABLE [dbo].[FilterNodeContentDirty] ALTER COLUMN [ColumnsUpdated] [varbinary] (100) NOT NULL
+GO
+PRINT N'Creating index [IX_FilterNodeContentDirty_ColumnsUpdated] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ColumnsUpdated] ON [dbo].[FilterNodeContentDirty] ([ColumnsUpdated])
+GO
+PRINT N'Creating index [IX_FilterNodeContentDirty_ParentIDObjectType] on [dbo].[FilterNodeContentDirty]'
+GO
+CREATE NONCLUSTERED INDEX [IX_FilterNodeContentDirty_ParentIDObjectType] ON [dbo].[FilterNodeContentDirty] ([ParentID], [ObjectType]) INCLUDE ([ColumnsUpdated], [ComputerID])
+GO
+PRINT N'Altering [dbo].[ShippingSettings]'
+GO
+ALTER TABLE [dbo].[ShippingSettings] ALTER COLUMN [Activated] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+ALTER TABLE [dbo].[ShippingSettings] ALTER COLUMN [Configured] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+ALTER TABLE [dbo].[ShippingSettings] ALTER COLUMN [Excluded] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+GO
 PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
 GO
 ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
@@ -341,4 +371,3 @@ EXEC sp_addextendedproperty N'AuditName', N'ShipState', 'SCHEMA', N'dbo', 'TABLE
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'Shipment', 'COLUMN', N'TotalWeight'
 GO
-
