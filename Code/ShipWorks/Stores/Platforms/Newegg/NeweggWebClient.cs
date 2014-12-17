@@ -296,13 +296,28 @@ namespace ShipWorks.Stores.Platforms.Newegg
             string carrierCode = string.Empty;
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
+
+                case ShipmentTypeCode.Stamps:
+
+                    PostalServiceType stampsService = (PostalServiceType)shipmentEntity.Postal.Service;
+
+                    // The shipment is a Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsStampsDhl(stampsService))
+                    {
+                        // The DHL carrier for Stamps is:
+                        return "DHL";
+                    }
+                    else
+                    {
+                        // Use the default carrier for other Stamps types
+                        return "USPS";
+                    }
 
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL
