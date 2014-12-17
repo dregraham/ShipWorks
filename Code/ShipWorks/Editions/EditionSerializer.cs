@@ -99,8 +99,11 @@ namespace ShipWorks.Editions
 
             if (xOptions != null)
             {
-                bool dhlEnabled = (bool) xOptions.Element("EndiciaDhl");
-                edition.SharedOptions.EndiciaDhlEnabled = dhlEnabled;
+                bool stampsDhlEnabled = xOptions.Descendants("StampsDhl").Any() && (bool)xOptions.Element("StampsDhl");
+                edition.SharedOptions.StampsDhlEnabled = stampsDhlEnabled;
+
+                bool endiciaDhlEnabled = (bool) xOptions.Element("EndiciaDhl");
+                edition.SharedOptions.EndiciaDhlEnabled = endiciaDhlEnabled;
 
                 bool insuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
                 edition.SharedOptions.EndiciaInsuranceEnabled = insuranceEnabled;
@@ -169,6 +172,7 @@ namespace ShipWorks.Editions
             }
 
             elements.Add(new XElement("SharedOptions",
+                new XElement("StampsDhl", edition.SharedOptions.StampsDhlEnabled),
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),

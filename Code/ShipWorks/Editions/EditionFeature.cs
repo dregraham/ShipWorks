@@ -159,6 +159,12 @@ namespace ShipWorks.Editions
         /// out to these customers and converted their accounts, this can be removed.
         /// </summary>
         [Description("Converting an account using the selected carrier is disabled.")]
-        ShippingAccountConversion
+        ShippingAccountConversion,
+
+        /// <summary>
+        /// Controls if DHL is enabled for Stamps users
+        /// </summary>
+        [Description("Your ShipWorks account does not support shipping with DHL through Stamps.")]
+        StampsDhl,
     }
 }

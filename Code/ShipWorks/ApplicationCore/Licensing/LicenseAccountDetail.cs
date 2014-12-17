@@ -111,6 +111,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Edition edition = InstantiateEdition(xpath);
 
+            // Now see if there are Stamps special stuff set. We do this at the end, basically ignorning them if any other editions are active.
+            bool stampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsDhlEnabled = stampsDhl;
+
             // Now see if there are endicia special stuff set. We do this at the end, basically ignorning them if any other editions are active.
             bool endiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
             edition.SharedOptions.EndiciaDhlEnabled = endiciaDhl;
