@@ -57,6 +57,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
+        /// Get the service description for the shipment
+        /// </summary>
+        public override string GetServiceDescription(ShipmentEntity shipment)
+        {
+            PostalServiceType service = (PostalServiceType)shipment.Postal.Service;
+
+            return ShipmentTypeManager.IsStampsDhl(service) ?
+                string.Format("DHL Global Mail {0}", EnumHelper.GetDescription((PostalServiceType)shipment.Postal.Service)) :
+                base.GetServiceDescription(shipment);
+        }
+
+        /// <summary>
         /// Gets or sets the repository that should be used when retrieving account information.
         /// </summary>
         public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
