@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -183,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private void ProcessOrder(OrderType orderType)
         {
             // Get the ShipWorks order.  This ends up calling our overriden FindOrder implementation
-            EbayOrderEntity order = (EbayOrderEntity) InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
+            EbayOrderEntity order = (EbayOrderEntity)InstantiateOrder(new EbayOrderIdentifier(orderType.OrderID));
 
             // Special processing for cancelled orders. If we'd never seen it before, there's no reason to do anything - just ignore it.
             if (orderType.OrderStatus == OrderStatusCodeType.Cancelled && order.IsNew)
@@ -205,11 +206,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
 
             // Online status
-            order.OnlineStatusCode = (int) orderType.OrderStatus;
+            order.OnlineStatusCode = (int)orderType.OrderStatus;
             order.OnlineStatus = EbayUtility.GetOrderStatusName(orderType.OrderStatus);
 
             // SellingManager Pro
-            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?) null;
+            order.SellingManagerRecord = orderType.ShippingDetails.SellingManagerSalesRecordNumberSpecified ? orderType.ShippingDetails.SellingManagerSalesRecordNumber : (int?)null;
 
             // Buyer , email, and address
             order.EbayBuyerID = orderType.BuyerUserID;
@@ -247,11 +248,78 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 order.LocalStatus = "Shipped";
             }
 
+            // Need to 
+            MergeOrderItemsFromDb(order);
+            MergeChargesFromDb(order);
+
             // Make totals adjustments
             double amount = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
             BalanceOrderTotal(order, amount);
 
             SaveOrder(order, abandonedItems);
+        }
+
+        /// <summary>
+        /// Fetches the combined order lines.
+        /// </summary>
+        private static void MergeOrderItemsFromDb(EbayOrderEntity order)
+        {
+            List<OrderItemEntity> updatedLinesFromEbay = order.OrderItems.ToList();
+            order.OrderItems.Clear();
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
+            // We just fetched these order items and now they are in memory
+            EntityCollection<OrderItemEntity> orderLinesFromDb = order.OrderItems;
+
+            for (int index = 0; index < orderLinesFromDb.Count; index++)
+            {
+                OrderItemEntity orderItemFromDb = orderLinesFromDb[index];
+                OrderItemEntity updatedLineFromEbay =
+                    updatedLinesFromEbay.SingleOrDefault(line => line.OrderItemID == orderItemFromDb.OrderItemID);
+
+                // Replace the order item from DB with potentially updated Ebay line.
+                if (updatedLineFromEbay != null)
+                {
+                    order.OrderItems[index] = updatedLineFromEbay;
+                }
+            }
+            updatedLinesFromEbay
+                .Where(fromEbay => orderLinesFromDb.All(fromDb => fromDb.OrderItemID != fromEbay.OrderItemID)) // select new items from ebay
+                .ToList()
+                .ForEach(fromEbay => order.OrderItems.Add(fromEbay)); // add them to the database
+        }
+
+        /// <summary>
+        /// Merges the charges from database.
+        /// </summary>
+        private static void MergeChargesFromDb(OrderEntity order)
+        {
+            List<OrderChargeEntity> chargesFromEbay = order.OrderCharges.ToList();
+            order.OrderCharges.Clear();
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(order.OrderCharges, new RelationPredicateBucket(OrderChargeFields.OrderID == order.OrderID));
+            }
+
+            EntityCollection<OrderChargeEntity> chargesFromDb = order.OrderCharges;
+
+            for (int index = 0; index < chargesFromDb.Count; index++)
+            {
+                OrderChargeEntity chargeFromDb = chargesFromDb[index];
+                OrderChargeEntity updatedLineFromEbay =
+                    chargesFromEbay.SingleOrDefault(line => line.OrderChargeID == chargeFromDb.OrderChargeID);
+
+                // Replace the order item from DB with potentially updated Ebay line.
+                if (updatedLineFromEbay != null)
+                {
+                    order.OrderCharges[index] = updatedLineFromEbay;
+                }
+            }
         }
 
         /// <summary>
@@ -285,6 +353,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     {
                         // Detatch it from the order
                         affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.Single(i => i.OrderItemID == item.OrderItemID).Order = null;
+                        // Make sure the detachment works both ways
+                        Debug.Assert(affectedOrders.Single(o => o.OrderID == item.OrderID).OrderItems.All(i => i.OrderItemID != item.OrderItemID));
 
                         // Deleted all the attributes
                         foreach (OrderItemAttributeEntity attribute in item.OrderItemAttributes)
@@ -765,16 +835,15 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
-            if (order.OrderTotal != Convert.ToDecimal(amountPaid))
+            if (order.OrderTotal != Convert.ToDecimal(amountPaid) &&
+                order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
+                !order.CombinedLocally) // Don't bother trying to reconcile a locally combined order
             {
-                // only make adjustments if it's considered complete
-                if (order.OnlineStatusCode is int && (int) order.OnlineStatusCode == (int) OrderStatusCodeType.Completed)
-                {
-                    OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other", true);
-                    otherCharge.Description = "Other";
-                    otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
-                }
+                OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other", true);
+                otherCharge.Description = "Other";
+                otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
             }
+
         }
 
         /// <summary>
@@ -983,14 +1052,50 @@ namespace ShipWorks.Stores.Platforms.Ebay
             else
             {
                 RelationPredicateBucket bucket = new RelationPredicateBucket(
-                    EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
+                EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
 
                 EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
                 SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                EbayOrderEntity ebayOrder = collection.FirstOrDefault();
 
-                return collection.FirstOrDefault();
+                if (ebayOrder==null)
+                {
+                    ebayOrder = GetCombinedOrder(identifier, prefetch);
+                }
+
+                return ebayOrder;
             }
         }
+
+        /// <summary>
+        /// Gets the locally combined order if it exists.
+        /// </summary>
+        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, PrefetchPath2 prefetch)
+        {
+            EbayOrderEntity ebayOrder = null;
+
+            if (identifier.EbayOrderID != 0)
+            {
+                LinqMetaData metaData = new LinqMetaData(SqlAdapter.Default);
+                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity = metaData
+                    .EbayCombinedOrderRelation
+                    .FirstOrDefault(relation => relation.EbayOrderID == identifier.EbayOrderID && relation.StoreID == Store.StoreID);
+
+                if (ebayCombinedOrderRelationEntity != null)
+                {
+                    RelationPredicateBucket bucket = new RelationPredicateBucket(EbayOrderFields.OrderID == ebayCombinedOrderRelationEntity.OrderID);
+
+                    using (EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>())
+                    {
+                        SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                        ebayOrder = collection.FirstOrDefault();
+                    }
+                }
+            }
+
+            return ebayOrder;
+        }
+
 
         /// <summary>
         /// Locate an item with the given identifier.  Can be optionally restricted to only loading the ItemID

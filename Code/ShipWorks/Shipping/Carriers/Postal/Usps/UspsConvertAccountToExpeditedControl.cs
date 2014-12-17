@@ -98,8 +98,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (StampsException exception)
             {
+                string message = "An error occurred, and ShipWorks was not able to convert your account at this time.";
                 log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);
-                MessageHelper.ShowError(this, "An error occurred, and ShipWorks was not able to convert your account at this time.");
+
+                if (exception.Code == 0x005f0301)
+                {
+                    // Provide additional details when the error code is regarding a mult-user account
+                    message = exception.Message;
+                }
+                MessageHelper.ShowError(this, message);
             }
         }
 

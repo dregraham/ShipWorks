@@ -70,6 +70,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RemoveMonthlyFeeText();
             }
+
+            // Set the shipment type is set correctly (could be USPS or Stamps.com), so the 
+            // label type gets persisted to the correct profile
+            optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
 
         /// <summary>
