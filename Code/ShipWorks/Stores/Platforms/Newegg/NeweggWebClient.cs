@@ -296,13 +296,13 @@ namespace ShipWorks.Stores.Platforms.Newegg
             string carrierCode = string.Empty;
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL

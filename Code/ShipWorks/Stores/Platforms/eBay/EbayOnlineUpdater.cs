@@ -389,7 +389,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
 
@@ -399,6 +398,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     carrierType = ShippingCarrierCodeType.USPS;
                     break;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
