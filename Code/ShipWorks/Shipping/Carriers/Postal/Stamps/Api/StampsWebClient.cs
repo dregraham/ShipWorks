@@ -661,9 +661,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     throw new StampsException(message, ex);
                 }
 
-                if (ex.Code == 5636353 || ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS"))
+                string errorMessageUpper = ex.Message.ToUpperInvariant();
+                if (ex.Code == 5636353 || errorMessageUpper.Contains("INSUFFICIENT FUNDS"))
                 {
                     throw new StampsInsufficientFundsException(account, ex.Message);
+                }
+
+                if (ex.Code == 450107 || (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED")))
+                {
+                    throw new StampsException("Your Stamps.com account has not been enabled to use the selected DHL service.");                    
                 }
 
                 // This isn't an exception we can handle, so just throw the original exception
