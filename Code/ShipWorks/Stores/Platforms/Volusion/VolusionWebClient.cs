@@ -240,15 +240,15 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
 
+                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
                         return "DHL";
                     }
