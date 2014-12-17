@@ -627,7 +627,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ColumnMask property of the Entity FilterNodeContent<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FilterNodeContent"."ColumnMask"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 75<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Byte[] ColumnMask
 		{

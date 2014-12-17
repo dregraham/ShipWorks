@@ -331,6 +331,8 @@ namespace ShipWorks.Shipping
         {
             shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.BilledType = 0;
+            shipment.BilledWeight = 0;
 
             // First apply the base profile
             ApplyProfile(shipment, GetPrimaryProfile());

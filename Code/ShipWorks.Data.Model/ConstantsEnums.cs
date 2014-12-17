@@ -7289,6 +7289,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEntry,
 		///<summary>OnlineShipmentID. </summary>
 		OnlineShipmentID,
+		///<summary>BilledType. </summary>
+		BilledType,
+		///<summary>BilledWeight. </summary>
+		BilledWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
