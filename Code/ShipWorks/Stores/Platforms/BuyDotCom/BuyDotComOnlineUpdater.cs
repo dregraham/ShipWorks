@@ -172,29 +172,14 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     return BuyDotComTrackingType.Usps;
 
                 case ShipmentTypeCode.Stamps:
-
-                    PostalServiceType stampsService = (PostalServiceType)shipment.Postal.Service;
-
-                    // The shipment is a Stamps shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsStampsDhl(stampsService))
-                    {
-                        // The DHL carrier for Stamps is:
-                        return BuyDotComTrackingType.DHLGlobalMail;
-                    }
-                    else
-                    {
-                        // Use the default carrier for other Stamps types
-                        return BuyDotComTrackingType.Usps;
-                    }
-
                 case ShipmentTypeCode.Endicia:
 
                     PostalServiceType service = (PostalServiceType)shipment.Postal.Service;
 
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    // The shipment is a Endicia/Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
-                        // The DHL carrier for Endicia is:
+                        // The DHL carrier for Endicia/Stamps is:
                         return BuyDotComTrackingType.DHLGlobalMail;
                     }
                     else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
@@ -203,7 +188,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     }
                     else
                     {
-                        // Use the default carrier for other Endicia types
+                        // Use the default carrier for other Stamps types
                         return BuyDotComTrackingType.Usps;
                     }
 

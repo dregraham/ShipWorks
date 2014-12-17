@@ -400,29 +400,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     break;
 
                 case ShipmentTypeCode.Stamps:
-
-                    PostalServiceType stampsService = (PostalServiceType)shipment.Postal.Service;
-
-                    // The shipment is a Stamps shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsStampsDhl(stampsService))
-                    {
-                        // The DHL carrier for Stamps is:
-                        return ShippingCarrierCodeType.DHL;
-                    }
-                    else
-                    {
-                        // Use the default carrier for other Stamps types
-                        return ShippingCarrierCodeType.USPS;
-                    }
-
                 case ShipmentTypeCode.Endicia:
-
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    // The shipment is an Endicia/Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
-                        // The DHL carrier for Endicia is:
+                        // The DHL carrier for Endicia/Stamps is:
                         carrierType = ShippingCarrierCodeType.DHL;
                     }
                     else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
@@ -431,10 +415,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     }
                     else
                     {
-                        // Use the default carrier for other Endicia types
+                        // Use the default carrier for other Endicia/Stamps types
                         carrierType = ShippingCarrierCodeType.USPS;
                     }
                     break;
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierType = ShippingCarrierCodeType.UPS;
