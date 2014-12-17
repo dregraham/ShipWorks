@@ -350,7 +350,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         return "CONSOLIDATOR";
                     }
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
+                    if (ShipmentTypeManager.IsDhl(postalServiceType))
                     {
                         return "Global Mail";
                     }
