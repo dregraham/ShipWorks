@@ -256,10 +256,25 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "Usps";
+
+                case ShipmentTypeCode.Stamps:
+
+                    PostalServiceType stampsService = (PostalServiceType)shipment.Postal.Service;
+
+                    // The shipment is a Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsStampsDhl(stampsService))
+                    {
+                        // The DHL carrier for Stamps is:
+                        return "Dhl";
+                    }
+                    else
+                    {
+                        // Use the default carrier for other Stamps types
+                        return "Usps";
+                    }
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
