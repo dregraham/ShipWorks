@@ -389,7 +389,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
@@ -399,6 +398,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                     carrierType = ShippingCarrierCodeType.USPS;
                     break;
+
+                case ShipmentTypeCode.Stamps:
+
+                    PostalServiceType stampsService = (PostalServiceType)shipment.Postal.Service;
+
+                    // The shipment is a Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsStampsDhl(stampsService))
+                    {
+                        // The DHL carrier for Stamps is:
+                        return ShippingCarrierCodeType.DHL;
+                    }
+                    else
+                    {
+                        // Use the default carrier for other Stamps types
+                        return ShippingCarrierCodeType.USPS;
+                    }
+
                 case ShipmentTypeCode.Endicia:
 
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
