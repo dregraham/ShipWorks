@@ -51,6 +51,7 @@
             this.industry.Name = "industry";
             this.industry.Size = new System.Drawing.Size(208, 21);
             this.industry.TabIndex = 2;
+            this.industry.SelectedIndexChanged += new System.EventHandler(this.OnIndustryChanged);
             // 
             // numberOfEmployees
             // 

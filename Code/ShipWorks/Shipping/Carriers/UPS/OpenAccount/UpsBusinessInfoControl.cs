@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using SpreadsheetGear.CustomFunctions;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -25,6 +26,11 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             EnumHelper.BindComboBox<UpsNumberOfEmployees>(numberOfEmployees);
         }
 
+        /// <summary>
+        /// Gets or sets Action that gets called when industry changed.
+        /// </summary>
+        public Action<UpsBusinessIndustry> IndustryChanged { get; set; }
+        
         /// <summary>
         /// Saves to request.
         /// </summary>
@@ -54,6 +60,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             else
             {
                 request.AccountCharacteristics.BusinessInformation = null;
+            }
+        }
+
+        /// <summary>
+        /// Called when [industry changed].
+        /// </summary>
+        private void OnIndustryChanged(object sender, EventArgs e)
+        {
+            if (IndustryChanged!=null)
+            {
+                IndustryChanged.Invoke((UpsBusinessIndustry)industry.SelectedValue);
             }
         }
     }

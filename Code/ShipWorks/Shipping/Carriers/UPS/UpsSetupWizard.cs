@@ -66,6 +66,34 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
             this.forceAccountOnly = forceAccountOnly;
+
+            upsBusinessInfoControl.IndustryChanged = IndustryChanged;
+        }
+
+        /// <summary>
+        /// Hide/show pharmacutical control based on industry selected.
+        /// </summary>
+        private void IndustryChanged(UpsBusinessIndustry upsBusinessIndustry)
+        {
+            switch (upsBusinessIndustry)
+            {
+                case UpsBusinessIndustry.Automotive:
+                case UpsBusinessIndustry.HighTech:
+                case UpsBusinessIndustry.IndustrialManufacturingAndDistribution:
+                case UpsBusinessIndustry.Government:                    
+                    upsPharmaceuticalControl.Visible = false;
+                    break;
+                case UpsBusinessIndustry.RetailAndConsumerGoods:
+                case UpsBusinessIndustry.ProfessionalServices:
+                case UpsBusinessIndustry.ConsumerServices:
+                case UpsBusinessIndustry.Healthcare:
+                case UpsBusinessIndustry.Other:
+                    upsPharmaceuticalControl.Visible = true;
+                    break;
+                default:
+                    upsPharmaceuticalControl.Visible = true;
+                    break;
+            }
         }
 
         /// <summary>
@@ -830,6 +858,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 shipmentCharacteristics.SaveToRequest(openAccountRequest);
                 accountCharacteristics.SaveToRequest(openAccountRequest);
                 upsBusinessInfoControl.SaveToRequest(openAccountRequest);
+                upsPharmaceuticalControl.SaveToRequest(openAccountRequest);
             }
             catch (UpsOpenAccountException ex)
             {
