@@ -157,7 +157,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                                 {
                                     TotalNetCharge = new Money {Amount = 40.12M},
                                     RatedWeightMethod = RatedWeightMethod.ACTUAL,
-                                    RatedWeightMethodSpecified = true
+                                    RatedWeightMethodSpecified = true,
+                                    TotalBillingWeight = new Weight {Value = 0.1M},
+                                    TotalDimWeight = new Weight {Value = 0.1M}
+
                                 }
                             }
                         },
@@ -173,7 +176,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                                 {
                                     TotalNetCharge = new Money {Amount = 40.12M},
                                     RatedWeightMethod = RatedWeightMethod.ACTUAL,
-                                    RatedWeightMethodSpecified = true
+                                    RatedWeightMethodSpecified = true,
+                                    TotalBillingWeight = new Weight {Value = 0.1M},
+                                    TotalDimWeight = new Weight {Value = 0.1M}
                                 }
                             }
                         },
@@ -1200,7 +1205,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                                 {
                                     TotalNetCharge = new Money {Amount = 40.12M},
                                     RatedWeightMethod = RatedWeightMethod.ACTUAL,
-                                    RatedWeightMethodSpecified = true
+                                    RatedWeightMethodSpecified = true,
+                                    TotalBillingWeight = new Weight {Value = 0.1M},
+                                    TotalDimWeight = new Weight {Value = 0.1M}
                                 }
                             }
                         },
@@ -1216,7 +1223,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                                 {
                                     TotalNetCharge = new Money {Amount = 40.12M},
                                     RatedWeightMethod = RatedWeightMethod.ACTUAL,
-                                    RatedWeightMethodSpecified = true
+                                    RatedWeightMethodSpecified = true,
+                                    TotalBillingWeight = new Weight {Value = 0.1M},
+                                    TotalDimWeight = new Weight {Value = 0.1M}
                                 }
                             }
                         },

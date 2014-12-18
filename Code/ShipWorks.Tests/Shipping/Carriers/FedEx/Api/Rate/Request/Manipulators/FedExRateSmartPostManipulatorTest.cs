@@ -346,9 +346,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         public void Manipulate_EachPackageTotalInsuredAmountIsZero_Test()
         {
             // Create a few packages in the FedEx shipment to work with
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             testObject.Manipulate(carrierRequest.Object);
 

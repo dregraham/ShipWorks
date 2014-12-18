@@ -107,9 +107,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                // Make sure package dimensions are valid.
-                ValidatePackageDimensions(shipmentEntity);
-
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
 
@@ -122,6 +119,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 PerformVersionCapture(shipmentEntity);
 
                 int packageCount = shipmentEntity.FedEx.Packages.Count();
+
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipmentEntity);
 
                 // Clear out any previously saved labels for this shipment (in case there was an error shipping the first time (MPS))
                 labelRepository.ClearReferences(shipmentEntity);
