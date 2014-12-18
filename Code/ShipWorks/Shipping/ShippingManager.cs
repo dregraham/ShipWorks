@@ -208,6 +208,10 @@ namespace ShipWorks.Shipping
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
+            // Set the rating billing info.
+            shipment.BilledType = (int)BilledType.Unknown;
+            shipment.BilledWeight = shipment.TotalWeight;
+
             // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;
