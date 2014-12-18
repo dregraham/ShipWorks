@@ -92,6 +92,7 @@
             this.labelCreateAccountRegistrationFailed2 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed3 = new System.Windows.Forms.Label();
             this.labelCreateAccountRegistrationFailed1 = new System.Windows.Forms.Label();
+            this.labelSetupCompleteNotifyTime = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -132,7 +133,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOpenAccountPickupLocation);
+            this.mainPanel.Controls.Add(this.wizardPageFinishOlt);
             this.mainPanel.Size = new System.Drawing.Size(579, 474);
             // 
             // etchBottom
@@ -335,6 +336,7 @@
             // 
             // wizardPageFinishOlt
             // 
+            this.wizardPageFinishOlt.Controls.Add(this.labelSetupCompleteNotifyTime);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete3);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete2);
             this.wizardPageFinishOlt.Controls.Add(this.labelSetupComplete1);
@@ -822,6 +824,13 @@
             this.labelCreateAccountRegistrationFailed1.TabIndex = 3;
             this.labelCreateAccountRegistrationFailed1.Text = "You have successfully created a UPS account within ShipWorks!";
             // 
+            // labelSetupCompleteNotifyTime
+            // 
+            this.labelSetupCompleteNotifyTime.Location = new System.Drawing.Point(21, 135);
+            this.labelSetupCompleteNotifyTime.Name = "labelSetupCompleteNotifyTime";
+            this.labelSetupCompleteNotifyTime.Size = new System.Drawing.Size(438, 32);
+            this.labelSetupCompleteNotifyTime.TabIndex = 3;
+            // 
             // UpsSetupWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -959,5 +968,6 @@
         private System.Windows.Forms.Label labelCreateAccountRegistrationFailed1;
         private OpenAccount.UpsBusinessInfoControl upsBusinessInfoControl;
         private OpenAccount.UpsShipmentCharacteristicsControl shipmentCharacteristics;
+        private System.Windows.Forms.Label labelSetupCompleteNotifyTime;
     }
 }

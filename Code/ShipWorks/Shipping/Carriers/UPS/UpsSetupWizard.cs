@@ -34,6 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     {
         ShipmentType shipmentType;
         bool forceAccountOnly;
+        DateTime? notifyTime;
 
         string upsLicense;
 
@@ -712,6 +713,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         "Your new UPS account number: {0}",
                         upsAccount.AccountNumber);
                     labelSetupComplete3.Text = "Please watch your email for a confirmation from UPS and more information on how to use your account.";
+                    if (notifyTime.HasValue)
+                    {
+                        labelSetupCompleteNotifyTime.Text = string.Format("UPS Smart Pickup Notify Time: {0}", notifyTime.Value.ToString("t"));
+                    }
                 }
             }
         }
@@ -891,28 +896,17 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <exception cref="System.NotImplementedException"></exception>
         private void CreateAccount()
         {
-            string newAccountNumber = OpenUpsAccount(new UpsClerk(upsAccount));
+            UpsOpenAccountResponseDTO upsOpenAccountResponse = OpenUpsAccount(new UpsClerk(upsAccount));
+
             try
             {
-                if (!string.IsNullOrEmpty(newAccountNumber))
-                {
-                    RegisterNewAccount(newAccountNumber);
-                }
+                RegisterNewAccount(upsOpenAccountResponse.AccountNumber);
+                notifyTime = upsOpenAccountResponse.NotifyTime;
             }
             catch (UpsException ex)
             {
                 throw new UpsOpenAccountException(ex.Message, UpsOpenAccountErrorCode.MissingRequiredFields);
             }
-        }
-
-        /// <summary>
-        /// Creates the ups account. Note the recursive call to correct the address.
-        /// </summary>
-        /// <param name="clerk">The clerk.</param>
-        /// <returns></returns>
-        private string OpenUpsAccount(IUpsClerk clerk)
-        {
-            return OpenUpsAccount(clerk, false);
         }
 
         /// <summary>
@@ -945,36 +939,43 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// Creates the ups account. Note the recursive call to correct the address.
         /// </summary>
         /// <param name="clerk">The clerk.</param>
+        /// <returns></returns>
+        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk)
+        {
+            return OpenUpsAccount(clerk, false);
+        }
+
+        /// <summary>
+        /// Creates the ups account. Note the recursive call to correct the address.
+        /// </summary>
+        /// <param name="clerk">The clerk.</param>
         /// <param name="retrySmartPost">if set to <c>true</c> [retry smart post].</param>
         /// <returns></returns>
         /// <exception cref="UpsOpenAccountException">Ups didn't return a new account number.</exception>
-        private string OpenUpsAccount(IUpsClerk clerk, bool retrySmartPost)
+        private UpsOpenAccountResponseDTO OpenUpsAccount(IUpsClerk clerk, bool retrySmartPost)
         {
-            string shipperNumber = string.Empty;
+            UpsOpenAccountResponseDTO upsOpenAccountResponse = null;
 
             try
             {
                 OpenAccountResponse response = clerk.OpenAccount(openAccountRequest);
 
-                shipperNumber = response.ShipperNumber;
 
-                if (string.IsNullOrEmpty(shipperNumber))
-                {
-                    throw new UpsOpenAccountException("Ups didn't return a new account number.");
-                }
+                upsOpenAccountResponse = new UpsOpenAccountResponseDTO(response.ShipperNumber, response.NotifyTime);
+
             }
             catch (UpsOpenAccountPickupAddressException ex)
             {
                 if (CorrectPickupAddress(ex.SuggestedAddress, openAccountRequest.PickupAddress))
                 {
-                    shipperNumber = OpenUpsAccount(clerk);
+                    upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
             }
             catch (UpsOpenAccountBusinessAddressException ex)
             {
                 if (CorrectBillingAddress(ex.SuggestedAddress, openAccountRequest.BillingAddress))
                 {
-                    shipperNumber = OpenUpsAccount(clerk);
+                    upsOpenAccountResponse = OpenUpsAccount(clerk);
                 }
             }
             catch (UpsOpenAccountSoapException ex)
@@ -991,7 +992,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     {
                         openAccountRequest.PickupAddress.City = correctedAddress;
 
-                        shipperNumber = OpenUpsAccount(clerk, true);
+                        upsOpenAccountResponse = OpenUpsAccount(clerk, true);
                     }
                     else
                     {
@@ -1004,7 +1005,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 }
             }
 
-            return shipperNumber;
+            return upsOpenAccountResponse;
         }
 
         /// <summary>
