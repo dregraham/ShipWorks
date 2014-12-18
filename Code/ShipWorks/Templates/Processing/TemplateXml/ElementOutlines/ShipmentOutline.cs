@@ -66,6 +66,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             // Add the ShipSense outline with package and customs info
             AddElement("ShipSense", new ShipSenseOutline(context), () => Shipment);
 
+            // Add the ShipSense outline with package and customs info
+            AddElement("BilledType", () => EnumHelper.GetDescription((BilledType)Shipment.BilledType));
+            AddElement("BilledWeight", () => Shipment.BilledWeight);
+
             // Add an outline entry for each unique shipment type that could potentially be used
             foreach (ShipmentType shipmentType in ShipmentTypeManager.ShipmentTypes)
             {
