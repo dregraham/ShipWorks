@@ -1069,6 +1069,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
+            // Make sure package dimensions are valid.
+            ValidatePackageDimensions(shipment);
+
             // Clear out any values that aren't allowed for SurePost or MI
             if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))
             {
