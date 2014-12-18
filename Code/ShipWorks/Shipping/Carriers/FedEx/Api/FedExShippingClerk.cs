@@ -107,6 +107,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipmentEntity);
+
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
 
@@ -550,6 +553,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipment);
+
                 //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
@@ -573,6 +579,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 overallResults.AddRange(GetOneRateRates(shipment));
 
                 return new RateGroup(overallResults);
+            }
+            catch (InvalidPackageDimensionsException ex)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
+                return errorRates;
             }
             catch (Exception ex)
             {
@@ -996,6 +1008,33 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 WebServices.Ship.VersionId version = new WebServices.Ship.VersionId();
                 return version.Major.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// a ShippingException is thrown informing the user.
+        /// </summary>
+        private void ValidatePackageDimensions(ShipmentEntity shipment)
+        {
+            string exceptionMessage = string.Empty;
+            int packageIndex = 1;
+
+            foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
+            {
+                FedExShipmentType fedExShipmentType = new FedExShipmentType();
+                if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                {
+                    exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                }
+
+                packageIndex++;
+            }
+
+            if (exceptionMessage.Length > 0)
+            {
+                exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
+                throw new InvalidPackageDimensionsException(exceptionMessage);
             }
         }
     }

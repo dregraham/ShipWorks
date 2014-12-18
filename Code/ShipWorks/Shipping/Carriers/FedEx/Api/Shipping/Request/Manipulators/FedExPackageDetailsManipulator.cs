@@ -55,21 +55,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             // If custom, add dimensions
             if (fedex.PackagingType == (int) FedExPackagingType.Custom)
             {
-                bool isSmartPost = FedExServiceType.SmartPost == (FedExServiceType) fedex.Service;
-
-                // If we are SmartPost, min dimensions are 6"Lx4"Wx1"H
-                int length = (int)Math.Max((isSmartPost ? 6 : 0), package.DimsLength);
-                int width = (int)Math.Max((isSmartPost ? 4 : 0), package.DimsWidth);
-                int height = (int)Math.Max((isSmartPost ? 1 : 0), package.DimsHeight);
-
                 packageRequest.Dimensions = new Dimensions
                 {
                     Units = GetApiLinearUnit(request.ShipmentEntity),
 
-                    // Default the dims to 1 if none are provided
-                    Length = Math.Max(1, length).ToString(CultureInfo.InvariantCulture),
-                    Height = Math.Max(1, height).ToString(CultureInfo.InvariantCulture),
-                    Width = Math.Max(1, width).ToString(CultureInfo.InvariantCulture)
+                    Length = package.DimsLength.ToString(CultureInfo.InvariantCulture),
+                    Height = package.DimsHeight.ToString(CultureInfo.InvariantCulture),
+                    Width = package.DimsWidth.ToString(CultureInfo.InvariantCulture)
                 };
 
                 // todo: make this something other than test.
