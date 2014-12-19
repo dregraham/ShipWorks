@@ -41,32 +41,27 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             // Take out above suppression
 
-            //if (request.AccountCharacteristics == null)
-            //{
-            //    request.AccountCharacteristics = new AccountCharacteristicsType();
-            //}
-            //if (Visible)
-            //{
-            //    request.AccountCharacteristics.BusinessInformation.
-            //    if (request.AccountCharacteristics.BusinessInformation == null)
-            //    {
-            //        request.AccountCharacteristics.BusinessInformation = new BusinessInformationType();
-            //    }
+            if (request.AccountCharacteristics == null)
+            {
+                request.AccountCharacteristics = new AccountCharacteristicsType();
+            }
+            request.AccountCharacteristics.PrescriptionToPatients = string.Empty;
+            request.AccountCharacteristics.LicensedInStateOrTerritory = string.Empty;
+            request.AccountCharacteristics.OnlineOrMailOrder = string.Empty;
 
-            //    request.AccountCharacteristics.BusinessInformation.Industry = new CodeOnlyType
-            //    {
-            //        Code = EnumHelper.GetApiValue((UpsBusinessIndustry)industry.SelectedValue)
-            //    };
-
-            //    request.AccountCharacteristics.BusinessInformation.NumberOfEmployees = new CodeOnlyType
-            //    {
-            //        Code = EnumHelper.GetApiValue((UpsNumberOfEmployees)numberOfEmployees.SelectedValue)
-            //    };
-            //}
-            //else
-            //{
-            //    request.AccountCharacteristics.BusinessInformation = null;
-            //}
+            if (Visible)
+            {
+                if (willShipYes.Checked)
+                {
+                    request.AccountCharacteristics.PrescriptionToPatients = EnumHelper.GetApiValue(UpsYesNoType.Yes);
+                    request.AccountCharacteristics.LicensedInStateOrTerritory = EnumHelper.GetApiValue(licensedYes.Checked ? UpsYesNoType.Yes : UpsYesNoType.No);
+                    request.AccountCharacteristics.OnlineOrMailOrder = EnumHelper.GetApiValue(onlinePharmacyYes.Checked ? UpsYesNoType.Yes : UpsYesNoType.No);
+                }
+                else
+                {
+                    request.AccountCharacteristics.PrescriptionToPatients = EnumHelper.GetApiValue(UpsYesNoType.No);
+                }
+            }
         }
     }
 }
