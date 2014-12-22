@@ -294,7 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             xmlWriter.WriteElementString("ToCity", toAdapter.City);
             xmlWriter.WriteElementString("ToProvince", Geography.GetStateProvCode(toAdapter.StateProvCode));
-            xmlWriter.WriteElementString("ToCountry", Geography.GetCountryName(toAdapter.CountryCode));
+            xmlWriter.WriteElementString("ToCountry", PostalWebUtility.GetCountryName(toAdapter.CountryCode));
             xmlWriter.WriteElementString("ToPostalCode", toAdapter.PostalCode);
             xmlWriter.WriteElementString("ToPOBoxFlag", "N");
             xmlWriter.WriteElementString("ToPhone", toAdapter.Phone);
