@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Divelements.SandRibbon;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore;
@@ -41,6 +42,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         public static string UspsPassword
         {
             get { return SecureText.Decrypt(uspsPassword, "apptive"); }
+        }
+
+        /// <summary>
+        /// Gets the name of the country.
+        /// </summary>
+        public static string GetCountryName(string countryCode)
+        {
+            if (countryCode == "KN")
+            {
+                return "Saint Kitts";
+            }
+            else
+            {
+                return Geography.GetCountryName(countryCode);
+            }
         }
     }
 }
