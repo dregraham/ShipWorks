@@ -573,7 +573,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
-            ScanForm scanForm = new ScanForm();
+            Carrier carrier = new Carrier();
 
             using (SwsimV40 webService = CreateWebService("ScanForm"))
             {
@@ -584,14 +584,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                         CreateScanFormAddress(person),
                         ImageType.Png,
                         false, // Don't print instructions
-                        scanForm,
+                        carrier,
                         null,
                         false,
                         out scanFormStampsId,
                         out scanFormUrl
                     );
             }
-
 
             if (scanFormUrl.Contains(" "))
             {

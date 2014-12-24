@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
         
         /// <remarks/>
         public SwsimV40() {
-            this.Url = "https://swsim.staging.stamps.com/swsim/swsimv40.asmx";
+            this.Url = "https://swsim.testing.stamps.com/swsim/SwsimV40.asmx";
             if ((this.IsLocalFileSystemWebService(this.Url) == true)) {
                 this.UseDefaultCredentials = true;
                 this.useDefaultCredentialsSetExplicitly = false;
@@ -835,14 +835,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://stamps.com/xml/namespace/2014/12/swsim/swsimv40/CreateScanForm", RequestNamespace="http://stamps.com/xml/namespace/2014/12/swsim/swsimv40", ResponseNamespace="http://stamps.com/xml/namespace/2014/12/swsim/swsimv40", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
         [return: System.Xml.Serialization.XmlElementAttribute("Authenticator")]
-        public string CreateScanForm([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, [System.ComponentModel.DefaultValueAttribute(ScanForm.Usps)] ScanForm ScanForm, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] System.Nullable<System.DateTime> ShipDate, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] bool ShipDateSpecified, out string ScanFormId, out string Url) {
+        public string CreateScanForm([System.Xml.Serialization.XmlElementAttribute("Authenticator", typeof(string))] [System.Xml.Serialization.XmlElementAttribute("Credentials", typeof(Credentials))] object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, [System.ComponentModel.DefaultValueAttribute(Carrier.Usps)] Carrier Carrier, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] System.Nullable<System.DateTime> ShipDate, [System.Xml.Serialization.XmlElementAttribute(DataType="date", IsNullable=true)] [System.Xml.Serialization.XmlIgnoreAttribute()] bool ShipDateSpecified, out string ScanFormId, out string Url) {
             object[] results = this.Invoke("CreateScanForm", new object[] {
                         Item,
                         StampsTxIDs,
                         FromAddress,
                         ImageType,
                         PrintInstructions,
-                        ScanForm,
+                        Carrier,
                         ShipDate,
                         ShipDateSpecified});
             ScanFormId = ((string)(results[1]));
@@ -851,12 +851,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
         }
         
         /// <remarks/>
-        public void CreateScanFormAsync(object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, ScanForm ScanForm, System.Nullable<System.DateTime> ShipDate, bool ShipDateSpecified) {
-            this.CreateScanFormAsync(Item, StampsTxIDs, FromAddress, ImageType, PrintInstructions, ScanForm, ShipDate, ShipDateSpecified, null);
+        public void CreateScanFormAsync(object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, Carrier Carrier, System.Nullable<System.DateTime> ShipDate, bool ShipDateSpecified) {
+            this.CreateScanFormAsync(Item, StampsTxIDs, FromAddress, ImageType, PrintInstructions, Carrier, ShipDate, ShipDateSpecified, null);
         }
         
         /// <remarks/>
-        public void CreateScanFormAsync(object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, ScanForm ScanForm, System.Nullable<System.DateTime> ShipDate, bool ShipDateSpecified, object userState) {
+        public void CreateScanFormAsync(object Item, System.Guid[] StampsTxIDs, Address FromAddress, ImageType ImageType, bool PrintInstructions, Carrier Carrier, System.Nullable<System.DateTime> ShipDate, bool ShipDateSpecified, object userState) {
             if ((this.CreateScanFormOperationCompleted == null)) {
                 this.CreateScanFormOperationCompleted = new System.Threading.SendOrPostCallback(this.OnCreateScanFormOperationCompleted);
             }
@@ -866,7 +866,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
                         FromAddress,
                         ImageType,
                         PrintInstructions,
-                        ScanForm,
+                        Carrier,
                         ShipDate,
                         ShipDateSpecified}, this.CreateScanFormOperationCompleted, userState);
         }
@@ -3754,7 +3754,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
         private uint idField;
         
         private string nameField;
-
+        
         /// <remarks/>
         [CLSCompliant(false)]
         public uint id {
@@ -4931,6 +4931,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("DHL-BPMG")]
         DHLBPMG,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("DHL-MPE")]
+        DHLMPE,
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("DHL-MPG")]
+        DHLMPG,
     }
     
     /// <remarks/>
@@ -5848,7 +5856,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
                 this.codewordTypeField = value;
             }
         }
-
+        
         /// <remarks/>
         [CLSCompliant(false)]
         public uint Value {
@@ -7068,7 +7076,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://stamps.com/xml/namespace/2014/12/swsim/swsimv40")]
-    public enum ScanForm {
+    public enum Carrier {
         
         /// <remarks/>
         Usps,

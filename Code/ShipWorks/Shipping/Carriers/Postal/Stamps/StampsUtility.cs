@@ -96,6 +96,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 case PostalServiceType.DhlParcelPlusStandard: return ServiceType.DHLPPE;
                 case PostalServiceType.DhlBpmExpedited: return ServiceType.DHLBPME;
                 case PostalServiceType.DhlBpmStandard: return ServiceType.DHLBPMG;
+                case PostalServiceType.DhlMarketingExpedited: return ServiceType.DHLMPE;
+                case PostalServiceType.DhlMarketingStandard:return ServiceType.DHLMPG;
 
                 default:
                     throw new ShippingException(string.Format("Stamps.com does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
