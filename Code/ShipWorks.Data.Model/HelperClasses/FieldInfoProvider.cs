@@ -1133,7 +1133,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "BrokerPhoneExtension", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.BrokerPhoneExtension, 8, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "BrokerEmail", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.BrokerEmail, 100, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsAdmissibilityPackaging", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsAdmissibilityPackaging, 0, 0, 10);
-			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsRecipientTIN, 15, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsRecipientTIN, 24, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsDocumentsOnly", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsDocumentsOnly, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsDocumentsDescription", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsDocumentsDescription, 150, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsExportFilingOption", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsExportFilingOption, 0, 0, 10);
@@ -1153,7 +1153,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoiceReference", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoiceReference, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterOfRecord", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterOfRecord, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterAccount", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterAccount, 12, 0, 0);
-			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterTIN, 15, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterTIN, 24, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterFirstName", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterFirstName, 30, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterLastName", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterLastName, 30, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterCompany", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterCompany, 35, 0, 0);
