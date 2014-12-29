@@ -917,6 +917,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 {
                     shipment.Postal.Endicia.Fields[EndiciaShipmentFields.EndiciaAccountID.FieldIndex],
                     shipment.Postal.Endicia.Fields[EndiciaShipmentFields.OriginalEndiciaAccountID.FieldIndex],
+                    shipment.Postal.Fields[PostalShipmentFields.SortType.FieldIndex],
+                    shipment.Postal.Fields[PostalShipmentFields.EntryFacility.FieldIndex],
                 }
             );
 
