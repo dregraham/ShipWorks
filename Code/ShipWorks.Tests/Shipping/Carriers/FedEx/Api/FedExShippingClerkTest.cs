@@ -306,10 +306,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         public void Ship_ThrowsFedExException_WhenFedExAccountIsNull_Test()
         {
             // Create the shipment and setup the repository to return a null account for this test
-            ShipmentEntity shipment = new ShipmentEntity();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns<FedExAccountEntity>(null);
             
-            testObject.Ship(shipment);
+            testObject.Ship(shipmentEntity);
         }
 
         [TestMethod]
@@ -318,10 +317,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             try
             {
                 // Create the shipment and setup the repository to return a null account for this test
-                ShipmentEntity shipment = new ShipmentEntity() {ShipmentID = 1001};
+                shipmentEntity.ShipmentID = 1001;
                 settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns<FedExAccountEntity>(null);
 
-                testObject.Ship(shipment);
+                testObject.Ship(shipmentEntity);
             }
             // catch the exception that is thrown so we can verify the correct message gets logged
             catch (FedExException)
@@ -340,10 +339,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             // Create the shipment and setup the repository to return an account that needs to be 
             // migrated for this test (indicated by the meter number)
-            ShipmentEntity shipment = new ShipmentEntity();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() {MeterNumber = string.Empty});
 
-            testObject.Ship(shipment);
+            testObject.Ship(shipmentEntity);
         }
 
         [TestMethod]
@@ -353,10 +351,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             {
                 // Create the shipment and setup the repository to return an account that needs to be 
                 // migrated for this test (indicated by the meter number)
-                ShipmentEntity shipment = new ShipmentEntity();
                 settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(new FedExAccountEntity() {AccountNumber = "123ABC", MeterNumber = string.Empty});
 
-                testObject.Ship(shipment);
+                testObject.Ship(shipmentEntity);
             }
             // catch the exception that is thrown so we can verify the correct message gets logged
             catch (FedExException)
@@ -439,12 +436,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [ExpectedException(typeof (FedExException))]
         public void Ship_ThrowsFedExException_WhenOriginAddressHasMoreThanTwoLines_Test()
         {
-            ShipmentEntity shipmentEntity = new ShipmentEntity
-            {
-                OriginStreet1 = "street 1",
-                OriginStreet2 = "street 2",
-                OriginStreet3 = "street 3"
-            };
+            shipmentEntity.OriginStreet1 = "street 1";
+            shipmentEntity.OriginStreet2 = "street 2";
+            shipmentEntity.OriginStreet3 = "street 3";
 
             testObject.Ship(shipmentEntity);
         }
@@ -454,13 +448,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                ShipmentEntity shipmentEntity = new ShipmentEntity
-                {
-                    ShipmentID = 12345,
-                    OriginStreet1 = "street 1",
-                    OriginStreet2 = "street 2",
-                    OriginStreet3 = "street 3"
-                };
+                shipmentEntity.ShipmentID = 12345;
+                shipmentEntity.OriginStreet1 = "street 1";
+                shipmentEntity.OriginStreet2 = "street 2";
+                shipmentEntity.OriginStreet3 = "street 3";
 
                 testObject.Ship(shipmentEntity);
             }
@@ -479,12 +470,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [ExpectedException(typeof(FedExException))]
         public void Ship_ThrowsFedExException_WhenShipAddressHasMoreThanTwoLines_Test()
         {
-            ShipmentEntity shipmentEntity = new ShipmentEntity
-            {
-                ShipStreet1 = "street 1",
-                ShipStreet2 = "street 2",
-                ShipStreet3 = "street 3"
-            };
+            shipmentEntity.ShipStreet1 = "street 1";
+            shipmentEntity.ShipStreet2 = "street 2";
+            shipmentEntity.ShipStreet3 = "street 3";
 
             testObject.Ship(shipmentEntity);
         }
@@ -494,13 +482,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         {
             try
             {
-                ShipmentEntity shipmentEntity = new ShipmentEntity
-                {
-                    ShipmentID = 12345,
-                    ShipStreet1 = "street 1",
-                    ShipStreet2 = "street 2",
-                    ShipStreet3 = "street 3"
-                };
+                shipmentEntity.ShipmentID = 12345;
+                shipmentEntity.ShipStreet1 = "street 1";
+                shipmentEntity.ShipStreet2 = "street 2";
+                shipmentEntity.ShipStreet3 = "street 3";
 
                 testObject.Ship(shipmentEntity);
             }
