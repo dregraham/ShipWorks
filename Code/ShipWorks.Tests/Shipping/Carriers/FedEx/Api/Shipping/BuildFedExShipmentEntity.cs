@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
             {
                 FedEx = mockedFedExShipmentEntity.Object,
                 ShipmentID = 77,
-                OriginCountryCode = "US"
+                OriginCountryCode = "US",
             };
 
             return shipmentEntity;
