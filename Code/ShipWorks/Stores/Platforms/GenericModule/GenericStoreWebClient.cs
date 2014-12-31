@@ -195,6 +195,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         }
 
         /// <summary>
+        /// Get the url from the store
+        /// </summary>
+	    protected virtual Uri GetUrlFromStore(GenericModuleStoreEntity genericStore)
+	    {
+            return new Uri(genericStore.ModuleUrl);
+	    }
+
+        /// <summary>
         /// Submits a request to the online store and returns the response
         /// </summary>
         protected virtual GenericModuleResponse ProcessRequest(HttpVariableRequestSubmitter request, string action)
@@ -222,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             // setup the uri
             try
             {
-                request.Uri = new Uri(genericStore.ModuleUrl); ;
+                request.Uri = GetUrlFromStore(store);
             }
             catch (UriFormatException ex)
             {
