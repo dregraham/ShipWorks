@@ -93,6 +93,7 @@ namespace ShipWorks.Filters.Search
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = false;
                     filter.Definition = null;
+                    filter.State = (int) FilterState.Enabled;
                     adapter.SaveAndRefetch(filter);
 
                     FilterSequenceEntity sequence = new FilterSequenceEntity();

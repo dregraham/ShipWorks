@@ -5,8 +5,10 @@ using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Management;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.UI;
 using ShipWorks.Templates.Printing;
@@ -24,6 +26,7 @@ namespace ShipWorks.Shipping.Settings
         // The tab page currently displayed in the settings.  So it looks like it remains the same when 
         // switching between service types.
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
+        private bool usedDisabledGeneralShipRule;
 
         /// <summary>
         /// Constructor
@@ -50,8 +53,9 @@ namespace ShipWorks.Shipping.Settings
             radioBlankPhoneUseShipper.Checked = (settings.BlankPhoneOption == (int) ShipmentBlankPhoneOption.ShipperPhone);
             radioBlankPhoneUseSpecified.Checked = !radioBlankPhoneUseShipper.Checked;
             blankPhone.Text = settings.BlankPhoneNumber;
-            
+
             originControl.Initialize();
+            usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
 
             LoadShipmentTypePages();
         }
@@ -110,7 +114,7 @@ namespace ShipWorks.Shipping.Settings
                         settingsControl = new ShipmentTypeSettingsControl(shipmentType);
 
                         // Force creation
-                        var handle = settingsControl.Handle;
+                        IntPtr handle = settingsControl.Handle;
                         settingsControl.LoadSettings();
 
                         settingsControl.BackColor = Color.Transparent;
@@ -188,15 +192,28 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnOptionPageDeselecting(object sender, OptionControlCancelEventArgs e)
         {
-            ShipmentTypeSettingsControl settingsControl = null;
-
-            if (e.OptionPage != null && e.OptionPage.Controls.Count == 1)
+            if (e.OptionPage == null || 
+                e.OptionPage.Controls.Count != 1)
             {
-                settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
+                return;
             }
+
+            ShipmentTypeSettingsControl settingsControl = e.OptionPage.Controls[0] as ShipmentTypeSettingsControl;
 
             if (settingsControl != null)
             {
+                if (!AllowDisabledPrintingFiltersToBeSaved(settingsControl))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
+                if (!AllowDisabledFilterInCarrierRuleToBeSaved(settingsControl))
+                {
+                    e.Cancel = true;
+                    return;
+                }
+
                 settingsTabPage = settingsControl.CurrentPage;
 
                 if (settingsTabPage == ShipmentTypeSettingsControl.Page.Printing)
@@ -206,6 +223,21 @@ namespace ShipWorks.Shipping.Settings
                     {
                         e.Cancel = true;
                         return;
+                    }
+                }
+            }
+            else
+            {
+                // The settings control could be null if the shipment type has not been
+                // configured, so we need to check the page's tag to determine if we're
+                // coming from the general settings page. We don't want to display the 
+                // confirmation if navigating from a shipment type that is not configured.
+                if (e.OptionPage.Tag == null)
+                {
+                    // We're coming from the general settings page
+                    if (!AllowDisabledShippingFiltersToBeSaved())
+                    {
+                        e.Cancel = true;
                     }
                 }
             }
@@ -234,6 +266,7 @@ namespace ShipWorks.Shipping.Settings
             if (e.OptionPage == optionPageGeneral)
             {
                 originControl.Initialize();
+                usedDisabledGeneralShipRule = providerRulesControl.AreAnyRuleFiltersDisabled;
             }
         }
 
@@ -242,6 +275,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
+            if (!AllowDisabledFiltersToBeSaved())
+            {
+                e.Cancel = true;
+                return;
+            }
+
             SaveSettings();
 
             // Clear the rate cache since it may now be out of date due to 
@@ -307,6 +346,65 @@ namespace ShipWorks.Shipping.Settings
                     optionControl.SelectedPage = pageToSelect;
                 }
             }
+        }
+
+        /// <summary>
+        /// Should disabled filters stop saving?
+        /// </summary>
+        private bool AllowDisabledFiltersToBeSaved()
+        {
+            if (optionControl.SelectedPage == optionPageGeneral)
+            {
+                return AllowDisabledShippingFiltersToBeSaved();
+            }
+            else
+            {
+                ShipmentTypeSettingsControl currentControl = optionControl.SelectedPage.Controls.OfType<ShipmentTypeSettingsControl>().FirstOrDefault();
+
+                return AllowDisabledPrintingFiltersToBeSaved(currentControl) && AllowDisabledFilterInCarrierRuleToBeSaved(currentControl);
+            }
+        }
+
+        /// <summary>
+        /// Should disabled filters in carrier rules stop saving?
+        /// </summary>
+        private bool AllowDisabledFilterInCarrierRuleToBeSaved(ShipmentTypeSettingsControl settingsControl)
+        {
+            return settingsControl == null ||
+                   !settingsControl.AreAnyShipRuleFiltersDisabled || 
+                   !settingsControl.AreAnyShipRuleFiltersChanged ||
+                   DoesUserWantToSaveDisabledFilters("shipping");
+        }
+
+        /// <summary>
+        /// Should disabled printing filters stop saving?
+        /// </summary>
+        private bool AllowDisabledPrintingFiltersToBeSaved(ShipmentTypeSettingsControl settingsControl)
+        {
+            return settingsControl == null ||
+                   !settingsControl.AreAnyPrintRuleFiltersDisabled ||
+                   !settingsControl.AreAnyPrintRuleFiltersChanged ||
+                   DoesUserWantToSaveDisabledFilters("printing");
+        }
+
+        /// <summary>
+        /// Should disabled shipping filters stop saving?
+        /// </summary>
+        private bool AllowDisabledShippingFiltersToBeSaved()
+        {
+            return !providerRulesControl.AreAnyRuleFiltersDisabled ||
+                usedDisabledGeneralShipRule ||
+                DoesUserWantToSaveDisabledFilters("shipping");
+        }
+
+        /// <summary>
+        /// Prompt the user about whether they want to save since they've selected a disabled filter
+        /// </summary>
+        private bool DoesUserWantToSaveDisabledFilters(string filterTypeDescription)
+        {
+            DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
+                string.Format("At least one {0} rule uses a disabled filter, and will not match any shipment.\n\nSave anyway?", filterTypeDescription));
+            return result == DialogResult.Yes;
         }
 
         /// <summary>

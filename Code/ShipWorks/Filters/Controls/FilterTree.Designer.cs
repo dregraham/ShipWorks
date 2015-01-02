@@ -1,3 +1,5 @@
+using Interapptive.Shared.Messaging;
+
 namespace ShipWorks.Filters.Controls
 {
     partial class FilterTree
@@ -16,6 +18,10 @@ namespace ShipWorks.Filters.Controls
             if (disposing && (components != null))
             {
                 components.Dispose();
+
+                Messenger.Current.Remove(filterEditedToken);
+
+                quickFilterDisplayManager.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -53,9 +59,9 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterDivider.SuspendLayout();
             this.quickFilterBackground.SuspendLayout();
             this.quickFilterCalculating.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.quickFilterSpinner)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.quickFilterPicture)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sandGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quickFilterSpinner)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quickFilterPicture)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sandGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // filterCountTimer
@@ -89,8 +95,8 @@ namespace ShipWorks.Filters.Controls
             // labelAllFilters
             // 
             this.labelAllFilters.AutoSize = true;
-            this.labelAllFilters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelAllFilters.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (80)))), ((int) (((byte) (80)))), ((int) (((byte) (80)))));
+            this.labelAllFilters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAllFilters.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.labelAllFilters.Location = new System.Drawing.Point(3, 5);
             this.labelAllFilters.Name = "labelAllFilters";
             this.labelAllFilters.Size = new System.Drawing.Size(59, 13);
@@ -99,20 +105,19 @@ namespace ShipWorks.Filters.Controls
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonBorderEdge.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.kryptonBorderEdge.AutoSize = false;
             this.kryptonBorderEdge.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.kryptonBorderEdge.Location = new System.Drawing.Point(0, 1);
             this.kryptonBorderEdge.Name = "kryptonBorderEdge";
             this.kryptonBorderEdge.Size = new System.Drawing.Size(320, 1);
-            this.kryptonBorderEdge.TabIndex = 2;
             this.kryptonBorderEdge.Text = "kryptonBorderEdge1";
             // 
             // quickFilterBackground
             // 
-            this.quickFilterBackground.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.quickFilterBackground.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.quickFilterBackground.BackColor = System.Drawing.Color.Transparent;
             this.quickFilterBackground.Controls.Add(this.quickFilterChoose);
             this.quickFilterBackground.Controls.Add(this.quickFilterCalculating);
@@ -124,20 +129,20 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterBackground.Name = "quickFilterBackground";
             this.quickFilterBackground.Size = new System.Drawing.Size(239, 18);
             this.quickFilterBackground.TabIndex = 11;
-            this.quickFilterBackground.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterBackground.Paint += new System.Windows.Forms.PaintEventHandler(this.OnQuickFilterPaintBackground);
             this.quickFilterBackground.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterBackground.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterBackground.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterBackground.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterBackground.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
-            // quickFilterClear
+            // quickFilterChoose
             // 
             this.quickFilterChoose.AutoSize = true;
             this.quickFilterChoose.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.quickFilterChoose.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.quickFilterChoose.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.quickFilterChoose.ForeColor = System.Drawing.Color.Blue;
             this.quickFilterChoose.Location = new System.Drawing.Point(178, 2);
-            this.quickFilterChoose.Name = "quickFilterClear";
+            this.quickFilterChoose.Name = "quickFilterChoose";
             this.quickFilterChoose.Size = new System.Drawing.Size(55, 13);
             this.quickFilterChoose.TabIndex = 11;
             this.quickFilterChoose.Text = "Choose...";
@@ -152,10 +157,10 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterCalculating.Name = "quickFilterCalculating";
             this.quickFilterCalculating.Size = new System.Drawing.Size(26, 18);
             this.quickFilterCalculating.TabIndex = 10;
-            this.quickFilterCalculating.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterCalculating.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterCalculating.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterCalculating.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterCalculating.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterCalculating.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterSpinner
             // 
@@ -166,10 +171,10 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterSpinner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.quickFilterSpinner.TabIndex = 9;
             this.quickFilterSpinner.TabStop = false;
-            this.quickFilterSpinner.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterSpinner.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterSpinner.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterSpinner.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterSpinner.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterSpinner.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterCountLeftParen
             // 
@@ -180,10 +185,10 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterCountLeftParen.Size = new System.Drawing.Size(11, 13);
             this.quickFilterCountLeftParen.TabIndex = 0;
             this.quickFilterCountLeftParen.Text = "(";
-            this.quickFilterCountLeftParen.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterCountLeftParen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterCountLeftParen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterCountLeftParen.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterCountLeftParen.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterCountLeftParen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterCountRightParen
             // 
@@ -194,10 +199,10 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterCountRightParen.Size = new System.Drawing.Size(11, 13);
             this.quickFilterCountRightParen.TabIndex = 1;
             this.quickFilterCountRightParen.Text = ")";
-            this.quickFilterCountRightParen.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterCountRightParen.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterCountRightParen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterCountRightParen.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterCountRightParen.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterCountRightParen.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterCount
             // 
@@ -208,10 +213,10 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterCount.Size = new System.Drawing.Size(33, 13);
             this.quickFilterCount.TabIndex = 8;
             this.quickFilterCount.Text = "(167)";
-            this.quickFilterCount.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterCount.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterCount.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterCount.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterCount.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterCount.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterName
             // 
@@ -221,25 +226,25 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterName.Size = new System.Drawing.Size(94, 13);
             this.quickFilterName.TabIndex = 4;
             this.quickFilterName.Text = "My awesome filter";
-            this.quickFilterName.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterName.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterName.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterName.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterName.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // quickFilterEdit
             // 
             this.quickFilterEdit.AutoSize = true;
             this.quickFilterEdit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.quickFilterEdit.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.quickFilterEdit.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.quickFilterEdit.ForeColor = System.Drawing.Color.Blue;
             this.quickFilterEdit.Location = new System.Drawing.Point(155, 2);
             this.quickFilterEdit.Name = "quickFilterEdit";
             this.quickFilterEdit.Size = new System.Drawing.Size(25, 13);
             this.quickFilterEdit.TabIndex = 5;
             this.quickFilterEdit.Text = "Edit";
-            this.quickFilterEdit.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterEdit.Click += new System.EventHandler(this.OnQuickFilterEditCreate);
             this.quickFilterEdit.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterEdit.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             // 
             // quickFilterPicture
             // 
@@ -250,16 +255,16 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.quickFilterPicture.TabIndex = 7;
             this.quickFilterPicture.TabStop = false;
-            this.quickFilterPicture.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
             this.quickFilterPicture.MouseDown += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseDown);
-            this.quickFilterPicture.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             this.quickFilterPicture.MouseEnter += new System.EventHandler(this.OnQuickFilterMouseEnter);
+            this.quickFilterPicture.MouseLeave += new System.EventHandler(this.OnQuickFilterMouseLeave);
+            this.quickFilterPicture.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuickFilterMouseUp);
             // 
             // labelQuick
             // 
             this.labelQuick.AutoSize = true;
-            this.labelQuick.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.labelQuick.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (80)))), ((int) (((byte) (80)))), ((int) (((byte) (80)))));
+            this.labelQuick.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelQuick.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(80)))), ((int)(((byte)(80)))), ((int)(((byte)(80)))));
             this.labelQuick.Location = new System.Drawing.Point(3, 3);
             this.labelQuick.Name = "labelQuick";
             this.labelQuick.Size = new System.Drawing.Size(70, 13);
@@ -289,23 +294,24 @@ namespace ShipWorks.Filters.Controls
             this.sandGrid.Size = new System.Drawing.Size(239, 253);
             this.sandGrid.TabIndex = 1;
             this.sandGrid.WhitespaceClickBehavior = Divelements.SandGrid.WhitespaceClickBehavior.None;
-            this.sandGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
-            this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnGridSelectionChanged);
-            this.sandGrid.Leave += new System.EventHandler(this.OnLeave);
-            this.sandGrid.AfterEdit += new Divelements.SandGrid.GridAfterEditEventHandler(this.OnAfterEdit);
-            this.sandGrid.BeforeEdit += new Divelements.SandGrid.GridBeforeEditEventHandler(this.OnBeforeEdit);
             this.sandGrid.GridRowDropped += new ShipWorks.UI.Controls.SandGrid.GridRowDroppedEventHandler(this.OnGridRowDropped);
+            this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnGridSelectionChanged);
+            this.sandGrid.BeforeEdit += new Divelements.SandGrid.GridBeforeEditEventHandler(this.OnBeforeEdit);
+            this.sandGrid.AfterEdit += new Divelements.SandGrid.GridAfterEditEventHandler(this.OnAfterEdit);
+            this.sandGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnKeyDown);
+            this.sandGrid.Leave += new System.EventHandler(this.OnLeave);
             // 
             // gridColumnFilterNode
             // 
             this.gridColumnFilterNode.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Contents;
-            this.gridColumnFilterNode.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnFilterNode.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gridColumnFilterNode.ForeColorSource = Divelements.SandGrid.CellForeColorSource.RowCell;
             this.gridColumnFilterNode.Width = 0;
             // 
             // gridColumnFill
             // 
             this.gridColumnFill.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
-            this.gridColumnFill.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnFill.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnFill.Width = 239;
             // 
             // FilterTree
@@ -315,7 +321,7 @@ namespace ShipWorks.Filters.Controls
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.sandGrid);
             this.Controls.Add(this.panelQuickFilter);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FilterTree";
             this.Size = new System.Drawing.Size(239, 315);
             this.panelQuickFilter.ResumeLayout(false);
@@ -326,9 +332,9 @@ namespace ShipWorks.Filters.Controls
             this.quickFilterBackground.PerformLayout();
             this.quickFilterCalculating.ResumeLayout(false);
             this.quickFilterCalculating.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.quickFilterSpinner)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.quickFilterPicture)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.sandGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quickFilterSpinner)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.quickFilterPicture)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sandGrid)).EndInit();
             this.ResumeLayout(false);
 
         }

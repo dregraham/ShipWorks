@@ -343,7 +343,7 @@ namespace ShipWorks.SqlServer.Filters
 
                 SET XACT_ABORT OFF;
             ";
-
+             
             cmd.Parameters.AddWithValue("@FilterNodeContentID", BuiltinFilter.GetTopLevelKey(target));
             cmd.ExecuteNonQuery();
         }
@@ -367,7 +367,7 @@ namespace ShipWorks.SqlServer.Filters
 	                      FROM FilterNode n INNER JOIN FilterSequence s ON n.FilterSequenceID = s.FilterSequenceID 
 						                    INNER JOIN Filter f ON s.FilterID = f.FilterID 
 						                    INNER JOIN FilterNodeContent c ON n.FilterNodeContentID = c.FilterNodeContentID
-	                      WHERE c.UpdateCalculation != '' AND (c.Status != {0} AND c.Status != {1})
+	                      WHERE f.[State] = 1 AND c.UpdateCalculation != '' AND (c.Status != {0} AND c.Status != {1})
                                 AND (SELECT COUNT(*) FROM FilterNodeContentDirty WITH (NOLOCK) WHERE dbo.BitwiseAnd(ColumnsUpdated, c.ColumnMask) != 0x0) > 0",
                 (int) FilterCountStatus.NeedsInitialCount,
                 (int) FilterCountStatus.RunningInitialCount);
