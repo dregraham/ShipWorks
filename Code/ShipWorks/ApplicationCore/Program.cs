@@ -1,3 +1,4 @@
+using System.Globalization;
 using Interapptive.Shared;
 using Interapptive.Shared.UI;
 using log4net;
@@ -118,6 +119,8 @@ namespace ShipWorks
                 // Load the execution mode, which is command-line dependant
                 ExecutionMode = new ExecutionModeFactory(commandLine).Create();
 
+                TrySetUsEnglish();
+
                 if (!CheckSystemRequirements())
                 {
                     return;
@@ -196,6 +199,14 @@ namespace ShipWorks
                 return false;
             }
 
+            // Check to see if the list separator is valid. If it's not, various parsing errors occur in the SandRibbon
+            if (!CheckListSeparatorSetting())
+            {
+                ExecutionMode.ShowTerminationMessage(new ListSeparatorFormatRequiredDlg(), "List separator must be a comma");
+
+                return false;
+            }
+
             // Check to see if the DateTimeFormat is valid.
             if (!CheckDateTimeFormatSetting())
             {
@@ -236,6 +247,56 @@ namespace ShipWorks
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Try to set the culture and UI culture of the application to us-EN
+        /// </summary>
+        private static void TrySetUsEnglish()
+        {
+            try
+            {
+                CultureInfo defaultEnglishCulture = new CultureInfo("en-US", false);
+                TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentCulture");
+                TrySetCulture(defaultEnglishCulture, "DefaultThreadCurrentUICulture");
+            }
+            catch (Exception ex)
+            {
+                // It shouldn't be a problem if an exception was thrown here because we should find out later
+                // if ShipWorks can't work with the current culture
+                log.Warn("An error occurred while trying to set culture.", ex);
+            }
+        }
+
+        /// <summary>
+        /// Try to set a culture setting to en-US
+        /// </summary>
+        /// <remarks>This method has to use reflection because the necessary method on CultureInfo exists in .NET 4.5
+        /// but not in .NET 4.  Since we install 4.5 by default on Windows Vista and higher, this should work for most
+        /// customers.</remarks>
+        private static void TrySetCulture(CultureInfo defaultEnglishCulture, string setCultureMethodName)
+        {
+            // Attempt to set the culture of ShipWorks to us-EN, since we rely on certain settings
+            PropertyInfo member = typeof (CultureInfo).GetProperty(setCultureMethodName,
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.SetProperty);
+            if (member == null)
+            {
+                log.Info(string.Format("Could not set {0} to default en-US.", setCultureMethodName));
+            }
+            else
+            {
+                log.Info(string.Format("Setting {0} of ShipWorks to default en-US...", setCultureMethodName));
+                member.SetValue(null, defaultEnglishCulture, null);
+            }
+        }
+
+        /// <summary>
+        /// Check whether the current culture has the required list separator
+        /// </summary>
+        /// <returns></returns>
+        private static bool CheckListSeparatorSetting()
+        {
+            return Thread.CurrentThread.CurrentCulture.TextInfo.ListSeparator == ",";
         }
 
         /// <summary>

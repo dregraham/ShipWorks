@@ -117,7 +117,7 @@ namespace ShipWorks.Data.Administration.Retry
             {
                 using (new LoggedStopwatch(log, string.Format("ExecuteWithRetry for {0}, iteration {1}, deadlock priority {2}.", commandDescription, retries, deadlockPriority)))
                 {
-                    while (retryCounter > 0)
+                    while (retryCounter >= 0)
                     {
                         try
                         {

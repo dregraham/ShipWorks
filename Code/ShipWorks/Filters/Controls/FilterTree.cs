@@ -1073,7 +1073,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode & Keys.Delete) == Keys.Delete)
+            if (e.KeyCode == Keys.Delete)
             {
                 if (Editable && DeleteKeyPressed != null)
                 {

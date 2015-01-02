@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -48,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// <summary>
         /// Determines whether [the specified shipment] [is eligible for global shipping program].
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
+        /// <param name="ebayOrder">The order.</param>
         /// <returns>
         ///   <c>true</c> if [the specified shipment] [is eligible for global shipping program]; otherwise, <c>false</c>.
         /// </returns>
@@ -96,7 +98,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 // a recipient name.
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipCompany, ebayOrder.GspReferenceID);
 
-                modifiedFieldList.AddRange(ConfigureRecipientName(shipment, ebayOrder));
+                modifiedFieldList.AddRange(ConfigureRecipientName(shipment, ebayOrder, ebayOrder.GspReferenceID));
                 modifiedFieldList.AddRange(ConfigureShippingAddress(shipment, ebayOrder));
                 modifiedFieldList.AddRange(ConfigureContactInfo(shipment));
 
@@ -140,8 +142,9 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="ebayOrder">The ebay order.</param>
+        /// <param name="gspReferenceID"></param>
         /// <returns>A List of the ShipmentFieldIndex values denoting the fields that were changed.</returns>
-        private List<ShipmentFieldIndex> ConfigureRecipientName(ShipmentEntity shipment, EbayOrderEntity ebayOrder)
+        private static IEnumerable<ShipmentFieldIndex> ConfigureRecipientName(ShipmentEntity shipment, EbayOrderEntity ebayOrder, string gspReferenceID)
         {
             List<ShipmentFieldIndex> modifiedFieldList = new List<ShipmentFieldIndex>();
 
@@ -152,7 +155,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, string.Empty);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipMiddleName, string.Empty);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipLastName, string.Empty);
-                
+            }
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.UpsOnLineTools && UpsUtility.IsUpsSurePostService((UpsServiceType)shipment.Ups.Service))
+            {
+                // UPS SurePost does not have a company name, so we'll need to use the name field to hold the GSP reference id
+                SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, string.Empty);
+                SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipMiddleName, string.Empty);
+                SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipLastName, gspReferenceID);
             }
             else
             {

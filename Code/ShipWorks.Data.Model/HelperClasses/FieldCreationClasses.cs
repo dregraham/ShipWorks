@@ -3799,6 +3799,31 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity EbayCombinedOrderRelationEntity</summary>
+	public partial class EbayCombinedOrderRelationFields
+	{
+		/// <summary>Creates a new EbayCombinedOrderRelationEntity.EbayCombinedOrderRelationID field instance</summary>
+		public static EntityField2 EbayCombinedOrderRelationID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayCombinedOrderRelationFieldIndex.EbayCombinedOrderRelationID);}
+		}
+		/// <summary>Creates a new EbayCombinedOrderRelationEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayCombinedOrderRelationFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new EbayCombinedOrderRelationEntity.EbayOrderID field instance</summary>
+		public static EntityField2 EbayOrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayCombinedOrderRelationFieldIndex.EbayOrderID);}
+		}
+		/// <summary>Creates a new EbayCombinedOrderRelationEntity.StoreID field instance</summary>
+		public static EntityField2 StoreID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayCombinedOrderRelationFieldIndex.StoreID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity EbayOrderEntity</summary>
 	public partial class EbayOrderFields
 	{
@@ -6296,6 +6321,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 HazardousMaterialQuanityUnits
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialQuanityUnits);}
+		}
+		/// <summary>Creates a new FedExPackageEntity.HazardousMaterialTechnicalName field instance</summary>
+		public static EntityField2 HazardousMaterialTechnicalName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExPackageFieldIndex.HazardousMaterialTechnicalName);}
 		}
 	}
 

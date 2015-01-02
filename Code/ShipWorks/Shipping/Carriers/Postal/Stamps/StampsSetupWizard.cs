@@ -68,6 +68,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 RemoveMonthlyFeeText();
             }
+
+            // Set the shipment type is set correctly (could be USPS or Stamps.com), so the 
+            // label type gets persisted to the correct profile
+            optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
 
         /// <summary>
@@ -198,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="e"></param>
         private void OnLinkStampsSpecialOffer(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.stamps.com/img/offer/Pro1799_5pa_1030wc_1060wc_1090wc_10120wc_scfree_wk35/webreg2-learn-more.html", this);
+            WebHelper.OpenUrl("http://www.stamps.com/img/offer/Pro1599_GoldShipper_50offscale_50offprinter_0pwk_1/webreg2-learn-more.html", this);
         }
 
         /// <summary>

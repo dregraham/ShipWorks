@@ -54,7 +54,8 @@ CREATE TABLE [dbo].[FedExPackage]
 [HazardousMaterialProperName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [HazardousMaterialPackingGroup] [int] NOT NULL,
 [HazardousMaterialQuantityValue] [float] NOT NULL,
-[HazardousMaterialQuanityUnits] [int] NOT NULL
+[HazardousMaterialQuanityUnits] [int] NOT NULL,
+[HazardousMaterialTechnicalName] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExPackage] on [dbo].[FedExPackage]'
@@ -289,7 +290,8 @@ ALTER TABLE [dbo].[ActionQueueSelection] ADD CONSTRAINT [PK_ActionQueueSelection
 GO
 PRINT N'Creating index [IX_ActionQueueSelection_ActionQueueID] on [dbo].[ActionQueueSelection]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID])
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueSelection_ActionQueueID] ON [dbo].[ActionQueueSelection] ([ActionQueueID], [ObjectID])
+
 GO
 PRINT N'Creating [dbo].[ActionQueueStep]'
 GO
@@ -319,6 +321,11 @@ PRINT N'Creating primary key [PK_QueueStep] on [dbo].[ActionQueueStep]'
 GO
 ALTER TABLE [dbo].[ActionQueueStep] ADD CONSTRAINT [PK_QueueStep] PRIMARY KEY CLUSTERED  ([ActionQueueStepID])
 GO
+PRINT N'Creating index [IX_ActionQueueStep_ActionQueue] on [dbo].[ActionQueueStep]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_ActionQueueStep_ActionQueue] ON [dbo].[ActionQueueStep] ([ActionQueueID], [StepIndex])
+GO
+
 PRINT N'Creating [dbo].[ActionTask]'
 GO
 CREATE TABLE [dbo].[ActionTask]
@@ -1194,6 +1201,24 @@ PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
 CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1])
 GO
+PRINT N'Creating [dbo].[EbayCombinedOrderRelation]'
+GO
+CREATE TABLE [dbo].[EbayCombinedOrderRelation]
+(
+[EbayCombinedOrderRelationID] [bigint] NOT NULL IDENTITY(1099, 1000),
+[OrderID] [bigint] NOT NULL,
+[EbayOrderID] [bigint] NOT NULL,
+[StoreID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
+GO
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [PK_EbayCombinedOrderRelation] PRIMARY KEY CLUSTERED  ([EbayCombinedOrderRelationID])
+GO
+PRINT N'Creating index [IX_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_EbayCombinedOrderRelation] ON [dbo].[EbayCombinedOrderRelation] ([EbayOrderID])
+GO
 PRINT N'Creating [dbo].[EbayOrderItem]'
 GO
 CREATE TABLE [dbo].[EbayOrderItem]
@@ -1606,7 +1631,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [BrokerPhoneExtension] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BrokerEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsAdmissibilityPackaging] [int] NOT NULL,
-[CustomsRecipientTIN] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CustomsRecipientTIN] [varchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsDocumentsOnly] [bit] NOT NULL,
 [CustomsDocumentsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsExportFilingOption] [int] NOT NULL,
@@ -1626,7 +1651,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CommercialInvoiceReference] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterOfRecord] [bit] NOT NULL,
 [ImporterAccount] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ImporterTIN] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ImporterTIN] [nvarchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterCompany] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -3826,7 +3851,8 @@ PRINT N'Creating [dbo].[Dirty]'
 GO
 CREATE TABLE [dbo].[Dirty]
 (
-[RowVersion] [timestamp] NOT NULL
+[RowVersion] [timestamp] NOT NULL,
+[Count] [bigint] NULL
 )
 GO
 PRINT N'Creating [dbo].[EmailAccount]'
@@ -4765,6 +4791,11 @@ GO
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]) ON DELETE CASCADE
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EbayCombinedOrderRelation]'
+GO
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[EbayStore] ([StoreID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[PrintResult]'
 GO

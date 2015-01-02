@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Update the UI based on the current state of the selection
         /// </summary>
-        private void UpdateSelectionDependentUI()
+        public void UpdateSelectionDependentUI()
         {
             UpdateShipmentButtons();
             UpdateStatusBar();
@@ -606,7 +606,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if ((e.KeyCode & Keys.Delete) == Keys.Delete)
+            if (e.KeyCode == Keys.Delete)
             {
                 if (entityGrid.SelectedElements.Count > 0)
                 {
