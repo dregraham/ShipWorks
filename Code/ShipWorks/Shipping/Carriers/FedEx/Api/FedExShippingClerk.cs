@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int)Insurance.InsuranceProvider.Carrier)
             {
-                throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable Shipworks Insurance for this carrier.");
+                throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
             // Clear out COD

@@ -119,7 +119,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         {
             try
             {
-                UpsClerk clerk = new UpsClerk();
+                UpsClerk clerk = new UpsClerk(account);
 
                 clerk.RegisterAccount(account, authorizationControl.InvoiceAuthorizationData);
             }

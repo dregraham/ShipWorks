@@ -19,8 +19,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsClerk" /> class.
         /// </summary>
-        public UpsClerk()
-            : this(new UpsOpenAccountRequestFactory(), new UpsInvoiceRegistrationRequestFactory())
+        public UpsClerk(UpsAccountEntity upsAccount)
+            : this(new UpsOpenAccountRequestFactory(upsAccount), new UpsInvoiceRegistrationRequestFactory())
         { }
 
 
@@ -47,18 +47,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
             CarrierRequest openAccountRequest = openAccountRequestFactory.CreateOpenAccountRequest(request);
 
             ICarrierResponse carrierResponse = openAccountRequest.Submit();
+            carrierResponse.Process();
+            
             OpenAccountResponse nativeResponse = (OpenAccountResponse)carrierResponse.NativeResponse;
-
-            if (nativeResponse.BillingAddressCandidate != null)
-            {
-                throw new UpsOpenAccountBusinessAddressException(nativeResponse.BillingAddressCandidate);
-            }
-
-            if (nativeResponse.PickupAddressCandidate != null)
-            {
-                throw new UpsOpenAccountPickupAddressException(nativeResponse.PickupAddressCandidate);
-            }
-
+            
             return nativeResponse;
         }
 

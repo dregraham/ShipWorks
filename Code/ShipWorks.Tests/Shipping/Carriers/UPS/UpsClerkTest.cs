@@ -83,24 +83,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
         {
             testObject.OpenAccount(new OpenAccountRequest());
         }
-
-        [TestMethod]
-        [ExpectedException(typeof(UpsOpenAccountBusinessAddressException))]
-        public void OpenAccount_ThrowsUpsOpenAccountBusinessAddressException_ResponseContainsNoAddressCandidates_Test()
-        {
-            nativeOpenAccountResponse.BillingAddressCandidate = new AddressKeyCandidateType();
-
-            testObject.OpenAccount(new OpenAccountRequest());
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(UpsOpenAccountPickupAddressException))]
-        public void OpenAccount_ThrowsUpsOpenAccountPickupAddressException_ResponseContainsNoAddressCandidates_Test()
-        {
-            nativeOpenAccountResponse.PickupAddressCandidate = new AddressKeyCandidateType();
-
-            testObject.OpenAccount(new OpenAccountRequest());
-        }
         #endregion
 
         [TestMethod]

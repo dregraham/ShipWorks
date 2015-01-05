@@ -29,6 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
         bool registrationComplete = false;
         private readonly bool allowRegisteringExistingAccount;
+        private int initialPersonControlHeight;
 
 
         /// <summary>
@@ -50,6 +51,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         protected StampsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
+
+            initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
 
@@ -82,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the person control associated with the Stamps.com account.
         /// </summary>
-        protected PersonControl PersonControl
+        protected AutofillPersonControl PersonControl
         {
             get { return personControl; }
         }
@@ -227,6 +230,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Save the data entered in the person control back to our stampsAccount
             PersonAdapter updatedStampsAccountAdapter = new PersonAdapter(StampsAccount, string.Empty);
             personControl.SaveToEntity(updatedStampsAccountAdapter);
+
+            if (StampsAccount.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "USPS only supports US addresses.");
+                e.NextPage = CurrentPage;
+                return;
+            }
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Full Name", StampsAccount.FirstName);
@@ -542,6 +552,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         protected void RemoveMonthlyFeeText()
         {
             stampsPaymentControl.RemoveMonthlyFeeText();
+        }
+
+        /// <summary>
+        /// Handle when the person control resizes
+        /// </summary>
+        private void OnPersonControlResize(object sender, EventArgs e)
+        {
+            panelTerms.Top = panelTerms.Top - (initialPersonControlHeight - personControl.Height);
         }
     }
 }
