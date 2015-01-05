@@ -168,5 +168,16 @@ namespace ShipWorks.Shipping.Settings
                 ruleControl.SaveSettings();
             }
         }
+
+        /// <summary>
+        /// Gets whether any rule filters are disabled
+        /// </summary>
+        public bool AreAnyRuleFiltersDisabled
+        {
+            get
+            {
+                return panelMain.Controls.OfType<ShippingProviderRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
     }
 }

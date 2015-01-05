@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
 using System.ComponentModel;
@@ -97,6 +98,8 @@ namespace ShipWorks.Filters.Management
                         FilterContentManager.CheckForChanges();
 
                         result = FilterEditingResult.OK;
+
+                        Messenger.Current.Send(new FilterNodeEditedMessage(parent, filterNode));
                     }
                     catch (FilterException ex)
                     {

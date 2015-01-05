@@ -23,6 +23,7 @@ namespace ShipWorks.Shipping.Settings
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingProviderRuleControl));
 
         ShippingProviderRuleEntity rule;
+        private long originalFilterNodeID;
 
         /// <summary>
         /// User has clicked the delete button on the rule line
@@ -59,7 +60,8 @@ namespace ShipWorks.Shipping.Settings
 
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
-            filterCombo.SelectedFilterNodeID = rule.FilterNodeID;
+            originalFilterNodeID = rule.FilterNodeID;
+            filterCombo.SelectedFilterNodeID = originalFilterNodeID;
             if (filterCombo.SelectedFilterNode == null)
             {
                 filterCombo.SelectFirstNode();
@@ -150,6 +152,7 @@ namespace ShipWorks.Shipping.Settings
                 try
                 {
                     ShippingProviderRuleManager.SaveRule(rule, adapter);
+                    originalFilterNodeID = rule.FilterNodeID;
                 }
                 catch (ORMConcurrencyException ex)
                 {
@@ -161,6 +164,19 @@ namespace ShipWorks.Shipping.Settings
                 }
 
                 adapter.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the selected filter is disabled
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.SelectedFilterNode != null &&
+                    filterCombo.SelectedFilterNodeID != originalFilterNodeID &&
+                    filterCombo.SelectedFilterNode.Filter.State != (int) FilterState.Enabled;
             }
         }
     }

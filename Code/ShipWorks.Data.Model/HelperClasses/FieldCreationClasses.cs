@@ -7427,6 +7427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.Definition);}
 		}
+		/// <summary>Creates a new FilterEntity.State field instance</summary>
+		public static EntityField2 State
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.State);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterLayoutEntity</summary>
