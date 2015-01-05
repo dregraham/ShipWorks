@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using RestSharp.Validation;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -19,11 +20,15 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using log4net;
+using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
+using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
+using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -107,6 +112,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
+                // Make sure it is a valid FedEx Shipment.
+                ValidateShipment(shipmentEntity);
+
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
 
@@ -137,6 +145,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             catch (Exception ex)
             {
                 throw (HandleException(ex, shipmentEntity));
+            }
+        }
+
+        /// <summary>
+        /// Make sure it is a valid FedEx Shipment.
+        /// </summary>
+        private static void ValidateShipment(ShipmentEntity shipmentEntity)
+        {
+            if (shipmentEntity.FedEx.Service == (int) FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
+            {
+                throw new FedExException("SmartPost only allows 1 package per shipment.");
             }
         }
 
