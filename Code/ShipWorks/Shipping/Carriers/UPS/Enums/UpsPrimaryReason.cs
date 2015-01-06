@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         OtherCarrier = 1,
 
         [ApiValue("06")]
-        [Description("Occasional Shipping Needs")]
+        [Description("Occasional shipping needs")]
         OccasionalShippingNeeds = 2
     }
 }

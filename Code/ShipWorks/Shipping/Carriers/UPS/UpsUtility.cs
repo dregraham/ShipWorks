@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -16,10 +17,12 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
+using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.UPS
 {
@@ -29,6 +32,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
     public static class UpsUtility
     {        
 		private static Lazy<bool> hasSurePostShipments = new Lazy<bool>(SurePostShipmentsExist);
+        private static IEnumerable<UpsServiceType> surePostShipmentTypes;
 
         /// <summary>
         /// Static Constructor
@@ -330,7 +334,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 // Process the XML request
                 XmlDocument upsResponse = UpsWebClient.ProcessRequest(xmlWriter);
 
-
                 // Now we can get the Access License number
                 string accessKey = (string) upsResponse.CreateNavigator().Evaluate("string(//AccessLicenseNumber)");
 
@@ -344,12 +347,29 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets a list of UpsServiceTypes that are SurePost
+        /// </summary>
+        public static IEnumerable<UpsServiceType> SurePostShipmentTypes
+        {
+            get
+            {
+                return surePostShipmentTypes ?? (surePostShipmentTypes = new ReadOnlyCollection<UpsServiceType>(new []
+                {
+                    UpsServiceType.UpsSurePost1LbOrGreater, 
+                    UpsServiceType.UpsSurePostBoundPrintedMatter, 
+                    UpsServiceType.UpsSurePostMedia, 
+                    UpsServiceType.UpsSurePostLessThan1Lb
+                }));
+            }
+        }
+
+        /// <summary>
         /// Checks to see if any SurePost shipments exist.
         /// </summary>
         /// <returns>True if there are SurePost shipments in the database; otherwise false.</returns>
         private static bool SurePostShipmentsExist()
         {
-            int[] surePostServiceTypeValues = new int[] { (int) UpsServiceType.UpsSurePost1LbOrGreater, (int) UpsServiceType.UpsSurePostBoundPrintedMatter, (int) UpsServiceType.UpsSurePostMedia, (int) UpsServiceType.UpsSurePostLessThan1Lb };
+            int[] surePostServiceTypeValues = SurePostShipmentTypes.Cast<int>().ToArray();
 
             // Create the predicate for the query to determine which shipments are eligible
             RelationPredicateBucket bucket = new RelationPredicateBucket
@@ -377,10 +397,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool IsUpsSurePostService(UpsServiceType upsServiceType)
         {
-            return upsServiceType == UpsServiceType.UpsSurePost1LbOrGreater ||
-                   upsServiceType == UpsServiceType.UpsSurePostBoundPrintedMatter ||
-                   upsServiceType == UpsServiceType.UpsSurePostLessThan1Lb ||
-                   upsServiceType == UpsServiceType.UpsSurePostMedia;
+            return SurePostShipmentTypes.Contains(upsServiceType);
         }
 
         /// <summary>
@@ -418,6 +435,37 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
 
             return emailAddress.Length <= 50 ? emailAddress : string.Empty;
+        }
+
+        /// <summary>
+        /// Corrects the smart pickup error. Return null if address not changed.
+        /// </summary>
+        public static string CorrectSmartPickupError(string city)
+        {
+            List<KeyValuePair<string, string>> replacements = new List<KeyValuePair<string, string>>()
+            {
+                new KeyValuePair<string, string>("St ", "Saint "),
+                new KeyValuePair<string, string>("St. ", "Saint "),
+                new KeyValuePair<string, string>("Ste ", "Saint "),
+                new KeyValuePair<string, string>("Ste. ", "Saint "),
+                new KeyValuePair<string, string>("Saint G", "Ste. G"), // specifically St Genevieve.
+                new KeyValuePair<string, string>("Saint ", "St "),
+                new KeyValuePair<string, string>("Ft. ", "Fort "),
+                new KeyValuePair<string, string>("Ft ", "Fort "),
+                new KeyValuePair<string, string>("Fort ", "Ft "),
+                new KeyValuePair<string, string>("MT ", "Mount "),
+                new KeyValuePair<string, string>("Mount ", "MT ")
+            };
+
+            foreach (KeyValuePair<string, string> replacement in replacements)
+            {
+                if (city.StartsWith(replacement.Key, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    return string.Format("{0}{1}", replacement.Value, city.Substring(replacement.Key.Length));
+                }
+            }
+
+            return null;
         }
     }
 }

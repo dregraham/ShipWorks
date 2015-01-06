@@ -120,6 +120,7 @@ namespace ShipWorks.Filters
 
             return false;
         }
+
         /// <summary>
         /// Indicates if the given filter is a uneditable "My Filters"
         /// </summary>
@@ -197,6 +198,7 @@ namespace ShipWorks.Filters
             filter.Name = myFiltersName;
             filter.FilterTarget = (int) target;
             filter.IsFolder = true;
+            filter.State = (int) FilterState.Enabled;
 
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Parent = null;
@@ -218,8 +220,8 @@ namespace ShipWorks.Filters
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int) FilterNodePurpose.Standard;
-
+            node.Purpose = (int)FilterNodePurpose.Standard;
+            
             FilterLayoutEntity layout = new FilterLayoutEntity();
             layout.User = user;
             layout.FilterTarget = (int) target;
@@ -657,6 +659,7 @@ namespace ShipWorks.Filters
             filter.FilterTarget = (int)definition.FilterTarget;
             filter.IsFolder = false;
             filter.Definition = definition.GetXml();
+            filter.State = (int)FilterState.Enabled;
 
             return filter;
         }
@@ -671,6 +674,7 @@ namespace ShipWorks.Filters
             folder.FilterTarget = (int)target;
             folder.IsFolder = true;
             folder.Definition = null;
+            folder.State = (int)FilterState.Enabled;
 
             return folder;
         }

@@ -59,7 +59,7 @@
             this.stampsUsageType = new System.Windows.Forms.ComboBox();
             this.labelUsageType = new System.Windows.Forms.Label();
             this.labelAccount = new System.Windows.Forms.Label();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageNewAccountCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.stampsRegistrationSecuritySettingsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.StampsRegistrationSecuritySettingsControl();
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
@@ -82,24 +82,24 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(374, 557);
+            this.next.Location = new System.Drawing.Point(374, 612);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(455, 557);
+            this.cancel.Location = new System.Drawing.Point(455, 612);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(293, 557);
+            this.back.Location = new System.Drawing.Point(293, 612);
             // 
             // mainPanel
             // 
             this.mainPanel.Controls.Add(this.wizardPageAccountAddress);
-            this.mainPanel.Size = new System.Drawing.Size(542, 485);
+            this.mainPanel.Size = new System.Drawing.Size(542, 540);
             // 
             // etchBottom
             // 
-            this.etchBottom.Location = new System.Drawing.Point(0, 547);
+            this.etchBottom.Location = new System.Drawing.Point(0, 602);
             this.etchBottom.Size = new System.Drawing.Size(546, 2);
             // 
             // pictureBox
@@ -215,7 +215,7 @@
             this.wizardPageExistingAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageExistingAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageExistingAccountCredentials.Name = "wizardPageExistingAccountCredentials";
-            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageExistingAccountCredentials.Size = new System.Drawing.Size(542, 540);
             this.wizardPageExistingAccountCredentials.TabIndex = 0;
             this.wizardPageExistingAccountCredentials.Title = "Stamps.com Credentials";
             this.wizardPageExistingAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextExistingCredentials);
@@ -271,7 +271,7 @@
             this.wizardPageStampsAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageStampsAccount.Location = new System.Drawing.Point(0, 0);
             this.wizardPageStampsAccount.Name = "wizardPageStampsAccount";
-            this.wizardPageStampsAccount.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageStampsAccount.Size = new System.Drawing.Size(542, 540);
             this.wizardPageStampsAccount.TabIndex = 0;
             this.wizardPageStampsAccount.Title = "Stamps.com Account";
             this.wizardPageStampsAccount.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAccountInfo);
@@ -292,7 +292,7 @@
             this.wizardPageOptions.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageOptions.Location = new System.Drawing.Point(0, 0);
             this.wizardPageOptions.Name = "wizardPageOptions";
-            this.wizardPageOptions.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageOptions.Size = new System.Drawing.Size(542, 540);
             this.wizardPageOptions.TabIndex = 0;
             this.wizardPageOptions.Title = "Stamps.com Settings";
             this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
@@ -316,7 +316,7 @@
             this.wizardPageAccountAddress.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAccountAddress.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAccountAddress.Name = "wizardPageAccountAddress";
-            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageAccountAddress.Size = new System.Drawing.Size(542, 540);
             this.wizardPageAccountAddress.TabIndex = 0;
             this.wizardPageAccountAddress.Title = "Account Registration";
             this.wizardPageAccountAddress.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextAccountAddress);
@@ -329,7 +329,7 @@
             this.panelTerms.Controls.Add(this.labelTerms1);
             this.panelTerms.Controls.Add(this.termsCheckBox);
             this.panelTerms.Controls.Add(this.labelTerms);
-            this.panelTerms.Location = new System.Drawing.Point(23, 396);
+            this.panelTerms.Location = new System.Drawing.Point(23, 438);
             this.panelTerms.Name = "panelTerms";
             this.panelTerms.Size = new System.Drawing.Size(494, 59);
             this.panelTerms.TabIndex = 2;
@@ -451,18 +451,20 @@
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.personControl.Location = new System.Drawing.Point(23, 92);
+            this.personControl.Location = new System.Drawing.Point(23, 86);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(355, 302);
+            this.personControl.Size = new System.Drawing.Size(355, 352);
             this.personControl.TabIndex = 1;
+            this.personControl.Resize += new System.EventHandler(this.OnPersonControlResize);
             // 
             // wizardPageNewAccountCredentials
             // 
@@ -472,7 +474,7 @@
             this.wizardPageNewAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountCredentials.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountCredentials.Name = "wizardPageNewAccountCredentials";
-            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageNewAccountCredentials.Size = new System.Drawing.Size(542, 540);
             this.wizardPageNewAccountCredentials.TabIndex = 0;
             this.wizardPageNewAccountCredentials.Title = "Account Registration";
             this.wizardPageNewAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRegistrationCredentials);
@@ -493,7 +495,7 @@
             this.wizardPageNewAccountPayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageNewAccountPayment.Location = new System.Drawing.Point(0, 0);
             this.wizardPageNewAccountPayment.Name = "wizardPageNewAccountPayment";
-            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageNewAccountPayment.Size = new System.Drawing.Size(542, 540);
             this.wizardPageNewAccountPayment.TabIndex = 0;
             this.wizardPageNewAccountPayment.Title = "Account Registration";
             this.wizardPageNewAccountPayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPayment);
@@ -513,7 +515,7 @@
             this.linkStampsPrivacy.Cursor = System.Windows.Forms.Cursors.Hand;
             this.linkStampsPrivacy.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkStampsPrivacy.ForeColor = System.Drawing.Color.RoyalBlue;
-            this.linkStampsPrivacy.Location = new System.Drawing.Point(20, 562);
+            this.linkStampsPrivacy.Location = new System.Drawing.Point(20, 617);
             this.linkStampsPrivacy.Name = "linkStampsPrivacy";
             this.linkStampsPrivacy.Size = new System.Drawing.Size(133, 13);
             this.linkStampsPrivacy.TabIndex = 6;
@@ -524,7 +526,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(542, 592);
+            this.ClientSize = new System.Drawing.Size(542, 647);
             this.Controls.Add(this.linkStampsPrivacy);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.LastPageCancelable = true;
@@ -609,6 +611,6 @@
         private System.Windows.Forms.Label labelTerms1;
         private System.Windows.Forms.CheckBox termsCheckBox;
         private System.Windows.Forms.Label labelTerms;
-        private Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
     }
 }

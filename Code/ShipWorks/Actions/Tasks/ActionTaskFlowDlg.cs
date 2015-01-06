@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.UI;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
@@ -213,6 +214,19 @@ namespace ShipWorks.Actions.Tasks
         private void OnOK(object sender, EventArgs e)
         {
             ActionTaskEntity entity = task.Entity;
+
+            // Alert the user if they have chosen to use a disabled filter
+            if (restrictFilter.Checked &&
+                entity.FilterConditionNodeID != restrictFilterCombo.SelectedFilterNodeID &&
+                restrictFilterCombo.SelectedFilterNode.Filter.State != (byte)FilterState.Enabled)
+            {
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
+                        "The selected filter has been disabled.\n\nDo you want to use this filter anyway?");
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
 
             entity.FilterCondition = restrictFilter.Checked;
             entity.FilterConditionNodeID = restrictFilterCombo.SelectedFilterNodeID;

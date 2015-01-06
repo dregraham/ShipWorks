@@ -489,7 +489,7 @@
   <!-- Zip the results of the build -->
   <Target Name="ZipResults" >
 
-    <CreateItem Include="$(AppDirectory)\**\*">
+    <!--<CreateItem Include="$(AppDirectory)\**\*">
       <Output TaskParameter="Include" ItemName="FilesToZip"/>
     </CreateItem>
 
@@ -497,8 +497,8 @@
 				WorkingDirectory="$(AppDirectory)\"
 				ZipFileName="$(AppDirectory)\ShipWorks$(CCNetLabel).zip" />
 
-    <!-- Delete all the files that went into the zip -->
-    <Delete Files="@(FilesToZip)" />
+    --><!-- Delete all the files that went into the zip --><!--
+    <Delete Files="@(FilesToZip)" />-->
 
   </Target>
 

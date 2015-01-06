@@ -125,6 +125,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.DownloadDetailEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "DownloadDetailEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.EbayCombinedOrderRelationEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EbayCombinedOrderRelationEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.EbayOrderEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EbayOrderEntity");
 					break;

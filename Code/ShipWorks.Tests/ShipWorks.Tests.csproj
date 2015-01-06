@@ -155,9 +155,11 @@
     <Compile Include="DatabaseManager.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
+    <Compile Include="Interapptive.Shared\Business\GeographyTest.cs" />
     <Compile Include="Interapptive.Shared\Business\PersonUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Collections\ArrayUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Collections\EnumerableExtensionsTests.cs" />
+    <Compile Include="Interapptive.Shared\MessengerTest.cs" />
     <Compile Include="Interapptive.Shared\Net\NetworkUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
     <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />
@@ -373,6 +375,7 @@
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsPackageServiceOptionsElementWriterTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCoreTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Request\Manipulators\UpsOpenAccountAddEndUserInformationTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountCreateUpsAccountEntityManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\UpsOpenAccountRequestFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsCanadaServiceManagerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\ServiceManager\Countries\UpsPuertoRicoServiceManagerTest.cs" />
@@ -384,6 +387,7 @@
     <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\BestRate\WorldShipBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />

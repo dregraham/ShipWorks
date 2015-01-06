@@ -759,6 +759,7 @@ namespace ShipWorks.Shipping
 
             // Update the processing \ settings buttons
             UpdateSelectionDependentUI();
+            shipmentControl.UpdateSelectionDependentUI();
 
             if (deleted.Count > 0)
             {

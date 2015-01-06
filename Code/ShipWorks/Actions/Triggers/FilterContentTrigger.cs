@@ -126,6 +126,28 @@ namespace ShipWorks.Actions.Triggers
         }
 
         /// <summary>
+        /// Validates the state of the trigger.  An exception is thrown to indicate validation failure.
+        /// </summary>
+        /// <exception cref="ShipWorks.Actions.Triggers.FilterContentActionTriggerException">A disabled filter has been selected as a trigger.</exception>
+        public override void Validate()
+        {
+            base.Validate();
+
+            // If the selected filter didn't change, don't bother validating it
+            if (initialFilterNodeID == FilterNodeID)
+            {
+                return;
+            }
+
+            // We want to throw an exception if the trigger is using a disabled filter
+            FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(FilterNodeID);
+            if (filterNode.Filter.State == (byte)FilterState.Disabled)
+            {
+                throw new FilterContentActionTriggerException("A disabled filter has been selected as a trigger.");
+            }
+        }
+
+        /// <summary>
         /// Save additional data required by the trigger to the database
         /// </summary>
         public override void SaveExtraState(ActionEntity action, SqlAdapter adapter)

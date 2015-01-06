@@ -1223,6 +1223,24 @@ PRINT N'Creating index [IX_DownloadDetail_String] on [dbo].[DownloadDetail]'
 GO
 CREATE NONCLUSTERED INDEX [IX_DownloadDetail_String] ON [dbo].[DownloadDetail] ([ExtraStringData1])
 GO
+PRINT N'Creating [dbo].[EbayCombinedOrderRelation]'
+GO
+CREATE TABLE [dbo].[EbayCombinedOrderRelation]
+(
+[EbayCombinedOrderRelationID] [bigint] NOT NULL IDENTITY(1099, 1000),
+[OrderID] [bigint] NOT NULL,
+[EbayOrderID] [bigint] NOT NULL,
+[StoreID] [bigint] NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
+GO
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [PK_EbayCombinedOrderRelation] PRIMARY KEY CLUSTERED  ([EbayCombinedOrderRelationID])
+GO
+PRINT N'Creating index [IX_EbayCombinedOrderRelation] on [dbo].[EbayCombinedOrderRelation]'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_EbayCombinedOrderRelation] ON [dbo].[EbayCombinedOrderRelation] ([EbayOrderID])
+GO
 PRINT N'Creating [dbo].[EbayOrderItem]'
 GO
 CREATE TABLE [dbo].[EbayOrderItem]
@@ -1635,7 +1653,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [BrokerPhoneExtension] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BrokerEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsAdmissibilityPackaging] [int] NOT NULL,
-[CustomsRecipientTIN] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CustomsRecipientTIN] [varchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsDocumentsOnly] [bit] NOT NULL,
 [CustomsDocumentsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsExportFilingOption] [int] NOT NULL,
@@ -1655,7 +1673,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CommercialInvoiceReference] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterOfRecord] [bit] NOT NULL,
 [ImporterAccount] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ImporterTIN] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ImporterTIN] [nvarchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterCompany] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1937,12 +1955,17 @@ CREATE TABLE [dbo].[Filter]
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
-[Definition] [xml] NULL
+[Definition] [xml] NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
+GO
+PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO
@@ -4823,6 +4846,11 @@ GO
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_Computer] FOREIGN KEY ([ComputerID]) REFERENCES [dbo].[Computer] ([ComputerID])
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID]) ON DELETE CASCADE
 ALTER TABLE [dbo].[Download] ADD CONSTRAINT [FK_Download_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+GO
+PRINT N'Adding foreign keys to [dbo].[EbayCombinedOrderRelation]'
+GO
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayOrder] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[EbayOrder] ([OrderID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[EbayCombinedOrderRelation] ADD CONSTRAINT [FK_EbayCombinedOrderRelation_EbayStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[EbayStore] ([StoreID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[PrintResult]'
 GO

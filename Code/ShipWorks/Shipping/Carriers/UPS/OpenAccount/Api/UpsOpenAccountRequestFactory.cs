@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipulators;
@@ -9,26 +10,31 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
 {
     public class UpsOpenAccountRequestFactory : IUpsOpenAccountRequestFactory
     {
+        private readonly UpsAccountEntity upsAccount;
         private readonly IUpsServiceGateway upsOpenAccountService;
         private readonly ICarrierResponseFactory responseFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsOpenAccountRequestFactory" /> class.
         /// </summary>
-        public UpsOpenAccountRequestFactory()
-            : this(new UpsServiceGateway(new UpsSettingsRepository()), new UpsResponseFactory())
-        { }
+        public UpsOpenAccountRequestFactory(UpsAccountEntity upsAccount)
+            : this(new UpsServiceGateway(new UpsSettingsRepository()), new UpsResponseFactory(), upsAccount)
+        {
+        }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UpsOpenAccountRequestFactory" /> class. This
+        /// Initializes a new instance of the 
+        /// <see cref="UpsOpenAccountRequestFactory" /> class. This
         /// constructor is primarily for testing purposes.
         /// </summary>
         /// <param name="upsOpenAccountService">The UpsOpenAccount service.</param>
         /// <param name="responseFactory">The response factory.</param>
-        public UpsOpenAccountRequestFactory(IUpsServiceGateway upsOpenAccountService, ICarrierResponseFactory responseFactory)
+        /// <param name="upsAccount">The ups account.</param>
+        public UpsOpenAccountRequestFactory(IUpsServiceGateway upsOpenAccountService, ICarrierResponseFactory responseFactory, UpsAccountEntity upsAccount)
         {
             this.upsOpenAccountService = upsOpenAccountService;
             this.responseFactory = responseFactory;
+            this.upsAccount = upsAccount;
         }
 
         /// <summary>
@@ -44,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api
                 new UpsOpenAccountAddEndUserInformation()
             };
 
-            return new UpsOpenAccountRequest(requestManipulators, upsOpenAccountService, responseFactory, request);
+            return new UpsOpenAccountRequest(requestManipulators, upsOpenAccountService, responseFactory, request, upsAccount);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -253,7 +254,28 @@ namespace ShipWorks.Users.Audit
         {
             if (Visible)
             {
-                AuditProcessor.ProcessAudits();
+                try
+                {
+                    AuditProcessor.ProcessAudits();
+                }
+                catch (SqlException ex)
+                {
+                    log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+                }
+                catch (Exception ex)
+                {
+                    // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
+                    // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                    // handled there.
+                    if (ex.InnerException != null && ex.InnerException is SqlException)
+                    {
+                        log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex.InnerException);
+                    }
+                    else
+                    {
+                        log.Error("An unexpected exception type was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+                    }
+                }
             }
         }
 
@@ -434,26 +456,47 @@ namespace ShipWorks.Users.Audit
         /// </summary>
         private void UpdateQueryFilter()
         {
-            RelationPredicateBucket bucket = new RelationPredicateBucket();
-
-            lock (searchCriteriaLock)
+            try
             {
-                // Search options critiera
-                bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchOptionsCriteria));
+                RelationPredicateBucket bucket = new RelationPredicateBucket();
 
-                // Related To Object (Search text) criteria
-                if (lockedSearchTextCriteria != null)
+                lock (searchCriteriaLock)
                 {
-                    bucket.PredicateExpression.AddWithAnd(lockedSearchTextCriteria);
+                    // Search options critiera
+                    bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchOptionsCriteria));
+
+                    // Related To Object (Search text) criteria
+                    if (lockedSearchTextCriteria != null)
+                    {
+                        bucket.PredicateExpression.AddWithAnd(lockedSearchTextCriteria);
+                    }
+                    else if (relatedToBox.Checked)
+                    {
+                        bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchTextCriteria));
+                    }
                 }
-                else if (relatedToBox.Checked)
+
+                // Apply the bucket to the gateway
+                entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, bucket));
+            }
+            catch (SqlException ex)
+            {
+                log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
+            }
+            catch (Exception ex)
+            {
+                // For some reason, the SqlException was not being caught and a customer was still getting a deadlock crash.  So checking the inner exception
+                // to see if it's a SqlException and logging as above.  If it's not, just carry on.  ProcessAudits will be called from other places and exceptions 
+                // handled there.
+                if (ex.InnerException != null && ex.InnerException is SqlException)
                 {
-                    bucket.PredicateExpression.AddWithAnd(ClonePredicate(searchTextCriteria));
+                    log.Error("A SqlException, probably a Deadlock, was thrown.  Just continue and not crash so as to not make the customer angry.", ex.InnerException);
+                }
+                else
+                {
+                    log.Error("An unexpected exception type was thrown.  Just continue and not crash so as to not make the customer angry.", ex);
                 }
             }
-
-            // Apply the bucket to the gateway
-            entityGrid.OpenGateway(new QueryableEntityGateway(entityProvider, bucket));
         }
 
         /// <summary>

@@ -39,7 +39,7 @@
             this.labelUsername = new System.Windows.Forms.Label();
             this.labelCredentialsInstructions = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
-            this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
+            this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
             this.iParcelOptionsControl = new ShipWorks.Shipping.Carriers.iParcel.iParcelOptionsControl();
             this.mainPanel.SuspendLayout();
@@ -53,9 +53,7 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(422, 496);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -67,7 +65,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOptions);
+            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
             this.mainPanel.Size = new System.Drawing.Size(590, 424);
             // 
             // etchBottom
@@ -107,7 +105,7 @@
             this.linkiParcelRegistration.ForeColor = System.Drawing.Color.Blue;
             this.linkiParcelRegistration.Location = new System.Drawing.Point(127, 79);
             this.linkiParcelRegistration.Name = "linkiParcelRegistration";
-            this.linkiParcelRegistration.Size = new System.Drawing.Size(183, 13);
+            this.linkiParcelRegistration.Size = new System.Drawing.Size(160, 13);
             this.linkiParcelRegistration.TabIndex = 2;
             this.linkiParcelRegistration.Text = "www.i-parcel.com/contact.aspx";
             this.linkiParcelRegistration.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -219,6 +217,7 @@
             | ShipWorks.Data.Controls.PersonFields.Website)));
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contactInformation.Location = new System.Drawing.Point(26, 10);
+            this.contactInformation.MaxStreetLines = 2;
             this.contactInformation.Name = "contactInformation";
             this.contactInformation.RequiredFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
@@ -229,9 +228,8 @@
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone) 
             | ShipWorks.Data.Controls.PersonFields.Website)));
-            this.contactInformation.Size = new System.Drawing.Size(355, 366);
+            this.contactInformation.Size = new System.Drawing.Size(355, 369);
             this.contactInformation.TabIndex = 0;
-            this.contactInformation.MaxStreetLines = 2;
             // 
             // wizardPageOptions
             // 
@@ -247,6 +245,7 @@
             // 
             // iParcelOptionsControl
             // 
+            this.iParcelOptionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.iParcelOptionsControl.Location = new System.Drawing.Point(26, 10);
             this.iParcelOptionsControl.Name = "iParcelOptionsControl";
             this.iParcelOptionsControl.Size = new System.Drawing.Size(439, 87);
@@ -297,7 +296,7 @@
         private System.Windows.Forms.Label labelUsername;
         private System.Windows.Forms.Label labelCredentialsInstructions;
         private UI.Wizard.WizardPage wizardPageContactInfo;
-        private Data.Controls.PersonControl contactInformation;
+        private Data.Controls.AutofillPersonControl contactInformation;
         private UI.Wizard.WizardPage wizardPageOptions;
         private iParcelOptionsControl iParcelOptionsControl;
     }

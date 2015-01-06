@@ -9,6 +9,7 @@ using System.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.Linq;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Data.Model;
 using log4net;
@@ -85,10 +86,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
         /// <summary>
         /// How to combine the order: online or local
         /// </summary>
-        public EbayCombinedOrderType CombinedOrderType 
-        { 
-            get; 
-            set; 
+        public EbayCombinedOrderType CombinedOrderType
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -253,10 +254,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                     {
                         // build a TransactionType to identify the transaction with eBay
                         TransactionType transaction = new TransactionType()
-                            {
-                                TransactionID = orderItem.EbayTransactionID.ToString(),
-                                Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
-                            };
+                        {
+                            TransactionID = orderItem.EbayTransactionID.ToString(),
+                            Item = new ItemType() { ItemID = orderItem.EbayItemID.ToString() }
+                        };
 
                         // add it to the list of transactions to be sent to eBay
                         transactions.Add(transaction);
@@ -270,14 +271,14 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 
                 // Combine the orders through eBay and pull out the new eBay order ID
                 ebayOrderID = webClient.CombineOrders(
-                    transactions, 
-                    GetCombinedPaymentTotal(toCombine), 
+                    transactions,
+                    GetCombinedPaymentTotal(toCombine),
                     AcceptedPayments.ParseList(ebayStore.AcceptedPaymentList),
-                    ShippingCost, 
-                    orderTemplate.ShipCountryCode, 
-                    ShippingService, 
-                    TaxPercent, 
-                    TaxState, 
+                    ShippingCost,
+                    orderTemplate.ShipCountryCode,
+                    ShippingService,
+                    TaxPercent,
+                    TaxState,
                     TaxShipping);
             }
 
@@ -334,6 +335,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 return true;
             }
 
+            bool locallyCombinedOnly = !ebayOrderID.HasValue;
             // Create a new master order based on the most recent order to be combined
             EbayOrderEntity primaryOrder = toCombine.OrderByDescending(c => c.Order.OnlineLastModified).First().Order;
 
@@ -355,7 +357,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             // Generate a new order number
             newOrder.OrderNumber = OrderUtility.GetNextOrderNumber(store.StoreID);
 
-            if (ebayOrderID.HasValue)
+            if (!locallyCombinedOnly)
             {
                 // apply the eBay order id, thus making it a Combined Payment to ShipWorks
                 newOrder.EbayOrderID = ebayOrderID.Value;
@@ -364,8 +366,13 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             {
                 // add a -C to denote a locally combined order
                 newOrder.ApplyOrderNumberPostfix("-C");
+                newOrder.CombinedLocally = true;
                 newOrder.EbayOrderID = 0;
             }
+
+            EntityCollection<EbayCombinedOrderRelationEntity> combinedOrderRelations = newOrder.EbayCombinedOrderRelation;
+            LinqMetaData metaData = new LinqMetaData(adapter);
+
 
             // For every order that is to be combined, we need to merge in items, charges, and payment details
             foreach (EbayCombinedOrderComponent component in toCombine)
@@ -375,9 +382,38 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 MoveOrderItems(sourceOrder, newOrder);
                 MovePaymentDetails(sourceOrder, newOrder);
                 MoveCharges(sourceOrder, newOrder);
+
+                if (locallyCombinedOnly)
+                {
+                    if (component.Order.CombinedLocally)
+                    {
+                        // Add EbayCombinedOrderRelation to the new order
+                        metaData.EbayCombinedOrderRelation
+                            .Where(oldRelation => oldRelation.OrderID == component.Order.OrderID && oldRelation.StoreID == component.Order.StoreID)
+                            .ToList()
+                            .ForEach(oldRelation =>
+                            {
+                                AddCombinedOrderRelation(
+                                    combinedOrderRelations,
+                                    oldRelation.EbayOrderID,
+                                    oldRelation.StoreID);
+
+                                adapter.DeleteEntity(oldRelation);
+                            }
+                        );
+                    }
+                    else if (component.Order.EbayOrderID != 0 && combinedOrderRelations.All(e => e.EbayOrderID != component.Order.EbayOrderID))
+                    {
+                        // Create new EbayCombinedOrderRelation
+                        AddCombinedOrderRelation(
+                            combinedOrderRelations, 
+                            component.Order.EbayOrderID, 
+                            component.Order.StoreID);
+                    }
+                }
             }
 
-            // For order we crate on eBay, some charges are applied based on what the user entered or what we calculate
+            // For order we create on eBay, some charges are applied based on what the user entered or what we calculate
             if (newOrder.EbayOrderID > 0)
             {
                 ApplyCalculatedCharges(newOrder);
@@ -406,6 +442,21 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
             adapter.SaveAndRefetch(newOrder);
 
             return true;
+        }
+
+        /// <summary>
+        /// Adds the combined order relation.
+        /// </summary>
+        /// <param name="combinedOrderRelations">The combined order relations.</param>
+        /// <param name="ebayOrderId">The ebay order identifier.</param>
+        /// <param name="storeId">The store identifier.</param>
+        private static void AddCombinedOrderRelation(EntityCollection<EbayCombinedOrderRelationEntity> combinedOrderRelations, long ebayOrderId, long storeId)
+        {
+            combinedOrderRelations.Add(new EbayCombinedOrderRelationEntity()
+            {
+                EbayOrderID = ebayOrderId,
+                StoreID = storeId
+            });
         }
 
         /// <summary>
