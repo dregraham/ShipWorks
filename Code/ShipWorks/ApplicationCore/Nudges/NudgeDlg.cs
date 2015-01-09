@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Nudges
                 // Use the dimensions of the nudge to set the size of the dialog (with some padding)
                 // to account for the location of the browser control and the other controls within 
                 // the dialog
-                Width = nudge.ContentDimensions.Width + 35;
+                Width = nudge.ContentDimensions.Width + 55;
                 Height = nudge.ContentDimensions.Height + 95;
             }
         }
