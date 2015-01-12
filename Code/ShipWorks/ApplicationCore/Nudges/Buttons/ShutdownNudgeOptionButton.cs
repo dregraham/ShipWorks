@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace ShipWorks.ApplicationCore.Nudges.Buttons
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         /// </summary>
         public override void HandleClick()
         {
-            Application.Exit();
+            Environment.Exit(0);
         }
     }
 }
