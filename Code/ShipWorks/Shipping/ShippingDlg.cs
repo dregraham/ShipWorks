@@ -2350,11 +2350,7 @@ namespace ShipWorks.Shipping
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
             {
-                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessEndicia);
-                if(nudges.Any())
-                {
-                    NudgeManager.ShowNudge(this, nudges.First());
-                }
+                NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ProcessEndicia));
             }
         }
 

@@ -46,18 +46,11 @@ namespace ShipWorks.ApplicationCore.Nudges
         }
 
         /// <summary>
-        /// Gets the nudges.
+        /// Get the first nudge of the given type, or null if there are none
         /// </summary>
-        public static IEnumerable<Nudge> Nudges
+        public static Nudge GetFirstNudgeOfType(NudgeType type)
         {
-            get
-            {
-                lock (lockObject)
-                {
-                    // Return a new list, so our internal list isn't altered by any consumers
-                    return nudges.ToList();
-                }
-            }
+            return nudges.FirstOrDefault(x => x.NudgeType == type);
         }
 
         /// <summary>
