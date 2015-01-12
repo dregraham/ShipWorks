@@ -13,51 +13,48 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public static class NudgeManager
     {
-        private readonly static ILog log = LogManager.GetLogger(typeof (NudgeManager));
-        private readonly static object lockObject = new object();
-
+        private static readonly ILog log = LogManager.GetLogger(typeof (NudgeManager));
         private static List<Nudge> nudges = new List<Nudge>();
+
+        /// <summary>
+        /// Initializes this instance, and calls Refresh to clear out any previous nudges and refresh the
+        /// nudges stored in memory for the given list of stores.
+        /// </summary>
+        /// <param name="stores">The stores.</param>
+        public static void Initialize(IEnumerable<StoreEntity> stores)
+        {
+            Refresh(stores);
+        }
 
         /// <summary>
         /// Initializes this instance by clearing out any previous nudges and refreshing the
         /// nudges stored in memory for the given list of stores.
         /// </summary>
         /// <param name="stores">The stores.</param>
-        public static void Initialize(IEnumerable<StoreEntity> stores)
+        public static void Refresh(IEnumerable<StoreEntity> stores)
         {
             log.Info("Initializing nudges");
-            lock (lockObject)
-            {
-                nudges.Clear();
-             
-                try
-                {
-                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                    nudges = tangoWebClient.GetNudges(stores).ToList();
 
-                    log.InfoFormat("Found {0} nudges", nudges.Count);
-                }
-                catch (TangoException exception)
-                {
-                    // Don't crash if SSL could not be verified
-                    log.Error("Could not intialize nudges.", exception);
-                }
+            try
+            {
+                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                nudges = tangoWebClient.GetNudges(stores).ToList();
+
+                log.InfoFormat("Found {0} nudges", nudges.Count);
+            }
+            catch (TangoException exception)
+            {
+                // Don't crash if SSL could not be verified
+                log.Error("Could not intialize nudges.", exception);
             }
         }
 
         /// <summary>
-        /// Gets the nudges.
+        /// Get the first nudge of the given type, or null if there are none
         /// </summary>
-        public static IEnumerable<Nudge> Nudges
+        public static Nudge GetFirstNudgeOfType(NudgeType type)
         {
-            get
-            {
-                lock (lockObject)
-                {
-                    // Return a new list, so our internal list isn't altered by any consumers
-                    return nudges.ToList();
-                }
-            }
+            return nudges.FirstOrDefault(x => x.NudgeType == type);
         }
 
         /// <summary>

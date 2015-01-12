@@ -142,10 +142,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private void ShowPurchasePostageNudges()
         {
             // If there is an Endicia shipment in the list, check for PurchasesEndicia nudges
-            IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.PurchaseEndicia);
-            if (nudges.Any())
+            Nudge nudge = NudgeManager.GetFirstNudgeOfType(NudgeType.PurchaseEndicia);
+            if (nudge != null)
             {
-                NudgeManager.ShowNudge(this, nudges.First());
+                NudgeManager.ShowNudge(this, nudge);
             }
             else if (purchaseRestricted)
             {
