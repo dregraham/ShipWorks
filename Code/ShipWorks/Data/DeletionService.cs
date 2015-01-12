@@ -27,6 +27,7 @@ using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
 using ShipWorks.Stores;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Users.Audit;
 using ShipWorks.SqlServer.Data.Auditing;
 
@@ -108,6 +109,12 @@ namespace ShipWorks.Data
             {
                 deletingStore = false;
             }
+
+            // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
+            // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
+            // not have run to force the check yet.
+            StoreManager.CheckForChanges();
+            NudgeManager.Refresh(StoreManager.GetAllStores());
         }
 
         /// <summary>
