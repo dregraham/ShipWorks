@@ -462,6 +462,9 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
+        /// <param name="order">The order.</param>
+        /// <exception cref="System.ArgumentNullException">order</exception>
+        /// <exception cref="DownloadException">ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.</exception>
         protected void SaveDownloadedOrder(OrderEntity order)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -602,18 +605,27 @@ namespace ShipWorks.Stores.Communication
 
                         if (shippingAddressChanged)
                         {
-                            LinqMetaData metaData = new LinqMetaData(adapter);
-                            List<ShipmentEntity> shipments = metaData.Shipment.Where(x => x.OrderID == order.OrderID && !x.Processed).ToList();
+                            IPredicateExpression relationFilter = new PredicateExpression();
+                            relationFilter.Add(ShipmentFields.OrderID == order.OrderID);
+                            relationFilter.AddWithAnd(ShipmentFields.Processed == false);
 
-                            foreach (ShipmentEntity shipment in shipments)
+                            RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
+                            relationPredicateBucket.PredicateExpression.Add(relationFilter);
+
+                            using (EntityCollection<ShipmentEntity> shipments = new EntityCollection<ShipmentEntity>())
                             {
-                                PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
-                                if (originalShippingAddress == shipmentAddress)
-                                {
-                                    PersonAdapter.Copy(newShippingAddress, shipmentAddress);
-                                }
+                                SqlAdapter.Default.FetchEntityCollection(shipments, relationPredicateBucket);
 
-                                adapter.SaveEntity(shipment);
+                                foreach (ShipmentEntity shipment in shipments)
+                                {
+                                    PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
+                                    if (originalShippingAddress == shipmentAddress)
+                                    {
+                                        PersonAdapter.Copy(newShippingAddress, shipmentAddress);
+                                    }
+
+                                    adapter.SaveEntity(shipment);
+                                }
                             }
                         }
 
