@@ -14,7 +14,6 @@ namespace ShipWorks.ApplicationCore.Nudges
     public static class NudgeManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof (NudgeManager));
-        private static readonly object lockObject = new object();
         private static List<Nudge> nudges = new List<Nudge>();
 
         /// <summary>
@@ -35,22 +34,18 @@ namespace ShipWorks.ApplicationCore.Nudges
         public static void Refresh(IEnumerable<StoreEntity> stores)
         {
             log.Info("Initializing nudges");
-            lock (lockObject)
-            {
-                nudges.Clear();
-             
-                try
-                {
-                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                    nudges = tangoWebClient.GetNudges(stores).ToList();
 
-                    log.InfoFormat("Found {0} nudges", nudges.Count);
-                }
-                catch (TangoException exception)
-                {
-                    // Don't crash if SSL could not be verified
-                    log.Error("Could not intialize nudges.", exception);
-                }
+            try
+            {
+                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+                nudges = tangoWebClient.GetNudges(stores).ToList();
+
+                log.InfoFormat("Found {0} nudges", nudges.Count);
+            }
+            catch (TangoException exception)
+            {
+                // Don't crash if SSL could not be verified
+                log.Error("Could not intialize nudges.", exception);
             }
         }
 
