@@ -46,9 +46,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Create the XPath engine and get the digest
             XPathNavigator xpath = confirmResponse.CreateNavigator();
-            string shipmentDigest = XPathUtility.Evaluate(xpath, "//ShipmentDigest", "");
 
-            ProcessShipAccept(shipment, shipmentDigest);
+            ProcessShipAccept(shipment, xpath);
         }
 
         /// <summary>
@@ -967,12 +966,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         /// <summary>
         /// Process the accept phase of the ship request
         /// </summary>
-        private static void ProcessShipAccept(ShipmentEntity shipment, string shipmentDigest)
+        private static void ProcessShipAccept(ShipmentEntity shipment, XPathNavigator shipConfirmNavigator)
         {
             UpsAccountEntity account = UpsApiCore.GetUpsAccount(shipment, new UpsAccountRepository());
 
             // Create the client for connecting to the UPS server
             XmlTextWriter xmlWriter = UpsWebClient.CreateRequest(UpsOnLineToolType.ShipAccept, account);
+            string shipmentDigest = XPathUtility.Evaluate(shipConfirmNavigator, "//ShipmentDigest", "");
             xmlWriter.WriteElementString("ShipmentDigest", shipmentDigest);
 
             XmlDocument acceptResponse = UpsWebClient.ProcessRequest(xmlWriter);
@@ -996,6 +996,18 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     shipment.Ups.NegotiatedRate = true;
                     shipment.ShipmentCost = specialRate;
                 }
+            }
+
+            // Set the billing weight and type
+            double billedWeight = XPathUtility.Evaluate(shipConfirmNavigator, "//BillingWeight/Weight", shipment.TotalWeight);
+            shipment.BilledWeight = billedWeight;
+            if (shipment.BilledWeight > shipment.TotalWeight)
+            {
+                shipment.BilledType = (int) BilledType.DimensionalWeight;
+            }
+            else
+            {
+                shipment.BilledType = (int)BilledType.ActualWeight; 
             }
 
             // Get all the packages for the shipment

@@ -1319,7 +1319,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "Status", "Status", false, (int)SqlDbType.SmallInt, 0, 0, 5, false, "", null, typeof(System.Int16), 3 );
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "InitialCalculation", "InitialCalculation", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "UpdateCalculation", "UpdateCalculation", false, (int)SqlDbType.NVarChar, 2147483647, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "FilterNodeContentEntity", "ColumnMask", "ColumnMask", false, (int)SqlDbType.VarBinary, 75, 0, 0, false, "", null, typeof(System.Byte[]), 6 );
+			base.AddElementFieldMapping( "FilterNodeContentEntity", "ColumnMask", "ColumnMask", false, (int)SqlDbType.VarBinary, 100, 0, 0, false, "", null, typeof(System.Byte[]), 6 );
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "JoinMask", "JoinMask", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "Cost", "Cost", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 8 );
 			base.AddElementFieldMapping( "FilterNodeContentEntity", "Count", "Count", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
@@ -2174,7 +2174,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipmentEntity's mappings</summary>
 		private void InitShipmentEntityMappings()
 		{
-			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 64 );
+			base.AddElementMapping( "ShipmentEntity", "ShipWorksLocal", @"dbo", "Shipment", 66 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "ShipmentEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
@@ -2239,6 +2239,8 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseChangeSets", "ShipSenseChangeSets", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 61 );
 			base.AddElementFieldMapping( "ShipmentEntity", "ShipSenseEntry", "ShipSenseEntry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 62 );
 			base.AddElementFieldMapping( "ShipmentEntity", "OnlineShipmentID", "OnlineShipmentID", false, (int)SqlDbType.VarChar, 128, 0, 0, false, "", null, typeof(System.String), 63 );
+			base.AddElementFieldMapping( "ShipmentEntity", "BilledType", "BilledType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 64 );
+			base.AddElementFieldMapping( "ShipmentEntity", "BilledWeight", "BilledWeight", false, (int)SqlDbType.Float, 0, 0, 38, false, "", null, typeof(System.Double), 65 );
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's mappings</summary>
 		private void InitShipmentCustomsItemEntityMappings()

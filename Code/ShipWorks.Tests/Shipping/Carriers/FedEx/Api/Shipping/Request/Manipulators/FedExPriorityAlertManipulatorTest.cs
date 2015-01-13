@@ -50,8 +50,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             };
 
             // Set the quantity of FedEx packages of the shipment entity equal to that in the native request for the happy path
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() {PriorityAlertEnhancementType = (int) FedExPriorityAlertEnhancementType.None});
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() {PriorityAlertEnhancementType = (int) FedExPriorityAlertEnhancementType.None});
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
             
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject = new FedExPriorityAlertManipulator();
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             // Setup only includes clearing out the package list and add one with none as enhancment type
             shipmentEntity.FedEx.Packages.Clear();
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             testObject.Manipulate(carrierRequest.Object);
 
@@ -172,7 +172,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 {
                     PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.PriorityAlertPlus,
                     PriorityAlertDetailContent = "Some Content",
-                    PriorityAlert = true
+                    PriorityAlert = true,
+                    DimsHeight = 2, 
+                    DimsWidth = 2, 
+                    DimsLength = 2
                 });
 
             testObject.Manipulate(carrierRequest.Object);
@@ -191,7 +194,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     {
                         PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.PriorityAlertPlus,
                         PriorityAlertDetailContent = "Some Content",
-                        PriorityAlert = true
+                        PriorityAlert = true,
+                        DimsHeight = 2, 
+                        DimsWidth = 2, 
+                        DimsLength = 2
                     }
                 );
 
@@ -211,7 +217,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     {
                         PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.PriorityAlertPlus,
                         PriorityAlertDetailContent = "Some Content",
-                        PriorityAlert = true
+                        PriorityAlert = true,
+                        DimsHeight = 2,
+                        DimsWidth = 2,
+                        DimsLength = 2
                     }
                 );
             
@@ -231,7 +240,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     {
                         PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None,
                         PriorityAlertDetailContent = "Some Content",
-                        PriorityAlert = true
+                        PriorityAlert = true,
+                        DimsHeight = 2,
+                        DimsWidth = 2,
+                        DimsLength = 2
                     }
                 );
 
@@ -251,7 +263,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     {
                         PriorityAlertEnhancementType = (int)FedExPriorityAlertEnhancementType.None,
                         PriorityAlertDetailContent = "Some Content",
-                        PriorityAlert = true
+                        PriorityAlert = true,
+                        DimsHeight = 2,
+                        DimsWidth = 2,
+                        DimsLength = 2
                     }
                 );
 
