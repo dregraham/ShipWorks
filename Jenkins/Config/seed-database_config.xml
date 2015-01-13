@@ -25,7 +25,7 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
-      <command>rake &quot;db:populate[3.10.0.4,INTJENKINS\\JENKINS,ShipWorks_SeedData, $SEED_DATA_FILEPATH]&quot;</command>
+      <command>rake &quot;db:populate[3.10.4.3,INTDEV1201\\SqlExpress,ShipWorks_SeedData, $SEED_DATA_FILEPATH]&quot;</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

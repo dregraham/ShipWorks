@@ -3460,6 +3460,8 @@ namespace ShipWorks.Data.Model
 		IsFolder,
 		///<summary>Definition. </summary>
 		Definition,
+		///<summary>State. </summary>
+		State,
 		/// <summary></summary>
 		AmountOfFields
 	}

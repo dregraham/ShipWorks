@@ -117,6 +117,7 @@ namespace ShipWorks.Filters
             return false;
         }
 
+        /// <summary>
         /// Indicates if the given filter is a uneditable "My Filters"
         /// </summary>
         public static bool IsMyFiltersRoot(FilterNodeEntity node)
@@ -193,6 +194,7 @@ namespace ShipWorks.Filters
             filter.Name = myFiltersName;
             filter.FilterTarget = (int) target;
             filter.IsFolder = true;
+            filter.State = (int) FilterState.Enabled;
 
             FilterSequenceEntity sequence = new FilterSequenceEntity();
             sequence.Parent = null;
@@ -214,8 +216,8 @@ namespace ShipWorks.Filters
             node.FilterSequence = sequence;
             node.FilterNodeContent = content;
             node.Created = DateTime.UtcNow;
-            node.Purpose = (int) FilterNodePurpose.Standard;
-
+            node.Purpose = (int)FilterNodePurpose.Standard;
+            
             FilterLayoutEntity layout = new FilterLayoutEntity();
             layout.User = user;
             layout.FilterTarget = (int) target;

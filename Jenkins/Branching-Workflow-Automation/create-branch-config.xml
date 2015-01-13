@@ -57,7 +57,7 @@ FEATURE_NAME=&quot;fedex-recert&quot;
 echo Feature name: $FEATURE_NAME
 
 echo Submitting request to create view $FEATURE_NAME&quot;...&quot;
-curl -d &apos;name=&apos;$FEATURE_NAME&apos;&amp;mode=hudson.model.ListView&amp;json={&quot;name&quot;: &quot;&apos;$FEATURE_NAME&apos;&quot;, &quot;mode&quot;: &quot;hudson.model.ListView&quot;}&apos; http://john-pc:8181/createView &gt; /dev/null
+curl -d &apos;name=&apos;$FEATURE_NAME&apos;&amp;mode=hudson.model.ListView&amp;json={&quot;name&quot;: &quot;&apos;$FEATURE_NAME&apos;&quot;, &quot;mode&quot;: &quot;hudson.model.ListView&quot;}&apos; http://intdev1201:8080/createView &gt; /dev/null
 echo $FEATURE_NAME view created
 
 for CFG in $(ls ./Jenkins/Config/*_config.xml); do
@@ -67,12 +67,12 @@ for CFG in $(ls ./Jenkins/Config/*_config.xml); do
 	sed -i &apos;s/@@FEATURE_NAME@@/&apos;$FEATURE_NAME&apos;/g&apos; $CFG
 	
 	echo Uploading job configuration for $JOB&quot;...&quot;
-	curl -X POST -H &quot;Content-Type: text/xml&quot; --upload-file $CFG http://john-pc:8181/createItem?name=$JOB &gt; /dev/null
+	curl -X POST -H &quot;Content-Type: text/xml&quot; --upload-file $CFG http://intdev1201:8080/createItem?name=$JOB &gt; /dev/null
 	echo $JOB configuration uploaded
 	
     # Add Job to View
 	echo Adding $JOB to $FEATURE_NAME view...
-    curl -d &apos;&apos; http://john-pc:8181/view/$FEATURE_NAME/addJobToView?name=$JOB
+    curl -d &apos;&apos; http://intdev1201:8080/view/$FEATURE_NAME/addJobToView?name=$JOB
 	echo $JOB added to $FEATURE_NAME view
 done
 

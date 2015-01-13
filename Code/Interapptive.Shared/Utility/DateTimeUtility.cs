@@ -52,5 +52,16 @@ namespace Interapptive.Shared.Utility
                 return TimeZoneInfo.ConvertTimeToUtc(sourceDateTime.AddHours(2), timeZoneInfo);
             }
         }
+
+        /// <summary>
+        /// Determines if a date is a business day
+        /// </summary>
+        public static bool IsBusinessDay(this DateTime value)
+        {
+            if (value.DayOfWeek == DayOfWeek.Sunday) return false;
+            if (value.DayOfWeek == DayOfWeek.Saturday) return false;
+
+            return true;
+        }
     }
 }

@@ -186,11 +186,58 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Gets whether any of the rules use disabled filters
+        /// </summary>
+        public virtual bool AreAnyPrintRuleFiltersDisabled
+        {
+            get
+            {
+                return printOutputControl.AreAnyRuleFiltersDisabled;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there [are any ship rule filters changed].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if there [are any ship rule filters changed]; otherwise, <c>false</c>.
+        /// </value>
+        public bool AreAnyPrintRuleFiltersChanged
+        {
+            get { return printOutputControl.AreAnyRuleFiltersChanged; }
+        }
+
+        /// <summary>
         /// Return all the template id's that the user has chosen to be used as templaets to print with
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith
         {
             get { return ((IPrintWithTemplates) printOutputControl).TemplatesToPrintWith; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there [are any ship rule filters disabled].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if there [are any ship rule filters disabled]; otherwise, <c>false</c>.
+        /// </value>
+        public bool AreAnyShipRuleFiltersDisabled
+        {
+            get
+            {
+                return defaultsControl.AreAnyRuleFiltersDisabled;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there [are any ship rule filters changed].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if there [are any ship rule filters changed]; otherwise, <c>false</c>.
+        /// </value>
+        public bool AreAnyShipRuleFiltersChanged
+        {
+            get { return defaultsControl.AreAnyRuleFiltersChanged; }
         }
 
         /// <summary>

@@ -1063,6 +1063,7 @@ namespace ShipWorks
             this.filterTree.Name = "filterTree";
             this.filterTree.Size = new System.Drawing.Size(212, 229);
             this.filterTree.TabIndex = 0;
+            this.filterTree.HideDisabledFilters = true;
             this.filterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
             // 
             // contextMenuFilterTree

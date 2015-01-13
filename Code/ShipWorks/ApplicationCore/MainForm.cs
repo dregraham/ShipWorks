@@ -658,7 +658,7 @@ namespace ShipWorks
 
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
-            NudgeManager.ShowNudge(this, NudgeManager.Nudges.FirstOrDefault(n => n.NudgeType == NudgeType.ShipWorksUpgrade));
+            NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ShipWorksUpgrade));
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
@@ -2112,7 +2112,7 @@ namespace ShipWorks
 
             if (result == FilterEditingResult.OK)
             {
-                filterTree.UpdateFilterName(filterTree.SelectedFilterNode.Filter);
+                filterTree.UpdateFilter(filterTree.SelectedFilterNode.Filter);
             }
         }
 
