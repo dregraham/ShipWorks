@@ -854,7 +854,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             catch (InvalidPackageDimensionsException ex)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(this, ex.Message));
+                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(this, ex.Message));
                 return errorRates;
             }
             finally

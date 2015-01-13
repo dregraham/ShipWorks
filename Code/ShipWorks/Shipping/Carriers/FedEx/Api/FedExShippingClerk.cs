@@ -583,7 +583,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             catch (InvalidPackageDimensionsException ex)
             {
                 RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
+                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
                 return errorRates;
             }
             catch (Exception ex)
