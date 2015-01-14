@@ -234,7 +234,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             UpdatePayPal(order, orderType);
 
             // Charges
-            UpdateCharges(order, orderType);
+            if (!order.CombinedLocally)
+            {
+                UpdateCharges(order, orderType);                
+            }
 
             // Notes
             UpdateNotes(order, orderType);
@@ -250,7 +253,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Need to 
             MergeOrderItemsFromDb(order);
-            MergeChargesFromDb(order);
 
             // Make totals adjustments
             double amount = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
@@ -291,35 +293,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 .Where(fromEbay => orderLinesFromDb.All(fromDb => fromDb.OrderItemID != fromEbay.OrderItemID)) // select new items from ebay
                 .ToList()
                 .ForEach(fromEbay => order.OrderItems.Add(fromEbay)); // add them to the database
-        }
-
-        /// <summary>
-        /// Merges the charges from database.
-        /// </summary>
-        private static void MergeChargesFromDb(OrderEntity order)
-        {
-            List<OrderChargeEntity> chargesFromEbay = order.OrderCharges.ToList();
-            order.OrderCharges.Clear();
-
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(order.OrderCharges, new RelationPredicateBucket(OrderChargeFields.OrderID == order.OrderID));
-            }
-
-            EntityCollection<OrderChargeEntity> chargesFromDb = order.OrderCharges;
-
-            for (int index = 0; index < chargesFromDb.Count; index++)
-            {
-                OrderChargeEntity chargeFromDb = chargesFromDb[index];
-                OrderChargeEntity updatedLineFromEbay =
-                    chargesFromEbay.SingleOrDefault(line => line.OrderChargeID == chargeFromDb.OrderChargeID);
-
-                // Replace the order item from DB with potentially updated Ebay line.
-                if (updatedLineFromEbay != null)
-                {
-                    order.OrderCharges[index] = updatedLineFromEbay;
-                }
-            }
         }
 
         /// <summary>
