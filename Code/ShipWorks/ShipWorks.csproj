@@ -2320,7 +2320,6 @@
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
     <Compile Include="Stores\Platforms\CloudConversion\CloudConversionStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorMarketplaceStoreNameCondition.cs" />
-    <Compile Include="Stores\Platforms\CsCart\CsCartStoreType.cs" />
     <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
@@ -8381,7 +8380,6 @@
     <None Include="Shipping\Carriers\UPS\OpenAccount\Wsdl\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Stores\Platforms\CsCart\shipworks3.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
@@ -10969,7 +10967,6 @@
     <None Include="Resources\livesite.png" />
     <None Include="Resources\fortune3.png" />
     <None Include="Resources\cloudconversion.png" />
-    <None Include="Resources\cscart.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
