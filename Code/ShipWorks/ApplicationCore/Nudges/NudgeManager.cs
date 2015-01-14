@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
@@ -14,6 +15,7 @@ namespace ShipWorks.ApplicationCore.Nudges
     public static class NudgeManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof (NudgeManager));
+        private static readonly object lockObject = new object();
         private static List<Nudge> nudges = new List<Nudge>();
 
         /// <summary>
@@ -38,8 +40,12 @@ namespace ShipWorks.ApplicationCore.Nudges
             try
             {
                 ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                nudges = tangoWebClient.GetNudges(stores).ToList();
 
+                lock (lockObject)
+                {
+                    nudges = tangoWebClient.GetNudges(stores).ToList();
+                }
+                
                 log.InfoFormat("Found {0} nudges", nudges.Count);
             }
             catch (TangoException exception)
@@ -54,7 +60,10 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         public static Nudge GetFirstNudgeOfType(NudgeType type)
         {
-            return nudges.FirstOrDefault(x => x.NudgeType == type);
+            lock (lockObject)
+            {
+                return nudges.FirstOrDefault(x => x.NudgeType == type);
+            }
         }
 
         /// <summary>
@@ -66,11 +75,19 @@ namespace ShipWorks.ApplicationCore.Nudges
         {
             if (nudge != null && nudge.NudgeOptions.Any())
             {
-                // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager as far as SRP goes...
                 log.InfoFormat("Showing nudge {0}", nudge.NudgeID);
                 using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
                 {
                     nudgeDialog.ShowDialog(owner);
+                }
+
+                // Remove the nudge from the list so that it doesn't continue to nudge the user.
+                lock (lockObject)
+                {
+                    if (nudges.Contains(nudge))
+                    {
+                        nudges.Remove(nudge);
+                    }
                 }
             }
         }
