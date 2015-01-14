@@ -297,8 +297,9 @@ namespace ShipWorks.AddressValidation
                 addressValidator.Validate(selectedAddress, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
-                    if (selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
-                        selectedAddress.POBox != (int)ValidationDetailStatusType.Unknown)
+                    if ((selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
+                        selectedAddress.POBox != (int)ValidationDetailStatusType.Unknown) &&
+                        !selectedAddress.IsNew)
                     {
                         using (SqlAdapter sqlAdapter = SqlAdapter.Default)
                         {
