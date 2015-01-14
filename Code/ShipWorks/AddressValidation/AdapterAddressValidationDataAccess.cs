@@ -1,6 +1,12 @@
+using System;
+using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Data.Utility;
 
 namespace ShipWorks.AddressValidation
 {
@@ -20,14 +26,19 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Allow shipments to be queried
+        /// Get validated addresses for the given consuemer and prefix
         /// </summary>
-        public ILinqCollections LinqCollections
+        public IEnumerable<ValidatedAddressEntity> GetValidatedAddressesByConsumerAndPrefix(long consumerId, string prefix)
         {
-            get
-            {
-                return new LLBLGenLinqCollections(new LinqMetaData(adapter));
-            }
+            return adapter.GetCollectionFromPredicate<ValidatedAddressEntity>(new AddressSuggestionsForConsumerPredicate(consumerId, prefix));
+        }
+
+        /// <summary>
+        /// Get unprocessed shipments for the given order
+        /// </summary>
+        public IEnumerable<ShipmentEntity> GetUnprocessedShipmentsForOrder(long orderId)
+        {
+            return adapter.GetCollectionFromPredicate<ShipmentEntity>(new UnprocessedShipmentsForOrderPredicate(orderId));
         }
 
         /// <summary>

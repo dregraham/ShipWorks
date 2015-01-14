@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Interapptive.Shared.Business;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -16,7 +15,6 @@ namespace ShipWorks.Tests.AddressValidation
         private AddressAdapter originalAddress;
         private AddressAdapter newAddress;
         private Mock<IAddressValidationDataAccess> dataAccess;
-        private Mock<ILinqCollections> linqCollections;
         private ShipmentEntity shipmentFromOtherOrder;
         private ShipmentEntity shipmentIsProcessed;
         private ShipmentEntity shipmentWithOtherAddress;
@@ -83,37 +81,19 @@ namespace ShipWorks.Tests.AddressValidation
                 ConsumerID = testOrder.OrderID + 1,
                 AddressPrefix = "Ship"
             };
-
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>
-            {
-                shipmentWithOtherAddress,
-                shipmentWithOrderAddress,
-                shipmentFromOtherOrder,
-                shipmentIsProcessed
-            };
-
-            List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>
-            {
-                addressForOtherOrder,
-                addressForOrder
-            };
-
-            linqCollections = new Mock<ILinqCollections>();
-            linqCollections.SetupGet(x => x.Shipment)
-                .Returns(shipments.AsQueryable());
-            linqCollections.SetupGet(x => x.ValidatedAddress)
-                .Returns(validatedAddresses.AsQueryable());
             
             dataAccess = new Mock<IAddressValidationDataAccess>();
-            dataAccess.SetupGet(x => x.LinqCollections)
-                .Returns(linqCollections.Object);
+            dataAccess.Setup(x => x.GetUnprocessedShipmentsForOrder(testOrder.OrderID))
+                .Returns(new List<ShipmentEntity> { shipmentWithOrderAddress });
+            dataAccess.Setup(x => x.GetValidatedAddressesByConsumerAndPrefix(testOrder.OrderID, "Ship"))
+                .Returns(new List<ValidatedAddressEntity> {addressForOrder});
         }
 
         [TestMethod]
         public void PropogateAddressChangesToShipments_DoesNotQueryShipments_WhenAddressHasNotChanged()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, originalAddress);
-            linqCollections.Verify(x => x.Shipment, Times.Never);
+            dataAccess.Verify(x => x.GetUnprocessedShipmentsForOrder(It.IsAny<long>()), Times.Never);
         }
 
         [TestMethod]

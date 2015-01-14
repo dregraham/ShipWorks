@@ -1,5 +1,4 @@
-using System;
-using System.Linq;
+using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -13,9 +12,14 @@ namespace ShipWorks.AddressValidation
     public interface IAddressValidationDataAccess
     {
         /// <summary>
-        /// Allow collections to be queried
+        /// Get validated addresses for the given consuemer and prefix
         /// </summary>
-        ILinqCollections LinqCollections{ get; }
+        IEnumerable<ValidatedAddressEntity> GetValidatedAddressesByConsumerAndPrefix(long consumerId, string prefix);
+
+        /// <summary>
+        /// Get unprocessed shipments for the given order
+        /// </summary>
+        IEnumerable<ShipmentEntity> GetUnprocessedShipmentsForOrder(long orderId);
 
         /// <summary>
         /// Delete an entity from the database

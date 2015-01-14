@@ -81,7 +81,7 @@ namespace ShipWorks.AddressValidation
             }
 
             // Get the shipments we might need to update
-            List<ShipmentEntity> shipments = dataAccess.LinqCollections.Shipment.Where(x => x.OrderID == orderID && !x.Processed).ToList();
+            IEnumerable<ShipmentEntity> shipments = dataAccess.GetUnprocessedShipmentsForOrder(orderID);
 
             foreach (ShipmentEntity shipment in shipments)
             {
@@ -121,7 +121,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static List<ValidatedAddressEntity> GetSuggestedAddresses(IAddressValidationDataAccess dataAccess, long entityId, string prefix)
         {
-            return dataAccess.LinqCollections.ValidatedAddress.Where(x => x.ConsumerID == entityId && x.AddressPrefix == prefix).ToList();
+            return dataAccess.GetValidatedAddressesByConsumerAndPrefix(entityId, prefix).ToList();
         }
 
         /// <summary>
