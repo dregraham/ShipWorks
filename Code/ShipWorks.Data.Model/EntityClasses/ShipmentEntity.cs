@@ -1137,6 +1137,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OnlineShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BilledType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BilledWeight", fieldHashtable);
 		}
 		#endregion
 
@@ -2369,6 +2375,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShipmentFieldIndex.OnlineShipmentID, true); }
 			set	{ SetValue((int)ShipmentFieldIndex.OnlineShipmentID, value); }
+		}
+
+		/// <summary> The BilledType property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BilledType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BilledType
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.BilledType, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.BilledType, value); }
+		}
+
+		/// <summary> The BilledWeight property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BilledWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Double BilledWeight
+		{
+			get { return (System.Double)GetValue((int)ShipmentFieldIndex.BilledWeight, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.BilledWeight, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.

@@ -14,8 +14,6 @@ namespace ShipWorks.Tests.Core
         [TestMethod]
         public void Verify_EnumObfuscation_IsSet_Test()
         {
-            ShipmentTypeCode stc = ShipmentTypeCode.BestRate;
-
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);
             IEnumerable<Type> types = assemblies
                 .SelectMany(t => t.GetTypes())
@@ -267,6 +265,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Users.Security.PermissionScope".ToUpperInvariant(),
                 "ShipWorks.Users.Security.StorePermissionCoverage".ToUpperInvariant(),
                 "ShipWorks.Users.UserSettingsDlg+Section".ToUpperInvariant(),
+                "ShipWorks.Filters.FilterState".ToUpperInvariant(),
             };
     }
 }

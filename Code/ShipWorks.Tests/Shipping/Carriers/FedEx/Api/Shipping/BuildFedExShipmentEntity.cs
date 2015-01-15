@@ -20,8 +20,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping
         {
             EntityCollection<FedExPackageEntity> packages = new EntityCollection<FedExPackageEntity>
             {
-                new FedExPackageEntity(),
-                new FedExPackageEntity()
+                new FedExPackageEntity() {DimsHeight = 2, DimsWidth = 2, DimsLength = 2},
+                new FedExPackageEntity() {DimsHeight = 2, DimsWidth = 2, DimsLength = 2}
             };
 
             Mock<FedExShipmentEntity> mockedFedExShipmentEntity = new Mock<FedExShipmentEntity>();
