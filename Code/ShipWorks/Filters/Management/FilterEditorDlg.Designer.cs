@@ -66,7 +66,7 @@ namespace ShipWorks.Filters.Management
             // 
             // labelFilterName
             // 
-            this.labelFilterName.Location = new System.Drawing.Point(3, 15);
+            this.labelFilterName.Location = new System.Drawing.Point(1, 15);
             this.labelFilterName.Name = "labelFilterName";
             this.labelFilterName.Size = new System.Drawing.Size(75, 13);
             this.labelFilterName.TabIndex = 0;
@@ -122,7 +122,7 @@ namespace ShipWorks.Filters.Management
             this.tabPageGridColumns.Location = new System.Drawing.Point(4, 22);
             this.tabPageGridColumns.Name = "tabPageGridColumns";
             this.tabPageGridColumns.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGridColumns.Size = new System.Drawing.Size(493, 376);
+            this.tabPageGridColumns.Size = new System.Drawing.Size(493, 414);
             this.tabPageGridColumns.TabIndex = 1;
             this.tabPageGridColumns.Text = "Grid Columns";
             this.tabPageGridColumns.UseVisualStyleBackColor = true;
@@ -320,7 +320,7 @@ namespace ShipWorks.Filters.Management
             // labelEnabled
             // 
             this.labelEnabled.AutoSize = true;
-            this.labelEnabled.Location = new System.Drawing.Point(29, 40);
+            this.labelEnabled.Location = new System.Drawing.Point(27, 40);
             this.labelEnabled.Name = "labelEnabled";
             this.labelEnabled.Size = new System.Drawing.Size(49, 13);
             this.labelEnabled.TabIndex = 8;
