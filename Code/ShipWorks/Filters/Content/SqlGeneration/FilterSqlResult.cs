@@ -116,6 +116,14 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         }
 
         /// <summary>
+        /// This is just to get the static constructor to fire so that we can test the bit counts using unit tests.
+        /// </summary>
+        public static void CheckBitCounts()
+        {
+            // This is just to get the static constructor to fire so that we can test the bit counts using unit tests.
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public FilterSqlResult(long filterCountID, string initialSql, string updateSql, ICollection<SqlParameter> parameters, byte[] columnMask, int joinMask)
