@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Insurance
 
             if (shipment.InsurancePolicy == null)
             {
-                messageLabel.Text = "A claim must be submitted through the Shipworks website. Go to ShipWorks.com and click \"My Account.\"";
+                messageLabel.Text = "A claim must be submitted through the ShipWorks website. Go to ShipWorks.com and click \"My Account.\"";
                 messageLabel.Visible = true;
                 return false;
             }

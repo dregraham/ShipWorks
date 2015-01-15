@@ -310,6 +310,7 @@ namespace ShipWorks.Data.Administration
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = true;
                     filter.Definition = null;
+                    filter.State = (int)FilterState.Enabled;
                     adapter.SaveAndRefetch(filter);
 
                     FilterSequenceEntity sequence = new FilterSequenceEntity();
@@ -372,6 +373,7 @@ namespace ShipWorks.Data.Administration
             filter.FilterTarget = (int) definition.FilterTarget;
             filter.IsFolder = false;
             filter.Definition = definition.GetXml();
+            filter.State = (int)FilterState.Enabled;
 
             return filter;
         }
@@ -386,6 +388,7 @@ namespace ShipWorks.Data.Administration
             folder.FilterTarget = (int) target;
             folder.IsFolder = true;
             folder.Definition = null;
+            folder.State = (int)FilterState.Enabled;
 
             return folder;
         }

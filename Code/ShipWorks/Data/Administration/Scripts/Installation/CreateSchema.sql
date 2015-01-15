@@ -946,7 +946,9 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [varchar] (128) NOT NULL
+[OnlineShipmentID] [varchar] (128) NOT NULL,
+[BilledType] [int] NOT NULL,
+[BilledWeight] [float] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1847,7 +1849,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL
@@ -1933,12 +1935,17 @@ CREATE TABLE [dbo].[Filter]
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
-[Definition] [xml] NULL
+[Definition] [xml] NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
+GO
+PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO
@@ -4019,7 +4026,7 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 [ParentID] [bigint] NULL,
 [ObjectType] [int] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
@@ -4470,9 +4477,9 @@ GO
 CREATE TABLE [dbo].[ShippingSettings]
 (
 [ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Activated] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Configured] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Excluded] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultType] [int] NOT NULL,
 [BlankPhoneOption] [int] NOT NULL,
 [BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

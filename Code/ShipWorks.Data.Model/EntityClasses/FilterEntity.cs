@@ -514,6 +514,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Definition", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("State", fieldHashtable);
 		}
 		#endregion
 
@@ -665,6 +668,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FilterFieldIndex.Definition, true); }
 			set	{ SetValue((int)FilterFieldIndex.Definition, value); }
+		}
+
+		/// <summary> The State property of the Entity Filter<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Filter"."State"<br/>
+		/// Table field type characteristics (type, precision, scale, length): TinyInt, 3, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Byte State
+		{
+			get { return (System.Byte)GetValue((int)FilterFieldIndex.State, true); }
+			set	{ SetValue((int)FilterFieldIndex.State, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FilterSequenceEntity' which are related to this entity via a relation of type '1:n'.

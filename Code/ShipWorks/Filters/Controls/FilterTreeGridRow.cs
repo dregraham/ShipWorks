@@ -19,7 +19,9 @@ namespace ShipWorks.Filters.Controls
         static readonly ILog log = LogManager.GetLogger(typeof(FilterTreeGridRow));
 
         FilterNodeEntity filterNode;
-        FilterCount filterCount;        
+        FilterCount filterCount;
+
+        private FilterState? previousFilterState;
 
         /// <summary>
         /// Constructor
@@ -27,10 +29,9 @@ namespace ShipWorks.Filters.Controls
         public FilterTreeGridRow(FilterNodeEntity filterNode)
             : base(filterNode.Filter.Name, FilterHelper.GetFilterImage(filterNode, false))
         {
-            this.filterNode = filterNode;
-            this.filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
+            SetFilter(filterNode);
         }
-
+        
         /// <summary>
         /// The filter node that this row represents
         /// </summary>
@@ -87,6 +88,41 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Updates the style of the row based on the state of the underlying data.
+        /// </summary>
+        public void UpdateStyle()
+        {
+            // We have a previous state, so only toggle the style if the state has changed
+            if (!previousFilterState.HasValue || previousFilterState != (FilterState) filterNode.Filter.State)
+            {
+                ToggleStyle((FilterState) filterNode.Filter.State);
+                previousFilterState = (FilterState) filterNode.Filter.State;
+            }
+        }
+
+        /// <summary>
+        /// Toggles the style of the cells based on the state of the filter: uses
+        /// the disabled font if the filter is disabled; otherwise the "normal" 
+        /// font/color.
+        /// </summary>
+        /// <param name="filterState">State of the filter.</param>
+        private void ToggleStyle(FilterState filterState)
+        {
+            bool isFilterDisabled = filterState == (byte)FilterState.Disabled;
+
+            // We need to use a new disabled font each time we toggle since it's disposable and the
+            // FilterTreeGridRow is not
+            using (DisabledFilterFont disabledFont = new DisabledFilterFont(Font))
+            {
+                foreach (GridCell cell in Cells)
+                {
+                    cell.Font = isFilterDisabled ? disabledFont.Font : Font;
+                    cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
+                }   
+            }
+        }
+
+        /// <summary>
         /// Update the filter count
         /// </summary>
         public void UpdateFilterCount()
@@ -97,8 +133,27 @@ namespace ShipWorks.Filters.Controls
                 filterCount = count;
                 RedrawNeeded();
             }
-                        
+
             UpdateLayoutForSpeed();
+        }
+
+        /// <summary>
+        /// Update the filter node associated with this grid row
+        /// </summary>
+        public void UpdateFilterNode(FilterNodeEntity filterNodeEntity)
+        {
+            SetFilter(filterNodeEntity);
+            UpdateFilterCount();
+            UpdateStyle();
+        }
+
+        /// <summary>
+        /// Set the specified filter
+        /// </summary>
+        private void SetFilter(FilterNodeEntity filterNodeEntity)
+        {
+            filterNode = filterNodeEntity;
+            filterCount = FilterContentManager.GetCount(filterNode.FilterNodeID);
         }
 
         /// <summary>
@@ -115,8 +170,6 @@ namespace ShipWorks.Filters.Controls
 
             foreach (GridCell cell in Cells)
             {
-
-
                 // A null reference error was being thrown.  Discoverred by Crash Reports.
                 // Let's figure out what is null....
                 if (FilterNode == null)

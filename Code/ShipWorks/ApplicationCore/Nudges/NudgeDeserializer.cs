@@ -22,6 +22,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <Nudges>
         ///     <Nudge>
         ///         <NudgeID>12345</NudgeID>
+        ///         <Name>The name</Name>
         ///         <NudgeType>0</NudgeType>
         ///         <ContentUri>https://www.shipworks.com/blah</ContentUri>
         ///         <ContentDimensions>
@@ -59,13 +60,14 @@ namespace ShipWorks.ApplicationCore.Nudges
             // Grab the nudge ID and the type of nudge from the XML
             int nudgeID = GetNudgeID(nudgeElement);
             NudgeType nudgeType = GetNudgeType(nudgeElement);
+            string nudgeName = GetNudgeName(nudgeElement);
 
             // Grab the content data
             Uri contentUri = GetContentUri(nudgeElement);
             Size contentDimensions = ContentSize(nudgeElement);
 
             // We now have everything that's needed for our nudge
-            Nudge nudge = new Nudge(nudgeID, nudgeType, contentUri, contentDimensions);
+            Nudge nudge = new Nudge(nudgeID, nudgeName, nudgeType, contentUri, contentDimensions);
 
             // Build up the list of nudge options defined in the XML and add them to the nudge
             IEnumerable<XElement> optionElements = nudgeElement.Descendants("Option");
@@ -80,7 +82,7 @@ namespace ShipWorks.ApplicationCore.Nudges
 
             return nudge;
         }
-        
+
         /// <summary>
         /// Gets the nudge ID value from the XElement provided.
         /// </summary>
@@ -96,6 +98,27 @@ namespace ShipWorks.ApplicationCore.Nudges
             }
 
             return nudgeID;
+        }
+
+        /// <summary>
+        /// Gets the name of the nudge from the XElement provided.
+        /// </summary>
+        private static string GetNudgeName(XElement nudgeElement)
+        {
+            // Allow empty strings to be used for the name
+            string name = string.Empty;
+
+            
+            IEnumerable<XElement> elements = nudgeElement.Descendants("Name");
+            List<XElement> xElements = elements as List<XElement> ?? elements.ToList();
+
+            if (xElements.Any() && !string.IsNullOrWhiteSpace(xElements.First().Value))
+            {
+                // Use the text in the "Name" node if provided
+                name = xElements.First().Value.Trim();
+            }
+
+            return name;
         }
 
         /// <summary>

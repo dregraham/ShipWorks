@@ -2112,7 +2112,7 @@ namespace ShipWorks
 
             if (result == FilterEditingResult.OK)
             {
-                filterTree.UpdateFilterName(filterTree.SelectedFilterNode.Filter);
+                filterTree.UpdateFilter(filterTree.SelectedFilterNode.Filter);
             }
         }
 

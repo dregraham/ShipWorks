@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Data.Model;
 using System.Diagnostics;
+using ShipWorks.Filters.Controls;
 
 namespace ShipWorks.Actions.Tasks
 {
@@ -25,12 +26,16 @@ namespace ShipWorks.Actions.Tasks
         /// </summary>
         public event EventHandler FlowClicked;
 
+        private readonly FilterControlDisplayManager filterDisplayManager;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public ActionTaskFlowInfoControl()
         {
             InitializeComponent();
+
+            filterDisplayManager = new FilterControlDisplayManager(filterName, filterCount);
         }
 
         /// <summary>
@@ -141,8 +146,10 @@ namespace ShipWorks.Actions.Tasks
 
                     filterName.Visible = true;
                     filterName.Text = filterNode.Filter.Name;
-
+                    
                     filterCount.Left = filterName.Right - 3;
+
+                    filterDisplayManager.ToggleDisplay(filterNode.Filter.State == (byte)FilterState.Enabled);
 
                     FilterCount count = FilterContentManager.GetCount(filterNode.FilterNodeID);
                     if (count != null)

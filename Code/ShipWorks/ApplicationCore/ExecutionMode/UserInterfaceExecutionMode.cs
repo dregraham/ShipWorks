@@ -166,8 +166,12 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         private static void RefreshNudgeThread()
         {
-            IEnumerable<StoreEntity> stores = StoreManager.GetAllStores();
-            NudgeManager.Refresh(stores);
+            if (UserSession.IsLoggedOn)
+            {
+                // The user has to be logged on in order to get the stores
+                IEnumerable<StoreEntity> stores = StoreManager.GetAllStores();
+                NudgeManager.Refresh(stores);
+            }
         }
 
         /// <summary>

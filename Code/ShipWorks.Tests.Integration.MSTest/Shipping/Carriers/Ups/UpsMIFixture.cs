@@ -248,6 +248,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
                 shipment.ContentWeight = package.Weight;
                 shipment.TotalWeight = package.Weight;
 
+                shipment.BilledWeight = shipment.TotalWeight;
+                shipment.BilledType = (int)BilledType.Unknown;
+
                 if (shipment.ShipCountryCode != "US")
                 {
                     ShipmentCustomsItemEntity shipmentCustomsItem = new ShipmentCustomsItemEntity();
@@ -299,9 +302,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
             package.TrackingNumber = string.Empty;
             package.UspsTrackingNumber = string.Empty;
 
-            package.DimsLength = 0;
-            package.DimsHeight = 0;
-            package.DimsWidth = 0;
+            package.DimsLength = 2;
+            package.DimsHeight = 1;
+            package.DimsWidth = 1;
             package.DimsWeight = 0;
             package.DimsAddWeight = false;
 

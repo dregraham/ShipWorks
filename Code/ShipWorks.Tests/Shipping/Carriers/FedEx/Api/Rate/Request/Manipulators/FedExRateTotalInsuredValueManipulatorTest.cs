@@ -32,9 +32,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             };
 
             EntityCollection<FedExPackageEntity> packages = new EntityCollection<FedExPackageEntity>();
-            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29 });
-            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29 });
-            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29 });
+            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            packages.Add(new FedExPackageEntity() { DeclaredValue = (decimal)100.29, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             // Create our default shipment entity and initialize the properties our test object will be accessing
             shipmentEntity = new ShipmentEntity()
@@ -106,9 +106,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         public void Manipulate_SetsAmount_Test()
         {
             // // Add some packages for the sum test
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m });
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.02m });
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.03m });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.02m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.03m, DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             const decimal expectedTotal = 300.06m;
 

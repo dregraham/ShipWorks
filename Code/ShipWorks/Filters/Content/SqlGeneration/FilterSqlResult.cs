@@ -114,7 +114,7 @@ namespace ShipWorks.Filters.Content.SqlGeneration
         {
 
         }
-
+        
         /// <summary>
         /// Constructor
         /// </summary>

@@ -60,7 +60,6 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             Pages[Pages.Count - 1].SteppingInto += new EventHandler<WizardSteppingIntoEventArgs>(OnSteppingIntoFinish);
         }
 
-
         /// <summary>
         /// Stepping next from the settings page
         /// </summary>
@@ -79,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.EquaShip
             account.Username = username.Text.Trim();
             account.Password = SecureText.Encrypt(password.Text.Trim(), account.Username);
 
-            personControl.SaveToEntity();
+            personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
             try
             {

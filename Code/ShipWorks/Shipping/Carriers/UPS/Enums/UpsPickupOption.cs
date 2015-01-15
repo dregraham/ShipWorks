@@ -10,24 +10,24 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsPickupOption
     {
+        [Description("No Scheduled Pickup")]
+        [ApiValue("08")]
+        NoScheduledPickup = 0,
+
         [Description("Regular Daily Pickup")]
         [ApiValue("01")]
-        RegularDailyPickup = 0,
+        RegularDailyPickup = 1,
 
         [Description("Daily-On Route")]
         [ApiValue("07")]
-        DailyOnRoute = 1,
+        DailyOnRoute = 2,
 
         [Description("Day Specific Pickup")]
         [ApiValue("99")]
-        DaySpecificPickup = 2,
+        DaySpecificPickup = 3,
 
         [Description("SMART Pickup")]
         [ApiValue("02")]
-        SmartPickup = 3,
-
-        [Description("No Scheduled Pickup")]
-        [ApiValue("08")]
-        NoScheduledPickup = 4
+        SmartPickup = 4
     }
 }
