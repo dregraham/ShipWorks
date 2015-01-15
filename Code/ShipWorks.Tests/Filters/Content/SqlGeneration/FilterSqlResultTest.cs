@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Filters.Content.SqlGeneration
         [TestMethod]
         public void CheckBitCounts()
         {
-            FilterSqlResult.CheckBitCounts();
+            typeof(FilterSqlResult).TypeInitializer.Invoke(null, null); 
         }
     }
 }
