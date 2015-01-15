@@ -846,7 +846,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             shipment.TrackingNumber = tracking;
             shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
             shipment.Postal.Stamps.StampsTransactionID = stampsGuid;
-            shipment.BilledWeight = rate.EffectiveWeightInOunces/ 16D;
+            shipment.BilledWeight = rate.EffectiveWeightInOunces / 16D;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?)thermalType;
