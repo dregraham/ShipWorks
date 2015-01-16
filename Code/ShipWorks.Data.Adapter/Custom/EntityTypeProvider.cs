@@ -146,9 +146,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "GenericModuleStoreEntity": return EntityType.GenericModuleStoreEntity;
 				case "FtpAccountEntity": return EntityType.FtpAccountEntity;
 				case "MivaOrderItemAttributeEntity": return EntityType.MivaOrderItemAttributeEntity;
-				case "EquaShipProfileEntity": return EntityType.EquaShipProfileEntity;
-				case "EquaShipAccountEntity": return EntityType.EquaShipAccountEntity;
-				case "EquaShipShipmentEntity": return EntityType.EquaShipShipmentEntity;
 				case "NeweggStoreEntity": return EntityType.NeweggStoreEntity;
 				case "NeweggOrderItemEntity": return EntityType.NeweggOrderItemEntity;
 				case "NeweggOrderEntity": return EntityType.NeweggOrderEntity;

@@ -158,15 +158,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.EndiciaShipmentEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EndiciaShipmentEntity");
 					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipAccountEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EquaShipAccountEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipProfileEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EquaShipProfileEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipShipmentEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EquaShipShipmentEntity");
-					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EtsyOrderEntity");
 					break;

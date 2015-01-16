@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.ShipmentCustomsItemEntityUsingShipmentID);
 			toReturn.Add(this.BestRateShipmentEntityUsingShipmentID);
-			toReturn.Add(this.EquaShipShipmentEntityUsingShipmentID);
 			toReturn.Add(this.FedExShipmentEntityUsingShipmentID);
 			toReturn.Add(this.InsurancePolicyEntityUsingShipmentID);
 			toReturn.Add(this.IParcelShipmentEntityUsingShipmentID);
@@ -80,25 +79,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("BestRateShipmentEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between ShipmentEntity and EquaShipShipmentEntity over the 1:1 relation they have, using the relation between the fields:
-		/// Shipment.ShipmentID - EquaShipShipment.ShipmentID
-		/// </summary>
-		public virtual IEntityRelation EquaShipShipmentEntityUsingShipmentID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "EquaShip", true);
-
-				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, EquaShipShipmentFields.ShipmentID);
-
-
-
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EquaShipShipmentEntity", false);
 				return relation;
 			}
 		}

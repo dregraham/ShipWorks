@@ -187,15 +187,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EndiciaShipmentEntity:
 					toReturn = this.EndiciaShipment;
 					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipAccountEntity:
-					toReturn = this.EquaShipAccount;
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipProfileEntity:
-					toReturn = this.EquaShipProfile;
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipShipmentEntity:
-					toReturn = this.EquaShipShipment;
-					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					toReturn = this.EtsyOrder;
 					break;
@@ -810,24 +801,6 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<EndiciaShipmentEntity> EndiciaShipment
 		{
 			get { return new DataSource2<EndiciaShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting EquaShipAccountEntity instances in the database.</summary>
-		public DataSource2<EquaShipAccountEntity> EquaShipAccount
-		{
-			get { return new DataSource2<EquaShipAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting EquaShipProfileEntity instances in the database.</summary>
-		public DataSource2<EquaShipProfileEntity> EquaShipProfile
-		{
-			get { return new DataSource2<EquaShipProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting EquaShipShipmentEntity instances in the database.</summary>
-		public DataSource2<EquaShipShipmentEntity> EquaShipShipment
-		{
-			get { return new DataSource2<EquaShipShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting EtsyOrderEntity instances in the database.</summary>

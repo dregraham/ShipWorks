@@ -84,12 +84,6 @@ public partial class Triggers
         AuditService.AuditExecutingTrigger("UpsShipment");
     }
 
-    [SqlTrigger(Target = "EquaShipShipment", Event = "FOR INSERT, UPDATE, DELETE")]
-    public static void EquashipShipmentAuditTrigger()
-    {
-        AuditService.AuditExecutingTrigger("EquaShipShipment");
-    }
-
     [SqlTrigger(Target = "iParcelShipment", Event = "FOR INSERT, UPDATE, DELETE")]
     public static void iParcelShipmentAuditTrigger()
     {

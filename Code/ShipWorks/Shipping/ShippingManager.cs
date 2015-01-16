@@ -640,10 +640,6 @@ namespace ShipWorks.Shipping
             {
                 return "Other";
             }
-            else if (shipmentTypeCode == ShipmentTypeCode.EquaShip)
-            {
-                return "EquaShip";
-            }
             else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
             {
                 return "OnTrac";
@@ -1281,7 +1277,6 @@ namespace ShipWorks.Shipping
             ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
             ClearOtherShipmentData(adapter, shipment, typeof(IParcelShipmentEntity), IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
             ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
-            ClearOtherShipmentData(adapter, shipment, typeof(EquaShipShipmentEntity), EquaShipShipmentFields.ShipmentID, ShipmentTypeCode.EquaShip);
             ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
         }
 

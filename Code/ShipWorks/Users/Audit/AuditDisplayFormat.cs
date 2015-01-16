@@ -22,8 +22,6 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers.EquaShip.Enums;
-using ShipWorks.Stores.Platforms.Etsy.Enums;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -69,8 +67,6 @@ namespace ShipWorks.Users.Audit
             enumMapping[115] = typeof(UpsServiceType);
             enumMapping[116] = typeof(UpsDeliveryConfirmationType);
             enumMapping[117] = typeof(UpsPayorType);
-            enumMapping[118] = typeof(EquaShipServiceType);
-            enumMapping[119] = typeof(EquaShipPackageType);
             enumMapping[121] = typeof(ShopifyPaymentStatus);
             enumMapping[122] = typeof(ShopifyFulfillmentStatus);
             enumMapping[123] = typeof(FedExDropoffType);

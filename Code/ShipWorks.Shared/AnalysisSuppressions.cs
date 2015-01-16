@@ -16,7 +16,6 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1016:MarkAssembliesWithAssemblyVersion")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.Object)", Scope = "member", Target = "ShipWorks.Stores.StoreTypeIdentity.#GetReflectedFieldInfo(ShipWorks.Stores.StoreTypeCode)")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA2210:AssembliesShouldHaveValidStrongNames")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Equa", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#EquaShip")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Shopify", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Shopify")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Etsy", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Etsy")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "DotCom", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#BuyDotCom")]

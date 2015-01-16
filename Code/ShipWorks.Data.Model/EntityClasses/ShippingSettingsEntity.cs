@@ -663,7 +663,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The InternalActivated property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Activated"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String InternalActivated
 		{
@@ -674,7 +674,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The InternalConfigured property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Configured"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String InternalConfigured
 		{
@@ -685,7 +685,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The InternalExcluded property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Excluded"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 45<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String InternalExcluded
 		{
