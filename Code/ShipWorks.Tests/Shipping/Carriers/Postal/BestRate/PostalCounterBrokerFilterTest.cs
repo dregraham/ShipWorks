@@ -46,39 +46,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
         }
 
         [TestMethod]
-        public void Filter_WithMultipleEndiciaAndStampsBrokers_ReturnsFirstStamps_WhenNoUspsBroker_Test()
-        {
-            var testBroker1 = new StampsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-            var testBroker2 = new EndiciaCounterRatesBroker(new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>().Object);
-            var testBroker3 = new StampsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-            var testBroker4 = new EndiciaCounterRatesBroker(new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>().Object);
-            var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2, testBroker3, testBroker4 };
-
-            var testObject = new PostalCounterBrokerFilter();
-            var results = testObject.Filter(brokers);
-
-            Assert.AreEqual(testBroker1, results.Single());
-        }
-
-        [TestMethod]
-        public void Filter_WithMultipleEndiciaAndStampsAndUspsBrokers_ReturnsFirstUspsBroker_Test()
-        {
-            var testBroker1 = new StampsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-            var testBroker2 = new EndiciaCounterRatesBroker(new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>().Object);
-            var testBroker3 = new StampsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-            var testBroker4 = new EndiciaCounterRatesBroker(new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>().Object);
-            var testBroker5 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-            var testBroker6 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<StampsAccountEntity>>().Object);
-
-            var brokers = new List<IBestRateShippingBroker> { testBroker1, testBroker2, testBroker3, testBroker4, testBroker5, testBroker6 };
-
-            var testObject = new PostalCounterBrokerFilter();
-            var results = testObject.Filter(brokers);
-
-            Assert.AreEqual(testBroker5, results.Single());
-        }
-
-        [TestMethod]
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList_Test()
         {
             var testBroker1 = new UpsBestRateBroker();
