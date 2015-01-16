@@ -446,9 +446,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // We don't have any Endicia accounts, so let the user know they need an account.
-            EndiciaException ex = new EndiciaException("An account is required to view Endicia rates.");
-            RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, new EndiciaException("An account is required to view Endicia rates."));
-            InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, ex.Message, ex);
+            string shipmentTypeName = EnumHelper.GetDescription(ShipmentTypeCode);
+            EndiciaException endiciaException = new EndiciaException(string.Format("An account is required to view {0} rates.", shipmentTypeName));
+            RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, endiciaException);
+            InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, endiciaException.Message, endiciaException);
 
             throw shippingException;
         }
