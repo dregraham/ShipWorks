@@ -6,7 +6,6 @@ using Interapptive.Shared.Utility;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Editing;
@@ -92,34 +91,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            //ICarrierAccountRepository<EndiciaAccountEntity> originalAccountRepository = AccountRepository;
-            //ICertificateInspector originalCertificateInspector = CertificateInspector;
-
-            //try
-            //{
-            //    CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
-
-            //    AccountRepository = new Express1EndiciaCounterAccountRepository(TangoCounterRatesCredentialStore.Instance);
-            //    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.Express1EndiciaCertificateVerificationData);
-
-            //    // This call to GetRates won't be recursive since the counter rate account repository will return an account
-            //    return GetRates(shipment);
-            //}
-            //catch (CounterRatesOriginAddressException)
-            //{
-            //    RateGroup errorRates = new RateGroup(new List<RateResult>());
-            //    errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
-            //    return errorRates;
-            //}
-            //finally
-            //{
-            //    AccountRepository = originalAccountRepository;
-            //    CertificateInspector = originalCertificateInspector;
-            //}
             return GetCachedRates<EndiciaException>(shipment, entity => { throw new EndiciaException("An account is required to view Express1 rates."); });
         }
-
-        
 
         /// <summary>
         /// Process the label server shipment
