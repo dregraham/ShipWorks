@@ -323,7 +323,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new Express1BrokerFilter(), new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
 
                 shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
                 ShippingManager.EnsureShipmentLoaded(shipment);
