@@ -877,9 +877,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
             {
-                if (!DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
+                if (upsPackage.PackagingType == (int) UpsPackagingType.Custom)
                 {
-                    exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
+                    if (!DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
+                    {
+                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
+                    }
                 }
 
                 packageIndex++;
