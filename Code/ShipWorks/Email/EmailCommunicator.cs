@@ -434,7 +434,18 @@ namespace ShipWorks.Email
 
                                     // Send the message
                                     Smtp smtpConnection = throttler.GetSmtpConnection();
-                                    smtpConnection.Send(mailMessage);
+
+                                    try
+                                    {
+                                        smtpConnection.Send(mailMessage);
+                                    }
+                                    catch (ArgumentException ex)
+                                    {
+                                        // I'm not sure why this is being thrown seeing that we check the recipeint before sending. Maybe this will give us some insight.
+                                        string errorMessage = string.Format("Argument Exception when sending email to: {0}", mailMessage.To);
+                                        log.Error(errorMessage, ex);
+                                        throw new EmailException(errorMessage, ex);
+                                    }
 
                                     // Successfully sent
                                     outboxItem.SendStatus = (int) EmailOutboundStatus.Sent;
@@ -556,6 +567,8 @@ namespace ShipWorks.Email
 
             // Recipients
             AddRecipients(mailMessage.To, outboxItem.ToList);
+
+
             AddRecipients(mailMessage.CC, outboxItem.CcList);
             AddRecipients(mailMessage.Bcc, outboxItem.BccList);
 
