@@ -398,6 +398,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipSettingsTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipPolicyTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponseTest.cs" />
+    <Compile Include="Shipping\Policies\RateResultCountShippingPolicyTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />

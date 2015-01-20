@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
@@ -323,7 +324,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
 
                 shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
                 ShippingManager.EnsureShipmentLoaded(shipment);
@@ -351,8 +352,10 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
-            // Only show the More link for the best rate shipment type
-            rateControl.ShowAllRates = rateGroup.Carrier != ShipmentTypeCode.BestRate;
+            // TODO: Replace this with a call to the ShippingPolicies.Apply(...) method. This was just for testing the rate count policy
+            RateResultCountShippingPolicy policy = new RateResultCountShippingPolicy();
+            policy.Configure("1");
+            policy.Apply(rateControl);
 
             rateControl.LoadRates(rateGroup);
         }

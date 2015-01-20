@@ -954,6 +954,7 @@
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Policies\IShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicies.cs" />
+    <Compile Include="Shipping\Policies\RateResultCountShippingPolicy.cs" />
     <Compile Include="Shipping\Policies\ShippingPolicyType.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
