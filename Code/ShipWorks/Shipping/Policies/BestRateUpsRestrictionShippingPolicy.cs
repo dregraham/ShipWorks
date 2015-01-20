@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         public bool IsApplicable(object target)
         {
-            return isRestricted && target is List<IBestRateShippingBroker>;
+            return isRestricted && (target is List<IBestRateShippingBroker> || target is List<ShipmentTypeCode>);
         }
 
         /// <summary>
@@ -61,14 +61,25 @@ namespace ShipWorks.Shipping.Policies
                 throw new ArgumentNullException("target");
             }
 
-            List<IBestRateShippingBroker> brokers = target as List<IBestRateShippingBroker>;
-
-            if (brokers == null)
+            if (!IsApplicable(target))
             {
-                throw new ArgumentException("target not of type  List<IBestRateShippingBroker>", "target");
+                throw new ArgumentException("target not of type List<IBestRateShippingBroker> or List<ShipmentTypeCode>", "target");                
             }
 
-            RemoveUpsRateGroups(brokers);
+            List<IBestRateShippingBroker> brokers = target as List<IBestRateShippingBroker>;
+            List<ShipmentTypeCode> shipmentTypesToExclude = target as List<ShipmentTypeCode>;
+
+            if (brokers != null)
+            {
+                RemoveUpsRateGroups(brokers);
+            }
+
+            if (shipmentTypesToExclude != null)
+            {
+                shipmentTypesToExclude.Add(ShipmentTypeCode.UpsOnLineTools);
+                shipmentTypesToExclude.Add(ShipmentTypeCode.UpsWorldShip);
+            }
+
         }
 
         /// <summary>
