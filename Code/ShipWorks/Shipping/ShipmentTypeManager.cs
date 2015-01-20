@@ -46,8 +46,8 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
-                    // Ups Jerks
-                    if (typeCode == ShipmentTypeCode.BestRate)
+                    // Ups Jerks - only show the best rate shipment type in ShipWorks if it is not restricted
+                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
                     {
                         continue;
                     }
