@@ -352,11 +352,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
-            // TODO: Replace this with a call to the ShippingPolicies.Apply(...) method. This was just for testing the rate count policy
-            RateResultCountShippingPolicy policy = new RateResultCountShippingPolicy();
-            policy.Configure("1");
-            policy.Apply(rateControl);
-
+            // Apply any applicable policies to the rate control prior to loading the rates
+            ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
             rateControl.LoadRates(rateGroup);
         }
 

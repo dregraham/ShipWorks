@@ -41,6 +41,7 @@ using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Shipping
 {
@@ -1114,8 +1115,9 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
-                    // Only show the configure link for the best rate shipment type
-                    rateControl.ActionLinkVisible = rateGroup.Carrier == ShipmentTypeCode.BestRate;
+                    // We know only one shipment Type is selected at this point, so we can use the first shipment entity to 
+                    // grab the shipment type and apply any applicable policies to the rate control
+                    ShippingPolicies.Current.Apply((ShipmentTypeCode)this.loadedShipmentEntities.First().ShipmentType, rateControl);
                     rateControl.LoadRates(rateGroup);
                     
                     ServiceControl.SyncSelectedRate();
