@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Net;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Editing.Rating;
@@ -14,8 +11,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 
@@ -94,29 +89,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             broker.Verify(b => b.GetBestRates(shipment, It.IsAny<List<BrokerException>>()), Times.Once());
             secondBroker.Verify(b => b.GetBestRates(shipment, It.IsAny<List<BrokerException>>()), Times.Once());
-        }
-
-        [TestMethod]
-        public void GetRates_OnlyReturnsOneRateResult_FromAllBrokers_Test()
-        {
-            // We are now returning 4 rates again. This is because we are using BestRate functionality for USPS only.
-            rates = new List<RateResult>
-            {
-                CreateRateResult("Rate xyz", "5", 4.23M, "SomeRateResult3"),
-                CreateRateResult("Rate 123", "4", 6.23M, "SomeRateResult4")
-            };
-
-            // Setup the factory to return two brokers - the one already defined at the class level 
-            // and another one for this test
-            Mock<IBestRateShippingBroker> secondBroker = new Mock<IBestRateShippingBroker>();
-            secondBroker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(rates));
-
-            brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker> { broker.Object, secondBroker.Object });
-
-            RateGroup rateGroup = testObject.GetRates(shipment);
-
-            // Even through both brokers are setup to return two rate results, so we should only have one
-            Assert.AreEqual(1, rateGroup.Rates.Count());
         }
 
         [TestMethod]
