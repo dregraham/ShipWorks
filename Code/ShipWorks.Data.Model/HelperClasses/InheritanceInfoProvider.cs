@@ -88,11 +88,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddEntityInfo("InfopiaOrderItemEntity", "OrderItemEntity", new InfopiaOrderItemRelations(), new InfopiaOrderItemEntityFactory(),  (18-18));
 			base.AddEntityInfo("InfopiaStoreEntity", "StoreEntity", new InfopiaStoreRelations(), new InfopiaStoreEntityFactory(),  (29-29));
 			base.AddEntityInfo("MagentoOrderEntity", "OrderEntity", new MagentoOrderRelations(), new MagentoOrderEntityFactory(),  (59-59));
-			base.AddEntityInfo("MagentoStoreEntity", "GenericModuleStoreEntity", new MagentoStoreRelations(), new MagentoStoreEntityFactory(),  (48-48));
+			base.AddEntityInfo("MagentoStoreEntity", "GenericModuleStoreEntity", new MagentoStoreRelations(), new MagentoStoreEntityFactory(),  (49-49));
 			base.AddEntityInfo("MarketplaceAdvisorOrderEntity", "OrderEntity", new MarketplaceAdvisorOrderRelations(), new MarketplaceAdvisorOrderEntityFactory(),  (59-59));
 			base.AddEntityInfo("MarketplaceAdvisorStoreEntity", "StoreEntity", new MarketplaceAdvisorStoreRelations(), new MarketplaceAdvisorStoreEntityFactory(),  (29-29));
 			base.AddEntityInfo("MivaOrderItemAttributeEntity", "OrderItemAttributeEntity", new MivaOrderItemAttributeRelations(), new MivaOrderItemAttributeEntityFactory(),  (7-7));
-			base.AddEntityInfo("MivaStoreEntity", "GenericModuleStoreEntity", new MivaStoreRelations(), new MivaStoreEntityFactory(),  (48-48));
+			base.AddEntityInfo("MivaStoreEntity", "GenericModuleStoreEntity", new MivaStoreRelations(), new MivaStoreEntityFactory(),  (49-49));
 			base.AddEntityInfo("NetworkSolutionsOrderEntity", "OrderEntity", new NetworkSolutionsOrderRelations(), new NetworkSolutionsOrderEntityFactory(),  (59-59));
 			base.AddEntityInfo("NetworkSolutionsStoreEntity", "StoreEntity", new NetworkSolutionsStoreRelations(), new NetworkSolutionsStoreEntityFactory(),  (29-29));
 			base.AddEntityInfo("NeweggOrderEntity", "OrderEntity", new NeweggOrderRelations(), new NeweggOrderEntityFactory(),  (59-59));

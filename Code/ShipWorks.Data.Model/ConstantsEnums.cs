@@ -3839,6 +3839,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4515,6 +4517,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
@@ -4879,6 +4883,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EncryptionPassphrase. </summary>

@@ -76,12 +76,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
 
-                GenericStoreWebClient webClient = this.CreateWebClient();
-                GenericModuleResponse webResponse = webClient.GetModule();
-
-                Version CurrentSchemaVersion = new Version();
-
-                CurrentSchemaVersion = webResponse.SchemaVersion;
+                Version currentSchemaVersion = new Version(genericStore.SchemaVersion);
 
                 string moduleUrl = genericStore.ModuleUrl;
 
@@ -97,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 string identifier = moduleUrl.ToLowerInvariant();
 
                 //New version of finding the identifier, only if the schemaversion is greater than or equal to 1.1.0
-                if (CurrentSchemaVersion.Complete() >= new Version("1.1.0.0"))
+                if (currentSchemaVersion >= new Version("1.1.0.0"))
                 {
                     //Grab the end of the URL, everything after the last "/"
                     string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/") + 1);
@@ -229,13 +224,15 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             string platform = XPathUtility.Evaluate(xpath, "//Platform", "");
             string developer = XPathUtility.Evaluate(xpath, "//Developer", "");
             string version = webResponse.ModuleVersion.ToString();
+            string schemaVersion = webResponse.SchemaVersion.ToString();
 
             // We know to log the developer\platform\version based on when the it changes.
-            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != version)
+            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != version || store.SchemaVersion != schemaVersion)
             {
                 // Update the known platform\version
                 store.ModulePlatform = platform;
                 store.ModuleVersion = version;
+                store.SchemaVersion = schemaVersion;
 
                 // Update module dev\platform in tango, but only if we have a license to log to
                 if (store.SetupComplete)
