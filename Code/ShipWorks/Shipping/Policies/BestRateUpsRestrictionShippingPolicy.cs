@@ -68,13 +68,13 @@ namespace ShipWorks.Shipping.Policies
                 throw new ArgumentException("target not of type  List<IBestRateShippingBroker>", "target");
             }
 
-            RemoveUPSRateGroups(brokers);
+            RemoveUpsRateGroups(brokers);
         }
 
         /// <summary>
         /// Removes the ups rate groups.
         /// </summary>
-        private void RemoveUPSRateGroups(List<IBestRateShippingBroker> brokers)
+        private static void RemoveUpsRateGroups(List<IBestRateShippingBroker> brokers)
         {
             int originalNumberOfRateGroups = brokers.Count;
 

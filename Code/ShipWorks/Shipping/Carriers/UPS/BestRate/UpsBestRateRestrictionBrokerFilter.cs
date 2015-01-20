@@ -10,7 +10,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// <summary>
     /// Applys shipping policies to possbily remove UPS rates.
     /// </summary>
-    public class UpsBestRateRestictionBrokerFilter : IShippingBrokerFilter
+    public class UpsBestRateRestrictionBrokerFilter : IShippingBrokerFilter
     {
         /// <summary>
         /// Filters the incoming list of brokers
