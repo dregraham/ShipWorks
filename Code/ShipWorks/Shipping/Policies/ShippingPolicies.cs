@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Policies
         /// Load a new set of shipping policies from the given configuration
         /// </summary>
         /// <param name="policyConfiguration"></param>
-        public static void Load(IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration)
+        public static void Load(List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration)
         {
             Load(policyConfiguration, new ShippingPolicyTypeEnumFactory());
         }

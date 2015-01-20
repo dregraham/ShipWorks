@@ -5,6 +5,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Common.Logging.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.XmlDiffPatch;
 using ShipWorks.Editions;
@@ -46,6 +47,14 @@ namespace ShipWorks.Tests.Editions
     <ShipmentTypeFunctionality>
 		<ShipmentType TypeCode=""3"">
 			<Restriction>Disabled</Restriction>
+            <Feature>
+                <Type>BestRateUpsRestriction</Type>
+                <Config>True</Config>
+            </Feature>
+            <Feature>
+                <Type>RateResultCount</Type>
+                <Config>2</Config>
+            </Feature>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
@@ -537,6 +546,14 @@ namespace ShipWorks.Tests.Editions
             string expectedRawXml = @"<ShipmentTypeFunctionality>
 		<ShipmentType TypeCode=""3"">
 			<Restriction>Disabled</Restriction>
+             <Feature>
+                <Type>BestRateUpsRestriction</Type>
+                <Config>True</Config>
+            </Feature>
+            <Feature>
+                <Type>RateResultCount</Type>
+                <Config>2</Config>
+            </Feature>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
@@ -548,17 +565,7 @@ namespace ShipWorks.Tests.Editions
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
 
-            // Load the raw XML into XmlDocuments to use XmlDiff to verify the 
-            // XML values are the same
-            XmlDiff diff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
-            
-            XmlDocument expectedDocument = new XmlDocument();
-            expectedDocument.LoadXml(expectedRawXml);
-
-            XmlDocument actualDocument = new XmlDocument();
-            actualDocument.LoadXml(functionality.ToString());
-
-            Assert.IsTrue(diff.Compare(expectedDocument, actualDocument));
+            Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
         [TestMethod]
@@ -568,6 +575,14 @@ namespace ShipWorks.Tests.Editions
             string expectedRawXml = @"<ShipmentTypeFunctionality>
 		<ShipmentType TypeCode=""3"">
 			<Restriction>Disabled</Restriction>
+            <Feature>
+                <Type>BestRateUpsRestriction</Type>
+                <Config>True</Config>
+            </Feature>
+            <Feature>
+                <Type>RateResultCount</Type>
+                <Config>2</Config>
+            </Feature>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
 			<Restriction>AccountRegistration</Restriction>
@@ -579,17 +594,7 @@ namespace ShipWorks.Tests.Editions
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(path);
 
-            // Load the raw XML into XmlDocuments to use XmlDiff to verify the 
-            // XML values are the same
-            XmlDiff diff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
-
-            XmlDocument expectedDocument = new XmlDocument();
-            expectedDocument.LoadXml(expectedRawXml);
-
-            XmlDocument actualDocument = new XmlDocument();
-            actualDocument.LoadXml(functionality.ToXElement().ToString());
-
-            Assert.IsTrue(diff.Compare(expectedDocument, actualDocument));
+            Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
         [TestMethod]
@@ -612,6 +617,40 @@ namespace ShipWorks.Tests.Editions
             XElement xElement = functionality.ToXElement();
 
             Assert.IsTrue(xElement.IsEmpty);
+        }
+
+        [TestMethod]
+        public void Deserialize_XElementsAreStored_Test()
+        {
+            List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> storedPolicy = null;
+            
+            ShipmentTypeFunctionality.Deserialize(XElement.Parse(path.OuterXml), list => storedPolicy = list);
+
+            Assert.AreEqual(1,storedPolicy.Count);
+            Assert.AreEqual(ShipmentTypeCode.Stamps, storedPolicy.First().Key);
+            Assert.AreEqual(2,storedPolicy.First().Value.Count());
+            Assert.IsTrue(
+                CompareXmlToText(
+                    storedPolicy.First().Value.First(),
+                    "<Feature><Type>BestRateUpsRestriction</Type><Config>True</Config></Feature>"),
+                "Xml Didn't Match");
+            Assert.IsTrue(
+                CompareXmlToText(
+                    storedPolicy.First().Value.Last(),
+                    " <Feature><Type>RateResultCount</Type><Config>2</Config></Feature>"),
+                "Xml Didn't Match");
+        }
+
+        private bool CompareXmlToText(XElement xElement, string xmlText)
+        {
+               XmlDocument expectedDocument = new XmlDocument();
+            expectedDocument.LoadXml(xmlText);
+
+            XmlDocument actualDocument = new XmlDocument();
+            actualDocument.LoadXml(xElement.ToString());
+
+            XmlDiff diff = new XmlDiff(XmlDiffOptions.IgnoreWhitespace);
+            return diff.Compare(expectedDocument, actualDocument);
         }
     }
 }

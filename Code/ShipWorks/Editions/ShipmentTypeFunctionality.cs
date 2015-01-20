@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
+using Microsoft.Web.Services3.Configuration;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Editions
 {
@@ -43,12 +46,25 @@ namespace ShipWorks.Editions
         }
 
         /// <summary>
+        /// Deserializes the specified source.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <returns></returns>
+        public static ShipmentTypeFunctionality Deserialize(XElement source)
+        {
+            return Deserialize(source, ShippingPolicies.Load);
+        }
+
+        /// <summary>
         /// Deserializes the XML in the specified XElement for data in the ShipmentTypeFunctionality node; no restrictions
         /// are configured if the node is not found.
         /// </summary>
         /// <param name="source">The source.</param>
-        /// <returns>An instance of ShipmentTypeFunctionality.</returns>
-        public static ShipmentTypeFunctionality Deserialize(XElement source)
+        /// <param name="storePolicyConfigurationAction">Action to store policy configuration.</param>
+        /// <returns>
+        /// An instance of ShipmentTypeFunctionality.
+        /// </returns>
+        public static ShipmentTypeFunctionality Deserialize(XElement source, Action<List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>> storePolicyConfigurationAction)
         {
             ShipmentTypeFunctionality functionality = new ShipmentTypeFunctionality();
 
@@ -62,19 +78,28 @@ namespace ShipWorks.Editions
                 sourcedElement = source.Element("ShipmentTypeFunctionality") ?? new XElement("ShipmentTypeFunctionality");
             }
 
+            List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration = new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>();
             IEnumerable<XElement> typeElements = sourcedElement.Elements("ShipmentType");
             foreach (XElement type in typeElements)
             {
-                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) (int) type.Attribute("TypeCode");
+                ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)(int)type.Attribute("TypeCode");
                 IEnumerable<ShipmentTypeRestrictionType> restrictions = type.Elements("Restriction").Select(e => EnumHelper.GetEnumByApiValue<ShipmentTypeRestrictionType>(e.Value));
 
                 functionality.AddShipmentTypeRestriction(shipmentTypeCode, restrictions.Distinct().ToList());
+
+                List<XElement> features = type.Elements("Feature").ToList();
+                if (features.Any())
+                {
+                    policyConfiguration.Add(new KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>(shipmentTypeCode, features));                    
+                }
             }
 
             // Record the raw data that was used to populate the object; we'll use this later
             // for serialization purposes. 
             functionality.originalFunctionalitySource = sourcedElement;
 
+            storePolicyConfigurationAction(policyConfiguration);
+            
             return functionality;
         }
 
