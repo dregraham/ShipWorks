@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create("RateResultCount");
-            //Assert.IsInstanceOfType(policy, typeof(RateResultCountShippingPolicy));
+            Assert.IsInstanceOfType(policy, typeof(RateResultCountShippingPolicy));
         }
 
         [TestMethod]
@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create("BestRateUpsRestriction");
-            //Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
+            Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
         }
 
         [TestMethod]

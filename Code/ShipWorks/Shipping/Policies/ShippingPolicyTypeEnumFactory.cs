@@ -1,4 +1,5 @@
 ﻿using System;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Policies
 {
@@ -12,7 +13,17 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         public IShippingPolicy Create(string policyType)
         {
-            throw new NotImplementedException();
+            ShippingPolicyType type = EnumHelper.GetEnumByApiValue<ShippingPolicyType>(policyType);
+
+            switch (type)
+            {
+                case ShippingPolicyType.BestRateUpsRestriction:
+                    return new BestRateUpsRestrictionShippingPolicy();
+                case ShippingPolicyType.RateResultCount:
+                    return new RateResultCountShippingPolicy();
+                default:
+                    throw new InvalidOperationException(string.Format("Could not create a policy for type {0}", policyType));
+            }
         }
     }
 }
