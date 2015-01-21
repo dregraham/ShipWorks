@@ -22,6 +22,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
     public class OnTracRates : OnTracRequest
     {
         private readonly HttpVariableRequestSubmitter httpVariableRequestSubmitter;
+        readonly ILog log;
+
 
         /// <summary>
         /// Constructor
@@ -31,7 +33,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                 account.AccountNumber,
                 SecureText.Decrypt(account.Password, account.AccountNumber.ToString()),
                 new HttpVariableRequestSubmitter(), 
-                new LogEntryFactory())
+                new LogEntryFactory(),
+                LogManager.GetLogger(typeof(OnTracRates)))
         {
             httpVariableRequestSubmitter = new HttpVariableRequestSubmitter();
         }
@@ -39,10 +42,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// <summary>
         /// Constructor
         /// </summary>
-        public OnTracRates(long onTracAccountNumber, string onTracPassword, HttpVariableRequestSubmitter httpVariableRequestSubmitter, ILogEntryFactory logEntryFactory)
+        public OnTracRates(long onTracAccountNumber, string onTracPassword, HttpVariableRequestSubmitter httpVariableRequestSubmitter, ILogEntryFactory logEntryFactory, ILog log)
             : base(onTracAccountNumber, onTracPassword, logEntryFactory, ApiLogSource.OnTrac, "OnTracRateRequest", LogActionType.GetRates)
         {
             this.httpVariableRequestSubmitter = httpVariableRequestSubmitter;
+            this.log = log;
         }
 
         /// <summary>
@@ -57,33 +61,40 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
 
             foreach (RateQuote rateQuote in rateShipment.Rates)
             {
-                OnTracServiceType onTracServiceType =
-                    EnumHelper.GetEnumByApiValue<OnTracServiceType>(rateQuote.Service.ToString());
-
-                DateTime? expectedDeliveryDate = GetExpectedDeliveryDate(rateQuote);
-                string deliveryDateDescription = rateQuote.TransitDays.ToString();
-
-                if (expectedDeliveryDate.HasValue)
+                try
                 {
-                    deliveryDateDescription += " " + ShippingManager.GetArrivalDescription(expectedDeliveryDate.Value);
-                }
-                else
-                {
-                    expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
-                }
+                    OnTracServiceType onTracServiceType =
+                        EnumHelper.GetEnumByApiValue<OnTracServiceType>(rateQuote.Service);
 
-                rates.Add(
-                    new RateResult(
-                        EnumHelper.GetDescription(onTracServiceType),
-                        deliveryDateDescription,
-                        (decimal)rateQuote.TotalCharge,
-                        onTracServiceType)
+                    DateTime? expectedDeliveryDate = GetExpectedDeliveryDate(rateQuote);
+                    string deliveryDateDescription = rateQuote.TransitDays.ToString();
+
+                    if (expectedDeliveryDate.HasValue)
                     {
-                        ExpectedDeliveryDate = expectedDeliveryDate,
-                        ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays),
-                        ShipmentType = ShipmentTypeCode.OnTrac,
-                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.OnTrac)
-                    });
+                        deliveryDateDescription += " " + ShippingManager.GetArrivalDescription(expectedDeliveryDate.Value);
+                    }
+                    else
+                    {
+                        expectedDeliveryDate = ShippingManager.CalculateExpectedDeliveryDate(rateQuote.TransitDays, DayOfWeek.Saturday, DayOfWeek.Sunday);
+                    }
+
+                    rates.Add(
+                        new RateResult(
+                            EnumHelper.GetDescription(onTracServiceType),
+                            deliveryDateDescription,
+                            (decimal)rateQuote.TotalCharge,
+                            onTracServiceType)
+                        {
+                            ExpectedDeliveryDate = expectedDeliveryDate,
+                            ServiceLevel = GetServiceLevel(onTracServiceType, rateQuote.TransitDays),
+                            ShipmentType = ShipmentTypeCode.OnTrac,
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.OnTrac)
+                        });
+                }
+                catch (InvalidOperationException ex)
+                {
+                    log.Info(string.Format("Unknown Service Type {0}", rateQuote.Service), ex);
+                }
             }
 
             return new RateGroup(rates);
