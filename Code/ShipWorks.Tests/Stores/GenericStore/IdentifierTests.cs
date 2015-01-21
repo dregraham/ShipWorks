@@ -27,6 +27,7 @@ namespace ShipWorks.Tests.Stores.osCommerce
             GenericModuleStoreEntity oscStore = new GenericModuleStoreEntity();
             oscStore.ModuleUrl = url;
             oscStore.TypeCode = (int) StoreTypeCode.osCommerce;
+            oscStore.SchemaVersion = "1.0.0.0";
 
             StoreType storeType = StoreTypeManager.GetType(oscStore);
 
