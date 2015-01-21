@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 string identifier = moduleUrl.ToLowerInvariant();
 
                 //New version of finding the identifier, only if the schemaversion is greater than or equal to 1.1.0
-                if (currentSchemaVersion >= new Version("1.1.0.0"))
+                if (currentSchemaVersion.Complete() >= new Version("1.1.0.0").Complete())
                 {
                     //Grab the end of the URL, everything after the last "/"
                     string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/") + 1);
@@ -223,15 +223,15 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             string platform = XPathUtility.Evaluate(xpath, "//Platform", "");
             string developer = XPathUtility.Evaluate(xpath, "//Developer", "");
-            string version = webResponse.ModuleVersion.ToString();
+            string moduleVersion = webResponse.ModuleVersion.ToString();
             string schemaVersion = webResponse.SchemaVersion.ToString();
 
             // We know to log the developer\platform\version based on when the it changes.
-            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != version || store.SchemaVersion != schemaVersion)
+            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != moduleVersion || store.SchemaVersion != schemaVersion)
             {
                 // Update the known platform\version
                 store.ModulePlatform = platform;
-                store.ModuleVersion = version;
+                store.ModuleVersion = moduleVersion;
                 store.SchemaVersion = schemaVersion;
 
                 // Update module dev\platform in tango, but only if we have a license to log to
@@ -243,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                     try
                     {
-                        TangoWebClient.UpdateGenericModuleInfo(store, platform, developer, version);
+                        TangoWebClient.UpdateGenericModuleInfo(store, platform, developer, moduleVersion);
                     }
                     catch (TangoException ex)
                     {
