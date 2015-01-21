@@ -1969,7 +1969,8 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [ModuleOnlineCustomerDataType] [int] NOT NULL,
 [ModuleOnlineShipmentDetails] [bit] NOT NULL,
 [ModuleHttpExpect100Continue] [bit] NOT NULL,
-[ModuleResponseEncoding] [int] NOT NULL
+[ModuleResponseEncoding] [int] NOT NULL,
+[SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'

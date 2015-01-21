@@ -76,6 +76,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
 
+                Version currentSchemaVersion = new Version(genericStore.SchemaVersion);
+
                 string moduleUrl = genericStore.ModuleUrl;
 
                 // Basically the only thing this does, is if someone enters a path to a web root (like "http://www.shipworks.com"), without the
@@ -88,7 +90,26 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                 }
 
                 string identifier = moduleUrl.ToLowerInvariant();
-                identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+
+                //New version of finding the identifier, only if the schemaversion is greater than or equal to 1.1.0
+                if (currentSchemaVersion.Complete() >= new Version("1.1.0.0").Complete())
+                {
+                    //Grab the end of the URL, everything after the last "/"
+                    string moduleUrlEnd = moduleUrl.Substring(moduleUrl.LastIndexOf("/") + 1);
+
+                    //Check to see if the end of the module url has a "." 
+                    if (moduleUrlEnd.Contains("."))
+                    {
+                        //Use the old version to remove files from the end of the url
+                        identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+                    }
+
+                }
+                else
+                {
+                    //Old version
+                    identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
+                }
 
                 // append the storecode if there is one
                 if (!string.IsNullOrWhiteSpace(genericStore.ModuleOnlineStoreCode))
@@ -144,7 +165,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             generic.ModuleRequestTimeout = 60;
             generic.ModuleDownloadPageSize = 50;
             generic.ModuleHttpExpect100Continue = true;
-            generic.ModuleResponseEncoding = (int) GenericStoreResponseEncoding.UTF8;
+            generic.ModuleResponseEncoding = (int)GenericStoreResponseEncoding.UTF8;
 
         }
 
@@ -182,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             UpdateOnlineModuleInfo();
 
             // Grab the status selections right away
-            if (generic.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
+            if (generic.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None)
             {
                 CreateStatusCodeProvider().UpdateFromOnlineStore();
             }
@@ -197,19 +218,21 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericStoreWebClient webClient = this.CreateWebClient();
             GenericModuleResponse webResponse = webClient.GetModule();
 
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
             XPathNavigator xpath = webResponse.XPath;
 
             string platform = XPathUtility.Evaluate(xpath, "//Platform", "");
             string developer = XPathUtility.Evaluate(xpath, "//Developer", "");
-            string version = webResponse.ModuleVersion.ToString();
+            string moduleVersion = webResponse.ModuleVersion.ToString();
+            string schemaVersion = webResponse.SchemaVersion.ToString();
 
             // We know to log the developer\platform\version based on when the it changes.
-            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != version)
+            if (store.ModulePlatform != platform || store.ModuleDeveloper != developer || store.ModuleVersion != moduleVersion || store.SchemaVersion != schemaVersion)
             {
                 // Update the known platform\version
                 store.ModulePlatform = platform;
-                store.ModuleVersion = version;
+                store.ModuleVersion = moduleVersion;
+                store.SchemaVersion = schemaVersion;
 
                 // Update module dev\platform in tango, but only if we have a license to log to
                 if (store.SetupComplete)
@@ -220,7 +243,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
                     try
                     {
-                        TangoWebClient.UpdateGenericModuleInfo(store, platform, developer, version);
+                        TangoWebClient.UpdateGenericModuleInfo(store, platform, developer, moduleVersion);
                     }
                     catch (TangoException ex)
                     {
@@ -233,12 +256,12 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             GenericModuleCapabilities capabilities = ReadModuleCapabilities(webResponse);
 
             // See if it used to support online status
-            if (store.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None)
+            if (store.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None)
             {
                 // The data type of the online status codes cannot change
                 if (capabilities.OnlineStatusSupport != GenericOnlineStatusSupport.None)
                 {
-                    if (store.ModuleOnlineStatusDataType != (int) capabilities.OnlineStatusDataType)
+                    if (store.ModuleOnlineStatusDataType != (int)capabilities.OnlineStatusDataType)
                     {
                         throw new GenericStoreException("The online module has been updated in an unsupported way: the online status dataType cannot be changed.");
                     }
@@ -251,11 +274,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             // Update the capabilities
-            store.ModuleDownloadStrategy = (int) capabilities.DownloadStrategy;
-            store.ModuleOnlineStatusSupport = (int) capabilities.OnlineStatusSupport;
-            store.ModuleOnlineStatusDataType = (int) capabilities.OnlineStatusDataType;
+            store.ModuleDownloadStrategy = (int)capabilities.DownloadStrategy;
+            store.ModuleOnlineStatusSupport = (int)capabilities.OnlineStatusSupport;
+            store.ModuleOnlineStatusDataType = (int)capabilities.OnlineStatusDataType;
             store.ModuleOnlineCustomerSupport = capabilities.OnlineCustomerSupport;
-            store.ModuleOnlineCustomerDataType = (int) capabilities.OnlineCustomerDataType;
+            store.ModuleOnlineCustomerDataType = (int)capabilities.OnlineCustomerDataType;
             store.ModuleOnlineShipmentDetails = capabilities.OnlineShipmentDetails;
 
             // Read communications settings
@@ -263,7 +286,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
 
             // update the communications settings
             store.ModuleHttpExpect100Continue = communications.Expect100Continue;
-            store.ModuleResponseEncoding = (int) communications.ResponseEncoding;
+            store.ModuleResponseEncoding = (int)communications.ResponseEncoding;
         }
 
         /// <summary>
@@ -312,7 +335,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override IEntityField2[] CreateCustomerIdentifierFields(out bool instanceLookup)
         {
-            if (((GenericModuleStoreEntity) Store).ModuleOnlineCustomerSupport)
+            if (((GenericModuleStoreEntity)Store).ModuleOnlineCustomerSupport)
             {
                 instanceLookup = true;
 
@@ -349,11 +372,11 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
 
             if (store.ModuleOnlineShipmentDetails ||
-                store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusOnly ||
-                store.ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.StatusWithComment)
+                store.ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.StatusOnly ||
+                store.ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.StatusWithComment)
             {
                 return new GenericStoreModuleActionControl();
             }
@@ -402,7 +425,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public override ICollection<string> GetOnlineStatusChoices()
         {
             // if this isn't pointed to a field, online status isn't suported
-            if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.None)
+            if (((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.None)
             {
                 return base.GetOnlineStatusChoices();
             }
@@ -427,16 +450,16 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
-            GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
+            GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
 
             if (column == OnlineGridColumnSupport.LastModified)
             {
-                return store.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByModifiedTime;
+                return store.ModuleDownloadStrategy == (int)GenericStoreDownloadStrategy.ByModifiedTime;
             }
 
             if (column == OnlineGridColumnSupport.OnlineStatus)
             {
-                return store.ModuleOnlineStatusSupport != (int) GenericOnlineStatusSupport.None;
+                return store.ModuleOnlineStatusSupport != (int)GenericOnlineStatusSupport.None;
             }
 
             return base.GridOnlineColumnSupported(column);
@@ -449,9 +472,9 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         {
             get
             {
-                GenericModuleStoreEntity store = (GenericModuleStoreEntity) Store;
+                GenericModuleStoreEntity store = (GenericModuleStoreEntity)Store;
 
-                if (store.ModuleDownloadStrategy == (int) GenericStoreDownloadStrategy.ByOrderNumber)
+                if (store.ModuleDownloadStrategy == (int)GenericStoreDownloadStrategy.ByOrderNumber)
                 {
                     return new InitialDownloadPolicy(InitialDownloadRestrictionType.OrderNumber);
                 }
@@ -467,7 +490,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
-            GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport) ((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport;
+            GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport)((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport;
 
             List<MenuCommand> commands = new List<MenuCommand>();
 
@@ -503,7 +526,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
 
             // Check if we can add the ability to upload tracking number
-            if (((GenericModuleStoreEntity) Store).ModuleOnlineShipmentDetails)
+            if (((GenericModuleStoreEntity)Store).ModuleOnlineShipmentDetails)
             {
                 // Add the option to Upload shipment details
                 MenuCommand uploadCommand = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadShipmentDetails));
@@ -638,7 +661,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public GenericStoreStatusCodeProvider CreateStatusCodeProvider()
         {
-            if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusSupport == (int) GenericOnlineStatusSupport.None)
+            if (((GenericModuleStoreEntity)Store).ModuleOnlineStatusSupport == (int)GenericOnlineStatusSupport.None)
             {
                 throw new InvalidOperationException("Unable to create the status code container because the store does not support online status codes.");
             }

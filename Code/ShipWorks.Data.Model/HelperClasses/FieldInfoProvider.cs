@@ -1340,6 +1340,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleOnlineShipmentDetails", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleOnlineShipmentDetails, 0, 0, 0);
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleHttpExpect100Continue", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleHttpExpect100Continue, 0, 0, 0);
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleResponseEncoding", typeof(System.Int32), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, 0, 0, 10);
+			base.AddElementFieldInfo("GenericModuleStoreEntity", "SchemaVersion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.SchemaVersion, 20, 0, 0);
 		}
 		/// <summary>Inits GridColumnFormatEntity's FieldInfo objects</summary>
 		private void InitGridColumnFormatEntityInfos()
