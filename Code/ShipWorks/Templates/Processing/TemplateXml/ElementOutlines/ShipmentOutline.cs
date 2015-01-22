@@ -5,7 +5,6 @@ using System.Text;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
-using ShipWorks.Editions;
 using ShipWorks.Templates.Processing.TemplateXml.NodeFactories;
 using log4net;
 using ShipWorks.Shipping;
@@ -62,10 +61,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("CustomsItem", new CustomsItemOutline(context), () => { if (CustomsManager.IsCustomsRequired(Shipment)) { CustomsManager.LoadCustomsItems(Shipment, false); return Shipment.CustomsItems; } else return null; });
             
             // Add an outline entry for the last/terminating best rate event that occurred on the shipment
-            if (ShipmentTypeManager.ShipmentTypes.Any(x => x.ShipmentTypeCode == ShipmentTypeCode.BestRate))
-            {
-                AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));   
-            }
+            AddElement("BestRateEvent", () => GetLatestBestRateEventDescription(Shipment));
 
             // Add the ShipSense outline with package and customs info
             AddElement("ShipSense", new ShipSenseOutline(context), () => Shipment);
