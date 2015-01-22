@@ -183,15 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <returns>An instance of an Express1EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker broker = new NullShippingBroker();
-            if (EndiciaAccountManager.GetAccounts(EndiciaReseller.Express1).Any())
-            {
-                // Only use an Express1 broker if there is an account. We no longer want to
-                // get Express1 counter rates
-                broker = new Express1EndiciaBestRateBroker();
-            }
-
-            return broker;
+            return new NullShippingBroker();
         }
 
         /// <summary>

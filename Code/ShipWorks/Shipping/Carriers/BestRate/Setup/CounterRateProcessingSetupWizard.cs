@@ -219,7 +219,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 ShipmentTypeCode.BestRate,
                 ShipmentTypeCode.None,
                 ShipmentTypeCode.Other,
-                ShipmentTypeCode.PostalWebTools
+                ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.Express1Stamps
             };
 
             setupExistingProvider.Items.Add("Choose...");
@@ -241,17 +244,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             switch (initialShipmentType.ShipmentTypeCode)
             {
-                case ShipmentTypeCode.Endicia:
-                    description = "USPS partners with Endicia to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " + 
-                                  "an account with Endicia.";
-                    break;
-
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-                    description = "USPS partners with Express1 to enable printing USPS shipping labels directly from your printer. To continue you'll need an " + 
-                                  "account with Express1. There is no monthly fee for the account.";
-                    break;
-                    
                 case ShipmentTypeCode.Stamps:
                     description = "USPS partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
                                   "an account with Stamps.com.";
@@ -393,24 +385,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
                     break;
                 case ShipmentTypeCode.PostalWebTools:
-                    setupShipmentType = ShippingSettings.Fetch().BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) ? 
-                        ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps) : 
-                        ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Usps);
                     break;
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps);
-                    break;
-                case ShipmentTypeCode.Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-                    break;
                 case ShipmentTypeCode.FedEx:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+                    setupShipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
                     break;
                 default:
                     throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");

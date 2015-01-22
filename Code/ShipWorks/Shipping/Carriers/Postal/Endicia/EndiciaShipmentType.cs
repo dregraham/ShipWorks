@@ -879,8 +879,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An instance of an EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
+            return new NullShippingBroker();
         }
 
         /// <summary>
