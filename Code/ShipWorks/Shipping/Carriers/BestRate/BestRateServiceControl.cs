@@ -26,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             bestRateShipment = new BestRateShipmentType();
 
             RateControl.ShowAllRates = false;
+            RateControl.ActionLinkVisible = true;
+
             sectionLabelOptions.Visible = false;
         }
 
