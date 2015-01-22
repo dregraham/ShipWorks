@@ -16,7 +16,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
             ShipmentTypeCode.Other,
-            ShipmentTypeCode.PostalWebTools
+            ShipmentTypeCode.PostalWebTools,
+            ShipmentTypeCode.Endicia,
+            ShipmentTypeCode.Express1Endicia,
+            ShipmentTypeCode.Express1Stamps
         };
 
         private bool isDirty;
