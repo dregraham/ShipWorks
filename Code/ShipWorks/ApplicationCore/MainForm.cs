@@ -731,7 +731,7 @@ namespace ShipWorks
             bool editionChanged = false;
 
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
-            foreach (StoreEntity store in StoreManager.GetAllStores())
+            foreach (StoreEntity store in StoreManager.GetAllStores().Where(s => s.Enabled))
             {
                 try
                 {
