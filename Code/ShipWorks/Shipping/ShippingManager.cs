@@ -1341,7 +1341,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }
@@ -1355,7 +1355,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeActivated(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }
