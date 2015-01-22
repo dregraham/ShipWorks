@@ -134,7 +134,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             }
             else
             {
-                LicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store);
+                LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
                 if (accountDetail.ActivationState == LicenseActivationState.Active || 
                     accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere || 

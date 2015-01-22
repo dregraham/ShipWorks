@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Xml;
+using System.Xml.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -69,6 +73,107 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             // Just log the account contract type to disk to simulate a call to Tango
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((StampsResellerType)account.StampsReseller));
+        }
+
+        /// <summary>
+        /// Get the status of the specified license
+        /// </summary>
+        public override LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
+        {
+            ShipWorksLicense license = new ShipWorksLicense(licenseKey);
+
+            string rawXml = @"<License>
+	<Key>" + license.Key + @"</Key>
+	<Machine>" + StoreTypeManager.GetType(store).LicenseIdentifier + @"</Machine>
+	<Active>true</Active>
+	<Cancelled>false</Cancelled>
+	<DisabledReason/>
+	<Valid>true</Valid>
+	<StoreID>12024</StoreID>
+	<CustomerID>54</CustomerID>
+	<Version>Checked</Version>					
+	<AlphaBeta>true</AlphaBeta>
+	<EndiciaDhlEnabled status='1'/>
+	<EndiciaInsuranceEnabled status='1'/>
+	<UpsSurePostEnabled status='1'/>
+	<EndiciaConsolidator status='1'>APC</EndiciaConsolidator>
+	<EndiciaScanBasedReturns status='1'/>
+    <ShipmentTypeFunctionality>
+        <ShipmentType TypeCode='14'>
+            <Feature>
+				<Type>BestRateUpsRestriction</Type>
+				<Config>False</Config>
+			</Feature>
+			<Feature>
+				<Type>RateResultCount</Type>
+				<Config>5</Config>
+			</Feature>
+		</ShipmentType>
+        <!-- This is the USPS shipment type. Testing to confirm that the feature settings are ignored. -->
+		<ShipmentType TypeCode='15'>
+			<Feature>
+				<Type>BestRateUpsRestriction</Type>
+				<Config>False</Config>
+			</Feature>
+			<Feature>
+				<Type>RateResultCount</Type>
+				<Config>5</Config>
+			</Feature>
+		</ShipmentType>
+	</ShipmentTypeFunctionality>
+</License>";
+
+            XmlDocument licenseXml = new XmlDocument();
+            licenseXml.LoadXml(rawXml);
+
+            LicenseAccountDetail accountDetail = new LicenseAccountDetail(licenseXml, store);
+            
+            //XDocument xml = XDocument.Parse(rawXml);
+            //accountDetail.Edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xml.Root);
+
+            return accountDetail;
+        }
+
+        /// <summary>
+        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
+        /// </summary>
+        public override TrialDetail GetTrial(StoreEntity store)
+        {
+            string rawXml = @"<License>
+	<Key>L26XZ-SLRTS-KZ5M4-YQ6BX-SEARS-TRIAL</Key>
+	<Created>2012-11-02 14:53:09</Created>
+
+
+	<Expires>2014-03-27 12:43:44</Expires>
+
+	<Converted>true</Converted>
+	<CanExtend>false</CanExtend>
+	<ServerTime>2015-01-22 20:36:15</ServerTime>
+
+
+	<Edition/>
+
+	<ShipmentTypeFunctionality>
+		<ShipmentType TypeCode='2'>
+			<Restriction>AccountRegistration</Restriction>
+		</ShipmentType>
+		<ShipmentType TypeCode='14'>
+            <Feature>
+				<Type>BestRateUpsRestriction</Type>
+				<Config>False</Config>
+			</Feature>
+			<Feature>
+				<Type>RateResultCount</Type>
+				<Config>5</Config>
+			</Feature>
+		</ShipmentType>
+	</ShipmentTypeFunctionality>
+</License>";
+            
+            XmlDocument trialXml = new XmlDocument();
+            trialXml.LoadXml(rawXml);
+
+            return new TrialDetail(trialXml, store);
         }
     }
 }

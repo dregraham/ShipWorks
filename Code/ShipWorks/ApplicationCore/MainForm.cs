@@ -738,7 +738,7 @@ namespace ShipWorks
                     ShipWorksLicense license = new ShipWorksLicense(store.License);
                     if (!license.IsTrial)
                     {
-                        LicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store);
+                        LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
                         if (accountDetail.ActivationState == LicenseActivationState.Active ||
                             accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
@@ -749,7 +749,7 @@ namespace ShipWorks
                     }
                     else
                     {
-                        TrialDetail trialDetail = TangoWebClient.GetTrial(store);
+                        TrialDetail trialDetail = new TangoWebClientFactory().CreateWebClient().GetTrial(store);
 
                         editionChanged |= EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
                     }
