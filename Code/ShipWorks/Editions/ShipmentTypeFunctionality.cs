@@ -33,7 +33,7 @@ namespace ShipWorks.Editions
         /// </summary>
         /// <param name="path">The path.</param>
         /// <returns>An instance of ShipmentTypeFunctionality.</returns>
-        public static ShipmentTypeFunctionality Deserialize(XPathNavigator path)
+        public static ShipmentTypeFunctionality Deserialize(long storeId, XPathNavigator path)
         {
             XElement document = null;
 
@@ -42,7 +42,7 @@ namespace ShipWorks.Editions
                 document = XElement.Parse(path.OuterXml);
             }
 
-            return Deserialize(document);
+            return Deserialize(storeId, document);
         }
 
         /// <summary>
@@ -50,9 +50,9 @@ namespace ShipWorks.Editions
         /// </summary>
         /// <param name="source">The source.</param>
         /// <returns></returns>
-        public static ShipmentTypeFunctionality Deserialize(XElement source)
+        public static ShipmentTypeFunctionality Deserialize(long storeId, XElement source)
         {
-            return Deserialize(source, ShippingPolicies.Load);
+            return Deserialize(storeId, source, ShippingPolicies.Load);
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace ShipWorks.Editions
         /// <returns>
         /// An instance of ShipmentTypeFunctionality.
         /// </returns>
-        public static ShipmentTypeFunctionality Deserialize(XElement source, Action<List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>> storePolicyConfigurationAction)
+        public static ShipmentTypeFunctionality Deserialize(long storeId, XElement source, Action<long, List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>> storePolicyConfigurationAction)
         {
             ShipmentTypeFunctionality functionality = new ShipmentTypeFunctionality();
 
@@ -98,7 +98,7 @@ namespace ShipWorks.Editions
             // for serialization purposes. 
             functionality.originalFunctionalitySource = sourcedElement;
 
-            storePolicyConfigurationAction(policyConfiguration);
+            storePolicyConfigurationAction(storeId, policyConfiguration);
             
             return functionality;
         }
