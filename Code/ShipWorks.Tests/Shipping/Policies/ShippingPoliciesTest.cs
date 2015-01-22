@@ -54,6 +54,19 @@ namespace ShipWorks.Tests.Shipping.Policies
 </DummyRoot>
 ";
 
+        private const string stampsFeature2Xml = @"
+<DummyRoot>
+    <Feature>
+        <Type>Bar</Type>
+        <Config>2</Config>
+    </Feature>
+    <Feature>
+        <Type>Baz</Type>
+        <Config>3</Config>
+    </Feature>
+</DummyRoot>
+";
+
         private readonly Dictionary<ShipmentTypeCode, IEnumerable<XElement>> features = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
                 {ShipmentTypeCode.BestRate, LoadElements(bestRateFeatureXml)},
@@ -71,6 +84,9 @@ namespace ShipWorks.Tests.Shipping.Policies
             bestRateNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
             stampsApplicablePolicy = CreatePolicyMock(mockRepository, true);
             stampsNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
+
+            // Make sure we're starting with a fresh cache each time
+            ShippingPolicies.ClearCache();
 
             policies = new ShippingPolicies(new List<KeyValuePair<ShipmentTypeCode, IShippingPolicy>>()
             {
@@ -139,14 +155,14 @@ namespace ShipWorks.Tests.Shipping.Policies
         public void Load_UpdatesCurrent()
         {
             policies = ShippingPolicies.Current;
-            ShippingPolicies.Load(1, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
+            ShippingPolicies.Load(0, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
             Assert.AreNotSame(policies, ShippingPolicies.Current);
         }
 
         [TestMethod]
         public void Load_DelegatesToFactory_ToCreateShippingPolicies()
         {
-            ShippingPolicies.Load(1, features, policyFactoryMock.Object);
+            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
 
             policyFactoryMock.Verify(x => x.Create("Foo"), Times.Once);
             policyFactoryMock.Verify(x => x.Create("Bar"), Times.Exactly(2));
@@ -160,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 2);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
 
-            ShippingPolicies.Load(1, features, policyFactoryMock.Object);
+            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
 
             fooPolicies[0].Verify(x => x.Configure("1"));
             fooPolicies[0].Verify(x => x.Configure("6"));
@@ -168,6 +184,82 @@ namespace ShipWorks.Tests.Shipping.Policies
             barPolicies[0].Verify(x => x.Configure("False"));
             barPolicies[1].Verify(x => x.Configure("1"));
             bazPolicies[0].Verify(x => x.Configure("1"));
+        }
+
+        [TestMethod]
+        public void Load_IncludePolicyOfExistingStore_WhenLoadingNewStore()
+        {
+            features.Remove(ShipmentTypeCode.BestRate);
+            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+
+            List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 2);
+            List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 2);
+
+            var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
+            {
+                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+            };
+
+            ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
+
+            barPolicies[0].Verify(x => x.Configure("1"));
+            barPolicies[1].Verify(x => x.Configure("2"));
+
+            bazPolicies[0].Verify(x => x.Configure("1"));
+            bazPolicies[1].Verify(x => x.Configure("3"));
+        }
+
+        [TestMethod]
+        public void Load_ReplacePolicyOfExistingStore_WhenLoadingExistingStore()
+        {
+            features.Remove(ShipmentTypeCode.BestRate);
+            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+
+            List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 1);
+            List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
+
+            var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
+            {
+                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+            };
+
+            ShippingPolicies.Load(0, extraFeatures, policyFactoryMock.Object);
+
+            barPolicies[0].Verify(x => x.Configure("2"));
+            bazPolicies[0].Verify(x => x.Configure("3"));
+        }
+
+        [TestMethod]
+        public void Unload_ExcludePolicyOfUnloadedStore()
+        {
+            // Load multiple stores
+            features.Remove(ShipmentTypeCode.BestRate);
+            ShippingPolicies.Load(0, features, policyFactoryMock.Object);
+
+            var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
+            {
+                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+            };
+            ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
+
+            // Test unloading a store
+            List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 1);
+            List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
+
+            ShippingPolicies.Unload(0, policyFactoryMock.Object);
+
+            barPolicies[0].Verify(x => x.Configure("2"));
+            bazPolicies[0].Verify(x => x.Configure("3"));
+        }
+
+        [TestMethod]
+        public void Unload_DoesNotUpdateCurrentPolicies_WhenStoreDoesNotExist()
+        {
+            var currentPolicies = ShippingPolicies.Current;
+
+            ShippingPolicies.Unload(1);
+
+            Assert.AreSame(currentPolicies, ShippingPolicies.Current);
         }
 
         private List<Mock<IShippingPolicy>> CreateAndRegisterFactoryMocks(string key, int count)

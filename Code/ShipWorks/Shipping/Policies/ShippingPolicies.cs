@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
@@ -11,6 +12,8 @@ namespace ShipWorks.Shipping.Policies
     public class ShippingPolicies
     {
         private readonly ILookup<ShipmentTypeCode, IShippingPolicy> shippingPolicies;
+        private static readonly ConcurrentDictionary<long, IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>> policyCache 
+            = new ConcurrentDictionary<long, IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>>();
 
         /// <summary>
         /// Constructor. Consuming code should use ShippingPolicies.Current instead of creating a new instance
@@ -40,12 +43,9 @@ namespace ShipWorks.Shipping.Policies
         public static void Load(long storeId, IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration, 
             IShippingPolicyFactory shippingPolicyFactory)
         {
-            // Var is used here because the nested generic signature reduces readability
-            var policies = policyConfiguration.SelectMany(shipmentPolicyConfiguration => shipmentPolicyConfiguration.Value
-                .GroupBy(x => GetElementValue(x, "Type"))
-                .Select(policyElements => CreatePolicy(shippingPolicyFactory, policyElements, shipmentPolicyConfiguration.Key)));
+            policyCache.AddOrUpdate(storeId, id => policyConfiguration, (id, orig) => policyConfiguration);
 
-            Current = new ShippingPolicies(policies);
+            UpdateCurrentPolicies(shippingPolicyFactory);
         }
 
         /// <summary>
@@ -54,7 +54,32 @@ namespace ShipWorks.Shipping.Policies
         /// <param name="storeId">Id of the store whose policies should be unloaded</param>
         public static void Unload(long storeId)
         {
-            throw new NotImplementedException();
+            Unload(storeId, new ShippingPolicyTypeEnumFactory());
+        }
+
+        /// <summary>
+        /// Unload a store from the cache
+        /// </summary>
+        /// <param name="storeId">Id of the store whose policies should be unloaded</param>
+        /// <param name="shippingPolicyFactory"></param>
+        public static void Unload(long storeId, IShippingPolicyFactory shippingPolicyFactory)
+        {
+            IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> removed = null;
+            if (policyCache.TryRemove(storeId, out removed))
+            {
+                UpdateCurrentPolicies(shippingPolicyFactory);
+            }
+        }
+
+        /// <summary>
+        /// Clear the cache of shipping policy data
+        /// </summary>
+        /// <remarks>This is primarily meant to be used by tests</remarks>
+        public static void ClearCache()
+        {
+            policyCache.Clear();
+
+            UpdateCurrentPolicies(null);
         }
 
         /// <summary>
@@ -74,6 +99,20 @@ namespace ShipWorks.Shipping.Policies
         /// Current ShippingPolicies
         /// </summary>
         public static ShippingPolicies Current { get; private set; }
+
+        /// <summary>
+        /// Update the policy collection with the currently cached data
+        /// </summary>
+        /// <param name="shippingPolicyFactory"></param>
+        private static void UpdateCurrentPolicies(IShippingPolicyFactory shippingPolicyFactory)
+        {
+            // Var is used here because the nested generic signature reduces readability
+            var policies = policyCache.SelectMany(x => x.Value).SelectMany(shipmentPolicyConfiguration => shipmentPolicyConfiguration.Value
+                .GroupBy(x => GetElementValue(x, "Type"))
+                .Select(policyElements => CreatePolicy(shippingPolicyFactory, policyElements, shipmentPolicyConfiguration.Key)));
+
+            Current = new ShippingPolicies(policies);
+        }
 
         /// <summary>
         /// Create a policy 
