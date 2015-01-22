@@ -46,12 +46,6 @@ namespace ShipWorks.Shipping
                         continue;
                     }
 
-                    // Ups Jerks - only show the best rate shipment type in ShipWorks if it is not restricted
-                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
-                    {
-                        continue;
-                    }
-
                     if (typeCode == ShipmentTypeCode.Express1Stamps)
                     {
                         // The only time Express1 for Stamps should be excluded is when Stamps has never been setup but Endicia has been setup
