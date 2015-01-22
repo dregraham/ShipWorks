@@ -100,7 +100,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             edition = new Edition(store);
             
             // Populate the shipment type functionality (restrictions)
-            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(xpath);
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xpath);
 
             // Then see if there is an edition set in tango
             string editionType = XPathUtility.Evaluate(xpath, "//Edition", "");

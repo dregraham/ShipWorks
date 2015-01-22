@@ -139,14 +139,14 @@ namespace ShipWorks.Tests.Shipping.Policies
         public void Load_UpdatesCurrent()
         {
             policies = ShippingPolicies.Current;
-            ShippingPolicies.Load(new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
+            ShippingPolicies.Load(1, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
             Assert.AreNotSame(policies, ShippingPolicies.Current);
         }
 
         [TestMethod]
         public void Load_DelegatesToFactory_ToCreateShippingPolicies()
         {
-            ShippingPolicies.Load(features, policyFactoryMock.Object);
+            ShippingPolicies.Load(1, features, policyFactoryMock.Object);
 
             policyFactoryMock.Verify(x => x.Create("Foo"), Times.Once);
             policyFactoryMock.Verify(x => x.Create("Bar"), Times.Exactly(2));
@@ -160,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             List<Mock<IShippingPolicy>> barPolicies = CreateAndRegisterFactoryMocks("Bar", 2);
             List<Mock<IShippingPolicy>> bazPolicies = CreateAndRegisterFactoryMocks("Baz", 1);
 
-            ShippingPolicies.Load(features, policyFactoryMock.Object);
+            ShippingPolicies.Load(1, features, policyFactoryMock.Object);
 
             fooPolicies[0].Verify(x => x.Configure("1"));
             fooPolicies[0].Verify(x => x.Configure("6"));
