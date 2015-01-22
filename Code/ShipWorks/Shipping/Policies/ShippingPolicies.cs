@@ -24,18 +24,20 @@ namespace ShipWorks.Shipping.Policies
         /// <summary>
         /// Load a new set of shipping policies from the given configuration
         /// </summary>
+        /// <param name="storeId">Id of the store to which the policies apply</param>
         /// <param name="policyConfiguration"></param>
-        public static void Load(List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration)
+        public static void Load(long storeId, IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration)
         {
-            Load(policyConfiguration, new ShippingPolicyTypeEnumFactory());
+            Load(storeId, policyConfiguration, new ShippingPolicyTypeEnumFactory());
         }
 
         /// <summary>
         /// Load a new set of shipping policies from the given configuration
         /// </summary>
+        /// <param name="storeId">Id of the store to which the policies apply</param>
         /// <param name="policyConfiguration"></param>
         /// <param name="shippingPolicyFactory">Factory that will be used to create the policies</param>
-        public static void Load(IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration, 
+        public static void Load(long storeId, IEnumerable<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> policyConfiguration, 
             IShippingPolicyFactory shippingPolicyFactory)
         {
             // Var is used here because the nested generic signature reduces readability
@@ -44,6 +46,15 @@ namespace ShipWorks.Shipping.Policies
                 .Select(policyElements => CreatePolicy(shippingPolicyFactory, policyElements, shipmentPolicyConfiguration.Key)));
 
             Current = new ShippingPolicies(policies);
+        }
+
+        /// <summary>
+        /// Unload a store from the cache
+        /// </summary>
+        /// <param name="storeId">Id of the store whose policies should be unloaded</param>
+        public static void Unload(long storeId)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
