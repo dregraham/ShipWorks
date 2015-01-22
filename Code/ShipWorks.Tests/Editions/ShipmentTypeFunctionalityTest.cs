@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.XmlDiffPatch;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Editions
 {
@@ -22,6 +23,9 @@ namespace ShipWorks.Tests.Editions
         [TestInitialize]
         public void Initialize()
         {
+            // Because we're now caching policy data, we need to make sure we clear the cache before each test run
+            ShippingPolicies.ClearCache();
+
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
         }
 

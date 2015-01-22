@@ -679,7 +679,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     throw new StampsException(message, ex);
                 }
 
-                if (ex.Code == 5636353 || ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS"))
+                if (ex.Code == 5636353 || 
+                    ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS") || ex.Message.ToUpperInvariant().Contains("not enough postage".ToUpperInvariant()) ||
+                    ex.Message.ToUpperInvariant().Contains("Insufficient Postage".ToUpperInvariant()))
                 {
                     throw new StampsInsufficientFundsException(account, ex.Message);
                 }

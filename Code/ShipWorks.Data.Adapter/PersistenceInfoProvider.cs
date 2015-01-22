@@ -1308,7 +1308,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits GenericModuleStoreEntity's mappings</summary>
 		private void InitGenericModuleStoreEntityMappings()
 		{
-			base.AddElementMapping( "GenericModuleStoreEntity", "ShipWorksLocal", @"dbo", "GenericModuleStore", 19 );
+			base.AddElementMapping( "GenericModuleStoreEntity", "ShipWorksLocal", @"dbo", "GenericModuleStore", 20 );
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "ModuleUsername", "ModuleUsername", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "ModulePassword", "ModulePassword", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1328,6 +1328,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "ModuleOnlineShipmentDetails", "ModuleOnlineShipmentDetails", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 16 );
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "ModuleHttpExpect100Continue", "ModuleHttpExpect100Continue", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 17 );
 			base.AddElementFieldMapping( "GenericModuleStoreEntity", "ModuleResponseEncoding", "ModuleResponseEncoding", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 18 );
+			base.AddElementFieldMapping( "GenericModuleStoreEntity", "SchemaVersion", "SchemaVersion", false, (int)SqlDbType.VarChar, 20, 0, 0, false, "", null, typeof(System.String), 19 );
 		}
 		/// <summary>Inits GridColumnFormatEntity's mappings</summary>
 		private void InitGridColumnFormatEntityMappings()
@@ -2320,7 +2321,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits ShipSenseKnowledgebaseEntity's mappings</summary>
 		private void InitShipSenseKnowledgebaseEntityMappings()
 		{
-			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgebase", 2 );
+			base.AddElementMapping( "ShipSenseKnowledgebaseEntity", "ShipWorksLocal", @"dbo", "ShipSenseKnowledgeBase", 2 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Hash", "Hash", false, (int)SqlDbType.NVarChar, 64, 0, 0, false, "", null, typeof(System.String), 0 );
 			base.AddElementFieldMapping( "ShipSenseKnowledgebaseEntity", "Entry", "Entry", false, (int)SqlDbType.VarBinary, 2147483647, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 		}

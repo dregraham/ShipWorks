@@ -1039,21 +1039,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             string exceptionMessage = string.Empty;
             int packageIndex = 1;
 
-            foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
+            if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
             {
-                FedExShipmentType fedExShipmentType = new FedExShipmentType();
-                if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
                 {
-                    exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                    FedExShipmentType fedExShipmentType = new FedExShipmentType();
+                    if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                    {
+                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                    }
+
+                    packageIndex++;
                 }
 
-                packageIndex++;
-            }
-
-            if (exceptionMessage.Length > 0)
-            {
-                exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
-                throw new InvalidPackageDimensionsException(exceptionMessage);
+                if (exceptionMessage.Length > 0)
+                {
+                    exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
+                    throw new InvalidPackageDimensionsException(exceptionMessage);
+                }
             }
         }
     }
