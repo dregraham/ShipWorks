@@ -407,17 +407,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsRatesAsRegularRateResults()
-        {
-            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
-
-            foreach (var rate in rates.Rates)
-            {
-                Assert.IsNotInstanceOfType(rate, typeof(NoncompetitiveRateResult));
-            }
-        }
-
-        [TestMethod]
         public void GetBestRates_SetsTagToBestRateResultTag()
         {
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());

@@ -123,8 +123,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
 
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
-                NoncompetitiveRateResult noncompetitiveRate = initialRate as NoncompetitiveRateResult;
-                bestRateCarrierName.Text = noncompetitiveRate == null ? initialRate.Description : noncompetitiveRate.OriginalRate.Description;
+                bestRateCarrierName.Text = initialRate.Description;
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
@@ -153,8 +152,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
 
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
-                NoncompetitiveRateResult noncompetitiveRate = existingAccountRate as NoncompetitiveRateResult;
-                useExistingCarrierServiceDescription.Text = noncompetitiveRate == null ? existingAccountRate.Description : noncompetitiveRate.OriginalRate.Description;
+                useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
 
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
                 
