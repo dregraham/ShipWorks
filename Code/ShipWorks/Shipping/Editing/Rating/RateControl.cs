@@ -391,7 +391,11 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 if (sandGrid.Rows.Count == 0)
                 {
-                    height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+                    // This was causing a crash when length was 0. 
+                    if (sandGrid.Columns.DisplayColumns.Length > 0)
+                    {
+                        height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+                    }
 
                     if (!string.IsNullOrEmpty(sandGrid.EmptyText))
                     {

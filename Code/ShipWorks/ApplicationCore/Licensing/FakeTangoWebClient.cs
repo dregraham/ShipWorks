@@ -75,13 +75,18 @@ namespace ShipWorks.ApplicationCore.Licensing
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((StampsResellerType)account.StampsReseller));
         }
 
+
+        string UpsRestriction = @"        <Feature>
+				<Type>BestRateUpsRestriction</Type>
+				<Config>False</Config>
+			</Feature>";
+
         /// <summary>
         /// Get the status of the specified license
         /// </summary>
         public override LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             ShipWorksLicense license = new ShipWorksLicense(licenseKey);
-
             string rawXml = @"<License>
 	<Key>" + license.Key + @"</Key>
 	<Machine>" + StoreTypeManager.GetType(store).LicenseIdentifier + @"</Machine>
@@ -100,10 +105,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 	<EndiciaScanBasedReturns status='1'/>
     <ShipmentTypeFunctionality>
         <ShipmentType TypeCode='14'>
-            <Feature>
-				<Type>BestRateUpsRestriction</Type>
-				<Config>False</Config>
-			</Feature>
+    " + UpsRestriction  + @"
 			<Feature>
 				<Type>RateResultCount</Type>
 				<Config>5</Config>
