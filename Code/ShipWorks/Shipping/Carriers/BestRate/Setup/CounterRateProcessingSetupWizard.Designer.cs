@@ -29,11 +29,6 @@
         private void InitializeComponent()
         {
             this.wizardPageNoAccounts = new ShipWorks.UI.Wizard.WizardPage();
-            this.panelVia = new System.Windows.Forms.Panel();
-            this.viaParenClose = new System.Windows.Forms.Label();
-            this.viaParenOpen = new System.Windows.Forms.Label();
-            this.viaCarrierName = new System.Windows.Forms.Label();
-            this.viaCarrierLogo = new System.Windows.Forms.PictureBox();
             this.signUpButton = new System.Windows.Forms.Button();
             this.createCarrierAccountDescription = new System.Windows.Forms.Label();
             this.bestRateAmount = new System.Windows.Forms.Label();
@@ -60,8 +55,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
             this.wizardPageNoAccounts.SuspendLayout();
-            this.panelVia.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.viaCarrierLogo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bestRateAccountCarrierLogo)).BeginInit();
             this.useExistingAccountPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.useExistingCarrierLogo)).BeginInit();
@@ -103,7 +96,6 @@
             // 
             // wizardPageNoAccounts
             // 
-            this.wizardPageNoAccounts.Controls.Add(this.panelVia);
             this.wizardPageNoAccounts.Controls.Add(this.signUpButton);
             this.wizardPageNoAccounts.Controls.Add(this.createCarrierAccountDescription);
             this.wizardPageNoAccounts.Controls.Add(this.bestRateAmount);
@@ -121,56 +113,6 @@
             this.wizardPageNoAccounts.Size = new System.Drawing.Size(640, 417);
             this.wizardPageNoAccounts.TabIndex = 0;
             this.wizardPageNoAccounts.Title = "Shipping Account";
-            // 
-            // panelVia
-            // 
-            this.panelVia.Controls.Add(this.viaParenClose);
-            this.panelVia.Controls.Add(this.viaParenOpen);
-            this.panelVia.Controls.Add(this.viaCarrierName);
-            this.panelVia.Controls.Add(this.viaCarrierLogo);
-            this.panelVia.Location = new System.Drawing.Point(178, 53);
-            this.panelVia.Name = "panelVia";
-            this.panelVia.Size = new System.Drawing.Size(387, 28);
-            this.panelVia.TabIndex = 18;
-            this.panelVia.Visible = false;
-            // 
-            // viaParenClose
-            // 
-            this.viaParenClose.AutoSize = true;
-            this.viaParenClose.Location = new System.Drawing.Point(180, 7);
-            this.viaParenClose.Name = "viaParenClose";
-            this.viaParenClose.Size = new System.Drawing.Size(11, 13);
-            this.viaParenClose.TabIndex = 18;
-            this.viaParenClose.Text = ")";
-            // 
-            // viaParenOpen
-            // 
-            this.viaParenOpen.AutoSize = true;
-            this.viaParenOpen.Location = new System.Drawing.Point(1, 7);
-            this.viaParenOpen.Name = "viaParenOpen";
-            this.viaParenOpen.Size = new System.Drawing.Size(104, 13);
-            this.viaParenOpen.TabIndex = 17;
-            this.viaParenOpen.Text = "(via an account with";
-            // 
-            // viaCarrierName
-            // 
-            this.viaCarrierName.AutoSize = true;
-            this.viaCarrierName.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
-            this.viaCarrierName.Location = new System.Drawing.Point(125, 7);
-            this.viaCarrierName.Name = "viaCarrierName";
-            this.viaCarrierName.Size = new System.Drawing.Size(58, 13);
-            this.viaCarrierName.TabIndex = 16;
-            this.viaCarrierName.Text = "Express1";
-            // 
-            // viaCarrierLogo
-            // 
-            this.viaCarrierLogo.Image = global::ShipWorks.Properties.Resources.box_closed16;
-            this.viaCarrierLogo.Location = new System.Drawing.Point(105, 3);
-            this.viaCarrierLogo.Name = "viaCarrierLogo";
-            this.viaCarrierLogo.Size = new System.Drawing.Size(20, 20);
-            this.viaCarrierLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.viaCarrierLogo.TabIndex = 15;
-            this.viaCarrierLogo.TabStop = false;
             // 
             // signUpButton
             // 
@@ -419,9 +361,6 @@
             this.topPanel.PerformLayout();
             this.wizardPageNoAccounts.ResumeLayout(false);
             this.wizardPageNoAccounts.PerformLayout();
-            this.panelVia.ResumeLayout(false);
-            this.panelVia.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.viaCarrierLogo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bestRateAccountCarrierLogo)).EndInit();
             this.useExistingAccountPanel.ResumeLayout(false);
             this.useExistingAccountPanel.PerformLayout();
@@ -457,10 +396,5 @@
         private System.Windows.Forms.Label createAccountHeading;
         private System.Windows.Forms.Label useExistingAccountsForRemainingLabel;
         private UI.Controls.ImageComboBox setupExistingProvider;
-        private System.Windows.Forms.Panel panelVia;
-        private System.Windows.Forms.Label viaParenClose;
-        private System.Windows.Forms.Label viaParenOpen;
-        private System.Windows.Forms.Label viaCarrierName;
-        private System.Windows.Forms.PictureBox viaCarrierLogo;
     }
 }

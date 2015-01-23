@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
@@ -117,25 +116,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // Some service types already contain USPS in the service description, so only add it if
                 // the service description does not already start with USPS
                 bestRateCarrierName.Text = string.Format("{0}{1}", initialRate.Description.StartsWith("USPS ", StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", initialRate.Description);
-
-                panelVia.Visible = true;
-                panelVia.Left = bestRateCarrierName.Right;
-                viaCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
-
-                switch (initialShipmentType.ShipmentTypeCode)
-                {
-                    case ShipmentTypeCode.Endicia: viaCarrierName.Text = "Endicia"; break;
-                    case ShipmentTypeCode.Stamps: viaCarrierName.Text = "Stamps.com"; break;
-                    case ShipmentTypeCode.Express1Endicia:
-                    case ShipmentTypeCode.Express1Stamps:
-                        viaCarrierName.Text = "Express1";
-                        break;
-                    default:
-                        viaCarrierName.Text = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode).ShipmentTypeName;
-                        break;
-                }
-
-                viaParenClose.Left = viaCarrierName.Right;
             }
             else
             {
@@ -145,8 +125,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
                 NoncompetitiveRateResult noncompetitiveRate = initialRate as NoncompetitiveRateResult;
                 bestRateCarrierName.Text = noncompetitiveRate == null ? initialRate.Description : noncompetitiveRate.OriginalRate.Description;
-
-                panelVia.Visible = false;
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
@@ -245,6 +223,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             switch (initialShipmentType.ShipmentTypeCode)
             {
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                     description = "USPS partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
                                   "an account with Stamps.com.";
                     break;
@@ -268,7 +247,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnSignUp(object sender, System.EventArgs e)
+        private void OnSignUp(object sender, EventArgs e)
         {
             IgnoreAllCounterRates = false;
 
@@ -291,7 +270,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <summary>
         /// Called when the value in the setup existing provider drop down list has changed.
         /// </summary>
-        private void OnSetupExistingProviderChanged(object sender, System.EventArgs e)
+        private void OnSetupExistingProviderChanged(object sender, EventArgs e)
         {
             // Disable the "Add my account" button if a provider is not selected
             ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
@@ -303,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAddExistingAccount(object sender, System.EventArgs e)
+        private void OnAddExistingAccount(object sender, EventArgs e)
         {
             ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
 
@@ -330,7 +309,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 {
                     // Give the user a chance to cancel out of the wizard if they accidentally 
                     // chose the wrong provider type and canceled out of the wizard
-                    Show(this.Owner);
+                    Show(Owner);
                 }
             }
         }
@@ -357,7 +336,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnUseExistingAccount(object sender, System.EventArgs e)
+        private void OnUseExistingAccount(object sender, EventArgs e)
         {
             // Choosing to ignore counter rates for the rest of the batch
             IgnoreAllCounterRates = true; 
