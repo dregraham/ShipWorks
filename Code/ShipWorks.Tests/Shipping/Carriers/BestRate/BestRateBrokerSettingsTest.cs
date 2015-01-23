@@ -44,9 +44,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsTrue_StampsExpress1EnabledAndNoAccount_Test()
+        public void CheckExpress1Rates_ReturnsFalse_StampsExpress1EnabledAndNoAccount_Test()
         {
-            Assert.AreEqual(true, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
         }
 
         [TestMethod]
@@ -74,9 +74,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsTrue_EndiciaExpress1EnabledAndNoAccount_Test()
+        public void CheckExpress1Rates_ReturnsFalse_EndiciaExpress1EnabledAndNoAccount_Test()
         {
-            Assert.AreEqual(true, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new EndiciaShipmentType()));
         }
 
         [TestMethod]
