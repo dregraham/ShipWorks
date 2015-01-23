@@ -31,7 +31,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             StampsAccountEntity stampsAccount = stampsAccountRepository.Accounts.FirstOrDefault();
 
-            if (postalShipmentEntity.Stamps != null && stampsAccount != null)
+            if (postalShipmentEntity.Stamps == null)
+            {
+                postalShipmentEntity.Stamps = new StampsShipmentEntity();
+            }
+
+            if (stampsAccount != null)
             {
                 postalShipmentEntity.Stamps.StampsAccountID = stampsAccount.StampsAccountID;
             }
