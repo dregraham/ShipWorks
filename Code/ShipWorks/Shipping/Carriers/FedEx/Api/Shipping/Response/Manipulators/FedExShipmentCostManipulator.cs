@@ -99,9 +99,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
                         break;
                     case RatedWeightMethod.DIM:
                         shipment.BilledType = (int)BilledType.DimensionalWeight;
-                        if (rateDetail.TotalBillingWeight != null)
+                        if (rateDetail.TotalDimWeight != null)
                         {
                             shipment.BilledWeight = (double) rateDetail.TotalDimWeight.Value;
+                        }
+                        else if (rateDetail.TotalBillingWeight != null)
+                        {
+                            shipment.BilledWeight = (double) rateDetail.TotalBillingWeight.Value;
                         }
                         break;
                     default:
