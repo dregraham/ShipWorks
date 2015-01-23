@@ -8,6 +8,9 @@
         /// <summary>
         /// Create a shipping policy from the given type string
         /// </summary>
-        IShippingPolicy Create(string policyType);
+        /// <param name="shipmentTypeCode">The shipment type code the policy is going to be created for.</param>
+        /// <param name="policyType">Type of the policy.</param>
+        /// <returns>An instance of an IShippingPolicy.</returns>
+        IShippingPolicy Create(ShipmentTypeCode shipmentTypeCode, string policyType);
     }
 }

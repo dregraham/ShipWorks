@@ -164,9 +164,9 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             ShippingPolicies.Load(0, features, policyFactoryMock.Object);
 
-            policyFactoryMock.Verify(x => x.Create("Foo"), Times.Once);
-            policyFactoryMock.Verify(x => x.Create("Bar"), Times.Exactly(2));
-            policyFactoryMock.Verify(x => x.Create("Baz"), Times.Once);
+            policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Foo"), Times.Once);
+            policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Bar"), Times.Exactly(2));
+            policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Baz"), Times.Once);
         }
 
         [TestMethod]
@@ -265,7 +265,8 @@ namespace ShipWorks.Tests.Shipping.Policies
         private List<Mock<IShippingPolicy>> CreateAndRegisterFactoryMocks(string key, int count)
         {
             List<Mock<IShippingPolicy>> policy = Enumerable.Range(0, count).Select(_ => mockRepository.Create<IShippingPolicy>()).ToList();
-            policyFactoryMock.Setup(x => x.Create(key)).Returns(new Queue<IShippingPolicy>(policy.Select(x => x.Object)).Dequeue);
+            policyFactoryMock.Setup(x => x.Create(It.IsAny<ShipmentTypeCode>(), key)).Returns(new Queue<IShippingPolicy>(policy.Select(x => x.Object)).Dequeue);
+
             return policy;
         }
 

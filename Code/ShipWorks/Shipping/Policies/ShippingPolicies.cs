@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Policies
         private static KeyValuePair<ShipmentTypeCode, IShippingPolicy> CreatePolicy(IShippingPolicyFactory shippingPolicyFactory, 
             IGrouping<string, XElement> policyElements, ShipmentTypeCode shipmentType)
         {
-            IShippingPolicy policy = shippingPolicyFactory.Create(policyElements.Key);
+            IShippingPolicy policy = shippingPolicyFactory.Create(shipmentType, policyElements.Key);
 
             foreach (string value in policyElements.Select(x => GetElementValue(x, "Config")))
             {

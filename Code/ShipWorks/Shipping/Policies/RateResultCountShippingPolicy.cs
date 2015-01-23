@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Policies
         /// <exception cref="System.ArgumentException">The configuration for the 
         /// RateResultCountShippingPolicy was not in the expected format. An integer 
         /// value is expected.</exception>
-        public void Configure(string configuration)
+        public virtual void Configure(string configuration)
         {
             int numericConfiguration = 0;
             if (int.TryParse(configuration, out numericConfiguration))
@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         /// <param name="target">The target is expected to be a rate control.</param>
         /// <returns><c>true</c> if the specified target is applicable; otherwise, <c>false</c>.</returns>
-        public bool IsApplicable(object target)
+        public virtual bool IsApplicable(object target)
         {
             return target is RateControl;
         }
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Policies
         /// </summary>
         /// <param name="target">The object the policy will be applied towards. The target is 
         /// expected to be a rate control.</param>
-        public void Apply(object target)
+        public virtual void Apply(object target)
         {
             RateControl rateControl = target as RateControl;
 

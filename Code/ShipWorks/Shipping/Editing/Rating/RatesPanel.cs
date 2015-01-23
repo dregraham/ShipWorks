@@ -352,6 +352,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
+            // Reset the rate control to show all rates and let the policy change the 
+            // behavior if it's necessary
+            rateControl.ShowAllRates = true;
+            rateControl.ShowSingleRate = false;
+
             // Apply any applicable policies to the rate control prior to loading the rates
             ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
             rateControl.LoadRates(rateGroup);
