@@ -105,8 +105,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// Loads the rate information for the best rate that was found.
         /// </summary>
         private void LoadInitialRateInfo()
-        {
+        {            
             LoadCreateCarrierDescriptionText();
+            PositionSignUpButton();
             
             if (ShipmentTypeManager.IsPostal(initialShipmentType.ShipmentTypeCode))
             {
@@ -127,6 +128,22 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
+        }
+
+        /// <summary>
+        /// Positions the sign up button in relation to the size of the string contained in the createCarrierAccountDescription 
+        /// label. This prevents a chunk of empty space appearing between the label and the button when there is only a single
+        /// line of text in the label.
+        /// </summary>
+        private void PositionSignUpButton()
+        {
+            using (Graphics g = CreateGraphics())
+            {
+                // Use the size of the control hosting the text to find the height and 
+                // adjust the sign-up button accordingly
+                SizeF size = g.MeasureString(createCarrierAccountDescription.Text, createCarrierAccountDescription.Font, createCarrierAccountDescription.Size);
+                signUpButton.Top = createCarrierAccountDescription.Top + (int) size.Height + 3;
+            }
         }
 
         /// <summary>
