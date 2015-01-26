@@ -594,8 +594,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // coming from somewhere other than the shipping screen)
             LoadShipmentData(shipment, false);
 
-            SqlAdapter.Default.SaveAndRefetch(shipment);
-
             IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
             return brokers.Any(b => b.IsCustomsRequired(shipment));
         }
