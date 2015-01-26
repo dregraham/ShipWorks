@@ -76,9 +76,15 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
 
-        string UpsRestriction = @"        <Feature>
+        string UpsRestriction = @"        
+            <Feature>
 				<Type>BestRateUpsRestriction</Type>
 				<Config>False</Config>
+			</Feature>";
+        private static string QtyRestriction = @"
+            <Feature>
+				<Type>RateResultCount</Type>
+				<Config>1</Config>
 			</Feature>";
 
         /// <summary>
@@ -106,10 +112,7 @@ namespace ShipWorks.ApplicationCore.Licensing
     <ShipmentTypeFunctionality>
         <ShipmentType TypeCode='14'>
     " + UpsRestriction  + @"
-			<Feature>
-				<Type>RateResultCount</Type>
-				<Config>5</Config>
-			</Feature>
+	" + QtyRestriction + @"
 		</ShipmentType>
         <!-- This is the USPS shipment type. Testing to confirm that the feature settings are ignored. -->
 		<ShipmentType TypeCode='15'>
