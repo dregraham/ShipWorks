@@ -64,6 +64,8 @@ namespace ShipWorks.Shipping
             // Use the trusting inspector until told otherwise trusting so that calls will continue to work as expected.
             // Calls that require specific inspection should override the CertificateInspector property.
             certificateInspector = new TrustingCertificateInspector();
+
+            ShouldApplyShipSense = true;
         }
 
         /// <summary>
@@ -217,6 +219,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [should apply ship sense].
+        /// </summary>
+        public bool ShouldApplyShipSense { get; set; }
+
+        /// <summary>
         /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
         /// null if the shipment type does not require setup
         /// </summary>
@@ -361,8 +368,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Attempts to apply ShipSense values to the given shipment.
         /// </summary>
-        protected void ApplyShipSense(ShipmentEntity shipment)
+        private void ApplyShipSense(ShipmentEntity shipment)
         {
+            if (!ShouldApplyShipSense)
+            {
+                return;
+            }
+
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if (!settings.ShipSenseEnabled)

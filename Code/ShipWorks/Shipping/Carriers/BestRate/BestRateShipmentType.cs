@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -592,6 +593,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             // Make sure the best rate shipment data is loaded (in the event that we're 
             // coming from somewhere other than the shipping screen)
             LoadShipmentData(shipment, false);
+
+            SqlAdapter.Default.SaveAndRefetch(shipment);
 
             IEnumerable<IBestRateShippingBroker> brokers = brokerFactory.CreateBrokers(shipment, false);
             return brokers.Any(b => b.IsCustomsRequired(shipment));

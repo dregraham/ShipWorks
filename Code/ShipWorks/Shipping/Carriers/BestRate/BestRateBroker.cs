@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
+            shipmentType.ShouldApplyShipSense = false;
             ShipmentType = shipmentType;
             GetRatesAction = ShippingManager.GetRates;
         }
