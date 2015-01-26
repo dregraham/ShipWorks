@@ -48,12 +48,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
 
-        // Maps stamps.com usernames to their latest authenticator tokens
-        static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
-
-        // Maps stamps.com usernames to the object lock used to make sure only one thread is trying to authenticate at a time
-        static Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
-
         // Cleansed address map so we don't do common addresses over and over again
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
@@ -149,14 +143,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     CheckCertificate(webService.Url, isExpress1);
 
-                    string auth = webService.AuthenticateUser(new Credentials
+                    webService.AuthenticateUser(new Credentials
                     {
                         IntegrationID = isExpress1 ? new Guid(express1StampsConnectionDetails.ApiKey) : integrationID,
                         Username = username,
                         Password = password
                     }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired);
-
-                    usernameAuthenticatorMap[username] = auth;
                 }
             }
             catch (SoapException ex)
@@ -198,11 +190,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public AccountInfo GetAccountInfo(StampsAccountEntity account)
         {
-            return AuthenticationWrapper(() => { return GetAccountInfoInternal(account); }, account);
+            return GetAccountInfoInternal(account);
         }
 
         /// <summary>
-        /// The internal GetAccountInfo implementation that is intended to be wrapped by the auth wrapper
+        /// The internal GetAccountInfo implementation
         /// </summary>
         private AccountInfo GetAccountInfoInternal(StampsAccountEntity account)
         {
@@ -214,8 +206,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Address address;
                 string email;
 
-                string auth = webService.GetAccountInfo(GetAuthenticator(account), out accountInfo, out address, out email);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
             }
 
             return accountInfo;
@@ -248,11 +239,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public string GetUrl(StampsAccountEntity account, UrlType urlType)
         {
-            return AuthenticationWrapper(() => { return GetUrlInternal(account, urlType); }, account);
+            return GetUrlInternal(account, urlType);
         }
 
         /// <summary>
-        /// The internal GetUrl implementation that is intended to be wrapped by the auth wrapper
+        /// The internal GetUrl implementation
         /// </summary>
         private string GetUrlInternal(StampsAccountEntity account, UrlType urlType)
         {
@@ -260,8 +251,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (SwsimV29 webService = CreateWebService("GetURL", (StampsResellerType)account.StampsReseller))
             {
-                string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.GetURL(GetCredentials(account), urlType, string.Empty, out url);
             }
 
             return url;
@@ -272,11 +262,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public void PurchasePostage(StampsAccountEntity account, decimal amount, decimal controlTotal)
         {
-            AuthenticationWrapper(() => { PurchasePostageInternal(account, amount, controlTotal); return true; }, account);
+            PurchasePostageInternal(account, amount, controlTotal);
         }
 
         /// <summary>
-        /// The internal PurchasePostageInternal implementation intended to be wrapped by the auth wrapper
+        /// The internal PurchasePostageInternal implementation
         /// </summary>
         private void PurchasePostageInternal(StampsAccountEntity account, decimal amount, decimal controlTotal)
         {
@@ -289,8 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (SwsimV29 webService = CreateWebService("PurchasePostage", (StampsResellerType)account.StampsReseller))
             {
-                string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.PurchasePostage(GetCredentials(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
             }
 
             if (purchaseStatus == PurchaseStatus.Rejected)
@@ -319,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+                foreach (RateV11 stampsRate in GetRatesInternal(shipment, account))
                 {
                     PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
@@ -408,7 +397,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// The internal GetRates implementation intended to be wrapped by the auth wrapper
+        /// The internal GetRates implementation
         /// </summary>
         private List<RateV11> GetRatesInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
@@ -422,8 +411,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 RateV11[] ratesArray;
 
-                string auth = webService.GetRates(GetAuthenticator(account), rate, out ratesArray);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.GetRates(GetCredentials(account), rate, out ratesArray);
 
                 rateResults = ratesArray.ToList();
             }
@@ -454,11 +442,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
-            return AuthenticationWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
+            return CleanseAddressInternal(person, account, requireFullMatch);
         }
 
         /// <summary>
-        /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
+        /// Internal CleanseAddress implementation
         /// </summary>
         private Address CleanseAddressInternal(PersonAdapter person, StampsAccountEntity account, bool requireFullMatch)
         {
@@ -480,8 +468,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             using (SwsimV29 webService = CreateWebService("CleanseAddress", (StampsResellerType)account.StampsReseller))
             {
-                string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.CleanseAddress(GetCredentials(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
 
                 if (!addressMatch)
                 {
@@ -565,13 +552,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             XDocument result = new XDocument();
-            AuthenticationWrapper(() => { result = CreateScanFormInternal(shipments, stampsAccountEntity); return true; }, stampsAccountEntity);
+            result = CreateScanFormInternal(shipments, stampsAccountEntity); 
 
             return result;
         }
 
         /// <summary>
-        /// Creates the scan form via the Stamps.com API and intended to be wrapped by the authentication wrapper.
+        /// Creates the scan form via the Stamps.com API.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         /// <param name="stampsAccountEntity">The stamps account entity.</param>
@@ -589,7 +576,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 webService.CreateScanForm
                 (
-                    GetAuthenticator(stampsAccountEntity),
+                    GetCredentials(stampsAccountEntity),
                     stampsTransactions.ToArray(),
                     CreateScanFormAddress(person),
                     ImageType.Png,
@@ -635,18 +622,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
-            AuthenticationWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
+            VoidShipmentInternal(shipment, account);
         }
 
         /// <summary>
-        /// The internal VoidShipment implementation intended to be wrapped by the auth wrapper
+        /// The internal VoidShipment implementation
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
             using (SwsimV29 webService = CreateWebService("Void", (StampsResellerType)account.StampsReseller))
             {
-                string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
-                usernameAuthenticatorMap[account.Username] = auth;
+                webService.CancelIndicium(GetCredentials(account), shipment.Postal.Stamps.StampsTransactionID);
             }
         }
 
@@ -663,7 +649,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                AuthenticationWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
+                ProcessShipmentInternal(shipment, account);
             }
             catch (StampsApiException ex)
             {
@@ -692,7 +678,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
+        /// The internal ProcessShipment implementation
         /// </summary>
         private void ProcessShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
@@ -781,7 +767,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
 
-                    string envelopeAuth = webService.CreateEnvelopeIndicium(GetAuthenticator(account), ref integratorGuid,
+                    webService.CreateEnvelopeIndicium(GetCredentials(account), ref integratorGuid,
                         ref rate,
                         fromAddress,
                         toAddress,
@@ -796,8 +782,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         out postageBalance,
                         out mac_Unused,
                         out postageHash);
-
-                    usernameAuthenticatorMap[account.Username] = envelopeAuth;
                 }
             }
             else
@@ -805,7 +789,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
                 using (SwsimV29 webService = CreateWebService("Process", (StampsResellerType)account.StampsReseller))
                 {
-                    string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
+                    webService.CreateIndicium(GetCredentials(account), ref integratorGuid,
                         ref tracking,
                         ref rate,
                         fromAddress,
@@ -840,8 +824,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         out mac_Unused,
                         out postageHash,
                         out imageData);
-
-                    usernameAuthenticatorMap[account.Username] = auth;
                 }
             }
 
@@ -1344,107 +1326,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Wraps the given executor in methods that ensure the appropriate authentication for the account
+        /// Get the Credentials for the given account
         /// </summary>
-        private T AuthenticationWrapper<T>(Func<T> executor, StampsAccountEntity account)
+        private static Credentials GetCredentials(StampsAccountEntity account)
         {
-            object authenticationLock;
-
-            lock (authenticationLockMap)
+            bool isExpress1 = account.StampsReseller == (int)StampsResellerType.Express1;
+            return new Credentials
             {
-                if (!authenticationLockMap.TryGetValue(account.Username, out authenticationLock))
-                {
-                    authenticationLock = new object();
-                    authenticationLockMap[account.Username] = authenticationLock;
-                }
-            }
-
-            // We have to lockout authentication of this account to make sure only one thread is trying to authenticate at a time,
-            // otherwise there will be race conditions try to get the latest authenticator.
-            lock (authenticationLock)
-            {
-                int triesLeft = 5;
-
-                while (true)
-                {
-                    triesLeft--;
-
-                    try
-                    {
-                        return executor();
-                    }
-                    catch (SoapException ex)
-                    {
-                        log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
-
-                        if (triesLeft > 0 && IsStaleAuthenticator(ex, account.StampsReseller == (int) StampsResellerType.Express1))
-                        {
-                            AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
-                        }
-                        else
-                        {
-                            throw new StampsApiException(ex);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw WebHelper.TranslateWebException(ex, typeof(StampsException));
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get the authenticator for the given account
-        /// </summary>
-        private string GetAuthenticator(StampsAccountEntity account)
-        {
-            string auth;
-            if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))
-            {
-                AuthenticateUser(account.Username, SecureText.Decrypt(account.Password, account.Username), (StampsResellerType)account.StampsReseller);
-
-                auth = usernameAuthenticatorMap[account.Username];
-            }
-
-            return auth;
-        }
-
-        /// <summary>
-        /// Indicates if the exception represents an authenticator that has gone stale
-        /// </summary>
-        private static bool IsStaleAuthenticator(SoapException ex, bool isExpress1)
-        {
-            if (isExpress1)
-            {
-                // Express1 does not return error codes...
-                switch (ex.Message)
-                {
-                    case "Invalid authentication info":
-                    case "Unable to authenticate user.":
-                        return true;
-                }
-
-                return false;
-            }
-            else
-            {
-                long code = StampsApiException.GetErrorCode(ex);
-
-                switch (code)
-                {
-                    case 0x002b0201: // Invalid
-                    case 0x002b0202: // Expired
-                    case 0x004C0105: // Expired
-                    case 0x00500102: // Expired
-                    case 0x8004E112: // Expired
-                    case 0x002b0203: // Invalid
-                    case 0x002b0204: // Out of sync
-                        return true;
-                }
-
-                return false;
-            }
+                IntegrationID = isExpress1 ? new Guid(express1StampsConnectionDetails.ApiKey) : integrationID,
+                Username = account.Username,
+                Password = SecureText.Decrypt(account.Password, account.Username)
+            };
         }
     }
 }
