@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             // We need to configure each of the brokers now that we have our final
             // list that should be used
-            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, brokers, EditionManager.ActiveRestrictions);
+            BestRateBrokerSettings brokerSettings = new BestRateBrokerSettings(shippingSettings, EditionManager.ActiveRestrictions);
             foreach (IBestRateShippingBroker broker in brokers)
             {
                 broker.Configure(brokerSettings);

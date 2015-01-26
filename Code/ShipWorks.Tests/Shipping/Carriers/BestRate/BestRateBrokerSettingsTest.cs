@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 (int)ShipmentTypeCode.Express1Stamps
             };
 
-            testObject = new BestRateBrokerSettings(settings, brokers, null);
+            testObject = new BestRateBrokerSettings(settings, null);
             testObject.EnabledShipmentTypeCodes = EnumHelper.GetEnumList<ShipmentTypeCode>().Select(x => x.Value);
         }
 

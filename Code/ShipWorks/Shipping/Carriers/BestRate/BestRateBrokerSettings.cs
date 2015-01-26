@@ -13,7 +13,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateBrokerSettings : IBestRateBrokerSettings
     {
         private readonly ShippingSettingsEntity settings;
-        private readonly List<IBestRateShippingBroker> brokers;
         private readonly EditionRestrictionSet activeRestrictions;
         private IEnumerable<ShipmentTypeCode> enabledShipmentTypeCodes;
 
@@ -21,12 +20,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// Initializes a new instance of the <see cref="BestRateBrokerSettings" /> class.
         /// </summary>
         /// <param name="settings">The settings.</param>
-        /// <param name="brokers">The brokers.</param>
         /// <param name="activeRestrictions">The active restrictions.</param>
-        public BestRateBrokerSettings(ShippingSettingsEntity settings, List<IBestRateShippingBroker> brokers, EditionRestrictionSet activeRestrictions)
+        public BestRateBrokerSettings(ShippingSettingsEntity settings, EditionRestrictionSet activeRestrictions)
         {
             this.settings = settings;
-            this.brokers = brokers;
             this.activeRestrictions = activeRestrictions;
         }
 
