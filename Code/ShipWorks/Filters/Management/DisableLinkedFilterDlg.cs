@@ -75,7 +75,10 @@ namespace ShipWorks.Filters.Management
                 BuildShippingRuleMessage(references)
             };
 
-            return messages.Where(x => !string.IsNullOrEmpty(x))
+            // If none of the reference messages match our friendly messages, just use the originals
+            List<string> filteredMessages = messages.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+            return (filteredMessages.Any() ? filteredMessages : references)
                            .Aggregate((x, y) => x + Environment.NewLine + Environment.NewLine + y);
         }
 
