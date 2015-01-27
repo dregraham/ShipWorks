@@ -1,17 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml;
-using System.Xml.XPath;
-using ShipWorks.Data;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using log4net;
-using Interapptive.Shared.Utility;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms.GenericModule;
-using Interapptive.Shared.Net;
 
 namespace ShipWorks.Stores.Platforms.GenericModule
 {
@@ -20,16 +11,26 @@ namespace ShipWorks.Stores.Platforms.GenericModule
     /// </summary>
     public class GenericStoreStatusCodeProvider : OnlineStatusCodeProvider<object>
     {
-        // Logger
+        // Loggers - these will be the same at run time, but the instance version can be mocked out during testing
         static readonly ILog log = LogManager.GetLogger(typeof(GenericStoreStatusCodeProvider));
+        private readonly ILog logger;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public GenericStoreStatusCodeProvider(GenericModuleStoreEntity store)
-            : base(store, GenericModuleStoreFields.ModuleStatusCodes)
+            : this(store, log)
         {
 
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public GenericStoreStatusCodeProvider(GenericModuleStoreEntity store, ILog logger)
+            : base(store, GenericModuleStoreFields.ModuleStatusCodes)
+        {
+            this.logger = logger;
         }
 
         /// <summary>
@@ -37,14 +38,32 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public override object ConvertCodeValue(object value)
         {
-            if (((GenericModuleStoreEntity) Store).ModuleOnlineStatusDataType == (int) GenericVariantDataType.Numeric)
+            return StoreUsesNumericStatusCodes ? 
+                ConvertToNumeric(value) : 
+                ConvertToText(value);
+        }
+
+        /// <summary>
+        /// Tests whether the specified code is valid
+        /// </summary>
+        public override bool IsValidCode(object code)
+        {
+            if (code == null)
             {
-                return Convert.ToInt64(value);
+                return false;
             }
-            else
+
+            if (StoreUsesNumericStatusCodes && (code is long || code is int)) 
             {
-                return value.ToString();
+                return true;
             }
+
+            if (!StoreUsesNumericStatusCodes && code is string)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -67,9 +86,50 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             }
             catch (GenericStoreException ex)
             {
-                log.ErrorFormat("ShipWorks was unable to retrieve available status codes from the online store: {0}", ex.Message);
+                logger.ErrorFormat("ShipWorks was unable to retrieve available status codes from the online store: {0}", ex.Message);
 
                 // return null skip import
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the store uses numeric status codes
+        /// </summary>
+        private bool StoreUsesNumericStatusCodes
+        {
+            get
+            {
+                return ((GenericModuleStoreEntity)Store).ModuleOnlineStatusDataType == (int)GenericVariantDataType.Numeric;
+            }
+        }
+
+        /// <summary>
+        /// Convert the given value to text
+        /// </summary>
+        private object ConvertToText(object value)
+        {
+            if (value != null)
+            {
+                return value.ToString();
+            }
+
+            logger.Warn("Could not null status code");
+            return null;
+        }
+
+        /// <summary>
+        /// Converts the given value to an Int64
+        /// </summary>
+        private object ConvertToNumeric(object value)
+        {
+            try
+            {
+                return Convert.ToInt64(value);
+            }
+            catch (FormatException ex)
+            {
+                logger.Warn(string.Format("Could not parse status code [{0}] into a number", value), ex);
                 return null;
             }
         }
