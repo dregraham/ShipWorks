@@ -1052,7 +1052,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (exceptionMessage.Length > 0)
                 {
-                    exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
+                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }
