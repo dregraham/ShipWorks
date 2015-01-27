@@ -84,6 +84,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.Types.Excel.Editing
                         MessageHelper.ShowError(this, ex.Message);
                         return;
                     }
+                    catch (InvalidOperationException ex)
+                    {
+                        MessageHelper.ShowError(this, ex.Message);
+                        return;
+                    }
                     catch (InvalidDataException ex)
                     {
                         MessageHelper.ShowError(this, ex.Message);

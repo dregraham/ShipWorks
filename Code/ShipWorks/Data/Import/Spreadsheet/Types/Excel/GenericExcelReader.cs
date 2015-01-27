@@ -65,6 +65,10 @@ namespace ShipWorks.Data.Import.Spreadsheet.Types.Excel
             {
                 throw new GenericSpreadsheetException("ShipWorks could not read the input file:\n\n" + ex.Message, ex);
             }
+            catch (InvalidOperationException ex)
+            {
+                throw new GenericSpreadsheetException("ShipWorks could not read the input file:\n\n" + ex.Message, ex);
+            }
             catch (IOException ex)
             {
                 throw new GenericSpreadsheetException("ShipWorks could not read the input file.\n\n" + ex.Message, ex);
