@@ -177,7 +177,6 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.Account.EndiciaAccountType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.PostalCustomsForm".ToUpperInvariant(),
-                "ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountContractType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.Enums.UpsEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsApiResponseStatus".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsOnLineToolType".ToUpperInvariant(),
