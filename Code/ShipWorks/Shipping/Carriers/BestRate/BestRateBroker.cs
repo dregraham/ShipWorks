@@ -398,6 +398,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.OriginOriginID = originalShipment.OriginOriginID;
             currentShipment.Insurance = originalShipment.Insurance;
             currentShipment.BestRateEvents = originalShipment.BestRateEvents;
+            currentShipment.ShipSenseStatus = originalShipment.ShipSenseStatus;
+            currentShipment.ShipSenseChangeSets = originalShipment.ShipSenseChangeSets;
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
         }
