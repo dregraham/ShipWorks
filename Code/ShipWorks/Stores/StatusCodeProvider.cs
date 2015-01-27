@@ -177,9 +177,21 @@ namespace ShipWorks.Stores
             string name = XPathUtility.Evaluate(xpath, "Name", "");
 
             code = ConvertCodeValue(code);
-            localMap[code] = name;
 
-            ReadExtendedStatusCodeXml(code, xpath);
+            if (IsValidCode(code))
+            {
+                localMap[code] = name;
+
+                ReadExtendedStatusCodeXml(code, xpath);
+            }
+        }
+
+        /// <summary>
+        /// Tests whether the specified code is valid
+        /// </summary>
+        public virtual bool IsValidCode(T code)
+        {
+            return true;
         }
 
         /// <summary>
