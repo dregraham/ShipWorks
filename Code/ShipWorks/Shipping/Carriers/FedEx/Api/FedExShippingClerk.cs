@@ -599,12 +599,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new RateGroup(overallResults);
             }
-            catch (InvalidPackageDimensionsException ex)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
-                return errorRates;
-            }
             catch (Exception ex)
             {
                 throw (HandleException(ex));
@@ -984,6 +978,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
 
                 return new FedExException(errorMessage, carrierException);
+            }
+            else if (exception is InvalidPackageDimensionsException)
+            {
+                return new FedExException(exception.Message, exception);
             }
             else
             {
