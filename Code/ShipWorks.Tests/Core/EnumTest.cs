@@ -54,6 +54,9 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(0, missingObfuscationAttribute.Length, missingObfuscationAttribute);
         }
 
+        /// <summary>
+        /// If namespace begins with these values, they are ignored.
+        /// </summary>
         private List<string> ignoreShipmentTypeNameParts = new List<string>
             {
                 "ShipWorks.Data.Model".ToUpperInvariant(),
@@ -70,6 +73,9 @@ namespace ShipWorks.Tests.Core
                 "PayPal.WebServices".ToUpperInvariant(),
             };
 
+        /// <summary>
+        /// Actual namespace of the enum
+        /// </summary>
         private List<string> ignoreShipmentTypeNames = new List<string>
             {
                 "ShipWorks.Filters.FilterNodePurpose".ToUpperInvariant(),
@@ -179,6 +185,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsApiResponseStatus".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsOnLineToolType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipStatusType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Editing.Rating.RatingExceptionType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl+DisplayMode".ToUpperInvariant(),
                 "ShipWorks.Shipping.InitialShippingTabDisplay".ToUpperInvariant(),
                 "ShipWorks.Shipping.Settings.ShipmentBlankPhoneOption".ToUpperInvariant(),
