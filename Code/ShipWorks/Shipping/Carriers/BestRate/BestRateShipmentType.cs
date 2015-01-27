@@ -236,7 +236,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     .Where(ex => ex != null)
                     // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
                     .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                    .GroupBy(e => e.Message)
+                    .GroupBy(e => e.Message + e.ShipmentType.ToString())
                     .Select(m => m.First()).ToList();
 
                 if (distinctExceptions.Any())
