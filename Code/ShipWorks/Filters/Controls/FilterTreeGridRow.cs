@@ -92,11 +92,13 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         public void UpdateStyle()
         {
+            FilterState currentState = CurrentFilterState;
+
             // We have a previous state, so only toggle the style if the state has changed
-            if (!previousFilterState.HasValue || previousFilterState != (FilterState) filterNode.Filter.State)
+            if (!previousFilterState.HasValue || previousFilterState != currentState)
             {
-                ToggleStyle((FilterState) filterNode.Filter.State);
-                previousFilterState = (FilterState) filterNode.Filter.State;
+                ToggleStyle(currentState);
+                previousFilterState = currentState;
             }
         }
 
@@ -118,7 +120,7 @@ namespace ShipWorks.Filters.Controls
                 {
                     cell.Font = isFilterDisabled ? disabledFont.Font : Font;
                     cell.ForeColor = isFilterDisabled ? disabledFont.TextColor : Grid.Columns[0].ForeColor;
-                }   
+                }
             }
         }
 
@@ -172,14 +174,9 @@ namespace ShipWorks.Filters.Controls
             {
                 // A null reference error was being thrown.  Discoverred by Crash Reports.
                 // Let's figure out what is null....
-                if (FilterNode == null)
+                if (!IsRowValid())
                 {
-                    throw new NullReferenceException("FilterNode cannot be null.");
-                }
-
-                if (FilterNode.Filter == null)
-                {
-                    throw new NullReferenceException(("FilterNode.Filter cannot be null."));
+                    throw new NullReferenceException("Could not update layout. Check log for warnings.");
                 }
 
                 // Make a note whether the filter was already flagged as a slow running filter
@@ -213,6 +210,50 @@ namespace ShipWorks.Filters.Controls
                         statusChangeWrittenToLog = true;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets whether the filter row is valid
+        /// </summary>
+        /// <remarks>This i</remarks>
+        /// <returns></returns>
+        private bool IsRowValid()
+        {
+            if (FilterNode == null)
+            {
+                log.Warn("FilterNode cannot be null");
+                return false;
+            }
+
+            if (FilterNode.Filter == null)
+            {
+                log.Warn("FilterNode.Filter cannot be null");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Gets whether the filter associated with this row is disabled 
+        /// </summary>
+        public bool IsFilterDisabled()
+        {
+            return CurrentFilterState == FilterState.Disabled;
+        }
+
+        /// <summary>
+        /// Gets the current state of the filter associated with this row
+        /// </summary>
+        /// <returns>The current state if it can be retrieved, otherwise we assume it is enabled</returns>
+        private FilterState CurrentFilterState
+        {
+            get
+            {
+                return IsRowValid() ?
+                    (FilterState)filterNode.Filter.State :
+                    FilterState.Enabled;
             }
         }
     }
