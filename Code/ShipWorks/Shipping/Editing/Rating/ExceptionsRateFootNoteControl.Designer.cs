@@ -28,11 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.exceptionsLink = new System.Windows.Forms.LinkLabel();
             this.errorMessage = new System.Windows.Forms.Label();
+            this.exceptionsLink = new System.Windows.Forms.LinkLabel();
             this.pictureBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.SuspendLayout();
+            // 
+            // errorMessage
+            // 
+            this.errorMessage.AutoSize = true;
+            this.errorMessage.Location = new System.Drawing.Point(25, 7);
+            this.errorMessage.Name = "errorMessage";
+            this.errorMessage.Size = new System.Drawing.Size(206, 13);
+            this.errorMessage.TabIndex = 6;
+            this.errorMessage.Text = "Some errors occurred while getting rates.";
             // 
             // exceptionsLink
             // 
@@ -44,15 +53,6 @@
             this.exceptionsLink.TabStop = true;
             this.exceptionsLink.Text = "More info...";
             this.exceptionsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnClickExceptionsLink);
-            // 
-            // errorMessage
-            // 
-            this.errorMessage.AutoSize = true;
-            this.errorMessage.Location = new System.Drawing.Point(25, 7);
-            this.errorMessage.Name = "errorMessage";
-            this.errorMessage.Size = new System.Drawing.Size(206, 13);
-            this.errorMessage.TabIndex = 6;
-            this.errorMessage.Text = "Some errors occurred while getting rates.";
             // 
             // pictureBox
             // 
@@ -81,8 +81,9 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.LinkLabel exceptionsLink;
         private System.Windows.Forms.Label errorMessage;
+        private System.Windows.Forms.LinkLabel exceptionsLink;
+        private System.Windows.Forms.PictureBox pictureBox;
+
     }
 }

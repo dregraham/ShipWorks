@@ -31,7 +31,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 
         private readonly Express1Registration registration;
         private readonly IEnumerable<IEntity2> existingExpress1Accounts;
-       
+        private int initialPersonCreditCardHeight;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
         /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Stamps), the caller needs to provide
@@ -66,6 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
             InitializeComponent();
 
+            initialPersonCreditCardHeight = personCreditCard.Height;
+
             this.postageDialog = postageDialog;
 
             this.accountControl = accountControl;
@@ -92,9 +95,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
             cardExpireMonth.SelectedIndex = 0;
             cardExpireYear.SelectedIndex = 0;
-
-            // Credit Card
-            paymentMethod.SelectedIndex = 1;
 
             this.ForceAccountOnly = forceAccountOnly;
             this.existingExpress1Accounts = existingExpress1Accounts ?? new List<IEntity2>();
@@ -235,14 +235,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         /// </summary>
         private void OnStepNextAddress(object sender, WizardStepEventArgs e)
         {
+            registration.MailingAddress = new PersonAdapter();
+            personControl.SaveToEntity(registration.MailingAddress);
+
+            if (registration.MailingAddress.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "USPS only supports US addresses.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             if (!personControl.ValidateRequiredFields())
             {
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            registration.MailingAddress = new PersonAdapter();
-            personControl.SaveToEntity(registration.MailingAddress);
 
             // pre-load these details into the CC controls
             personCreditCard.LoadEntity(registration.MailingAddress);
@@ -317,33 +324,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                     CreditCardType = (Express1CreditCardType)cardType.SelectedValue,
                     CreditCardAccountNumber = cardNumber.Text.Trim(),
                     CreditCardExpirationDate = new DateTime(cardExpireYear.SelectedIndex + 2009, cardExpireMonth.SelectedIndex + 1, 1),
-                    AchAccountNumber = checkingAccount.Text.Trim(),
-                    AchRoutingId = checkingRouting.Text.Trim()
+                    AchAccountNumber = string.Empty,
+                    AchRoutingId = string.Empty
                 };
 
             return paymentInfo;
-        }
-
-        /// <summary>
-        /// Payment Method was changed
-        /// </summary>
-        private void OnChangedPaymentMethod(object sender, EventArgs e)
-        {
-            // Checking Account
-            if (paymentMethod.SelectedIndex == 0)
-            {
-                creditCardPanel.Visible = false;
-                checkingPanel.Visible = true;
-
-                // move checking details into place
-                checkingPanel.Top = creditCardPanel.Top + 30;
-            }
-            // Credit Card
-            else
-            {
-                creditCardPanel.Visible = true;
-                checkingPanel.Visible = false;
-            }
         }
 
         /// <summary>
@@ -464,6 +449,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                 optionsControl.SaveSettings(settings);
                 ShippingSettings.Save(settings);
             }
+        }
+
+        /// <summary>
+        /// Adjust the location of the credit card details if the credit card person control changes
+        /// </summary>
+        private void OnPersonCreditCardResize(object sender, EventArgs e)
+        {
+            creditCardDetailsPanel.Top = creditCardDetailsPanel.Top - (initialPersonCreditCardHeight - personCreditCard.Height);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace ShipWorks.ApplicationCore.Nudges
                 Width = nudge.ContentDimensions.Width + 35;
                 Height = nudge.ContentDimensions.Height + 95;
             }
+
         }
 
         /// <summary>
@@ -40,7 +41,8 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            Text = EnumHelper.GetDescription(nudge.NudgeType);
+            // Default the dialog's title to ShipWorks if a name was not provided
+            this.Text = string.IsNullOrWhiteSpace(nudge.Name) ? "ShipWorks" : nudge.Name;
 
             browser.Navigate(nudge.ContentUri);
             AddButtons();

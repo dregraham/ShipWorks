@@ -827,6 +827,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             try
             {
+                // Validate each of the packages dimensions.
+                ValidatePackageDimensions(shipment);
+
                 // Check with the SettingsRepository here rather than UpsAccountManager, so getting 
                 // counter rates from the broker is not impacted
                 if (!SettingsRepository.GetAccounts().Any() && !IsShipmentTypeRestricted)
@@ -848,12 +851,47 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 errorRates.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(this));
                 return errorRates;
             }
+            catch (InvalidPackageDimensionsException ex)
+            {
+                RateGroup errorRates = new RateGroup(new List<RateResult>());
+                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(this, ex.Message));
+                return errorRates;
+            }
             finally
             {
                 // Switch the settings repository back to the original now that we have counter rates
                 SettingsRepository = originalSettings;
                 CertificateInspector = originalInspector;
                 AccountRepository = originalAccountRepository;
+            }
+        }
+
+        /// <summary>
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// a ShippingException is thrown informing the user.
+        /// </summary>
+        private void ValidatePackageDimensions(ShipmentEntity shipment)
+        {
+            string exceptionMessage = string.Empty;
+            int packageIndex = 1;
+
+            foreach (UpsPackageEntity upsPackage in shipment.Ups.Packages)
+            {
+                if (upsPackage.PackagingType == (int) UpsPackagingType.Custom)
+                {
+                    if (!DimensionsAreValid(upsPackage.DimsLength, upsPackage.DimsWidth, upsPackage.DimsHeight))
+                    {
+                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, Environment.NewLine);
+                    }
+                }
+
+                packageIndex++;
+            }
+
+            if (exceptionMessage.Length > 0)
+            {
+                exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", Environment.NewLine);
+                throw new InvalidPackageDimensionsException(exceptionMessage);
             }
         }
 
@@ -1033,6 +1071,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 throw new CarrierException("UPS declared value is not supported for SurePost shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
+
+            // Make sure package dimensions are valid.
+            ValidatePackageDimensions(shipment);
 
             // Clear out any values that aren't allowed for SurePost or MI
             if (UpsUtility.IsUpsMiOrSurePostService(upsServiceType))

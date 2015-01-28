@@ -39,7 +39,7 @@
             this.pictureBoxDazzleNote = new System.Windows.Forms.PictureBox();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPagePasswords = new ShipWorks.UI.Wizard.WizardPage();
             this.labelTerms1 = new System.Windows.Forms.Label();
             this.linkEndiciaTerms = new ShipWorks.UI.Controls.LinkControl();
@@ -147,7 +147,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageAccountType);
+            this.mainPanel.Controls.Add(this.wizardPageAddress);
             this.mainPanel.Size = new System.Drawing.Size(555, 470);
             // 
             // etchBottom
@@ -270,11 +270,12 @@
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Residential) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone) 
@@ -282,7 +283,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 9);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(358, 344);
+            this.personControl.Size = new System.Drawing.Size(358, 399);
             this.personControl.TabIndex = 0;
             // 
             // wizardPagePasswords
@@ -777,6 +778,7 @@
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
             this.personCreditCard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.personCreditCard.FullName = "";
             this.personCreditCard.Location = new System.Drawing.Point(42, 24);
             this.personCreditCard.Name = "personCreditCard";
             this.personCreditCard.Size = new System.Drawing.Size(358, 158);
@@ -1139,7 +1141,7 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageAccountType;
         private System.Windows.Forms.Label labelInfo1;
         private ShipWorks.UI.Wizard.WizardPage wizardPageAddress;
-        private ShipWorks.Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePasswords;
         private ShipWorks.UI.Wizard.WizardPage wizardPagePayment;
         private ShipWorks.UI.Wizard.WizardPage wizardPageFinish;

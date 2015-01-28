@@ -21,36 +21,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsNumberOfEmployees
     {
-        [Description("Select your number of employees.")]
-        [ApiValue("0")]
-        Unselected = 0,
-
         [Description("1")]
         [ApiValue("01")]
-        One = 01,
+        One = 0,
 
         [Description("2-5")]
         [ApiValue("02")]
-        TwoToFive = 02,
+        TwoToFive = 1,
 
         [Description("6-10")]
         [ApiValue("03")]
-        SixToTen = 03,
+        SixToTen = 2,
 
         [Description("11-19")]
         [ApiValue("04")]
-        ElevenToNineteen = 04,
+        ElevenToNineteen = 3,
 
         [Description("20 - 49")]
         [ApiValue("05")]
-        TwentyToFortyNine = 05,
+        TwentyToFortyNine = 4,
 
         [Description("50 - 99")]
         [ApiValue("06")]
-        FiftyToNinetyNine = 06,
+        FiftyToNinetyNine = 5,
 
         [Description("100+")]
         [ApiValue("07")]
-        OneHundredAndOver = 07
+        OneHundredAndOver = 6
     }
 }

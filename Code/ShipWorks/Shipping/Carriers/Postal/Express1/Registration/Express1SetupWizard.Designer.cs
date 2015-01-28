@@ -36,29 +36,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.radioNewAccount = new System.Windows.Forms.RadioButton();
             this.radioExistingAccount = new System.Windows.Forms.RadioButton();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageAgreement = new ShipWorks.UI.Wizard.WizardPage();
             this.termsCheckBox = new System.Windows.Forms.CheckBox();
             this.licenseAgreement = new System.Windows.Forms.RichTextBox();
             this.wizardPagePayment = new ShipWorks.UI.Wizard.WizardPage();
-            this.checkingPanel = new System.Windows.Forms.Panel();
-            this.checkingRouting = new System.Windows.Forms.TextBox();
-            this.labelRouting = new System.Windows.Forms.Label();
-            this.checkingAccount = new System.Windows.Forms.TextBox();
-            this.labelCheckingAccount = new System.Windows.Forms.Label();
-            this.paymentMethod = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.creditCardPanel = new System.Windows.Forms.Panel();
+            this.creditCardDetailsPanel = new System.Windows.Forms.Panel();
+            this.labelCardType = new System.Windows.Forms.Label();
             this.cardExpireYear = new System.Windows.Forms.ComboBox();
+            this.cardType = new System.Windows.Forms.ComboBox();
             this.cardExpireMonth = new System.Windows.Forms.ComboBox();
+            this.labelCardNumber = new System.Windows.Forms.Label();
             this.labelCardExpiration = new System.Windows.Forms.Label();
             this.cardNumber = new System.Windows.Forms.TextBox();
-            this.labelCardNumber = new System.Windows.Forms.Label();
-            this.cardType = new System.Windows.Forms.ComboBox();
-            this.labelCardType = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.personCreditCard = new ShipWorks.Data.Controls.PersonControl();
+            this.personCreditCard = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageFinish = new ShipWorks.UI.Wizard.WizardPage();
             this.panelAccountCredentials = new System.Windows.Forms.Panel();
             this.accountDetailsTextBox = new System.Windows.Forms.TextBox();
@@ -87,8 +80,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAddress.SuspendLayout();
             this.wizardPageAgreement.SuspendLayout();
             this.wizardPagePayment.SuspendLayout();
-            this.checkingPanel.SuspendLayout();
-            this.creditCardPanel.SuspendLayout();
+            this.creditCardDetailsPanel.SuspendLayout();
             this.wizardPageFinish.SuspendLayout();
             this.panelAccountCredentials.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -113,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageOptions);
+            this.mainPanel.Controls.Add(this.wizardPageAddress);
             this.mainPanel.Size = new System.Drawing.Size(625, 460);
             // 
             // etchBottom
@@ -192,11 +184,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // personControl
             // 
-            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Residential) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone) 
@@ -211,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             | ShipWorks.Data.Controls.PersonFields.Postal) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.personControl.Size = new System.Drawing.Size(358, 344);
+            this.personControl.Size = new System.Drawing.Size(358, 392);
             this.personControl.TabIndex = 1;
             // 
             // wizardPageAgreement
@@ -252,11 +245,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // wizardPagePayment
             // 
-            this.wizardPagePayment.Controls.Add(this.checkingPanel);
-            this.wizardPagePayment.Controls.Add(this.paymentMethod);
-            this.wizardPagePayment.Controls.Add(this.label2);
             this.wizardPagePayment.Controls.Add(this.label1);
-            this.wizardPagePayment.Controls.Add(this.creditCardPanel);
+            this.wizardPagePayment.Controls.Add(this.creditCardDetailsPanel);
+            this.wizardPagePayment.Controls.Add(this.label3);
+            this.wizardPagePayment.Controls.Add(this.personCreditCard);
             this.wizardPagePayment.Description = "Enter your payment information for Postage.";
             this.wizardPagePayment.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPagePayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -267,73 +259,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPagePayment.Title = "Account Registration";
             this.wizardPagePayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextPayment);
             // 
-            // checkingPanel
-            // 
-            this.checkingPanel.Controls.Add(this.checkingRouting);
-            this.checkingPanel.Controls.Add(this.labelRouting);
-            this.checkingPanel.Controls.Add(this.checkingAccount);
-            this.checkingPanel.Controls.Add(this.labelCheckingAccount);
-            this.checkingPanel.Location = new System.Drawing.Point(55, 303);
-            this.checkingPanel.Name = "checkingPanel";
-            this.checkingPanel.Size = new System.Drawing.Size(372, 62);
-            this.checkingPanel.TabIndex = 4;
-            // 
-            // checkingRouting
-            // 
-            this.checkingRouting.Location = new System.Drawing.Point(155, 34);
-            this.checkingRouting.Name = "checkingRouting";
-            this.checkingRouting.Size = new System.Drawing.Size(206, 21);
-            this.checkingRouting.TabIndex = 21;
-            // 
-            // labelRouting
-            // 
-            this.labelRouting.AutoSize = true;
-            this.labelRouting.Location = new System.Drawing.Point(65, 37);
-            this.labelRouting.Name = "labelRouting";
-            this.labelRouting.Size = new System.Drawing.Size(87, 13);
-            this.labelRouting.TabIndex = 20;
-            this.labelRouting.Text = "Routing number:";
-            // 
-            // checkingAccount
-            // 
-            this.checkingAccount.Location = new System.Drawing.Point(155, 7);
-            this.checkingAccount.Name = "checkingAccount";
-            this.checkingAccount.Size = new System.Drawing.Size(206, 21);
-            this.checkingAccount.TabIndex = 19;
-            // 
-            // labelCheckingAccount
-            // 
-            this.labelCheckingAccount.AutoSize = true;
-            this.labelCheckingAccount.Location = new System.Drawing.Point(18, 10);
-            this.labelCheckingAccount.Name = "labelCheckingAccount";
-            this.labelCheckingAccount.Size = new System.Drawing.Size(134, 13);
-            this.labelCheckingAccount.TabIndex = 18;
-            this.labelCheckingAccount.Text = "Checking account number:";
-            // 
-            // paymentMethod
-            // 
-            this.paymentMethod.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.paymentMethod.FormattingEnabled = true;
-            this.paymentMethod.Items.AddRange(new object[] {
-            "Checking Account",
-            "Credit Card"});
-            this.paymentMethod.Location = new System.Drawing.Point(145, 383);
-            this.paymentMethod.Name = "paymentMethod";
-            this.paymentMethod.Size = new System.Drawing.Size(157, 21);
-            this.paymentMethod.TabIndex = 2;
-            this.paymentMethod.Visible = false;
-            this.paymentMethod.SelectedIndexChanged += new System.EventHandler(this.OnChangedPaymentMethod);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(23, 386);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(116, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Pay for postage using:";
-            this.label2.Visible = false;
-            // 
             // label1
             // 
             this.label1.Location = new System.Drawing.Point(20, 12);
@@ -342,21 +267,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.label1.TabIndex = 0;
             this.label1.Text = resources.GetString("label1.Text");
             // 
-            // creditCardPanel
+            // creditCardDetailsPanel
             // 
-            this.creditCardPanel.Controls.Add(this.cardExpireYear);
-            this.creditCardPanel.Controls.Add(this.cardExpireMonth);
-            this.creditCardPanel.Controls.Add(this.labelCardExpiration);
-            this.creditCardPanel.Controls.Add(this.cardNumber);
-            this.creditCardPanel.Controls.Add(this.labelCardNumber);
-            this.creditCardPanel.Controls.Add(this.cardType);
-            this.creditCardPanel.Controls.Add(this.labelCardType);
-            this.creditCardPanel.Controls.Add(this.label3);
-            this.creditCardPanel.Controls.Add(this.personCreditCard);
-            this.creditCardPanel.Location = new System.Drawing.Point(54, 40);
-            this.creditCardPanel.Name = "creditCardPanel";
-            this.creditCardPanel.Size = new System.Drawing.Size(372, 257);
-            this.creditCardPanel.TabIndex = 3;
+            this.creditCardDetailsPanel.Controls.Add(this.labelCardType);
+            this.creditCardDetailsPanel.Controls.Add(this.cardExpireYear);
+            this.creditCardDetailsPanel.Controls.Add(this.cardType);
+            this.creditCardDetailsPanel.Controls.Add(this.cardExpireMonth);
+            this.creditCardDetailsPanel.Controls.Add(this.labelCardNumber);
+            this.creditCardDetailsPanel.Controls.Add(this.labelCardExpiration);
+            this.creditCardDetailsPanel.Controls.Add(this.cardNumber);
+            this.creditCardDetailsPanel.Location = new System.Drawing.Point(54, 236);
+            this.creditCardDetailsPanel.Name = "creditCardDetailsPanel";
+            this.creditCardDetailsPanel.Size = new System.Drawing.Size(363, 100);
+            this.creditCardDetailsPanel.TabIndex = 17;
+            // 
+            // labelCardType
+            // 
+            this.labelCardType.AutoSize = true;
+            this.labelCardType.Location = new System.Drawing.Point(14, 8);
+            this.labelCardType.Name = "labelCardType";
+            this.labelCardType.Size = new System.Drawing.Size(59, 13);
+            this.labelCardType.TabIndex = 10;
+            this.labelCardType.Text = "Card type:";
             // 
             // cardExpireYear
             // 
@@ -375,10 +307,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             "2018",
             "2019",
             "2020"});
-            this.cardExpireYear.Location = new System.Drawing.Point(181, 218);
+            this.cardExpireYear.Location = new System.Drawing.Point(182, 60);
             this.cardExpireYear.Name = "cardExpireYear";
             this.cardExpireYear.Size = new System.Drawing.Size(85, 21);
             this.cardExpireYear.TabIndex = 16;
+            // 
+            // cardType
+            // 
+            this.cardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cardType.FormattingEnabled = true;
+            this.cardType.Location = new System.Drawing.Point(79, 5);
+            this.cardType.Name = "cardType";
+            this.cardType.Size = new System.Drawing.Size(144, 21);
+            this.cardType.TabIndex = 11;
             // 
             // cardExpireMonth
             // 
@@ -397,15 +338,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             "10 - October",
             "11 - November",
             "12 - December"});
-            this.cardExpireMonth.Location = new System.Drawing.Point(78, 218);
+            this.cardExpireMonth.Location = new System.Drawing.Point(79, 60);
             this.cardExpireMonth.Name = "cardExpireMonth";
             this.cardExpireMonth.Size = new System.Drawing.Size(97, 21);
             this.cardExpireMonth.TabIndex = 15;
             // 
+            // labelCardNumber
+            // 
+            this.labelCardNumber.AutoSize = true;
+            this.labelCardNumber.Location = new System.Drawing.Point(0, 36);
+            this.labelCardNumber.Name = "labelCardNumber";
+            this.labelCardNumber.Size = new System.Drawing.Size(73, 13);
+            this.labelCardNumber.TabIndex = 12;
+            this.labelCardNumber.Text = "Card number:";
+            // 
             // labelCardExpiration
             // 
             this.labelCardExpiration.AutoSize = true;
-            this.labelCardExpiration.Location = new System.Drawing.Point(13, 221);
+            this.labelCardExpiration.Location = new System.Drawing.Point(14, 63);
             this.labelCardExpiration.Name = "labelCardExpiration";
             this.labelCardExpiration.Size = new System.Drawing.Size(59, 13);
             this.labelCardExpiration.TabIndex = 14;
@@ -413,37 +363,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             // 
             // cardNumber
             // 
-            this.cardNumber.Location = new System.Drawing.Point(78, 191);
+            this.cardNumber.Location = new System.Drawing.Point(79, 33);
             this.cardNumber.Name = "cardNumber";
             this.cardNumber.Size = new System.Drawing.Size(206, 21);
             this.cardNumber.TabIndex = 13;
-            // 
-            // labelCardNumber
-            // 
-            this.labelCardNumber.AutoSize = true;
-            this.labelCardNumber.Location = new System.Drawing.Point(-1, 194);
-            this.labelCardNumber.Name = "labelCardNumber";
-            this.labelCardNumber.Size = new System.Drawing.Size(73, 13);
-            this.labelCardNumber.TabIndex = 12;
-            this.labelCardNumber.Text = "Card number:";
-            // 
-            // cardType
-            // 
-            this.cardType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cardType.FormattingEnabled = true;
-            this.cardType.Location = new System.Drawing.Point(78, 163);
-            this.cardType.Name = "cardType";
-            this.cardType.Size = new System.Drawing.Size(144, 21);
-            this.cardType.TabIndex = 11;
-            // 
-            // labelCardType
-            // 
-            this.labelCardType.AutoSize = true;
-            this.labelCardType.Location = new System.Drawing.Point(13, 166);
-            this.labelCardType.Name = "labelCardType";
-            this.labelCardType.Size = new System.Drawing.Size(59, 13);
-            this.labelCardType.TabIndex = 10;
-            this.labelCardType.Text = "Card type:";
             // 
             // label3
             // 
@@ -458,10 +381,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
             this.personCreditCard.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.personCreditCard.Location = new System.Drawing.Point(3, 3);
+            this.personCreditCard.Location = new System.Drawing.Point(57, 59);
             this.personCreditCard.Name = "personCreditCard";
-            this.personCreditCard.Size = new System.Drawing.Size(358, 154);
+            this.personCreditCard.Size = new System.Drawing.Size(358, 183);
             this.personCreditCard.TabIndex = 3;
+            this.personCreditCard.Resize += new System.EventHandler(this.OnPersonCreditCardResize);
             // 
             // wizardPageFinish
             // 
@@ -575,8 +499,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageOptions.Size = new System.Drawing.Size(625, 460);
             this.wizardPageOptions.TabIndex = 0;
             this.wizardPageOptions.Title = "Express1 Settings";
-            this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
             this.wizardPageOptions.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSettings);
+            this.wizardPageOptions.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoOptions);
             // 
             // optionsControlPanel
             // 
@@ -710,11 +634,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             this.wizardPageAgreement.ResumeLayout(false);
             this.wizardPageAgreement.PerformLayout();
             this.wizardPagePayment.ResumeLayout(false);
-            this.wizardPagePayment.PerformLayout();
-            this.checkingPanel.ResumeLayout(false);
-            this.checkingPanel.PerformLayout();
-            this.creditCardPanel.ResumeLayout(false);
-            this.creditCardPanel.PerformLayout();
+            this.creditCardDetailsPanel.ResumeLayout(false);
+            this.creditCardDetailsPanel.PerformLayout();
             this.wizardPageFinish.ResumeLayout(false);
             this.wizardPageFinish.PerformLayout();
             this.panelAccountCredentials.ResumeLayout(false);
@@ -739,15 +660,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private System.Windows.Forms.RadioButton radioExistingAccount;
         private System.Windows.Forms.Label labelInfo1;
         private UI.Wizard.WizardPage wizardPageAddress;
-        private Data.Controls.PersonControl personControl;
+        private Data.Controls.AutofillPersonControl personControl;
         private UI.Wizard.WizardPage wizardPageAgreement;
         private UI.Wizard.WizardPage wizardPagePayment;
-        private System.Windows.Forms.Panel checkingPanel;
-        private System.Windows.Forms.Panel creditCardPanel;
-        private System.Windows.Forms.ComboBox paymentMethod;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private Data.Controls.PersonControl personCreditCard;
+        private Data.Controls.AutofillPersonControl personCreditCard;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cardExpireYear;
         private System.Windows.Forms.ComboBox cardExpireMonth;
@@ -756,10 +673,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private System.Windows.Forms.Label labelCardNumber;
         private System.Windows.Forms.ComboBox cardType;
         private System.Windows.Forms.Label labelCardType;
-        private System.Windows.Forms.TextBox checkingRouting;
-        private System.Windows.Forms.Label labelRouting;
-        private System.Windows.Forms.TextBox checkingAccount;
-        private System.Windows.Forms.Label labelCheckingAccount;
         private UI.Wizard.WizardPage wizardPageFinish;
         private System.Windows.Forms.Panel panelAccountNumber;
         private System.Windows.Forms.Button buyPostage;
@@ -783,5 +696,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         private System.Windows.Forms.Panel accountControlPanel;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Panel creditCardDetailsPanel;
     }
 }

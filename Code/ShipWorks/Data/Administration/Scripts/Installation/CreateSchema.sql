@@ -586,6 +586,15 @@ PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
 GO
+PRINT N'Adding [Order].[IX_Store_OrderNumberComplete_IsManual] Index'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
+(
+	[StoreID] ASC,
+	[OrderNumberComplete] ASC,
+	[IsManual] ASC
+)
+GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -946,7 +955,9 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [varchar] (128) NOT NULL
+[OnlineShipmentID] [varchar] (128) NOT NULL,
+[BilledType] [int] NOT NULL,
+[BilledWeight] [float] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1631,7 +1642,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [BrokerPhoneExtension] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BrokerEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsAdmissibilityPackaging] [int] NOT NULL,
-[CustomsRecipientTIN] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CustomsRecipientTIN] [varchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsDocumentsOnly] [bit] NOT NULL,
 [CustomsDocumentsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsExportFilingOption] [int] NOT NULL,
@@ -1651,7 +1662,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CommercialInvoiceReference] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterOfRecord] [bit] NOT NULL,
 [ImporterAccount] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ImporterTIN] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ImporterTIN] [nvarchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterCompany] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1847,7 +1858,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL
@@ -1933,12 +1944,17 @@ CREATE TABLE [dbo].[Filter]
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
-[Definition] [xml] NULL
+[Definition] [xml] NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
+GO
+PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO
@@ -1962,7 +1978,8 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [ModuleOnlineCustomerDataType] [int] NOT NULL,
 [ModuleOnlineShipmentDetails] [bit] NOT NULL,
 [ModuleHttpExpect100Continue] [bit] NOT NULL,
-[ModuleResponseEncoding] [int] NOT NULL
+[ModuleResponseEncoding] [int] NOT NULL,
+[SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
@@ -4019,7 +4036,7 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 [ParentID] [bigint] NULL,
 [ObjectType] [int] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
@@ -4470,9 +4487,9 @@ GO
 CREATE TABLE [dbo].[ShippingSettings]
 (
 [ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Activated] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Configured] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Excluded] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultType] [int] NOT NULL,
 [BlankPhoneOption] [int] NOT NULL,
 [BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

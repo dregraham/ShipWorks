@@ -1,4 +1,6 @@
+using System;
 using System.Linq;
+using Common.Logging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,6 +13,7 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ILog = log4net.ILog;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 {
@@ -22,6 +25,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         Mock<IApiLogEntry> mockedLogger;
 
         Mock<HttpVariableRequestSubmitter> mockedSubmitter;
+
+        Mock<ILog> log;
 
         ShipmentEntity shipment;
 
@@ -44,7 +49,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
                 .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(mockedLogger.Object);
 
-            testObject = new OnTracRates(42, "testpass", mockedSubmitter.Object, mockedLogFactory.Object);
+            log = new Mock<ILog>();
+            log.Setup(l => l.Info(It.IsAny<string>(), It.IsAny<InvalidOperationException>()));
+
+            testObject = new OnTracRates(42, "testpass", mockedSubmitter.Object, mockedLogFactory.Object, log.Object);
 
             shipment = new ShipmentEntity(1)
             {
@@ -240,6 +248,41 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
             testObject.GetRates(shipment);
+        }
+
+        [TestMethod]
+        public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned_Test()
+        {
+            RateShipmentList rateShipmentList = new RateShipmentList
+            {
+                Error = "",
+                Shipments = new[]
+                {
+                    new RateShipment
+                    {
+                        Rates = new[]
+                        {
+                            new RateQuote
+                            {
+                                Service = "XX"
+                            },
+                            new RateQuote
+                            {
+                                Service = EnumHelper.GetApiValue(OnTracServiceType.Ground)
+                            }
+                        }
+                    }
+                }
+            };
+
+            string serializedValidResponse = SerializationUtility.SerializeToXml(rateShipmentList);
+
+            //Setup mock object that holds response from request
+            mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
+
+            testObject.GetRates(shipment);
+
+            log.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<InvalidOperationException>()), Times.Once());
         }
     }
 }

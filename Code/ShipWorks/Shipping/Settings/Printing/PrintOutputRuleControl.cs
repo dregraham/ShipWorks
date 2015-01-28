@@ -19,7 +19,10 @@ namespace ShipWorks.Shipping.Settings.Printing
     /// </summary>
     public partial class PrintOutputRuleControl : UserControl, IPrintWithTemplates
     {
+        private const long NoFilterSelectedID = long.MinValue;
+
         ShippingPrintOutputRuleEntity rule;
+        private long originalFilterID;
 
         /// <summary>
         /// The delete button on this rule line has been clicked
@@ -37,6 +40,7 @@ namespace ShipWorks.Shipping.Settings.Printing
             InitializeComponent();
 
             toolStripDelete.Renderer = new NoBorderToolStripRenderer();
+            originalFilterID = NoFilterSelectedID;
         }
 
         /// <summary>
@@ -50,11 +54,16 @@ namespace ShipWorks.Shipping.Settings.Printing
             templateCombo.LoadTemplates();
 
             filterCombo.SelectedFilterNodeID = rule.FilterNodeID;
+            
             if (filterCombo.SelectedFilterNode == null)
             {
                 filterCombo.SelectFirstNode();
             }
-
+            else
+            {
+                originalFilterID = filterCombo.SelectedFilterNode.FilterID;
+            }
+            
             alwaysExecute = rule.FilterNodeID == ShippingPrintOutputManager.FilterNodeAlwaysID;
 
             templateCombo.SelectedTemplateID = rule.TemplateID;
@@ -174,6 +183,35 @@ namespace ShipWorks.Shipping.Settings.Printing
         {
             rule.FilterNodeID = alwaysExecute ? ShippingPrintOutputManager.FilterNodeAlwaysID : filterCombo.SelectedFilterNodeID;
             rule.TemplateID = templateCombo.SelectedTemplateID ?? 0;
+
+            // Sync up the original filter ID with the saved filter ID to prevent a 
+            // false positive in the HasFilterChanged property.
+            originalFilterID = SelectedFilterNodeId;
+        }
+
+        /// <summary>
+        /// Gets whether the selected filter is disabled
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.IsSelectedFilterDisabled;
+            }
+        }
+
+        /// <summary> 
+        /// Gets a value indicating whether this the filter being used for this rule has changed.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the filter filter changed; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasFilterChanged
+        {
+            get
+            {
+                return originalFilterID != SelectedFilterNodeId;
+            }
         }
 
         /// <summary>
@@ -181,7 +219,23 @@ namespace ShipWorks.Shipping.Settings.Printing
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith
         {
-            get { return new long[] { templateCombo.SelectedTemplateID ?? 0 }; }
+            get
+            {
+                return new long[] { templateCombo.SelectedTemplateID ?? 0 };
+            }
+        }
+
+        /// <summary>
+        /// Gets the id of the currently selected filter
+        /// </summary>
+        private long SelectedFilterNodeId
+        {
+            get
+            {
+                return filterCombo.SelectedFilterNode != null ? 
+                    filterCombo.SelectedFilterNode.FilterID : 
+                    NoFilterSelectedID;
+            }
         }
     }
 }

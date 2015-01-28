@@ -661,7 +661,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     throw new StampsException(message, ex);
                 }
 
-                if (ex.Code == 5636353 || ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS"))
+                if (ex.Code == 5636353 || 
+                    ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS") || ex.Message.ToUpperInvariant().Contains("not enough postage".ToUpperInvariant()) ||
+                    ex.Message.ToUpperInvariant().Contains("Insufficient Postage".ToUpperInvariant()))
                 {
                     throw new StampsInsufficientFundsException(account, ex.Message);
                 }
@@ -827,6 +829,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             shipment.TrackingNumber = tracking;
             shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
             shipment.Postal.Stamps.StampsTransactionID = stampsGuid;
+            shipment.BilledWeight = rate.EffectiveWeightInOunces / 16D;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?)thermalType;

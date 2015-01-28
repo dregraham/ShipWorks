@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- edited with XML Spy v4.1 U (http://www.xmlspy.com) by Rajendra Upadhya (UPS GACOR850393,) -->
 <!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by MC (United Parcel Service) -->
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ups="http://www.ups.com/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" elementFormDefault="qualified">
+<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:ups="http://www.ups.com/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xsd:element name="Request" type="common:RequestType"/>
 	<xsd:element name="Response" type="common:ResponseType"/>
 	<xsd:element name="ClientInformation" type="common:ClientInformationType"/>
-	
 	<xsd:complexType name="ClientInformationType">
 		<xsd:sequence>
 			<xsd:element name="Property" minOccurs="0" maxOccurs="unbounded">
@@ -19,10 +18,10 @@
 			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
-	
 	<xsd:complexType name="RequestType">
 		<xsd:sequence>
 			<xsd:element name="RequestOption" type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="SubVersion" type="xsd:string" minOccurs="0"/>
 			<xsd:element name="TransactionReference" type="common:TransactionReferenceType" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>

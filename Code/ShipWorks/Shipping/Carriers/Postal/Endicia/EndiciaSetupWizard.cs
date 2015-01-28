@@ -264,6 +264,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 return;
             }
 
+            if (person.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "USPS only supports US addresses.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             personCreditCard.LoadEntity(person);
 
             if (freemiumEdition != null)

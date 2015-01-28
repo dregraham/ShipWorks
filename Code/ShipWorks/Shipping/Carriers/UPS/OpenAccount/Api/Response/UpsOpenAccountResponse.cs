@@ -40,19 +40,13 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response
         }
 
         /// <summary>
-        /// Gets the native response received from the carrier API.
+        /// Gets the native response received from the carrier API - virtual for unit tests
         /// </summary>
         /// <value>The native response.</value>
-        public object NativeResponse
+        public virtual object NativeResponse
         {
             get { return nativeResponse; }
         }
-
-        /// <summary>
-        /// Gets the carrier account entity.
-        /// </summary>
-        /// <value>The carrier account entity.</value>
-        public IEntity2 CarrierAccountEntity { get; set; }
 
         /// <summary>
         /// Performs any processing required based on the response from the carrier.

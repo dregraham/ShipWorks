@@ -187,3 +187,4 @@ LLBLGen/ShipWorks[0-9]*.lgp
 InstallUtil.InstallLog
 Build/InnoSetup.iss
 Build/ShipWorks*.*.*.*
+*GhostDoc.xml

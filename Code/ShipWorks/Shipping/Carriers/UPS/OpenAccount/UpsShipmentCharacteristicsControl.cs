@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
@@ -27,8 +28,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             // at least one field has a value and it is not 0.
             if (shipmentCharacteristics.Count == 0)
-            {
-                throw new UpsOpenAccountException("Ground, Air, or International must have positive value.");
+            {   
+                throw new UpsOpenAccountException("UPS requires that there is at least one Ground, Air, or International shipment to create an account.");
             }
             
             request.ShipmentCharacteristics = shipmentCharacteristics.ToArray();
@@ -37,7 +38,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Adds the shipment characteristic if needed.
         /// </summary>
-        /// <exception cref="UpsOpenAccountException">Quantity for any method cannot exceed 99.</exception>
         private void AddShipmentCharacteristicIfNeeded(ICollection<ShipmentCharacteristicsType> shipmentCharacteristics, string code, int? quantity)
         {
             if (!quantity.HasValue || quantity.Value == 0)
@@ -45,10 +45,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                 return;
             }
 
-            if (quantity.Value >= 100)
-            {
-                throw new UpsOpenAccountException("Quantity for any method cannot exceed 99.");
-            }
+            // The API only allows values up to 99
+            quantity = Math.Min(quantity.Value, 99);
 
             shipmentCharacteristics.Add(new ShipmentCharacteristicsType
             {

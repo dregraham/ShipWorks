@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -68,12 +69,53 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
                 {
                     shipment.ShipmentCost = rateDetail.TotalNetFedExCharge.Amount;
                 }
+
+                // Set the shipment's billed type and billed weight.
+                SetBilledTypeAndWeight(rateDetail);
             }
             else
             {
                 shipment.ShipmentCost = 0;
 
                 log.WarnFormat("FedEx did not return rating details for shipment {0}", shipment.ShipmentID);
+            }
+        }
+
+        /// <summary>
+        /// Sets the shipment's billed type and billed weight.
+        /// </summary>
+        private void SetBilledTypeAndWeight(ShipmentRateDetail rateDetail)
+        {
+            if (rateDetail.RatedWeightMethodSpecified)
+            {
+                switch (rateDetail.RatedWeightMethod)
+                {
+                    case RatedWeightMethod.ACTUAL:
+                        shipment.BilledType = (int)BilledType.ActualWeight;
+                        if (rateDetail.TotalBillingWeight != null)
+                        {
+                            shipment.BilledWeight = (double) rateDetail.TotalBillingWeight.Value;
+                        }
+                        break;
+                    case RatedWeightMethod.DIM:
+                        shipment.BilledType = (int)BilledType.DimensionalWeight;
+                        if (rateDetail.TotalDimWeight != null)
+                        {
+                            shipment.BilledWeight = (double) rateDetail.TotalDimWeight.Value;
+                        }
+                        else if (rateDetail.TotalBillingWeight != null)
+                        {
+                            shipment.BilledWeight = (double) rateDetail.TotalBillingWeight.Value;
+                        }
+                        break;
+                    default:
+                        shipment.BilledType = (int)BilledType.Unknown;
+                        break;
+                }
+            }
+            else
+            {
+                shipment.BilledType = (int)BilledType.Unknown;
             }
         }
     }

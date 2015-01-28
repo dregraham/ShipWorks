@@ -426,6 +426,7 @@
             this.entryFacility.PromptText = "(Multiple Values)";
             this.entryFacility.Size = new System.Drawing.Size(167, 21);
             this.entryFacility.TabIndex = 101;
+            this.entryFacility.SelectedValueChanged += OnEntryFacilityDataChanged;
             // 
             // sortType
             // 
@@ -436,6 +437,7 @@
             this.sortType.PromptText = "(Multiple Values)";
             this.sortType.Size = new System.Drawing.Size(167, 21);
             this.sortType.TabIndex = 100;
+            this.sortType.SelectedValueChanged += OnEntryFacilityDataChanged;
             // 
             // EndiciaServiceControl
             // 

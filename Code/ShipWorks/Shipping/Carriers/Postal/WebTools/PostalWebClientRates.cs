@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("Machinable", shipment.Postal.NonMachinable ? "false" : "true");
                     xmlWriter.WriteElementString("MailType", GetInternationalMailType(packaging));
                     xmlWriter.WriteElementString("ValueOfContents", shipment.CustomsValue.ToString());
-                    xmlWriter.WriteElementString("Country", Geography.GetCountryName(shipment.ShipCountryCode));
+                    xmlWriter.WriteElementString("Country", PostalWebUtility.GetCountryName(shipment.ShipCountryCode));
                     xmlWriter.WriteElementString("Container", GetContainerValue(shipment.Postal, packaging, shipment.Postal.NonRectangular));
                     xmlWriter.WriteElementString("Size", GetSizeValue(shipment.Postal, dimensions));
                     xmlWriter.WriteElementString("Width", dimensions.Width.ToString());

@@ -3460,6 +3460,8 @@ namespace ShipWorks.Data.Model
 		IsFolder,
 		///<summary>Definition. </summary>
 		Definition,
+		///<summary>State. </summary>
+		State,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3837,6 +3839,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4513,6 +4517,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
@@ -4877,6 +4883,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EncryptionPassphrase. </summary>
@@ -7289,6 +7297,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEntry,
 		///<summary>OnlineShipmentID. </summary>
 		OnlineShipmentID,
+		///<summary>BilledType. </summary>
+		BilledType,
+		///<summary>BilledWeight. </summary>
+		BilledWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}

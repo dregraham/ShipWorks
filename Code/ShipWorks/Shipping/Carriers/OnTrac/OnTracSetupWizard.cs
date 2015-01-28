@@ -122,6 +122,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             PersonAdapter personAdapter = new PersonAdapter(account, "");
             contactInformation.SaveToEntity(personAdapter);
 
+            if (personAdapter.CountryCode != "US")
+            {
+                MessageHelper.ShowInformation(this, "OnTrac only supports US addresses.");
+                e.NextPage = CurrentPage;
+                return;
+            }
+
             account.Description = OnTracAccountManager.GetDefaultDescription(account);
 
             OnTracAccountManager.SaveAccount(account);
