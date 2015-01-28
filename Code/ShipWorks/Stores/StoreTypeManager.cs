@@ -127,6 +127,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
                 case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
                 case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
+                case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
