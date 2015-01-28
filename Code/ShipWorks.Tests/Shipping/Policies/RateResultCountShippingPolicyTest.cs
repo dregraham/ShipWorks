@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
 
@@ -24,24 +23,35 @@ namespace ShipWorks.Tests.Shipping.Policies
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Configure_ThrowsArgumentException_WhenDataIsDecimalFormat_Test()
+        public void Configure_QuantityIsOne_WhenDataIsEmptyString_Test()
+        {
+            testObject.Configure(string.Empty);
+
+            Assert.AreEqual(1, testObject.RateResultQuantity);
+        }
+
+        [TestMethod]
+        public void Configure_QuantityIsOne_WhenDataIsDecimalFormat_Test()
         {
             testObject.Configure("3.3");
+
+            Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Configure_ThrowsArgumentException_WhenDataHasAlphaCharacters_Test()
+        public void Configure_QuantityIsOne_WhenDataHasAlphaCharacters_Test()
         {
             testObject.Configure("3ABC");
+            
+            Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void Configure_ThrowsArgumentException_WhenDataContainsUnTrimmableWhitespace_Test()
+        public void Configure_QuantityIsOne_WhenDataContainsUnTrimmableWhitespace_Test()
         {
             testObject.Configure("3 4");
+
+            Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
         [TestMethod]

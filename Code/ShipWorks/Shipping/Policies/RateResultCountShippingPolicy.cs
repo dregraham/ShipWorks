@@ -43,10 +43,6 @@ namespace ShipWorks.Shipping.Policies
                     RateResultQuantity = numericConfiguration;
                 }
             }
-            else
-            {
-                throw new ArgumentException("The configuration for the RateResultCountShippingPolicy was not in the expected format. An integer value is expected.");
-            }
         }
 
         /// <summary>
