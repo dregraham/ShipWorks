@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
@@ -84,7 +85,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         private static string QtyRestriction = @"
             <Feature>
 				<Type>RateResultCount</Type>
-				<Config>1</Config>
+				<Config>5</Config>
 			</Feature>";
 
         /// <summary>
@@ -93,9 +94,65 @@ namespace ShipWorks.ApplicationCore.Licensing
         public override LicenseAccountDetail GetLicenseStatus(string licenseKey, StoreEntity store)
         {
             ShipWorksLicense license = new ShipWorksLicense(licenseKey);
-            string rawXml = @"<License>
-	<Key>" + license.Key + @"</Key>
-	<Machine>" + StoreTypeManager.GetType(store).LicenseIdentifier + @"</Machine>
+            string rawXml = GetLicenseXmlFromFile("C:\\Temp\\License.xml", GenerateDummyLicenseXml());
+
+            XmlDocument licenseXml = new XmlDocument();
+            licenseXml.LoadXml(string.Format(rawXml, license.Key, StoreTypeManager.GetType(store).LicenseIdentifier));
+
+            return new LicenseAccountDetail(licenseXml, store);
+        }
+
+        /// <summary>
+        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
+        /// </summary>
+        public override TrialDetail GetTrial(StoreEntity store)
+        {
+            string rawXml = GetLicenseXmlFromFile("C:\\Temp\\Trial.xml", GenerateDummyTrialLicenseXml());
+
+            XmlDocument trialXml = new XmlDocument();
+            trialXml.LoadXml(string.Format(rawXml, store.License));
+
+            return new TrialDetail(trialXml, store);
+        }
+
+        /// <summary>
+        /// Reads a file from the the given file path for a license information.
+        /// </summary>
+        /// <param name="path">The file path to read from.</param>
+        /// <param name="defaultXml">The XML to use if there is a problem reading from the given file path.</param>
+        /// <returns>The contents of the file.</returns>
+        private static string GetLicenseXmlFromFile(string path, string defaultXml)
+        {
+            string rawXml = string.Empty;
+
+            try
+            {
+                using (StreamReader licenseFile = new StreamReader("C:\\Temp\\License.xml"))
+                {
+                    rawXml = licenseFile.ReadToEnd();
+                    licenseFile.Close();
+                }
+            }
+            catch (Exception)
+            {
+                // Fall back to the hard-coded values if there is a problem reading from the 
+                // license.xml file
+                rawXml = defaultXml;
+            }
+
+            return rawXml;
+        }
+
+        /// <summary>
+        /// Generates dummy license XML that can be used in the event that the 
+        /// License.xml file cannot be read from.
+        /// </summary>
+        /// <returns>Fake license information.</returns>
+        private string GenerateDummyLicenseXml()
+        {
+            return @"<License>
+	<Key>{0}</Key>
+	<Machine>{1}</Machine>
 	<Active>true</Active>
 	<Cancelled>false</Cancelled>
 	<DisabledReason/>
@@ -111,8 +168,9 @@ namespace ShipWorks.ApplicationCore.Licensing
 	<EndiciaScanBasedReturns status='1'/>
     <ShipmentTypeFunctionality>
         <ShipmentType TypeCode='14'>
-    " + UpsRestriction  + @"
-	" + QtyRestriction + @"
+            <Restriction>Disabled</Restriction>
+            " + UpsRestriction + @"
+	        " + QtyRestriction + @"
 		</ShipmentType>
         <!-- This is the USPS shipment type. Testing to confirm that the feature settings are ignored. -->
 		<ShipmentType TypeCode='15'>
@@ -127,37 +185,22 @@ namespace ShipWorks.ApplicationCore.Licensing
 		</ShipmentType>
 	</ShipmentTypeFunctionality>
 </License>";
-
-            XmlDocument licenseXml = new XmlDocument();
-            licenseXml.LoadXml(rawXml);
-
-            LicenseAccountDetail accountDetail = new LicenseAccountDetail(licenseXml, store);
-            
-            //XDocument xml = XDocument.Parse(rawXml);
-            //accountDetail.Edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xml.Root);
-
-            return accountDetail;
         }
 
         /// <summary>
-        /// Request a trial for use with the specified store. If a trial already exists, a new one will not be created.
+        /// Generates the dummy trial license XML in the event that the Trial.xml file cannot be read from.
         /// </summary>
-        public override TrialDetail GetTrial(StoreEntity store)
+        /// <returns>Fake license info for a trial store.</returns>
+        private static string GenerateDummyTrialLicenseXml()
         {
-            string rawXml = @"<License>
-	<Key>L26XZ-SLRTS-KZ5M4-YQ6BX-SEARS-TRIAL</Key>
+            return @"<License>
+	<Key>{0}</Key>
 	<Created>2012-11-02 14:53:09</Created>
-
-
 	<Expires>2014-03-27 12:43:44</Expires>
-
 	<Converted>true</Converted>
 	<CanExtend>false</CanExtend>
 	<ServerTime>2015-01-22 20:36:15</ServerTime>
-
-
 	<Edition/>
-
 	<ShipmentTypeFunctionality>
 		<ShipmentType TypeCode='2'>
 			<Restriction>AccountRegistration</Restriction>
@@ -174,11 +217,6 @@ namespace ShipWorks.ApplicationCore.Licensing
 		</ShipmentType>
 	</ShipmentTypeFunctionality>
 </License>";
-            
-            XmlDocument trialXml = new XmlDocument();
-            trialXml.LoadXml(rawXml);
-
-            return new TrialDetail(trialXml, store);
         }
     }
 }
