@@ -144,8 +144,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.DimsLength = currentShipment.BestRate.DimsLength;
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
-            currentShipment.Postal.DimsWeight = originalShipment.ContentWeight;
-            currentShipment.Postal.DimsAddWeight = false;
+            currentShipment.Postal.DimsWeight = originalShipment.BestRate.DimsWeight;
+            currentShipment.Postal.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
             currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
 
