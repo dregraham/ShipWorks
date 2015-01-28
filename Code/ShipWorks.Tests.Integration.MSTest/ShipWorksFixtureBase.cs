@@ -318,6 +318,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Fixtures
 
             shipment.TotalWeight = ShipmentTotalWeight;
 
+            shipment.BilledWeight = shipment.TotalWeight;
+            shipment.BilledType = (int)BilledType.Unknown;
+
             shipment.OriginFirstName = OriginFirstName;
             shipment.OriginMiddleName = string.Empty;
             shipment.OriginLastName = OriginLastName;

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request;
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         [TestInitialize]
         public void Initialize()
         {
-            testObject = new UpsOpenAccountRequestFactory();
+            testObject = new UpsOpenAccountRequestFactory(new UpsAccountEntity());
         }
 
         [TestMethod]

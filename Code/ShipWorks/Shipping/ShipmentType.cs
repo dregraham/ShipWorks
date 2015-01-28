@@ -331,6 +331,8 @@ namespace ShipWorks.Shipping
         {
             shipment.ActualLabelFormat = null;
             shipment.ShipSenseStatus = (int)ShipSenseStatus.NotApplied;
+            shipment.BilledType = 0;
+            shipment.BilledWeight = 0;
 
             // First apply the base profile
             ApplyProfile(shipment, GetPrimaryProfile());
@@ -1117,6 +1119,27 @@ namespace ShipWorks.Shipping
             PersonAdapter address = new PersonAdapter(entity, fieldPrefix);
             return address.CountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ||
                 (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals("PR", StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        /// <returns>True if the dimensions are valid.  False otherwise.</returns>
+        public virtual bool DimensionsAreValid(double length, double width, double height)
+        {
+            if (length <= 0 || width <= 0 || height <= 0)
+            {
+                return false;
+            }
+
+            // Some customers may have 1x1x1 in a profile to get around carriers that used to require dimensions.
+            // This is no longer valid due to new dimensional weight requirements.
+            if (length == 1.0 && width == 1.0 && height == 1.0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

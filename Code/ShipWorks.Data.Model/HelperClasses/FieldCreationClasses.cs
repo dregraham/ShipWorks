@@ -7427,6 +7427,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.Definition);}
 		}
+		/// <summary>Creates a new FilterEntity.State field instance</summary>
+		public static EntityField2 State
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FilterFieldIndex.State);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterLayoutEntity</summary>
@@ -8166,6 +8171,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ModuleResponseEncoding
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.ModuleResponseEncoding);}
+		}
+		/// <summary>Creates a new GenericModuleStoreEntity.SchemaVersion field instance</summary>
+		public static EntityField2 SchemaVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GenericModuleStoreFieldIndex.SchemaVersion);}
 		}
 	}
 
@@ -9542,6 +9552,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.ModuleResponseEncoding);}
 		}
+		/// <summary>Creates a new MagentoStoreEntity.SchemaVersion field instance</summary>
+		public static EntityField2 SchemaVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MagentoStoreFieldIndex.SchemaVersion);}
+		}
 		/// <summary>Creates a new MagentoStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
 		{
@@ -10361,6 +10376,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ModuleResponseEncoding
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.ModuleResponseEncoding);}
+		}
+		/// <summary>Creates a new MivaStoreEntity.SchemaVersion field instance</summary>
+		public static EntityField2 SchemaVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(MivaStoreFieldIndex.SchemaVersion);}
 		}
 		/// <summary>Creates a new MivaStoreEntity.StoreID field instance</summary>
 		public static EntityField2 StoreID
@@ -15536,6 +15556,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OnlineShipmentID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.OnlineShipmentID);}
+		}
+		/// <summary>Creates a new ShipmentEntity.BilledType field instance</summary>
+		public static EntityField2 BilledType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BilledType);}
+		}
+		/// <summary>Creates a new ShipmentEntity.BilledWeight field instance</summary>
+		public static EntityField2 BilledWeight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShipmentFieldIndex.BilledWeight);}
 		}
 	}
 

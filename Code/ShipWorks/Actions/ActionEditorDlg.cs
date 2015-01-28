@@ -589,15 +589,34 @@ namespace ShipWorks.Actions
             }
 
             Cursor.Current = Cursors.WaitCursor;
-            
+
+            bool hasAcceptedDisabledFilters = false;
+
             try
             {
                 trigger.Validate();
+            }
+            catch (FilterContentActionTriggerException)
+            {
+                optionControl.SelectedPage = optionPageAction;
+                ActiveControl = panelTrigger;
+
+                DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo, 
+                    "This action is configured to use a filter that has been disabled. This action will not run until the filter is enabled.\n\nDo you want to use this filter anyway?");
+                if (result == DialogResult.No)
+                {
+                    // The user opted not to use a disabled filter, so drop 
+                    // them back into the dialog
+                    return;
+                }
+
+                hasAcceptedDisabledFilters = true;
             }
             catch (ActionTriggerException ex)
             {
                 optionControl.SelectedPage = optionPageAction;
                 ActiveControl = panelTrigger;
+                
                 MessageHelper.ShowError(this, ex.Message);
                 return;
             }
@@ -662,6 +681,18 @@ namespace ShipWorks.Actions
                 if (ActiveBubbles.Any(bubble => !bubble.ValidateChildren()))
                 {
                     return;
+                }
+
+                if (ActiveBubbles.Any(bubble => bubble.UsesDisabledFilter) && !hasAcceptedDisabledFilters)
+                {
+                    DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning, MessageBoxButtons.YesNo,
+                        "At least one task is configured to use a filter that has been disabled.\n\nDo you want to use this filter anyway?");
+                    if (result == DialogResult.No)
+                    {
+                        // The user opted not to use a disabled filter, so drop 
+                        // them back into the dialog
+                        return;
+                    }
                 }
 
                 // Transacted since we affect multiple action tables

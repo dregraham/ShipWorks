@@ -1133,7 +1133,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "BrokerPhoneExtension", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.BrokerPhoneExtension, 8, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "BrokerEmail", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.BrokerEmail, 100, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsAdmissibilityPackaging", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsAdmissibilityPackaging, 0, 0, 10);
-			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsRecipientTIN, 15, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsRecipientTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsRecipientTIN, 24, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsDocumentsOnly", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsDocumentsOnly, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsDocumentsDescription", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsDocumentsDescription, 150, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "CustomsExportFilingOption", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.CustomsExportFilingOption, 0, 0, 10);
@@ -1153,7 +1153,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "CommercialInvoiceReference", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.CommercialInvoiceReference, 300, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterOfRecord", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterOfRecord, 0, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterAccount", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterAccount, 12, 0, 0);
-			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterTIN, 15, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterTIN", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterTIN, 24, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterFirstName", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterFirstName, 30, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterLastName", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterLastName, 30, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ImporterCompany", typeof(System.String), false, false, false, false,  (int)FedExShipmentFieldIndex.ImporterCompany, 35, 0, 0);
@@ -1222,6 +1222,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FilterEntity", "FilterTarget", typeof(System.Int32), false, false, false, false,  (int)FilterFieldIndex.FilterTarget, 0, 0, 10);
 			base.AddElementFieldInfo("FilterEntity", "IsFolder", typeof(System.Boolean), false, false, false, false,  (int)FilterFieldIndex.IsFolder, 0, 0, 0);
 			base.AddElementFieldInfo("FilterEntity", "Definition", typeof(System.String), false, false, false, true,  (int)FilterFieldIndex.Definition, 2147483647, 0, 0);
+			base.AddElementFieldInfo("FilterEntity", "State", typeof(System.Byte), false, false, false, false,  (int)FilterFieldIndex.State, 0, 0, 3);
 		}
 		/// <summary>Inits FilterLayoutEntity's FieldInfo objects</summary>
 		private void InitFilterLayoutEntityInfos()
@@ -1261,7 +1262,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FilterNodeContentEntity", "Status", typeof(System.Int16), false, false, false, false,  (int)FilterNodeContentFieldIndex.Status, 0, 0, 5);
 			base.AddElementFieldInfo("FilterNodeContentEntity", "InitialCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.InitialCalculation, 2147483647, 0, 0);
 			base.AddElementFieldInfo("FilterNodeContentEntity", "UpdateCalculation", typeof(System.String), false, false, false, false,  (int)FilterNodeContentFieldIndex.UpdateCalculation, 2147483647, 0, 0);
-			base.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 75, 0, 0);
+			base.AddElementFieldInfo("FilterNodeContentEntity", "ColumnMask", typeof(System.Byte[]), false, false, false, false,  (int)FilterNodeContentFieldIndex.ColumnMask, 100, 0, 0);
 			base.AddElementFieldInfo("FilterNodeContentEntity", "JoinMask", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.JoinMask, 0, 0, 10);
 			base.AddElementFieldInfo("FilterNodeContentEntity", "Cost", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Cost, 0, 0, 10);
 			base.AddElementFieldInfo("FilterNodeContentEntity", "Count", typeof(System.Int32), false, false, false, false,  (int)FilterNodeContentFieldIndex.Count, 0, 0, 10);
@@ -1339,6 +1340,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleOnlineShipmentDetails", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleOnlineShipmentDetails, 0, 0, 0);
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleHttpExpect100Continue", typeof(System.Boolean), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleHttpExpect100Continue, 0, 0, 0);
 			base.AddElementFieldInfo("GenericModuleStoreEntity", "ModuleResponseEncoding", typeof(System.Int32), false, false, false, false,  (int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, 0, 0, 10);
+			base.AddElementFieldInfo("GenericModuleStoreEntity", "SchemaVersion", typeof(System.String), false, false, false, false,  (int)GenericModuleStoreFieldIndex.SchemaVersion, 20, 0, 0);
 		}
 		/// <summary>Inits GridColumnFormatEntity's FieldInfo objects</summary>
 		private void InitGridColumnFormatEntityInfos()
@@ -2120,6 +2122,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseChangeSets", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseChangeSets, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "ShipSenseEntry", typeof(System.Byte[]), false, false, false, false,  (int)ShipmentFieldIndex.ShipSenseEntry, 2147483647, 0, 0);
 			base.AddElementFieldInfo("ShipmentEntity", "OnlineShipmentID", typeof(System.String), false, false, false, false,  (int)ShipmentFieldIndex.OnlineShipmentID, 128, 0, 0);
+			base.AddElementFieldInfo("ShipmentEntity", "BilledType", typeof(System.Int32), false, false, false, false,  (int)ShipmentFieldIndex.BilledType, 0, 0, 10);
+			base.AddElementFieldInfo("ShipmentEntity", "BilledWeight", typeof(System.Double), false, false, false, false,  (int)ShipmentFieldIndex.BilledWeight, 0, 0, 38);
 		}
 		/// <summary>Inits ShipmentCustomsItemEntity's FieldInfo objects</summary>
 		private void InitShipmentCustomsItemEntityInfos()

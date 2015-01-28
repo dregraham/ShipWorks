@@ -687,7 +687,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             stamps.StampsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().StampsAccountID : 0;
             stamps.RequireFullAddressValidation = true;
-            stamps.HidePostage = false;
+            stamps.HidePostage = true;
             stamps.Memo = string.Empty;
         }
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared.Messaging;
+using ShipWorks.Filters.Management;
 using ShipWorks.UI.Controls;
 using System.Windows.Forms;
 using System.Drawing;
@@ -219,6 +221,22 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Gets a value indicating whether this instance is selected filter disabled.
+        /// </summary>
+        public bool IsSelectedFilterDisabled
+        {
+            get
+            {
+                if (selectedNode != null)
+                {
+                    return selectedNode.Filter.State == (byte)FilterState.Disabled;                    
+                }
+
+                return false;
+            }
+        }
+
+        /// <summary>
         /// When a filter is selected, we close the drop down
         /// </summary>
         private void OnFilterSelected(object sender, EventArgs e)
@@ -363,7 +381,7 @@ namespace ShipWorks.Filters.Controls
         protected override void OnDrawSelectedItem(Graphics g, Color foreColor, Rectangle bounds)
         {
             bool selected = false;
-
+            
             if (selectedNode != null)
             {
                 if (sizeToContentLastName != selectedNode.Filter.Name)
@@ -387,7 +405,18 @@ namespace ShipWorks.Filters.Controls
                 bounds.Offset(image.Width + imageTextSeparation, 1);
                 bounds.Width -= (image.Width + imageTextSeparation);
 
-                IndependentText.DrawText(g, selectedNode.Filter.Name, Font, bounds, textFormat, foreColor);
+                Font itemFont = new Font(Font, Font.Style);
+                Color itemColor = foreColor;
+                
+                DisabledFilterFont disabledFont = new DisabledFilterFont(Font);
+                bool isFilterDisabled = selectedNode.Filter.State == (byte)FilterState.Disabled;
+                if (isFilterDisabled)
+                {
+                    itemFont = disabledFont.Font;
+                    itemColor = disabledFont.TextColor;
+                }
+
+                IndependentText.DrawText(g, selectedNode.Filter.Name, itemFont, bounds, textFormat, itemColor);
 
                 string countText = GetCountText(selectedNode);
 
@@ -403,6 +432,11 @@ namespace ShipWorks.Filters.Controls
 
                 Color countColor = (selected || !Enabled) ? foreColor : Color.Blue;
 
+                if (isFilterDisabled)
+                {
+                    countColor = disabledFont.TextColor;
+                }
+
                 // How big the text is drawn by default
                 Size size = IndependentText.MeasureText(g, selectedNode.Filter.Name, Font, textFormat);
 
@@ -412,7 +446,7 @@ namespace ShipWorks.Filters.Controls
 
                 if (countText != null)
                 {
-                    IndependentText.DrawText(g, countText, Font, countBounds, textFormat, countColor);
+                    IndependentText.DrawText(g, countText, itemFont, countBounds, textFormat, countColor);
                 }
                 else
                 {

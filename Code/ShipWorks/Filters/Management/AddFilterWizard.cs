@@ -216,6 +216,7 @@ namespace ShipWorks.Filters.Management
 
             fakeFilterNode = new FilterNodeEntity();
             fakeFilterNode.FilterSequence = sequence;
+            fakeFilterNode.Filter.State = (int)FilterState.Enabled;
 
             // Have to set this for GridLayout defaults to work
             fakeFilterNode.ParentNode = filterTree.SelectedFilterNode;
@@ -231,7 +232,7 @@ namespace ShipWorks.Filters.Management
                 fakeFilterNode.ParentNode = null;
                 fakeFilterNode.FilterSequence.Filter = null;
                 fakeFilterNode.FilterSequence = null;
-                fakeFilterNode = null;
+                fakeFilterNode = null;                
             }
         }
 

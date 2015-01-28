@@ -526,7 +526,7 @@ namespace ShipWorks.Filters.Search
                 searchNode.ParentNode = null;
                 searchNode.FilterNodeContent = content;
                 searchNode.Created = DateTime.UtcNow;
-                searchNode.Purpose = (int) FilterNodePurpose.Search;
+                searchNode.Purpose = (int)FilterNodePurpose.Search;
 
                 // We'll just point to and re-use the placeholder sequence.  We don't actually need the sequence\filter for
                 // anything other than that some code references them for such things as determining FilterTarget and the filter

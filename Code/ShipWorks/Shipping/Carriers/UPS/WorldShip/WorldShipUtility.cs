@@ -885,10 +885,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public static string GetWorldShipExe()
         {
+            string subKeyPathAndName = @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WorldShipTD.exe";
+            string exePath = GetWorldShipExe(subKeyPathAndName);
+            if (string.IsNullOrWhiteSpace(exePath))
+            {
+                subKeyPathAndName = @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\App Paths\WorldShipTD.exe";
+                exePath = GetWorldShipExe(subKeyPathAndName);
+            }
+
+            return exePath;
+        }
+
+        /// <summary>
+        /// Get the full path to the worldship executable
+        /// </summary>
+        public static string GetWorldShipExe(string subKeyPathAndName)
+        {
             string path = string.Empty;
 
-            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(
-                       @"SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\WorldShipTD.exe"))
+            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(subKeyPathAndName))
             {
                 if (regKey != null)
                 {
@@ -997,9 +1012,25 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public static string GetWorldShipIni()
         {
+            string subKeyPathAndName = @"SOFTWARE\UPS\Installation";
+            string ini = GetWorldShipIni(subKeyPathAndName);
+            if (string.IsNullOrWhiteSpace(ini))
+            {
+                subKeyPathAndName = @"SOFTWARE\Wow6432Node\UPS\Installation";
+                ini = GetWorldShipIni(subKeyPathAndName);
+            }
+
+            return ini;
+        }
+
+        /// <summary>
+        /// Get the full path to the worldship executable
+        /// </summary>
+        public static string GetWorldShipIni(string subKeyPathAndName)
+        {
             string path = string.Empty;
 
-            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\UPS\Installation"))
+            using (RegistryKey regKey = Registry.LocalMachine.OpenSubKey(subKeyPathAndName))
             {
                 if (regKey != null)
                 {

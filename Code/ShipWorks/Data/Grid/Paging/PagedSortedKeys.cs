@@ -11,8 +11,10 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.Data.SqlClient;
 using System.Data;
 using System.Diagnostics;
+using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Grid.Paging
 {
@@ -228,25 +230,29 @@ namespace ShipWorks.Data.Grid.Paging
 
             try
             {
-                using (SqlAdapter adapter = new SqlAdapter())
+                SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "PagedSortedKeys.AsyncExecuteQuery.");
+                sqlAdapterRetry.ExecuteWithRetry(() =>
                 {
-                    if (!canceled)
+                    using (SqlAdapter adapter = new SqlAdapter())
                     {
-                        ResultsetFields resultFields = new ResultsetFields(1);
-                        resultFields.DefineField(keyField, 0, "EntityID", "");
-
-                        using (SqlDataReader reader = (SqlDataReader) SqlAdapter.Default.FetchDataReader(resultFields, queryBucket, CommandBehavior.CloseConnection, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
+                        if (!canceled)
                         {
-                            while (!canceled && reader.Read())
+                            ResultsetFields resultFields = new ResultsetFields(1);
+                            resultFields.DefineField(keyField, 0, "EntityID", "");
+
+                            using (SqlDataReader reader = (SqlDataReader) adapter.FetchDataReader(resultFields, queryBucket, CommandBehavior.CloseConnection, PagedEntityGrid.MaxVirtualRowCount, sortExpression, true))
                             {
-                                loadedKeys.Add(reader.GetInt64(0));
-                                loadedKeyCount = loadedKeys.Count;
+                                while (!canceled && reader.Read())
+                                {
+                                    loadedKeys.Add(reader.GetInt64(0));
+                                    loadedKeyCount = loadedKeys.Count;
+                                }
                             }
                         }
-                    }
 
-                    loadingComplete = true;
-                }
+                        loadingComplete = true;
+                    }
+                });
             }
             finally
             {

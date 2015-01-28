@@ -143,8 +143,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             account.AccountNumber = accountNumber.Text;
             account.SignatureRelease = "";
 
-            personControl.SaveToEntity();
-
+            personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Account", account.AccountNumber);

@@ -289,7 +289,7 @@ namespace ShipWorks.ApplicationCore.Services
                 }
                 catch (InvalidShipWorksDatabaseException ex)
                 {
-                    log.Error("Invalid Shipworks Database", ex);
+                    log.Error("Invalid ShipWorks Database", ex);
 
                     return hasChanged;
                 }

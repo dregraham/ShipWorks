@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -12,6 +13,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request
     {
         private readonly IUpsServiceGateway serviceGateway;
         private readonly ICarrierResponseFactory responseFactory;
+        private readonly UpsAccountEntity upsAccount;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsOpenAccountRequest" /> class.
@@ -20,11 +22,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request
         /// <param name="serviceGateway">The service gateway.</param>
         /// <param name="responseFactory">The response factory.</param>
         /// <param name="request">The request.</param>
-        public UpsOpenAccountRequest(IEnumerable<ICarrierRequestManipulator> manipulators, IUpsServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, OpenAccountRequest request)
+        public UpsOpenAccountRequest(IEnumerable<ICarrierRequestManipulator> manipulators, IUpsServiceGateway serviceGateway, ICarrierResponseFactory responseFactory, OpenAccountRequest request, UpsAccountEntity upsAccount)
             : base(manipulators, null)
         {
             this.serviceGateway = serviceGateway;
             this.responseFactory = responseFactory;
+            this.upsAccount = upsAccount;
 
             NativeRequest = request;
         }
@@ -36,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Request
         /// <value>The carrier account entity.</value>
         public override IEntity2 CarrierAccountEntity
         {
-            get { return null; }
+            get { return upsAccount; }
         }
 
         /// <summary>

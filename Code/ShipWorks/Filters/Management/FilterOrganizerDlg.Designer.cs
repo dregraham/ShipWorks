@@ -67,10 +67,11 @@ namespace ShipWorks.Filters.Management
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageOrders = new System.Windows.Forms.TabPage();
-            this.filterTreeOrders = new ShipWorks.Filters.Controls.FilterTree();
             this.tabPageCustomers = new System.Windows.Forms.TabPage();
-            this.filterTreeCustomers = new ShipWorks.Filters.Controls.FilterTree();
             this.imageListTabs = new System.Windows.Forms.ImageList(this.components);
+            this.showDisabledFilters = new System.Windows.Forms.CheckBox();
+            this.filterTreeOrders = new ShipWorks.Filters.Controls.FilterTree();
+            this.filterTreeCustomers = new ShipWorks.Filters.Controls.FilterTree();
             this.sortButton = new ShipWorks.UI.Controls.DropDownButton();
             this.editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
             this.contextMenuStripSort.SuspendLayout();
@@ -83,9 +84,9 @@ namespace ShipWorks.Filters.Management
             // 
             // labelAdd
             // 
-            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelAdd.AutoSize = true;
-            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelAdd.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelAdd.Location = new System.Drawing.Point(323, 145);
             this.labelAdd.Name = "labelAdd";
             this.labelAdd.Size = new System.Drawing.Size(29, 13);
@@ -94,9 +95,9 @@ namespace ShipWorks.Filters.Management
             // 
             // labelMove
             // 
-            this.labelMove.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.labelMove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelMove.AutoSize = true;
-            this.labelMove.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelMove.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelMove.Location = new System.Drawing.Point(323, 284);
             this.labelMove.Name = "labelMove";
             this.labelMove.Size = new System.Drawing.Size(38, 13);
@@ -105,9 +106,9 @@ namespace ShipWorks.Filters.Management
             // 
             // label4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label4.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(323, 35);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(28, 13);
@@ -116,7 +117,7 @@ namespace ShipWorks.Filters.Management
             // 
             // close
             // 
-            this.close.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.close.Location = new System.Drawing.Point(400, 433);
             this.close.Name = "close";
@@ -197,7 +198,7 @@ namespace ShipWorks.Filters.Management
             // 
             // rename
             // 
-            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rename.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.rename.Image = global::ShipWorks.Properties.Resources.rename;
             this.rename.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.rename.Location = new System.Drawing.Point(326, 80);
@@ -210,7 +211,7 @@ namespace ShipWorks.Filters.Management
             // 
             // moveIntoFolder
             // 
-            this.moveIntoFolder.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveIntoFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveIntoFolder.Image = global::ShipWorks.Properties.Resources.move_into_folder;
             this.moveIntoFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveIntoFolder.Location = new System.Drawing.Point(326, 358);
@@ -223,7 +224,7 @@ namespace ShipWorks.Filters.Management
             // 
             // delete
             // 
-            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.delete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.delete.Image = global::ShipWorks.Properties.Resources.delete16;
             this.delete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.delete.Location = new System.Drawing.Point(326, 109);
@@ -236,7 +237,7 @@ namespace ShipWorks.Filters.Management
             // 
             // edit
             // 
-            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.edit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.edit.Image = global::ShipWorks.Properties.Resources.edit16;
             this.edit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.edit.Location = new System.Drawing.Point(326, 50);
@@ -249,7 +250,7 @@ namespace ShipWorks.Filters.Management
             // 
             // moveDown
             // 
-            this.moveDown.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveDown.Image = global::ShipWorks.Properties.Resources.arrow_down_blue;
             this.moveDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveDown.Location = new System.Drawing.Point(326, 329);
@@ -262,7 +263,7 @@ namespace ShipWorks.Filters.Management
             // 
             // moveUp
             // 
-            this.moveUp.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.moveUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.moveUp.Image = global::ShipWorks.Properties.Resources.arrow_up_blue;
             this.moveUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.moveUp.Location = new System.Drawing.Point(326, 300);
@@ -275,7 +276,7 @@ namespace ShipWorks.Filters.Management
             // 
             // newFolder
             // 
-            this.newFolder.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
             this.newFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.newFolder.Location = new System.Drawing.Point(326, 190);
@@ -288,7 +289,7 @@ namespace ShipWorks.Filters.Management
             // 
             // createLink
             // 
-            this.createLink.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.createLink.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.createLink.Image = global::ShipWorks.Properties.Resources.paperclip16;
             this.createLink.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.createLink.Location = new System.Drawing.Point(326, 248);
@@ -302,7 +303,7 @@ namespace ShipWorks.Filters.Management
             // 
             // copy
             // 
-            this.copy.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.copy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.copy.Image = global::ShipWorks.Properties.Resources.CopyHS;
             this.copy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.copy.Location = new System.Drawing.Point(326, 219);
@@ -315,7 +316,7 @@ namespace ShipWorks.Filters.Management
             // 
             // newFilter
             // 
-            this.newFilter.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.newFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.newFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
             this.newFilter.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.newFilter.Location = new System.Drawing.Point(326, 161);
@@ -356,10 +357,10 @@ namespace ShipWorks.Filters.Management
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(131, 6);
             // 
-            // meuItemNewFilter
+            // menuItemNewFilter
             // 
             this.menuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
-            this.menuItemNewFilter.Name = "meuItemNewFilter";
+            this.menuItemNewFilter.Name = "menuItemNewFilter";
             this.menuItemNewFilter.Size = new System.Drawing.Size(134, 22);
             this.menuItemNewFilter.Text = "New Filter";
             this.menuItemNewFilter.Click += new System.EventHandler(this.OnNewFilter);
@@ -416,9 +417,9 @@ namespace ShipWorks.Filters.Management
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageOrders);
             this.tabControl.Controls.Add(this.tabPageCustomers);
             this.tabControl.ImageList = this.imageListTabs;
@@ -441,25 +442,6 @@ namespace ShipWorks.Filters.Management
             this.tabPageOrders.Text = "Orders";
             this.tabPageOrders.UseVisualStyleBackColor = true;
             // 
-            // filterTreeOrders
-            // 
-            this.filterTreeOrders.AutoRefreshCalculatingCounts = true;
-            this.filterTreeOrders.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.filterTreeOrders.ContextMenuStrip = this.contextMenuTree;
-            this.filterTreeOrders.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filterTreeOrders.Editable = true;
-            this.filterTreeOrders.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.filterTreeOrders.HotTrackNode = null;
-            this.filterTreeOrders.Location = new System.Drawing.Point(3, 3);
-            this.filterTreeOrders.Name = "filterTreeOrders";
-            this.filterTreeOrders.Size = new System.Drawing.Size(291, 365);
-            this.filterTreeOrders.TabIndex = 0;
-            this.filterTreeOrders.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
-            this.filterTreeOrders.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
-            this.filterTreeOrders.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
-            this.filterTreeOrders.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
-            this.filterTreeOrders.DragDropComplete += new ShipWorks.Filters.Controls.FilterDragDropCompleteEventHandler(this.OnDragDropComplete);
-            // 
             // tabPageCustomers
             // 
             this.tabPageCustomers.Controls.Add(this.filterTreeCustomers);
@@ -472,6 +454,45 @@ namespace ShipWorks.Filters.Management
             this.tabPageCustomers.Text = "Customers";
             this.tabPageCustomers.UseVisualStyleBackColor = true;
             // 
+            // imageListTabs
+            // 
+            this.imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListTabs.ImageStream")));
+            this.imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListTabs.Images.SetKeyName(0, "user11.png");
+            this.imageListTabs.Images.SetKeyName(1, "form_blue.png");
+            // 
+            // showDisabledFilters
+            // 
+            this.showDisabledFilters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showDisabledFilters.AutoSize = true;
+            this.showDisabledFilters.Location = new System.Drawing.Point(12, 416);
+            this.showDisabledFilters.Name = "showDisabledFilters";
+            this.showDisabledFilters.Size = new System.Drawing.Size(124, 17);
+            this.showDisabledFilters.TabIndex = 16;
+            this.showDisabledFilters.Text = "Show disabled filters";
+            this.showDisabledFilters.UseVisualStyleBackColor = true;
+            this.showDisabledFilters.CheckedChanged += new System.EventHandler(this.OnShowDisabledFiltersCheckedChanged);
+            // 
+            // filterTreeOrders
+            // 
+            this.filterTreeOrders.AutoRefreshCalculatingCounts = true;
+            this.filterTreeOrders.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.filterTreeOrders.ContextMenuStrip = this.contextMenuTree;
+            this.filterTreeOrders.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.filterTreeOrders.Editable = true;
+            this.filterTreeOrders.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterTreeOrders.HideDisabledFilters = true;
+            this.filterTreeOrders.HotTrackNode = null;
+            this.filterTreeOrders.Location = new System.Drawing.Point(3, 3);
+            this.filterTreeOrders.Name = "filterTreeOrders";
+            this.filterTreeOrders.Size = new System.Drawing.Size(291, 365);
+            this.filterTreeOrders.TabIndex = 0;
+            this.filterTreeOrders.SelectedFilterNodeChanged += new System.EventHandler(this.OnChangeSelectedFilterNode);
+            this.filterTreeOrders.FilterRenaming += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnBeforeRename);
+            this.filterTreeOrders.FilterRenamed += new ShipWorks.Filters.Controls.FilterNodeRenameEventHandler(this.OnAfterRename);
+            this.filterTreeOrders.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
+            this.filterTreeOrders.DragDropComplete += new ShipWorks.Filters.Controls.FilterDragDropCompleteEventHandler(this.OnDragDropComplete);
+            // 
             // filterTreeCustomers
             // 
             this.filterTreeCustomers.AutoRefreshCalculatingCounts = true;
@@ -479,7 +500,8 @@ namespace ShipWorks.Filters.Management
             this.filterTreeCustomers.ContextMenuStrip = this.contextMenuTree;
             this.filterTreeCustomers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filterTreeCustomers.Editable = true;
-            this.filterTreeCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.filterTreeCustomers.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filterTreeCustomers.HideDisabledFilters = true;
             this.filterTreeCustomers.HotTrackNode = null;
             this.filterTreeCustomers.Location = new System.Drawing.Point(3, 3);
             this.filterTreeCustomers.Name = "filterTreeCustomers";
@@ -491,16 +513,9 @@ namespace ShipWorks.Filters.Management
             this.filterTreeCustomers.DeleteKeyPressed += new System.EventHandler(this.OnDelete);
             this.filterTreeCustomers.DragDropComplete += new ShipWorks.Filters.Controls.FilterDragDropCompleteEventHandler(this.OnDragDropComplete);
             // 
-            // imageListTabs
-            // 
-            this.imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer) (resources.GetObject("imageListTabs.ImageStream")));
-            this.imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListTabs.Images.SetKeyName(0, "user11.png");
-            this.imageListTabs.Images.SetKeyName(1, "form_blue.png");
-            // 
             // sortButton
             // 
-            this.sortButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.sortButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.sortButton.AutoSize = true;
             this.sortButton.ContextMenuStrip = this.contextMenuStripSort;
             this.sortButton.Image = global::ShipWorks.Properties.Resources.sort_az_descending;
@@ -519,6 +534,7 @@ namespace ShipWorks.Filters.Management
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.close;
             this.ClientSize = new System.Drawing.Size(487, 468);
+            this.Controls.Add(this.showDisabledFilters);
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.rename);
             this.Controls.Add(this.delete);
@@ -535,7 +551,7 @@ namespace ShipWorks.Filters.Management
             this.Controls.Add(this.createLink);
             this.Controls.Add(this.copy);
             this.Controls.Add(this.newFilter);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(486, 497);
@@ -602,5 +618,6 @@ namespace ShipWorks.Filters.Management
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private Editions.EditionGuiHelper editionGuiHelper;
+        private System.Windows.Forms.CheckBox showDisabledFilters;
     }
 }

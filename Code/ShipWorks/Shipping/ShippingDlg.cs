@@ -754,6 +754,7 @@ namespace ShipWorks.Shipping
 
             // Update the processing \ settings buttons
             UpdateSelectionDependentUI();
+            shipmentControl.UpdateSelectionDependentUI();
 
             if (deleted.Count > 0)
             {
@@ -2349,11 +2350,7 @@ namespace ShipWorks.Shipping
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
             {
-                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessEndicia);
-                if(nudges.Any())
-                {
-                    NudgeManager.ShowNudge(this, nudges.First());
-                }
+                NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ProcessEndicia));
             }
         }
 

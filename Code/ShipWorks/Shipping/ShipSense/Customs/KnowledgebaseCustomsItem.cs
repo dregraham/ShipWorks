@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Reflection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
@@ -9,6 +10,7 @@ namespace ShipWorks.Shipping.ShipSense.Customs
     /// A DTO of customs information that will be serialized in an entry to the ShipSense knowledge base.
     /// </summary>
     [Serializable]
+    [Obfuscation(ApplyToMembers = false, Exclude = true, StripAfterObfuscation = false)]
     public class KnowledgebaseCustomsItem
     {
         /// <summary>

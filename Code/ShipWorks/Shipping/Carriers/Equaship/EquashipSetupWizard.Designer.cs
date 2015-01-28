@@ -36,7 +36,7 @@
             this.labelUsername = new System.Windows.Forms.Label();
             this.username = new System.Windows.Forms.TextBox();
             this.labelFedExAccount = new System.Windows.Forms.Label();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
             this.optionsControl = new ShipWorks.Shipping.Carriers.EquaShip.EquaShipOptionsControl();
             this.mainPanel.SuspendLayout();
@@ -49,10 +49,8 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(400, 542);
             this.next.TabIndex = 1;
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -66,7 +64,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageSettings);
+            this.mainPanel.Controls.Add(this.wizardPageAccount);
             this.mainPanel.Size = new System.Drawing.Size(568, 470);
             // 
             // etchBottom
@@ -183,7 +181,7 @@
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.Location = new System.Drawing.Point(23, 80);
             this.personControl.Name = "personControl";
-            this.personControl.Size = new System.Drawing.Size(358, 368);
+            this.personControl.Size = new System.Drawing.Size(358, 375);
             this.personControl.TabIndex = 2;
             // 
             // wizardPageSettings
@@ -211,7 +209,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(568, 577);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "EquashipSetupWizard";
             this.NextVisible = true;
@@ -240,7 +237,7 @@
         private UI.Wizard.WizardPage wizardPageInitial;
         private System.Windows.Forms.Label labelInfo1;
         private UI.Wizard.WizardPage wizardPageAccount;
-        private Data.Controls.PersonControl personControl;
+        private Data.Controls.AutofillPersonControl personControl;
         private System.Windows.Forms.TextBox password;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelUsername;

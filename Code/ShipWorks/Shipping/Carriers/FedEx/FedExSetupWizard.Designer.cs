@@ -33,7 +33,7 @@
             this.wizardPageInitial = new ShipWorks.UI.Wizard.WizardPage();
             this.labelInfo1 = new System.Windows.Forms.Label();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
-            this.personControl = new ShipWorks.Data.Controls.PersonControl();
+            this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
             this.accountSettingsControl = new ShipWorks.Shipping.Carriers.FedEx.FedExAccountSettingsControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.FedEx.FedExOptionsControl();
@@ -281,7 +281,7 @@
         private ShipWorks.UI.Wizard.WizardPage wizardPageInitial;
         private System.Windows.Forms.Label labelInfo1;
         private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
-        private ShipWorks.Data.Controls.PersonControl personControl;
+        private ShipWorks.Data.Controls.AutofillPersonControl personControl;
         private ShipWorks.UI.Wizard.WizardPage wizardPageSettings;
         private FedExOptionsControl optionsControl;
         private System.Windows.Forms.Label label1;

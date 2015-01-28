@@ -1,4 +1,4 @@
-<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:oa="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:ups="http://www.ups.com/XMLSchema" elementFormDefault="qualified">
+<xsd:schema targetNamespace="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:ups="http://www.ups.com/XMLSchema" xmlns:oa="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns="http://www.ups.com/XMLSchema/XOLTWS/OpenAccount/v1.0" xmlns:common="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 	<xsd:import namespace="http://www.ups.com/XMLSchema/XOLTWS/Common/v1.0" schemaLocation="common.xsd"/>
 	<xsd:element name="OpenAccountRequest">
 		<xsd:complexType>
@@ -10,6 +10,7 @@
 				<xsd:element name="BillingAddress" type="oa:BillingAddressType"/>
 				<xsd:element name="PickupAddress" type="oa:PickupAddressType"/>
 				<xsd:element name="PickupInformation" type="oa:PickupInformationType"/>
+				<xsd:element name="BillMyAccountInformation" type="oa:BillMyAccountType" minOccurs="0"/>
 			</xsd:sequence>
 		</xsd:complexType>
 	</xsd:element>
@@ -39,10 +40,15 @@
 	<xsd:complexType name="AccountCharacteristicsType">
 		<xsd:sequence>
 			<xsd:element name="CustomerClassification" type="oa:CodeOnlyType"/>
-			<xsd:element name="PrimaryReason" type="oa:PrimaryReasonType" />
+			<xsd:element name="PrimaryReason" type="oa:PrimaryReasonType"/>
 			<xsd:element name="BusinessInformation" type="oa:BusinessInformationType" minOccurs="0"/>
 			<xsd:element name="UnitOfMeasure" type="oa:CodeOnlyType" minOccurs="0"/>
 			<xsd:element name="ImportBrokerage" type="oa:ImportBrokerageType" minOccurs="0"/>
+			<!-- added for RFC 6523-Start-->
+			<xsd:element name="PrescriptionToPatients" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="LicensedInStateOrTerritory" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="OnlineOrMailOrder" type="xsd:string" minOccurs="0"/>
+			<!-- added for RFC 6523-End-->
 		</xsd:sequence>
 	</xsd:complexType>
 	<xsd:complexType name="PrimaryReasonType">
@@ -134,6 +140,14 @@
 			<xsd:element name="State" type="xsd:string"/>
 			<xsd:element name="PostalCode" type="xsd:string"/>
 			<xsd:element name="CountryCode" type="xsd:string"/>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="BillMyAccountType">
+		<xsd:sequence>
+			<xsd:element name="BMAEnrollmentOption" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BMATransactionPreference" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BMAEmailReceipt" type="xsd:string" minOccurs="0"/>
+			<xsd:element name="BMAEmailAddress" type="xsd:string" minOccurs="0"/>
 		</xsd:sequence>
 	</xsd:complexType>
 </xsd:schema>

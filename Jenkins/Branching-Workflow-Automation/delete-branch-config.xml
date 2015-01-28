@@ -26,7 +26,7 @@
     <hudson.plugins.powershell.PowerShell plugin="powershell@1.2">
       <command>echo &quot;Deleting jobs for $env:FEATURE_NAME&quot;
 
-$listJobsUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/api/xml?xpath=//job/name&amp;wrapper=jobs&quot;
+$listJobsUrl = &quot;http://intdev1201:8080/view/&quot; + $env:FEATURE_NAME + &quot;/api/xml?xpath=//job/name&amp;wrapper=jobs&quot;
 echo $listJobsUrl 
 
 # Make a request to obtain all of the jobs for the feature&apos;s view
@@ -43,10 +43,9 @@ $jobNames = Select-Xml &quot;//jobs/name&quot; $jobXml
 $jobNames | ForEach-Object { 
     echo &quot;Deleting job $_&quot; 
 
-    $deleteJobUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/job/$_/doDelete&quot;
+    $deleteJobUrl = &quot;http://intdev1201:8080/view/&quot; + $env:FEATURE_NAME + &quot;/job/$_/doDelete&quot;
     echo $deleteJobUrl
 
-    # $deleteJobUrl = &quot;http://www.google.com/&quot;
     [net.httpWebRequest] $jobRequest = [net.webRequest]::create($deleteJobUrl)
     $jobRequest.Method = &quot;POST&quot;
 
@@ -54,7 +53,7 @@ $jobNames | ForEach-Object {
 }
 
 # URL to delete the feature&apos;s view in Jenkins
-$deleteViewUrl = &quot;http://john-pc:8181/view/&quot; + $env:FEATURE_NAME + &quot;/doDelete&quot;
+$deleteViewUrl = &quot;http://intdev1201:8080/view/&quot; + $env:FEATURE_NAME + &quot;/doDelete&quot;
 
 # Make the request to delete the feature view
 $request = [net.webRequest]::create($deleteViewUrl)
@@ -63,7 +62,7 @@ $request.getResponse()
 
 
 # Delete the source code directory from disk
-$jobSourceDirectory = "\\intjenkins\C$\jenkins-builds\" + $env:FEATURE_NAME
+$jobSourceDirectory = "\\intdev1201\C$\jenkins-builds\" + $env:FEATURE_NAME
 if (Test-Path -Path $jobSourceDirectory)
 {
     echo "Deleting source directory for $env:FEATURE_NAME..."

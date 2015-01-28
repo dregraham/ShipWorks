@@ -462,6 +462,7 @@
     <Compile Include="Actions\Triggers\Editors\UserInitiatedImageChooserDlg.Designer.cs">
       <DependentUpon>UserInitiatedImageChooserDlg.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Triggers\FilterContentActionTriggerException.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedSelectionRequirement.cs" />
     <Compile Include="Actions\Triggers\UserInitiatedStockImages.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -625,6 +626,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
+    <Compile Include="Data\Controls\AutofillPersonControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Data\Controls\AutofillPersonControl.Designer.cs">
+      <DependentUpon>AutofillPersonControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
@@ -646,6 +653,18 @@
     <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.Designer.cs">
       <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Filters\Controls\FilterControlDisplayManager.cs" />
+    <Compile Include="Filters\Controls\DisabledFilterFont.cs" />
+    <Compile Include="Filters\FilterState.cs" />
+    <Compile Include="Filters\Management\DisableLinkedFilterDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Filters\Management\DisableLinkedFilterDlg.Designer.cs">
+      <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
+    <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
+    <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -829,8 +848,16 @@
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountResponseDTO.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.Designer.cs">
+      <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
@@ -844,6 +871,13 @@
     </Compile>
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\FootnoteParameters.cs" />
+    <Compile Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteControl.Designer.cs">
+      <DependentUpon>InvalidPackageDimensionsRateFootnoteControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
@@ -930,6 +964,7 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Claim\InsureShipSubmitClaimRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyRequest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
+    <Compile Include="Shipping\InvalidPackageDimensionsException.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
@@ -2047,12 +2082,6 @@
     <Compile Include="Shipping\Carriers\UPS\IUpsClerk.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsWebServiceException.cs" />
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountBusinessAddressException.cs" />
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsCreateAccount.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsCreateAccount.Designer.cs">
-      <DependentUpon>UpsCreateAccount.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7192,6 +7221,9 @@
     <EmbeddedResource Include="Data\Connection\SingleUserModeDlg.resx">
       <DependentUpon>SingleUserModeDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\Controls\AutofillPersonControl.resx">
+      <DependentUpon>AutofillPersonControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Grid\Columns\DisplayTypes\Editors\GridEnumDisplayEditor.resx">
       <DependentUpon>GridEnumDisplayEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -7273,6 +7305,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FileTransfer\FtpAccountEditorDlg.resx">
       <DependentUpon>FtpAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Management\DisableLinkedFilterDlg.resx">
+      <DependentUpon>DisableLinkedFilterDlg.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -7475,9 +7511,6 @@
       <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsCreateAccount.resx">
-      <DependentUpon>UpsCreateAccount.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -7495,6 +7528,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsInvalidAddressControl.resx">
       <DependentUpon>UpsInvalidAddressControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsPharmaceuticalControl.resx">
+      <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsPickupLocationControl.resx">
       <DependentUpon>UpsPickupLocationControl.cs</DependentUpon>
@@ -7525,6 +7561,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\InformationFootnoteControl.resx">
       <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteControl.resx">
+      <DependentUpon>InvalidPackageDimensionsRateFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Editing\Rating\RatesPanel.resx">
       <DependentUpon>RatesPanel.cs</DependentUpon>
@@ -10829,8 +10868,14 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.4.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.6.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.7.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -12372,10 +12417,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_v2013_PackageMovement_PackageMovementInformationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Branches\3.3.8.x-UPSRecertification\Code\ShipWorks\Shipping\Carriers\UPS\Api\Wsdl\OpenAccount.wsdl">
+    <WebReferenceUrl Include="C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\OpenAccount\Wsdl\OpenAccount.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\</RelPath>
-      <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Branches\3.3.8.x-UPSRecertification\Code\ShipWorks\Shipping\Carriers\UPS\Api\Wsdl\OpenAccount.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\shipworks3x\Code\ShipWorks\Shipping\Carriers\UPS\OpenAccount\Wsdl\OpenAccount.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

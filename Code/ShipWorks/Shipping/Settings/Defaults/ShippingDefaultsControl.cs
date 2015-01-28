@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// A profile has been edited in some way
         /// </summary>
         public event EventHandler ProfileEdited;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
@@ -35,6 +35,28 @@ namespace ShipWorks.Shipping.Settings.Defaults
             InitializeComponent();
 
             toolStripAddSettingsLine.Renderer = new NoBorderToolStripRenderer();
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether [are any rule filters disabled].
+        /// </summary>
+        public bool AreAnyRuleFiltersDisabled
+        {
+            get
+            {
+                return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>().Any(x => x.IsFilterDisabled);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there are any rule filters that have changed.
+        /// </summary>
+        public bool AreAnyRuleFiltersChanged
+        {
+            get
+            {
+                return panelSettingsArea.Controls.OfType<ShippingDefaultsRuleControl>().Any(r => r.HasFilterChanged);
+            }
         }
 
         /// <summary>

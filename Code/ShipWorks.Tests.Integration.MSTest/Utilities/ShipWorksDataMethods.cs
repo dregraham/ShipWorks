@@ -120,6 +120,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Utilities
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
+            shipment.BilledWeight = shipment.TotalWeight;
+            shipment.BilledType = (int)BilledType.Unknown;
+
             // Content items arent generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;

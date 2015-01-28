@@ -527,6 +527,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ModuleResponseEncoding", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("SchemaVersion", fieldHashtable);
 		}
 		#endregion
 
@@ -796,6 +799,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, true); }
 			set	{ SetValue((int)GenericModuleStoreFieldIndex.ModuleResponseEncoding, value); }
+		}
+
+		/// <summary> The SchemaVersion property of the Entity GenericModuleStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "GenericModuleStore"."SchemaVersion"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 20<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String SchemaVersion
+		{
+			get { return (System.String)GetValue((int)GenericModuleStoreFieldIndex.SchemaVersion, true); }
+			set	{ SetValue((int)GenericModuleStoreFieldIndex.SchemaVersion, value); }
 		}
 
 
