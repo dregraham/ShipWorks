@@ -193,7 +193,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 // Adjust font for disabled nodes
-                if (filterTreeRow.FilterNode.Filter.State == (byte) FilterState.Disabled)
+                if (filterTreeRow.IsFilterDisabled())
                 {
                     using (DisabledFilterFont disabledFont = new DisabledFilterFont(cellFont))
                     {
@@ -224,27 +224,6 @@ namespace ShipWorks.Filters.Controls
                     IndependentText.DrawText(context.Graphics, ")", cellFont, countBounds, textFormat, countColor);
                 }
             }
-        }
-
-        /// <summary>
-        /// Get the filter count to be displayed in the column
-        /// </summary>
-        private FilterCount GetFilterCount(GridRow row)
-        {
-            FilterNodeEntity node = row.Tag as FilterNodeEntity;
-            if (node == null)
-            {
-                return null;
-            }
-
-            // There are cases where there is no sequence, like if we just had a bad error, but the message box is showing, but the number would\should be visible
-            // in the background
-            if (node.FilterSequence == null)
-            {
-                return null;
-            }
-
-            return FilterContentManager.GetCount(node.FilterNodeID);
         }
     }
 }
