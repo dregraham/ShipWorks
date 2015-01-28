@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Settings.Printing
 
             // Sync up the original filter ID with the saved filter ID to prevent a 
             // false positive in the HasFilterChanged property.
-            originalFilterID = filterCombo.SelectedFilterNode != null ? filterCombo.SelectedFilterNode.FilterID : NoFilterSelectedID;
+            originalFilterID = SelectedFilterNodeId;
         }
 
         /// <summary>
@@ -208,7 +208,10 @@ namespace ShipWorks.Shipping.Settings.Printing
         /// </value>
         public bool HasFilterChanged
         {
-            get { return originalFilterID != filterCombo.SelectedFilterNode.FilterID; }
+            get
+            {
+                return originalFilterID != SelectedFilterNodeId;
+            }
         }
 
         /// <summary>
@@ -216,7 +219,23 @@ namespace ShipWorks.Shipping.Settings.Printing
         /// </summary>
         IEnumerable<long> IPrintWithTemplates.TemplatesToPrintWith
         {
-            get { return new long[] { templateCombo.SelectedTemplateID ?? 0 }; }
+            get
+            {
+                return new long[] { templateCombo.SelectedTemplateID ?? 0 };
+            }
+        }
+
+        /// <summary>
+        /// Gets the id of the currently selected filter
+        /// </summary>
+        private long SelectedFilterNodeId
+        {
+            get
+            {
+                return filterCombo.SelectedFilterNode != null ? 
+                    filterCombo.SelectedFilterNode.FilterID : 
+                    NoFilterSelectedID;
+            }
         }
     }
 }
