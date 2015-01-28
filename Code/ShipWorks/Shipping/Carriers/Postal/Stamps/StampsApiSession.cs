@@ -190,11 +190,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public AccountInfo GetAccountInfo(StampsAccountEntity account)
         {
-            return GetAccountInfoInternal(account);
+            return ExceptionWrapper(() => { return GetAccountInfoInternal(account); }, account);
         }
 
         /// <summary>
-        /// The internal GetAccountInfo implementation
+        /// The internal GetAccountInfo implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
         private AccountInfo GetAccountInfoInternal(StampsAccountEntity account)
         {
@@ -239,11 +239,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public string GetUrl(StampsAccountEntity account, UrlType urlType)
         {
-            return GetUrlInternal(account, urlType);
+            return ExceptionWrapper(() => { return GetUrlInternal(account, urlType); }, account);
         }
 
         /// <summary>
-        /// The internal GetUrl implementation
+        /// The internal GetUrl implementation that is intended to be wrapped by the exception wrapper
         /// </summary>
         private string GetUrlInternal(StampsAccountEntity account, UrlType urlType)
         {
@@ -262,11 +262,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public void PurchasePostage(StampsAccountEntity account, decimal amount, decimal controlTotal)
         {
-            PurchasePostageInternal(account, amount, controlTotal);
+            ExceptionWrapper(() => { PurchasePostageInternal(account, amount, controlTotal); return true; }, account);
         }
 
         /// <summary>
-        /// The internal PurchasePostageInternal implementation
+        /// The internal PurchasePostageInternal implementation intended to be wrapped by the exception wrapper
         /// </summary>
         private void PurchasePostageInternal(StampsAccountEntity account, decimal amount, decimal controlTotal)
         {
@@ -308,7 +308,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV11 stampsRate in GetRatesInternal(shipment, account))
+                foreach (RateV11 stampsRate in ExceptionWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
                     PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
@@ -397,7 +397,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// The internal GetRates implementation
+        /// The internal GetRates implementation intended to be wrapped by the exception wrapper
         /// </summary>
         private List<RateV11> GetRatesInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
@@ -442,11 +442,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
-            return CleanseAddressInternal(person, account, requireFullMatch);
+            return ExceptionWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
         }
 
         /// <summary>
-        /// Internal CleanseAddress implementation
+        /// Internal CleanseAddress implementation intended to be warpped by the exception wrapper
         /// </summary>
         private Address CleanseAddressInternal(PersonAdapter person, StampsAccountEntity account, bool requireFullMatch)
         {
@@ -552,13 +552,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             XDocument result = new XDocument();
-            result = CreateScanFormInternal(shipments, stampsAccountEntity); 
+            ExceptionWrapper(() => { result = CreateScanFormInternal(shipments, stampsAccountEntity); return true; }, stampsAccountEntity);
 
             return result;
         }
 
         /// <summary>
-        /// Creates the scan form via the Stamps.com API.
+        /// Creates the scan form via the Stamps.com API and intended to be wrapped by the authentication wrapper.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
         /// <param name="stampsAccountEntity">The stamps account entity.</param>
@@ -622,11 +622,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
             }
 
-            VoidShipmentInternal(shipment, account);
+            ExceptionWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
         }
 
         /// <summary>
-        /// The internal VoidShipment implementation
+        /// The internal VoidShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
@@ -649,7 +649,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                ProcessShipmentInternal(shipment, account);
+                ExceptionWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
             }
             catch (StampsApiException ex)
             {
@@ -678,7 +678,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// The internal ProcessShipment implementation
+        /// The internal ProcessShipment implementation intended to be wrapped by the exception wrapper
         /// </summary>
         private void ProcessShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
         {
@@ -1323,6 +1323,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             customs.CustomsLines = lines.ToArray();
 
             return customs;
+        }
+
+        /// <summary>
+        /// Handles exceptions when making calls to the Stamps API
+        /// </summary>
+        private T ExceptionWrapper<T>(Func<T> executor, StampsAccountEntity account)
+        {
+            try
+            {
+                return executor();
+            }
+            catch (SoapException ex)
+            {
+                log.ErrorFormat("Failed connecting to Stamps.com.  Account: {0}, Error Code: '{1}', Exception Message: {2}", account.StampsAccountID, StampsApiException.GetErrorCode(ex), ex.Message);
+
+                throw new StampsApiException(ex);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+            }
         }
 
         /// <summary>
