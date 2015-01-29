@@ -29,6 +29,7 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -47,7 +48,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public string HidePostage { get; set; }
         public string StampsAccountID { get; set; }
 
-        public override bool Ship()
+        public override bool Ship(StampsResellerType stampsResellerType)
         {
             try
             {
@@ -58,7 +59,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    stampsWebClient = new StampsWebClient(new UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), StampsResellerType.StampsExpedited);
+                    stampsWebClient = new StampsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
                     stampsWebClient.ProcessShipment(shipment);
 
                     //shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
@@ -75,6 +76,21 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             finally
             {
                 CleanupLabel();
+            }
+        }
+
+        private ICarrierAccountRepository<StampsAccountEntity> GetAccountRepository(StampsResellerType stampsResellerType)
+        {
+            switch (stampsResellerType)
+            {
+                case StampsResellerType.None:
+                    return new UspsAccountRepository();
+                case StampsResellerType.Express1:
+                    return new StampsAccountRepository();
+                case StampsResellerType.StampsExpedited:
+                    return new StampsAccountRepository();
+                default:
+                    throw new ArgumentOutOfRangeException("stampsResellerType");
             }
         }
 
