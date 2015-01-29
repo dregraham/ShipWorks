@@ -30,6 +30,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Commercial Plus Pricing/Negotiated Service Agreement (CPP/NSA)
         /// </summary>
         [Description("CPP/NSA")]
-        CommercialPlus = 3
+        CommercialPlus = 3,
+
+        /// <summary>
+        /// Reseller
+        /// </summary>
+        [Description("Reseller")]
+        Reseller = 4
     }
 }
