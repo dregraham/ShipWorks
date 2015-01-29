@@ -15,8 +15,10 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Grid.Columns;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
+using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -663,33 +665,11 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Get the carrier name for the given free text carrier name.  i.e. "U S P S", "Fed Ex", "FedEx"
+        /// Get a description for the 'Other' carrier
         /// </summary>
-        /// <returns>
-        /// If freeTextCarrierName can be parsed, "UPS", "USPS", or "FedEx" will be returned.
-        /// Otherwise, freeTextCarrierName will be returned.
-        /// </returns>
-        public static string GetCarrierName(string freeTextCarrierName)
+        public static CarrierDescription GetOtherCarrierDescription(ShipmentEntity shipment)
         {
-            // Strip out any characters that aren't in UPS, FedEx, or USPS
-            string parsedCarrierName = Regex.Replace(freeTextCarrierName, "[^fedxupsFEDXUPS]", "");
-
-            // See if this is UPS, USPS, or FedEx
-            if (parsedCarrierName.IndexOf("ups", 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                return "UPS";
-            }
-            else if (parsedCarrierName.IndexOf("usps", 0, StringComparison.OrdinalIgnoreCase) >= 0
-                 || freeTextCarrierName.IndexOf("postal", 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                return "USPS";
-            }
-            else if (parsedCarrierName.IndexOf("fedex", 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                return "FedEx";
-            }
-
-            return freeTextCarrierName;
+            return new CarrierDescription(shipment);
         }
 
         /// <summary>

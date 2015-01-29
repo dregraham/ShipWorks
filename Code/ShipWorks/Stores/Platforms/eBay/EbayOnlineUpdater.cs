@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
 using System.Data.Common;
@@ -429,8 +430,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     break;
 
                 case ShipmentTypeCode.Other:
-                    carrierType = ShippingCarrierCodeType.Other;
-                    break;
+                    CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
+
+                    return description.IsUPS ? ShippingCarrierCodeType.UPS :
+                        description.IsFedEx ? ShippingCarrierCodeType.FedEx :
+                        description.IsUSPS ? ShippingCarrierCodeType.USPS :
+                        description.IsDHL ? ShippingCarrierCodeType.DHL :
+                        ShippingCarrierCodeType.Other;
             }
 
             return carrierType;

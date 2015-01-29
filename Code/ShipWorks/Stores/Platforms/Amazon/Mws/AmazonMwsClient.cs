@@ -568,12 +568,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             string carrier;
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)
             {
-                if (shipment.Other == null)
-                {
-                    OtherShipmentType otherShipmentType = new OtherShipmentType();
-                    otherShipmentType.LoadShipmentData(shipment, false);
-                }
-                carrier = ShippingManager.GetCarrierName(shipment.Other.Carrier);
+                carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
             }
             else
             {
