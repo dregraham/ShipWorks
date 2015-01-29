@@ -319,12 +319,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
                 foreach (XElement sci in shipmentCustomsItemsElements.Descendants())
                 {
                     ShipmentCustomsItemEntity shipmentCustomsItem = new ShipmentCustomsItemEntity();
-                    shipmentCustomsItem.Description = sci.Attribute("Description").Value;
+                    shipmentCustomsItem.Description = Trim(sci.Attribute("Description").Value, 60);
                     shipmentCustomsItem.Quantity = Convert.ToDouble(sci.Attribute("Quantity").Value);
                     shipmentCustomsItem.Weight = Convert.ToDouble(sci.Attribute("Weight").Value);
                     shipmentCustomsItem.UnitValue = Convert.ToDecimal(sci.Attribute("UnitValue").Value);
-                    shipmentCustomsItem.CountryOfOrigin = sci.Attribute("CountryOfOrigin").Value;
-                    shipmentCustomsItem.HarmonizedCode = sci.Attribute("HarmonizedCode").Value;
+                    shipmentCustomsItem.CountryOfOrigin = Trim(sci.Attribute("CountryOfOrigin").Value, 2);
+                    shipmentCustomsItem.HarmonizedCode = Trim(sci.Attribute("HarmonizedCode").Value, 6);
                     shipmentCustomsItem.NumberOfPieces = Convert.ToInt16(sci.Attribute("NumberOfPieces").Value);
                     shipmentCustomsItem.UnitPriceAmount = Convert.ToDecimal(sci.Attribute("UnitPriceAmount").Value);
                     
@@ -341,6 +341,28 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
             }
 
             return shipment;
+        }
+
+        /// <summary>
+        /// Trim a string to a max length.
+        /// </summary>
+        /// <param name="textToTrim"></param>
+        /// <param name="maxLength"></param>
+        /// <returns></returns>
+        public string Trim(string textToTrim, int maxLength)
+        {
+            if (string.IsNullOrWhiteSpace(textToTrim))
+            {
+                return string.Empty;
+            }
+
+            textToTrim = textToTrim.Trim();
+            if (textToTrim.Length <= maxLength)
+            {
+                return textToTrim;
+            }
+
+            return textToTrim.Substring(0, maxLength);
         }
 
     }

@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [DeploymentItem("DataSources\\Stamps.xlsx")]
         [TestCategory("Stamps")]
         [TestMethod]
-        public void Ship()
+        public void ProcessBatch_USPS_Test()
         {
             try
             {
