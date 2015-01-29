@@ -19,13 +19,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void ProcessBatch_USPS_Test()
         {
+            StampsMapping testObject = new StampsMapping();
+
             try
             {
                 PostalWebUtility.UseTestServer = true;
                 StampsWebClient.UseTestServer = true;
                 Express1StampsWebClient.UseTestServer = true;
 
-                StampsMapping testObject = new StampsMapping();
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
@@ -38,16 +39,18 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                     using (SqlAdapter adapter = new SqlAdapter(true))
                     {
                         testObject.Ship();
-                    }
+                    }  
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
                 {
                     // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
                     return;
                 }
+
+                Console.WriteLine(string.Format("Error running Test ID {0}.  Error message: {1}", TestContext.DataRow["TestID"], ex.Message));
 
                 // We have a legitimate exception
                 throw;
