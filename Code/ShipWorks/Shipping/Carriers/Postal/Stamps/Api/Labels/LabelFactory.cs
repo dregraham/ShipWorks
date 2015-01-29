@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
                     }
                     else
                     {
-                        labels.Add(CreateLabel(shipment, labelUrls[0], "LabelPrimary", CroppingStyles.SingleInternationalCrop));
+                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
                     }
                 }
                 else
