@@ -301,6 +301,11 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("cloudconversion")]
         CloudConversion = 57,
 
+        [Description("CS-Cart")]
+        [StoreTypeIdentity("CSCART", "CSC")]
+        [StoreTypeIcon("cscart")]
+        CsCart = 58,
+
         [Description("PrestaShop")]
         [StoreTypeIdentity("PRESTA", "PRS")]
         [StoreTypeIcon("prestashop")]
