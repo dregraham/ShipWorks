@@ -164,13 +164,13 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             webClient.VoidShipment(shipment);
         }
 
-        public void PurchasePostage(ShipmentEntity shipment, decimal amount)
+        public void PurchasePostage(decimal amount)
         {
-            IStampsWebClient webClient = GetWebClient(shipment);
+            ShipmentEntity shipment = CreateShipment();
             StampsAccountEntity stampsAccount = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            decimal controlValue = new StampsPostageWebClient(stampsAccount).GetBalance();
+            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(stampsAccount);
 
-            webClient.PurchasePostage(stampsAccount, amount, controlValue);
+            stampsPostageWebClient.Purchase(amount);
         }
     }
 }
