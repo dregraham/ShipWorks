@@ -455,7 +455,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             using (SwsimV40 webService = CreateWebService("CleanseAddress"))
             {
-                string auth = webService.CleanseAddress(GetCredentials(account), ref address, fromZipCode, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes, out rates);
+                webService.CleanseAddress(GetCredentials(account), ref address, fromZipCode, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes, out rates);
 
                 if (!addressMatch)
                 {
