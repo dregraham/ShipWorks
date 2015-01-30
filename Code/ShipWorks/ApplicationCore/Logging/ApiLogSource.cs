@@ -108,6 +108,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		
         SellerExpress,
         PowersportsSupport,
+        CsCart,
         PrestaShop,
     }
 }
