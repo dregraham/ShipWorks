@@ -43,9 +43,9 @@ namespace ShipWorks.Stores.Platforms.PrestaShop
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        //public override string AccountSettingsHelpUrl
-        //{
-        //    get { return "http://support.shipworks.com/solution/"; }
-        //}
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000043804-adding-prestashop"; }
+        }
     }
 }
