@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -22,6 +23,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         private readonly Mock<ICarrierAccountRepository<StampsAccountEntity>> accountRepository;
         private readonly Mock<ILogEntryFactory> logEntryFactory;
 
+        private readonly StampsAccountEntity account;
+
         public StampsWebClientTest()
         {
             // This will initialize all of the various static classes
@@ -29,6 +32,19 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             
             accountRepository = new Mock<ICarrierAccountRepository<StampsAccountEntity>>();
             accountRepository.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());
+
+            account = new StampsAccountEntity()
+            {
+                Username = "interapptive",
+                Password = "AYSaiZOMP3UcalGuDB+4aA==",
+                FirstName = "Interapptive",
+                LastName = "ShipWorks",
+                Street1 = "1 Memorial Drive",
+                Street2 = "Suite 2000",
+                City = "St. Louis",
+                StateProvCode = "MO",
+                PostalCode = "63102"
+            };
 
             logEntryFactory = new Mock<ILogEntryFactory>();
             logEntryFactory.Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(new Mock<IApiLogEntry>().Object);
@@ -41,17 +57,36 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
-        {
-            StampsAccountEntity account = new StampsAccountEntity()
-            {
-                Username = "interapptive",
-                Password = "AYSaiZOMP3UcalGuDB+4aA=="
-            };
-
+        {           
             AccountInfo info = testObject.GetAccountInfo(account) as AccountInfo;
 
             // Basically just a connectivity test to confirm that the web client is not broken
             Assert.IsNotNull(info);
+        }
+
+        [TestCategory("Stamps")]
+        [TestCategory("ContinuousIntegration")]
+        [TestMethod]
+        public void CreateScanForm_Connectivity_Test()
+        {
+            try
+            {
+                // Checking for basic connectivity with the API to make sure there haven't been 
+                // any breaking changes between the web client and API for scan forms
+                List<StampsShipmentEntity> shipments = new List<StampsShipmentEntity>
+                {
+                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() },
+                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() }
+                };
+
+                testObject.CreateScanForm(shipments, account);
+            }
+            catch (StampsApiException exception)
+            {
+                // Since we just dummied some data up to create a scan form with we're going
+                // to get an exception. Make sure the error code is that of an invalid transaction ID
+                Assert.AreEqual(4523265, exception.Code);
+            }
         }
 
         [TestCategory("Stamps")]
