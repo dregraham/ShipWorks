@@ -172,5 +172,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
             stampsPostageWebClient.Purchase(amount);
         }
+
+        public decimal CheckPostage()
+        {
+            ShipmentEntity shipment = CreateShipment();
+            StampsAccountEntity stampsAccount = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(stampsAccount);
+
+            return stampsPostageWebClient.GetBalance();
+        }
     }
 }
