@@ -152,6 +152,7 @@ namespace ShipWorks.Stores
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
                 StoreTypeCode.PrestaShop,
+                StoreTypeCode.CsCart,
             };
 
             return disabledTypes.Contains(typeCode);
