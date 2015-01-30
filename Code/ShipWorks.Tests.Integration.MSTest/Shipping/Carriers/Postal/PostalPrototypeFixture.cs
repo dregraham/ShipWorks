@@ -97,6 +97,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
         public string TestID { get; set; }
 
         // Shipment fields
+        public string ShipmentTypeCode { get; set; }
         public string TotalWeight { get; set; }
         public string Service { get; set; }
         public string ShipDate { get; set; }
@@ -278,7 +279,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
             shipment.OriginUnparsedName = OriginUnparsedName;
             shipment.OriginOriginID = Convert.ToInt64(OriginOriginID);
 
-            shipment.ShipFirstName = ShipFirstName;
+            shipment.ShipFirstName = ShipFirstName + " " + TestID;
             shipment.ShipMiddleName = ShipMiddleName;
             shipment.ShipLastName = ShipLastName;
             shipment.ShipCompany = ShipCompany;

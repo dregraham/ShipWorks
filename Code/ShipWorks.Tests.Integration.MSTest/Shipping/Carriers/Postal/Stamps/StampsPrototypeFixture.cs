@@ -1,37 +1,15 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using Interapptive.Shared.Enums;
+using System.Threading;
 using Interapptive.Shared.Net;
-using Interapptive.Shared.Win32;
-using log4net;
-using log4net.Core;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.Enums;
-using ShipWorks.Data;
-using ShipWorks.Templates;
-using ShipWorks.Tests.Integration.MSTest.Utilities;
-using ShipWorks.Users;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Profiles;
-using ShipWorks.Stores;
-using ShipWorks.Shipping.Settings.Defaults;
-using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
-using Moq;
-using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
@@ -52,14 +30,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                StampsWebClient stampsWebClient;
+                IStampsWebClient stampsWebClient;
                 ShipmentEntity shipment = CreateShipment();
 
-                // If you want to create the shipments, but NOT process them, press the magic keys
-                // This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
+                 //If you want to create the shipments, but NOT process them, press the magic keys
+                 //This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    stampsWebClient = new StampsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
+                    stampsWebClient = GetWebClient(stampsResellerType);
                     stampsWebClient.ProcessShipment(shipment);
 
                     //shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
@@ -70,7 +48,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 shipment.CustomsGenerated = true;
 
                 ShippingManager.SaveShipment(shipment);
-                
+
+                if (stampsResellerType == StampsResellerType.Express1)
+                {
+                    // Now void to get our money back.  Sleep for a few seconds so that the carrier can process the void on their side.
+                    VoidShipment(shipment);
+                    Thread.Sleep(3000);
+                }
+
                 return true;
             }
             finally
@@ -79,16 +64,52 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             }
         }
 
+        private IStampsWebClient GetWebClient(StampsResellerType stampsResellerType)
+        {
+            switch (stampsResellerType)
+            {
+                case StampsResellerType.None:
+                case StampsResellerType.StampsExpedited:
+                    return new StampsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
+
+                case StampsResellerType.Express1:
+                    return new Express1StampsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector());
+                default:
+                    throw new ArgumentOutOfRangeException("stampsResellerType");
+            }
+        }
+
+        private IStampsWebClient GetWebClient(ShipmentEntity shipment)
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+
+            IStampsWebClient webClient = null;
+            if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Stamps)
+            {
+                webClient = GetWebClient(StampsResellerType.None);
+            }
+            else if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Usps)
+            {
+                webClient = GetWebClient(StampsResellerType.StampsExpedited);
+            }
+            else
+            {
+                webClient = GetWebClient(StampsResellerType.Express1);
+            }
+
+            return webClient;
+        }
+
         private ICarrierAccountRepository<StampsAccountEntity> GetAccountRepository(StampsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
                 case StampsResellerType.None:
-                    return new UspsAccountRepository();
+                    return new StampsAccountRepository();
                 case StampsResellerType.Express1:
-                    return new StampsAccountRepository();
+                    return new Express1StampsAccountRepository();
                 case StampsResellerType.StampsExpedited:
-                    return new StampsAccountRepository();
+                    return new UspsAccountRepository();
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");
             }
@@ -134,6 +155,22 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             }
 
             return shipment;
+        }
+
+        public void VoidShipment(ShipmentEntity shipment)
+        {
+            IStampsWebClient webClient = GetWebClient(shipment);
+
+            webClient.VoidShipment(shipment);
+        }
+
+        public void PurchasePostage(ShipmentEntity shipment, decimal amount)
+        {
+            IStampsWebClient webClient = GetWebClient(shipment);
+            StampsAccountEntity stampsAccount = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            decimal controlValue = new StampsPostageWebClient(stampsAccount).GetBalance();
+
+            webClient.PurchasePostage(stampsAccount, amount, controlValue);
         }
     }
 }
