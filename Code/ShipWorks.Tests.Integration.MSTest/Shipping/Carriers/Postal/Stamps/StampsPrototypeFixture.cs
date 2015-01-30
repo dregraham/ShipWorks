@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using Interapptive.Shared.Net;
@@ -11,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 {   
@@ -62,6 +64,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 CleanupLabel();
             }
+        }
+
+
+        public List<RateResult> GetRates(StampsResellerType stampsResellerType)
+        {
+            IStampsWebClient stampsWebClient;
+            ShipmentEntity shipment = CreateShipment();
+
+            stampsWebClient = GetWebClient(stampsResellerType);
+            return stampsWebClient.GetRates(shipment);
         }
 
         private IStampsWebClient GetWebClient(StampsResellerType stampsResellerType)
