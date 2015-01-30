@@ -127,13 +127,13 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             try
             {
-                using (StreamReader licenseFile = new StreamReader("C:\\Temp\\License.xml"))
+                using (StreamReader licenseFile = new StreamReader(path))
                 {
                     rawXml = licenseFile.ReadToEnd();
                     licenseFile.Close();
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 // Fall back to the hard-coded values if there is a problem reading from the 
                 // license.xml file
