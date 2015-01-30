@@ -71,7 +71,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
             {
-                GridRow row = new GridRow(new string[] { account.Description, "Checking..." });
+                string contractType = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
+                GridRow row = new GridRow(new string[] { account.Description, contractType, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
@@ -142,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         {
                             if (row.Cells.Count > 1)
                             {
-                                row.Cells[1].Text = result;
+                                row.Cells[2].Text = result;
                             }
                         }
                     }
