@@ -2,7 +2,7 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:sw="http://www.interapptive.com/shipworks" extension-element-prefixes="sw">
-  
+
   <!-- Imports -->
   <xsl:import href="System\Snippets" />
   <xsl:output method="html" encoding="utf-8" />
@@ -34,6 +34,7 @@
         <xsl:variable name="upsWorldShip" select="sum(//Shipment[Status = 'Processed' and ShipmentType='UPS (WorldShip)']/TotalCharges)" />
         <xsl:variable name="uspsWeb" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (w/o Postage)']/TotalCharges)" />
         <xsl:variable name="uspsEndicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Endicia)']/TotalCharges)" />
+        <xsl:variable name="usps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS']/TotalCharges)" />
         <xsl:variable name="uspsStamps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Stamps.com)']/TotalCharges)" />
         <xsl:variable name="uspsExpress1" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1)']/TotalCharges)" />
         <xsl:variable name="uspsExpress1Endicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1 for Endicia)']/TotalCharges)" />
@@ -70,6 +71,12 @@
             <td style="{$rowStyle};">USPS (w/o Postage)</td>
             <td style="{$rowStyle};" align="right">
               $<xsl:value-of select="format-number($uspsWeb, '#,##0.00')" />
+            </td>
+          </tr>
+          <tr>
+            <td style="{$rowStyle};">USPS</td>
+            <td style="{$rowStyle};" align="right">
+              $<xsl:value-of select="format-number($usps, '#,##0.00')" />
             </td>
           </tr>
           <tr>
