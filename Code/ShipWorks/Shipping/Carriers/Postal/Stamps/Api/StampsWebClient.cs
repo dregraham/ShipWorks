@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
     public class StampsWebClient : IStampsWebClient
     {
         private readonly ILog log;
-        private readonly LogEntryFactory logEntryFactory;
+        private readonly ILogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
 
         static Guid integrationID = new Guid("F784C8BC-9CAD-4DAF-B320-6F9F86090032");
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
-        public StampsWebClient(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
+        public StampsWebClient(ICarrierAccountRepository<StampsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;

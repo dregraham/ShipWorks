@@ -116,6 +116,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsMapping.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPrototypeFixture.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsMIFixture.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsFixture.cs" />
