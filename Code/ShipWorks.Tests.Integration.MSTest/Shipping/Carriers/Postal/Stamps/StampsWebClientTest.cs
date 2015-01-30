@@ -40,6 +40,23 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestCategory("Stamps")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
+        public void GetAccountInfo_ReturnsAccountInformation_Test()
+        {
+            StampsAccountEntity account = new StampsAccountEntity()
+            {
+                Username = "interapptive",
+                Password = "AYSaiZOMP3UcalGuDB+4aA=="
+            };
+
+            AccountInfo info = testObject.GetAccountInfo(account) as AccountInfo;
+
+            // Basically just a connectivity test to confirm that the web client is not broken
+            Assert.IsNotNull(info);
+        }
+
+        [TestCategory("Stamps")]
+        [TestCategory("ContinuousIntegration")]
+        [TestMethod]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
             StampsRegistration registration = CreateRegistrationWithoutUsername();
