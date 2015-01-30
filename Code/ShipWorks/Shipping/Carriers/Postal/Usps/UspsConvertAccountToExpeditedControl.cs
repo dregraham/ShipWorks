@@ -86,7 +86,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // contract type to reflect the conversion, so the Activate discount dialog is 
                 // not displayed again
                 ConvertAccountToExpedited();
-                accountToConvert.ContractType = (int)StampsAccountContractType.CommercialPlus;
+
+                // Set the ContractType to Unknown so that we rely on Stamps to correctly tell us 
+                // the contract type the next time we get rates or process.
+                accountToConvert.ContractType = (int)StampsAccountContractType.Unknown;
+
                 StampsAccountManager.SaveAccount(accountToConvert);
 
                 // Notify any listeners

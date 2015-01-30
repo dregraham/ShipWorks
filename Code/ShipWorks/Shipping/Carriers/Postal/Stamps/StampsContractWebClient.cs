@@ -135,8 +135,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     case RatesetType.CPP:
                     case RatesetType.NSA:
-                    case RatesetType.Reseller:
                         contract = StampsAccountContractType.CommercialPlus;
+                        break;
+
+                    case RatesetType.Reseller:
+                        contract = StampsAccountContractType.Reseller;
                         break;
 
                     default:
