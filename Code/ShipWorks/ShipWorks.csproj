@@ -2360,6 +2360,7 @@
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
+    <Compile Include="Stores\Platforms\PrestaShop\PrestaShopStoreType.cs" />
     <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8382,6 +8383,7 @@
     </None>
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
+    <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
     <None Include="Web References\Shipping.Carriers.Equaship.WebServices\equashipapi.wsdl" />
     <None Include="Web References\Shipping.Carriers.Equaship.WebServices\Reference.map">
@@ -11015,6 +11017,7 @@
     <None Include="Resources\printer21.png" />
     <None Include="Resources\server_from_client1.png" />
     <None Include="Resources\Progress\squares_circle_green_transparent.gif" />
+    <None Include="Resources\prestashop.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
