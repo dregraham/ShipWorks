@@ -58,8 +58,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                         {
                             exception = ex;
                         }
-
-                        adapter.Commit();
                     }
 
                     if (exception != null)
