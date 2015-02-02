@@ -13900,3 +13900,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Presta", Scope = "type", Target = "ShipWorks.Stores.Platforms.PrestaShop.PrestaShopStoreType")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Presta", Scope = "namespace", Target = "ShipWorks.Stores.Platforms.PrestaShop")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Presta", Scope = "member", Target = "ShipWorks.ApplicationCore.Logging.ApiLogSource.#PrestaShop")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "type", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.UspsPostalRateSelection")]
