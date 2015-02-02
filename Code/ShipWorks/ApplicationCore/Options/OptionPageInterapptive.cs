@@ -14,6 +14,7 @@ using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using log4net;
 using ShipWorks.Data.Model;
@@ -67,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnLoad(object sender, EventArgs e)
         {
             postalWebTestServer.Checked = PostalWebUtility.UseTestServer;
-            stampsTestServer.Checked = StampsApiSession.UseTestServer;
+            stampsTestServer.Checked = StampsWebClient.UseTestServer;
             
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
@@ -109,7 +110,7 @@ namespace ShipWorks.ApplicationCore.Options
             base.Save();
 
             PostalWebUtility.UseTestServer = postalWebTestServer.Checked;
-            StampsApiSession.UseTestServer = stampsTestServer.Checked;
+            StampsWebClient.UseTestServer = stampsTestServer.Checked;
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;

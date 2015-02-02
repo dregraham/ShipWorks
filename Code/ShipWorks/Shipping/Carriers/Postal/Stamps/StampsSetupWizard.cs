@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
@@ -55,10 +56,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
+            StampsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Stamps ? StampsResellerType.None : StampsResellerType.StampsExpedited;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
-            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(), promotion);
+            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
             availableRegistrationTypes = promotion.AvailableRegistrationTypes;
 
@@ -443,7 +445,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsApiSession().AuthenticateUser(userID, password.Text, StampsResellerType.None);
+                new StampsWebClient(StampsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 if (StampsAccount == null)
                 {

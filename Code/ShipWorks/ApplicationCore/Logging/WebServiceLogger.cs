@@ -8,7 +8,7 @@ using System.Web.Services.Protocols;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
@@ -135,12 +135,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
     }
 }		
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV39
+    partial class SwsimV40
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV39(IApiLogEntry logEntry)
+        internal SwsimV40(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

@@ -727,6 +727,14 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\CountryCodeCleanser.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\IStampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Express1StampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\CroppingStyles.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\Label.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\LabelFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\StandardLabel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\ThermalLabel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
@@ -758,7 +766,6 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractTypeCache.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
@@ -4560,7 +4567,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.Designer.cs">
       <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsApiSession.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\StampsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsApiException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />
@@ -6182,11 +6189,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -8224,6 +8226,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -8582,11 +8589,37 @@
     <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\SDCV24Service0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\cost_code_info_v1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\CountryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\IndiciumData.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetStampsImage.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetStampsLayout.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetstampsStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\RateV11.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\ResidentialDeliveryIndicatorType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\StatusCodes.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\StoreShippingMethodOption.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\swsimv29.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\cost_code_info_v1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -8617,7 +8650,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\StoreShippingMethodOption.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv29.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv40.wsdl" />
     <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -11287,6 +11320,9 @@
     <EmbeddedResource Include="Templates\Distribution\Source\Source.zip" />
     <None Include="Stores\Platforms\CreLoaded\shipworks3.php" />
     <None Include="Templates\Distribution\TemplateSettingsSchema.xsd" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\RegistrationStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\RegistrationStatus.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12045,6 +12081,26 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\ShippingService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\AccountInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Address.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\PostageBalance.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\PurchaseStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\TrackingEvent.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\AccountInfo.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12511,19 +12567,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\</RelPath>
-      <UpdateFromURL>C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>
-      </CachedAppSettingsObjectName>
-      <CachedSettingsPropName>
-      </CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="https://testbeta1.americommerce.com/store/ws/americommercedb.asmx">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Stores.Platforms.AmeriCommerce.WebServices\</RelPath>
@@ -12548,8 +12591,19 @@
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
       <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
+      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\</RelPath>
       <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Stamps_WebServices_swsim_v1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv40.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv40.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
 using Interapptive.Shared.Net;
@@ -122,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {
@@ -139,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {
