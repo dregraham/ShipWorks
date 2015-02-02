@@ -2215,9 +2215,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 		private void InitShippingSettingsEntityInfos()
 		{
 			base.AddElementFieldInfo("ShippingSettingsEntity", "ShippingSettingsID", typeof(System.Boolean), true, false, false, false,  (int)ShippingSettingsFieldIndex.ShippingSettingsID, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalActivated", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalActivated, 30, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalConfigured", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalConfigured, 30, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalExcluded", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalExcluded, 30, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalActivated", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalActivated, 45, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalConfigured", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalConfigured, 45, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalExcluded", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalExcluded, 45, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "DefaultType", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.DefaultType, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "BlankPhoneOption", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.BlankPhoneOption, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "BlankPhoneNumber", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.BlankPhoneNumber, 16, 0, 0);
@@ -2340,6 +2340,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsProfileEntity", "HidePostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.HidePostage, 0, 0, 0);
 			base.AddElementFieldInfo("StampsProfileEntity", "RequireFullAddressValidation", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.RequireFullAddressValidation, 0, 0, 0);
 			base.AddElementFieldInfo("StampsProfileEntity", "Memo", typeof(System.String), false, false, false, true,  (int)StampsProfileFieldIndex.Memo, 200, 0, 0);
+			base.AddElementFieldInfo("StampsProfileEntity", "RateShop", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.RateShop, 0, 0, 0);
 		}
 		/// <summary>Inits StampsScanFormEntity's FieldInfo objects</summary>
 		private void InitStampsScanFormEntityInfos()
@@ -2365,6 +2366,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsShipmentEntity", "OriginalStampsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsShipmentFieldIndex.OriginalStampsAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)StampsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
 			base.AddElementFieldInfo("StampsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)StampsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			base.AddElementFieldInfo("StampsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)StampsShipmentFieldIndex.RateShop, 0, 0, 0);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()

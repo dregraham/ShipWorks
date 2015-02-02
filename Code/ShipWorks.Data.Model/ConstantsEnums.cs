@@ -8048,6 +8048,8 @@ namespace ShipWorks.Data.Model
 		RequireFullAddressValidation,
 		///<summary>Memo. </summary>
 		Memo,
+		///<summary>RateShop. </summary>
+		RateShop,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8104,6 +8106,8 @@ namespace ShipWorks.Data.Model
 		ScanFormBatchID,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>RateShop. </summary>
+		RateShop,
 		/// <summary></summary>
 		AmountOfFields
 	}

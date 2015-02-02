@@ -3155,7 +3155,8 @@ CREATE TABLE [dbo].[StampsProfile]
 [StampsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RateShop] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsProfile] on [dbo].[StampsProfile]'
@@ -3192,7 +3193,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalStampsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[RateShop] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
