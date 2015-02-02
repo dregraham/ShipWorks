@@ -37,3 +37,5 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "nop", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#nopCommerce")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Powersports", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#PowersportsSupport")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#Usps")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Presta", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#PrestaShop")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Cs", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#CsCart")]
