@@ -148,5 +148,33 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             return registration;
         }
 
+        [TestCategory("Stamps")]
+        [TestCategory("ContinuousIntegration")]
+        [TestMethod]
+        public void GetContract_Connectivity_Test()
+        {
+            StampsAccountContractType contractType = testObject.GetContractType(account);
+
+            Assert.AreEqual(StampsAccountContractType.Reseller, contractType);
+        }
+
+        [TestCategory("Stamps")]
+        [TestCategory("ContinuousIntegration")]
+        [TestMethod]
+        public void ChangeToExpeditedPlan_Connectivity_Test()
+        {
+            // We just need to make sure we can connect and submit the request without
+            // an exception. This will throw an exception since we're trying to convert
+            // an existing reseller account.
+            try
+            {
+                testObject.ChangeToExpeditedPlan(account, "ShipWorks3");
+            }
+            catch (StampsApiException exception)
+            {
+                Assert.AreEqual(0x005f0302, exception.Code);
+            }
+        }
+
     }
 }

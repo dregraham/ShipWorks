@@ -35,6 +35,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
     /// </summary>
     public class StampsWebClient : IStampsWebClient
     {
+        // This value came from Stamps.com (the "standard" account value is 88)
+        private const int ExpeditedPlanID = 236;
+
         private readonly ILog log;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
@@ -195,28 +198,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
 
             return accountInfo;
-        }
-
-        /// <summary>
-        /// Changes the contract associated with the given account based on the contract type provided.
-        /// </summary>
-        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
-        {
-            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
-            // has been upgraded to v39+ 
-            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer, certificateInspector);
-            contractWebClient.ChangeToExpeditedPlan(account, promoCode);
-        }
-
-        /// <summary>
-        /// Checks with Stamps.com API to get the contract type of the account.
-        /// </summary>
-        public StampsAccountContractType GetContractType(StampsAccountEntity account)
-        {
-            // Just pass this along to the contract web client until the WSDL used by the StampsApiSession
-            // has been upgraded to v39+ 
-            StampsContractWebClient contractWebClient = new StampsContractWebClient(UseTestServer, certificateInspector);
-            return contractWebClient.GetContractType(account);
         }
 
         /// <summary>
@@ -1080,6 +1061,100 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             customs.CustomsLines = lines.ToArray();
 
             return customs;
+        }
+
+        /// <summary>
+        /// Makes request to Stamps.com API to change plan associated with the account referenced by the authenticator to be 
+        /// an Expedited plan. This requires an authentication call to the Stamps.com API prior to changing the plan.
+        /// </summary>
+        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        {
+            ExceptionWrapper(() =>
+            {
+                InternalChangeToExpeditedPlan(GetCredentials(account), promoCode);
+                return true;
+            }, account);
+        }
+
+        /// <summary>
+        /// Makes request to Stamps.com API to change plan associated with the account referenced by the authenticator to be 
+        /// an Expedited plan. This requires an authentication call to the Stamps.com API prior to changing the plan.
+        /// </summary>
+        private void InternalChangeToExpeditedPlan(Credentials credentials, string promoCode)
+        {
+            // Output parameters for web service call
+            int transactionID;
+            PurchaseStatus purchaseStatus;
+            string rejectionReason = string.Empty;
+
+            try
+            {
+                using (SwsimV40 webService = CreateWebService("ChangePlan"))
+                {
+                    webService.Url = ServiceUrl;
+                    webService.ChangePlan(credentials, ExpeditedPlanID, promoCode, out purchaseStatus, out transactionID, out rejectionReason);
+                }
+            }
+            catch (StampsException exception)
+            {
+                log.ErrorFormat("ShipWorks was unable to change the Stamps.com plan. {0}. {1}", rejectionReason ?? string.Empty, exception.Message);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Checks with Stamps.com to get the contract type of the account.
+        /// </summary>
+        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        {
+            return ExceptionWrapper(() => InternalGetContractType(account), account);
+        }
+
+        /// <summary>
+        /// The internal GetContractType implementation that is intended to be wrapped by the auth wrapper
+        /// </summary>
+        private StampsAccountContractType InternalGetContractType(StampsAccountEntity account)
+        {
+            StampsAccountContractType contract = StampsAccountContractType.Unknown;
+            AccountInfo accountInfo;
+
+            using (SwsimV40 webService = CreateWebService("GetContractType"))
+            {
+                CheckCertificate(webService.Url);
+
+                // Address and CustomerEmail are not returned by Express1, so do not use them.
+                Address address;
+                string email;
+
+                webService.GetAccountInfo(GetCredentials(account), out accountInfo, out address, out email);
+            }
+
+            RatesetType? rateset = accountInfo.RatesetType;
+            if (rateset.HasValue)
+            {
+                switch (rateset)
+                {
+                    case RatesetType.CBP:
+                    case RatesetType.Retail:
+                        contract = StampsAccountContractType.Commercial;
+                        break;
+
+                    case RatesetType.CPP:
+                    case RatesetType.NSA:
+                        contract = StampsAccountContractType.CommercialPlus;
+                        break;
+
+                    case RatesetType.Reseller:
+                        contract = StampsAccountContractType.Reseller;
+                        break;
+
+                    default:
+                        contract = StampsAccountContractType.Unknown;
+                        break;
+                }
+            }
+
+            return contract;
         }
 
         /// <summary>

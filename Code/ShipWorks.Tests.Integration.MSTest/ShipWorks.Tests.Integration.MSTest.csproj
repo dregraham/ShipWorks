@@ -112,7 +112,6 @@
     <Compile Include="Shipping\Carriers\FedEx\US\Express\Domestic\FedExUSOneRateMapping.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPrototypeFixture.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsMapping.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPrototypeFixture.cs" />
