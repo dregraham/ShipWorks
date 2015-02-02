@@ -327,18 +327,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity orderItem, LineItemType lineItem)
         {
-            //if (lineItem.SelectedVariationList != null)
-            //{
-            //    foreach (SelectedVariationType variation in lineItem.SelectedVariationList)
-            //    {
-            //        OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(orderItem);
-
-            //        attribute.Name = variation.Group;
-            //        attribute.Description = variation.Option;
-            //        attribute.UnitPrice = 0;
-            //    }
-            //}
-
             IEnumerable<KeyValuePair<string, string>> attributes = BuildVariationList(lineItem.SelectedVariationList)
                 .Concat(BuildQuestionAnswerList(lineItem.QuestionList));
 
@@ -381,6 +369,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 .Select(ConvertQuestionItemToBooleanAnswer)
                 .Where(x => x.Value)
                 .Select(x => x.Answer)
+                .DefaultIfEmpty()
                 .Aggregate((x, y) => x + ", " + y);
         }
 
