@@ -81,13 +81,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IStampsWebClient client = CreateWebClient();
 
-            List<RateResult> stampsRates = shipment.Postal.Stamps.RateShop ? 
-                GetRatesForAllAccounts(shipment, client) : 
+            List<RateResult> stampsRates = shipment.Postal.Stamps.RateShop ?
+                GetRatesForAllAccounts(shipment, client) :
                 client.GetRates(shipment);
 
             RateGroup rateGroup = new RateGroup(stampsRates);
             AddUspsRatePromotionFootnote(shipment, rateGroup);
-            
+
             return rateGroup;
         }
 
@@ -149,11 +149,54 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                CreateWebClient().ProcessShipment(shipment);
+                if (shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1)
+                {
+                    ProcessShipmentWithRateShopping(shipment);
+                }
+                else
+                {
+                    CreateWebClient().ProcessShipment(shipment);
+                }
             }
             catch (StampsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
+            }
+        }
+
+        /// <summary>
+        /// Process the shipment using the account with the cheapest rate for the requested service
+        /// </summary>
+        private void ProcessShipmentWithRateShopping(ShipmentEntity shipment)
+        {
+            IStampsWebClient client = CreateWebClient();
+            List<StampsAccountEntity> accounts = GetRatesFromApi(shipment).Rates
+                    .OrderBy(x => x.Amount)
+                    .Select(x => x.OriginalTag as UspsPostalRateSelection)
+                    .Where(x => x.IsRateFor(shipment))
+                    .Select(x => x.Accounts)
+                    .FirstOrDefault();
+
+            if (accounts == null)
+            {
+                throw new StampsException("Could not get rates for the specified service type");
+            }
+
+            foreach (StampsAccountEntity account in accounts)
+            {
+                try
+                {
+                    shipment.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+                    client.ProcessShipment(shipment);
+                    break;
+                }
+                catch (StampsInsufficientFundsException)
+                {
+                    if (ReferenceEquals(account, accounts.Last()))
+                    {
+                        throw;
+                    }
+                }
             }
         }
 

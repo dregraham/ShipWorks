@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -43,6 +44,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override int GetHashCode()
         {
             return base.GetHashCode() + Accounts.GetHashCode();
+        }
+
+        /// <summary>
+        /// Is the rate compatible with the specified shipment
+        /// </summary>
+        public bool IsRateFor(ShipmentEntity shipment)
+        {
+            if (shipment == null || shipment.Postal == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return ServiceType == (PostalServiceType) shipment.Postal.Service && 
+                ConfirmationType == (PostalConfirmationType) shipment.Postal.Confirmation;
         }
     }
 }
