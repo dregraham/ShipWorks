@@ -122,12 +122,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (AggregateException ex)
             {
+                // Try to rethrow the first api exception we got
                 StampsApiException apiException = ex.InnerExceptions.OfType<StampsApiException>().FirstOrDefault();
                 if (apiException != null)
                 {
                     throw apiException;
                 }
 
+                // If there are no api exceptions, just rethrow the first exception
+                Exception exception = ex.InnerExceptions.FirstOrDefault();
+                if (exception != null)
+                {
+                    throw exception;
+                }
+
+                // If there were no exceptions in the aggregate exception, just rethrow it
                 throw;
             }
         }
