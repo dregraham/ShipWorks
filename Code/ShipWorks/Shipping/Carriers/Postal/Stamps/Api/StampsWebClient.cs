@@ -16,6 +16,7 @@ using ShipWorks.Data.Connection;
 using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI;
 using ShipWorks.Shipping.Editing;
@@ -259,7 +260,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
-            StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            return GetRates(shipment, accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID));
+        }
+
+        /// <summary>
+        /// Get the rates for the given shipment using the specified account
+        /// </summary>
+        public List<RateResult> GetRates(ShipmentEntity shipment, StampsAccountEntity account)
+        {
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
@@ -274,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV15 stampsRate in ExceptionWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+                foreach (RateV15 stampsRate in ExceptionWrapper(() => GetRatesInternal(shipment, account), account))
                 {
                     PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
@@ -287,7 +295,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
                             stampsRate.DeliverDays.Replace("Days", ""))
                         {
-                            Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
+                            Tag = new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account),
                             ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                         };
                     }
@@ -297,10 +305,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
                             stampsRate.DeliverDays.Replace("Days", ""),
                             stampsRate.Amount,
-                            new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                            {
-                                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
-                            };
+                            new UspsPostalRateSelection(serviceType, PostalConfirmationType.None, account))
+                        {
+                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
+                        };
                     }
 
                     PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
@@ -332,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                                 name,
                                 string.Empty,
                                 stampsRate.Amount + addOn.Amount,
-                                new PostalRateSelection(serviceType, confirmationType));
+                                new UspsPostalRateSelection(serviceType, confirmationType, account));
 
                             PostalUtility.SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
 
@@ -369,7 +377,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             RateV15 rate = CreateRateForRating(shipment, account);
 
-            List<RateV15> rateResults = new List<RateV15>();
+            List<RateV15> rateResults;
 
             using (SwsimV40 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {

@@ -1,7 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
@@ -11,6 +17,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -72,12 +79,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            List<RateResult> stampsRates = CreateWebClient().GetRates(shipment);
-            
+            IStampsWebClient client = CreateWebClient();
+
+            List<RateResult> stampsRates = shipment.Postal.Stamps.RateShop ? 
+                GetRatesForAllAccounts(shipment, client) : 
+                client.GetRates(shipment);
+
             RateGroup rateGroup = new RateGroup(stampsRates);
             AddUspsRatePromotionFootnote(shipment, rateGroup);
             
             return rateGroup;
+        }
+
+        /// <summary>
+        /// Get rates for all available accounts
+        /// </summary>
+        private List<RateResult> GetRatesForAllAccounts(ShipmentEntity shipment, IStampsWebClient client)
+        {
+            List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
+            List<Task<List<RateResult>>> tasks = uspsAccounts.Select(x => Task.Factory.StartNew(() => client.GetRates(shipment, x))).ToList();
+
+            foreach (Task<List<RateResult>> task in tasks)
+            {
+                task.Wait();
+            }
+
+            return new UspsRateConsolidator().Consolidate(tasks.Select(x => x.Result));
         }
 
         /// <summary>
@@ -104,7 +131,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// The updates shipment (or shipments) that is ready to be processed. A null value may
         /// be returned to indicate that processing should be halted completely.
         /// </returns>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
             // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
             IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
@@ -150,6 +177,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // here because the underlying accounts being used are the same.
                 return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
             }
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            return base.GetRatingFields(shipment)
+                .Concat(new[]
+                {
+                    shipment.Postal.Stamps.Fields[StampsShipmentFields.RateShop.FieldIndex]
+                });
+        }
+
+        /// <summary>
+        /// Get the default profile for the shipment type
+        /// </summary>
+        protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
+        {
+            base.ConfigurePrimaryProfile(profile);
+
+            profile.Postal.Stamps.RateShop = true;
         }
     }
 }
