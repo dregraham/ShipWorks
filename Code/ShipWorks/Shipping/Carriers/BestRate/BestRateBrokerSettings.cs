@@ -97,10 +97,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                     express1ShipmentType = ShipmentTypeCode.Express1Endicia;
                     break;
                 case ShipmentTypeCode.Stamps:
+                case ShipmentTypeCode.Usps:
                     express1ShipmentType = ShipmentTypeCode.Express1Stamps;
                     break;
                 default:
-                    string message = string.Format("Shipment type {0} was provided. A shipment type of either Endicia or Stamps was expected.", shipmentType.ShipmentTypeName);
+                    string message = string.Format("Shipment type {0} was provided. A shipment type of either USPS, Endicia or Stamps was expected.", shipmentType.ShipmentTypeName);
                     throw new ArgumentException(message, "shipmentType");
             }
 

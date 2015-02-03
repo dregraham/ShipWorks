@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
+﻿using System.Drawing;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     partial class UspsProfileControl
     {
@@ -43,19 +45,19 @@
             // groupTo
             // 
             this.groupTo.Location = new System.Drawing.Point(9, 108);
-            this.groupTo.Size = new System.Drawing.Size(396, 52);
+            this.groupTo.Size = new System.Drawing.Size(417, 52);
             // 
             // groupLabels
             // 
             this.groupLabels.Location = new System.Drawing.Point(9, 442);
-            this.groupLabels.Size = new System.Drawing.Size(396, 58);
+            this.groupLabels.Size = new System.Drawing.Size(417, 58);
             // 
             // groupBoxFrom
             // 
             this.groupBoxFrom.Controls.Add(this.rateShop);
             this.groupBoxFrom.Controls.Add(this.labelRateShop);
             this.groupBoxFrom.Controls.Add(this.stateRateShop);
-            this.groupBoxFrom.Size = new System.Drawing.Size(396, 96);
+            this.groupBoxFrom.Size = new System.Drawing.Size(417, 96);
             this.groupBoxFrom.Controls.SetChildIndex(this.senderState, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.originCombo, 0);
             this.groupBoxFrom.Controls.SetChildIndex(this.labelSender, 0);
@@ -67,24 +69,27 @@
             // groupShipment
             // 
             this.groupShipment.Location = new System.Drawing.Point(9, 166);
-            this.groupShipment.Size = new System.Drawing.Size(396, 270);
+            this.groupShipment.Size = new System.Drawing.Size(417, 270);
             // 
             // groupBoxCustoms
             // 
             this.groupBoxCustoms.Location = new System.Drawing.Point(9, 593);
-            this.groupBoxCustoms.Size = new System.Drawing.Size(396, 54);
+            this.groupBoxCustoms.Size = new System.Drawing.Size(417, 54);
             // 
             // groupReturns
             // 
             this.groupReturns.Location = new System.Drawing.Point(9, 714);
+            this.groupReturns.Size = new Size(417, 53);
+            // 
+            // groupInsurance
+            // 
+            this.groupInsurance.Location = new System.Drawing.Point(9, 505);
+            this.groupInsurance.Size = new Size(417, 82);
             // 
             // groupExpressMail
             // 
             this.groupExpressMail.Location = new System.Drawing.Point(9, 654);
-            // 
-            // insuranceControl
-            // 
-            this.insuranceControl.Location = new System.Drawing.Point(44, 35);
+            this.groupExpressMail.Size = new Size(417, 53);
             // 
             // kryptonBorderEdge1
             // 
