@@ -287,14 +287,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
-            return GetRates(shipment, accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID));
-        }
+            StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
 
-        /// <summary>
-        /// Get the rates for the given shipment using the specified account
-        /// </summary>
-        public List<RateResult> GetRates(ShipmentEntity shipment, StampsAccountEntity account)
-        {
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");

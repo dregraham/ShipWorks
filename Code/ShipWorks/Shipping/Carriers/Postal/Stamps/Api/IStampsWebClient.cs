@@ -39,11 +39,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// Get the rates for the given shipment based on its settings
         /// </summary>
         List<RateResult> GetRates(ShipmentEntity shipment);
-
-        /// <summary>
-        /// Get the rates for the given shipment using the specified account
-        /// </summary>
-        List<RateResult> GetRates(ShipmentEntity shipment, StampsAccountEntity account); 
             
         /// <summary>
         /// Creates the scan form.

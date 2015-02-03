@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -16,6 +18,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -95,14 +98,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private List<RateResult> GetRatesForAllAccounts(ShipmentEntity shipment, IStampsWebClient client)
         {
             List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
-            List<Task<List<RateResult>>> tasks = uspsAccounts.Select(x => Task.Factory.StartNew(() => client.GetRates(shipment, x))).ToList();
 
-            foreach (Task<List<RateResult>> task in tasks)
+            try
             {
-                task.Wait();
-            }
+                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(x => CreateShipmentCopy(x, shipment))
+                    .Select(x => Task.Factory.StartNew(() => client.GetRates(shipment)))
+                    .ToList();
 
-            return new UspsRateConsolidator().Consolidate(tasks.Select(x => x.Result));
+                foreach (Task<List<RateResult>> task in tasks)
+                {
+                    task.Wait();
+                }
+
+                return new UspsRateConsolidator().Consolidate(tasks.Select(x => x.Result));
+            }
+            catch (AggregateException ex)
+            {
+                StampsApiException apiException = ex.InnerExceptions.OfType<StampsApiException>().FirstOrDefault();
+                if (apiException != null)
+                {
+                    throw apiException;
+                }
+
+                throw;
+            }
         }
 
         /// <summary>
@@ -184,7 +203,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    shipment.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+                    UseAccountForShipment(account, shipment);
+
                     client.ProcessShipment(shipment);
                     break;
                 }
@@ -264,6 +284,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 StampsProfileEntity stampsProfile = profile.Postal.Stamps;
 
                 ShippingProfileUtility.ApplyProfileValue(stampsProfile.RateShop, stampsShipment, StampsShipmentFields.RateShop);
+            }
+        }
+		
+        /// <summary>
+        /// Create a copy of the shipment, using the specified account
+        /// </summary>
+        private static ShipmentEntity CreateShipmentCopy(StampsAccountEntity account, ShipmentEntity shipment)
+        {
+            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+
+            UseAccountForShipment(account, clonedShipment);
+
+            return clonedShipment;
+        }
+
+        /// <summary>
+        /// Update the shipment to use the specified account
+        /// </summary>
+        private static void UseAccountForShipment(StampsAccountEntity account, ShipmentEntity shipment)
+        {
+            shipment.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+
+            if (shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
+            {
+                PersonAdapter.Copy(account, string.Empty, shipment, "Origin");
             }
         }
     }
