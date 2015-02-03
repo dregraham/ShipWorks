@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             try
             {
                 List<Task<List<RateResult>>> tasks = uspsAccounts.Select(x => CreateShipmentCopy(x, shipment))
-                    .Select(x => Task.Factory.StartNew(() => client.GetRates(shipment)))
+                    .Select(x => Task.Factory.StartNew(() => client.GetRates(x)))
                     .ToList();
 
                 foreach (Task<List<RateResult>> task in tasks)
