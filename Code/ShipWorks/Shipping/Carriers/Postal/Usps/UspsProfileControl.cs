@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             StampsProfileEntity stampsProfile = profile.Postal.Stamps;
 
-            AddValueMapping(stampsProfile, StampsProfileFields.HidePostage, stateRateShop, rateShop, labelRateShop);
+            AddValueMapping(stampsProfile, StampsProfileFields.RateShop, stateRateShop, rateShop, labelRateShop);
         }
     }
 }
