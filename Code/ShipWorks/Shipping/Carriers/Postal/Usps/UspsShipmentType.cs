@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
@@ -233,6 +234,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     shipment.Postal.Stamps.Fields[StampsShipmentFields.RateShop.FieldIndex]
                 });
         }
+		
+        /// <summary>
+        /// Create the UserControl used to handle Stamps.com profiles
+        /// </summary>
+        public override ShippingProfileControlBase CreateProfileControl()
+        {
+            return new UspsProfileControl(ShipmentTypeCode.Usps);
+        }
 
         /// <summary>
         /// Get the default profile for the shipment type
@@ -242,6 +251,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             base.ConfigurePrimaryProfile(profile);
 
             profile.Postal.Stamps.RateShop = true;
+        }
+
+        /// <summary>
+        /// Apply the given shipping profile to the shipment
+        /// </summary>
+        public override void ApplyProfile(ShipmentEntity shipment, ShippingProfileEntity profile)
+        {
+            base.ApplyProfile(shipment, profile);
+
+            // We can be called during the creation of the base Postal shipment, before the Stamps one exists
+            if (shipment.Postal.Stamps != null)
+            {
+                StampsShipmentEntity stampsShipment = shipment.Postal.Stamps;
+                StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+
+                ShippingProfileUtility.ApplyProfileValue(stampsProfile.RateShop, stampsShipment, StampsShipmentFields.RateShop);
+            }
         }
     }
 }

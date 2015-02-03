@@ -356,7 +356,7 @@
         private System.Windows.Forms.CheckBox stateStealth;
         private System.Windows.Forms.CheckBox hidePostage;
         private System.Windows.Forms.Label labelStealth;
-        private System.Windows.Forms.GroupBox groupTo;
+        protected System.Windows.Forms.GroupBox groupTo;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge31;
         private System.Windows.Forms.Label labelValidation;
         private System.Windows.Forms.CheckBox validationState;

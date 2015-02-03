@@ -659,6 +659,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipment.Postal.Stamps.IntegratorTransactionID = Guid.Empty;
                 shipment.Postal.Stamps.StampsTransactionID = Guid.Empty;
                 shipment.Postal.Stamps.RequestedLabelFormat = (int)ThermalLanguage.None;
+                shipment.Postal.Stamps.RateShop = false;
             }
 
             // We need to call the base after setting up the Stamps.com specific information because LLBLgen was
@@ -689,6 +690,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stamps.RequireFullAddressValidation = true;
             stamps.HidePostage = true;
             stamps.Memo = string.Empty;
+            profile.Postal.Stamps.RateShop = false;
         }
 
         /// <summary>
