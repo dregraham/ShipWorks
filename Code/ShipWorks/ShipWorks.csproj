@@ -845,6 +845,12 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.Designer.cs">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7522,6 +7528,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.resx">
       <DependentUpon>UspsProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.resx">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>

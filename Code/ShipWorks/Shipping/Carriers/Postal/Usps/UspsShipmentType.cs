@@ -82,12 +82,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IStampsWebClient client = CreateWebClient();
 
-            List<RateResult> stampsRates = shipment.Postal.Stamps.RateShop ?
-                GetRatesForAllAccounts(shipment, client) :
-                client.GetRates(shipment);
+            List<RateResult> stampsRates;
+            RateGroup rateGroup;
 
-            RateGroup rateGroup = new RateGroup(stampsRates);
-            AddUspsRatePromotionFootnote(shipment, rateGroup);
+            if (shipment.Postal.Stamps.RateShop)
+            {
+                stampsRates = GetRatesForAllAccounts(shipment, client);
+                rateGroup = new RateGroup(stampsRates);
+            }
+            else
+            {
+                stampsRates = client.GetRates(shipment);
+                rateGroup = new RateGroup(stampsRates);
+                AddUspsRatePromotionFootnote(shipment, rateGroup);
+            }
 
             return rateGroup;
         }
@@ -101,8 +109,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(x => CreateShipmentCopy(x, shipment))
-                    .Select(x => Task.Factory.StartNew(() => client.GetRates(x)))
+                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => client.GetRates(shipmentWithAccount)))
                     .ToList();
 
                 foreach (Task<List<RateResult>> task in tasks)
@@ -125,14 +133,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Creates the Express1/Stamps service control.
+        /// Creates the USPS service control.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
-            // Just use the stamps service control, but configured it for USPS (Stamps.com Expedited)
-            return new StampsServiceControl(ShipmentTypeCode, StampsResellerType.StampsExpedited, rateControl);
+            return new UspsServiceControl(ShipmentTypeCode, rateControl);
         }
 
         /// <summary>
@@ -251,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     shipment.Postal.Stamps.Fields[StampsShipmentFields.RateShop.FieldIndex]
                 });
         }
-		
+
         /// <summary>
         /// Create the UserControl used to handle Stamps.com profiles
         /// </summary>
@@ -286,7 +293,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ShippingProfileUtility.ApplyProfileValue(stampsProfile.RateShop, stampsShipment, StampsShipmentFields.RateShop);
             }
         }
-		
+
         /// <summary>
         /// Create a copy of the shipment, using the specified account
         /// </summary>
