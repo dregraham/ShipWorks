@@ -155,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Save the 
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                stampsAccount.ReadMultiValue(v => shipment.Postal.Stamps.StampsAccountID = (long)v);
+                stampsAccount.ReadMultiValue(v => shipment.Postal.Stamps.StampsAccountID = (long)v == 0 ? shipment.Postal.Stamps.StampsAccountID : (long)v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Stamps.RequireFullAddressValidation = c);
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Stamps.HidePostage = c);
                 memo.ReadMultiText(t => shipment.Postal.Stamps.Memo = t);
