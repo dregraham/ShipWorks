@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (shipment.Postal.Stamps.RateShop)
             {
-                stampsRates = GetRatesForAllAccounts(shipment, client);
+                stampsRates = GetRatesForAllAccounts(shipment);
                 rateGroup = new RateGroup(stampsRates);
             }
             else
@@ -103,14 +103,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get rates for all available accounts
         /// </summary>
-        private List<RateResult> GetRatesForAllAccounts(ShipmentEntity shipment, IStampsWebClient client)
+        private List<RateResult> GetRatesForAllAccounts(ShipmentEntity shipment)
         {
             List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
 
             try
             {
                 List<Task<List<RateResult>>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => client.GetRates(shipmentWithAccount)))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount).Rates))
                     .ToList();
 
                 foreach (Task<List<RateResult>> task in tasks)
@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void ProcessShipmentWithRateShopping(ShipmentEntity shipment)
         {
             IStampsWebClient client = CreateWebClient();
-            List<StampsAccountEntity> accounts = GetRatesFromApi(shipment).Rates
+            List<StampsAccountEntity> accounts = GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)
                     .Where(x => x.IsRateFor(shipment))
@@ -311,6 +311,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
 
             UseAccountForShipment(account, clonedShipment);
+
+            clonedShipment.Postal.Stamps.RateShop = false;
 
             return clonedShipment;
         }
