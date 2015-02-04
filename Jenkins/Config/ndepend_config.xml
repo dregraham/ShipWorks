@@ -25,7 +25,7 @@
   <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
   <builders>
     <hudson.tasks.BatchFile>
-      <command>c:\tools\NDepend\NDepend.Console.exe NDepend\ShipWorks.ndproj /Silent /Concurrent</command>
+      <command>c:\tools\NDepend\NDepend.Console.exe C:\jenkins-builds\@@BRANCH_NAME@@\NDepend\ShipWorks.ndproj /Silent /Concurrent</command>
     </hudson.tasks.BatchFile>
   </builders>
   <publishers>
