@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -64,7 +64,7 @@
   </Dirs>
   <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="64512" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <CoverageFiles UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
@@ -111,9 +111,10 @@
       <Serie MetricName="# Large Types" MetricUnit="Type" Color="#FFCD853F" ChartType="Line" ScaleExp="0" />
     </Chart>
   </TrendMetrics>
-  <HistoricAnalysisResult PersistRecurrence="3" UseCustomDir="False" CustomDir="" />
+  <HistoricAnalysisResult PersistRecurrence="1" UseCustomDir="False" CustomDir="" />
   <SourceFileRebasing FromPath="" ToPath="" />
-  <PathVariables /><Queries>
+  <PathVariables />
+  <Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4162,29 +4163,30 @@ select new { n, n.NbLinesOfCode } ]]></Query>
       </Group>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: methods too complex - critical</Name>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
 warnif count > 92 from m in JustMyCode.Methods where 
   m.CyclomaticComplexity > 20
   orderby m.CyclomaticComplexity descending
 
 select new { m, m.CyclomaticComplexity }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: methods too long - critical</Name>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # long methods allowed exceeded</Name>
 warnif  count > 443
 from  m in JustMyCode.Methods where 
   m.NbLinesOfCode > 30
 
 select new { m, m.NbLinesOfCode }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: methods w/ too many parameters - critical</Name>
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
 warnif count > 95 from  m in JustMyCode.Methods where
  m.NbParameters > 5
  orderby m.NbParameters
 
 select new { m, m.NbParameters }]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types - critical</Name>
-warnif count > 95 from  t in JustMyCode.Types where
+      <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # large types allowed exceeded</Name>
+warnif count > 50 from  t in JustMyCode.Types where
  t.NbLinesOfCode > 500
  orderby t.NbLinesOfCode
 
 select new { t, t.NbLinesOfCode }]]></Query>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
