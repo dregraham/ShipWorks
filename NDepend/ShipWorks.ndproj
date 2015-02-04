@@ -64,7 +64,7 @@
   </Dirs>
   <Report Kind="0" SectionsEnabled="45055" XslPath="" Flags="64512" />
   <BuildComparisonSetting ProjectMode="CurrentProject" BuildMode="ParticularAnalysisResult" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
-  <BaselineInUISetting ProjectMode="CurrentProject" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
+  <BaselineInUISetting ProjectMode="DontCompare" BuildMode="MostRecentAnalysisResultAvailable" ProjectFileToCompareWith=".\ShipWorks.ndproj" BuildFileToCompareWith=".\NDependOut\2014_10\07_15_55\NDependAnalysisResult_ShipWorks_2014Oct07_15h55.ndar" NDaysAgo="1" FocusOnRecentRulesViolations="False" />
   <CoverageFiles UncoverableAttribute="" />
   <TrendMetrics UseCustomLog="False" LogRecurrence="3" LogLabel="2" UseCustomDir="False" CustomDir="">
     <Chart Name="Lines of Code" ShowInReport="True">
@@ -4164,7 +4164,7 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 92 from m in JustMyCode.Methods where 
+warnif count > 93 from m in JustMyCode.Methods where 
   m.CyclomaticComplexity > 20
   orderby m.CyclomaticComplexity descending
 
