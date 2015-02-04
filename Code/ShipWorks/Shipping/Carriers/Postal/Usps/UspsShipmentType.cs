@@ -82,17 +82,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             IStampsWebClient client = CreateWebClient();
 
-            List<RateResult> stampsRates;
             RateGroup rateGroup;
 
             if (shipment.Postal.Stamps.RateShop)
             {
-                stampsRates = GetRatesForAllAccounts(shipment);
-                rateGroup = new RateGroup(stampsRates);
+                rateGroup = GetRatesForAllAccounts(shipment);
             }
             else
             {
-                stampsRates = client.GetRates(shipment);
+                List<RateResult> stampsRates = client.GetRates(shipment);
                 rateGroup = new RateGroup(stampsRates);
                 AddUspsRatePromotionFootnote(shipment, rateGroup);
             }
@@ -103,22 +101,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get rates for all available accounts
         /// </summary>
-        private List<RateResult> GetRatesForAllAccounts(ShipmentEntity shipment)
+        private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
             List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
 
             try
             {
-                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount).Rates))
+                List<Task<RateGroup>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount)))
                     .ToList();
 
-                foreach (Task<List<RateResult>> task in tasks)
+                foreach (Task<RateGroup> task in tasks)
                 {
                     task.Wait();
                 }
 
-                return new UspsRateConsolidator().Consolidate(tasks.Select(x => x.Result));
+                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(x => x.Result).ToList());
             }
             catch (AggregateException ex)
             {

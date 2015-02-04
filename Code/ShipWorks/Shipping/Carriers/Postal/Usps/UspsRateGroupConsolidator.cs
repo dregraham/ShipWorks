@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -7,38 +8,55 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Consolidate a collection of usps rates
     /// </summary>
-    public class UspsRateConsolidator
+    public class UspsRateGroupConsolidator
     {
         /// <summary>
         /// Perform the consolidation
         /// </summary>
-        public List<RateResult> Consolidate(IEnumerable<List<RateResult>> rates)
+        public RateGroup Consolidate(List<RateGroup> rateGroupsToConsolidate)
         {
             List<RateResult> consolidatedRates = new List<RateResult>();
 
-            foreach (RateResult rateResult in rates.SelectMany(r => r))
+            // Loop through all the rates in the rate group
+            foreach (RateResult rateResult in rateGroupsToConsolidate.SelectMany(r => r.Rates))
             {
+                // Find rate in new consolidated rate list.
                 RateResult foundConsolidatedRate = consolidatedRates.SingleOrDefault(consolidatedRate => ServiceMatches(consolidatedRate, rateResult));
 
+                // if not found, add it.
                 if (foundConsolidatedRate == null)
                 {
                     consolidatedRates.Add(rateResult);
                 }
+                // if better rate found, us it instead
                 else if (foundConsolidatedRate.Amount > rateResult.Amount)
                 {
                     int indexOfFoundConsolidatedRate = consolidatedRates.IndexOf(foundConsolidatedRate);
                     consolidatedRates[indexOfFoundConsolidatedRate] = rateResult;
                 }
+                // if it is the same rate, add this account to the result
                 else if (foundConsolidatedRate.Amount == rateResult.Amount)
                 {
                     AddAccounts(foundConsolidatedRate, rateResult);
                 }
             }
 
-            return consolidatedRates
+            List<RateResult> sortedConsolidatedRates = consolidatedRates
                 .OrderBy(GetServiceType)
                 .ThenBy(r => r.Selectable)
                 .ToList();
+
+            RateGroup consolidatedRateGroup = new RateGroup(sortedConsolidatedRates);
+
+            rateGroupsToConsolidate.SelectMany(r=>r.FootnoteFactories)
+                .GroupBy(footnoteFactory=>footnoteFactory.GetType())
+                // exclude UspsRatePromotionFootnoteFactory if not all rate groups have it
+                .Where(group=> !(group.First() is UspsRatePromotionFootnoteFactory) || group.Count() == rateGroupsToConsolidate.Count )
+                .Select(group=>group.First())
+                .ToList()
+                .ForEach(consolidatedRateGroup.AddFootnoteFactory);
+
+            return consolidatedRateGroup;
         }
 
         /// <summary>
