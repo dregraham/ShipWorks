@@ -35,7 +35,6 @@
 		"ShipWorks.Stores.Platforms.AmeriCommerce.WebServices", "AmeriCommerceDatabaseIO",
 		"ShipWorks.Stores.Platforms.NetworkSolutions.WebServices", "NetSolEcomService",
 		"ShipWorks.Stores.Platforms.Magento.WebServices", "MagentoService",		
-		"ShipWorks.Shipping.Carriers.EquaShip.WebServices", "EquashipAPI",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",

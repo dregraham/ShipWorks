@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool SupportsCounterRates
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
@@ -438,11 +438,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
+            // Get the rates, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
-            return AccountRepository.Accounts.Any() ? 
-                GetCachedRates<EndiciaException>(shipment, GetRatesFromApi) : 
-                GetCounterRates(shipment);
+            if (AccountRepository.Accounts.Any())
+            {
+                return GetCachedRates<EndiciaException>(shipment, GetRatesFromApi);
+            }
+
+            // We don't have any Endicia accounts, so let the user know they need an account.
+            string shipmentTypeName = EnumHelper.GetDescription(ShipmentTypeCode);
+            EndiciaException endiciaException = new EndiciaException(string.Format("An account is required to view {0} rates.", shipmentTypeName));
+            RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, endiciaException);
+            InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, endiciaException.Message, endiciaException);
+
+            throw shippingException;
         }
 
         /// <summary>
@@ -870,8 +879,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An instance of an EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
+            return new NullShippingBroker();
         }
 
         /// <summary>

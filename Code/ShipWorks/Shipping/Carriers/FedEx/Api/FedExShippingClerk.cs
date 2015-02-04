@@ -599,12 +599,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new RateGroup(overallResults);
             }
-            catch (InvalidPackageDimensionsException ex)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
-                return errorRates;
-            }
             catch (Exception ex)
             {
                 throw (HandleException(ex));
@@ -985,6 +979,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new FedExException(errorMessage, carrierException);
             }
+            else if (exception is InvalidPackageDimensionsException)
+            {
+                return new FedExException(exception.Message, exception);
+            }
             else
             {
                 log.Error(exception.Message);
@@ -1054,7 +1052,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (exceptionMessage.Length > 0)
                 {
-                    exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
+                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }

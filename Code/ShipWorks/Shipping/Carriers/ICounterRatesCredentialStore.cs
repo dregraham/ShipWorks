@@ -53,36 +53,6 @@ namespace ShipWorks.Shipping.Carriers
         string UpsCertificateVerificationData { get; }
 
         /// <summary>
-        /// Gets the Express1 Endicia user name used for obtaining counter rates
-        /// </summary>
-        string Express1EndiciaAccountNumber { get; }
-
-        /// <summary>
-        /// Gets the Express1 Endicia password used for obtaining counter rates
-        /// </summary>
-        string Express1EndiciaPassPhrase { get; }
-
-        /// <summary>
-        /// Gets data to verify the SSL certificate from Express1Endicia
-        /// </summary>
-        string Express1EndiciaCertificateVerificationData { get; }
-
-        /// <summary>
-        /// Gets the Express1 Stamps user name used for obtaining counter rates
-        /// </summary>
-        string Express1StampsUsername { get; }
-
-        /// <summary>
-        /// Gets the Express1 Stamps password used for obtaining counter rates
-        /// </summary>
-        string Express1StampsPassword { get; }
-
-        /// <summary>
-        /// Gets data to verify the SSL certificate from Express1Stamps
-        /// </summary>
-        string Express1StampsCertificateVerificationData { get; }
-
-        /// <summary>
         /// Gets the Stamps.com user name used for obtaining counter rates
         /// </summary>
         string StampsUsername { get; }

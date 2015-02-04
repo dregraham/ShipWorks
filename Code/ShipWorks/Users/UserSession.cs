@@ -21,7 +21,6 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
@@ -169,7 +168,6 @@ namespace ShipWorks.Users
             ShippingDefaultsRuleManager.InitializeForCurrentSession();
             ShippingPrintOutputManager.InitializeForCurrentSession();
             ShippingProviderRuleManager.InitializeForCurrentSession();
-            EquaShipAccountManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
         }

@@ -83,9 +83,6 @@ namespace ShipWorks.ApplicationCore.Logging
         ShipWorks,
 
         [ApiPrivateLogSource]
-        EquaShip,
-
-        [ApiPrivateLogSource]
         OnTrac,
 
         [ApiPrivateLogSource]

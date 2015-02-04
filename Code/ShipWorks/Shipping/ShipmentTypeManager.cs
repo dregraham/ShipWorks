@@ -18,7 +18,6 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
@@ -43,18 +42,6 @@ namespace ShipWorks.Shipping
                 {
                     // If the active edition doesn't allow this ShipmentType, skip it
                     if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShipmentType, typeCode).Level == EditionRestrictionLevel.Hidden)
-                    {
-                        continue;
-                    }
-
-                    // Jerks
-                    if (typeCode == ShipmentTypeCode.EquaShip)
-                    {
-                        continue;
-                    }
-
-                    // Ups Jerks
-                    if (typeCode == ShipmentTypeCode.BestRate)
                     {
                         continue;
                     }
@@ -127,9 +114,6 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.UpsWorldShip:
                     return new WorldShipShipmentType();
 
-                case ShipmentTypeCode.EquaShip:
-                    return new EquaShipShipmentType();
-
                 case ShipmentTypeCode.FedEx:
                     return new FedExShipmentType();
 
@@ -191,7 +175,6 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.iParcel: return 12;
                 case ShipmentTypeCode.Other: return 13;
                 case ShipmentTypeCode.None: return 14;
-                case ShipmentTypeCode.EquaShip: return 15;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");

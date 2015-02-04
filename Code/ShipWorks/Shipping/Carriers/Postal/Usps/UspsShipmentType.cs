@@ -73,7 +73,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> stampsRates = CreateWebClient().GetRates(shipment);
-            
+            stampsRates.ForEach(r => r.ShipmentType = this.ShipmentTypeCode);
+
             RateGroup rateGroup = new RateGroup(stampsRates);
             AddUspsRatePromotionFootnote(shipment, rateGroup);
             

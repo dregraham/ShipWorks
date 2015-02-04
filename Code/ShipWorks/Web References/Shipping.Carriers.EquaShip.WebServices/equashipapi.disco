@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://integrate.equaship.com/apidev/equashipapi.asmx?wsdl" docRef="http://integrate.equaship.com/apidev/equashipapi.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
-  <soap address="http://integrate.equaship.com/apidev/equashipapi.asmx" xmlns:q1="http://equaship.com/" binding="q1:EquashipAPISoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-  <soap address="http://integrate.equaship.com/apidev/equashipapi.asmx" xmlns:q2="http://equaship.com/" binding="q2:EquashipAPISoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-</discovery>

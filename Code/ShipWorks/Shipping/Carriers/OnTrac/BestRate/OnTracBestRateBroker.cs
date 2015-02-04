@@ -45,7 +45,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.BestRate
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.OnTrac.DimsWeight = originalShipment.ContentWeight;
-            currentShipment.OnTrac.DimsAddWeight = false;
+            currentShipment.OnTrac.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
+
             currentShipment.OnTrac.Service = (int)OnTracServiceType.Ground;
             currentShipment.OnTrac.OnTracAccountID = account.OnTracAccountID;
         }

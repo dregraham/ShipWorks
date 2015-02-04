@@ -43,7 +43,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
 
         }
 
-
+        /// <summary>
+        /// Shipment type for the broker
+        /// </summary>
+        public override ShipmentType ShipmentType
+        {
+            get { return actualPostalShipmentType; }
+        }
 
         /// <summary>
         /// Gets the best rates for for WebTools counter-based prices.
