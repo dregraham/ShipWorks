@@ -20,8 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsServiceControl : PostalServiceControlBase
     {
-        //readonly StampsResellerType stampsResellerType;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsServiceControl"/> class.
         /// </summary>
@@ -37,8 +35,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)
             : base(shipmentTypeCode, rateControl)
         {
-            //this.stampsResellerType = StampsResellerType.StampsExpedited;
-
             InitializeComponent();
         }
 
@@ -65,6 +61,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             stampsAccount.SelectedValueChanged += OnOriginChanged;
 
             stampsAccount.Enabled = !rateShop.Checked && rateShop.CheckState != CheckState.Checked;
+
+            UpdateFromSectionText();
 
             RaiseRateCriteriaChanged();
         }
@@ -103,7 +101,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
-
             if (shipments == null)
             {
                 throw new ArgumentNullException("shipments");
@@ -121,13 +118,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
+                    rateShop.ApplyMultiCheck(shipment.Postal.Stamps.RateShop);
+
+                    if (!shipment.Processed && shipment.Postal.Stamps.RateShop)
+                    {
+                        stampsAccount.ApplyMultiValue(0);
+                    }
+                    else
+                    {
+                        stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
+                    }
+
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Stamps.RequireFullAddressValidation);
                     hidePostage.ApplyMultiCheck(shipment.Postal.Stamps.HidePostage);
                     memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
-                    rateShop.ApplyMultiCheck(shipment.Postal.Stamps.RateShop);
                 }
             }
+
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
@@ -164,6 +171,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnOriginChanged(object sender, EventArgs e)
         {
+            UpdateFromSectionText();
+
+            RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Update the from section's text
+        /// </summary>
+        private void UpdateFromSectionText()
+        {
             string text = "Account: ";
 
             if (stampsAccount.MultiValued)
@@ -173,9 +190,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 StampsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long)stampsAccount.SelectedValue) : null;
-                if (account != null)
+                if (stampsAccount.Enabled && account != null)
                 {
                     text += account.Description;
+                }
+                else if (rateShop.Checked && !stampsAccount.Enabled)
+                {
+                    text += "(Rate Shopping)";
                 }
                 else
                 {
@@ -184,8 +205,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             sectionFrom.ExtraText = text + ", " + originControl.OriginDescription;
-
-            RaiseRateCriteriaChanged();
         }
 
         /// <summary>
