@@ -40,12 +40,40 @@
           <wrapperName>htmlpublisher-wrapper.html</wrapperName>
         </htmlpublisher.HtmlPublisherTarget>
       </reportTargets>
-    </htmlpublisher.HtmlPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>false</sendToIndividuals>
-    </hudson.tasks.Mailer>
+    </htmlpublisher.HtmlPublisher>    
+	<hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.39">
+      <recipientList>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipientList>
+      <configuredTriggers>
+        <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+          <email>
+            <recipientList></recipientList>
+            <subject>Code metrics failure</subject>
+            <body>&lt;h2 style=&apos;font-family: Verdana,Helvetica,sans serif;&apos;&gt;You would not get a bonus if the quarter were to end today.&lt;/h2&gt;
+&lt;br/&gt;&lt;br/&gt;
+
+${JELLY_SCRIPT,template=&quot;html&quot;}</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+      </configuredTriggers>
+      <contentType>default</contentType>
+      <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>
+      <defaultContent>$DEFAULT_CONTENT</defaultContent>
+      <attachmentsPattern></attachmentsPattern>
+      <presendScript>$DEFAULT_PRESEND_SCRIPT</presendScript>
+      <attachBuildLog>false</attachBuildLog>
+      <compressBuildLog>false</compressBuildLog>
+      <replyTo>$DEFAULT_REPLYTO</replyTo>
+      <saveOutput>false</saveOutput>
+      <disabled>false</disabled>
+    </hudson.plugins.emailext.ExtendedEmailPublisher>
   </publishers>
   <buildWrappers/>
 </project>
