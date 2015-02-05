@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 else
                 {
                     // Case for an existing customer with a postal account only through Stamps.com
-                    promotion = new StampsRegistrationPromotion();
+                    promotion = new StampsIntuishipRegistrationPromotion();
                 }
             }
             else
