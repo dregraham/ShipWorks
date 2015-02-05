@@ -2,14 +2,18 @@
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
 {
-    public class StampsRegistrationPromotion : IRegistrationPromotion
+    /// <summary>
+    /// An implementation of the IRegistrationPromotion intended to be used to create a 
+    /// new standard account with CBP rates.
+    /// </summary>
+    public class StampsCbpRegistrationPromotion : IRegistrationPromotion
     {
         /// <summary>
-        /// This will only return the Expedited type.
+        /// This will only return the Standard type.
         /// </summary>
         public IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes
         {
-            get { return new List<PostalAccountRegistrationType> { PostalAccountRegistrationType.Expedited }; }
+            get { return new List<PostalAccountRegistrationType> { PostalAccountRegistrationType.Standard }; }
         }
 
         /// <summary>
@@ -28,9 +32,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
         /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode(PostalAccountRegistrationType registrationType)
         {
-            // The regular promotion code for a new expedited account when a Stamps.com 
-            // account already exists in ShipWorks.
-            return "ShipWorks3";
+            // The promotion code for creating a standard Stamps.com account with CBP rates.
+            return "ShipWorks4";
         }
     }
 }
