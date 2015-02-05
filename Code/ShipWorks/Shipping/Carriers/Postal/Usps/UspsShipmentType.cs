@@ -91,6 +91,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 List<RateResult> stampsRates = client.GetRates(shipment);
+            	stampsRates.ForEach(r => r.ShipmentType = this.ShipmentTypeCode);
+
                 rateGroup = new RateGroup(stampsRates);
                 AddUspsRatePromotionFootnote(shipment, rateGroup);
             }

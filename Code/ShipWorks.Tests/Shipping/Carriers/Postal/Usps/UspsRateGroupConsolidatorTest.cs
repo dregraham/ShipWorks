@@ -36,8 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         [TestInitialize]
         public void Initialize()
         {
-            exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(uspsShipmentType, "blah 1");
-            exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(uspsShipmentType, "blah 2");
+            exceptionFootnoteFactory1 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
+            exceptionFootnoteFactory2 = new ExceptionsRateFootnoteFactory(uspsShipmentType, new Exception());
 
             uspsRatePromotionFootnote1 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);
             uspsRatePromotionFootnote2 = new UspsRatePromotionFootnoteFactory(uspsShipmentType, new ShipmentEntity(), true);

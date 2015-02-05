@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.UI;
 using System.Threading;
 using ShipWorks.Data;
@@ -236,6 +237,8 @@ namespace ShipWorks.Data
             // We delete the clone, so the original store doesnt get marked as Deleted until the StoreManager updates itself.
             StoreEntity clone = (StoreEntity) GeneralEntityFactory.Create(EntityUtility.GetEntityType(store.GetType()));
             clone.Fields = store.Fields.Clone();
+
+            ShippingPolicies.Unload(clone.StoreID);
 
             // Delete the store
             adapter.DeleteEntity(clone);

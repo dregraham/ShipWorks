@@ -58,9 +58,6 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIconAttribute("other")]
         Other = 5,
 
-        [Description("EquaShip")]
-        EquaShip = 10,
-
         [Description("Best Rate")]
         [ShipmentTypeIconAttribute("bestrate")]
         BestRate = 14,

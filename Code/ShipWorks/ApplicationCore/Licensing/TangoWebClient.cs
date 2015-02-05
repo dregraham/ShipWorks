@@ -273,8 +273,6 @@ namespace ShipWorks.ApplicationCore.Licensing
             // so we can easily/quickly update them in Tango if they ever need to change
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1EndiciaCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Express1", TangoCounterRatesCredentialStore.Express1StampsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCounterRatesCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCounterRatesCredentialStore.StampsCertificateVerificationDataKeyName, results);
             
