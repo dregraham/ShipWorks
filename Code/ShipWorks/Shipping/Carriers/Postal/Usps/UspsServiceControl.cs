@@ -57,7 +57,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnRateShopChanged(object sender, EventArgs e)
         {
             stampsAccount.SelectedValueChanged -= OnOriginChanged;
+            SaveToShipments();
+            
             LoadAccounts();
+
+            LoadAccountValue();
+
             stampsAccount.SelectedValueChanged += OnOriginChanged;
 
             stampsAccount.Enabled = !rateShop.Checked && rateShop.CheckState != CheckState.Checked;
@@ -119,7 +124,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
                     rateShop.ApplyMultiCheck(shipment.Postal.Stamps.RateShop);
+                    requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Stamps.RequireFullAddressValidation);
+                    hidePostage.ApplyMultiCheck(shipment.Postal.Stamps.HidePostage);
+                    memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
+                }
+            }
 
+            LoadAccountValue();
+            ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
+        }
+
+        private void LoadAccountValue()
+        {
+            using (MultiValueScope scope = new MultiValueScope())
+            {
+                foreach (ShipmentEntity shipment in LoadedShipments)
+                {
                     if (!shipment.Processed && shipment.Postal.Stamps.RateShop)
                     {
                         stampsAccount.ApplyMultiValue(0);
@@ -128,15 +149,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     {
                         stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
                     }
-
-                    requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Stamps.RequireFullAddressValidation);
-                    hidePostage.ApplyMultiCheck(shipment.Postal.Stamps.HidePostage);
-                    memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
                 }
             }
-
-            ResumeRateCriteriaChangeEvent();
-            ResumeShipSenseFieldChangeEvent();
         }
 
         /// <summary>
@@ -155,11 +169,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Save the 
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
+                rateShop.ReadMultiCheck(c => shipment.Postal.Stamps.RateShop = c);
                 stampsAccount.ReadMultiValue(v => shipment.Postal.Stamps.StampsAccountID = (long)v == 0 ? shipment.Postal.Stamps.StampsAccountID : (long)v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Stamps.RequireFullAddressValidation = c);
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Stamps.HidePostage = c);
                 memo.ReadMultiText(t => shipment.Postal.Stamps.Memo = t);
-                rateShop.ReadMultiCheck(c => shipment.Postal.Stamps.RateShop = c);
             }
 
             ResumeRateCriteriaChangeEvent();
