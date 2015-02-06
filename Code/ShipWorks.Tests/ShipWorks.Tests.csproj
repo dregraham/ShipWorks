@@ -162,6 +162,7 @@
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
     <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\PathUtilityTests.cs" />
+    <Compile Include="Interapptive.Shared\Utility\StringUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
@@ -357,6 +358,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStoreTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />

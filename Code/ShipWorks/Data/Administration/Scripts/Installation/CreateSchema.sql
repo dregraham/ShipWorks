@@ -3098,7 +3098,8 @@ CREATE TABLE [dbo].[StampsProfile]
 [StampsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RateShop] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsProfile] on [dbo].[StampsProfile]'
@@ -3135,7 +3136,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalStampsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[RateShop] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
@@ -4455,17 +4457,17 @@ PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
 GO
-PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
+PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
 GO
-CREATE TABLE [dbo].[ShipSenseKnowledgebase]
+CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
 (
 [Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
+PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnowledgeBase]'
 GO
-ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
+ALTER TABLE [dbo].[ShipSenseKnowledgeBase] ADD CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED  ([Hash])
 GO
 PRINT N'Creating [dbo].[StampsAccount]'
 GO

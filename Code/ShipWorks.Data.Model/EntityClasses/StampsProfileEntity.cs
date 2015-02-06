@@ -479,6 +479,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Memo", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RateShop", fieldHashtable);
 		}
 		#endregion
 
@@ -640,6 +643,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)StampsProfileFieldIndex.Memo, true); }
 			set	{ SetValue((int)StampsProfileFieldIndex.Memo, value); }
+		}
+
+		/// <summary> The RateShop property of the Entity StampsProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsProfile"."RateShop"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Boolean> RateShop
+		{
+			get { return (Nullable<System.Boolean>)GetValue((int)StampsProfileFieldIndex.RateShop, false); }
+			set	{ SetValue((int)StampsProfileFieldIndex.RateShop, value); }
 		}
 
 

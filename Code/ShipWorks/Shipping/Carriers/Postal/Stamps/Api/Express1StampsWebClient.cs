@@ -54,6 +54,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
     /// </summary>
     public class Express1StampsWebClient : IStampsWebClient
     {
+        // These lengths come from the error that Stamps' API gives us when we send data that is too long
+        private const int MaxCustomsContentDescriptionLength = 20;
+        private const int MaxCustomsItemDescriptionLength = 60;
+
         private readonly ILog log;
         private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
@@ -288,6 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
@@ -326,9 +331,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                             stampsRate.DeliverDays.Replace("Days", ""),
                             stampsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                            {
-                                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
-                            };
+                        {
+                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
+                        };
                     }
 
                     PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
@@ -389,7 +394,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 throw;
             }
         }
-
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
@@ -1009,7 +1013,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 }
                 else
                 {
-                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription;
+                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength);
                 }
             }
 
@@ -1021,7 +1025,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
 
                 CustomsLine line = new CustomsLine();
-                line.Description = customsItem.Description;
+                line.Description = customsItem.Description.Truncate(MaxCustomsItemDescriptionLength);
                 line.Quantity = customsItem.Quantity;
                 line.Value = customsItem.UnitValue;
 

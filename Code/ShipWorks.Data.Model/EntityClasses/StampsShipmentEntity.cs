@@ -525,6 +525,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("RequestedLabelFormat", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("RateShop", fieldHashtable);
 		}
 		#endregion
 
@@ -784,6 +787,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)StampsShipmentFieldIndex.RequestedLabelFormat, true); }
 			set	{ SetValue((int)StampsShipmentFieldIndex.RequestedLabelFormat, value); }
+		}
+
+		/// <summary> The RateShop property of the Entity StampsShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "StampsShipment"."RateShop"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean RateShop
+		{
+			get { return (System.Boolean)GetValue((int)StampsShipmentFieldIndex.RateShop, true); }
+			set	{ SetValue((int)StampsShipmentFieldIndex.RateShop, value); }
 		}
 
 
