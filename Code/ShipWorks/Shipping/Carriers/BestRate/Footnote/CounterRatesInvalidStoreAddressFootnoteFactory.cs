@@ -22,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Footnote
         public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
+        /// Notes that this factory should be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Create a new CounterRatesInvalidStoreAddressFootnoteControl
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)

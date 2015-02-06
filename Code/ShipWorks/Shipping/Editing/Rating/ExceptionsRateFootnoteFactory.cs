@@ -25,6 +25,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// Notes that this factory should be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Determines whether [is invalid package exception] [the specified exception].
         /// </summary>
         private bool IsInvalidPackageException(Exception exception)
