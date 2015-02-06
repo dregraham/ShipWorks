@@ -61,14 +61,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             LoadAccounts();
 
-            LoadAccountValue();
+            using (MultiValueScope scope = new MultiValueScope())
+            {
+                LoadAccountValue(scope);
+            }
 
             stampsAccount.SelectedValueChanged += OnOriginChanged;
-
             stampsAccount.Enabled = !rateShop.Checked && rateShop.CheckState != CheckState.Checked;
-
+            
             UpdateFromSectionText();
-
             RaiseRateCriteriaChanged();
         }
 
@@ -80,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            var accounts = StampsAccountManager.GetAccounts(StampsResellerType.StampsExpedited, false);
+            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.StampsExpedited, false);
 
             if (accounts.Count > 0)
             {
@@ -127,28 +128,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Stamps.RequireFullAddressValidation);
                     hidePostage.ApplyMultiCheck(shipment.Postal.Stamps.HidePostage);
                     memo.ApplyMultiText(shipment.Postal.Stamps.Memo);
+                    LoadAccountValue(scope);
                 }
             }
-
-            LoadAccountValue();
+            
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
 
-        private void LoadAccountValue()
+        /// <summary>
+        /// Loads the account value from the loaded shipments.
+        /// </summary>
+        /// <param name="scope">A MultiValueScope is required since the account value is being applied to a MultiValueComboBox.</param>
+        private void LoadAccountValue(MultiValueScope scope)
         {
-            using (MultiValueScope scope = new MultiValueScope())
+            if (scope == null)
             {
-                foreach (ShipmentEntity shipment in LoadedShipments)
+                throw new InvalidOperationException("MultiValueScope cannot be null.");
+            }
+
+            foreach (ShipmentEntity shipment in LoadedShipments)
+            {
+                if (!shipment.Processed && shipment.Postal.Stamps.RateShop)
                 {
-                    if (!shipment.Processed && shipment.Postal.Stamps.RateShop)
-                    {
-                        stampsAccount.ApplyMultiValue(0);
-                    }
-                    else
-                    {
-                        stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
-                    }
+                    stampsAccount.ApplyMultiValue(0);
+                }
+                else
+                {
+                    stampsAccount.ApplyMultiValue(shipment.Postal.Stamps.StampsAccountID);
                 }
             }
         }
