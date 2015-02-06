@@ -345,8 +345,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private RateGroup MergeDiscountedRates(ShipmentEntity shipment, List<RateResult> stampsRates, List<RateResult> discountedRates, ShippingSettingsEntity settings)
         {
             List<RateResult> finalRates = new List<RateResult>();
-            //bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
-            bool hasDiscountFootnote = false;
 
             // Go through each Stamps rate
             foreach (RateResult stampsRate in stampsRates)
@@ -393,17 +391,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
-                hasDiscountFootnote = true;
-            }
-
-            if (!hasDiscountFootnote)
+            } 
+            else if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
             {
-                // Only show one footnote at a time
-                if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int) StampsAccountContractType.Commercial)
-                {
-                    // Show the promotional footer for discounted rates 
-                    finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
-                }
+                // Show the promotional footer for discounted rates 
+                finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
             }
 
             return finalGroup;
