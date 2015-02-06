@@ -7882,6 +7882,8 @@ namespace ShipWorks.Data.Model
 		StampsReseller,
 		///<summary>ContractType. </summary>
 		ContractType,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
