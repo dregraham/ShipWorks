@@ -16802,6 +16802,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.Memo);}
 		}
+		/// <summary>Creates a new StampsProfileEntity.RateShop field instance</summary>
+		public static EntityField2 RateShop
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.RateShop);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity StampsScanFormEntity</summary>
@@ -16896,6 +16901,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestedLabelFormat
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new StampsShipmentEntity.RateShop field instance</summary>
+		public static EntityField2 RateShop
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.RateShop);}
 		}
 	}
 

@@ -2393,12 +2393,13 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StampsProfileEntity's mappings</summary>
 		private void InitStampsProfileEntityMappings()
 		{
-			base.AddElementMapping( "StampsProfileEntity", "ShipWorksLocal", @"dbo", "StampsProfile", 5 );
+			base.AddElementMapping( "StampsProfileEntity", "ShipWorksLocal", @"dbo", "StampsProfile", 6 );
 			base.AddElementFieldMapping( "StampsProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StampsProfileEntity", "StampsAccountID", "StampsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "StampsProfileEntity", "HidePostage", "HidePostage", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
 			base.AddElementFieldMapping( "StampsProfileEntity", "RequireFullAddressValidation", "RequireFullAddressValidation", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "StampsProfileEntity", "Memo", "Memo", true, (int)SqlDbType.NVarChar, 200, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "StampsProfileEntity", "RateShop", "RateShop", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
 		}
 		/// <summary>Inits StampsScanFormEntity's mappings</summary>
 		private void InitStampsScanFormEntityMappings()
@@ -2415,7 +2416,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits StampsShipmentEntity's mappings</summary>
 		private void InitStampsShipmentEntityMappings()
 		{
-			base.AddElementMapping( "StampsShipmentEntity", "ShipWorksLocal", @"dbo", "StampsShipment", 10 );
+			base.AddElementMapping( "StampsShipmentEntity", "ShipWorksLocal", @"dbo", "StampsShipment", 11 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "StampsAccountID", "StampsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "HidePostage", "HidePostage", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
@@ -2426,6 +2427,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "StampsShipmentEntity", "OriginalStampsAccountID", "OriginalStampsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
 			base.AddElementFieldMapping( "StampsShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
+			base.AddElementFieldMapping( "StampsShipmentEntity", "RateShop", "RateShop", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 10 );
 		}
 		/// <summary>Inits StatusPresetEntity's mappings</summary>
 		private void InitStatusPresetEntityMappings()

@@ -292,6 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
             StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
@@ -330,9 +331,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                             stampsRate.DeliverDays.Replace("Days", ""),
                             stampsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
-                            {
-                                ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
-                            };
+                        {
+                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
+                        };
                     }
 
                     PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
@@ -393,7 +394,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 throw;
             }
         }
-
 
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper

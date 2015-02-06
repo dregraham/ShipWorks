@@ -829,9 +829,23 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountConvertedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsPostalRateSelection.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.Designer.cs">
+      <DependentUpon>UspsProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.Designer.cs">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7442,6 +7456,12 @@
       <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.resx">
+      <DependentUpon>UspsProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.resx">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -10800,6 +10820,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />    
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
