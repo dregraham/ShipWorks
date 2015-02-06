@@ -171,7 +171,7 @@
             this.rateShop.Name = "rateShop";
             this.rateShop.Size = new System.Drawing.Size(198, 17);
             this.rateShop.TabIndex = 6;
-            this.rateShop.Text = "Rate shop using my USPS accounts";
+            this.rateShop.Text = "Automatically use the USPS account with the least expensive rate";
             this.rateShop.UseVisualStyleBackColor = false;
             this.rateShop.CheckedChanged += new System.EventHandler(this.OnRateShopChanged);
             // 
