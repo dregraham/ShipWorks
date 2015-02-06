@@ -38,6 +38,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         // This value came from Stamps.com (the "standard" account value is 88)
         private const int ExpeditedPlanID = 236;
 
+        // These lengths come from the error that Stamps' API gives us when we send data that is too long
+        private const int MaxCustomsContentDescriptionLength = 20;
+        private const int MaxCustomsItemDescriptionLength = 60;
+
         private readonly ILog log;
         private readonly ILogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
@@ -1045,7 +1049,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 }
                 else
                 {
-                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription;
+                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength);
                 }
             }
 
@@ -1057,7 +1061,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
 
                 CustomsLine line = new CustomsLine();
-                line.Description = customsItem.Description;
+                line.Description = customsItem.Description.Truncate(MaxCustomsItemDescriptionLength);
                 line.Quantity = customsItem.Quantity;
                 line.Value = customsItem.UnitValue;
 
