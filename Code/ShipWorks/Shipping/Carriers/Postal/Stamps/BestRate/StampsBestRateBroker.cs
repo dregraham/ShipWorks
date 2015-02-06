@@ -58,19 +58,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         /// <summary>
-        /// Updates data on the postal child shipment that is required for checking best rate
-        /// </summary>
-        /// <param name="currentShipment">Shipment that we'll be working with</param>
-        /// <param name="originalShipment">The original shipment from which data can be copied.</param>
-        /// <param name="account">The Account Entity for this shipment.</param>
-        protected override void UpdateChildShipmentSettings(ShipmentEntity currentShipment, ShipmentEntity originalShipment, StampsAccountEntity account)
-        {
-            base.UpdateChildShipmentSettings(currentShipment, originalShipment, account);
-
-            currentShipment.Postal.Stamps.RateShop = false;
-        }
-
-        /// <summary>
         /// Configures the specified broker settings.
         /// </summary>
         public override void Configure(IBestRateBrokerSettings brokerSettings)
