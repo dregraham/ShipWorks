@@ -33,9 +33,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         CommercialPlus = 3,
 
         /// <summary>
-        /// Reseller
+        /// Reseller - displays as Discounted in the UI rather than Reseller, so customers don't infer
+        /// that some third party is making a profit.
         /// </summary>
-        [Description("Reseller")]
+        [Description("Discounted")]
         Reseller = 4
     }
 }
