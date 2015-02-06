@@ -48,10 +48,7 @@
           <email>
             <recipientList></recipientList>
             <subject>Code metrics failure</subject>
-            <body>&lt;h2 style=&apos;font-family: Verdana,Helvetica,sans serif;&apos;&gt;You would not get a bonus if the quarter were to end today.&lt;/h2&gt;
-&lt;div style=&apos;margin: 0 auto; width:450px;&apos;&gt;&lt;img src=&quot;http://fbarnews.com/wp-content/uploads/Monopoly-man-no-money-hands.jpg&quot;/&gt;&lt;/div&gt;
-
-${JELLY_SCRIPT,template=&quot;html&quot;}</body>
+            <body>${JELLY_SCRIPT,template=&quot;html&quot;}</body>
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
@@ -66,10 +63,7 @@ ${JELLY_SCRIPT,template=&quot;html&quot;}</body>
           <email>
             <recipientList></recipientList>
             <subject>Code metrics fixed</subject>
-            <body>&lt;h2 style=&apos;font-family: Verdana,Helvetica,sans serif;&apos;&gt;You are back on track to get that code metrics bonus.&lt;/h2&gt;
-&lt;div style=&apos;margin: 0 auto; width:450px;&apos;&gt;&lt;img src=&quot;http://wordslikeacharm.com/wp/wp-content/uploads/2014/01/pennybags.jpg/&gt;&quot;&lt;/div&gt;
-
-${JELLY_SCRIPT,template=&quot;html&quot;}</body>
+            <body>${JELLY_SCRIPT,template=&quot;html&quot;}</body>
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
