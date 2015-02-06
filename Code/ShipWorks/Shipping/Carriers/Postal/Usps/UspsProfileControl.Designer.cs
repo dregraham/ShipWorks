@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.rateShop.Name = "rateShop";
             this.rateShop.Size = new System.Drawing.Size(188, 17);
             this.rateShop.TabIndex = 20;
-            this.rateShop.Text = "Rate Shop all your USPS accounts";
+            this.rateShop.Text = "Automatically use the USPS account with the least expensive rate";
             this.rateShop.UseVisualStyleBackColor = true;
             // 
             // labelRateShop
