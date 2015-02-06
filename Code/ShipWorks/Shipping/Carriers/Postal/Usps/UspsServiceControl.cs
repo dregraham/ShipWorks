@@ -211,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 StampsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long)stampsAccount.SelectedValue) : null;
-                if (stampsAccount.Enabled && account != null)
+                if (account != null && ((stampsAccount.Enabled) || (rateShop.Checked && LoadedShipments.First().Processed)))
                 {
                     text += account.Description;
                 }
