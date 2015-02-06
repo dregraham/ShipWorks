@@ -676,27 +676,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.ToState = toAddress.State;
             rate.ToZIPCode = toAddress.ZIPCode;
 
-            ThermalLanguage? thermalType;
-
-            // Determine what thermal type, if any to use.  
-            // If USPS, use it's setting.  
-            // Otherwise, use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
-            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
-            }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
-            }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
-            }
-            else
-            {
-                throw new InvalidOperationException("Unknown Stamps.com shipment type.");
-            }
+            ThermalLanguage? thermalType = GetThermalLanguage(shipment);
 
             // For international thermal labels, we need to set the print layout or else most service/package type combinations
             // will fail with a "does not support Zebra printers" error
@@ -804,6 +784,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             string[] labelUrls = labelUrl.Split(' ');
             SaveLabels(shipment, labelUrls);
+        }
+
+        /// <summary>
+        /// Gets the thermal language based on the shipment type and the requested label format on the shipment.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>The ThermalLanguage value.</returns>
+        /// <exception cref="System.InvalidOperationException">Unknown Stamps.com shipment type.</exception>
+        private static ThermalLanguage? GetThermalLanguage(ShipmentEntity shipment)
+        {
+            ThermalLanguage? thermalType;
+
+            // Determine what thermal type, if any to use.  If USPS, use it's setting. Otherwise, use the Stamps 
+            // settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
+            {
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
+            }
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            {
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
+            }
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Stamps)
+            {
+                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown Stamps.com shipment type.");
+            }
+
+            return thermalType;
         }
 
         /// <summary>
