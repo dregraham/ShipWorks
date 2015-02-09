@@ -352,6 +352,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotionTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsCbpRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationValidatorTest.cs" />
