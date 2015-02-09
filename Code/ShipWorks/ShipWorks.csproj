@@ -2330,6 +2330,19 @@
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorLog.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\TlsAppDomain.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorOrderDto.cs" />
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreType.cs" />
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.Designer.cs">
+      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
@@ -7685,6 +7698,12 @@
     <EmbeddedResource Include="Stores\Platforms\Newegg\WizardPages\NeweggDownloadCriteriaPage.resx">
       <DependentUpon>NeweggDownloadCriteriaPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.resx">
+      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.resx">
+      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\SearsAccountSettingsControl.resx">
       <DependentUpon>SearsAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10976,6 +10995,7 @@
     <None Include="Resources\nav_down_green1.png" />
     <None Include="Resources\nav_down_green2.png" />
     <None Include="Resources\nav_up_blue.png" />
+    <None Include="Resources\nomorerack.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />
@@ -12741,7 +12761,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

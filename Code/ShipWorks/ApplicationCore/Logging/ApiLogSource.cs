@@ -107,6 +107,8 @@ namespace ShipWorks.ApplicationCore.Logging
         PowersportsSupport,
         CsCart,
         PrestaShop,
-        LoadedCommerce
+		LoadedCommerce,
+        NoMoreRack,
+		
     }
 }

@@ -314,8 +314,12 @@ namespace ShipWorks.Stores
         [Description("Loaded Commerce")]
         [StoreTypeIdentity("LOADEDCOMMERCE", "LDC")]
         [StoreTypeIcon("loadedcommerce")]
-        LoadedCommerce = 60
+        LoadedCommerce = 60,
 
+        [Description("NoMoreRack")]
+        [StoreTypeIdentity("NOMORERACK", "NMR")]
+        [StoreTypeIcon("nomorerack")]
+        NoMoreRack = 61
 
     }
 }
