@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <NDepend AppName="ShipWorks" Platform="DotNet">
   <OutputDir KeepXmlFiles="False">.\NDependOut</OutputDir>
   <Assemblies>
@@ -113,7 +113,8 @@
   </TrendMetrics>
   <HistoricAnalysisResult PersistRecurrence="1" UseCustomDir="False" CustomDir="" />
   <SourceFileRebasing FromPath="" ToPath="" />
-  <PathVariables /><Queries>
+  <PathVariables />
+  <Queries>
     <Group Name="Code Quality" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Types too big - critical</Name>
 warnif count > 0 from t in JustMyCode.Types where 
@@ -4163,7 +4164,7 @@ select new { n, n.NbLinesOfCode } ]]></Query>
     </Group>
     <Group Name="Jenkins Critical Rules" Active="True" ShownInReport="False">
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of complex methods allowed exceeded</Name>
-warnif count > 93 from m in JustMyCode.Methods where 
+warnif count > 91 from m in JustMyCode.Methods where 
   m.CyclomaticComplexity > 20
   orderby m.CyclomaticComplexity descending
 
@@ -4187,4 +4188,5 @@ warnif count > 50 from  t in JustMyCode.Types where
 
 select new { t, t.NbLinesOfCode }]]></Query>
     </Group>
-  </Queries></NDepend>
+  </Queries>
+</NDepend>
