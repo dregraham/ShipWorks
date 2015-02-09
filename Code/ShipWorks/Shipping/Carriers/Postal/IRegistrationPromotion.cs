@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Gets the promo code to use when registering an account with Stamps.com based on the 
         /// type of account being registered.
         /// </summary>
-        /// <param name="registrationType">The type of account being registered.</param>
         /// <returns>The promotion code to be used during registration.</returns>
         string GetPromoCode();
     }
