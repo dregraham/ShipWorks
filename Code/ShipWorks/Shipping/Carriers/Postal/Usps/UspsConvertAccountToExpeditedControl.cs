@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
 
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new StampsWebClient((StampsResellerType)accountToConvert.StampsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode(PostalAccountRegistrationType.Expedited)); 
+                new StampsWebClient((StampsResellerType)accountToConvert.StampsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
             catch (StampsApiException exception)
             {

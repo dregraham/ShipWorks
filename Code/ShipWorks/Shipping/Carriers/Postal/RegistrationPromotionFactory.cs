@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 else if (EndiciaAccountsExist)
                 {
                     // Case for an Endicia account exists
-                    promotion = new EndiciaRegistrationPromotion();
+                    promotion = new EndiciaIntuishipRegistrationPromotion();
                 }
                 else
                 {

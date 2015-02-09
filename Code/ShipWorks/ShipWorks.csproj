@@ -735,7 +735,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\LabelFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\StandardLabel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\ThermalLabel.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
@@ -758,6 +758,7 @@
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaCbpRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsCbpRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
@@ -10819,7 +10820,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />    
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
     <Content Include="Resources\add.png" />

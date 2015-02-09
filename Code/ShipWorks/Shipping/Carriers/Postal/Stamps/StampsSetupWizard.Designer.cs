@@ -54,8 +54,6 @@
             this.termsCheckBox = new System.Windows.Forms.CheckBox();
             this.labelTerms = new System.Windows.Forms.Label();
             this.panelAccountType = new System.Windows.Forms.Panel();
-            this.stampsAccountRegistrationType = new System.Windows.Forms.ComboBox();
-            this.labelAccountType = new System.Windows.Forms.Label();
             this.stampsUsageType = new System.Windows.Forms.ComboBox();
             this.labelUsageType = new System.Windows.Forms.Label();
             this.labelAccount = new System.Windows.Forms.Label();
@@ -121,7 +119,7 @@
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
-            this.wizardPageWelcome.Size = new System.Drawing.Size(542, 485);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(542, 540);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Stamps.com Shipping";
             // 
@@ -329,7 +327,7 @@
             this.panelTerms.Controls.Add(this.labelTerms1);
             this.panelTerms.Controls.Add(this.termsCheckBox);
             this.panelTerms.Controls.Add(this.labelTerms);
-            this.panelTerms.Location = new System.Drawing.Point(23, 438);
+            this.panelTerms.Location = new System.Drawing.Point(23, 409);
             this.panelTerms.Name = "panelTerms";
             this.panelTerms.Size = new System.Drawing.Size(494, 59);
             this.panelTerms.TabIndex = 2;
@@ -388,41 +386,19 @@
             // 
             // panelAccountType
             // 
-            this.panelAccountType.Controls.Add(this.stampsAccountRegistrationType);
-            this.panelAccountType.Controls.Add(this.labelAccountType);
             this.panelAccountType.Controls.Add(this.stampsUsageType);
             this.panelAccountType.Controls.Add(this.labelUsageType);
             this.panelAccountType.Controls.Add(this.labelAccount);
             this.panelAccountType.Location = new System.Drawing.Point(23, 8);
             this.panelAccountType.Name = "panelAccountType";
-            this.panelAccountType.Size = new System.Drawing.Size(345, 78);
+            this.panelAccountType.Size = new System.Drawing.Size(345, 46);
             this.panelAccountType.TabIndex = 0;
-            // 
-            // stampsAccountRegistrationType
-            // 
-            this.stampsAccountRegistrationType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stampsAccountRegistrationType.FormattingEnabled = true;
-            this.stampsAccountRegistrationType.Location = new System.Drawing.Point(100, 19);
-            this.stampsAccountRegistrationType.Name = "stampsAccountRegistrationType";
-            this.stampsAccountRegistrationType.Size = new System.Drawing.Size(143, 21);
-            this.stampsAccountRegistrationType.TabIndex = 2;
-            // 
-            // labelAccountType
-            // 
-            this.labelAccountType.AutoSize = true;
-            this.labelAccountType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelAccountType.Location = new System.Drawing.Point(59, 22);
-            this.labelAccountType.Name = "labelAccountType";
-            this.labelAccountType.Size = new System.Drawing.Size(35, 13);
-            this.labelAccountType.TabIndex = 1;
-            this.labelAccountType.Text = "Type:";
-            this.labelAccountType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // stampsUsageType
             // 
             this.stampsUsageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.stampsUsageType.FormattingEnabled = true;
-            this.stampsUsageType.Location = new System.Drawing.Point(100, 46);
+            this.stampsUsageType.Location = new System.Drawing.Point(100, 19);
             this.stampsUsageType.Name = "stampsUsageType";
             this.stampsUsageType.Size = new System.Drawing.Size(143, 21);
             this.stampsUsageType.TabIndex = 4;
@@ -431,7 +407,7 @@
             // 
             this.labelUsageType.AutoSize = true;
             this.labelUsageType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelUsageType.Location = new System.Drawing.Point(14, 49);
+            this.labelUsageType.Location = new System.Drawing.Point(14, 22);
             this.labelUsageType.Name = "labelUsageType";
             this.labelUsageType.Size = new System.Drawing.Size(80, 13);
             this.labelUsageType.TabIndex = 3;
@@ -460,7 +436,7 @@
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.personControl.Location = new System.Drawing.Point(23, 86);
+            this.personControl.Location = new System.Drawing.Point(23, 57);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(355, 352);
             this.personControl.TabIndex = 1;
@@ -603,8 +579,6 @@
         private System.Windows.Forms.Label labelUsageType;
         private System.Windows.Forms.Panel panelAccountType;
         private UI.Controls.LinkControl linkStampsPrivacy;
-        private System.Windows.Forms.ComboBox stampsAccountRegistrationType;
-        private System.Windows.Forms.Label labelAccountType;
         private System.Windows.Forms.Panel panelTerms;
         private System.Windows.Forms.Label labelTerms2;
         private UI.Controls.LinkControl linkTerms;

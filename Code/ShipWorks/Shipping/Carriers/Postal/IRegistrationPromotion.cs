@@ -12,13 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public interface IRegistrationPromotion
     {
         /// <summary>
-        /// Gets the available account registration types. These values could differ across implementations
-        /// based on factors such as whether the account is a brand new account, being migrated from another
-        /// postal carrier, etc.
-        /// </summary>
-        IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes { get; }
-
-        /// <summary>
         /// Gets a value indicating whether the promotion waives the monthly fee.
         /// </summary>
         bool IsMonthlyFeeWaived { get; }
@@ -29,6 +22,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         /// <param name="registrationType">The type of account being registered.</param>
         /// <returns>The promotion code to be used during registration.</returns>
-        string GetPromoCode(PostalAccountRegistrationType registrationType);
+        string GetPromoCode();
     }
 }
