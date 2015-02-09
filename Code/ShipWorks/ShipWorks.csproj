@@ -727,13 +727,19 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\CountryCodeCleanser.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\IStampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Express1StampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\CroppingStyles.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\Label.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\LabelFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\StandardLabel.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\ThermalLabel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\BestRate\Express1BrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\BestRate\EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaReturnsControl.cs">
       <SubType>UserControl</SubType>
@@ -742,8 +748,6 @@
       <DependentUpon>EndiciaReturnsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\BestRate\Express1EndiciaCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1DiscountedRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1NotQualifiedRateFootnoteFactory.cs" />
@@ -759,12 +763,9 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractTypeCache.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\BestRate\Express1StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountContractType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
@@ -828,9 +829,23 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountConvertedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsPostalRateSelection.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.Designer.cs">
+      <DependentUpon>UspsProfileControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.Designer.cs">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -838,6 +853,7 @@
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilter.cs" />
@@ -870,7 +886,6 @@
     <Compile Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteControl.Designer.cs">
       <DependentUpon>InvalidPackageDimensionsRateFootnoteControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Editing\Rating\InvalidPackageDimensionsRateFootnoteFactory.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\InvalidRateGroupShippingException.cs" />
     <Compile Include="Shipping\Editing\Rating\IRateFootnoteFactory.cs" />
@@ -882,6 +897,7 @@
       <DependentUpon>InformationFootnoteControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\Rating\InformationFootnoteFactory.cs" />
+    <Compile Include="Shipping\Editing\Rating\RatingExceptionType.cs" />
     <Compile Include="Shipping\Editing\Rating\ShipmentRateGroup.cs" />
     <Compile Include="Shipping\Editing\Rating\RatesPanel.cs">
       <SubType>UserControl</SubType>
@@ -959,6 +975,14 @@
     <Compile Include="Shipping\Insurance\InsureShip\Net\Void\InsureShipVoidPolicyResponse.cs" />
     <Compile Include="Shipping\InvalidPackageDimensionsException.cs" />
     <Compile Include="Shipping\IShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Policies\BestRateUpsRestrictionShippingPolicy.cs" />
+    <Compile Include="Shipping\Policies\IShippingPolicy.cs" />
+    <Compile Include="Shipping\Policies\IShippingPolicyFactory.cs" />
+    <Compile Include="Shipping\Policies\NonRestrictedRateCountShippingPolicy.cs" />
+    <Compile Include="Shipping\Policies\ShippingPolicies.cs" />
+    <Compile Include="Shipping\Policies\RateResultCountShippingPolicy.cs" />
+    <Compile Include="Shipping\Policies\ShippingPolicyType.cs" />
+    <Compile Include="Shipping\Policies\ShippingPolicyTypeEnumFactory.cs" />
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1623,58 +1647,6 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsIrregularIndicatorType.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsShipmentChargeType.cs" />
     <Compile Include="Shipping\Carriers\UPS\IUpsServiceManager.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipPackageType.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipServiceType.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\Enums\ErrorResponseLocation.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipAccountManager.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipClient.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\Enums\EquaShipConfirmation.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipException.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.Designer.cs">
-      <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipProfileControl.Designer.cs">
-      <DependentUpon>EquaShipProfileControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipServiceControl.Designer.cs">
-      <DependentUpon>EquaShipServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipServiceRate.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipSettingsControl.Designer.cs">
-      <DependentUpon>EquaShipSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquashipSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquashipSetupWizard.Designer.cs">
-      <DependentUpon>EquashipSetupWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipUtility.cs" />
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipAccountManagerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipAccountManagerControl.Designer.cs">
-      <DependentUpon>EquaShipAccountManagerControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipAccountEditorDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Equaship\EquaShipAccountEditorDlg.Designer.cs">
-      <DependentUpon>EquaShipAccountEditorDlg.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Api\CarrierException.cs" />
     <Compile Include="Shipping\Api\CarrierRequest.cs" />
     <Compile Include="Shipping\Api\ICarrierResponseFactory.cs" />
@@ -2182,7 +2154,6 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipOdbcManager.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProcessedGrouping.cs" />
     <Compile Include="Shipping\CoreExtensions\ShippingFilterConditionUtility.cs" />
-    <Compile Include="Shipping\Editing\Rating\NonCompetitiveRateResult.cs" />
     <Compile Include="Shipping\Editing\Rating\RateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2321,6 +2292,7 @@
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
     <Compile Include="Stores\Platforms\CloudConversion\CloudConversionStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\CoreExtensions\Filters\OrderItems\ChannelAdvisorMarketplaceStoreNameCondition.cs" />
+    <Compile Include="Stores\Platforms\CsCart\CsCartStoreType.cs" />
     <Compile Include="Stores\Platforms\Fortune3\Fortune3StoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleStoreType.cs" />
     <Compile Include="Stores\Platforms\ChannelSale\ChannelSaleAccountSettingsControl.cs">
@@ -2361,6 +2333,7 @@
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
     <Compile Include="Stores\Platforms\OpenCart\OpenCartStoreType.cs" />
+    <Compile Include="Stores\Platforms\PrestaShop\PrestaShopStoreType.cs" />
     <Compile Include="Stores\Platforms\SellerExpress\SellerExpressAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4559,7 +4532,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.Designer.cs">
       <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsApiSession.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\StampsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsApiException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />
@@ -6185,11 +6158,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.UPS.WebServices.OpenAccount\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7344,27 +7312,6 @@
     <EmbeddedResource Include="Shipping\Carriers\BestRate\Footnote\CounterRatesInvalidStoreAddressFootnoteControl.resx">
       <DependentUpon>CounterRatesInvalidStoreAddressFootnoteControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipOptionsControl.resx">
-      <DependentUpon>EquaShipOptionsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipProfileControl.resx">
-      <DependentUpon>EquaShipProfileControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipServiceControl.resx">
-      <DependentUpon>EquaShipServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipSettingsControl.resx">
-      <DependentUpon>EquaShipSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquashipSetupWizard.resx">
-      <DependentUpon>EquashipSetupWizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipAccountManagerControl.resx">
-      <DependentUpon>EquaShipAccountManagerControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Equaship\EquaShipAccountEditorDlg.resx">
-      <DependentUpon>EquaShipAccountEditorDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExDangerousGoodsControl.resx">
       <DependentUpon>FedExDangerousGoodsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7508,6 +7455,12 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.resx">
       <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.resx">
+      <DependentUpon>UspsProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.resx">
+      <DependentUpon>UspsServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\OpenAccount\UpsOpenAccountInvalidAddressDlg.resx">
       <DependentUpon>UpsOpenAccountInvalidAddressDlg.cs</DependentUpon>
@@ -8193,11 +8146,6 @@
     <Compile Include="Users\UserSettingsDlg.Designer.cs">
       <DependentUpon>UserSettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.Equaship.WebServices\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -8219,6 +8167,11 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.LabelService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -8308,7 +8261,6 @@
     <EmbeddedResource Include="Data\Import\Xml\Schema\ShipWorksCore.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Shipping\Carriers\Equaship\Wsdl\equashipapi.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v3.wsdl" />
@@ -8381,14 +8333,12 @@
     <None Include="Shipping\Carriers\UPS\OpenAccount\Wsdl\UPSSecurity.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Stores\Platforms\CsCart\shipworks3.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
+    <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
+    <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
-    <None Include="Web References\Shipping.Carriers.Equaship.WebServices\equashipapi.wsdl" />
-    <None Include="Web References\Shipping.Carriers.Equaship.WebServices\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\GroundCloseDocumentsReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -8578,11 +8528,37 @@
     <None Include="Web References\Shipping.Carriers.Postal.Express1.WebServices.Stamps\SDCV24Service0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\cost_code_info_v1.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\CountryInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\IndiciumData.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetStampsImage.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetStampsLayout.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\NetstampsStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\RateV11.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\ResidentialDeliveryIndicatorType.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\StatusCodes.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\StoreShippingMethodOption.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\swsimv29.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\cost_code_info_v1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -8613,7 +8589,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\StoreShippingMethodOption.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv29.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\swsimv40.wsdl" />
     <None Include="Web References\Shipping.Carriers.UPS.OnLineTools.WebServices.Registration\common.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -8944,7 +8920,6 @@
   <ItemGroup>
     <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.CartAdvanced\cart_advanced.disco" />
     <None Include="Web References\Stores.Platforms.ThreeDCart.WebServices.Cart\cart.disco" />
-    <None Include="Web References\Shipping.Carriers.Equaship.WebServices\equashipapi.disco" />
     <None Include="Web References\Stores.Platforms.AmeriCommerce.WebServices\americommercedb.disco" />
     <EmbeddedResource Include="Actions\ActionEditorDlg.resx">
       <DependentUpon>ActionEditorDlg.cs</DependentUpon>
@@ -10843,6 +10818,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.5.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />    
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10970,6 +10949,7 @@
     <None Include="Resources\livesite.png" />
     <None Include="Resources\fortune3.png" />
     <None Include="Resources\cloudconversion.png" />
+    <None Include="Resources\cscart.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -11015,6 +10995,7 @@
     <None Include="Resources\printer21.png" />
     <None Include="Resources\server_from_client1.png" />
     <None Include="Resources\Progress\squares_circle_green_transparent.gif" />
+    <None Include="Resources\prestashop.png" />
     <Content Include="Resources\shape_circle.png" />
     <None Include="Resources\shield_ok.png" />
     <None Include="Resources\shield_ok1.png" />
@@ -11280,6 +11261,9 @@
     <EmbeddedResource Include="Templates\Distribution\Source\Source.zip" />
     <None Include="Stores\Platforms\CreLoaded\shipworks3.php" />
     <None Include="Templates\Distribution\TemplateSettingsSchema.xsd" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\RegistrationStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\RegistrationStatus.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12038,6 +12022,26 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\Stores.Platforms.ChannelAdvisor.WebServices.Shipping\ShippingService.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\AccountInfo.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Address.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\PostageBalance.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\PurchaseStatus.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\TrackingEvent.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Stamps.WebServices\AccountInfo.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12427,17 +12431,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_ThreeDCart_WebServices_CartAdvanced_cartAPIAdvanced</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="http://integrate.equaship.com/apidev/equashipapi.asmx">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.Equaship.WebServices\</RelPath>
-      <UpdateFromURL>http://integrate.equaship.com/apidev/equashipapi.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Equaship_WebServices_EquashipAPI</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="http://magento151.interapptive.local/api/soap/%3fwsdl=1">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Stores.Platforms.Magento.WebServices\</RelPath>
@@ -12504,19 +12497,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Express1_WebServices_Stamps_SDCV24Service</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\</RelPath>
-      <UpdateFromURL>C:\git\ShipWorks3x\Code\ShipWorks\Web References\Shipping.Carriers.Postal.Stamps.WebServices.Contract\swsimv39.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>
-      </CachedAppSettingsObjectName>
-      <CachedSettingsPropName>
-      </CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="https://testbeta1.americommerce.com/store/ws/americommercedb.asmx">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Stores.Platforms.AmeriCommerce.WebServices\</RelPath>
@@ -12541,8 +12521,19 @@
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Development\Applications\ShipWorks3x\Trunk\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl">
       <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
+      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices.v29\</RelPath>
       <UpdateFromURL>D:\Development\Applications\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv29.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Stamps_WebServices_swsim_v1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv40.wsdl">
+      <UrlBehavior>Static</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.Postal.Stamps.WebServices\</RelPath>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Stamps\Wsdl\swsimv40.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

@@ -83,9 +83,6 @@ namespace ShipWorks.ApplicationCore.Logging
         ShipWorks,
 
         [ApiPrivateLogSource]
-        EquaShip,
-
-        [ApiPrivateLogSource]
         OnTrac,
 
         [ApiPrivateLogSource]
@@ -108,5 +105,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		
         SellerExpress,
         PowersportsSupport,
+        CsCart,
+        PrestaShop,
     }
 }

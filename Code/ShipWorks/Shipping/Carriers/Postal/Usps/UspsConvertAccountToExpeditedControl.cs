@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.UI;
 using log4net;
@@ -86,7 +87,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // contract type to reflect the conversion, so the Activate discount dialog is 
                 // not displayed again
                 ConvertAccountToExpedited();
-                accountToConvert.ContractType = (int)StampsAccountContractType.CommercialPlus;
+
+                // Set the ContractType to Unknown so that we rely on Stamps to correctly tell us 
+                // the contract type the next time we get rates or process.
+                accountToConvert.ContractType = (int)StampsAccountContractType.Unknown;
+
                 StampsAccountManager.SaveAccount(accountToConvert);
 
                 // Notify any listeners
@@ -120,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
 
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new StampsApiSession().ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode(PostalAccountRegistrationType.Expedited)); 
+                new StampsWebClient((StampsResellerType)accountToConvert.StampsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode(PostalAccountRegistrationType.Expedited)); 
             }
             catch (StampsApiException exception)
             {

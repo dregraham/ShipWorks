@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -27,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
-            testObject = new StampsScanFormGateway();
+            testObject = new StampsScanFormGateway(new StampsWebClient(StampsResellerType.None));
         }
 
         [TestMethod]

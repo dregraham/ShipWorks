@@ -152,10 +152,24 @@ namespace ShipWorks.Stores.Communication
 
             lastAutoDownloadCheck = DateTime.UtcNow;
 
+            List<StoreEntity> readyToDownload = GetStoresForAutoDownloading();
+
+            if (readyToDownload.Count > 0)
+            {
+                StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
+            }
+        }
+
+        /// <summary>
+        /// Gets the stores that are ready for automatic downloading.
+        /// </summary>
+        /// <returns>A List of StoreEntity instances.</returns>
+        private static List<StoreEntity> GetStoresForAutoDownloading()
+        {
             List<StoreEntity> readyToDownload = new List<StoreEntity>();
 
             bool wereTimesCached = (lastDownloadTimesCache != null);
-            
+
             // Find each store that is ready for an auto-download
             foreach (StoreEntity store in StoreManager.GetAllStores())
             {
@@ -178,8 +192,7 @@ namespace ShipWorks.Stores.Communication
 
                 DateTime? lastDownload = GetLastDownloadTime(store);
 
-                if (lastDownload == null ||
-                    lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) < DateTime.UtcNow)
+                if (lastDownload == null || lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) < DateTime.UtcNow)
                 {
                     readyToDownload.Add(store);
                 }
@@ -200,18 +213,14 @@ namespace ShipWorks.Stores.Communication
                     DateTime? lastDownload = GetLastDownloadTime(store);
 
                     // Its downloaded somwhere since we had the last cached time, so remove it.
-                    if (lastDownload.HasValue &&
-                        lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
+                    if (lastDownload.HasValue && lastDownload + TimeSpan.FromMinutes(store.AutoDownloadMinutes) >= DateTime.UtcNow)
                     {
                         readyToDownload.Remove(store);
                     }
                 }
             }
 
-            if (readyToDownload.Count > 0)
-            {
-                StartDownload(readyToDownload, DownloadInitiatedBy.ShipWorks);
-            }
+            return readyToDownload;
         }
 
         /// <summary>

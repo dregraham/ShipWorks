@@ -28,6 +28,13 @@ namespace ShipWorks.Stores
                         continue;
                     }
 
+                    if (IsStoreTypeDisabled(typeCode))
+                    {
+                        // Temporary: don't show in ShipWorks for the new stores until marketing materials 
+                        // and other ancillary materials are ready to go
+                        continue;
+                    }
+
                     StoreType storeType = GetType(typeCode);
                     storeTypes.Add(storeType);
                 }
@@ -127,9 +134,28 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.SellerExpress: return new Platforms.SellerExpress.SellerExpressStoreType(store);
                 case StoreTypeCode.PowersportsSupport: return new Platforms.PowersportsSupport.PowersportsSupportStoreType(store);
                 case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
+                case StoreTypeCode.CsCart: return new Platforms.CsCart.CsCartStoreType(store);
+                case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
+        }
+
+        /// <summary>
+        /// Determines whether the store type is disabled. This is only temporary, so we can continue
+        /// to release ShipWorks until supporting materials for the new store types are ready.
+        /// </summary>
+        private static bool IsStoreTypeDisabled(StoreTypeCode typeCode)
+        {
+            // Don't show in ShipWorks until marketing materials and other ancillary 
+            // materials are ready to go
+            List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
+            {
+                StoreTypeCode.PrestaShop,
+                StoreTypeCode.CsCart,
+            };
+
+            return disabledTypes.Contains(typeCode);
         }
     }
 }

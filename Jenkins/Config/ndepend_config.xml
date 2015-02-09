@@ -48,10 +48,7 @@
           <email>
             <recipientList></recipientList>
             <subject>Code metrics failure</subject>
-            <body>&lt;h2 style=&apos;font-family: Verdana,Helvetica,sans serif;&apos;&gt;You would not get a bonus if the quarter were to end today.&lt;/h2&gt;
-&lt;br/&gt;&lt;br/&gt;
-
-${JELLY_SCRIPT,template=&quot;html&quot;}</body>
+            <body>${JELLY_SCRIPT,template=&quot;html&quot;}</body>
             <recipientProviders>
               <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
             </recipientProviders>
@@ -62,6 +59,21 @@ ${JELLY_SCRIPT,template=&quot;html&quot;}</body>
             <contentType>project</contentType>
           </email>
         </hudson.plugins.emailext.plugins.trigger.FailureTrigger>
+		<hudson.plugins.emailext.plugins.trigger.FixedTrigger>
+          <email>
+            <recipientList></recipientList>
+            <subject>Code metrics fixed</subject>
+            <body>${JELLY_SCRIPT,template=&quot;html&quot;}</body>
+            <recipientProviders>
+              <hudson.plugins.emailext.plugins.recipients.ListRecipientProvider/>
+            </recipientProviders>
+            <attachmentsPattern></attachmentsPattern>
+            <attachBuildLog>false</attachBuildLog>
+            <compressBuildLog>false</compressBuildLog>
+            <replyTo>$PROJECT_DEFAULT_REPLYTO</replyTo>
+            <contentType>project</contentType>
+          </email>
+        </hudson.plugins.emailext.plugins.trigger.FixedTrigger>
       </configuredTriggers>
       <contentType>default</contentType>
       <defaultSubject>$DEFAULT_SUBJECT</defaultSubject>

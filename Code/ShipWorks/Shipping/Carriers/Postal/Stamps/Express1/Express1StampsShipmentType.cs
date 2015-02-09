@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -38,6 +40,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
+        /// Gets the type of the reseller.
+        /// </summary>
+        public override StampsResellerType ResellerType
+        {
+            get { return StampsResellerType.Express1; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
         /// </summary>
         public override bool HasAccounts
@@ -69,6 +79,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         public override bool SupportsCounterRates
         {
             get { return false; }
+        }
+
+        /// <summary>
+        /// Creates the web client to use to contact the underlying carrier API.
+        /// </summary>
+        /// <returns>An instance of IStampsWebClient.</returns>
+        public override IStampsWebClient CreateWebClient()
+        {
+            return new Express1StampsWebClient(AccountRepository, new LogEntryFactory(), CertificateInspector);
         }
 
         /// <summary>
@@ -162,7 +181,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Stamps.HidePostage = true;
-                new StampsApiSession(AccountRepository, LogEntryFactory, CertificateInspector).ProcessShipment(shipment);
+                new Express1StampsWebClient().ProcessShipment(shipment);
             }
             catch(StampsException ex)
             {
@@ -177,15 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker broker = new NullShippingBroker();
-            if (StampsAccountManager.Express1Accounts.Any())
-            {
-                // Only use an Express1 broker if there is an account. We no longer want to
-                // get Express1 counter rates
-                broker = new Express1StampsBestRateBroker();
-            }
-
-            return broker;
+            return new NullShippingBroker();
         }
 
         /// <summary>

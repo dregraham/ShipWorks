@@ -8,11 +8,13 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.UI;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using System.Threading;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -45,6 +47,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.account = account;
             this.accountName.Text = account.Description;
             postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
+            
+            contractType.Text = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
 
             bool isExpress1 = account.StampsReseller == (int)StampsResellerType.Express1;
             
@@ -119,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {
@@ -136,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsApiSession().GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {

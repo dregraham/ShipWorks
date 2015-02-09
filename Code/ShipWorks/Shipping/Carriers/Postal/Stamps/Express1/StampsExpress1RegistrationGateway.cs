@@ -6,6 +6,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -40,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             try
             {
                 // This throws a stamps exception if the account credentials are incorrect
-                new StampsApiSession(new Express1StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector()).GetAccountInfo(new StampsAccountEntity
+                new Express1StampsWebClient().GetAccountInfo(new StampsAccountEntity
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,

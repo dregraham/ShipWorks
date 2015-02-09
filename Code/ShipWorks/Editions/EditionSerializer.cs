@@ -65,7 +65,7 @@ namespace ShipWorks.Editions
 
             ApplySharedOptions(edition, xMemento);
 
-            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(root);
+            edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, root);
 
             return edition;
         }

@@ -54,6 +54,9 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(0, missingObfuscationAttribute.Length, missingObfuscationAttribute);
         }
 
+        /// <summary>
+        /// If namespace begins with these values, they are ignored.
+        /// </summary>
         private List<string> ignoreShipmentTypeNameParts = new List<string>
             {
                 "ShipWorks.Data.Model".ToUpperInvariant(),
@@ -70,6 +73,9 @@ namespace ShipWorks.Tests.Core
                 "PayPal.WebServices".ToUpperInvariant(),
             };
 
+        /// <summary>
+        /// Actual namespace of the enum
+        /// </summary>
         private List<string> ignoreShipmentTypeNames = new List<string>
             {
                 "ShipWorks.Filters.FilterNodePurpose".ToUpperInvariant(),
@@ -169,19 +175,16 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Filters.Controls.FilterScope".ToUpperInvariant(),
                 "ShipWorks.Filters.FilterHelper+FilterImageType".ToUpperInvariant(),
                 "ShipWorks.Filters.Management.FilterEditingResult".ToUpperInvariant(),
-                "ShipWorks.Shipping.Carriers.EquaShip.Enums.ErrorResponseLocation".ToUpperInvariant(),
-                "ShipWorks.Shipping.Carriers.EquaShip.WebServices.CreditCardTypeEnum".ToUpperInvariant(),
-                "ShipWorks.Shipping.Carriers.EquaShip.WebServices.InsurancePayTypeEnum".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.FedEx.Enums.FedExEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment.codType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.Account.EndiciaAccountType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaReseller".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.Postal.PostalCustomsForm".ToUpperInvariant(),
-                "ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountContractType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.Enums.UpsEmailNotificationType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsApiResponseStatus".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.UpsOnLineToolType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Carriers.UPS.WorldShip.WorldShipStatusType".ToUpperInvariant(),
+                "ShipWorks.Shipping.Editing.Rating.RatingExceptionType".ToUpperInvariant(),
                 "ShipWorks.Shipping.Editing.RequestedLabelFormatOptionControl+DisplayMode".ToUpperInvariant(),
                 "ShipWorks.Shipping.InitialShippingTabDisplay".ToUpperInvariant(),
                 "ShipWorks.Shipping.Settings.ShipmentBlankPhoneOption".ToUpperInvariant(),

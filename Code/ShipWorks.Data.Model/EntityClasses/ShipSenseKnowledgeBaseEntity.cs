@@ -504,7 +504,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Hash property of the Entity ShipSenseKnowledgebase<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShipSenseKnowledgebase"."Hash"<br/>
+		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Hash"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 64<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
 		public virtual System.String Hash
@@ -515,7 +515,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		/// <summary> The Entry property of the Entity ShipSenseKnowledgebase<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShipSenseKnowledgebase"."Entry"<br/>
+		/// <remarks>Mapped on  table field: "ShipSenseKnowledgeBase"."Entry"<br/>
 		/// Table field type characteristics (type, precision, scale, length): VarBinary, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.Byte[] Entry

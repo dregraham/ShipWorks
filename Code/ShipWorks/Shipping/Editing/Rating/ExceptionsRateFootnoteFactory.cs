@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Editing.Rating
+﻿using System;
+
+namespace ShipWorks.Shipping.Editing.Rating
 {
     /// <summary>
     /// Factory to create an ExceptionsRateFootnote
@@ -6,14 +8,38 @@
     public class ExceptionsRateFootnoteFactory : IRateFootnoteFactory
     {
         private readonly string errorMessage;
+        private readonly RatingExceptionType ratingExceptionType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionsRateFootnoteFactory"/> class.
         /// </summary>
-        public ExceptionsRateFootnoteFactory(ShipmentType shipmentType, string errorMessage)
+        public ExceptionsRateFootnoteFactory(ShipmentType shipmentType, Exception exception)
         {
             ShipmentType = shipmentType;
-            this.errorMessage = errorMessage;
+
+            ratingExceptionType = IsInvalidPackageException(exception) ?
+                RatingExceptionType.InvalidPackageDimensions : 
+                RatingExceptionType.General;
+
+            errorMessage = exception.Message;
+        }
+
+        /// <summary>
+        /// Determines whether [is invalid package exception] [the specified exception].
+        /// </summary>
+        private bool IsInvalidPackageException(Exception exception)
+        {
+            if (exception==null)
+            {
+                return false;
+            }
+
+            if (exception is InvalidPackageDimensionsException)
+            {
+                return true;
+            }
+
+            return IsInvalidPackageException(exception.InnerException);
         }
 
         /// <summary>
@@ -26,7 +52,9 @@
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
         {
-            return new ExceptionsRateFootnoteControl(errorMessage);
+            return ratingExceptionType == RatingExceptionType.InvalidPackageDimensions ?
+               (RateFootnoteControl) new InvalidPackageDimensionsRateFootnoteControl(errorMessage) :
+                new ExceptionsRateFootnoteControl(errorMessage);
         }
     }
 }
