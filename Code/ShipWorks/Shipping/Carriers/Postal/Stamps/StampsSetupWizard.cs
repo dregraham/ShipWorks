@@ -32,7 +32,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private readonly bool allowRegisteringExistingAccount;
         private int initialPersonControlHeight;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsSetupWizard"/> class.
         /// </summary>
@@ -144,6 +143,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             LoadAccountRegistrationTypes();
         }
 
+        /// <summary>
+        /// Load registration types for Stamps accounts
+        /// </summary>
         private void LoadAccountRegistrationTypes()
         {
             stampsAccountRegistrationType.Items.Clear();
@@ -173,7 +175,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccountRegistrationType.SelectedIndex = 0;
         }
         
-
         /// <summary>
         /// User clicked the link to open the stamps.com website
         /// </summary>
@@ -425,7 +426,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 BackEnabled = false;
             }
         }
-
 
         /// <summary>
         /// Stepping next from the credentials page
