@@ -137,6 +137,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.CsCart: return new Platforms.CsCart.CsCartStoreType(store);
                 case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
                 case StoreTypeCode.LoadedCommerce: return new Platforms.LoadedCommerce.LoadedCommerceStoreType(store);
+                case StoreTypeCode.NoMoreRack: return new Platforms.NoMoreRack.NoMoreRackStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
