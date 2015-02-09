@@ -309,7 +309,13 @@ namespace ShipWorks.Stores
         [Description("PrestaShop")]
         [StoreTypeIdentity("PRESTA", "PRS")]
         [StoreTypeIcon("prestashop")]
-        PrestaShop = 59
+        PrestaShop = 59,
+
+        [Description("Loaded Commerce")]
+        [StoreTypeIdentity("LOADEDCOMMERCE", "LDC")]
+        [StoreTypeIcon("loadedcommerce")]
+        LoadedCommerce = 60
+
 
     }
 }
