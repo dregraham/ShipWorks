@@ -61,7 +61,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             StampsAccount.StampsReseller = (int) StampsResellerType.StampsExpedited;
         }
 
-        protected override void OnFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        /// <summary>
+        /// Handle the form closing event
+        /// </summary>
+        protected override void OnFormClosing(object sender, FormClosingEventArgs e)
         {
             base.OnFormClosing(sender, e);
 
