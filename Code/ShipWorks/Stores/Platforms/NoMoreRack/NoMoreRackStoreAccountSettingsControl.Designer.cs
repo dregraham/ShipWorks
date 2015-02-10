@@ -35,9 +35,11 @@
             this.username = new System.Windows.Forms.TextBox();
             this.password = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.useTestServer = new System.Windows.Forms.CheckBox();
             this.vendorId = new System.Windows.Forms.TextBox();
+            this.useTestServer = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,7 +75,6 @@
             // 
             this.username.Location = new System.Drawing.Point(131, 26);
             this.username.MaxLength = 50;
-            this.fieldLengthProvider.SetMaxLengthSource(this.username, ShipWorks.Data.Utility.EntityFieldLengthSource.GenericUsername);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(230, 21);
             this.username.TabIndex = 3;
@@ -82,30 +83,28 @@
             // 
             this.password.Location = new System.Drawing.Point(131, 52);
             this.password.MaxLength = 50;
-            this.fieldLengthProvider.SetMaxLengthSource(this.password, ShipWorks.Data.Utility.EntityFieldLengthSource.GenericPassword);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(230, 21);
             this.password.TabIndex = 4;
             this.password.UseSystemPasswordChar = true;
             // 
+            // vendorId
+            // 
+            this.vendorId.Location = new System.Drawing.Point(131, 79);
+            this.vendorId.MaxLength = 50;
+            this.vendorId.Name = "vendorId";
+            this.vendorId.Size = new System.Drawing.Size(230, 21);
+            this.vendorId.TabIndex = 6;
+            // 
             // useTestServer
             // 
             this.useTestServer.AutoSize = true;
-            this.useTestServer.Location = new System.Drawing.Point(131, 106);
+            this.useTestServer.Location = new System.Drawing.Point(19, 104);
             this.useTestServer.Name = "useTestServer";
             this.useTestServer.Size = new System.Drawing.Size(103, 17);
             this.useTestServer.TabIndex = 5;
             this.useTestServer.Text = "Use Test Server";
             this.useTestServer.UseVisualStyleBackColor = true;
-            // 
-            // vendorId
-            // 
-            this.vendorId.Location = new System.Drawing.Point(131, 79);
-            this.vendorId.MaxLength = 50;
-            this.fieldLengthProvider.SetMaxLengthSource(this.vendorId, ShipWorks.Data.Utility.EntityFieldLengthSource.GenericUsername);
-            this.vendorId.Name = "vendorId";
-            this.vendorId.Size = new System.Drawing.Size(230, 21);
-            this.vendorId.TabIndex = 6;
             // 
             // label4
             // 
@@ -116,10 +115,35 @@
             this.label4.TabIndex = 7;
             this.label4.Text = "Vendor ID:";
             // 
+            // helpLink
+            // 
+            this.helpLink.AutoSize = true;
+            this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink.Location = new System.Drawing.Point(296, 103);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(55, 18);
+            this.helpLink.TabIndex = 10;
+            this.helpLink.TabStop = true;
+            this.helpLink.Text = "click here.";
+            this.helpLink.Url = "http://www.interapptive.com/shipworks/help";
+            this.helpLink.UseCompatibleTextRendering = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(128, 103);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(223, 29);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "For help with adding NoMoreRack ";
+            // 
             // NoMoreRackStoreAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpLink);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.vendorId);
             this.Controls.Add(this.useTestServer);
@@ -129,7 +153,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "NoMoreRackStoreAccountSettingsControl";
-            this.Size = new System.Drawing.Size(482, 134);
+            this.Size = new System.Drawing.Size(482, 135);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -147,5 +171,7 @@
         private System.Windows.Forms.CheckBox useTestServer;
         private System.Windows.Forms.TextBox vendorId;
         private System.Windows.Forms.Label label4;
+        protected ApplicationCore.Interaction.HelpLink helpLink;
+        protected System.Windows.Forms.Label label5;
     }
 }

@@ -35,6 +35,10 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
             InitializeComponent();
 
             useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
+
+            NoMoreRackStoreType store = new NoMoreRackStoreType(new GenericModuleStoreEntity { TypeCode = (int)StoreTypeCode.NoMoreRack });
+            helpLink.Url = store.AccountSettingsHelpUrl;
+
         }
 
         /// <summary>
@@ -50,6 +54,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
 
             username.Text = genericStore.ModuleUsername;
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
+            vendorId.Text = genericStore.ModuleUrl.Substring(genericStore.ModuleUrl.LastIndexOf("/") + 1);
 
             useTestServer.Checked = genericStore.ModuleUrl.IndexOf("test", StringComparison.InvariantCultureIgnoreCase) > -1;
             useTestServer.Visible = useTestServer.Checked || InterapptiveOnly.MagicKeysDown;
@@ -115,5 +120,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                     genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleUrl].IsChanged ||
                     genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleOnlineStoreCode].IsChanged);
         }
+
+ 
     }
 }

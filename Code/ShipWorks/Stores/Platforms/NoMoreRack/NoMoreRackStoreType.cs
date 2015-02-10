@@ -76,9 +76,9 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        //public override string AccountSettingsHelpUrl
-        //{
-        //    get { return "http://support.shipworks.com/solution/articles/4000023323-connecting-NoMoreRack-with"; }
-        //}
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/solution/articles/4000044856-connecting-nomorerack"; }
+        }
     }
 }
