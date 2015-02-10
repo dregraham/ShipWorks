@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -85,56 +84,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
             var express1RateTask = GetExpress1RatesIfNecessary(shipment);
 
-            IStampsWebClient client = CreateWebClient();
-
-            RateGroup rateGroup;
-
-            if (shipment.Postal.Stamps.RateShop)
-            {
-                rateGroup = GetRatesForAllAccounts(shipment);
-            }
-            else
-            {
-                List<RateResult> stampsRates = client.GetRates(shipment);
-            	stampsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
-
-                rateGroup = new RateGroup(stampsRates);
-                AddUspsRatePromotionFootnote(shipment, rateGroup);
-            }
+            RateGroup rateGroup = shipment.Postal.Stamps.RateShop ? 
+                GetRatesForAllAccounts(shipment) : 
+                GetRatesForSpecifiedAccount(shipment);
 
             return new UspsExpress1RateConsolidator().Consolidate(rateGroup, express1RateTask);
         }
 
         /// <summary>
-        /// Start getting Express1 rates if necessary
+        /// Get rates for the account specified in the shipment
         /// </summary>
-        private static Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
+        private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment)
         {
-            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
-            if (express1AutoRouteAccount != null)
-            {
-                // Start getting rates from Express1
-                ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-                return Task.Factory.StartNew(() => new Express1StampsWebClient().GetRates(express1Shipment));
-            }
-            
-            // Create a dummy task that will return an empty result
-            TaskCompletionSource<List<RateResult>> completionSource = new TaskCompletionSource<List<RateResult>>();
-            completionSource.SetResult(new List<RateResult>());
-            return completionSource.Task;
-        }
+            List<RateResult> stampsRates = CreateWebClient().GetRates(shipment);
+            stampsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
 
-        /// <summary>
-        /// Get the Express1 account that should be used for auto routing, or null if we should not auto route
-        /// </summary>
-        private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
-        {
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
-            bool shouldUseExpress1 = settings.StampsAutomaticExpress1 && !isExpress1Restricted &&
-                                     Express1Utilities.IsValidPackagingType(null, packagingType);
-
-            return shouldUseExpress1 ? StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account) : null;
+            RateGroup rateGroup = new RateGroup(stampsRates);
+            AddUspsRatePromotionFootnote(shipment, rateGroup);
+            return rateGroup;
         }
 
         /// <summary>
@@ -176,6 +143,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // If there were no exceptions in the aggregate exception, just rethrow it
                 throw;
             }
+        }
+
+        /// <summary>
+        /// Start getting Express1 rates if necessary
+        /// </summary>
+        private static Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
+        {
+            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
+            if (express1AutoRouteAccount != null)
+            {
+                // Start getting rates from Express1
+                ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
+                return Task.Factory.StartNew(() => new Express1StampsWebClient().GetRates(express1Shipment));
+            }
+            
+            // Create a dummy task that will return an empty result
+            TaskCompletionSource<List<RateResult>> completionSource = new TaskCompletionSource<List<RateResult>>();
+            completionSource.SetResult(new List<RateResult>());
+            return completionSource.Task;
+        }
+
+        /// <summary>
+        /// Get the Express1 account that should be used for auto routing, or null if we should not auto route
+        /// </summary>
+        private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
+            bool shouldUseExpress1 = settings.StampsAutomaticExpress1 && !isExpress1Restricted &&
+                                     Express1Utilities.IsValidPackagingType(null, packagingType);
+
+            return shouldUseExpress1 ? StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account) : null;
         }
 
         /// <summary>
