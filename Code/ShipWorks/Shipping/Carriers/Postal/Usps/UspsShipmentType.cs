@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -110,19 +111,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
             List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
+            IStampsWebClient client = CreateWebClient();
 
             try
             {
-                List<Task<RateGroup>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => GetRates(shipmentWithAccount)))
+                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => client.GetRates(shipmentWithAccount)))
                     .ToList();
 
-                foreach (Task<RateGroup> task in tasks)
+                foreach (Task<List<RateResult>> task in tasks)
                 {
                     task.Wait();
                 }
 
-                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(x => x.Result).ToList());
+                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(x => new RateGroup(x.Result)).ToList());
             }
             catch (AggregateException ex)
             {
@@ -148,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Start getting Express1 rates if necessary
         /// </summary>
-        private Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
+        private static Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
             if (ShouldRetrieveExpress1Rates)
             {
@@ -157,13 +159,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     // Start getting rates from Express1
                     ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-                    return Task.Factory.StartNew(() => new Express1StampsWebClient().GetRates(express1Shipment));
+                    express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Stamps;
+                    return Task.Factory.StartNew(() => new Express1StampsShipmentType().GetRates(express1Shipment));
                 }
             }
 
             // Create a dummy task that will return an empty result
-            TaskCompletionSource<List<RateResult>> completionSource = new TaskCompletionSource<List<RateResult>>();
-            completionSource.SetResult(new List<RateResult>());
+            TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();
+            completionSource.SetResult(new RateGroup(new List<RateResult>()));
             return completionSource.Task;
         }
 
