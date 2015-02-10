@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public UspsShipmentType()
         {
-            ShouldRetrieveExpress1Rates = false;
+            ShouldRetrieveExpress1Rates = true;
 
             // Use the "live" versions by default
             AccountRepository = new UspsAccountRepository();
@@ -148,16 +148,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Start getting Express1 rates if necessary
         /// </summary>
-        private static Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
+        private Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
-            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
-            if (express1AutoRouteAccount != null)
+            if (ShouldRetrieveExpress1Rates)
             {
-                // Start getting rates from Express1
-                ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-                return Task.Factory.StartNew(() => new Express1StampsWebClient().GetRates(express1Shipment));
+                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
+                if (express1AutoRouteAccount != null)
+                {
+                    // Start getting rates from Express1
+                    ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
+                    return Task.Factory.StartNew(() => new Express1StampsWebClient().GetRates(express1Shipment));
+                }
             }
-            
+
             // Create a dummy task that will return an empty result
             TaskCompletionSource<List<RateResult>> completionSource = new TaskCompletionSource<List<RateResult>>();
             completionSource.SetResult(new List<RateResult>());
