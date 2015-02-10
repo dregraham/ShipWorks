@@ -218,9 +218,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                if (shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1)
+                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
+
+                // If Autoroute or RateShop is turned on....
+                if ((shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1) ||
+                    express1AutoRouteAccount != null)
                 {
-                    ProcessShipmentWithRateShopping(shipment);
+                    ProcessShipmentWithRates(shipment);
                 }
                 else
                 {
@@ -236,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Process the shipment using the account with the cheapest rate for the requested service
         /// </summary>
-        private void ProcessShipmentWithRateShopping(ShipmentEntity shipment)
+        private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
             IStampsWebClient client = CreateWebClient();
             List<StampsAccountEntity> accounts = GetRates(shipment).Rates
@@ -255,9 +259,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    UseAccountForShipment(account, shipment);
+                    if (account.StampsReseller == (int)StampsResellerType.Express1)
+                    {
+                        shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
 
-                    client.ProcessShipment(shipment);
+                        ShipmentType express1ShipmentType = ShipmentTypeManager.GetType(shipment);
+                        shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
+                        UseAccountForShipment(account,shipment);
+                        
+                        express1ShipmentType.UpdateDynamicShipmentData(shipment);
+                        express1ShipmentType.ProcessShipment(shipment);
+                    }
+                    else
+                    {
+                        UseAccountForShipment(account, shipment);
+                        client.ProcessShipment(shipment);
+                    }
+
                     break;
                 }
                 catch (StampsInsufficientFundsException)
