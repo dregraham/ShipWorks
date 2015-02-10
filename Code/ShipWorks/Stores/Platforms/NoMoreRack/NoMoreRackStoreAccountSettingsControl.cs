@@ -56,7 +56,6 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
             password.Text = SecureText.Decrypt(genericStore.ModulePassword, genericStore.ModuleUsername);
             vendorId.Text = genericStore.ModuleUrl.Substring(genericStore.ModuleUrl.LastIndexOf("/") + 1);
 
-            useTestServer.Checked = genericStore.ModuleUrl.IndexOf("test", StringComparison.InvariantCultureIgnoreCase) > -1;
             useTestServer.Visible = useTestServer.Checked || InterapptiveOnly.MagicKeysDown;
         }
 

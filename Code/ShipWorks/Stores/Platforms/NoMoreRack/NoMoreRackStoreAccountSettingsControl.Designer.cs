@@ -171,7 +171,7 @@
         private System.Windows.Forms.CheckBox useTestServer;
         private System.Windows.Forms.TextBox vendorId;
         private System.Windows.Forms.Label label4;
-        protected ApplicationCore.Interaction.HelpLink helpLink;
-        protected System.Windows.Forms.Label label5;
+        private ApplicationCore.Interaction.HelpLink helpLink;
+        private System.Windows.Forms.Label label5;
     }
 }
