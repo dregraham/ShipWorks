@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using NDesk.Options;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -35,6 +36,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.StampsResellerType = stampsResellerType;
+
+            PositionControls();
+        }
+
+        /// <summary>
+        /// Positions the controls based on the visibility of other controls
+        /// </summary>
+        private void PositionControls()
+        {
+            express1SettingsControl.Top = optionsControl.Bottom + 5;
+
+            if (express1SettingsControl.Visible)
+            {
+                panelBottom.Top = express1SettingsControl.Bottom;
+            }
+            else if (express1Options.Visible)
+            {
+                panelBottom.Top = express1Options.Bottom;
+            }
+            else
+            {
+                panelBottom.Top = optionsControl.Bottom;
+            }
         }
 
         /// <summary>
@@ -48,8 +72,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
 
             express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
+            express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
 
             LoadExpress1Settings();
+            PositionControls();
         }
 
         /// <summary>
@@ -63,13 +89,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
             {
                 express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom + 5;
             }
             else
             {
-                // This isn't Express1 - hide the express1 settings
-                express1Options.Hide();
-                panelBottom.Top = optionsControl.Bottom - 35;
+                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted)
+                {
+                    // Express1 is restricted - hide the express1 settings
+                    express1SettingsControl.Hide();
+                    express1Options.Hide();
+                }
+                else
+                {
+                    express1SettingsControl.LoadSettings(express1Settings);
+                    express1SettingsControl.Top = optionsControl.Bottom + 5;
+                }
             }
         }
 
