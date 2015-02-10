@@ -150,24 +150,47 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Start getting Express1 rates if necessary
         /// </summary>
-        private static Task<List<RateResult>> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
+        private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
-            if (ShouldRetrieveExpress1Rates)
-            {
-                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
-                if (express1AutoRouteAccount != null)
-                {
-                    // Start getting rates from Express1
-                    ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-                    express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Stamps;
-                    return Task.Factory.StartNew(() => new Express1StampsShipmentType().GetRates(express1Shipment));
-                }
-            }
+            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
+            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
+                BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
+                CreateEmptyExpress1RatesTask();
+        }
 
+        /// <summary>
+        /// Create a task that will return an empty list of rates
+        /// </summary>
+        private static Task<RateGroup> CreateEmptyExpress1RatesTask()
+        {
             // Create a dummy task that will return an empty result
             TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();
             completionSource.SetResult(new RateGroup(new List<RateResult>()));
             return completionSource.Task;
+        }
+
+        /// <summary>
+        /// Start retrieving Express1 rates
+        /// </summary>
+        private static Task<RateGroup> BeginRetrievingExpress1Rates(ShipmentEntity shipment, StampsAccountEntity express1AutoRouteAccount)
+        {
+            // Start getting rates from Express1
+            ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
+            express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Stamps;
+
+            return Task.Factory.StartNew(() =>
+            {
+                RateGroup rateGroup = new Express1StampsShipmentType().GetRates(express1Shipment);
+                foreach (RateResult rate in rateGroup.Rates)
+                {
+                    PostalRateSelection tag = rate.Tag as PostalRateSelection;
+                    if (tag != null)
+                    {
+                        rate.Tag = new UspsPostalRateSelection(tag.ServiceType, tag.ConfirmationType, express1AutoRouteAccount);
+                    }
+                }
+                return rateGroup;
+            });
         }
 
         /// <summary>
@@ -271,7 +294,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                         ShipmentType express1ShipmentType = ShipmentTypeManager.GetType(shipment);
                         shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
-                        UseAccountForShipment(account,shipment);
+                        UseAccountForShipment(account, shipment);
                         
                         express1ShipmentType.UpdateDynamicShipmentData(shipment);
                         express1ShipmentType.ProcessShipment(shipment);
@@ -307,13 +330,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // We have an account, so use the normal broker
                 return new UspsBestRateBroker(this, AccountRepository);
             }
-            else
-            {
-                // No accounts, so use the counter rates broker to allow the user to
-                // sign up for the account. We can use the StampsCounterRateAccountRepository 
-                // here because the underlying accounts being used are the same.
-                return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
-            }
+            
+            // No accounts, so use the counter rates broker to allow the user to
+            // sign up for the account. We can use the StampsCounterRateAccountRepository 
+            // here because the underlying accounts being used are the same.
+            return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
         }
 
         /// <summary>
