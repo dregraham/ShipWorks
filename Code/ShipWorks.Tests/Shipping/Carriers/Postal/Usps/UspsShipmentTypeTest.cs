@@ -27,13 +27,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [TestMethod]
-        public void ShouldRetrieveExpress1Rates_ReturnsFalse_Test()
-        {
-            // Never get Express1 rates for stamps expedited
-            Assert.IsFalse(testObject.ShouldRetrieveExpress1Rates);
-        }
-
-        [TestMethod]
         public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());

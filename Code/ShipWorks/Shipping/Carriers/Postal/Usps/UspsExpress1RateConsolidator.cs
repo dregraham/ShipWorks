@@ -39,6 +39,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {   
             List<RateResult> mergedRates = uspsRateGroup.Rates
                 .Select(uspsRate => GetCheaperMatchingExpress1Rate(express1Rates.Rates, uspsRate) ?? uspsRate)
+                .OrderBy(rate => ((PostalRateSelection)rate.Tag).ServiceType)
+                .ThenBy(rate => rate.Selectable)
+                .ThenBy(rate => ((PostalRateSelection)rate.Tag).ConfirmationType)
                 .ToList();
 
             RateGroup mergedRateResult = new RateGroup(mergedRates);
