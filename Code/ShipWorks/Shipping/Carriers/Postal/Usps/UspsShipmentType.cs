@@ -194,20 +194,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get the Express1 account that should be used for auto routing.
-        /// Returns null if auto routing should not be used.
-        /// </summary>
-        private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalServiceType serviceType, PostalPackagingType packagingType)
-        {
-            if (Express1Utilities.IsPostageSavingService(serviceType))
-            {
-                return GetExpress1AutoRouteAccount(packagingType);
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Get the Express1 account that should be used for auto routing, or null if we should not auto route
         /// </summary>
         private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
@@ -261,11 +247,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType);
-
-                // If Autoroute or RateShop is turned on....
-                if ((shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1) ||
-                    express1AutoRouteAccount != null)
+                if (ShouldRateShop(shipment) || ShouldTestExpress1Rates(shipment))
                 {
                     ProcessShipmentWithRates(shipment);
                 }
@@ -278,6 +260,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 throw new ShippingException(ex.Message, ex);
             }
+        }
+        
+        /// <summary>
+        /// Should we rate shop before processing
+        /// </summary>
+        private bool ShouldRateShop(ShipmentEntity shipment)
+        {
+            return shipment.Postal.Stamps.RateShop && 
+                AccountRepository.Accounts.Count() > 1;
+        }
+
+        /// <summary>
+        /// Get the Express1 account that should be used for auto routing.
+        /// Returns null if auto routing should not be used.
+        /// </summary>
+        private static bool ShouldTestExpress1Rates(ShipmentEntity shipment)
+        {
+            return Express1Utilities.IsPostageSavingService((PostalServiceType)shipment.Postal.Service) &&
+                GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType) != null;
         }
 
         /// <summary>
