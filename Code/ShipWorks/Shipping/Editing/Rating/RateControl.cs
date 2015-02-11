@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
         // The text to display for the action link, if its visible
         string actionLinkText = "Select";
+        private bool hasMoreLinkBeenClicked;
 
         /// <summary>
         /// Raised when the user selects a rate row
@@ -68,6 +69,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             RestrictedRateCount = 5;
 
             sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
+            hasMoreLinkBeenClicked = false;
         }
 
         /// <summary>
@@ -333,6 +335,21 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// The rate control will track whether the More link has been clicked. This will 
+        /// collapse the rates only if the link has not been previously clicked (i.e. the
+        /// user elected to see more rates at some point, so we want to retain that view).
+        /// </summary>
+        public void TryCollapseRateResults()
+        {
+            if (!hasMoreLinkBeenClicked)
+            {
+                // The more link has not been clicked yet, so we can collapse
+                // the results
+                ShowAllRates = false;
+            }
+        }
+
+        /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
         /// </summary>
@@ -354,9 +371,13 @@ namespace ShipWorks.Shipping.Editing.Rating
                             IsRealRate = false,
                             RateSelectionDelegate = entity =>
                             {
-                                // The user wants to expand the rates, so set the ShowAllRates
-                                // to true and load the full list of original rates
+                                // The user wants to expand the rates, so set the ShowAllRates to true and load the full list of original rates
                                 ShowAllRates = true;
+
+                                // Capture that the more link has been clicked, so we don't collapse the rates again. The user 
+                                // elected to see more rates, so we want to retain view
+                                hasMoreLinkBeenClicked = true;
+                                
                                 LoadRates(originalRateGroup);
                             }
                         }
