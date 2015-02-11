@@ -188,6 +188,7 @@
     <Compile Include="IO\Hardware\Usb\HidDeviceManager.cs" />
     <Compile Include="IO\Hardware\Usb\HidException.cs" />
     <Compile Include="IO\Hardware\Usb\NativeUsb.cs" />
+    <Compile Include="IO\Hardware\Usb\DeviceListener.cs" />
     <Compile Include="IO\Text\Csv\CachedCsvReader.cs" />
     <Compile Include="IO\Text\Csv\CsvReader.cs" />
     <Compile Include="IO\Text\Csv\DuplicateFieldAction.cs" />
