@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Services.Protocols;
+using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Api;

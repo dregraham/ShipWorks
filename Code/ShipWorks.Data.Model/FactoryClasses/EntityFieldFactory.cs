@@ -362,30 +362,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("EndiciaShipmentEntity", (int)fieldIndex));
 		}
 
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the EquaShipAccountEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(EquaShipAccountFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("EquaShipAccountEntity", (int)fieldIndex));
-		}
-
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the EquaShipProfileEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(EquaShipProfileFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("EquaShipProfileEntity", (int)fieldIndex));
-		}
-
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the EquaShipShipmentEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(EquaShipShipmentFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("EquaShipShipmentEntity", (int)fieldIndex));
-		}
-
 		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the EtsyOrderEntity. Which EntityField is created is specified by fieldIndex</summary>
 		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
 		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>

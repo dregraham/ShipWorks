@@ -1827,7 +1827,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The CustomsRecipientTIN property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."CustomsRecipientTIN"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 15<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 24<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String CustomsRecipientTIN
 		{
@@ -2047,7 +2047,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The ImporterTIN property of the Entity FedExShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "FedExShipment"."ImporterTIN"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 15<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 24<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
 		public virtual System.String ImporterTIN
 		{

@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         {
             shipment.TrackingNumber = shipmentResponse.Tracking;
             shipment.ShipmentCost = (decimal)shipmentResponse.TotalChrg;
+            shipment.BilledWeight = shipmentResponse.BilledWeight;
 
             // Interapptive users have an Unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);

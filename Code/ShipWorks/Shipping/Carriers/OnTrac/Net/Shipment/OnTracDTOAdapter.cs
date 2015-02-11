@@ -10,7 +10,7 @@ using ShipWorks.Templates.Tokens;
 namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
 {
     /// <summary>
-    /// Converts Shipworks ShipmentEntity to an OnTrac DTO
+    /// Converts ShipWorks ShipmentEntity to an OnTrac DTO
     /// </summary>
     public class OnTracDtoAdapter
     {
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Shipment
         /// <summary>
         /// Given a shipworks COD type, return an OnTrac COD type defined by OnTrac XSD
         /// </summary>
-        /// <param name="onTracCodType"> Shipworks OnTrac COD type </param>
+        /// <param name="onTracCodType"> ShipWorks OnTrac COD type </param>
         private static codType GetOnTracCodType(OnTracCodType onTracCodType)
         {
             string apiValue = EnumHelper.GetApiValue(onTracCodType);

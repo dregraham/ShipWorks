@@ -586,6 +586,15 @@ PRINT N'Adding [Order].[IX_Auto_ShipSenseHashKey] Index'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_ShipSenseHashKey] ON [dbo].[Order] ([ShipSenseHashKey])
 GO
+PRINT N'Adding [Order].[IX_Store_OrderNumberComplete_IsManual] Index'
+GO
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo].[Order]
+(
+	[StoreID] ASC,
+	[OrderNumberComplete] ASC,
+	[IsManual] ASC
+)
+GO
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -946,7 +955,9 @@ CREATE TABLE [dbo].[Shipment]
 [ShipSenseStatus] [int] NOT NULL,
 [ShipSenseChangeSets] [xml] NOT NULL,
 [ShipSenseEntry] [varbinary] (max) NOT NULL,
-[OnlineShipmentID] [varchar] (128) NOT NULL
+[OnlineShipmentID] [varchar] (128) NOT NULL,
+[BilledType] [int] NOT NULL,
+[BilledWeight] [float] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Shipment] on [dbo].[Shipment]'
@@ -1471,63 +1482,6 @@ PRINT N'Creating primary key [PK_EndiciaShipment] on [dbo].[EndiciaShipment]'
 GO
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [PK_EndiciaShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
-PRINT N'Creating [dbo].[EquaShipProfile]'
-GO
-CREATE TABLE [dbo].[EquaShipProfile]
-(
-[ShippingProfileID] [bigint] NOT NULL,
-[EquaShipAccountID] [bigint] NULL,
-[Service] [int] NULL,
-[PackageType] [int] NULL,
-[ReferenceNumber] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Description] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ShippingNotes] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Weight] [float] NULL,
-[DimsProfileID] [bigint] NULL,
-[DimsLength] [float] NULL,
-[DimsHeight] [float] NULL,
-[DimsWidth] [float] NULL,
-[DimsWeight] [float] NULL,
-[DimsAddWeight] [bit] NULL,
-[DeclaredValue] [money] NULL,
-[EmailNotification] [bit] NULL,
-[SaturdayDelivery] [bit] NULL,
-[Confirmation] [int] NULL
-)
-GO
-PRINT N'Creating primary key [PK_EquashipProfile] on [dbo].[EquaShipProfile]'
-GO
-ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [PK_EquashipProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
-GO
-PRINT N'Creating [dbo].[EquaShipShipment]'
-GO
-CREATE TABLE [dbo].[EquaShipShipment]
-(
-[ShipmentID] [bigint] NOT NULL,
-[EquaShipAccountID] [bigint] NOT NULL,
-[Service] [int] NOT NULL,
-[PackageType] [int] NOT NULL,
-[ReferenceNumber] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ShippingNotes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[DimsProfileID] [bigint] NOT NULL,
-[DimsLength] [float] NOT NULL,
-[DimsHeight] [float] NOT NULL,
-[DimsWidth] [float] NOT NULL,
-[DimsWeight] [float] NOT NULL,
-[DimsAddWeight] [bit] NOT NULL,
-[InsuranceValue] [money] NOT NULL,
-[DeclaredValue] [money] NOT NULL,
-[EmailNotification] [bit] NOT NULL,
-[SaturdayDelivery] [bit] NOT NULL,
-[Confirmation] [int] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_EquashipShipment] on [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [PK_EquashipShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
-GO
 PRINT N'Creating [dbo].[EtsyOrder]'
 GO
 CREATE TABLE [dbo].[EtsyOrder]
@@ -1631,7 +1585,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [BrokerPhoneExtension] [nvarchar] (8) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [BrokerEmail] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsAdmissibilityPackaging] [int] NOT NULL,
-[CustomsRecipientTIN] [varchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CustomsRecipientTIN] [varchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsDocumentsOnly] [bit] NOT NULL,
 [CustomsDocumentsDescription] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CustomsExportFilingOption] [int] NOT NULL,
@@ -1651,7 +1605,7 @@ CREATE TABLE [dbo].[FedExShipment]
 [CommercialInvoiceReference] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterOfRecord] [bit] NOT NULL,
 [ImporterAccount] [nvarchar] (12) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ImporterTIN] [nvarchar] (15) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ImporterTIN] [nvarchar] (24) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterFirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterLastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ImporterCompany] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -1847,7 +1801,7 @@ CREATE TABLE [dbo].[FilterNodeContent]
 [Status] [smallint] NOT NULL,
 [InitialCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpdateCalculation] [nvarchar] (max) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ColumnMask] [varbinary] (75) NOT NULL,
+[ColumnMask] [varbinary] (100) NOT NULL,
 [JoinMask] [int] NOT NULL,
 [Cost] [int] NOT NULL,
 [Count] [int] NOT NULL
@@ -1933,12 +1887,17 @@ CREATE TABLE [dbo].[Filter]
 [Name] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FilterTarget] [int] NOT NULL,
 [IsFolder] [bit] NOT NULL,
-[Definition] [xml] NULL
+[Definition] [xml] NULL,
+[State] [tinyint] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_Filter] on [dbo].[Filter]'
 GO
 ALTER TABLE [dbo].[Filter] ADD CONSTRAINT [PK_Filter] PRIMARY KEY CLUSTERED  ([FilterID])
+GO
+PRINT N'Creating index [IX_Filter_State] on [dbo].[Filter]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Filter_State] ON [dbo].[Filter] ([State])
 GO
 PRINT N'Creating [dbo].[GenericModuleStore]'
 GO
@@ -1962,7 +1921,8 @@ CREATE TABLE [dbo].[GenericModuleStore]
 [ModuleOnlineCustomerDataType] [int] NOT NULL,
 [ModuleOnlineShipmentDetails] [bit] NOT NULL,
 [ModuleHttpExpect100Continue] [bit] NOT NULL,
-[ModuleResponseEncoding] [int] NOT NULL
+[ModuleResponseEncoding] [int] NOT NULL,
+[SchemaVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_GenericModuleStore] on [dbo].[GenericModuleStore]'
@@ -3138,7 +3098,8 @@ CREATE TABLE [dbo].[StampsProfile]
 [StampsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[RateShop] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsProfile] on [dbo].[StampsProfile]'
@@ -3175,7 +3136,8 @@ CREATE TABLE [dbo].[StampsShipment]
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalStampsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[RateShop] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
@@ -3927,37 +3889,6 @@ ALTER TABLE [dbo].[EndiciaAccount] ADD CONSTRAINT [PK_EndiciaAccount] PRIMARY KE
 GO
 ALTER TABLE [dbo].[EndiciaAccount] ENABLE CHANGE_TRACKING
 GO
-PRINT N'Creating [dbo].[EquaShipAccount]'
-GO
-CREATE TABLE [dbo].[EquaShipAccount]
-(
-[EquaShipAccountID] [bigint] NOT NULL IDENTITY(1067, 1000),
-[RowVersion] [timestamp] NOT NULL,
-[Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Password] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[MiddleName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[LastName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Company] [nvarchar] (35) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street1] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street2] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Street3] [nvarchar] (60) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[City] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StateProvCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[PostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[CountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Phone] [nvarchar] (25) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-)
-GO
-PRINT N'Creating primary key [PK_EquahipAccount] on [dbo].[EquaShipAccount]'
-GO
-ALTER TABLE [dbo].[EquaShipAccount] ADD CONSTRAINT [PK_EquahipAccount] PRIMARY KEY CLUSTERED  ([EquaShipAccountID])
-GO
-ALTER TABLE [dbo].[EquaShipAccount] ENABLE CHANGE_TRACKING
-GO
 PRINT N'Creating [dbo].[FedExAccount]'
 GO
 CREATE TABLE [dbo].[FedExAccount]
@@ -4019,7 +3950,7 @@ CREATE TABLE [dbo].[FilterNodeContentDirty]
 [ParentID] [bigint] NULL,
 [ObjectType] [int] NOT NULL,
 [ComputerID] [bigint] NOT NULL,
-[ColumnsUpdated] [varbinary] (75) NOT NULL
+[ColumnsUpdated] [varbinary] (100) NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_FilterNodeContentDirty] on [dbo].[FilterNodeContentDirty]'
@@ -4470,9 +4401,9 @@ GO
 CREATE TABLE [dbo].[ShippingSettings]
 (
 [ShippingSettingsID] [bit] NOT NULL,
-[Activated] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Configured] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Excluded] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Activated] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Configured] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Excluded] [varchar] (45) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DefaultType] [int] NOT NULL,
 [BlankPhoneOption] [int] NOT NULL,
 [BlankPhoneNumber] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -4526,17 +4457,17 @@ PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
 GO
-PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
+PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
 GO
-CREATE TABLE [dbo].[ShipSenseKnowledgebase]
+CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
 (
 [Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
+PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnowledgeBase]'
 GO
-ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
+ALTER TABLE [dbo].[ShipSenseKnowledgeBase] ADD CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED  ([Hash])
 GO
 PRINT N'Creating [dbo].[StampsAccount]'
 GO
@@ -4652,8 +4583,6 @@ GO
 PRINT N'Altering [dbo].[EmailAccount]'
 GO
 PRINT N'Altering [dbo].[EndiciaAccount]'
-GO
-PRINT N'Altering [dbo].[EquaShipAccount]'
 GO
 PRINT N'Altering [dbo].[FedExAccount]'
 GO
@@ -4860,14 +4789,6 @@ PRINT N'Adding foreign keys to [dbo].[EndiciaShipment]'
 GO
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [FK_EndiciaShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE
 ALTER TABLE [dbo].[EndiciaShipment] ADD CONSTRAINT [FK_EndiciaShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipProfile]'
-GO
-ALTER TABLE [dbo].[EquaShipProfile] ADD CONSTRAINT [FK_EquashipProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[EtsyOrder]'
 GO
@@ -5289,26 +5210,6 @@ GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EndiciaShipment', 'COLUMN', N'RefundFormID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EndiciaShipment', 'COLUMN', N'TransactionID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DeclaredValue'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Description'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsProfileID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'3', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'DimsWeight'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'EquaShipAccountID'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'InsuranceValue'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'119', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'PackageType'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ReferenceNumber'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'118', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'Service'
-GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'EquaShipShipment', 'COLUMN', N'ShippingNotes'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'121', 'SCHEMA', N'dbo', 'TABLE', N'EtsyOrder', 'COLUMN', N'WasPaid'
 GO

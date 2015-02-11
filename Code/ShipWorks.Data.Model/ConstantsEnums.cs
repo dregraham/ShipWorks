@@ -2478,151 +2478,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipAccountFieldIndex:int
-	{
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>Username. </summary>
-		Username,
-		///<summary>Password. </summary>
-		Password,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>FirstName. </summary>
-		FirstName,
-		///<summary>MiddleName. </summary>
-		MiddleName,
-		///<summary>LastName. </summary>
-		LastName,
-		///<summary>Company. </summary>
-		Company,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>Street2. </summary>
-		Street2,
-		///<summary>Street3. </summary>
-		Street3,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>Phone. </summary>
-		Phone,
-		///<summary>Email. </summary>
-		Email,
-		///<summary>Website. </summary>
-		Website,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipProfileFieldIndex:int
-	{
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>Service. </summary>
-		Service,
-		///<summary>PackageType. </summary>
-		PackageType,
-		///<summary>ReferenceNumber. </summary>
-		ReferenceNumber,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>ShippingNotes. </summary>
-		ShippingNotes,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
-		///<summary>EmailNotification. </summary>
-		EmailNotification,
-		///<summary>SaturdayDelivery. </summary>
-		SaturdayDelivery,
-		///<summary>Confirmation. </summary>
-		Confirmation,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipShipmentFieldIndex:int
-	{
-		///<summary>ShipmentID. </summary>
-		ShipmentID,
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>Service. </summary>
-		Service,
-		///<summary>PackageType. </summary>
-		PackageType,
-		///<summary>ReferenceNumber. </summary>
-		ReferenceNumber,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>ShippingNotes. </summary>
-		ShippingNotes,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>InsuranceValue. </summary>
-		InsuranceValue,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
-		///<summary>EmailNotification. </summary>
-		EmailNotification,
-		///<summary>SaturdayDelivery. </summary>
-		SaturdayDelivery,
-		///<summary>Confirmation. </summary>
-		Confirmation,
-		///<summary>RequestedLabelFormat. </summary>
-		RequestedLabelFormat,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrder.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -3460,6 +3315,8 @@ namespace ShipWorks.Data.Model
 		IsFolder,
 		///<summary>Definition. </summary>
 		Definition,
+		///<summary>State. </summary>
+		State,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3837,6 +3694,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4513,6 +4372,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
@@ -4877,6 +4738,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EncryptionPassphrase. </summary>
@@ -7289,6 +7152,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEntry,
 		///<summary>OnlineShipmentID. </summary>
 		OnlineShipmentID,
+		///<summary>BilledType. </summary>
+		BilledType,
+		///<summary>BilledWeight. </summary>
+		BilledWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8036,6 +7903,8 @@ namespace ShipWorks.Data.Model
 		RequireFullAddressValidation,
 		///<summary>Memo. </summary>
 		Memo,
+		///<summary>RateShop. </summary>
+		RateShop,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8092,6 +7961,8 @@ namespace ShipWorks.Data.Model
 		ScanFormBatchID,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>RateShop. </summary>
+		RateShop,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9732,12 +9603,6 @@ namespace ShipWorks.Data.Model
 		EndiciaScanFormEntity,
 		///<summary>EndiciaShipment</summary>
 		EndiciaShipmentEntity,
-		///<summary>EquaShipAccount</summary>
-		EquaShipAccountEntity,
-		///<summary>EquaShipProfile</summary>
-		EquaShipProfileEntity,
-		///<summary>EquaShipShipment</summary>
-		EquaShipShipmentEntity,
 		///<summary>EtsyOrder</summary>
 		EtsyOrderEntity,
 		///<summary>EtsyStore</summary>

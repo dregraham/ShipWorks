@@ -28,69 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelShipmentCharacteristics = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.ground = new ShipWorks.UI.Controls.NumericTextBox();
-            this.air = new ShipWorks.UI.Controls.NumericTextBox();
             this.labelAir = new System.Windows.Forms.Label();
-            this.international = new ShipWorks.UI.Controls.NumericTextBox();
             this.labelInternational = new System.Windows.Forms.Label();
             this.labelInstructions = new System.Windows.Forms.Label();
+            this.international = new ShipWorks.UI.Controls.NumericTextBox();
+            this.air = new ShipWorks.UI.Controls.NumericTextBox();
+            this.ground = new ShipWorks.UI.Controls.NumericTextBox();
             this.SuspendLayout();
-            // 
-            // labelShipmentCharacteristics
-            // 
-            this.labelShipmentCharacteristics.AutoSize = true;
-            this.labelShipmentCharacteristics.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipmentCharacteristics.Location = new System.Drawing.Point(0, 0);
-            this.labelShipmentCharacteristics.Name = "labelShipmentCharacteristics";
-            this.labelShipmentCharacteristics.Size = new System.Drawing.Size(149, 13);
-            this.labelShipmentCharacteristics.TabIndex = 0;
-            this.labelShipmentCharacteristics.Text = "Shipment Characteristics";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(53, 71);
+            this.label2.Location = new System.Drawing.Point(107, 37);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 1;
             this.label2.Text = "Ground:";
             // 
-            // ground
-            // 
-            this.ground.Location = new System.Drawing.Point(105, 68);
-            this.ground.Name = "ground";
-            this.ground.Size = new System.Drawing.Size(100, 21);
-            this.ground.TabIndex = 2;
-            // 
-            // air
-            // 
-            this.air.Location = new System.Drawing.Point(105, 95);
-            this.air.Name = "air";
-            this.air.Size = new System.Drawing.Size(100, 21);
-            this.air.TabIndex = 4;
-            // 
             // labelAir
             // 
             this.labelAir.AutoSize = true;
-            this.labelAir.Location = new System.Drawing.Point(75, 98);
+            this.labelAir.Location = new System.Drawing.Point(129, 64);
             this.labelAir.Name = "labelAir";
             this.labelAir.Size = new System.Drawing.Size(24, 13);
             this.labelAir.TabIndex = 3;
             this.labelAir.Text = "Air:";
             // 
-            // international
-            // 
-            this.international.Location = new System.Drawing.Point(105, 122);
-            this.international.Name = "international";
-            this.international.Size = new System.Drawing.Size(100, 21);
-            this.international.TabIndex = 6;
-            // 
             // labelInternational
             // 
             this.labelInternational.AutoSize = true;
-            this.labelInternational.Location = new System.Drawing.Point(26, 125);
+            this.labelInternational.Location = new System.Drawing.Point(80, 91);
             this.labelInternational.Name = "labelInternational";
             this.labelInternational.Size = new System.Drawing.Size(73, 13);
             this.labelInternational.TabIndex = 5;
@@ -98,12 +66,33 @@
             // 
             // labelInstructions
             // 
-            this.labelInstructions.Location = new System.Drawing.Point(5, 28);
+            this.labelInstructions.Location = new System.Drawing.Point(0, 0);
             this.labelInstructions.Name = "labelInstructions";
-            this.labelInstructions.Size = new System.Drawing.Size(529, 37);
+            this.labelInstructions.Size = new System.Drawing.Size(460, 31);
             this.labelInstructions.TabIndex = 7;
-            this.labelInstructions.Text = "Identify the characteristics of your shipments. How many Ground, Air, or International" +
-    " shipments will you have for a week?";
+            this.labelInstructions.Text = "Approximately how many Ground, Air, or International shipments will you have in a" +
+    "n average week?";
+            // 
+            // international
+            // 
+            this.international.Location = new System.Drawing.Point(162, 88);
+            this.international.Name = "international";
+            this.international.Size = new System.Drawing.Size(100, 21);
+            this.international.TabIndex = 6;
+            // 
+            // air
+            // 
+            this.air.Location = new System.Drawing.Point(162, 61);
+            this.air.Name = "air";
+            this.air.Size = new System.Drawing.Size(100, 21);
+            this.air.TabIndex = 4;
+            // 
+            // ground
+            // 
+            this.ground.Location = new System.Drawing.Point(162, 34);
+            this.ground.Name = "ground";
+            this.ground.Size = new System.Drawing.Size(100, 21);
+            this.ground.TabIndex = 2;
             // 
             // UpsShipmentCharacteristicsControl
             // 
@@ -116,10 +105,9 @@
             this.Controls.Add(this.labelAir);
             this.Controls.Add(this.ground);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.labelShipmentCharacteristics);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsShipmentCharacteristicsControl";
-            this.Size = new System.Drawing.Size(513, 296);
+            this.Size = new System.Drawing.Size(460, 152);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -127,7 +115,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelShipmentCharacteristics;
         private System.Windows.Forms.Label label2;
         private UI.Controls.NumericTextBox ground;
         private UI.Controls.NumericTextBox air;

@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Editing.Enums;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
@@ -261,7 +262,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex.Message));
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex));
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
@@ -323,7 +324,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
             {
-                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new Express1BrokerFilter(), new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}), int.MaxValue);
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
 
                 shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
                 ShippingManager.EnsureShipmentLoaded(shipment);
@@ -351,9 +352,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <param name="rateGroup">The rate group.</param>
         private void LoadRates(ShipmentRateGroup rateGroup)
         {
-            // Only show the More link for the best rate shipment type
-            rateControl.ShowAllRates = rateGroup.Carrier != ShipmentTypeCode.BestRate;
+            // Reset the rate control to show all rates and let the policy change the 
+            // behavior if it's necessary
+            rateControl.ShowAllRates = true;
+            rateControl.ShowSingleRate = false;
 
+            // Apply any applicable policies to the rate control prior to loading the rates
+            ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
             rateControl.LoadRates(rateGroup);
         }
 

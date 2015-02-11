@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Branches/3.3.8.x-UPSRecertification/Code/ShipWorks/Shipping/Carriers/UPS/Api/Wsdl/Error1.1.xsd" filename="Error1.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Branches/3.3.8.x-UPSRecertification/Code/ShipWorks/Shipping/Carriers/UPS/Api/Wsdl/common.xsd" filename="common.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Branches/3.3.8.x-UPSRecertification/Code/ShipWorks/Shipping/Carriers/UPS/Api/Wsdl/OpenAccountWS.xsd" filename="OpenAccountWS.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///D:/Development/Applications/ShipWorks3x/Branches/3.3.8.x-UPSRecertification/Code/ShipWorks/Shipping/Carriers/UPS/Api/Wsdl/UPSSecurity.xsd" filename="UPSSecurity.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///D:/Development/Applications/ShipWorks3x/Branches/3.3.8.x-UPSRecertification/Code/ShipWorks/Shipping/Carriers/UPS/Api/Wsdl/OpenAccount.wsdl" filename="OpenAccount.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/OpenAccount/Wsdl/UPSSecurity.xsd" filename="UPSSecurity.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/OpenAccount/Wsdl/OpenAccountWS.xsd" filename="OpenAccountWS.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/OpenAccount/Wsdl/common.xsd" filename="common.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="file:///C:/shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/OpenAccount/Wsdl/Error1.1.xsd" filename="Error1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/shipworks3x/Code/ShipWorks/Shipping/Carriers/UPS/OpenAccount/Wsdl/OpenAccount.wsdl" filename="OpenAccount.wsdl" />
   </Results>
 </DiscoveryClientResultsFile>

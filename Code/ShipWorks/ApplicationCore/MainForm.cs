@@ -658,7 +658,7 @@ namespace ShipWorks
 
             // Update the nudges from Tango and show any upgrade related nudges
             NudgeManager.Initialize(StoreManager.GetAllStores());
-            NudgeManager.ShowNudge(this, NudgeManager.Nudges.FirstOrDefault(n => n.NudgeType == NudgeType.ShipWorksUpgrade));
+            NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ShipWorksUpgrade));
 
             // Start auto downloading immediately
             DownloadManager.StartAutoDownloadIfNeeded(true);
@@ -731,14 +731,14 @@ namespace ShipWorks
             bool editionChanged = false;
 
             // Update our edition for each store.  Eventually this will also be where we log with tango the sw version being used and maybe other things
-            foreach (StoreEntity store in StoreManager.GetAllStores())
+            foreach (StoreEntity store in StoreManager.GetEnabledStores())
             {
                 try
                 {
                     ShipWorksLicense license = new ShipWorksLicense(store.License);
                     if (!license.IsTrial)
                     {
-                        LicenseAccountDetail accountDetail = TangoWebClient.GetLicenseStatus(store.License, store);
+                        LicenseAccountDetail accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(store.License, store);
 
                         if (accountDetail.ActivationState == LicenseActivationState.Active ||
                             accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere ||
@@ -749,7 +749,7 @@ namespace ShipWorks
                     }
                     else
                     {
-                        TrialDetail trialDetail = TangoWebClient.GetTrial(store);
+                        TrialDetail trialDetail = new TangoWebClientFactory().CreateWebClient().GetTrial(store);
 
                         editionChanged |= EditionManager.UpdateStoreEdition(store, trialDetail.Edition);
                     }
@@ -2112,7 +2112,7 @@ namespace ShipWorks
 
             if (result == FilterEditingResult.OK)
             {
-                filterTree.UpdateFilterName(filterTree.SelectedFilterNode.Filter);
+                filterTree.UpdateFilter(filterTree.SelectedFilterNode.Filter);
             }
         }
 

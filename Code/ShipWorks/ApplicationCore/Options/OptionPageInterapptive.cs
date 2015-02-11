@@ -40,7 +40,6 @@ using Interapptive.Shared.Data;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.ApplicationCore.Options.ResourceCleanup;
 using ShipWorks.ApplicationCore.Options.PrintResultCleanup;
-using ShipWorks.Shipping.Carriers.EquaShip;
 using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
@@ -74,7 +73,6 @@ namespace ShipWorks.ApplicationCore.Options
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
             express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
             express1StampsTestServer.Checked = Express1StampsConnectionDetails.UseTestServer;
-            equaShipTestServer.Checked = EquaShipClient.UseTestServer;
             onTracTestServer.Checked = OnTracRequest.UseTestServer;
 
             FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
@@ -115,7 +113,6 @@ namespace ShipWorks.ApplicationCore.Options
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;
             Express1StampsConnectionDetails.UseTestServer = express1StampsTestServer.Checked;
-            EquaShipClient.UseTestServer = equaShipTestServer.Checked;
             OnTracRequest.UseTestServer = onTracTestServer.Checked;
 
             FedExSettingsRepository fedexSettingsRepo = new FedExSettingsRepository();

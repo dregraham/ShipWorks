@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Update the UI based on the current state of the selection
         /// </summary>
-        private void UpdateSelectionDependentUI()
+        public void UpdateSelectionDependentUI()
         {
             UpdateShipmentButtons();
             UpdateStatusBar();

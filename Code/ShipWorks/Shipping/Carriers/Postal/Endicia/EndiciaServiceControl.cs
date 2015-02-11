@@ -233,5 +233,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             RaiseRateCriteriaChanged();
         }
+
+        /// <summary>
+        /// Update rates when the entry facility is changed
+        /// </summary>
+        private void OnEntryFacilityDataChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
     }
 }

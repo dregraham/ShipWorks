@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
+using SpreadsheetGear.CustomFunctions;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
@@ -26,38 +27,51 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
+        /// Gets or sets Action that gets called when industry changed.
+        /// </summary>
+        public Action<UpsBusinessIndustry> IndustryChanged { get; set; }
+        
+        /// <summary>
         /// Saves to request.
         /// </summary>
         public void SaveToRequest(OpenAccountRequest request)
         {
-            if (industry.SelectedValue.ToString() == UpsBusinessIndustry.Unselected.ToString())
-            {
-                throw new UpsOpenAccountException("Please select an industry.", UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
-
-            if (numberOfEmployees.SelectedValue.ToString() == UpsNumberOfEmployees.Unselected.ToString())
-            {
-                throw new UpsOpenAccountException("Please select a number of employees.", UpsOpenAccountErrorCode.MissingRequiredFields);
-            }
-
             if (request.AccountCharacteristics == null)
             {
                 request.AccountCharacteristics = new AccountCharacteristicsType();
             }
-            if (request.AccountCharacteristics.BusinessInformation == null)
+            if (Visible)
             {
-                request.AccountCharacteristics.BusinessInformation = new BusinessInformationType();
+                if (request.AccountCharacteristics.BusinessInformation == null)
+                {
+                    request.AccountCharacteristics.BusinessInformation = new BusinessInformationType();
+                }
+
+                request.AccountCharacteristics.BusinessInformation.Industry = new CodeOnlyType
+                {
+                    Code = EnumHelper.GetApiValue((UpsBusinessIndustry)industry.SelectedValue)
+                };
+
+                request.AccountCharacteristics.BusinessInformation.NumberOfEmployees = new CodeOnlyType
+                {
+                    Code = EnumHelper.GetApiValue((UpsNumberOfEmployees)numberOfEmployees.SelectedValue)
+                };
             }
-
-            request.AccountCharacteristics.BusinessInformation.Industry = new CodeOnlyType
+            else
             {
-                Code = EnumHelper.GetApiValue((UpsBusinessIndustry)industry.SelectedValue)
-            };
+                request.AccountCharacteristics.BusinessInformation = null;
+            }
+        }
 
-            request.AccountCharacteristics.BusinessInformation.NumberOfEmployees = new CodeOnlyType
+        /// <summary>
+        /// Called when [industry changed].
+        /// </summary>
+        private void OnIndustryChanged(object sender, EventArgs e)
+        {
+            if (IndustryChanged!=null)
             {
-                Code = EnumHelper.GetApiValue((UpsNumberOfEmployees)numberOfEmployees.SelectedValue)
-            };
+                IndustryChanged.Invoke((UpsBusinessIndustry)industry.SelectedValue);
+            }
         }
     }
 }

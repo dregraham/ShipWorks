@@ -11,11 +11,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration.Promotion
     [TestClass]
     public class StampsRegistrationPromotionTest
     {
-        private readonly StampsRegistrationPromotion testObject;
+        private readonly StampsIntuishipRegistrationPromotion testObject;
 
         public StampsRegistrationPromotionTest()
         {
-            testObject = new StampsRegistrationPromotion();
+            testObject = new StampsIntuishipRegistrationPromotion();
         }
 
         [TestMethod]

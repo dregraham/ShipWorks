@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.labelPickupLocationHeader = new System.Windows.Forms.Label();
-            this.pickupLocationPersonControl = new ShipWorks.Data.Controls.PersonControl();
+            this.pickupLocationPersonControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.SuspendLayout();
             // 
             // labelPickupLocationHeader
@@ -38,9 +38,9 @@
             this.labelPickupLocationHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelPickupLocationHeader.Location = new System.Drawing.Point(3, 0);
             this.labelPickupLocationHeader.Name = "labelPickupLocationHeader";
-            this.labelPickupLocationHeader.Size = new System.Drawing.Size(158, 13);
+            this.labelPickupLocationHeader.Size = new System.Drawing.Size(93, 13);
             this.labelPickupLocationHeader.TabIndex = 0;
-            this.labelPickupLocationHeader.Text = "Pickup Location Information";
+            this.labelPickupLocationHeader.Text = "Pickup Address";
             // 
             // pickupLocationPersonControl
             // 
@@ -63,7 +63,7 @@
             | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
-            this.pickupLocationPersonControl.Size = new System.Drawing.Size(355, 333);
+            this.pickupLocationPersonControl.Size = new System.Drawing.Size(355, 357);
             this.pickupLocationPersonControl.TabIndex = 1;
             // 
             // UpsPickupLocationControl
@@ -74,7 +74,7 @@
             this.Controls.Add(this.labelPickupLocationHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsPickupLocationControl";
-            this.Size = new System.Drawing.Size(369, 348);
+            this.Size = new System.Drawing.Size(369, 375);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -83,6 +83,6 @@
         #endregion
 
         private System.Windows.Forms.Label labelPickupLocationHeader;
-        private Data.Controls.PersonControl pickupLocationPersonControl;
+        private Data.Controls.AutofillPersonControl pickupLocationPersonControl;
     }
 }

@@ -327,17 +327,67 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity orderItem, LineItemType lineItem)
         {
-            if (lineItem.SelectedVariationList != null)
-            {
-                foreach (SelectedVariationType variation in lineItem.SelectedVariationList)
-                {
-                    OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(orderItem);
+            IEnumerable<KeyValuePair<string, string>> attributes = BuildVariationList(lineItem.SelectedVariationList)
+                .Concat(BuildQuestionAnswerList(lineItem.QuestionList));
 
-                    attribute.Name = variation.Group;
-                    attribute.Description = variation.Option;
-                    attribute.UnitPrice = 0;
-                }
+            foreach (KeyValuePair<string, string> question in attributes)
+            {
+                OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(orderItem);
+
+                attribute.Name = question.Key;
+                attribute.Description = question.Value;
+                attribute.UnitPrice = 0;
             }
+        }
+
+        /// <summary>
+        /// Build a list of item variations
+        /// </summary>
+        private static Dictionary<string, string> BuildVariationList(IEnumerable<SelectedVariationType> variations)
+        {
+            return variations == null ?
+                new Dictionary<string, string>() :
+                variations.ToDictionary(x => x.Group, x => x.Option);
+        }
+
+        /// <summary>
+        /// Build a list of question and their answers
+        /// </summary>
+        private static Dictionary<string, string> BuildQuestionAnswerList(IEnumerable<QuestionType> questionList)
+        {
+            return questionList == null ? 
+                new Dictionary<string, string>() : 
+                questionList.ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+        }
+
+        /// <summary>
+        /// Build an answer from the given question
+        /// </summary>
+        private static string BuildAnswerFromQuestion(QuestionType question)
+        {
+            return question.Items
+                .Select(ConvertQuestionItemToBooleanAnswer)
+                .Where(x => x.Value)
+                .Select(x => x.Answer)
+                .DefaultIfEmpty()
+                .Aggregate((x, y) => x + ", " + y);
+        }
+
+        /// <summary>
+        /// Converts a question item to a boolean answer so it can be handled in a uniform way
+        /// </summary>
+        private static BooleanAnswerType ConvertQuestionItemToBooleanAnswer(object answer)
+        {
+            BooleanAnswerType booleanAnswer = answer as BooleanAnswerType;
+            if (booleanAnswer != null)
+            {
+                return booleanAnswer;
+            }
+
+            TextAnswerType textAnswer = answer as TextAnswerType;
+            return textAnswer != null ? 
+                new BooleanAnswerType {Answer = textAnswer.Value, Value = true} : 
+                new BooleanAnswerType { Value = false};
         }
 
         /// <summary>
@@ -346,6 +396,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         private void LoadNotes(NetworkSolutionsOrderEntity order, OrderType nsOrder)
         {
             InstantiateNote(order, nsOrder.Notes, order.OrderDate, NoteVisibility.Public);
+
+            foreach (KeyValuePair<string, string> question in BuildQuestionAnswerList(nsOrder.QuestionList))
+            {
+                InstantiateNote(order, question.Key + Environment.NewLine + question.Value, order.OrderDate, NoteVisibility.Internal);
+            }
         }
 
         /// <summary>

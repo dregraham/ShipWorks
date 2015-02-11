@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using RestSharp.Validation;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -19,11 +20,15 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Tracking.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using log4net;
+using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
+using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
+using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -107,6 +112,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
+                // Make sure it is a valid FedEx Shipment.
+                ValidateShipment(shipmentEntity);
+
                 // Make sure the shipment has a valid account associated with it
                 ValidateFedExAccount(shipmentEntity);
 
@@ -119,6 +127,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 PerformVersionCapture(shipmentEntity);
 
                 int packageCount = shipmentEntity.FedEx.Packages.Count();
+
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipmentEntity);
 
                 // Clear out any previously saved labels for this shipment (in case there was an error shipping the first time (MPS))
                 labelRepository.ClearReferences(shipmentEntity);
@@ -137,6 +148,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             catch (Exception ex)
             {
                 throw (HandleException(ex, shipmentEntity));
+            }
+        }
+
+        /// <summary>
+        /// Make sure it is a valid FedEx Shipment.
+        /// </summary>
+        private static void ValidateShipment(ShipmentEntity shipmentEntity)
+        {
+            if (shipmentEntity.FedEx.Service == (int) FedExServiceType.SmartPost && shipmentEntity.FedEx.Packages.Count > 1)
+            {
+                throw new FedExException("SmartPost only allows 1 package per shipment.");
             }
         }
 
@@ -220,7 +242,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             if (fedExShipmentEntity.Shipment.Insurance && fedExShipmentEntity.Shipment.InsuranceProvider == (int)Insurance.InsuranceProvider.Carrier)
             {
-                throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable Shipworks Insurance for this carrier.");
+                throw new FedExException("FedEx declared value is not supported for Smart Post shipments. For insurance coverage, go to Shipping Settings and enable ShipWorks Insurance for this carrier.");
             }
 
             // Clear out COD
@@ -550,6 +572,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             try
             {
+                // Make sure package dimensions are valid.
+                ValidatePackageDimensions(shipment);
+
                 //Make sure the addresses only have two lines
                 ValidateTwoLineAddress(shipment);
 
@@ -954,6 +979,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new FedExException(errorMessage, carrierException);
             }
+            else if (exception is InvalidPackageDimensionsException)
+            {
+                return new FedExException(exception.Message, exception);
+            }
             else
             {
                 log.Error(exception.Message);
@@ -996,6 +1025,36 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 WebServices.Ship.VersionId version = new WebServices.Ship.VersionId();
                 return version.Major.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Checks each packages dimensions, making sure that each is valid.  If one or more packages have invalid dimensions, 
+        /// a ShippingException is thrown informing the user.
+        /// </summary>
+        private void ValidatePackageDimensions(ShipmentEntity shipment)
+        {
+            string exceptionMessage = string.Empty;
+            int packageIndex = 1;
+
+            if (shipment.FedEx.PackagingType == (int) FedExPackagingType.Custom)
+            {
+                foreach (FedExPackageEntity fedexPackage in shipment.FedEx.Packages)
+                {
+                    FedExShipmentType fedExShipmentType = new FedExShipmentType();
+                    if (!fedExShipmentType.DimensionsAreValid(fedexPackage.DimsLength, fedexPackage.DimsWidth, fedexPackage.DimsHeight))
+                    {
+                        exceptionMessage += string.Format("Package {0} has invalid dimensions.{1}", packageIndex, System.Environment.NewLine);
+                    }
+
+                    packageIndex++;
+                }
+
+                if (exceptionMessage.Length > 0)
+                {
+                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
+                    throw new InvalidPackageDimensionsException(exceptionMessage);
+                }
             }
         }
     }

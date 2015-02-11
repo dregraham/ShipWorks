@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                long? accountID = new StampsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
+                long? accountID = new UspsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Usps, accountID);
             }
         }

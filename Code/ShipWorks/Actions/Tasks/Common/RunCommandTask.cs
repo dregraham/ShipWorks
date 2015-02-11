@@ -225,60 +225,8 @@ namespace ShipWorks.Actions.Tasks.Common
                     {
                         using (Process process = new Process())
                         {
-                            process.StartInfo = new ProcessStartInfo
-                            {
-                                CreateNoWindow = true,
-                                RedirectStandardOutput = true,
-                                RedirectStandardError = true,
-                                RedirectStandardInput = true,
-                                UseShellExecute = false,
-                                WorkingDirectory = GetTempPath(),
-                                FileName = commandPath
-                            };
-
-                            // Wire up the handlers that will take care of logging output and errors
-                            process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
-                            process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
-
-                            process.Start();
-
-                            // Start reading the output and error streams
-                            process.BeginOutputReadLine();
-                            process.BeginErrorReadLine();
-                            process.StandardInput.Close();
-
-                            bool wasResponding = true;
-
-                            do
-                            {
-                                if (!process.HasExited)
-                                {
-                                    if (!process.Responding && wasResponding)
-                                    {
-                                        log.Warn("Command is not responding");
-                                    }
-
-                                    wasResponding = process.Responding;
-
-                                    if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
-                                    {
-                                        KillProcessTree(process);
-                                        throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
-                                            CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
-                                    }
-                                }
-                            } while (!process.WaitForExit(500));
-
-                            // Wait for asynchronous output processing to complete
-                            process.WaitForExit();
-
-                            // Verify that the command completed without errors
-                            if (process.ExitCode > 0)
-                            {
-                                string errorMessage = string.Format("The command exited with code {0}.", process.ExitCode);
-                                log.ErrorFormat(errorMessage);
-                                throw new ActionTaskRunException(errorMessage);
-                            }
+                            StartProcess(process, commandPath, commandLogWriter);
+                            MonitorForCompletion(timeoutDate, process);
                         }
                     }
                     catch (InvalidOperationException ex)
@@ -312,6 +260,79 @@ namespace ShipWorks.Actions.Tasks.Common
             finally
             {
                 File.Delete(commandPath);
+            }
+        }
+
+        /// <summary>
+        /// Helper method for configuring and starting the given process based on the command path provided.
+        /// </summary>
+        /// <param name="process">The process.</param>
+        /// <param name="commandPath">The command path.</param>
+        /// <param name="commandLogWriter">The command log writer.</param>
+        private static void StartProcess(Process process, string commandPath, StreamWriter commandLogWriter)
+        {
+            process.StartInfo = new ProcessStartInfo
+            {
+                CreateNoWindow = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                RedirectStandardInput = true,
+                UseShellExecute = false,
+                WorkingDirectory = GetTempPath(),
+                FileName = commandPath
+            };
+
+            // Wire up the handlers that will take care of logging output and errors
+            process.OutputDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("O> ", e.Data));
+            process.ErrorDataReceived += (s, e) => commandLogWriter.WriteLine(PrefixLines("E> ", e.Data));
+
+            process.Start();
+
+            // Start reading the output and error streams
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            process.StandardInput.Close();
+        }
+
+        /// <summary>
+        /// Monitors the given process to determine if it has completed successfully.
+        /// </summary>
+        /// <param name="timeoutDate">The timeout date.</param>
+        /// <param name="process">The process.</param>
+        /// <exception cref="ActionTaskRunException"></exception>
+        private void MonitorForCompletion(DateTime timeoutDate, Process process)
+        {
+            bool wasResponding = true;
+
+            do
+            {
+                if (!process.HasExited)
+                {
+                    if (!process.Responding && wasResponding)
+                    {
+                        log.Warn("Command is not responding");
+                    }
+
+                    wasResponding = process.Responding;
+
+                    if (ShouldStopCommandOnTimeout && timeoutDate < DateTime.Now)
+                    {
+                        KillProcessTree(process);
+                        throw new ActionTaskRunException(string.Format("The command took longer than {0} minute{1} to run.",
+                            CommandTimeoutInMinutes, CommandTimeoutInMinutes > 1 ? "s" : ""));
+                    }
+                }
+            } while (!process.WaitForExit(500));
+
+            // Wait for asynchronous output processing to complete
+            process.WaitForExit();
+
+            // Verify that the command completed without errors
+            if (process.ExitCode > 0)
+            {
+                string errorMessage = string.Format("The command exited with code {0}.", process.ExitCode);
+                log.ErrorFormat(errorMessage);
+                throw new ActionTaskRunException(errorMessage);
             }
         }
 

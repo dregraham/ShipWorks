@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
             this.optionsControl = new ShipWorks.Shipping.Carriers.OnTrac.OnTracOptionsControl();
             this.wizardPageContactInfo = new ShipWorks.UI.Wizard.WizardPage();
-            this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
+            this.contactInformation = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -210,6 +210,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // 
             // optionsControl
             // 
+            this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(11, 3);
             this.optionsControl.Name = "optionsControl";
             this.optionsControl.Size = new System.Drawing.Size(438, 75);
@@ -230,11 +231,12 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // 
             // contactInformation
             // 
-            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
+            this.contactInformation.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)(((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal) 
+            | ShipWorks.Data.Controls.PersonFields.Country) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.contactInformation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -246,7 +248,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             | ShipWorks.Data.Controls.PersonFields.City) 
             | ShipWorks.Data.Controls.PersonFields.State) 
             | ShipWorks.Data.Controls.PersonFields.Postal)));
-            this.contactInformation.Size = new System.Drawing.Size(355, 285);
+            this.contactInformation.Size = new System.Drawing.Size(355, 381);
             this.contactInformation.TabIndex = 0;
             // 
             // OnTracSetupWizard
@@ -295,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         private UI.Wizard.WizardPage wizardPageOptions;
         private OnTracOptionsControl optionsControl;
         private UI.Wizard.WizardPage wizardPageContactInfo;
-        private Data.Controls.PersonControl contactInformation;
+        private Data.Controls.AutofillPersonControl contactInformation;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.NumericTextBox accountNumber;
     }

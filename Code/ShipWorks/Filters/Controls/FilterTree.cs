@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using System.Windows.Forms;
 using Divelements.SandGrid;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Properties;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
@@ -75,6 +76,8 @@ namespace ShipWorks.Filters.Controls
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
         bool quickFilterSelected = false;
+        private readonly MessengerToken filterEditedToken;
+        private readonly FilterControlDisplayManager quickFilterDisplayManager;
 
         // Event raised when a drag-drop operation has taken place
         public event FilterDragDropCompleteEventHandler DragDropComplete;
@@ -90,7 +93,11 @@ namespace ShipWorks.Filters.Controls
 
             ThemedBorderProvider themedBorder = new ThemedBorderProvider(this);
 
+            quickFilterDisplayManager = new FilterControlDisplayManager(quickFilterName, quickFilterCount);
+
             UpdateQuickFilterDisplay();
+
+            filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(this, HandleFilterEdited);
         }
 
         /// <summary>
@@ -196,6 +203,13 @@ namespace ShipWorks.Filters.Controls
                 alwaysShowMyFilters = value;
             }
         }
+
+        /// <summary>
+        /// Should disabled filters be hidden
+        /// </summary>
+        [DefaultValue(false)]
+        [Category("Behavior")]
+        public bool HideDisabledFilters { get; set; }
 
         /// <summary>
         /// Indicates if the active search node - if any - that will be displayed
@@ -545,7 +559,7 @@ namespace ShipWorks.Filters.Controls
         private void LoadChildren(FilterNodeEntity filterNode, FilterTreeGridRow parentRow)
         {
             // Go through each of the children in order
-            foreach (FilterNodeEntity childNode in filterNode.ChildNodes)
+            foreach (FilterNodeEntity childNode in filterNode.ChildNodes.Where(x => !HideDisabledFilters || x.Filter.State == (int) FilterState.Enabled))
             {
                 FilterTreeGridRow row = CreateRow(childNode);
                 parentRow.NestedRows.Add(row);
@@ -807,7 +821,7 @@ namespace ShipWorks.Filters.Controls
         /// <summary>
         /// Update the display text for all nodes that use the given filter
         /// </summary>
-        public void UpdateFilterName(FilterEntity filter)
+        public void UpdateFilter(FilterEntity filter)
         {
             foreach (FilterNodeEntity node in FilterHelper.GetNodesUsingFilter(filter))
             {
@@ -815,10 +829,23 @@ namespace ShipWorks.Filters.Controls
                 // skip it as there's nothing to update.
                 if (nodeOwnerMap.ContainsKey(node))
                 {
-                    GridCell gridCell = GetGridRow(node).Cells[0];
+                    FilterTreeGridRow gridRow = GetGridRow(node);
 
-                    gridCell.Text = filter.Name;
-                    gridCell.Image = FilterHelper.GetFilterImage(node);
+                    if (filter.State != (int) FilterState.Enabled && HideDisabledFilters)
+                    {
+                        if (gridRow.Selected)
+                        {
+                            SelectFirstNode();
+                        }
+
+                        gridRow.Remove();
+                    }
+                    else
+                    {
+                        GridCell gridCell = gridRow.Cells[0];
+                        gridCell.Text = filter.Name;
+                        gridCell.Image = FilterHelper.GetFilterImage(node);   
+                    }
                 }
             }
 
@@ -1189,6 +1216,8 @@ namespace ShipWorks.Filters.Controls
                 FilterCount count = FilterContentManager.GetCount(quickFilterNode.FilterNodeID);
                 if (count != null)
                 {
+                    quickFilterDisplayManager.ToggleDisplay(quickFilterNode.Filter.State == (int)FilterState.Enabled);
+                    
                     if (count.Status == FilterCountStatus.Ready)
                     {
                         quickFilterCount.Visible = true;
@@ -1448,6 +1477,33 @@ namespace ShipWorks.Filters.Controls
             if (quickFilterNode != null && HotTracking)
             {
                 SelectedFilterNode = quickFilterNode;
+            }
+        }
+
+        /// <summary>
+        /// Handle any filter node changed messages
+        /// </summary>
+        private void HandleFilterEdited(FilterNodeEditedMessage message)
+        {
+            IEnumerable<FilterTreeGridRow> rows = sandGrid.FlatRows.OfType<FilterTreeGridRow>().Where(x => x.FilterNode.FilterNodeID == message.FilterNode.FilterNodeID);
+
+            foreach (FilterTreeGridRow row in rows)
+            {
+                row.UpdateFilterNode(message.FilterNode);
+            }
+
+            // Update the quick filter node if it matches the edited filter
+            if (quickFilterNode != null && quickFilterNode.FilterNodeID == message.FilterNode.FilterNodeID)
+            {
+                quickFilterNode = message.FilterNode;
+                UpdateQuickFilterDisplay();
+            }
+
+            // Update the selected node if it matches the edited filter
+            if (SelectedFilterNode != null && SelectedFilterNode.FilterNodeID == message.FilterNode.FilterNodeID)
+            {
+                SelectedFilterNode = message.FilterNode;
+                OnSelectedFilterNodeChanged();
             }
         }
 

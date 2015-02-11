@@ -23,44 +23,40 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UpsBusinessIndustry
     {
-        [Description("Select an Industry")]
-        [ApiValue("0")]
-        Unselected = 0,
-
         [Description("Automotive")]
         [ApiValue("2000")]
-        Automotive = 2000,
+        Automotive = 0,
 
         [Description("High Tech")]
         [ApiValue("3000")]
-        HighTech = 3000,
+        HighTech = 1,
 
         [Description("Industrial Manufacturing & Distribution")]
         [ApiValue("4000")]
-        IndustrialManufacturingAndDistribution = 4000,
+        IndustrialManufacturingAndDistribution = 2,
 
         [Description("Retail And Consumer Goods")]
         [ApiValue("5000")]
-        RetailAndConsumerGoods = 5000,
+        RetailAndConsumerGoods = 3,
 
         [Description("Professional Services")]
         [ApiValue("6000")]
-        ProfessionalServices = 6000,
+        ProfessionalServices = 4,
 
         [Description("Consumer Services")]
         [ApiValue("7000")]
-        ConsumerServices = 7000,
+        ConsumerServices = 5,
 
         [Description("Healthcare")]
         [ApiValue("8000")]
-        Healthcare = 8000,
+        Healthcare = 6,
 
         [Description("Government")]
         [ApiValue("9000")]
-        Government = 9000,
+        Government = 7,
 
         [Description("Other")]
         [ApiValue("9900")]
-        Other = 9900
+        Other = 8
     }
 }

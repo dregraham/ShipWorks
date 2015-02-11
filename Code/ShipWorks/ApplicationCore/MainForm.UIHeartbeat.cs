@@ -156,7 +156,7 @@ namespace ShipWorks
                         // changes to definitions and such are reported as IsLayoutDirty
                         foreach (FilterEntity filter in FilterLayoutContext.Current.RefreshFilters())
                         {
-                            mainForm.filterTree.UpdateFilterName(filter);
+                            mainForm.filterTree.UpdateFilter(filter);
                         }
 
                         // Ensure the filter tree is showing up-to-date counts
