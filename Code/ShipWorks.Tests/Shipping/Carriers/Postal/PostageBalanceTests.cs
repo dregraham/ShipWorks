@@ -73,27 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             decimal testValue = testObject.Value;
 
-            int index = 0;
-
-            while (true)
-            {
-                try
-                {
-                    index++;
-                    tangoWebClient.Verify(t => t.LogPostageEvent(balance, 0, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
-                    return;
-                }
-                catch (Exception)
-                {
-                    if (index > 3)
-                    {
-                        throw;   
-                    }
-                    
-                    Thread.Sleep(200);
-                }
-            }
-            
+            tangoWebClient.Verify(t => t.LogPostageEvent(balance, 0, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
         }
 
         [TestMethod]

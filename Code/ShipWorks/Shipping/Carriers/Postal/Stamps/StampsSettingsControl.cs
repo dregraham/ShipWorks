@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using NDesk.Options;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -37,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.StampsResellerType = stampsResellerType;
 
-            PositionControls();
+            VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
         }
 
         /// <summary>
@@ -70,7 +63,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             string reseller = StampsAccountManager.GetResellerName(stampsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
+        }
 
+        /// <summary>
+        /// Updates whether the Express1 controls are displayed
+        /// </summary>
+        private void UpdateExpress1ControlDisplay()
+        {
             express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
             express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
 
@@ -146,10 +145,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 accountControl.Initialize();
                 loadedAccounts = true;
             }
-
-            // Reload the Express1 settings in the event that an Express1 account was deleted to accurately
-            // show whether to sign-up, remove the deleted account from the list, etc.
-            LoadExpress1Settings();
         }
     }
 }
