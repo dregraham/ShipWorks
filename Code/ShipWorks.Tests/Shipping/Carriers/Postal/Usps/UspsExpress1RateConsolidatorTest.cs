@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
+
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
@@ -19,10 +19,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
     {
         UspsExpress1RateConsolidator consolidator;
 
+        Image Express1Logo;
+        Image UspsLogo;
+
         [TestInitialize]
         public void Setup()
         {
             consolidator = new UspsExpress1RateConsolidator();
+            Express1Logo = new Bitmap(1, 1);
+            UspsLogo = new Bitmap(1, 1);
         }
 
         [TestMethod]
@@ -142,6 +147,60 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
+        [TestMethod]
+        public void Consolidate_ReturnsExpress1Icon_WhenAllExpress1ConfirmationMatchAndAreLess()
+        {
+            RateGroup rateGroup = CreatePopulatedRateGroup();
+            Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
+            {
+                x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo});
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 4.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+            });
+
+            RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
+
+            RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
+
+            Assert.AreEqual(Express1Logo, priorityRateHeader.ProviderLogo);
+        }
+
+        [TestMethod]
+        public void Consolidate_ReturnsUspsIcon_WhenAllExpress1ConfirmationMatchAndAreSame()
+        {
+            RateGroup rateGroup = CreatePopulatedRateGroup();
+            Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
+            {
+                x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 7.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+            });
+
+            RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
+
+            RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
+
+            Assert.AreEqual(UspsLogo, priorityRateHeader.ProviderLogo);
+        }
+
+        [TestMethod]
+        public void Consolidate_ReturnsUspsIcon_WhenOneExpress1ConfirmationMatchIsLess()
+        {
+            RateGroup rateGroup = CreatePopulatedRateGroup();
+            Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
+            {
+                x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+            });
+
+            RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
+
+            RateResult priorityRateHeader = rateResults.Rates.Single(rate => rate.Selectable == false && (rate.Tag as PostalRateSelection).ServiceType == PostalServiceType.PriorityMail);
+
+            Assert.AreEqual(UspsLogo, priorityRateHeader.ProviderLogo);
+        }
+
         /// <summary>
         /// Create an Express1 rate retrieval task that returns the specified rate results
         /// </summary>
@@ -195,23 +254,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Create a rate group that's populated with normal looking rates
         /// </summary>
-        private static RateGroup CreatePopulatedRateGroup()
+        private RateGroup CreatePopulatedRateGroup()
         {
             StampsAccountEntity account = new StampsAccountEntity();
 
             List<RateResult> rates = new List<RateResult>
             {
-                new RateResult("Priority", "2") { Tag = new UspsPostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None, account) },
+                new RateResult("Priority", "2") { Tag = new UspsPostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None, account), ProviderLogo = UspsLogo },
                 new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new UspsPostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery, account)),
                 new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 7.00m, new UspsPostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature, account)),
                 new RateResult("Priority Mail Express", "1-2", 24.00m, new UspsPostalRateSelection(PostalServiceType.ExpressMail, PostalConfirmationType.None, account)),
-                new RateResult("Media Mail", "6") { Tag = new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.None, account) },
+                new RateResult("Media Mail", "6") { Tag = new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.None, account), ProviderLogo = UspsLogo },
                 new RateResult("\tDelivery Confirmation ($0.50)", string.Empty, 2.50m, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Delivery, account)),
                 new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 4.00m, new UspsPostalRateSelection(PostalServiceType.MediaMail, PostalConfirmationType.Signature, account)),
-                new RateResult("Library Mail", "2-8") { Tag = new UspsPostalRateSelection(PostalServiceType.LibraryMail, PostalConfirmationType.None, account) },
+                new RateResult("Library Mail", "2-8") { Tag = new UspsPostalRateSelection(PostalServiceType.LibraryMail, PostalConfirmationType.None, account), ProviderLogo = UspsLogo },
                 new RateResult("\tDelivery Confirmation ($0.50)", string.Empty, 2.00m, new UspsPostalRateSelection(PostalServiceType.LibraryMail, PostalConfirmationType.Delivery, account)),
                 new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 3.50m, new UspsPostalRateSelection(PostalServiceType.LibraryMail, PostalConfirmationType.Signature, account)),
-                new RateResult("Parcel Select", "6") { Tag = new UspsPostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.None, account) },
+                new RateResult("Parcel Select", "6") { Tag = new UspsPostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.None, account), ProviderLogo = UspsLogo },
                 new RateResult("\tDelivery Confirmation ($0.50)", string.Empty, 6.00m, new UspsPostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.Delivery, account)),
                 new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 7.50m, new UspsPostalRateSelection(PostalServiceType.ParcelSelect, PostalConfirmationType.Signature, account))
             };
