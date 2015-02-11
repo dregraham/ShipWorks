@@ -80,14 +80,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected override RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        protected override RateGroup GetRatesInternal(ShipmentEntity shipment)
         {
             // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
             var express1RateTask = GetExpress1RatesIfNecessary(shipment);
 
-            RateGroup rateGroup = shipment.Postal.Stamps.RateShop ? 
-                GetRatesForAllAccounts(shipment) : 
-                GetRatesForSpecifiedAccount(shipment);
+            RateGroup rateGroup = shipment.Postal.Stamps.RateShop ?
+                GetRatesForAllAccounts(shipment) :
+                GetCachedRates<StampsException>(shipment, GetRatesForSpecifiedAccount);
 
             return new UspsExpress1RateConsolidator().Consolidate(rateGroup, express1RateTask);
         }
@@ -111,20 +111,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
             List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
-            IStampsWebClient client = CreateWebClient();
+
+            // We are creating a new shipment type here so we can call get rates and not call Express1 Rates.
+            // We thought of just turning off ShouldRetrieveExpress1Rates, but worried that might cause unexpected behavior
+            //   in a multi-threaded situation.
+            UspsShipmentType uspsShipmentTypeWithNoExpress1 = new UspsShipmentType() { ShouldRetrieveExpress1Rates = false };
 
             try
             {
-                List<Task<List<RateResult>>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
-                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => client.GetRates(shipmentWithAccount)))
+                List<Task<RateGroup>> tasks = uspsAccounts.Select(accountToCopy => CreateShipmentCopy(accountToCopy, shipment))
+                    .Select(shipmentWithAccount => Task.Factory.StartNew(() => uspsShipmentTypeWithNoExpress1.GetRates(shipmentWithAccount)))
                     .ToList();
 
-                foreach (Task<List<RateResult>> task in tasks)
+                foreach (Task<RateGroup> task in tasks)
                 {
                     task.Wait();
                 }
 
-                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(x => new RateGroup(x.Result)).ToList());
+                return new UspsRateGroupConsolidator().Consolidate(tasks.Select(task=>task.Result).ToList());
             }
             catch (AggregateException ex)
             {
