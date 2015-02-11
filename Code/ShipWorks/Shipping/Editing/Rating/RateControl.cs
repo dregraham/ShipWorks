@@ -350,6 +350,15 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// Resets the state of the control to behave as if the more link has not 
+        /// been clicked.
+        /// </summary>
+        public void ResetCollapsibleState()
+        {
+            hasMoreLinkBeenClicked = false;
+        }
+
+        /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
         /// </summary>

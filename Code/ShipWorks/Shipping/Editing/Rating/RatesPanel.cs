@@ -112,8 +112,11 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             selectedShipmentID = shipmentID;
 
-            // Refresh the rates in the panel; using cached rates is fine here since nothing
+            
+            // We want to reset the collapsible state here on a change of shipment before 
+            // refreshing the rates in the panel; using cached rates is fine here since nothing
             // about the shipment has changed, so don't force a re-fetch
+            rateControl.ResetCollapsibleState();
             RefreshRates(false);
         }
 
