@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                if (ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted)
+                if (ShouldHideExpress1Controls())
                 {
                     // Express1 is restricted - hide the express1 settings
                     express1SettingsControl.Hide();
@@ -104,6 +104,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     express1SettingsControl.Top = optionsControl.Bottom + 5;
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines if the Express1 controls should be hidden
+        /// </summary>
+        private static bool ShouldHideExpress1Controls()
+        {
+            return !StampsAccountManager.GetAccounts(StampsResellerType.Express1).Any() ||
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted; 
         }
 
         /// <summary>
