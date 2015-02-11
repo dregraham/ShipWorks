@@ -152,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
-            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType) shipment.Postal.PackagingType);
+            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
             return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
                 CreateEmptyExpress1RatesTask();
@@ -191,6 +191,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 return rateGroup;
             });
+        }
+
+        /// <summary>
+        /// Get the Express1 account that should be used for auto routing.
+        /// Returns null if auto routing should not be used.
+        /// </summary>
+        private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            if (Express1Utilities.IsPostageSavingService(serviceType))
+            {
+                return GetExpress1AutoRouteAccount(packagingType);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -247,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
+                StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType);
 
                 // If Autoroute or RateShop is turned on....
                 if ((shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1) ||
