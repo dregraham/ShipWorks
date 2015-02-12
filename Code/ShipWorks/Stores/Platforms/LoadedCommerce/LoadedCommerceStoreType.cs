@@ -1,18 +1,18 @@
-﻿using ShipWorks.ApplicationCore.Logging;
+﻿﻿using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
-namespace ShipWorks.Stores.Platforms.PrestaShop
+namespace ShipWorks.Stores.Platforms.LoadedCommerce
 {
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
-    public class PrestaShopStoreType : GenericModuleStoreType
+    public class LoadedCommerceStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public PrestaShopStoreType(StoreEntity store) :
+        public LoadedCommerceStoreType(StoreEntity store) :
             base(store)
         {
 
@@ -25,18 +25,18 @@ namespace ShipWorks.Stores.Platforms.PrestaShop
         {
             get
             {
-                return StoreTypeCode.PrestaShop;
+                return StoreTypeCode.LoadedCommerce;
             }
         }
 
         /// <summary>
-        /// Log request/responses as PrestaShop
+        /// Log request/responses as LoadedCommerce
         /// </summary>
         public override ApiLogSource LogSource
         {
             get
             {
-                return ApiLogSource.PrestaShop;
+                return ApiLogSource.LoadedCommerce;
             }
         }
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.PrestaShop
         /// </summary>
         public override string AccountSettingsHelpUrl
         {
-            get { return "http://support.shipworks.com/solution/articles/4000043804-connecting-prestashop"; }
+            get { return "http://support.shipworks.com/solution/articles/4000044620-connecting-loadedcommerce"; }
         }
     }
 }

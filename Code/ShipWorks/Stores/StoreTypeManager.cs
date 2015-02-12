@@ -136,6 +136,8 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.CloudConversion: return new Platforms.CloudConversion.CloudConversionStoreType(store);
                 case StoreTypeCode.CsCart: return new Platforms.CsCart.CsCartStoreType(store);
                 case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
+                case StoreTypeCode.LoadedCommerce: return new Platforms.LoadedCommerce.LoadedCommerceStoreType(store);
+                case StoreTypeCode.NoMoreRack: return new Platforms.NoMoreRack.NoMoreRackStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
@@ -151,8 +153,7 @@ namespace ShipWorks.Stores
             // materials are ready to go
             List<StoreTypeCode> disabledTypes = new List<StoreTypeCode>
             {
-                StoreTypeCode.PrestaShop,
-                StoreTypeCode.CsCart,
+
             };
 
             return disabledTypes.Contains(typeCode);

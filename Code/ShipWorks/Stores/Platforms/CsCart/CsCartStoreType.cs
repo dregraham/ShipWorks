@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.CsCart
         /// </summary>
         public override string AccountSettingsHelpUrl
         {
-            get { return "http://support.shipworks.com/solution/articles/4000042631-connecting-to-your-cs-cart-store"; }
+            get { return "http://support.shipworks.com/solution/articles/4000042631-connecting-cs-cart"; }
         }
     }
 }
