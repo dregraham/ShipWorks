@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Editing.Rating
     public partial class RatesPanel : UserControl
     {
         private long? selectedShipmentID = null;
+        private bool resetCollapsibleStateRequired;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -44,6 +45,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             ConsolidatePostalRates = false;
             InitializeComponent();
+
+            resetCollapsibleStateRequired = true;
 
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
@@ -110,26 +113,18 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ChangeShipment(long? shipmentID)
         {
+            // This method can get triggered when the shipment dialog closes but the 
+            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // state when the shipment ID actually changes.
+            resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
 
             
-            // We want to reset the collapsible state here on a change of shipment before 
-            // refreshing the rates in the panel; using cached rates is fine here since nothing
+            // Refresh the rates in the panel; using cached rates is fine here since nothing
             // about the shipment has changed, so don't force a re-fetch
-            rateControl.ResetCollapsibleState();
             RefreshRates(false);
         }
-
-
-        /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
-        /// list with up-to-date displayed entity content.
-        /// </summary>
-        public void ReloadRates()
-        {
-            RefreshRates(false);
-        }
-
+        
         /// <summary>
         /// When the size of the rate control changes, we have to update our size to match. This is what makes the auto-scrolling in the containing panel work
         /// </summary>
@@ -359,6 +354,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             // behavior if it's necessary
             rateControl.ShowAllRates = true;
             rateControl.ShowSingleRate = false;
+
+            if (resetCollapsibleStateRequired)
+            {
+                rateControl.ResetCollapsibleState();
+            }
 
             // Apply any applicable policies to the rate control prior to loading the rates
             ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);
