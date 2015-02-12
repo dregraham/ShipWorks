@@ -153,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(ShipmentTypeCode);
+            return new UspsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>

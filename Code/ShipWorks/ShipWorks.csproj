@@ -4296,11 +4296,11 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.Designer.cs">
       <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.Designer.cs">
-      <DependentUpon>StampsSettingsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.Designer.cs">
+      <DependentUpon>UspsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebClientTracking.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCore.cs" />
@@ -9583,8 +9583,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.resx">
       <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.resx">
-      <DependentUpon>StampsSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.resx">
+      <DependentUpon>UspsSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.resx">
       <DependentUpon>StampsProfileControl.cs</DependentUpon>

@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(ShipmentTypeCode);
+            return new UspsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
