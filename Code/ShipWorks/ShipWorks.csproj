@@ -10823,6 +10823,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

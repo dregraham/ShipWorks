@@ -37,7 +37,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
                         Password = credentialStore.StampsPassword,
                         PostalCode = "63102",
                         CountryCode = "US",
-                        StampsAccountID = -1052
+                        StampsAccountID = -1052,
+                        CreatedDate = DateTime.Now.AddDays(-30)
                     };
                     
                     accounts.Add(account);
