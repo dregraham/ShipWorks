@@ -21,23 +21,31 @@ UPDATE ShippingSettings
 	SET DefaultType = CASE WHEN @IsUspsConfigured = 1 THEN @UspsShipmentTypeCode ELSE 0 END
 	WHERE DefaultType = @StampsShipmentTypeCode
 
-UPDATE ScanFormBatch 
-	SET ShipmentType = @UspsShipmentTypeCode 
+UPDATE ScanFormBatch
+	SET ShipmentType = @UspsShipmentTypeCode
 	WHERE ShipmentType = @StampsShipmentTypeCode
 
-UPDATE Shipment 
-	SET ShipmentType = @UspsShipmentTypeCode 
+UPDATE Shipment
+	SET ShipmentType = @UspsShipmentTypeCode
 	WHERE ShipmentType = @StampsShipmentTypeCode
 
 UPDATE ShippingProviderRule
-	SET ShipmentType = @UspsShipmentTypeCode 
+	SET ShipmentType = @UspsShipmentTypeCode
 	WHERE ShipmentType = @StampsShipmentTypeCode
 
--- Update any filter reference to Stamps.com with Usps. We can't use the variables since a string literal is required
-UPDATE Filter
-	SET [Definition].modify('replace value of (//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1] with "15"')
-	WHERE [Definition] IS NOT NULL
+-- Update any filter reference to Stamps.com with Usps. We can't use the variables since a string literal is required.
+-- We also have to loop because you cannot update multiple xml nodes in a single call.
+WHILE EXISTS(SELECT *
+				FROM Filter
+				WHERE Definition IS NOT NULL 
+					AND Definition.value('(//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1]', 'int') IS NOT NULL)
+BEGIN
+	UPDATE Filter
+		SET Definition.modify('replace value of (//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1] with "15"')
+		WHERE Definition IS NOT NULL
+END
 
+-- We don't need to loop on the Action table because it's a flat group of settings
 UPDATE [Action]
 	SET TriggerSettings.modify('replace value of (/Settings/ShipmentType[@value="3"]/@value)[1] with "15"')
 	WHERE TriggerSettings IS NOT NULL
