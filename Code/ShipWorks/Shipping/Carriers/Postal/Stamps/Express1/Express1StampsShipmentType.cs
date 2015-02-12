@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
-            return new StampsProfileControl(ShipmentTypeCode);
+            return new UspsProfileControl(ShipmentTypeCode);
         }
         
         /// <summary>

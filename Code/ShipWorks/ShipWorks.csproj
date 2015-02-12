@@ -830,13 +830,13 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountConvertedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsPostalRateSelection.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.Designer.cs">
       <DependentUpon>UspsProfileControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
@@ -4445,12 +4445,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalProfileControlBase.Designer.cs">
       <DependentUpon>PostalProfileControlBase.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.Designer.cs">
-      <DependentUpon>StampsProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebSetupWizard.cs">
       <SubType>Form</SubType>
@@ -9579,9 +9573,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.resx">
       <DependentUpon>UspsSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.resx">
-      <DependentUpon>StampsProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\WebTools\PostalWebSetupWizard.resx">
       <DependentUpon>PostalWebSetupWizard.cs</DependentUpon>

@@ -269,14 +269,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
-        /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UspsProfileControl(ShipmentTypeCode.Usps);
-        }
-
-        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
