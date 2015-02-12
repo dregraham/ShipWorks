@@ -31,7 +31,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private readonly bool allowRegisteringExistingAccount;
         private int initialPersonControlHeight;
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsSetupWizard"/> class.
         /// </summary>
@@ -383,7 +382,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 BackEnabled = false;
             }
         }
-
 
         /// <summary>
         /// Stepping next from the credentials page
