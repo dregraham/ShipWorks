@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Interapptive.Shared.Usb;
+using log4net;
 
 namespace Interapptive.Shared.IO.Hardware.Scales
 {
@@ -9,6 +10,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
     /// </summary>
     public static class ScaleReader
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ScaleReader));
         static readonly ScaleReadResult notFoundResult = new ScaleReadResult(ScaleReadStatus.NotFound, "Could not find a compatible scale, the scale is in motion, or the scale is being used by another application.");
 
         static ScaleUsbReader usbReader;
@@ -18,6 +20,7 @@ namespace Interapptive.Shared.IO.Hardware.Scales
 
         static object threadLock = new object();
         private static readonly DeviceListener DeviceListener = new DeviceListener();
+        private const int MaxScaleConnectionAttempts = 20;
 
         /// <summary>
         /// Static constructor
@@ -41,12 +44,14 @@ namespace Interapptive.Shared.IO.Hardware.Scales
         /// </summary>
         private static void SetUsbScale()
         {
+            log.InfoFormat("Device attached or changed");
+
             // Don't bother setting up the scale if we already have one
             if (usbReader != null)
             {
                 return;
             }
-            
+
             lock (threadLock)
             {
                 // If the scale was already set up, just bail
@@ -55,16 +60,31 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                     return;
                 }
 
-                // Try and get a reading from the usb scale
-                usbReader = new ScaleUsbReader();
-                ScaleReadResult usbResult = usbReader.ReadScale();
+                int currentAttempt = 0;
+                const int attemptDelayInMilliseconds = 200;
 
-                // Success, return result now
-                if (usbResult.Status == ScaleReadStatus.NotFound)
+                // Try to connect to the scale for a period of time, as some scales (and computers) take
+                // longer to connect than others.
+                while (usbReader == null && currentAttempt < MaxScaleConnectionAttempts)
                 {
-                    // Didn't work, clear it
-                    usbReader = null;
+                    currentAttempt++;
+
+                    // Try and get a reading from the usb scale
+                    usbReader = new ScaleUsbReader();
+                    ScaleReadResult usbResult = usbReader.ReadScale();
+
+                    // Success, return result now
+                    if (usbResult.Status == ScaleReadStatus.NotFound)
+                    {
+                        // Didn't work, clear it and wait to try again
+                        usbReader = null;
+                        Thread.Sleep(attemptDelayInMilliseconds * currentAttempt);
+                    }
                 }
+
+                log.DebugFormat("Scale {0} after {1} attempts", 
+                    usbReader == null ? "could not be attached" : "attached successfully", 
+                    currentAttempt);
             }
         }
 
@@ -130,11 +150,11 @@ namespace Interapptive.Shared.IO.Hardware.Scales
                 {
                     return usbResult;
                 }
-                
+
                 // Didn't work, clear it
                 usbReader = null;
             }
-            
+
             // Read serial - but not as a background polling
             serialReader = new ScaleSerialPortReader();
             ScaleReadResult serialResult = (!isPolling) ? serialReader.ReadScale() : new ScaleReadResult(ScaleReadStatus.NotFound, "Serial scales are not read during polling.");
