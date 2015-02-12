@@ -23,6 +23,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Discounted
         }
 
         /// <summary>
+        /// Notes that this factory should not be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets the corresponding shipment type for the factory.
         /// </summary>
         public ShipmentType ShipmentType { get; private set; }

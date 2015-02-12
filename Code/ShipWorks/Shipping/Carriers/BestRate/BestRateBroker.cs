@@ -263,6 +263,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Get distinct types of footnotes
             IEnumerable<IRateFootnoteFactory> distinctFootnoteFactories = accountRates.SelectMany(x => x.Value.FootnoteFactories)
+                                                                                      .Where(f => f.AllowedForBestRate)
                                                                                       .GroupBy(f => f.GetType())
                                                                                       .Select(f => f.FirstOrDefault());
 
