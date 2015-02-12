@@ -127,6 +127,31 @@ namespace ShipWorks.Actions.Tasks.Common
             DateTime runUntil = sqlDate.AddHours(TimeoutInHours);
             DateTime olderThan = sqlDate.AddDays(-RetentionPeriodInDays);
 
+            // Purge the data and shrink the database
+            Dictionary<PurgeDatabaseType, Exception> exceptions = PurgeData(localStopExecutionAfter, olderThan, runUntil);
+            ShrinkDatabase(localStopExecutionAfter);
+
+            // Fail the task if any exceptions were encountered
+            if (exceptions.Any())
+            {
+                string exceptionMessage = string.Format("An error occurred while deleting the following items: {0}",
+                    exceptions.Keys
+                        .Select(x => EnumHelper.GetDescription(x))
+                        .Aggregate((x, y) => x + ", " + y));
+
+                throw new ActionTaskRunException(exceptionMessage, new ExceptionCollection(new ArrayList(exceptions.Values)));
+            }
+        }
+
+        /// <summary>
+        /// Purges the data from the database.
+        /// </summary>
+        /// <param name="localStopExecutionAfter">The local stop execution after.</param>
+        /// <param name="olderThan">The older than.</param>
+        /// <param name="runUntil">The run until.</param>
+        /// <returns>A Dictionary containing any exceptions that were encountered.</returns>
+        private Dictionary<PurgeDatabaseType, Exception> PurgeData(DateTime localStopExecutionAfter, DateTime olderThan, DateTime runUntil)
+        {
             Dictionary<PurgeDatabaseType, Exception> exceptions = new Dictionary<PurgeDatabaseType, Exception>();
 
             List<PurgeDatabaseType> purges = purgeOrder.Intersect(Purges).ToList();
@@ -171,6 +196,16 @@ namespace ShipWorks.Actions.Tasks.Common
                 }
             }
 
+            return exceptions;
+        }
+
+        /// <summary>
+        /// Conditionally shrinks the database.
+        /// </summary>
+        /// <param name="localStopExecutionAfter">The local stop execution after.</param>
+        /// <exception cref="ActionTaskRunException"></exception>
+        private void ShrinkDatabase(DateTime localStopExecutionAfter)
+        {
             try
             {
                 if (ReclaimDiskSpace && (!CanTimeout || localStopExecutionAfter < dateProvider.UtcNow))
@@ -184,17 +219,6 @@ namespace ShipWorks.Actions.Tasks.Common
                 // SqlException is sealed and can't be easily constructed.
                 log.InfoFormat("Error shrinking database: {0}.", ex.Message);
                 throw new ActionTaskRunException(ex.Message, ex);
-            }
-
-            // If any exceptions were saved, fail the task
-            if (exceptions.Any())
-            {
-                string exceptionMessage = string.Format("An error occurred while deleting the following items: {0}",
-                    exceptions.Keys
-                        .Select(x => EnumHelper.GetDescription(x))
-                        .Aggregate((x, y) => x + ", " + y));
-
-                throw new ActionTaskRunException(exceptionMessage, new ExceptionCollection(new ArrayList(exceptions.Values)));
             }
         }
 

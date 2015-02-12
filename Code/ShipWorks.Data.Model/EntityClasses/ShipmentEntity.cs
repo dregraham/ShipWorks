@@ -45,7 +45,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 		private BestRateShipmentEntity _bestRate;
-		private EquaShipShipmentEntity _equaShip;
 		private FedExShipmentEntity _fedEx;
 		private InsurancePolicyEntity _insurancePolicy;
 		private IParcelShipmentEntity _iParcel;
@@ -76,8 +75,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
-			/// <summary>Member name EquaShip</summary>
-			public static readonly string EquaShip = "EquaShip";
 			/// <summary>Member name FedEx</summary>
 			public static readonly string FedEx = "FedEx";
 			/// <summary>Member name InsurancePolicy</summary>
@@ -165,11 +162,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				if(_bestRate!=null)
 				{
 					_bestRate.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
-				_equaShip = (EquaShipShipmentEntity)info.GetValue("_equaShip", typeof(EquaShipShipmentEntity));
-				if(_equaShip!=null)
-				{
-					_equaShip.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_fedEx = (FedExShipmentEntity)info.GetValue("_fedEx", typeof(FedExShipmentEntity));
 				if(_fedEx!=null)
@@ -271,9 +263,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					this.BestRate = (BestRateShipmentEntity)entity;
 					break;
-				case "EquaShip":
-					this.EquaShip = (EquaShipShipmentEntity)entity;
-					break;
 				case "FedEx":
 					this.FedEx = (FedExShipmentEntity)entity;
 					break;
@@ -330,9 +319,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					toReturn.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
 					break;
-				case "EquaShip":
-					toReturn.Add(ShipmentEntity.Relations.EquaShipShipmentEntityUsingShipmentID);
-					break;
 				case "FedEx":
 					toReturn.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
 					break;
@@ -388,7 +374,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
 				default:
 					return base.CheckOneWayRelations(propertyName);
 			}
@@ -414,9 +399,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 					break;
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
-					break;
-				case "EquaShip":
-					SetupSyncEquaShip(relatedEntity);
 					break;
 				case "FedEx":
 					SetupSyncFedEx(relatedEntity);
@@ -466,9 +448,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
 					break;
-				case "EquaShip":
-					DesetupSyncEquaShip(false, true);
-					break;
 				case "FedEx":
 					DesetupSyncFedEx(false, true);
 					break;
@@ -503,11 +482,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_bestRate!=null)
 			{
 				toReturn.Add(_bestRate);
-			}
-
-			if(_equaShip!=null)
-			{
-				toReturn.Add(_equaShip);
 			}
 
 			if(_fedEx!=null)
@@ -578,8 +552,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
-
 			return toReturn;
 		}
 		
@@ -611,7 +583,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
-				info.AddValue("_equaShip", (!this.MarkedForDeletion?_equaShip:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_insurancePolicy", (!this.MarkedForDeletion?_insurancePolicy:null));
 				info.AddValue("_iParcel", (!this.MarkedForDeletion?_iParcel:null));
@@ -685,16 +656,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(BestRateShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
-			return bucket;
-		}
-
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'EquaShipShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoEquaShip()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(EquaShipShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
 
@@ -845,7 +806,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("CustomsItems", _customsItems);
 
 			toReturn.Add("BestRate", _bestRate);
-			toReturn.Add("EquaShip", _equaShip);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("InsurancePolicy", _insurancePolicy);
 			toReturn.Add("IParcel", _iParcel);
@@ -875,10 +835,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(_bestRate!=null)
 			{
 				_bestRate.ActiveContext = base.ActiveContext;
-			}
-			if(_equaShip!=null)
-			{
-				_equaShip.ActiveContext = base.ActiveContext;
 			}
 			if(_fedEx!=null)
 			{
@@ -922,7 +878,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 			_bestRate = null;
-			_equaShip = null;
 			_fedEx = null;
 			_insurancePolicy = null;
 			_iParcel = null;
@@ -1137,6 +1092,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OnlineShipmentID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BilledType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BilledWeight", fieldHashtable);
 		}
 		#endregion
 
@@ -1202,39 +1163,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void OnBestRatePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
-
-		/// <summary> Removes the sync logic for member _equaShip</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncEquaShip(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _equaShip, new PropertyChangedEventHandler( OnEquaShipPropertyChanged ), "EquaShip", ShipmentEntity.Relations.EquaShipShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
-			_equaShip = null;
-		}
-		
-		/// <summary> setups the sync logic for member _equaShip</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncEquaShip(IEntity2 relatedEntity)
-		{
-			if(_equaShip!=relatedEntity)
-			{
-				DesetupSyncEquaShip(true, true);
-				_equaShip = (EquaShipShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _equaShip, new PropertyChangedEventHandler( OnEquaShipPropertyChanged ), "EquaShip", ShipmentEntity.Relations.EquaShipShipmentEntityUsingShipmentID, false, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnEquaShipPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1544,18 +1472,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(BestRateShipmentEntityFactory))),
 					(IEntityRelation)GetRelationsForField("BestRate")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.BestRateShipmentEntity, 0, null, null, null, null, "BestRate", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
-		}
-
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'EquaShipShipment' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathEquaShip
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(EquaShipShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("EquaShip")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.EquaShipShipmentEntity, 0, null, null, null, null, "EquaShip", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -2371,6 +2287,28 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.OnlineShipmentID, value); }
 		}
 
+		/// <summary> The BilledType property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BilledType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 BilledType
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.BilledType, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.BilledType, value); }
+		}
+
+		/// <summary> The BilledWeight property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."BilledWeight"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Float, 38, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Double BilledWeight
+		{
+			get { return (System.Double)GetValue((int)ShipmentFieldIndex.BilledWeight, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.BilledWeight, value); }
+		}
+
 		/// <summary> Gets the EntityCollection with the related entities of type 'ShipmentCustomsItemEntity' which are related to this entity via a relation of type '1:n'.
 		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
 		[TypeContainedAttribute(typeof(ShipmentCustomsItemEntity))]
@@ -2464,49 +2402,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 							IEntity2 relatedEntity = (IEntity2)value;
 							relatedEntity.SetRelatedEntity(this, "Shipment");
 							SetupSyncBestRate(relatedEntity);
-						}
-					}
-				}
-			}
-		}
-
-		/// <summary> Gets / sets related entity of type 'EquaShipShipmentEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual EquaShipShipmentEntity EquaShip
-		{
-			get
-			{
-				return _equaShip;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncEquaShip(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "Shipment");
-					}
-				}
-				else
-				{
-					if(value==null)
-					{
-						bool raisePropertyChanged = (_equaShip !=null);
-						DesetupSyncEquaShip(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("EquaShip");
-						}
-					}
-					else
-					{
-						if(_equaShip!=value)
-						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "Shipment");
-							SetupSyncEquaShip(relatedEntity);
 						}
 					}
 				}

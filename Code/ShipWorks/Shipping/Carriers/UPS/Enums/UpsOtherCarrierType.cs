@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.Enums
         FedEx = 1,
 
         [ApiValue("33")]
-        [Description("US Postal Service")]
+        [Description("USPS")]
         Usps = 2,
 
         [ApiValue("34")]

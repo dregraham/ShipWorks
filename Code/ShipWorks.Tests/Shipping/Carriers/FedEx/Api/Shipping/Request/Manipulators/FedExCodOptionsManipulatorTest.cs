@@ -54,8 +54,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             };
 
             // Add a couple of packages to the shipment
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
-            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity());
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
+            shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             nativeRequest = new ProcessShipmentRequest()
             {

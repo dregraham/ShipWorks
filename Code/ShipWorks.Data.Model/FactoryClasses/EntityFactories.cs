@@ -1807,123 +1807,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
-	/// <summary>Factory to create new, empty EquaShipAccountEntity objects.</summary>
-	[Serializable]
-	public partial class EquaShipAccountEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public EquaShipAccountEntityFactory() : base("EquaShipAccountEntity", ShipWorks.Data.Model.EntityType.EquaShipAccountEntity) { }
-
-		/// <summary>Creates a new, empty EquaShipAccountEntity object.</summary>
-		/// <returns>A new, empty EquaShipAccountEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new EquaShipAccountEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipAccount
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new EquaShipAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new EquaShipAccountEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<EquaShipAccountEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
-	/// <summary>Factory to create new, empty EquaShipProfileEntity objects.</summary>
-	[Serializable]
-	public partial class EquaShipProfileEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public EquaShipProfileEntityFactory() : base("EquaShipProfileEntity", ShipWorks.Data.Model.EntityType.EquaShipProfileEntity) { }
-
-		/// <summary>Creates a new, empty EquaShipProfileEntity object.</summary>
-		/// <returns>A new, empty EquaShipProfileEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new EquaShipProfileEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipProfile
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new EquaShipProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new EquaShipProfileEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<EquaShipProfileEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
-	/// <summary>Factory to create new, empty EquaShipShipmentEntity objects.</summary>
-	[Serializable]
-	public partial class EquaShipShipmentEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public EquaShipShipmentEntityFactory() : base("EquaShipShipmentEntity", ShipWorks.Data.Model.EntityType.EquaShipShipmentEntity) { }
-
-		/// <summary>Creates a new, empty EquaShipShipmentEntity object.</summary>
-		/// <returns>A new, empty EquaShipShipmentEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new EquaShipShipmentEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipShipment
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new EquaShipShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new EquaShipShipmentEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewEquaShipShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<EquaShipShipmentEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
 	/// <summary>Factory to create new, empty EtsyOrderEntity objects.</summary>
 	[Serializable]
 	public partial class EtsyOrderEntityFactory : EntityFactoryBase2 {
@@ -6903,15 +6786,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.EndiciaShipmentEntity:
 					factoryToUse = new EndiciaShipmentEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipAccountEntity:
-					factoryToUse = new EquaShipAccountEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipProfileEntity:
-					factoryToUse = new EquaShipProfileEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.EquaShipShipmentEntity:
-					factoryToUse = new EquaShipShipmentEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.EtsyOrderEntity:
 					factoryToUse = new EtsyOrderEntityFactory();

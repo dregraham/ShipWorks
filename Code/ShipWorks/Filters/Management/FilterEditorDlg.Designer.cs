@@ -38,6 +38,7 @@ namespace ShipWorks.Filters.Management
             this.tabPageGridColumns = new System.Windows.Forms.TabPage();
             this.columnSettingList = new ShipWorks.UI.Controls.MenuList();
             this.panelDefaultColumns = new System.Windows.Forms.Panel();
+            this.infotipDefaultColumns = new ShipWorks.UI.Controls.InfoTip();
             this.label2 = new System.Windows.Forms.Label();
             this.copyFromMySettings = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -52,19 +53,20 @@ namespace ShipWorks.Filters.Management
             this.labelAppliesTo = new System.Windows.Forms.Label();
             this.appliesToImage = new System.Windows.Forms.PictureBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.infotipDefaultColumns = new ShipWorks.UI.Controls.InfoTip();
+            this.enabled = new System.Windows.Forms.CheckBox();
+            this.labelEnabled = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPageCondition.SuspendLayout();
             this.tabPageGridColumns.SuspendLayout();
             this.panelDefaultColumns.SuspendLayout();
             this.panelPersonalColumns.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.appliesToImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appliesToImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // labelFilterName
             // 
-            this.labelFilterName.Location = new System.Drawing.Point(3, 15);
+            this.labelFilterName.Location = new System.Drawing.Point(1, 15);
             this.labelFilterName.Name = "labelFilterName";
             this.labelFilterName.Size = new System.Drawing.Size(75, 13);
             this.labelFilterName.TabIndex = 0;
@@ -81,15 +83,15 @@ namespace ShipWorks.Filters.Management
             // 
             // tabControl
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageCondition);
             this.tabControl.Controls.Add(this.tabPageGridColumns);
-            this.tabControl.Location = new System.Drawing.Point(15, 70);
+            this.tabControl.Location = new System.Drawing.Point(15, 85);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(501, 402);
+            this.tabControl.Size = new System.Drawing.Size(501, 440);
             this.tabControl.TabIndex = 4;
             // 
             // tabPageCondition
@@ -98,7 +100,7 @@ namespace ShipWorks.Filters.Management
             this.tabPageCondition.Location = new System.Drawing.Point(4, 22);
             this.tabPageCondition.Name = "tabPageCondition";
             this.tabPageCondition.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCondition.Size = new System.Drawing.Size(493, 376);
+            this.tabPageCondition.Size = new System.Drawing.Size(493, 414);
             this.tabPageCondition.TabIndex = 0;
             this.tabPageCondition.Text = "Condition";
             this.tabPageCondition.UseVisualStyleBackColor = true;
@@ -106,10 +108,10 @@ namespace ShipWorks.Filters.Management
             // conditionControl
             // 
             this.conditionControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.conditionControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.conditionControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.conditionControl.Location = new System.Drawing.Point(3, 3);
             this.conditionControl.Name = "conditionControl";
-            this.conditionControl.Size = new System.Drawing.Size(487, 370);
+            this.conditionControl.Size = new System.Drawing.Size(487, 408);
             this.conditionControl.TabIndex = 0;
             // 
             // tabPageGridColumns
@@ -120,15 +122,15 @@ namespace ShipWorks.Filters.Management
             this.tabPageGridColumns.Location = new System.Drawing.Point(4, 22);
             this.tabPageGridColumns.Name = "tabPageGridColumns";
             this.tabPageGridColumns.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGridColumns.Size = new System.Drawing.Size(493, 376);
+            this.tabPageGridColumns.Size = new System.Drawing.Size(493, 414);
             this.tabPageGridColumns.TabIndex = 1;
             this.tabPageGridColumns.Text = "Grid Columns";
             this.tabPageGridColumns.UseVisualStyleBackColor = true;
             // 
             // columnSettingList
             // 
-            this.columnSettingList.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.columnSettingList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.columnSettingList.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.columnSettingList.FormattingEnabled = true;
             this.columnSettingList.IntegralHeight = false;
@@ -144,9 +146,9 @@ namespace ShipWorks.Filters.Management
             // 
             // panelDefaultColumns
             // 
-            this.panelDefaultColumns.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelDefaultColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelDefaultColumns.Controls.Add(this.infotipDefaultColumns);
             this.panelDefaultColumns.Controls.Add(this.label2);
             this.panelDefaultColumns.Controls.Add(this.copyFromMySettings);
@@ -158,11 +160,21 @@ namespace ShipWorks.Filters.Management
             this.panelDefaultColumns.TabIndex = 3;
             this.panelDefaultColumns.Visible = false;
             // 
+            // infotipDefaultColumns
+            // 
+            this.infotipDefaultColumns.Caption = "Changing the default columns will not affect the columns of users who have alread" +
+    "y gotten a copy of the defaults.";
+            this.infotipDefaultColumns.Location = new System.Drawing.Point(236, 28);
+            this.infotipDefaultColumns.Name = "infotipDefaultColumns";
+            this.infotipDefaultColumns.Size = new System.Drawing.Size(12, 12);
+            this.infotipDefaultColumns.TabIndex = 23;
+            this.infotipDefaultColumns.Title = "Default Columns";
+            // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(2, 319);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(98, 13);
@@ -171,7 +183,7 @@ namespace ShipWorks.Filters.Management
             // 
             // copyFromMySettings
             // 
-            this.copyFromMySettings.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.copyFromMySettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.copyFromMySettings.Location = new System.Drawing.Point(3, 334);
             this.copyFromMySettings.Name = "copyFromMySettings";
             this.copyFromMySettings.Size = new System.Drawing.Size(142, 23);
@@ -190,9 +202,9 @@ namespace ShipWorks.Filters.Management
             // 
             // gridColumnsDefault
             // 
-            this.gridColumnsDefault.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.gridColumnsDefault.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnsDefault.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gridColumnsDefault.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnsDefault.Location = new System.Drawing.Point(-3, 45);
             this.gridColumnsDefault.MinimumSize = new System.Drawing.Size(344, 200);
             this.gridColumnsDefault.Name = "gridColumnsDefault";
@@ -201,9 +213,9 @@ namespace ShipWorks.Filters.Management
             // 
             // panelPersonalColumns
             // 
-            this.panelPersonalColumns.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelPersonalColumns.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelPersonalColumns.Controls.Add(this.label3);
             this.panelPersonalColumns.Controls.Add(this.resetToDefualt);
             this.panelPersonalColumns.Controls.Add(this.gridColumnsPersonal);
@@ -215,9 +227,9 @@ namespace ShipWorks.Filters.Management
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.label3.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(1, 319);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 13);
@@ -226,7 +238,7 @@ namespace ShipWorks.Filters.Management
             // 
             // resetToDefualt
             // 
-            this.resetToDefualt.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.resetToDefualt.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.resetToDefualt.Location = new System.Drawing.Point(2, 334);
             this.resetToDefualt.Name = "resetToDefualt";
             this.resetToDefualt.Size = new System.Drawing.Size(142, 23);
@@ -237,9 +249,9 @@ namespace ShipWorks.Filters.Management
             // 
             // gridColumnsPersonal
             // 
-            this.gridColumnsPersonal.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
-            this.gridColumnsPersonal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.gridColumnsPersonal.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.gridColumnsPersonal.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.gridColumnsPersonal.Location = new System.Drawing.Point(-4, 0);
             this.gridColumnsPersonal.MinimumSize = new System.Drawing.Size(344, 283);
             this.gridColumnsPersonal.Name = "gridColumnsPersonal";
@@ -248,8 +260,8 @@ namespace ShipWorks.Filters.Management
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(360, 476);
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Location = new System.Drawing.Point(360, 529);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 4;
@@ -259,9 +271,9 @@ namespace ShipWorks.Filters.Management
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(441, 476);
+            this.cancel.Location = new System.Drawing.Point(441, 529);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 5;
@@ -271,7 +283,7 @@ namespace ShipWorks.Filters.Management
             // appliesTo
             // 
             this.appliesTo.AutoSize = true;
-            this.appliesTo.Location = new System.Drawing.Point(107, 40);
+            this.appliesTo.Location = new System.Drawing.Point(107, 64);
             this.appliesTo.Name = "appliesTo";
             this.appliesTo.Size = new System.Drawing.Size(40, 13);
             this.appliesTo.TabIndex = 3;
@@ -279,7 +291,7 @@ namespace ShipWorks.Filters.Management
             // 
             // labelAppliesTo
             // 
-            this.labelAppliesTo.Location = new System.Drawing.Point(18, 40);
+            this.labelAppliesTo.Location = new System.Drawing.Point(16, 64);
             this.labelAppliesTo.Name = "labelAppliesTo";
             this.labelAppliesTo.Size = new System.Drawing.Size(60, 13);
             this.labelAppliesTo.TabIndex = 2;
@@ -289,22 +301,30 @@ namespace ShipWorks.Filters.Management
             // appliesToImage
             // 
             this.appliesToImage.Image = global::ShipWorks.Properties.Resources.order16;
-            this.appliesToImage.Location = new System.Drawing.Point(86, 39);
+            this.appliesToImage.Location = new System.Drawing.Point(86, 63);
             this.appliesToImage.Name = "appliesToImage";
             this.appliesToImage.Size = new System.Drawing.Size(16, 16);
             this.appliesToImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.appliesToImage.TabIndex = 6;
             this.appliesToImage.TabStop = false;
             // 
-            // infotipDefaultColumns
+            // enabled
             // 
-            this.infotipDefaultColumns.Caption = "Changing the default columns will not affect the columns of users who have alread" +
-                "y gotten a copy of the defaults.";
-            this.infotipDefaultColumns.Location = new System.Drawing.Point(236, 28);
-            this.infotipDefaultColumns.Name = "infotipDefaultColumns";
-            this.infotipDefaultColumns.Size = new System.Drawing.Size(12, 12);
-            this.infotipDefaultColumns.TabIndex = 23;
-            this.infotipDefaultColumns.Title = "Default Columns";
+            this.enabled.AutoSize = true;
+            this.enabled.Location = new System.Drawing.Point(86, 40);
+            this.enabled.Name = "enabled";
+            this.enabled.Size = new System.Drawing.Size(15, 14);
+            this.enabled.TabIndex = 7;
+            this.enabled.UseVisualStyleBackColor = true;
+            // 
+            // labelEnabled
+            // 
+            this.labelEnabled.AutoSize = true;
+            this.labelEnabled.Location = new System.Drawing.Point(27, 40);
+            this.labelEnabled.Name = "labelEnabled";
+            this.labelEnabled.Size = new System.Drawing.Size(49, 13);
+            this.labelEnabled.TabIndex = 8;
+            this.labelEnabled.Text = "Enabled:";
             // 
             // FilterEditorDlg
             // 
@@ -312,7 +332,9 @@ namespace ShipWorks.Filters.Management
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(528, 511);
+            this.ClientSize = new System.Drawing.Size(528, 564);
+            this.Controls.Add(this.labelEnabled);
+            this.Controls.Add(this.enabled);
             this.Controls.Add(this.labelAppliesTo);
             this.Controls.Add(this.appliesTo);
             this.Controls.Add(this.appliesToImage);
@@ -321,7 +343,7 @@ namespace ShipWorks.Filters.Management
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.filterName);
             this.Controls.Add(this.labelFilterName);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(536, 540);
@@ -341,8 +363,8 @@ namespace ShipWorks.Filters.Management
             this.panelDefaultColumns.PerformLayout();
             this.panelPersonalColumns.ResumeLayout(false);
             this.panelPersonalColumns.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize) (this.appliesToImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.appliesToImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -373,5 +395,7 @@ namespace ShipWorks.Filters.Management
         private System.Windows.Forms.Button resetToDefualt;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
         private UI.Controls.InfoTip infotipDefaultColumns;
+        private System.Windows.Forms.CheckBox enabled;
+        private System.Windows.Forms.Label labelEnabled;
     }
 }

@@ -22,6 +22,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
     public partial class ShippingDefaultsRuleControl : UserControl
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDefaultsRuleControl));
+        private const long NoFilterSelectedID = long.MinValue;
 
         ShippingDefaultsRuleEntity rule;
         int position = 0;
@@ -46,6 +47,8 @@ namespace ShipWorks.Shipping.Settings.Defaults
         /// </summary>
         public event EventHandler MangeProfilesClicked;
 
+        private long originalFilterID;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -54,6 +57,7 @@ namespace ShipWorks.Shipping.Settings.Defaults
             InitializeComponent();
 
             toolStipDelete.Renderer = new NoBorderToolStripRenderer();
+            originalFilterID = NoFilterSelectedID;
         }
 
         /// <summary>
@@ -62,6 +66,28 @@ namespace ShipWorks.Shipping.Settings.Defaults
         public ShippingDefaultsRuleEntity Rule
         {
             get { return rule; }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is filter disabled.
+        /// </summary>
+        public bool IsFilterDisabled
+        {
+            get
+            {
+                return filterCombo.IsSelectedFilterDisabled;
+            }
+        }
+
+        /// <summary> 
+        /// Gets a value indicating whether this the filter being used for this rule has changed.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if the filter filter changed; otherwise, <c>false</c>.
+        /// </value>
+        public bool HasFilterChanged
+        {
+            get { return originalFilterID != filterCombo.SelectedFilterNode.FilterID; }
         }
 
         /// <summary>
@@ -74,9 +100,14 @@ namespace ShipWorks.Shipping.Settings.Defaults
             filterCombo.LoadLayouts(FilterTarget.Orders);
 
             filterCombo.SelectedFilterNodeID = rule.FilterNodeID;
+            
             if (filterCombo.SelectedFilterNode == null)
             {
                 filterCombo.SelectFirstNode();
+            }
+            else
+            {
+                originalFilterID = filterCombo.SelectedFilterNode.FilterID;
             }
 
             UpdateProfileDisplay(ShippingProfileManager.GetProfile(rule.ShippingProfileID));
@@ -259,6 +290,12 @@ namespace ShipWorks.Shipping.Settings.Defaults
 
                 adapter.Commit();
             }
+
+            // Sync up the original filter ID with the saved filter ID for instances where 
+            // this control's remains in memory and the Initialize method is not called 
+            // prior to showing the control. This will prevent a false positive in the 
+            // HasFilterChanged property.
+            originalFilterID = filterCombo.SelectedFilterNode != null ? filterCombo.SelectedFilterNode.FilterID : NoFilterSelectedID;
         }
     }
 }

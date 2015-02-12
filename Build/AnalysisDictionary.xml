@@ -30,7 +30,6 @@
 			<Word>AmeriCommerce</Word>
 			<Word>Volusion</Word>
 			<Word>Udi</Word>
-			<Word>EquaShip</Word>
       <Word>Resumable</Word>
       <Word>tkn</Word>
       <Word>etsy</Word>
@@ -68,7 +67,6 @@
       <Term>OnLine</Term>
       <Term>FedEx</Term>
       <Term>AmeriCommerce</Term>
-      <Term>EquaShip</Term>
       <Term>MainForm</Term>
     </DiscreteExceptions>
 		<Deprecated>

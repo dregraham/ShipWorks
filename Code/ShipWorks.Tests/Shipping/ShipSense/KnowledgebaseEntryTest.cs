@@ -492,7 +492,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
 
             // Add another package to the shipment, but not the test object
-            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
             Assert.IsFalse(testObject.Matches(shipment));
         }
@@ -619,7 +619,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 FedEx = new FedExShipmentEntity()
             };
 
-            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
             shipment.FedEx.Packages[0].Weight = adapter1.Object.Weight;
             shipment.FedEx.Packages[0].DimsHeight = adapter1.Object.Height;
             shipment.FedEx.Packages[0].DimsWidth = adapter1.Object.Width;
@@ -627,7 +627,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             shipment.FedEx.Packages[0].DimsWeight = adapter1.Object.AdditionalWeight;
             shipment.FedEx.Packages[0].DimsAddWeight = adapter1.Object.ApplyAdditionalWeight;
 
-            shipment.FedEx.Packages.Add(new FedExPackageEntity());
+            shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
             shipment.FedEx.Packages[1].Weight = adapter2.Object.Weight;
             shipment.FedEx.Packages[1].DimsHeight = adapter2.Object.Height;
             shipment.FedEx.Packages[1].DimsWidth = adapter2.Object.Width;

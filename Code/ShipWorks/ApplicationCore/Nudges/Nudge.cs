@@ -18,9 +18,10 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Initializes a new instance of the <see cref="Nudge"/> class.
         /// </summary>
-        public Nudge(int nudgeID, NudgeType nudgeType, Uri contentUri, Size contentDimensions)
+        public Nudge(int nudgeID, string name, NudgeType nudgeType, Uri contentUri, Size contentDimensions)
         {
             NudgeID = nudgeID;
+            Name = name;
             NudgeType = nudgeType;
 
             ContentUri = contentUri;
@@ -34,6 +35,11 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// Identifier of this Nudge
         /// </summary>
         public int NudgeID { get; private set; }
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        public string Name { get; private set; }
 
         /// <summary>
         /// Type of Nudge

@@ -28,27 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.labelBusinessInformationHeader = new System.Windows.Forms.Label();
             this.labelCustomerClassification = new System.Windows.Forms.Label();
             this.industry = new System.Windows.Forms.ComboBox();
             this.numberOfEmployees = new System.Windows.Forms.ComboBox();
             this.labelNumberOfEmployees = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // labelBusinessInformationHeader
-            // 
-            this.labelBusinessInformationHeader.AutoSize = true;
-            this.labelBusinessInformationHeader.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelBusinessInformationHeader.Location = new System.Drawing.Point(3, 0);
-            this.labelBusinessInformationHeader.Name = "labelBusinessInformationHeader";
-            this.labelBusinessInformationHeader.Size = new System.Drawing.Size(127, 13);
-            this.labelBusinessInformationHeader.TabIndex = 0;
-            this.labelBusinessInformationHeader.Text = "Business Information";
-            // 
             // labelCustomerClassification
             // 
             this.labelCustomerClassification.AutoSize = true;
-            this.labelCustomerClassification.Location = new System.Drawing.Point(92, 23);
+            this.labelCustomerClassification.Location = new System.Drawing.Point(104, 3);
             this.labelCustomerClassification.Name = "labelCustomerClassification";
             this.labelCustomerClassification.Size = new System.Drawing.Size(52, 13);
             this.labelCustomerClassification.TabIndex = 1;
@@ -58,24 +47,25 @@
             // 
             this.industry.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.industry.FormattingEnabled = true;
-            this.industry.Location = new System.Drawing.Point(150, 20);
+            this.industry.Location = new System.Drawing.Point(162, 0);
             this.industry.Name = "industry";
-            this.industry.Size = new System.Drawing.Size(216, 21);
+            this.industry.Size = new System.Drawing.Size(208, 21);
             this.industry.TabIndex = 2;
+            this.industry.SelectedIndexChanged += new System.EventHandler(this.OnIndustryChanged);
             // 
             // numberOfEmployees
             // 
             this.numberOfEmployees.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.numberOfEmployees.FormattingEnabled = true;
-            this.numberOfEmployees.Location = new System.Drawing.Point(150, 47);
+            this.numberOfEmployees.Location = new System.Drawing.Point(162, 27);
             this.numberOfEmployees.Name = "numberOfEmployees";
-            this.numberOfEmployees.Size = new System.Drawing.Size(216, 21);
+            this.numberOfEmployees.Size = new System.Drawing.Size(208, 21);
             this.numberOfEmployees.TabIndex = 4;
             // 
             // labelNumberOfEmployees
             // 
             this.labelNumberOfEmployees.AutoSize = true;
-            this.labelNumberOfEmployees.Location = new System.Drawing.Point(29, 50);
+            this.labelNumberOfEmployees.Location = new System.Drawing.Point(41, 30);
             this.labelNumberOfEmployees.Name = "labelNumberOfEmployees";
             this.labelNumberOfEmployees.Size = new System.Drawing.Size(115, 13);
             this.labelNumberOfEmployees.TabIndex = 3;
@@ -89,10 +79,9 @@
             this.Controls.Add(this.labelNumberOfEmployees);
             this.Controls.Add(this.industry);
             this.Controls.Add(this.labelCustomerClassification);
-            this.Controls.Add(this.labelBusinessInformationHeader);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "UpsBusinessInfoControl";
-            this.Size = new System.Drawing.Size(369, 296);
+            this.Size = new System.Drawing.Size(402, 54);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -100,7 +89,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelBusinessInformationHeader;
         private System.Windows.Forms.Label labelCustomerClassification;
         private System.Windows.Forms.ComboBox industry;
         private System.Windows.Forms.ComboBox numberOfEmployees;

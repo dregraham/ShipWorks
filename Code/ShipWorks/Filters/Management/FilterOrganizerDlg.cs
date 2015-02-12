@@ -50,6 +50,9 @@ namespace ShipWorks.Filters.Management
         public FilterOrganizerDlg(FilterNodeEntity selectedNode, FolderExpansionState initialState)
         {
             InitializeComponent();
+
+            //filterTreeOrders.HideDisabledFilters = !showDisabledFilters.Checked;
+            //filterTreeCustomers.HideDisabledFilters = !showDisabledFilters.Checked;
             
             WindowStateSaver.Manage(this);
 
@@ -337,7 +340,7 @@ namespace ShipWorks.Filters.Management
             if (result == FilterEditingResult.OK)
             {
                 // It has changed, update the tree
-                ActiveFilterTree.UpdateFilterName(selected.Filter);
+                ActiveFilterTree.UpdateFilter(selected.Filter);
             }
 
             if (result == FilterEditingResult.Error)
@@ -378,7 +381,7 @@ namespace ShipWorks.Filters.Management
                 layoutContext.SaveFilter(filter);
 
                 // The only thing that could have changed is the name
-                ActiveFilterTree.UpdateFilterName(filter);
+                ActiveFilterTree.UpdateFilter(filter);
             }
             catch (FilterException ex)
             {
@@ -918,6 +921,31 @@ namespace ShipWorks.Filters.Management
         {
             // Pop the scope we pushed in the constructor.  For an explanation of why we do this see the Push call.
             FilterLayoutContext.PopScope();
+        }
+
+        /// <summary>
+        /// Show or hide filters
+        /// </summary>
+        private void OnShowDisabledFiltersCheckedChanged(object sender, EventArgs e)
+        {
+            ReloadFilterTree(filterTreeCustomers);
+            ReloadFilterTree(filterTreeOrders);
+        }
+
+        /// <summary>
+        /// Reload the specified filter tree
+        /// </summary>
+        private void ReloadFilterTree(FilterTree filterTree)
+        {
+            if (!showDisabledFilters.Checked &&
+                filterTree.SelectedFilterNode != null &&
+                filterTree.SelectedFilterNode.Filter.State != (int)FilterState.Enabled)
+            {
+                filterTree.SelectFirstNode();    
+            }
+
+            filterTree.HideDisabledFilters = !showDisabledFilters.Checked;
+            filterTree.ReloadLayouts();
         }
     }
 }

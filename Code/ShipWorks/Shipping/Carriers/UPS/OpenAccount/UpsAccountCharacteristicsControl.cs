@@ -15,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         {
             InitializeComponent();
 
-            EnumHelper.BindComboBox<UpsCustomerClassificationCode>(customerClassification);
             EnumHelper.BindComboBox<UpsPrimaryReason>(primaryReason);
             EnumHelper.BindComboBox<UpsOtherCarrierType>(carrierType);
         }
@@ -23,8 +22,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         /// <summary>
         /// Hide/Show carrier type when primaryReason changes.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void OnPrimaryReasonChanged(object sender, EventArgs e)
         {
             bool shouldCarrierTypeBeVisible = (UpsPrimaryReason) primaryReason.SelectedValue == UpsPrimaryReason.OtherCarrier;
@@ -32,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
             carrierType.Visible = shouldCarrierTypeBeVisible;
             labelCarrierType.Visible = shouldCarrierTypeBeVisible;
         }
-
+        
         /// <summary>
         /// Saves to request.
         /// </summary>
@@ -45,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 
             request.AccountCharacteristics.CustomerClassification = new CodeOnlyType
             {
-                Code = EnumHelper.GetApiValue((UpsCustomerClassificationCode) customerClassification.SelectedValue)
+                Code = EnumHelper.GetApiValue(UpsCustomerClassificationCode.Business)
             };
 
             request.AccountCharacteristics.PrimaryReason = new PrimaryReasonType

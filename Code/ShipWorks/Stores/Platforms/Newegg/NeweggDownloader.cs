@@ -111,7 +111,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 // We have pages/orders that need to be downloaded
                 while (pageNumberToDownload > 0)
                 {
-                    // Download the orders from Newegg and check for any discrepancies between Shipworks and Newegg
+                    // Download the orders from Newegg and check for any discrepancies between ShipWorks and Newegg
                     IEnumerable<Order> orders = webClient.DownloadOrders(unfulfilledShipWorksOrders, pageNumberToDownload);
                     foreach (Order order in orders)
                     {
@@ -227,7 +227,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         }
 
         /// <summary>
-        /// Loads a batch of orders into Shipworks. The download info is used to update the
+        /// Loads a batch of orders into ShipWorks. The download info is used to update the
         /// progress of the total download/import process as there are multiple pages of 
         /// orders that need to be downloaded.
         /// </summary>

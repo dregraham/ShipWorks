@@ -41,6 +41,7 @@ using ShipWorks.UI.Utility;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
+using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Shipping
 {
@@ -754,6 +755,7 @@ namespace ShipWorks.Shipping
 
             // Update the processing \ settings buttons
             UpdateSelectionDependentUI();
+            shipmentControl.UpdateSelectionDependentUI();
 
             if (deleted.Count > 0)
             {
@@ -1113,8 +1115,9 @@ namespace ShipWorks.Shipping
                 }
                 else
                 {
-                    // Only show the configure link for the best rate shipment type
-                    rateControl.ActionLinkVisible = rateGroup.Carrier == ShipmentTypeCode.BestRate;
+                    // We know only one shipment Type is selected at this point, so we can use the first shipment entity to 
+                    // grab the shipment type and apply any applicable policies to the rate control
+                    ShippingPolicies.Current.Apply((ShipmentTypeCode)this.loadedShipmentEntities.First().ShipmentType, rateControl);
                     rateControl.LoadRates(rateGroup);
                     
                     ServiceControl.SyncSelectedRate();
@@ -2349,11 +2352,7 @@ namespace ShipWorks.Shipping
             // If there is an Endicia shipment in the list, check for ProcessEndicia nudges
             if (shipmentTypeCodes.Contains(ShipmentTypeCode.Endicia))
             {
-                IEnumerable<Nudge> nudges = NudgeManager.Nudges.Where(n => n.NudgeType == NudgeType.ProcessEndicia);
-                if(nudges.Any())
-                {
-                    NudgeManager.ShowNudge(this, nudges.First());
-                }
+                NudgeManager.ShowNudge(this, NudgeManager.GetFirstNudgeOfType(NudgeType.ProcessEndicia));
             }
         }
 

@@ -80,6 +80,7 @@
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -110,6 +111,11 @@
     <Compile Include="Shipping\Carriers\FedEx\US\Ground\FedExUSGroundFixture.cs" />
     <Compile Include="Shipping\Carriers\FedEx\US\Express\Domestic\FedExUSOneRateMapping.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelIntegrationTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalPrototypeFixture.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsMapping.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPrototypeFixture.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsIntegrationTest.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsMIFixture.cs" />
     <Compile Include="Shipping\Carriers\Ups\UpsFixture.cs" />
@@ -160,6 +166,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\iParcel.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="DataSources\Stamps.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="DataSources\UPSRecert.xlsx">

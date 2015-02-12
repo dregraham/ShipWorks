@@ -113,7 +113,8 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
         }
 
         [TestMethod]
-        [TestCategory("SqlServer.Maintenance"), TestCategory("IncludeInJenkinsBuild")]
+        [TestCategory("SqlServer.Maintenance")]
+        [TestCategory("ContinuousIntegration")]
         public void RebuildTableIndex_RebuildAllIndexes_Succeeds_Test()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script

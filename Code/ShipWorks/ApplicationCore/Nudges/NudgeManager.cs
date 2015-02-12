@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
@@ -13,50 +14,55 @@ namespace ShipWorks.ApplicationCore.Nudges
     /// </summary>
     public static class NudgeManager
     {
-        private readonly static ILog log = LogManager.GetLogger(typeof (NudgeManager));
-        private readonly static object lockObject = new object();
-
+        private static readonly ILog log = LogManager.GetLogger(typeof (NudgeManager));
+        private static readonly object lockObject = new object();
         private static List<Nudge> nudges = new List<Nudge>();
+
+        /// <summary>
+        /// Initializes this instance, and calls Refresh to clear out any previous nudges and refresh the
+        /// nudges stored in memory for the given list of stores.
+        /// </summary>
+        /// <param name="stores">The stores.</param>
+        public static void Initialize(IEnumerable<StoreEntity> stores)
+        {
+            Refresh(stores);
+        }
 
         /// <summary>
         /// Initializes this instance by clearing out any previous nudges and refreshing the
         /// nudges stored in memory for the given list of stores.
         /// </summary>
         /// <param name="stores">The stores.</param>
-        public static void Initialize(IEnumerable<StoreEntity> stores)
+        public static void Refresh(IEnumerable<StoreEntity> stores)
         {
             log.Info("Initializing nudges");
-            lock (lockObject)
-            {
-                nudges.Clear();
-             
-                try
-                {
-                    ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                    nudges = tangoWebClient.GetNudges(stores).ToList();
 
-                    log.InfoFormat("Found {0} nudges", nudges.Count);
-                }
-                catch (TangoException exception)
+            try
+            {
+                ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
+
+                lock (lockObject)
                 {
-                    // Don't crash if SSL could not be verified
-                    log.Error("Could not intialize nudges.", exception);
+                    nudges = tangoWebClient.GetNudges(stores).ToList();
                 }
+                
+                log.InfoFormat("Found {0} nudges", nudges.Count);
+            }
+            catch (TangoException exception)
+            {
+                // Don't crash if SSL could not be verified
+                log.Error("Could not intialize nudges.", exception);
             }
         }
 
         /// <summary>
-        /// Gets the nudges.
+        /// Get the first nudge of the given type, or null if there are none
         /// </summary>
-        public static IEnumerable<Nudge> Nudges
+        public static Nudge GetFirstNudgeOfType(NudgeType type)
         {
-            get
+            lock (lockObject)
             {
-                lock (lockObject)
-                {
-                    // Return a new list, so our internal list isn't altered by any consumers
-                    return nudges.ToList();
-                }
+                return nudges.FirstOrDefault(x => x.NudgeType == type);
             }
         }
 
@@ -69,11 +75,19 @@ namespace ShipWorks.ApplicationCore.Nudges
         {
             if (nudge != null && nudge.NudgeOptions.Any())
             {
-                // TODO: Move this elsewhere since it doesn't necessarily belong in the NudgeManager as far as SRP goes...
                 log.InfoFormat("Showing nudge {0}", nudge.NudgeID);
                 using (NudgeDlg nudgeDialog = new NudgeDlg(nudge))
                 {
                     nudgeDialog.ShowDialog(owner);
+                }
+
+                // Remove the nudge from the list so that it doesn't continue to nudge the user.
+                lock (lockObject)
+                {
+                    if (nudges.Contains(nudge))
+                    {
+                        nudges.Remove(nudge);
+                    }
                 }
             }
         }

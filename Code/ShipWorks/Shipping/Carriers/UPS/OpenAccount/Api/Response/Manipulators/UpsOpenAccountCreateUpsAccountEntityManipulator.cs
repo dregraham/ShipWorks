@@ -15,8 +15,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response.Manipulators
     {
         private OpenAccountResponse openAccountResponse;
 
-        private UpsAccountEntity upsAccountEntity;
-
         public void Manipulate(ICarrierResponse carrierResponse)
         {
             Validate(carrierResponse);
@@ -25,42 +23,29 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response.Manipulators
             OpenAccountRequest openAccountRequest = upsOpenAccountResponse.Request.NativeRequest as OpenAccountRequest;
             openAccountResponse = upsOpenAccountResponse.NativeResponse as OpenAccountResponse;
 
-            string userId = Guid.NewGuid().ToString("N").Substring(0, 16);
-            string password = Guid.NewGuid().ToString("N").Substring(0, 8);
+            UpsAccountEntity upsAccount = upsOpenAccountResponse.Request.CarrierAccountEntity as UpsAccountEntity;
 
-            // TODO: Get the real rate type here!
-            upsAccountEntity = new UpsAccountEntity()
-                {
-                    AccountNumber = openAccountResponse.ShipperNumber,
-                    City = openAccountResponse.BillingAddressCandidate.City,
-                    Company = openAccountRequest.BillingAddress.CompanyName,
-                    CountryCode = openAccountResponse.BillingAddressCandidate.CountryCode,
-                    Description = string.Empty,
-                    Email = openAccountRequest.BillingAddress.EmailAddress,
-                    FirstName = openAccountRequest.BillingAddress.ContactName,
-                    LastName = openAccountRequest.BillingAddress.ContactName,
-                    MiddleName = openAccountRequest.BillingAddress.ContactName,
-                    UserID = userId,
-                    Password = password,
-                    Phone = openAccountRequest.BillingAddress.Phone.Number,
-                    PostalCode = openAccountResponse.BillingAddressCandidate.PostalCode,
-                    StateProvCode = openAccountResponse.BillingAddressCandidate.State,
-                    Street1 = openAccountResponse.BillingAddressCandidate.StreetAddress,
-                    Website = "DO WE STORE THIS???",
-                    RateType = (int)UpsRateType.Occasional
-                };
+            upsAccount.AccountNumber = openAccountResponse.ShipperNumber;
+            upsAccount.RateType = GetRateType(openAccountRequest.PickupInformation.PickupOption.Code);
+            
+            upsAccount.Description = UpsAccountManager.GetDefaultDescription(upsAccount);
+            upsAccount.InitializeNullsToDefault();
+        }
 
-            upsAccountEntity.Description = UpsAccountManager.GetDefaultDescription(upsAccountEntity);
-            upsAccountEntity.InitializeNullsToDefault();
+        /// <summary>
+        /// Given the pickup option return the RateType.
+        /// </summary>
+        private static int GetRateType(string pickupOptionCode)
+        {
+            UpsPickupOption upsPickupOption = EnumHelper.GetEnumByApiValue<UpsPickupOption>(pickupOptionCode);
+            UpsRateType rateType = UpsRateType.Occasional;
 
-            // TODO: See if we can get the UpsAccessKey from the response.  
+            if (upsPickupOption == UpsPickupOption.DailyOnRoute || upsPickupOption == UpsPickupOption.RegularDailyPickup)
+            {
+                rateType = UpsRateType.DailyPickup;
+            }
 
-            UpsAccountRepository upsAccountRepository = new UpsAccountRepository();
-            upsAccountRepository.Save(upsAccountEntity);
-
-            // TODO: Hoping that we don't have to send this...we'll see.
-            string upsLicense = "";
-            UpsUtility.FetchAndSaveUpsAccessKey(upsAccountEntity, upsLicense);
+            return (int)rateType;
         }
 
         /// <summary>
@@ -80,6 +65,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api.Response.Manipulators
             if (openAccountResponse.Response.ResponseStatus.Code == EnumHelper.GetApiValue(UpsOpenAccountResponseStatusCode.Failed))
             {
                 throw new UpsOpenAccountException(openAccountResponse.Response.Alert);
+            }
+
+            if (openAccountResponse.BillingAddressCandidate != null)
+            {
+                throw new UpsOpenAccountBusinessAddressException(openAccountResponse.BillingAddressCandidate);
+            }
+
+            if (openAccountResponse.PickupAddressCandidate != null)
+            {
+                throw new UpsOpenAccountPickupAddressException(openAccountResponse.PickupAddressCandidate);
             }
         }
     }

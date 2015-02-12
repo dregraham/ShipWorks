@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram;
 using ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules;
 using ShipWorks.Data.Model.EntityClasses;
@@ -25,6 +29,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         private ShipmentEntity express1Shipment;
         private ShipmentEntity stampsShipment;
         private ShipmentEntity fedexShipment;
+        private ShipmentEntity upsShipment;
 
         private EbayOrderEntity shipmentOrder;
 
@@ -70,7 +75,6 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             mockedMixtureOfRules.Add(passingRule.Object);
             mockedMixtureOfRules.Add(failingRule.Object);
 
-
             shipmentOrder = new EbayOrderEntity()
             {
                 // Just setup the GSP data of the order
@@ -96,78 +100,28 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             testObject = new Policy(mockedAllPassingRules);
 
             // Our shipments could change from test to test so make sure they're initialized before each test
-            endiciaShipment = new ShipmentEntity()
+            endiciaShipment = CreateShipment((int)ShipmentTypeCode.Endicia);
+
+            express1Shipment = CreateShipment((int) ShipmentTypeCode.Express1Endicia);
+
+            stampsShipment = CreateShipment((int) ShipmentTypeCode.Stamps);
+            stampsShipment.Postal = new PostalShipmentEntity()
             {
-                Order = shipmentOrder,
-                ShipmentType = (int)ShipmentTypeCode.Endicia,
-
-                ShipFirstName = "John",
-                ShipMiddleName = "Paul",
-                ShipLastName = "Jones",
-
-                ShipStreet1 = "123 Main Street",
-                ShipStreet2 = "Suite 900",
-                ShipStreet3 = "Sound Room 2",
-                ShipCity = "Sidcup",
-                ShipStateProvCode = "Kent",
-                ShipCountryCode = "UK",
-                ShipPostalCode = "DA14 5BU",
-
-                ShipPhone = PhoneNumber,
-                ShipEmail = Email
+                Stamps = new StampsShipmentEntity()
             };
 
-            express1Shipment = new ShipmentEntity()
+            fedexShipment = CreateShipment((int) ShipmentTypeCode.FedEx);
+
+            upsShipment = CreateShipment((int) ShipmentTypeCode.UpsOnLineTools);
+            upsShipment.Ups = new UpsShipmentEntity();
+        }
+
+        private ShipmentEntity CreateShipment(int shipmentType)
+        {
+            return new ShipmentEntity
             {
                 Order = shipmentOrder,
-                ShipmentType = (int)ShipmentTypeCode.Express1Endicia,
-
-                ShipFirstName = "John",
-                ShipMiddleName = "Paul",
-                ShipLastName = "Jones",
-
-                ShipStreet1 = "123 Main Street",
-                ShipStreet2 = "Suite 900",
-                ShipStreet3 = "Sound Room 2",
-                ShipCity = "Sidcup",
-                ShipStateProvCode = "Kent",
-                ShipCountryCode = "UK",
-                ShipPostalCode = "DA14 5BU",
-
-                ShipPhone = PhoneNumber,
-                ShipEmail = Email
-            };
-           
-            stampsShipment = new ShipmentEntity()
-            {
-                Order = shipmentOrder,
-                ShipmentType = (int)ShipmentTypeCode.Stamps,
-
-                ShipFirstName = "John",
-                ShipMiddleName = "Paul",
-                ShipLastName = "Jones",
-
-                ShipStreet1 = "123 Main Street",
-                ShipStreet2 = "Suite 900",
-                ShipStreet3 = "Sound Room 2",
-                ShipCity = "Sidcup",
-                ShipStateProvCode = "Kent",
-                ShipCountryCode = "UK",
-                ShipPostalCode = "DA14 5BU",
-
-                ShipPhone = PhoneNumber,
-                ShipEmail = Email,
-
-                Postal = new PostalShipmentEntity() 
-                { 
-                    Stamps = new StampsShipmentEntity() 
-                }
-            };
-
-            fedexShipment = new ShipmentEntity()
-            {
-                Order = shipmentOrder,
-                ShipmentType = (int)ShipmentTypeCode.FedEx,
+                ShipmentType = shipmentType,
 
                 ShipFirstName = "John",
                 ShipMiddleName = "Paul",
@@ -313,6 +267,22 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             Assert.AreEqual(string.Empty, express1Shipment.ShipFirstName);
             Assert.AreEqual(string.Empty, express1Shipment.ShipMiddleName);
             Assert.AreEqual(string.Empty, express1Shipment.ShipLastName);
+        }
+
+        [TestMethod]
+        public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsReplacedWithGspId_WhenShippingWithUpsSurePost_Test()
+        {
+            foreach (UpsServiceType service in UpsUtility.SurePostShipmentTypes)
+            {
+                upsShipment.Ups.Service = (int)service;
+
+                testObject.ConfigureShipmentForGlobalShippingProgram(upsShipment, shipmentOrder);
+
+                string testingDescription = string.Format("Testing {0}", EnumHelper.GetDescription(service));
+                Assert.AreEqual(string.Empty, upsShipment.ShipFirstName, testingDescription);
+                Assert.AreEqual(string.Empty, upsShipment.ShipMiddleName, testingDescription);
+                Assert.AreEqual(shipmentOrder.GspReferenceID, upsShipment.ShipLastName, testingDescription);
+            }
         }
 
         [TestMethod]

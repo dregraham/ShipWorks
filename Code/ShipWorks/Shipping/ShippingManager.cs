@@ -208,6 +208,10 @@ namespace ShipWorks.Shipping
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
+            // Set the rating billing info.
+            shipment.BilledType = (int)BilledType.Unknown;
+            shipment.BilledWeight = shipment.TotalWeight;
+
             // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;
@@ -635,10 +639,6 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.Other)
             {
                 return "Other";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.EquaShip)
-            {
-                return "EquaShip";
             }
             else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
             {
@@ -1277,7 +1277,6 @@ namespace ShipWorks.Shipping
             ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
             ClearOtherShipmentData(adapter, shipment, typeof(IParcelShipmentEntity), IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
             ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
-            ClearOtherShipmentData(adapter, shipment, typeof(EquaShipShipmentEntity), EquaShipShipmentFields.ShipmentID, ShipmentTypeCode.EquaShip);
             ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
         }
 
@@ -1342,7 +1341,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }
@@ -1356,7 +1355,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeActivated(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }

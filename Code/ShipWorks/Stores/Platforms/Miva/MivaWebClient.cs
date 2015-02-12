@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Miva
     /// </summary>
     public class MivaWebClient : GenericStoreWebClient
     {
+        const string TemporarySessionQueryString = "TemporarySession=1";
         static readonly ILog log = LogManager.GetLogger(typeof(MivaWebClient));
 
         MivaStoreEntity store = null;
@@ -352,7 +353,7 @@ namespace ShipWorks.Stores.Platforms.Miva
             request.Variables.Add("Store_Code", store.ModuleOnlineStoreCode);
 
             // Setup the request
-            request.Uri = new Uri(Regex.Replace(store.ModuleUrl, "util/.*?[.]mvc", "fulfill/orderstatus5.mvc", RegexOptions.IgnoreCase).Replace("http:", "https:"));
+            request.Uri = new Uri(Regex.Replace(GetUrlFromStore(store).AbsoluteUri, "util/.*?[.]mvc", "fulfill/orderstatus5.mvc", RegexOptions.IgnoreCase).Replace("http:", "https:"));
             request.Timeout = TimeSpan.FromMinutes(1);
 
             // log the request
@@ -415,6 +416,23 @@ namespace ShipWorks.Stores.Platforms.Miva
             {
                 throw WebHelper.TranslateWebException(ex, typeof(GenericStoreException));
             }
+        }
+
+        /// <summary>
+        /// Adds the TemporarySession=1 query string variable
+        /// </summary>
+        protected override Uri GetUrlFromStore(GenericModuleStoreEntity genericStore)
+        {
+            UriBuilder builder = new UriBuilder(base.GetUrlFromStore(genericStore));
+            if (builder.Query != null && builder.Query.Length > 1)
+            {
+                builder.Query = builder.Query.Substring(1) + "&" + TemporarySessionQueryString;
+            }
+            else
+            {
+                builder.Query = TemporarySessionQueryString;
+            }
+            return builder.Uri;
         }
     }
 }
