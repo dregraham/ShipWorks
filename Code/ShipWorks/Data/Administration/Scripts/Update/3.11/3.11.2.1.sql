@@ -33,6 +33,12 @@ UPDATE ShippingProviderRule
 	SET ShipmentType = @UspsShipmentTypeCode 
 	WHERE ShipmentType = @StampsShipmentTypeCode
 
+-- Update any filter reference to Stamps.com with Usps. We can't use the variables since a string literal is required
+UPDATE Filter
+	SET Definition.modify('replace value of (//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1] with "15"')
+	FROM Filter
+	WHERE Definition IS NOT NULL
+
 IF @IsUspsConfigured = 0
 BEGIN
 	-- Update Stamps.com rules and profiles to Usps, since Usps isn't configured
