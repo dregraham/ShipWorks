@@ -115,6 +115,6 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Sends Stamps.com account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        void LogStampsAccount(StampsAccountEntity account);
+        void LogStampsAccount(UspsAccountEntity account);
     }
 }

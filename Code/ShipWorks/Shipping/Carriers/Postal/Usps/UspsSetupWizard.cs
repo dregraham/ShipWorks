@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected override void PrepareStampsAccountForSave()
         {
             base.PrepareStampsAccountForSave();
-            StampsAccount.StampsReseller = (int) StampsResellerType.StampsExpedited;
+            UspsAccount.UspsReseller = (int) StampsResellerType.StampsExpedited;
         }
 
         protected override void OnFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             newProfile.ShipmentTypePrimary = false;
 
             newProfile.Postal = CreateCopy(profile.Postal);
-            newProfile.Postal.Stamps = new StampsProfileEntity();
+            newProfile.Postal.Usps = new UspsProfileEntity();
 
             EnsureUniqueName(newProfile, profile.Name);
 

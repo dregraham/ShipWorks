@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void Accounts_DelegatesToCredentialStore_WhenAssigningUsername_Test()
         {
-            StampsAccountEntity account = testObject.Accounts.First();
+            UspsAccountEntity account = testObject.Accounts.First();
 
             credentialStore.Verify(s => s.StampsUsername, Times.Once());
             Assert.AreEqual(credentialStore.Object.StampsUsername, account.Username);
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void Accounts_DelegatesToCredentialStore_WhenAssigningPassword_Test()
         {
-            StampsAccountEntity account = testObject.Accounts.First();
+            UspsAccountEntity account = testObject.Accounts.First();
 
             credentialStore.Verify(s => s.StampsPassword, Times.Once());
             Assert.AreEqual(credentialStore.Object.StampsPassword, account.Password);

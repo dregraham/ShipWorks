@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsConvertAccountToExpeditedControl : UserControl
     {
         private readonly ILog log;
-        private StampsAccountEntity accountToConvert;
+        private UspsAccountEntity accountToConvert;
 
         public event EventHandler<UspsAccountConvertedEventArgs> AccountConverted;
         public event EventHandler AccountConverting;
@@ -58,16 +58,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Initializes the account to convert with the specified stamps account.
         /// </summary>
-        /// <param name="stampsAccount">The account to be converted.</param>
+        /// <param name="uspsAccount">The account to be converted.</param>
         /// <exception cref="StampsException">Only Stamps.com accounts can be converted.</exception>
-        public void Initialize(StampsAccountEntity stampsAccount)
+        public void Initialize(UspsAccountEntity uspsAccount)
         {
-            if (stampsAccount.StampsReseller == (int)StampsResellerType.Express1)
+            if (uspsAccount.UspsReseller == (int)StampsResellerType.Express1)
             {
                 throw new StampsException("Express1 accounts cannot be converted.");
             }
 
-            accountToConvert = stampsAccount;
+            accountToConvert = uspsAccount;
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
 
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new StampsWebClient((StampsResellerType)accountToConvert.StampsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode(PostalAccountRegistrationType.Expedited)); 
+                new StampsWebClient((StampsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode(PostalAccountRegistrationType.Expedited)); 
             }
             catch (StampsApiException exception)
             {

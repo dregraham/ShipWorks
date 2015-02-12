@@ -12,12 +12,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     {
         private StampsShipmentProcessingSynchronizer testObject;
 
-        private Mock<ICarrierAccountRepository<StampsAccountEntity>> accountRepository;
+        private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
 
         [TestInitialize]
         public void Initialize()
         {
-            accountRepository = new Mock<ICarrierAccountRepository<StampsAccountEntity>>();
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
 
             testObject = new StampsShipmentProcessingSynchronizer(accountRepository.Object);
         }
@@ -32,11 +32,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
-            List<StampsAccountEntity> StampsAccounts = new List<StampsAccountEntity>()
+            List<UspsAccountEntity> StampsAccounts = new List<UspsAccountEntity>()
             {
-                new StampsAccountEntity(123),
-                new StampsAccountEntity(456),
-                new StampsAccountEntity(789)
+                new UspsAccountEntity(123),
+                new UspsAccountEntity(456),
+                new UspsAccountEntity(789)
             };
 
             accountRepository.Setup(r => r.Accounts).Returns(StampsAccounts);
@@ -45,20 +45,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             {
                 Postal = new PostalShipmentEntity()
                 {
-                    Stamps = new StampsShipmentEntity()
+                    Usps = new UspsShipmentEntity()
                 }
             };
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Stamps.StampsAccountID);
+            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
         }
 
         [TestMethod]
         [ExpectedException(typeof(StampsException))]
         public void SaveAccountToShipment_ThrowsStampsException_WhenNoAccounts_Test()
         {
-            accountRepository.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());
+            accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
@@ -66,9 +66,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
-            List<StampsAccountEntity> accounts = new List<StampsAccountEntity>()
+            List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
-                new StampsAccountEntity(123)
+                new UspsAccountEntity(123)
             };
 
             accountRepository.Setup(r => r.Accounts).Returns(accounts);
@@ -77,22 +77,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             {
                 Postal = new PostalShipmentEntity()
                 {
-                    Stamps = new StampsShipmentEntity()
+                    Usps = new UspsShipmentEntity()
                 }
             };
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Stamps.StampsAccountID);
+            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
         }
 
         [TestMethod]
         public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
-            List<StampsAccountEntity> accounts = new List<StampsAccountEntity>()
+            List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
-                new StampsAccountEntity(123),
-                new StampsAccountEntity(456)
+                new UspsAccountEntity(123),
+                new UspsAccountEntity(456)
             };
 
             accountRepository.Setup(r => r.Accounts).Returns(accounts);
@@ -101,13 +101,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             {
                 Postal = new PostalShipmentEntity()
                 {
-                    Stamps = new StampsShipmentEntity()
+                    Usps = new UspsShipmentEntity()
                 }
             };
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Stamps.StampsAccountID);
+            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
         }
     }
 }

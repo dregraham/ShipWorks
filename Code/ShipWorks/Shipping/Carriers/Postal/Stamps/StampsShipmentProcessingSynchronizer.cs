@@ -5,13 +5,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     public class StampsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<StampsAccountEntity> accountRepository)
+        public StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }
@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             if (accountRepository.Accounts.Any())
             {
                 // Grab the first account in the repository to set the account ID
-                shipment.Postal.Stamps.StampsAccountID = accountRepository.Accounts.First().StampsAccountID;
+                shipment.Postal.Usps.UspsAccountID = accountRepository.Accounts.First().UspsAccountID;
             }
             else
             {
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public void ReplaceInvalidAccount(ShipmentEntity shipment)
         {
-            if (HasAccounts && shipment.Postal.Stamps != null && accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID) == null)
+            if (HasAccounts && shipment.Postal.Usps != null && accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID) == null)
             {
                 SaveAccountToShipment(shipment);
             }

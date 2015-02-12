@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public UspsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity)
+        public UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity)
             : this(repository, accountEntity, LogManager.GetLogger(typeof(UspsScanFormCarrierAccount)))
         { }
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public UspsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity, ILog log)
+        public UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
             : base(repository, accountEntity, log)
         { }
 

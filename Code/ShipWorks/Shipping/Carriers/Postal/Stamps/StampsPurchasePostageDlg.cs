@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         static readonly ILog log = LogManager.GetLogger(typeof(StampsPurchasePostageDlg));
 
-        private StampsAccountEntity account;
+        private UspsAccountEntity account;
  
         private PostageBalance postageBalance;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
         /// </summary>
-        public StampsPurchasePostageDlg(StampsAccountEntity account)
+        public StampsPurchasePostageDlg(UspsAccountEntity account)
         {
             InitializeComponent();
 
@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPurchasePostageDlg"/> class.
         /// </summary>
-        public StampsPurchasePostageDlg(StampsAccountEntity account, decimal balance)
+        public StampsPurchasePostageDlg(UspsAccountEntity account, decimal balance)
         {
             InitializeComponent();
 
@@ -67,10 +67,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Initializes the account info.
         /// </summary>
         /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
-        private decimal GetBalance(StampsAccountEntity account)
+        private decimal GetBalance(UspsAccountEntity account)
         {
             // Define these here since they could be used in either inside or outside the try statement
-            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller); 
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller); 
             string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
 
             if (postageBalance == null)
@@ -115,8 +115,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller);
-            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.StampsReseller);
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller);
+            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.UspsReseller);
 
             try
             {

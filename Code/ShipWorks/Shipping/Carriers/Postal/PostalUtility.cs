@@ -121,7 +121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {

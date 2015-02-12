@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public static class StampsAccountManager
     {
-        static TableSynchronizer<StampsAccountEntity> synchronizer;
+        static TableSynchronizer<UspsAccountEntity> synchronizer;
         static bool needCheckForChanges = false;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static void InitializeForCurrentSession()
         {
-            synchronizer = new TableSynchronizer<StampsAccountEntity>();
+            synchronizer = new TableSynchronizer<UspsAccountEntity>();
             InternalCheckForChanges();
         }
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int) StampsAccountFieldIndex.Username, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int) UspsAccountFieldIndex.Username, ListSortDirection.Ascending);
                 }
 
                 needCheckForChanges = false;
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get the Stamps.com accounts in the system.  Optionally include those that have not yet totally completed signup where
         /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<StampsAccountEntity> GetAccounts(StampsResellerType stampsResellerType, bool includeIncomplete)
+        public static List<UspsAccountEntity> GetAccounts(StampsResellerType stampsResellerType, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -75,14 +75,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.StampsReseller == (int)stampsResellerType)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.UspsReseller == (int)stampsResellerType)));
             }
         }
 
         /// <summary>
         /// Get the Stamps.com accounts in the system.
         /// </summary>
-        public static List<StampsAccountEntity> GetAccounts(StampsResellerType stampsResellerType)
+        public static List<UspsAccountEntity> GetAccounts(StampsResellerType stampsResellerType)
         {
             return GetAccounts(stampsResellerType, false);
         }
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Return the active list of stamps.com accounts
         /// </summary>
-        public static List<StampsAccountEntity> StampsAccounts
+        public static List<UspsAccountEntity> StampsAccounts
         {
             get
             {
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Return the active list of Express1 accounts
         /// </summary>
-        public static List<StampsAccountEntity> Express1Accounts
+        public static List<UspsAccountEntity> Express1Accounts
         {
             get
             {
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Return the active list of Stamps.com Expedited accounts
         /// </summary>
-        public static List<StampsAccountEntity> StampsExpeditedAccounts
+        public static List<UspsAccountEntity> StampsExpeditedAccounts
         {
             get
             {
@@ -123,27 +123,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the account with the specified ID, or null if not found.
         /// </summary>
-        public static StampsAccountEntity GetAccount(long accountID)
+        public static UspsAccountEntity GetAccount(long accountID)
         {
-            StampsAccountEntity stampsAccount = StampsAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+            UspsAccountEntity uspsAccount = StampsAccounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
 
-            if (stampsAccount == null)
+            if (uspsAccount == null)
             {
-                stampsAccount = Express1Accounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+                uspsAccount = Express1Accounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
             }
 
-            if (stampsAccount == null)
+            if (uspsAccount == null)
             {
-                stampsAccount = StampsExpeditedAccounts.Where(a => a.StampsAccountID == accountID).FirstOrDefault();
+                uspsAccount = StampsExpeditedAccounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
             }
 
-            return stampsAccount;
+            return uspsAccount;
         }
 
         /// <summary>
         /// Save the given stamps account
         /// </summary>
-        public static void SaveAccount(StampsAccountEntity account)
+        public static void SaveAccount(UspsAccountEntity account)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Delete the given stamps account
         /// </summary>
-        public static void DeleteAccount(StampsAccountEntity account)
+        public static void DeleteAccount(UspsAccountEntity account)
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -169,12 +169,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the default description to use for the given account
         /// </summary>
-        public static string GetDefaultDescription(StampsAccountEntity account)
+        public static string GetDefaultDescription(UspsAccountEntity account)
         {
-            string descriptionBase = account.StampsAccountID.ToString();
+            string descriptionBase = account.UspsAccountID.ToString();
 
             // Express1 uses terribly long account numbers
-            if (account.StampsReseller == (int)StampsResellerType.Express1)
+            if (account.UspsReseller == (int)StampsResellerType.Express1)
             {
                 // only shorten so long as we know they're still using long account numbers.
                 if (descriptionBase.Length == 36)

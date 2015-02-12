@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
+        public UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             this(shipmentType, accountRepository, "USPS")
         { }
 
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="carrierDescription">The carrier description.</param>
-        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository, string carrierDescription) :
+        protected UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         { }
 

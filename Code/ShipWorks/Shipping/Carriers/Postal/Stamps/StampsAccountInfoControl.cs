@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsAccountInfoControl : UserControl
     {
-        StampsAccountEntity account;
+        UspsAccountEntity account;
         private PostageBalance postageBalance;
         private decimal? balance;
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initialize the control to display information for the given account
         /// </summary>
-        public void Initialize(StampsAccountEntity account)
+        public void Initialize(UspsAccountEntity account)
         {
             Cursor.Current = Cursors.WaitCursor;
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             
             contractType.Text = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
 
-            bool isExpress1 = account.StampsReseller == (int)StampsResellerType.Express1;
+            bool isExpress1 = account.UspsReseller == (int)StampsResellerType.Express1;
             
             if (isExpress1)
             {
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller));
+                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller));
                         keepTrying = true;
                     }
 
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {
@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.StampsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (StampsException ex)
             {

@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             return webClient;
         }
 
-        private ICarrierAccountRepository<StampsAccountEntity> GetAccountRepository(StampsResellerType stampsResellerType)
+        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(StampsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
@@ -152,11 +152,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         {
             ShipmentEntity shipment = base.CreateShipment();
 
-            shipment.Postal.Stamps.ScanFormBatchID = null;
-            shipment.Postal.Stamps.Memo = Memo;
-            shipment.Postal.Stamps.RequireFullAddressValidation = Convert.ToInt16(RequireFullAddressValidation) == 1;
-            shipment.Postal.Stamps.HidePostage = Convert.ToInt16(HidePostage) == 1;
-            shipment.Postal.Stamps.StampsAccountID = Convert.ToInt16(StampsAccountID);
+            shipment.Postal.Usps.ScanFormBatchID = null;
+            shipment.Postal.Usps.Memo = Memo;
+            shipment.Postal.Usps.RequireFullAddressValidation = Convert.ToInt16(RequireFullAddressValidation) == 1;
+            shipment.Postal.Usps.HidePostage = Convert.ToInt16(HidePostage) == 1;
+            shipment.Postal.Usps.UspsAccountID = Convert.ToInt16(StampsAccountID);
 
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))
@@ -179,8 +179,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public void PurchasePostage(decimal amount)
         {
             ShipmentEntity shipment = CreateShipment();
-            StampsAccountEntity stampsAccount = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(stampsAccount);
+            UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(uspsAccount);
 
             stampsPostageWebClient.Purchase(amount);
         }
@@ -188,8 +188,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public decimal CheckPostage()
         {
             ShipmentEntity shipment = CreateShipment();
-            StampsAccountEntity stampsAccount = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
-            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(stampsAccount);
+            UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(uspsAccount);
 
             return stampsPostageWebClient.GetBalance();
         }

@@ -180,7 +180,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
-                shipment.Postal.Stamps.HidePostage = true;
+                shipment.Postal.Usps.HidePostage = true;
                 new Express1StampsWebClient().ProcessShipment(shipment);
             }
             catch(StampsException ex)
@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void UpdateContractType(StampsAccountEntity account)
+        public override void UpdateContractType(UspsAccountEntity account)
         {
             // If the ContractType is unknown, we must not have tried to check this account yet.
             // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts

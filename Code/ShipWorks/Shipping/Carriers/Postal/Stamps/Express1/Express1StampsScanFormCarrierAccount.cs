@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity)
+        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity)
             : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1StampsScanFormCarrierAccount)))
         { }
 
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity, ILog log)
+        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
             : base(repository, accountEntity, log)
         {
         }

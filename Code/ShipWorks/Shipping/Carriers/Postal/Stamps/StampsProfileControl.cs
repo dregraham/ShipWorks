@@ -48,12 +48,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             LoadStampsAccounts();
 
-            StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+            UspsProfileEntity uspsProfile = profile.Postal.Usps;
 
-            AddValueMapping(stampsProfile, StampsProfileFields.StampsAccountID, stateAccount, stampsAccount, labelAccount);
-            AddValueMapping(stampsProfile, StampsProfileFields.HidePostage, stateStealth, hidePostage, labelStealth);
-            AddValueMapping(stampsProfile, StampsProfileFields.RequireFullAddressValidation, validationState, requireFullAddressValidation, labelValidation);
-            AddValueMapping(stampsProfile, StampsProfileFields.Memo, stateMemo, memo, labelMemo);
+            AddValueMapping(uspsProfile, UspsProfileFields.UspsAccountID, stateAccount, stampsAccount, labelAccount);
+            AddValueMapping(uspsProfile, UspsProfileFields.HidePostage, stateStealth, hidePostage, labelStealth);
+            AddValueMapping(uspsProfile, UspsProfileFields.RequireFullAddressValidation, validationState, requireFullAddressValidation, labelValidation);
+            AddValueMapping(uspsProfile, UspsProfileFields.Memo, stateMemo, memo, labelMemo);
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);
@@ -68,10 +68,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsAccount.ValueMember = "Value";
 
             StampsResellerType stampsResellerType = PostalUtility.GetStampsResellerType(shipmentTypeCode);
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(stampsResellerType);
+            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(stampsResellerType);
             if (accounts.Any())
             {
-                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID)).ToList();
+                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.UspsAccountID)).ToList();
                 stampsAccount.Enabled = true;
             }
             else

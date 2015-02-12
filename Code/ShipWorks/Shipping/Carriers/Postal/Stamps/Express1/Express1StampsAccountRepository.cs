@@ -8,12 +8,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// <summary>
     /// Account repository for Express1 Stamps accounts
     /// </summary>
-    public class Express1StampsAccountRepository : CarrierAccountRepositoryBase<StampsAccountEntity>, ICarrierAccountRepository<StampsAccountEntity>
+    public class Express1StampsAccountRepository : CarrierAccountRepositoryBase<UspsAccountEntity>, ICarrierAccountRepository<UspsAccountEntity>
     {
         /// <summary>
         /// Gets all the Express1 Stamps accounts in the system
         /// </summary>
-        public override IEnumerable<StampsAccountEntity> Accounts
+        public override IEnumerable<UspsAccountEntity> Accounts
         {
             get
             {
@@ -25,9 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Gets the Stamps account with the specified id
         /// </summary>
         /// <param name="accountID">Id of the account to retrieve</param>
-        public override StampsAccountEntity GetAccount(long accountID)
+        public override UspsAccountEntity GetAccount(long accountID)
         {
-            return Accounts.ToList().FirstOrDefault(a => a.StampsAccountID == accountID);            
+            return Accounts.ToList().FirstOrDefault(a => a.UspsAccountID == accountID);            
         }
 
         /// <summary>
@@ -36,11 +36,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <value>
         /// The default profile account.
         /// </value>
-        public override StampsAccountEntity DefaultProfileAccount
+        public override UspsAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = new Express1StampsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
+                long? accountID = new Express1StampsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Express1Stamps, accountID);
             }
         }
@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(StampsAccountEntity account)
+        public override void Save(UspsAccountEntity account)
         {
             StampsAccountManager.SaveAccount(account);
         }

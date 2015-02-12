@@ -190,7 +190,7 @@
             this.labelAccount.TabIndex = 14;
             this.labelAccount.Text = "Account:";
             // 
-            // stampsAccount
+            // uspsAccount
             // 
             this.stampsAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.stampsAccount.FormattingEnabled = true;

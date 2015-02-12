@@ -32,9 +32,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             base.LoadProfile(profile);
 
-            StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+            UspsProfileEntity uspsProfile = profile.Postal.Usps;
 
-            AddValueMapping(stampsProfile, StampsProfileFields.RateShop, stateRateShop, rateShop, labelRateShop);
+            AddValueMapping(uspsProfile, UspsProfileFields.RateShop, stateRateShop, rateShop, labelRateShop);
         }
     }
 }

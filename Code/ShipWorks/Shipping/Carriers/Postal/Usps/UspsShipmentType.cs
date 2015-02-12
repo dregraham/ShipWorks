@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             RateGroup rateGroup;
 
-            if (shipment.Postal.Stamps.RateShop)
+            if (shipment.Postal.Usps.RateShop)
             {
                 rateGroup = GetRatesForAllAccounts(shipment);
             }
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
-            List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
+            List<UspsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
 
             try
             {
@@ -182,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                if (shipment.Postal.Stamps.RateShop && AccountRepository.Accounts.Count() > 1)
+                if (shipment.Postal.Usps.RateShop && AccountRepository.Accounts.Count() > 1)
                 {
                     ProcessShipmentWithRateShopping(shipment);
                 }
@@ -203,7 +203,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void ProcessShipmentWithRateShopping(ShipmentEntity shipment)
         {
             IStampsWebClient client = CreateWebClient();
-            List<StampsAccountEntity> accounts = GetRates(shipment).Rates
+            List<UspsAccountEntity> accounts = GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)
                     .Where(x => x.IsRateFor(shipment))
@@ -215,7 +215,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new StampsException("Could not get rates for the specified service type");
             }
 
-            foreach (StampsAccountEntity account in accounts)
+            foreach (UspsAccountEntity account in accounts)
             {
                 try
                 {
@@ -264,7 +264,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return base.GetRatingFields(shipment)
                 .Concat(new[]
                 {
-                    shipment.Postal.Stamps.Fields[StampsShipmentFields.RateShop.FieldIndex]
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex]
                 });
         }
 
@@ -283,7 +283,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             base.ConfigurePrimaryProfile(profile);
 
-            profile.Postal.Stamps.RateShop = true;
+            profile.Postal.Usps.RateShop = true;
         }
 
         /// <summary>
@@ -294,25 +294,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             base.ApplyProfile(shipment, profile);
 
             // We can be called during the creation of the base Postal shipment, before the Stamps one exists
-            if (shipment.Postal.Stamps != null)
+            if (shipment.Postal.Usps != null)
             {
-                StampsShipmentEntity stampsShipment = shipment.Postal.Stamps;
-                StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+                UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
+                UspsProfileEntity uspsProfile = profile.Postal.Usps;
 
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.RateShop, stampsShipment, StampsShipmentFields.RateShop);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
             }
         }
 
         /// <summary>
         /// Create a copy of the shipment, using the specified account
         /// </summary>
-        private static ShipmentEntity CreateShipmentCopy(StampsAccountEntity account, ShipmentEntity shipment)
+        private static ShipmentEntity CreateShipmentCopy(UspsAccountEntity account, ShipmentEntity shipment)
         {
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
 
             UseAccountForShipment(account, clonedShipment);
 
-            clonedShipment.Postal.Stamps.RateShop = false;
+            clonedShipment.Postal.Usps.RateShop = false;
 
             return clonedShipment;
         }
@@ -320,9 +320,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        private static void UseAccountForShipment(StampsAccountEntity account, ShipmentEntity shipment)
+        private static void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
         {
-            shipment.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+            shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
             if (shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
             {

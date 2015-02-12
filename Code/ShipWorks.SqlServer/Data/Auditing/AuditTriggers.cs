@@ -60,10 +60,10 @@ public partial class Triggers
         AuditService.AuditExecutingTrigger("PostalShipment");
     }
 
-    [SqlTrigger(Target = "StampsShipment", Event = "FOR INSERT, UPDATE, DELETE")]
-    public static void StampsShipmentAuditTrigger()
+    [SqlTrigger(Target = "UspsShipment", Event = "FOR INSERT, UPDATE, DELETE")]
+    public static void UspsShipmentAuditTrigger()
     {
-        AuditService.AuditExecutingTrigger("StampsShipment");
+        AuditService.AuditExecutingTrigger("UspsShipment");
     }
 
     [SqlTrigger(Target = "EndiciaShipment", Event = "FOR INSERT, UPDATE, DELETE")]

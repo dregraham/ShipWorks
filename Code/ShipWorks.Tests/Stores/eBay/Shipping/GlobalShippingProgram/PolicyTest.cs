@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             stampsShipment = CreateShipment((int) ShipmentTypeCode.Stamps);
             stampsShipment.Postal = new PostalShipmentEntity()
             {
-                Stamps = new StampsShipmentEntity()
+                Usps = new UspsShipmentEntity()
             };
 
             fedexShipment = CreateShipment((int) ShipmentTypeCode.FedEx);
@@ -300,7 +300,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
 
-            Assert.IsFalse(stampsShipment.Postal.Stamps.RequireFullAddressValidation);
+            Assert.IsFalse(stampsShipment.Postal.Usps.RequireFullAddressValidation);
         }
 
         [TestMethod]

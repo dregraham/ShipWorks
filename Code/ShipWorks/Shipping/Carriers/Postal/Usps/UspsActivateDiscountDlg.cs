@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 convertToExpeditedControl.AccountConverted += OnAccountConverted;
                 convertToExpeditedControl.AccountConverting += OnAccountConverting;
                 
-                StampsAccountEntity accountToConvert = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                UspsAccountEntity accountToConvert = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
                 convertToExpeditedControl.Initialize(accountToConvert);
             }
             else

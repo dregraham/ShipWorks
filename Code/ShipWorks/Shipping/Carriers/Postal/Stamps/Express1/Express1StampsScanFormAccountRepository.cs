@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets the accounts that should have scan forms created for them
         /// </summary>
-        protected override IEnumerable<StampsAccountEntity> AccountList
+        protected override IEnumerable<UspsAccountEntity> AccountList
         {
             get { return StampsAccountManager.Express1Accounts; }
         }
@@ -22,9 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         /// <param name="accountEntity">Account entity for which to create the scan form carrier account</param>
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
-        protected override IScanFormCarrierAccount CreateScanFormCarrierAccount(StampsAccountEntity accountEntity)
+        protected override IScanFormCarrierAccount CreateScanFormCarrierAccount(UspsAccountEntity accountEntity)
         {
-            return new Express1StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.StampsReseller), accountEntity);
+            return new Express1StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.UspsReseller), accountEntity);
         }
     }
 }
