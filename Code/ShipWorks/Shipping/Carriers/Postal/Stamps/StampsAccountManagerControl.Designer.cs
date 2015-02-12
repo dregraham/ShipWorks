@@ -76,7 +76,7 @@
             this.gridColumnContractType.AllowReorder = false;
             this.gridColumnContractType.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
             this.gridColumnContractType.Clickable = false;
-            this.gridColumnContractType.HeaderText = "Contract";
+            this.gridColumnContractType.HeaderText = "Rate Type";
             this.gridColumnContractType.MinimumWidth = 50;
             // 
             // gridColumnPostage
