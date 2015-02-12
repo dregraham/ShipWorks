@@ -308,6 +308,7 @@ namespace Interapptive.Shared.Business
                 case "LC": return Flags.saint_lucia;
                 case "MB": return null; // Saint Maaretn
                 case "TB": return null; // Saint Martin
+                case "SX": return null; // Sint Maarten
                 case "PM": return Flags.saint_pierre_and_miquelon;
                 case "VL": return null; // Saint Thomas
                 case "VC": return Flags.saint_vincent_and_the_grenadines;
@@ -681,6 +682,7 @@ namespace Interapptive.Shared.Business
             countries.Add("Saint John", "UV");
             countries.Add("Saint Maaretn", "MB");
             countries.Add("Saint Martin", "TB");
+            countries.Add("Sint Maarten", "SX");
             countries.Add("Saint Thomas", "VL");
             countries.Add("Sudan", "SD");
             countries.Add("Suriname", "SR");
