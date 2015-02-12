@@ -35,9 +35,12 @@ UPDATE ShippingProviderRule
 
 -- Update any filter reference to Stamps.com with Usps. We can't use the variables since a string literal is required
 UPDATE Filter
-	SET Definition.modify('replace value of (//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1] with "15"')
-	FROM Filter
-	WHERE Definition IS NOT NULL
+	SET [Definition].modify('replace value of (//Item[@identifier="Shipment.ShipmentType"]/Value[@value="3"]/@value)[1] with "15"')
+	WHERE [Definition] IS NOT NULL
+
+UPDATE [Action]
+	SET TriggerSettings.modify('replace value of (/Settings/ShipmentType[@value="3"]/@value)[1] with "15"')
+	WHERE TriggerSettings IS NOT NULL
 
 IF @IsUspsConfigured = 0
 BEGIN
