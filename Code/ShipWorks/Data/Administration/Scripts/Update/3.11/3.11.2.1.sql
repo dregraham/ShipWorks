@@ -1,6 +1,7 @@
 ﻿DECLARE @StampsShipmentTypeCode INT = 3
 DECLARE @UspsShipmentTypeCode INT = 15
-DECLARE @IsUspsConfigured BIT
+DECLARE @IsUspsConfigured BIT = 0
+DECLARE @IsStampsConfigured BIT = 0
 
 -- Check whether Usps is configured
 DECLARE @UspsShipmentTypeCodeString VARCHAR(2)
@@ -16,10 +17,27 @@ BEGIN
 	SET @IsUspsConfigured = 1
 END
 
+-- Check whether Usps is configured
+DECLARE @StampsShipmentTypeCodeString VARCHAR(2)
+SELECT @StampsShipmentTypeCodeString = CAST(@StampsShipmentTypeCode AS VARCHAR(2))
+
+IF EXISTS(SELECT *
+	FROM ShippingSettings 
+	WHERE Configured LIKE '%,' + @StampsShipmentTypeCodeString + ',%'
+		OR Configured LIKE '%,' + @StampsShipmentTypeCodeString
+		OR Configured LIKE @StampsShipmentTypeCodeString + ',%'
+		OR Configured = @StampsShipmentTypeCodeString)
+BEGIN
+	SET @IsStampsConfigured = 1
+END
+
 -- Update the default shipment type when Stamps.com is the default. If Usps is configured, set it to Usps else set it to none
 UPDATE ShippingSettings
-	SET DefaultType = CASE WHEN @IsUspsConfigured = 1 THEN @UspsShipmentTypeCode ELSE 0 END
-	WHERE DefaultType = @StampsShipmentTypeCode
+	SET DefaultType = CASE WHEN DefaultType = @StampsShipmentTypeCode THEN @UspsShipmentTypeCode ELSE DefaultType END,
+		Configured = Configured + CASE WHEN @IsStampsConfigured = 1 AND @IsUspsConfigured = 0 
+										THEN ',' + @UspsShipmentTypeCodeString
+										ELSE ''
+									END
 
 UPDATE ScanFormBatch
 	SET ShipmentType = @UspsShipmentTypeCode
@@ -32,6 +50,15 @@ UPDATE Shipment
 UPDATE ShippingProviderRule
 	SET ShipmentType = @UspsShipmentTypeCode
 	WHERE ShipmentType = @StampsShipmentTypeCode
+
+UPDATE UspsAccount
+	SET UspsReseller = 0
+	WHERE UspsReseller = 2
+
+UPDATE AuditChangeDetail
+	SET VariantOld = CASE WHEN VariantOld = @StampsShipmentTypeCode THEN @UspsShipmentTypeCode ELSE VariantOld END,
+		VariantNew = CASE WHEN VariantNew = @StampsShipmentTypeCode THEN @UspsShipmentTypeCode ELSE VariantNew END
+	WHERE DisplayFormat = 103
 
 -- Update any filter reference to Stamps.com with Usps. We can't use the variables since a string literal is required.
 -- We also have to loop because you cannot update multiple xml nodes in a single call.
