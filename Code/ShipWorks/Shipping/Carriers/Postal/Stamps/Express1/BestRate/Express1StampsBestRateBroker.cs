@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
+        public Express1StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Gets a description from the specified account
         /// </summary>
-        protected override string AccountDescription(StampsAccountEntity account)
+        protected override string AccountDescription(UspsAccountEntity account)
         {
             return account.Description;
         }

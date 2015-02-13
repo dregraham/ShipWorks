@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     public class StampsShipmentType : PostalShipmentType
     {
+        private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsShipmentType"/> class.
         /// </summary>
@@ -59,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets or sets the repository that should be used when retrieving account information.
         /// </summary>
-        public ICarrierAccountRepository<StampsAccountEntity> AccountRepository { get; set; }
+        public ICarrierAccountRepository<UspsAccountEntity> AccountRepository { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether this shipment type has accounts
@@ -137,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
-            return new StampsServiceControl(rateControl);
+            return new UspsServiceControl(rateControl);
         }
 
         /// <summary>
@@ -145,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
-            return new StampsProfileControl(ShipmentTypeCode);
+            return new UspsProfileControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -153,7 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(ShipmentTypeCode);
+            return new UspsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -197,9 +199,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // The Stamps or Postal objects may not yet be set if we are in the middle of creating a new shipment
-            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Stamps != null)
+            if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
                 if (account == null)
                 {
                     account = AccountRepository.Accounts.FirstOrDefault();
@@ -226,7 +228,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
             // Take this opportunity to try to update contract type of the account
-            StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             UpdateContractType(account);
 
             // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
@@ -253,10 +255,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // See if this shipment should really go through Express1
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps &&
-                settings.StampsAutomaticExpress1 && !isExpress1Restricted &&
-                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
+               settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
+               Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
-                var express1Account = StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account);
+                var express1Account = StampsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account);
 
                 if (express1Account == null)
                 {
@@ -265,8 +267,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 // We temporarily turn this into an Exprss1 shipment to get rated
                 shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
-                shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
-                shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
+                shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
+                shipment.Postal.Usps.UspsAccountID = express1Account.UspsAccountID;
 
                 try
                 {
@@ -282,8 +284,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 finally
                 {
                     shipment.ShipmentType = (int)ShipmentTypeCode.Stamps;
-                    shipment.Postal.Stamps.StampsAccountID = shipment.Postal.Stamps.OriginalStampsAccountID.Value;
-                    shipment.Postal.Stamps.OriginalStampsAccountID = null;
+                    shipment.Postal.Usps.UspsAccountID = shipment.Postal.Usps.OriginalUspsAccountID.Value;
+                    shipment.Postal.Usps.OriginalUspsAccountID = null;
                 }
             }
 
@@ -326,13 +328,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="rateGroup">The rate group.</param>
         protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
         {
-            StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType;
+            StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
+            UspsAccountEntity uspsAccount = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
             // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
             bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
-            if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
+            TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
+
+            if (contractType == StampsAccountContractType.Commercial && 
+                accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo && 
+                !accountConversionRestricted)
             {
                 // Show the promotional footer for discounted rates 
                 rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
@@ -397,7 +404,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
             } 
-            else if (AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
+            else if (AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
             {
                 // Show the promotional footer for discounted rates 
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
@@ -461,9 +468,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipments = base.PreProcess(shipment, counterRatesProcessing, selectedRate);
 
                 // Take this opportunity to try to update contract type of the account
-                if (shipment.Postal != null && shipment.Postal.Stamps != null)
+                if (shipment.Postal != null && shipment.Postal.Usps != null)
                 {
-                    StampsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+                    UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
                     UpdateContractType(account);
                 }
             }
@@ -489,9 +496,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             bool useExpress1 = Express1Utilities.IsPostageSavingService(shipment) && !IsRateDiscountMessagingRestricted &&
                 Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
-                ShippingSettings.Fetch().StampsAutomaticExpress1;
+                ShippingSettings.Fetch().UspsAutomaticExpress1;
 
-            StampsAccountEntity express1Account = StampsAccountManager.GetAccount(ShippingSettings.Fetch().StampsAutomaticExpress1Account);
+            UspsAccountEntity express1Account = StampsAccountManager.GetAccount(ShippingSettings.Fetch().UspsAutomaticExpress1Account);
 
             if (useExpress1)
             {
@@ -501,8 +508,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
 
                 int originalShipmentType = shipment.ShipmentType;
-                long? originalStampsAccountID = shipment.Postal.Stamps.OriginalStampsAccountID;
-                long stampsAccountID = shipment.Postal.Stamps.StampsAccountID;
+                long? originalStampsAccountID = shipment.Postal.Usps.OriginalUspsAccountID;
+                long stampsAccountID = shipment.Postal.Usps.UspsAccountID;
 
                 try
                 {
@@ -514,8 +521,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     // Check Express1 amount
                     shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
-                    shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
-                    shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
+                    shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
+                    shipment.Postal.Usps.UspsAccountID = express1Account.UspsAccountID;
 
                     List<RateResult> express1Rates = new Express1StampsWebClient().GetRates(shipment);
                     RateResult express1Rate = express1Rates.Where(er => er.Selectable).FirstOrDefault(er =>
@@ -541,8 +548,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     // Reset back to the original values
                     shipment.ShipmentType = originalShipmentType;
-                    shipment.Postal.Stamps.OriginalStampsAccountID = originalStampsAccountID;
-                    shipment.Postal.Stamps.StampsAccountID = stampsAccountID;
+                    shipment.Postal.Usps.OriginalUspsAccountID = originalStampsAccountID;
+                    shipment.Postal.Usps.UspsAccountID = stampsAccountID;
                 }
             }
 
@@ -551,8 +558,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // Now we turn this into an Express1 shipment...
                 shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
-                shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
-                shipment.Postal.Stamps.StampsAccountID = express1Account.StampsAccountID;
+                shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
+                shipment.Postal.Usps.UspsAccountID = express1Account.UspsAccountID;
 
                 Express1StampsShipmentType shipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(shipment);
 
@@ -563,7 +570,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             else
             {
                 // This would be set if they have tried to process as Express1 but it failed... make sure its clear since we are not using it.
-                shipment.Postal.Stamps.OriginalStampsAccountID = null;
+                shipment.Postal.Usps.OriginalUspsAccountID = null;
 
                 try
                 {
@@ -584,9 +591,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             base.UpdateDynamicShipmentData(shipment);
 
-            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                shipment.RequestedLabelFormat = shipment.Postal.Stamps.RequestedLabelFormat;                
+                shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;                
             }
         }
 
@@ -626,12 +633,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
         {
-            StampsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UspsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Stamps;
             }
@@ -646,7 +653,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             base.LoadShipmentData(shipment, refreshIfPresent);
 
-            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Stamps", typeof(StampsShipmentEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment.Postal, "Usps", typeof(UspsShipmentEntity), refreshIfPresent);
         }
 
         /// <summary>
@@ -655,13 +662,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             // We can be called during the creation of the base Postal shipment, before the Stamps one exists
-            if (shipment.Postal.Stamps != null)
+            if (shipment.Postal.Usps != null)
             {
                 // Use the empty guids for now - they'll get set properly during processing
-                shipment.Postal.Stamps.IntegratorTransactionID = Guid.Empty;
-                shipment.Postal.Stamps.StampsTransactionID = Guid.Empty;
-                shipment.Postal.Stamps.RequestedLabelFormat = (int)ThermalLanguage.None;
-                shipment.Postal.Stamps.RateShop = false;
+                shipment.Postal.Usps.IntegratorTransactionID = Guid.Empty;
+                shipment.Postal.Usps.UspsTransactionID = Guid.Empty;
+                shipment.Postal.Usps.RequestedLabelFormat = (int)ThermalLanguage.None;
+                shipment.Postal.Usps.RateShop = false;
             }
 
             // We need to call the base after setting up the Stamps.com specific information because LLBLgen was
@@ -676,7 +683,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             base.LoadProfileData(profile, refreshIfPresent);
 
-            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Stamps", typeof(StampsProfileEntity), refreshIfPresent);
+            ShipmentTypeDataService.LoadProfileData(profile.Postal, "Usps", typeof(UspsProfileEntity), refreshIfPresent);
         }
 
         /// <summary>
@@ -686,13 +693,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             base.ConfigurePrimaryProfile(profile);
 
-            StampsProfileEntity stamps = profile.Postal.Stamps;
+            UspsProfileEntity usps = profile.Postal.Usps;
 
-            stamps.StampsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().StampsAccountID : 0;
-            stamps.RequireFullAddressValidation = true;
-            stamps.HidePostage = true;
-            stamps.Memo = string.Empty;
-            profile.Postal.Stamps.RateShop = false;
+            usps.UspsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().UspsAccountID : 0;
+            usps.RequireFullAddressValidation = true;
+            usps.HidePostage = true;
+            usps.Memo = string.Empty;
+            profile.Postal.Usps.RateShop = false;
         }
 
         /// <summary>
@@ -703,15 +710,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             base.ApplyProfile(shipment, profile);
 
             // We can be called during the creation of the base Postal shipment, before the Stamps one exists
-            if (shipment.Postal.Stamps != null)
+            if (shipment.Postal.Usps != null)
             {
-                StampsShipmentEntity stampsShipment = shipment.Postal.Stamps;
-                StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+                UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
+                UspsProfileEntity uspsProfile = profile.Postal.Usps;
 
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.StampsAccountID, stampsShipment, StampsShipmentFields.StampsAccountID);
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.RequireFullAddressValidation, stampsShipment, StampsShipmentFields.RequireFullAddressValidation);
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.HidePostage, stampsShipment, StampsShipmentFields.HidePostage);
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.Memo, stampsShipment, StampsShipmentFields.Memo);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.UspsAccountID, uspsShipment, UspsShipmentFields.UspsAccountID);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.Memo, uspsShipment, UspsShipmentFields.Memo);
             }
         }
 
@@ -804,9 +811,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void ClearDataForCopiedShipment(ShipmentEntity shipment)
         {
-            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                shipment.Postal.Stamps.ScanFormBatchID = null;
+                shipment.Postal.Usps.ScanFormBatchID = null;
             }
         }
 
@@ -821,8 +828,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             (
                 new List<IEntityField2>()
                 {
-                    shipment.Postal.Stamps.Fields[StampsShipmentFields.StampsAccountID.FieldIndex],
-                    shipment.Postal.Stamps.Fields[StampsShipmentFields.OriginalStampsAccountID.FieldIndex],
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.UspsAccountID.FieldIndex],
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.OriginalUspsAccountID.FieldIndex],
                 }
             );
 
@@ -833,14 +840,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Uses the Stamps.com API to update the contract type of the account if it is unkown.
         /// </summary>
         /// <param name="account">The account.</param>
-        public virtual void UpdateContractType(StampsAccountEntity account)
+        public virtual void UpdateContractType(UspsAccountEntity account)
         {
             if (account != null)
             {
                 // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
                 // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
                 // updated outside of ShipWorks.
-                if (!StampsContractTypeCache.Contains(account.StampsAccountID) || StampsContractTypeCache.GetContractType(account.StampsAccountID) == StampsAccountContractType.Unknown)
+                if (!StampsContractTypeCache.Contains(account.UspsAccountID) || StampsContractTypeCache.GetContractType(account.UspsAccountID) == StampsAccountContractType.Unknown)
                 {
                     try
                     {
@@ -853,7 +860,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                         // Save the contract to the DB and update the cache
                         AccountRepository.Save(account);
-                        StampsContractTypeCache.Set(account.StampsAccountID, (StampsAccountContractType)account.ContractType);
+                        StampsContractTypeCache.Set(account.UspsAccountID, (StampsAccountContractType)account.ContractType);
 
                         if (hasContractChanged)
                         {
@@ -879,9 +886,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override void SaveRequestedLabelFormat(ThermalLanguage requestedLabelFormat, ShipmentEntity shipment)
         {
-            if (shipment.Postal != null && shipment.Postal.Stamps != null)
+            if (shipment.Postal != null && shipment.Postal.Usps != null)
             {
-                shipment.Postal.Stamps.RequestedLabelFormat = (int)requestedLabelFormat;
+                shipment.Postal.Usps.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
 
@@ -892,7 +899,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             // We're going to be temporarily swapping these out to get counter rates, so 
             // make a note of the original values
-            ICarrierAccountRepository<StampsAccountEntity> originalAccountRepository = AccountRepository;
+            ICarrierAccountRepository<UspsAccountEntity> originalAccountRepository = AccountRepository;
             ICertificateInspector originalCertificateInspector = CertificateInspector;
 
             try

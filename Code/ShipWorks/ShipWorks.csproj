@@ -735,7 +735,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\LabelFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\StandardLabel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Labels\ThermalLabel.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
@@ -758,6 +758,7 @@
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaCbpRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsCbpRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
@@ -831,13 +832,13 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsPostalRateSelection.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.Designer.cs">
       <DependentUpon>UspsProfileControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
@@ -1628,12 +1629,6 @@
     <Compile Include="Shipping\Carriers\Postal\PostalOptionsControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.Designer.cs">
-      <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
@@ -2325,11 +2320,25 @@
       <DependentUpon>StoreAddressControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\LiveSite\LiveSiteStoreType.cs" />
+    <Compile Include="Stores\Platforms\LoadedCommerce\LoadedCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorShipmentDto.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorApiLogger.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorLog.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\TlsAppDomain.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorOrderDto.cs" />
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreType.cs" />
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.Designer.cs">
+      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
@@ -4283,11 +4292,11 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.Designer.cs">
       <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.Designer.cs">
-      <DependentUpon>StampsSettingsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.Designer.cs">
+      <DependentUpon>UspsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebClientTracking.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\UpsApiCore.cs" />
@@ -4439,12 +4448,6 @@
     <Compile Include="Shipping\Carriers\Postal\PostalProfileControlBase.Designer.cs">
       <DependentUpon>PostalProfileControlBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.Designer.cs">
-      <DependentUpon>StampsProfileControl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -4543,11 +4546,11 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.Designer.cs">
       <DependentUpon>StampsPurchasePostageDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsServiceControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsServiceControl.Designer.cs">
-      <DependentUpon>StampsServiceControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.Designer.cs">
+      <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSetupWizard.cs">
       <SubType>Form</SubType>
@@ -7685,6 +7688,12 @@
     <EmbeddedResource Include="Stores\Platforms\Newegg\WizardPages\NeweggDownloadCriteriaPage.resx">
       <DependentUpon>NeweggDownloadCriteriaPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.resx">
+      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.resx">
+      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\SearsAccountSettingsControl.resx">
       <DependentUpon>SearsAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -8335,6 +8344,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Stores\Platforms\CsCart\shipworks3.php" />
+    <None Include="Stores\Platforms\LoadedCommerce\shipworks3.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\Model\Objectmodel\Api.php" />
     <None Include="Stores\Platforms\Magento\MagentoConnectExtension\Module.zip" />
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
@@ -9563,11 +9573,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.resx">
       <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsSettingsControl.resx">
-      <DependentUpon>StampsSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsProfileControl.resx">
-      <DependentUpon>StampsProfileControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.resx">
+      <DependentUpon>UspsSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\WebTools\PostalWebSetupWizard.resx">
       <DependentUpon>PostalWebSetupWizard.cs</DependentUpon>
@@ -9651,8 +9658,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.resx">
       <DependentUpon>StampsPurchasePostageDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsServiceControl.resx">
-      <DependentUpon>StampsServiceControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.resx">
+      <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsSetupWizard.resx">
       <DependentUpon>StampsSetupWizard.cs</DependentUpon>
@@ -10823,6 +10830,10 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10951,6 +10962,7 @@
     <None Include="Resources\fortune3.png" />
     <None Include="Resources\cloudconversion.png" />
     <None Include="Resources\cscart.png" />
+    <None Include="Resources\loadedcommerce.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -10974,6 +10986,7 @@
     <None Include="Resources\nav_down_green1.png" />
     <None Include="Resources\nav_down_green2.png" />
     <None Include="Resources\nav_up_blue.png" />
+    <None Include="Resources\nomorerack.png" />
     <Content Include="Resources\not_available.gif" />
     <None Include="Resources\OnTracLogo48.jpg" />
     <None Include="Resources\plug.png" />

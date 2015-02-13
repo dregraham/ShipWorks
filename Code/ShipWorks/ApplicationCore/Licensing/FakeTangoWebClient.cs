@@ -70,10 +70,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// Sends Stamps.com account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void LogStampsAccount(StampsAccountEntity account)
+        public override void LogStampsAccount(UspsAccountEntity account)
         {
             // Just log the account contract type to disk to simulate a call to Tango
-            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((StampsResellerType)account.StampsReseller));
+            LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((StampsResellerType)account.UspsReseller));
         }
 
 

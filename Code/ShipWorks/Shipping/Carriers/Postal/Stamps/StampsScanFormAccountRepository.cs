@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the accounts that should have scan forms created for them
         /// </summary>
-        protected virtual IEnumerable<StampsAccountEntity> AccountList
+        protected virtual IEnumerable<UspsAccountEntity> AccountList
         {
             get { return StampsAccountManager.StampsAccounts; }
         }
@@ -32,9 +32,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="accountEntity">Account entity for which to create the scan form carrier account</param>
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
-        protected virtual IScanFormCarrierAccount CreateScanFormCarrierAccount(StampsAccountEntity accountEntity)
+        protected virtual IScanFormCarrierAccount CreateScanFormCarrierAccount(UspsAccountEntity accountEntity)
         {
-            return new StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.StampsReseller), accountEntity);
+            return new StampsScanFormCarrierAccount(new StampsScanFormRepository((StampsResellerType)accountEntity.UspsReseller), accountEntity);
         }
     }
 }

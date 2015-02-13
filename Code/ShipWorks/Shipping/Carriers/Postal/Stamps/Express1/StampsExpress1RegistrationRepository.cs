@@ -28,49 +28,51 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
 
             // Create a new stamps account entity that will get saved to the database
-            StampsAccountEntity stampsAccount = registration.AccountId.HasValue ? 
+            UspsAccountEntity uspsAccount = registration.AccountId.HasValue ? 
                 StampsAccountManager.GetAccount(registration.AccountId.Value) : 
-                new StampsAccountEntity();
+                new UspsAccountEntity();
 
             // Initialize the nulls to default values and denote that the account is for Express1
-            stampsAccount.InitializeNullsToDefault();
-            stampsAccount.StampsReseller = (int)StampsResellerType.Express1;
+            uspsAccount.InitializeNullsToDefault();
+            uspsAccount.UspsReseller = (int)StampsResellerType.Express1;
 
-            stampsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
+            uspsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
 
             // Translate the registration data into a Stamps account entity
-            stampsAccount.Username = registration.UserName;
-            stampsAccount.Password = registration.EncryptedPassword;
+            uspsAccount.Username = registration.UserName;
+            uspsAccount.Password = registration.EncryptedPassword;
 
-            stampsAccount.FirstName = registration.MailingAddress.FirstName;
-            stampsAccount.MiddleName = registration.MailingAddress.MiddleName;
-            stampsAccount.LastName = registration.MailingAddress.LastName;
-            stampsAccount.Company = registration.MailingAddress.Company;
+            uspsAccount.FirstName = registration.MailingAddress.FirstName;
+            uspsAccount.MiddleName = registration.MailingAddress.MiddleName;
+            uspsAccount.LastName = registration.MailingAddress.LastName;
+            uspsAccount.Company = registration.MailingAddress.Company;
 
             // Address info
-            stampsAccount.Street1 = registration.MailingAddress.Street1;
-            stampsAccount.Street2 = registration.MailingAddress.Street2;
-            stampsAccount.Street3 = registration.MailingAddress.Street3;
-            stampsAccount.City = registration.MailingAddress.City;
-            stampsAccount.PostalCode = registration.MailingAddress.PostalCode;
-            stampsAccount.CountryCode = Geography.GetCountryCode(registration.MailingAddress.CountryCode);
-            stampsAccount.StateProvCode = Geography.GetStateProvCode(registration.MailingAddress.StateProvCode);
-            stampsAccount.MailingPostalCode = registration.MailingAddress.PostalCode;
+            uspsAccount.Street1 = registration.MailingAddress.Street1;
+            uspsAccount.Street2 = registration.MailingAddress.Street2;
+            uspsAccount.Street3 = registration.MailingAddress.Street3;
+            uspsAccount.City = registration.MailingAddress.City;
+            uspsAccount.PostalCode = registration.MailingAddress.PostalCode;
+            uspsAccount.CountryCode = Geography.GetCountryCode(registration.MailingAddress.CountryCode);
+            uspsAccount.StateProvCode = Geography.GetStateProvCode(registration.MailingAddress.StateProvCode);
+            uspsAccount.MailingPostalCode = registration.MailingAddress.PostalCode;
 
             // Contact information (website is not collected required by Express1, so the registration is not
             // collecting this information)
-            stampsAccount.Phone = registration.Phone10Digits;
-            stampsAccount.Email = registration.Email;
-            stampsAccount.Website = string.Empty;
+            uspsAccount.Phone = registration.Phone10Digits;
+            uspsAccount.Email = registration.Email;
+            uspsAccount.Website = string.Empty;
+
+            uspsAccount.CreatedDate = DateTime.UtcNow;
             
             // Persist the account entity to the database
-            StampsAccountManager.SaveAccount(stampsAccount);
+            StampsAccountManager.SaveAccount(uspsAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.Express1, false);
+            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.Express1, false);
             if (accounts.Count == 1)
             {
-                StampsAccountEntity accountEntity = accounts.First();
+                UspsAccountEntity accountEntity = accounts.First();
 
                 // Update any profiles to use this account if this is the only account
                 // in the system. This is to account for the situation where there a multiple
@@ -78,9 +80,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // been deleted. 
                 foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Stamps))
                 {
-                    if (shippingProfileEntity.Postal.Stamps.StampsAccountID.HasValue)
+                    if (shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue)
                     {
-                        shippingProfileEntity.Postal.Stamps.StampsAccountID = accountEntity.StampsAccountID;
+                        shippingProfileEntity.Postal.Usps.UspsAccountID = accountEntity.UspsAccountID;
                         ShippingProfileManager.SaveProfile(shippingProfileEntity);
                     }
                 }
@@ -88,15 +90,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             // Update the account contract type
             Express1StampsShipmentType stampsShipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-            stampsShipmentType.UpdateContractType(stampsAccount);
+            stampsShipmentType.UpdateContractType(uspsAccount);
 
-            return stampsAccount.StampsAccountID;
+            return uspsAccount.UspsAccountID;
         }
 
 
         /// <summary>
         /// Uses the StampsAccountManager to Delete the carrier account (if it exists) associated with the 
-        /// given registration from the StampsAccount table.
+        /// given registration from the uspsAccount table.
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>
         public void Delete(Express1Registration registration)
@@ -105,11 +107,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 // The registration has an account ID associated with it, implying there is an account 
                 // entity associated with it. 
-                StampsAccountEntity stampsAccountEntity = StampsAccountManager.GetAccount(registration.AccountId.Value);
-                if (stampsAccountEntity != null)
+                UspsAccountEntity uspsAccountEntity = StampsAccountManager.GetAccount(registration.AccountId.Value);
+                if (uspsAccountEntity != null)
                 {
                     // We've confirmed this account still does exist and needs to be deleted
-                    StampsAccountManager.DeleteAccount(stampsAccountEntity);
+                    StampsAccountManager.DeleteAccount(uspsAccountEntity);
                 }
             }
         }

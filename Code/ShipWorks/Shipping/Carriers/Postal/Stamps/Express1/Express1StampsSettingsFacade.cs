@@ -23,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 throw new ArgumentNullException("settings");
             }
 
-            UseExpress1 = settings.StampsAutomaticExpress1;
-            Express1Account = settings.StampsAutomaticExpress1Account;
+            UseExpress1 = settings.UspsAutomaticExpress1;
+            Express1Account = settings.UspsAutomaticExpress1Account;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             get
             {
                 return StampsAccountManager.GetAccounts(StampsResellerType.Express1)
-                           .Select(a => new KeyValuePair<string, long>(a.Description, a.StampsAccountID))
+                           .Select(a => new KeyValuePair<string, long>(a.Description, a.UspsAccountID))
                            .ToList();
             }
         }
@@ -73,8 +73,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 throw new ArgumentNullException("settings");
             }
 
-            settings.StampsAutomaticExpress1 = UseExpress1;
-            settings.StampsAutomaticExpress1Account = Express1Account;
+            settings.UspsAutomaticExpress1 = UseExpress1;
+            settings.UspsAutomaticExpress1Account = Express1Account;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+                List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
 
                 return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
             }

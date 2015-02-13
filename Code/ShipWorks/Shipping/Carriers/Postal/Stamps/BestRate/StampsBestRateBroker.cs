@@ -8,14 +8,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
     /// <summary>
     /// Best rate broker for Stamps accounts
     /// </summary>
-    public class StampsBestRateBroker : PostalResellerBestRateBroker<StampsAccountEntity>
+    public class StampsBestRateBroker : PostalResellerBestRateBroker<UspsAccountEntity>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsBestRateBroker"/> class.
         /// </summary>
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
-        public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
+        public StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             this(shipmentType, accountRepository, "USPS")
         { }
 
@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// <param name="shipmentType">Type of the shipment.</param>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="carrierDescription">The carrier description.</param>
-        protected StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<StampsAccountEntity> accountRepository, string carrierDescription) :
+        protected StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository, string carrierDescription) :
             base(shipmentType, accountRepository, carrierDescription)
         { }
 
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         protected override void CreateShipmentChild(ShipmentEntity shipment)
         {
             base.CreateShipmentChild(shipment);
-            shipment.Postal.Stamps = new StampsShipmentEntity();
+            shipment.Postal.Usps = new UspsShipmentEntity();
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// </summary>
         /// <param name="postalShipmentEntity">Postal shipment on which the account id should be set</param>
         /// <param name="account">Account that should be used for this shipment</param>
-        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, StampsAccountEntity account)
+        protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, UspsAccountEntity account)
         {
-            postalShipmentEntity.Stamps.StampsAccountID = account.StampsAccountID;
+            postalShipmentEntity.Usps.UspsAccountID = account.UspsAccountID;
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// <summary>
         /// Gets a description from the specified account
         /// </summary>
-        protected override string AccountDescription(StampsAccountEntity account)
+        protected override string AccountDescription(UspsAccountEntity account)
         {
             return account.Description;
         }

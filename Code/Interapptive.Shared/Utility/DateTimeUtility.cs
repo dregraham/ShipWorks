@@ -18,7 +18,14 @@ namespace Interapptive.Shared.Utility
         /// </summary>
         public static DateTime ParseEnUS(string dateTime)
         {
-            return DateTime.Parse(dateTime, CultureInfo.CreateSpecificCulture("en-US"));
+            try
+            {
+                return DateTime.Parse(dateTime, CultureInfo.CreateSpecificCulture("en-US"));
+            }
+            catch (FormatException ex)
+            {
+                throw new FormatException(string.Format("DateTimeUtility.ParseEnUs cannot parse datetime '{0}'", dateTime), ex);
+            }
         }
 
         /// <summary>

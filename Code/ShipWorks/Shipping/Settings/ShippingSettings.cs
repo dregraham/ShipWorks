@@ -173,13 +173,13 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
 
-            settings.Express1StampsSingleSource = false;
+            settings.Express1UspsSingleSource = false;
 
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
-            settings.StampsAutomaticExpress1 = false;
-            settings.StampsAutomaticExpress1Account = 0;
+            settings.UspsAutomaticExpress1 = false;
+            settings.UspsAutomaticExpress1Account = 0;
             settings.StampsUspsAutomaticExpedited = false;
             settings.StampsUspsAutomaticExpeditedAccount = 0;
 

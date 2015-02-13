@@ -15,14 +15,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     public partial class StampsAccountEditorDlg : Form
     {
-        private StampsAccountEntity account;
+        private UspsAccountEntity account;
         private bool passwordUpdated;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsAccountEditorDlg"/> class.
         /// </summary>
         /// <param name="account">The account.</param>
-        public StampsAccountEditorDlg(StampsAccountEntity account)
+        public StampsAccountEditorDlg(UspsAccountEntity account)
         {
             InitializeComponent();
 
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             passwordUpdated = false;
 
             // Adjust the note text based on the carrier/reseller
-            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller);
+            string carrierName = StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller);
             labelStamps.Text = carrierName;
             labelNote.Text = string.Format("Any changes made to the address are only for ShipWorks. Your address information with {0} is not updated.", carrierName);
             this.Text = string.Format("{0} Account", carrierName);

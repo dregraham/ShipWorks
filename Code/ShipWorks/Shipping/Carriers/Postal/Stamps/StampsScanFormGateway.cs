@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>A carrier-specific collection of scan form entity object.</returns>
         public IEnumerable<IEntity2> CreateScanForms(ScanFormBatch scanFormBatch, IEnumerable<ShipmentEntity> shipments)
         {
-            StampsAccountEntity accountEntity = scanFormBatch.AccountEntity as StampsAccountEntity;
+            UspsAccountEntity accountEntity = scanFormBatch.AccountEntity as UspsAccountEntity;
             if (accountEntity == null)
             {
                 throw new StampsException(invalidCarrierMessage);
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // Grab all the stamps-specific shipments (this should be all of the shipments)
-            IEnumerable<StampsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Stamps).Where(s => s != null);
+            IEnumerable<UspsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Usps).Where(s => s != null);
             if (stampsShipments.Count() != shipments.Count())
             {
                 throw new StampsException(invalidShipmentMessage);
@@ -87,13 +87,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // Create entities for each returned scan form
-            List<StampsScanFormEntity> entities = new List<StampsScanFormEntity>();
+            List<UspsScanFormEntity> entities = new List<UspsScanFormEntity>();
 
             for (int i = 0; i < xDocument.Descendants("TransactionId").Count(); i++)
             {
                 // Populate the stamps scan form entity based on the response from the API
-                StampsScanFormEntity scanEntity = new StampsScanFormEntity();
-                scanEntity.StampsAccountID = accountEntity.StampsAccountID;
+                UspsScanFormEntity scanEntity = new UspsScanFormEntity();
+                scanEntity.UspsAccountID = accountEntity.UspsAccountID;
                 scanEntity.CreatedDate = DateTime.UtcNow;
                 scanEntity.ScanFormTransactionID = xDocument.Descendants("TransactionId").ElementAt(i).Value;
                 scanEntity.ScanFormUrl = xDocument.Descendants("Url").ElementAt(i).Value;

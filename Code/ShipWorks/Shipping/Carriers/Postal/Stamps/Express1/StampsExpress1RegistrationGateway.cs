@@ -41,11 +41,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             try
             {
                 // This throws a stamps exception if the account credentials are incorrect
-                new Express1StampsWebClient().GetAccountInfo(new StampsAccountEntity
+                new Express1StampsWebClient().GetAccountInfo(new UspsAccountEntity
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,
-                    StampsReseller = (int)StampsResellerType.Express1
+                    UspsReseller = (int)StampsResellerType.Express1
                 });
             }
             catch (StampsException ex)

@@ -209,7 +209,7 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "USPS";
             // 
-            // stampsAccount
+            // uspsAccount
             // 
             this.stampsAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));

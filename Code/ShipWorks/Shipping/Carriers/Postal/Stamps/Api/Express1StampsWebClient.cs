@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
         private readonly ILog log;
         private readonly LogEntryFactory logEntryFactory;
-        private readonly ICarrierAccountRepository<StampsAccountEntity> accountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         // Maps stamps.com usernames to their latest authenticator tokens
         static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
         /// </summary>
-        public Express1StampsWebClient(ICarrierAccountRepository<StampsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public Express1StampsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
@@ -165,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Changes the contract associated with the given account based on the contract type provided.
         /// </summary>
-        public void ChangeToExpeditedPlan(StampsAccountEntity account, string promoCode)
+        public void ChangeToExpeditedPlan(UspsAccountEntity account, string promoCode)
         {
             throw new InvalidOperationException("An Express1 contract cannot be changed.");
         }
@@ -173,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Checks with Stamps.com API to get the contract type of the account.
         /// </summary>
-        public StampsAccountContractType GetContractType(StampsAccountEntity account)
+        public StampsAccountContractType GetContractType(UspsAccountEntity account)
         {
             throw new InvalidOperationException("The contract type is not applicable for Express1.");
         }
@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Get the account info for the given Stamps.com user name
         /// </summary>
-        public object GetAccountInfo(StampsAccountEntity account)
+        public object GetAccountInfo(UspsAccountEntity account)
         {
             return AuthenticationWrapper(() => { return GetAccountInfoInternal(account); }, account);
         }
@@ -213,7 +213,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal GetAccountInfo implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
-        private AccountInfo GetAccountInfoInternal(StampsAccountEntity account)
+        private AccountInfo GetAccountInfoInternal(UspsAccountEntity account)
         {
             AccountInfo accountInfo;
 
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Get the Stamps.com URL of the given urlType
         /// </summary>
-        public string GetUrl(StampsAccountEntity account, UrlType urlType)
+        public string GetUrl(UspsAccountEntity account, UrlType urlType)
         {
             return AuthenticationWrapper(() => { return GetUrlInternal(account, urlType); }, account);
         }
@@ -241,7 +241,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal GetUrl implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
-        private string GetUrlInternal(StampsAccountEntity account, UrlType urlType)
+        private string GetUrlInternal(UspsAccountEntity account, UrlType urlType)
         {
             string url;
 
@@ -257,7 +257,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.
         /// </summary>
-        public void PurchasePostage(StampsAccountEntity account, decimal amount, decimal controlTotal)
+        public void PurchasePostage(UspsAccountEntity account, decimal amount, decimal controlTotal)
         {
             AuthenticationWrapper(() => { PurchasePostageInternal(account, amount, controlTotal); return true; }, account);
         }
@@ -265,7 +265,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal PurchasePostageInternal implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private void PurchasePostageInternal(StampsAccountEntity account, decimal amount, decimal controlTotal)
+        private void PurchasePostageInternal(UspsAccountEntity account, decimal amount, decimal controlTotal)
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
@@ -291,7 +291,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public List<RateResult> GetRates(ShipmentEntity shipment)
         {
-            StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             if (account == null)
             {
@@ -398,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private List<RateV11> GetRatesInternal(ShipmentEntity shipment, StampsAccountEntity account)
+        private List<RateV11> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV11 rate = CreateRateForRating(shipment, account);
 
@@ -440,7 +440,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Cleans the address of the given person using the specified stamps account
         /// </summary>
-        private Address CleanseAddress(StampsAccountEntity account, PersonAdapter person, bool requireFullMatch)
+        private Address CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
             return AuthenticationWrapper(() => { return CleanseAddressInternal(person, account, requireFullMatch); }, account);
         }
@@ -448,7 +448,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
         /// </summary>
-        private Address CleanseAddressInternal(PersonAdapter person, StampsAccountEntity account, bool requireFullMatch)
+        private Address CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
         {
             Address address;
             if (cleansedAddressMap.TryGetValue(person, out address))
@@ -493,18 +493,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// Creates the scan form.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="stampsAccountEntity">The stamps account entity.</param>
+        /// <param name="uspsAccountEntity">The stamps account entity.</param>
         /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
         /// identify results from Stamps.com</returns>
-        public XDocument CreateScanForm(IEnumerable<StampsShipmentEntity> shipments, StampsAccountEntity stampsAccountEntity)
+        public XDocument CreateScanForm(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
-            if (stampsAccountEntity == null)
+            if (uspsAccountEntity == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the SCAN form.");
             }
 
             XDocument result = new XDocument();
-            AuthenticationWrapper(() => { result = CreateScanFormInternal(shipments, stampsAccountEntity); return true; }, stampsAccountEntity);
+            AuthenticationWrapper(() => { result = CreateScanFormInternal(shipments, uspsAccountEntity); return true; }, uspsAccountEntity);
 
             return result;
         }
@@ -513,13 +513,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// Creates the scan form via the Stamps.com API and intended to be wrapped by the authentication wrapper.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="stampsAccountEntity">The stamps account entity.</param>
+        /// <param name="uspsAccountEntity">The stamps account entity.</param>
         /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
         /// identify results from Stamps.com</returns>
-        private XDocument CreateScanFormInternal(IEnumerable<StampsShipmentEntity> shipments, StampsAccountEntity stampsAccountEntity)
+        private XDocument CreateScanFormInternal(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
-            List<Guid> stampsTransactions = shipments.Select(s => s.StampsTransactionID).ToList();
-            PersonAdapter person = new PersonAdapter(stampsAccountEntity, string.Empty);
+            List<Guid> stampsTransactions = shipments.Select(s => s.UspsTransactionID).ToList();
+            PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
 
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
@@ -528,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             {
                 webService.CreateScanForm
                     (
-                        GetAuthenticator(stampsAccountEntity),
+                        GetAuthenticator(uspsAccountEntity),
                         stampsTransactions.ToArray(),
                         CreateScanFormAddress(person),
                         ImageType.Png,
@@ -551,7 +551,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public void VoidShipment(ShipmentEntity shipment)
         {
-            StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
@@ -563,11 +563,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal VoidShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private void VoidShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
+        private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             using (SwsimV29 webService = CreateWebService("Void"))
             {
-                string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Stamps.StampsTransactionID);
+                string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Usps.UspsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
             }
         }
@@ -577,7 +577,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// </summary>
         public void ProcessShipment(ShipmentEntity shipment)
         {
-            StampsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Stamps.StampsAccountID);
+            UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
                 throw new StampsException("No Stamps.com account is selected for the shipment.");
@@ -614,14 +614,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private void ProcessShipmentInternal(ShipmentEntity shipment, StampsAccountEntity account)
+        private void ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
             Guid stampsGuid;
             string tracking = string.Empty;
             string labelUrl;
 
             Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
-            Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Stamps.RequireFullAddressValidation);
+            Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Usps.RequireFullAddressValidation);
 
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
@@ -639,7 +639,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
             WebServices.v29.PostageBalance postageBalance;
-            string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Stamps.Memo, shipment.ShipmentID), 200);
+            string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -654,7 +654,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Stamps.OriginalStampsAccountID != null)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
@@ -679,8 +679,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             // Each request needs to get a new requestID.  If Stamps.com sees a duplicate, it thinks its the same request.  
             // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still 
             // be in error if you used the same ID again.
-            shipment.Postal.Stamps.IntegratorTransactionID = Guid.NewGuid();
-            string integratorGuid = shipment.Postal.Stamps.IntegratorTransactionID.ToString();
+            shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
+            string integratorGuid = shipment.Postal.Usps.IntegratorTransactionID.ToString();
 
             string mac_Unused;
             string postageHash;
@@ -688,7 +688,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && account.StampsReseller != (int)StampsResellerType.Express1;
+            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)StampsResellerType.Express1;
 
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
@@ -767,7 +767,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             shipment.TrackingNumber = tracking;
             shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
-            shipment.Postal.Stamps.StampsTransactionID = stampsGuid;
+            shipment.Postal.Usps.UspsTransactionID = stampsGuid;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?)thermalType;
@@ -872,7 +872,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV11 CreateRateForRating(ShipmentEntity shipment, StampsAccountEntity account)
+        private static RateV11 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
             RateV11 rate = new RateV11();
 
@@ -922,7 +922,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, StampsAccountEntity account)
+        private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
@@ -966,7 +966,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
-            if (shipment.Postal.Stamps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
+            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
             {
                 addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.SCAHP });
             }
@@ -1046,7 +1046,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Wraps the given executor in methods that ensure the appropriate authentication for the account
         /// </summary>
-        private T AuthenticationWrapper<T>(Func<T> executor, StampsAccountEntity account)
+        private T AuthenticationWrapper<T>(Func<T> executor, UspsAccountEntity account)
         {
             object authenticationLock;
 
@@ -1097,7 +1097,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Get the authenticator for the given account
         /// </summary>
-        private string GetAuthenticator(StampsAccountEntity account)
+        private string GetAuthenticator(UspsAccountEntity account)
         {
             string auth;
             if (!usernameAuthenticatorMap.TryGetValue(account.Username, out auth))

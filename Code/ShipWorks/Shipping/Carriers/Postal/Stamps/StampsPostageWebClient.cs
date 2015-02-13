@@ -9,14 +9,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsPostageWebClient : IPostageWebClient
     {
-        private readonly StampsAccountEntity account;
+        private readonly UspsAccountEntity account;
         private decimal controlTotal;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsPostageWebClient" /> class.
         /// </summary>
         /// <param name="account">The account.</param>        
-        public StampsPostageWebClient(StampsAccountEntity account)
+        public StampsPostageWebClient(UspsAccountEntity account)
         {
             this.account = account;
             controlTotal = decimal.MinValue;
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)account.StampsReseller).ShipmentTypeCode;
+                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)account.UspsReseller).ShipmentTypeCode;
             }
         }
 
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             decimal availablePostage = 0;
 
             IStampsWebClient client = CreateWebClient();
-            if ((StampsResellerType) account.StampsReseller != StampsResellerType.Express1)
+            if ((StampsResellerType) account.UspsReseller != StampsResellerType.Express1)
             {
                 AccountInfo accountInfo = (AccountInfo)client.GetAccountInfo(account);
 

@@ -69,14 +69,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             sandGrid.Rows.Clear();
 
-            foreach (StampsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
+            foreach (UspsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
             {
                 string contractType = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
                 GridRow row = new GridRow(new string[] { account.Description, contractType, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
-                if (account.StampsAccountID == initialAccountID)
+                if (account.UspsAccountID == initialAccountID)
                 {
                     row.Selected = true;
                 }
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Grab the account from the row and make a note of username for 
             // exception handling purposes
-            StampsAccountEntity account = (StampsAccountEntity) row.Tag;
+            UspsAccountEntity account = (UspsAccountEntity) row.Tag;
             string username = account.Username;
 
             if (account.Fields.State == EntityState.Fetched)
@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 }
                 catch (StampsException ex)
                 {
-                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((StampsResellerType)account.StampsReseller));
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller));
                     log.Error(logMessage, ex);
                 }
                 catch (ORMEntityIsDeletedException ex)
@@ -202,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnEdit(object sender, EventArgs e)
         {
-            StampsAccountEntity account = (StampsAccountEntity)sandGrid.SelectedElements[0].Tag;
+            UspsAccountEntity account = (UspsAccountEntity)sandGrid.SelectedElements[0].Tag;
 
             using (StampsAccountEditorDlg dlg = new StampsAccountEditorDlg(account))
             {
@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         private void OnRemove(object sender, EventArgs e)
         {
-            StampsAccountEntity account = (StampsAccountEntity) sandGrid.SelectedElements[0].Tag;
+            UspsAccountEntity account = (UspsAccountEntity) sandGrid.SelectedElements[0].Tag;
 
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +

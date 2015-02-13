@@ -20,20 +20,20 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
     {
         private readonly StampsWebClient testObject;
 
-        private readonly Mock<ICarrierAccountRepository<StampsAccountEntity>> accountRepository;
+        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
         private readonly Mock<ILogEntryFactory> logEntryFactory;
 
-        private readonly StampsAccountEntity account;
+        private readonly UspsAccountEntity account;
 
         public StampsWebClientTest()
         {
             // This will initialize all of the various static classes
             new StampsPrototypeFixture();
             
-            accountRepository = new Mock<ICarrierAccountRepository<StampsAccountEntity>>();
-            accountRepository.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
-            account = new StampsAccountEntity()
+            account = new UspsAccountEntity()
             {
                 Username = "interapptive",
                 Password = "AYSaiZOMP3UcalGuDB+4aA==",
@@ -73,10 +73,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 // Checking for basic connectivity with the API to make sure there haven't been 
                 // any breaking changes between the web client and API for scan forms
-                List<StampsShipmentEntity> shipments = new List<StampsShipmentEntity>
+                List<UspsShipmentEntity> shipments = new List<UspsShipmentEntity>
                 {
-                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() },
-                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() }
+                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() },
+                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() }
                 };
 
                 testObject.CreateScanForm(shipments, account);
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Mock<IStampsRegistrationGateway> gateway = new Mock<IStampsRegistrationGateway>();
 
             Mock<IRegistrationPromotion> promotion = new Mock<IRegistrationPromotion>();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns(string.Empty);
+            promotion.Setup(p => p.GetPromoCode()).Returns(string.Empty);
 
             StampsRegistration registration = new StampsRegistration(validator.Object, gateway.Object, promotion.Object);            
             registration.UsageType = AccountType.OfficeBasedBusiness;

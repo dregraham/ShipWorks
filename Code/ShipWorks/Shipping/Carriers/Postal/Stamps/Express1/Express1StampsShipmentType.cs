@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -119,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(ShipmentTypeCode);
+            return new UspsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -127,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
-            return new StampsProfileControl(ShipmentTypeCode);
+            return new UspsProfileControl(ShipmentTypeCode);
         }
         
         /// <summary>
@@ -180,7 +181,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
-                shipment.Postal.Stamps.HidePostage = true;
+                shipment.Postal.Usps.HidePostage = true;
                 new Express1StampsWebClient().ProcessShipment(shipment);
             }
             catch(StampsException ex)
@@ -203,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Will just assign the contract type of the account to Unknown and save the account to the repository.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void UpdateContractType(StampsAccountEntity account)
+        public override void UpdateContractType(UspsAccountEntity account)
         {
             // If the ContractType is unknown, we must not have tried to check this account yet.
             // Just assign the contract type to NotApplicable; we don't need to worry about Express1 accounts

@@ -143,9 +143,9 @@ namespace ShipWorks.Users.Audit
             EntityType entityType = EntityUtility.GetEntityType(entityID);
             switch (entityType)
             {
-                case EntityType.StampsAccountEntity:
+                case EntityType.UspsAccountEntity:
                     {
-                        StampsAccountEntity account = StampsAccountManager.GetAccount(entityID);
+                        UspsAccountEntity account = StampsAccountManager.GetAccount(entityID);
                         return account != null ? account.Username : "(Deleted)";
                     }
 

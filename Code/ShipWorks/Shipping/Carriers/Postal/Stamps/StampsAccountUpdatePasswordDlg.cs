@@ -20,11 +20,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public partial class StampsAccountUpdatePasswordDlg : Form
     {
-        StampsAccountEntity account;
+        UspsAccountEntity account;
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAccountUpdatePasswordDlg(StampsAccountEntity account)
+        public StampsAccountUpdatePasswordDlg(UspsAccountEntity account)
         {
             InitializeComponent();
 
@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsWebClient((StampsResellerType)account.StampsReseller).AuthenticateUser(account.Username, password.Text);
+                new StampsWebClient((StampsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

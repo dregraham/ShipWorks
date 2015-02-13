@@ -256,7 +256,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         /// </summary>
         private RateGroup CreatePopulatedRateGroup()
         {
-            StampsAccountEntity account = new StampsAccountEntity();
+            UspsAccountEntity account = new UspsAccountEntity();
 
             List<RateResult> rates = new List<RateResult>
             {

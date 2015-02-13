@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
     /// <summary>
     /// A repository for Stamps.com counter rate accounts
     /// </summary>
-    public class StampsCounterRateAccountRepository : ICarrierAccountRepository<StampsAccountEntity>
+    public class StampsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity>
     {
         private readonly ICounterRatesCredentialStore credentialStore;
 
@@ -24,20 +24,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// <summary>
         /// Gets the accounts for the carrier.
         /// </summary>
-        public IEnumerable<StampsAccountEntity> Accounts
+        public IEnumerable<UspsAccountEntity> Accounts
         {
             get 
             { 
-                List<StampsAccountEntity> accounts = new List<StampsAccountEntity>();
+                List<UspsAccountEntity> accounts = new List<UspsAccountEntity>();
                 try
                 {
-                    StampsAccountEntity account = new StampsAccountEntity()
+                    UspsAccountEntity account = new UspsAccountEntity()
                     {
                         Username = credentialStore.StampsUsername,
                         Password = credentialStore.StampsPassword,
                         PostalCode = "63102",
                         CountryCode = "US",
-                        StampsAccountID = -1052
+                        UspsAccountID = -1052,
+                        CreatedDate = DateTime.Now.AddDays(-30)
                     };
                     
                     accounts.Add(account);
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// Returns a carrier counter rate account.
         /// </summary>
         /// <returns>Returns the first counter rate.</returns>
-        public StampsAccountEntity GetAccount(long accountID)
+        public UspsAccountEntity GetAccount(long accountID)
         {
             return Accounts.First();
         }
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// <summary>
         /// Gets the default profile account.
         /// </summary>
-        public StampsAccountEntity DefaultProfileAccount
+        public UspsAccountEntity DefaultProfileAccount
         {
             get { return Accounts.First(); }
         }
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public void Save(StampsAccountEntity account)
+        public void Save(UspsAccountEntity account)
         {
             // Nothing to save. This is a counter rate account.
         }

@@ -9,12 +9,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsInsufficientFundsException : StampsException, IInsufficientFunds
     {
-        private readonly StampsAccountEntity account;
+        private readonly UspsAccountEntity account;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsInsufficientFundsException(StampsAccountEntity account, string message) :
+        public StampsInsufficientFundsException(UspsAccountEntity account, string message) :
             base(message)
         {
             this.account = account;
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                switch ((StampsResellerType)account.StampsReseller)
+                switch ((StampsResellerType)account.UspsReseller)
                 {
                     case StampsResellerType.None:
                         return "Stamps.com";

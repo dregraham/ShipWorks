@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new StampsSettingsControl(ShipmentTypeCode);
+            return new UspsSettingsControl(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -72,8 +72,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
+            EnsureAccountsHaveCurrentContractData();
+
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
             return new UspsSetupWizard(promotion, true);
+        }
+
+        /// <summary>
+        /// Ensure that all USPS accounts have up to date contract information
+        /// </summary>
+        private void EnsureAccountsHaveCurrentContractData()
+        {
+            Task[] tasks = AccountRepository.Accounts
+                .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
+                .ToArray();
+
+            Task.WaitAll(tasks);
         }
 
         /// <summary>
@@ -85,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
             var express1RateTask = GetExpress1RatesIfNecessary(shipment);
 
-            RateGroup rateGroup = shipment.Postal.Stamps.RateShop ?
+            RateGroup rateGroup = shipment.Postal.Usps.RateShop ?
                 GetRatesForAllAccounts(shipment) :
                 GetCachedRates<StampsException>(shipment, GetRatesForSpecifiedAccount);
 
@@ -110,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private RateGroup GetRatesForAllAccounts(ShipmentEntity shipment)
         {
-            List<StampsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
+            List<UspsAccountEntity> uspsAccounts = AccountRepository.Accounts.ToList();
 
             // We are creating a new shipment type here so we can call get rates and not call Express1 Rates.
             // We thought of just turning off ShouldRetrieveExpress1Rates, but worried that might cause unexpected behavior
@@ -156,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
-            StampsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
+            UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
             return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
                 CreateEmptyExpress1RatesTask();
@@ -176,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Start retrieving Express1 rates
         /// </summary>
-        private static Task<RateGroup> BeginRetrievingExpress1Rates(ShipmentEntity shipment, StampsAccountEntity express1AutoRouteAccount)
+        private static Task<RateGroup> BeginRetrievingExpress1Rates(ShipmentEntity shipment, UspsAccountEntity express1AutoRouteAccount)
         {
             // Start getting rates from Express1
             ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
@@ -200,14 +214,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Get the Express1 account that should be used for auto routing, or null if we should not auto route
         /// </summary>
-        private static StampsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
+        private static UspsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
-            bool shouldUseExpress1 = settings.StampsAutomaticExpress1 && !isExpress1Restricted &&
+            bool shouldUseExpress1 = settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
                                      Express1Utilities.IsValidPackagingType(null, packagingType);
 
-            return shouldUseExpress1 ? StampsAccountManager.GetAccount(settings.StampsAutomaticExpress1Account) : null;
+            return shouldUseExpress1 ? StampsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account) : null;
         }
 
         /// <summary>
@@ -271,7 +285,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private bool ShouldRateShop(ShipmentEntity shipment)
         {
-            return shipment.Postal.Stamps.RateShop && 
+            return shipment.Postal.Usps.RateShop && 
                 AccountRepository.Accounts.Count() > 1;
         }
 
@@ -291,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
             IStampsWebClient client = CreateWebClient();
-            List<StampsAccountEntity> accounts = GetRates(shipment).Rates
+            List<UspsAccountEntity> accounts = GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)
                     .Where(x => x.IsRateFor(shipment))
@@ -303,16 +317,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new StampsException("Could not get rates for the specified service type");
             }
 
-            foreach (StampsAccountEntity account in accounts)
+            foreach (UspsAccountEntity account in accounts)
             {
                 try
                 {
-                    if (account.StampsReseller == (int)StampsResellerType.Express1)
+                    if (account.UspsReseller == (int)StampsResellerType.Express1)
                     {
                         shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
 
                         ShipmentType express1ShipmentType = ShipmentTypeManager.GetType(shipment);
-                        shipment.Postal.Stamps.OriginalStampsAccountID = shipment.Postal.Stamps.StampsAccountID;
+                        shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
                         UseAccountForShipment(account, shipment);
                         
                         express1ShipmentType.UpdateDynamicShipmentData(shipment);
@@ -364,16 +378,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return base.GetRatingFields(shipment)
                 .Concat(new[]
                 {
-                    shipment.Postal.Stamps.Fields[StampsShipmentFields.RateShop.FieldIndex]
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex]
                 });
-        }
-
-        /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
-        /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new UspsProfileControl(ShipmentTypeCode.Usps);
         }
 
         /// <summary>
@@ -383,7 +389,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             base.ConfigurePrimaryProfile(profile);
 
-            profile.Postal.Stamps.RateShop = true;
+            profile.Postal.Usps.RateShop = true;
         }
 
         /// <summary>
@@ -394,25 +400,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             base.ApplyProfile(shipment, profile);
 
             // We can be called during the creation of the base Postal shipment, before the Stamps one exists
-            if (shipment.Postal.Stamps != null)
+            if (shipment.Postal.Usps != null)
             {
-                StampsShipmentEntity stampsShipment = shipment.Postal.Stamps;
-                StampsProfileEntity stampsProfile = profile.Postal.Stamps;
+                UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
+                UspsProfileEntity uspsProfile = profile.Postal.Usps;
 
-                ShippingProfileUtility.ApplyProfileValue(stampsProfile.RateShop, stampsShipment, StampsShipmentFields.RateShop);
+                ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
             }
         }
 
         /// <summary>
         /// Create a copy of the shipment, using the specified account
         /// </summary>
-        private static ShipmentEntity CreateShipmentCopy(StampsAccountEntity account, ShipmentEntity shipment)
+        private static ShipmentEntity CreateShipmentCopy(UspsAccountEntity account, ShipmentEntity shipment)
         {
             ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
 
             UseAccountForShipment(account, clonedShipment);
 
-            clonedShipment.Postal.Stamps.RateShop = false;
+            clonedShipment.Postal.Usps.RateShop = false;
 
             return clonedShipment;
         }
@@ -420,9 +426,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use the specified account
         /// </summary>
-        private static void UseAccountForShipment(StampsAccountEntity account, ShipmentEntity shipment)
+        private static void UseAccountForShipment(UspsAccountEntity account, ShipmentEntity shipment)
         {
-            shipment.Postal.Stamps.StampsAccountID = account.StampsAccountID;
+            shipment.Postal.Usps.UspsAccountID = account.UspsAccountID;
 
             if (shipment.OriginOriginID == (int)ShipmentOriginSource.Account)
             {

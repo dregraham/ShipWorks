@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 throw new ArgumentNullException("settings");
             }
 
-            singleSourceCheckBox.Checked = settings.Express1StampsSingleSource;
+            singleSourceCheckBox.Checked = settings.Express1UspsSingleSource;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 throw new ArgumentNullException("settings");
             }
 
-            settings.Express1StampsSingleSource = singleSourceCheckBox.Checked;
+            settings.Express1UspsSingleSource = singleSourceCheckBox.Checked;
         }
     }
 }

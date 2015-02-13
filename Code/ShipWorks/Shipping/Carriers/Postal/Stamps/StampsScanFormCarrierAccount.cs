@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     /// </summary>
     public class StampsScanFormCarrierAccount : IScanFormCarrierAccount
     {
-        private readonly StampsAccountEntity accountEntity;
+        private readonly UspsAccountEntity accountEntity;
         private readonly IScanFormRepository repository;
         private readonly ILog log;
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public StampsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity)
+        public StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity)
             : this(repository, accountEntity, LogManager.GetLogger(typeof(StampsScanFormCarrierAccount)))
         { }
 
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public StampsScanFormCarrierAccount(IScanFormRepository repository, StampsAccountEntity accountEntity, ILog log)
+        public StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
         {
             this.repository = repository;
             this.accountEntity = accountEntity;
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An IScanFormGateway object.</returns>
         public virtual IScanFormGateway GetGateway()
         {
-            return new StampsScanFormGateway(new StampsWebClient((StampsResellerType)accountEntity.StampsReseller));
+            return new StampsScanFormGateway(new StampsWebClient((StampsResellerType)accountEntity.UspsReseller));
         }
         
         /// <summary>
@@ -146,8 +146,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 ShipmentFields.ReturnShipment == false &
 
                 // Has to not have been scanned yet and is for the selected account
-                StampsShipmentFields.ScanFormBatchID == DBNull.Value &
-                StampsShipmentFields.StampsAccountID == accountEntity.StampsAccountID &
+                UspsShipmentFields.ScanFormBatchID == DBNull.Value &
+                UspsShipmentFields.UspsAccountID == accountEntity.UspsAccountID &
 
                 // And has to have been processed today.  This will get all shipments that were processed since midnight locally.
                 ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime() & 
@@ -161,7 +161,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);
 
             bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
-            bucket.Relations.Add(PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 
             // Defer to the repository to perform the actual lookup
             return repository.GetShipmentIDs(bucket);

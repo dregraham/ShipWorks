@@ -25,9 +25,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestInitialize]
         public void Initialize()
         {
-            StampsAccountEntity accountEntity = new StampsAccountEntity()
+            UspsAccountEntity accountEntity = new UspsAccountEntity()
             {
-                StampsAccountID = 123456,
+                UspsAccountID = 123456,
                 Username = "testUsername",
                 Password = "password",
                 PostalCode = "63102",

@@ -520,10 +520,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StampsAutomaticExpress1", fieldHashtable);
+			_fieldsCustomProperties.Add("UspsAutomaticExpress1", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StampsAutomaticExpress1Account", fieldHashtable);
+			_fieldsCustomProperties.Add("UspsAutomaticExpress1Account", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("StampsUspsAutomaticExpedited", fieldHashtable);
@@ -559,7 +559,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Express1StampsSingleSource", fieldHashtable);
+			_fieldsCustomProperties.Add("Express1UspsSingleSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UpsMailInnovationsEnabled", fieldHashtable);
@@ -968,26 +968,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.WorldShipLaunch, value); }
 		}
 
-		/// <summary> The StampsAutomaticExpress1 property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The UspsAutomaticExpress1 property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpress1"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsAutomaticExpress1"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean StampsAutomaticExpress1
+		public virtual System.Boolean UspsAutomaticExpress1
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1, value); }
 		}
 
-		/// <summary> The StampsAutomaticExpress1Account property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The UspsAutomaticExpress1Account property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."StampsAutomaticExpress1Account"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsAutomaticExpress1Account"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 StampsAutomaticExpress1Account
+		public virtual System.Int64 UspsAutomaticExpress1Account
 		{
-			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, value); }
+			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, value); }
 		}
 
 		/// <summary> The StampsUspsAutomaticExpedited property of the Entity ShippingSettings<br/><br/>
@@ -1111,15 +1111,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
 		}
 
-		/// <summary> The Express1StampsSingleSource property of the Entity ShippingSettings<br/><br/>
+		/// <summary> The Express1UspsSingleSource property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1StampsSingleSource"<br/>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1UspsSingleSource"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean Express1StampsSingleSource
+		public virtual System.Boolean Express1UspsSingleSource
 		{
-			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1StampsSingleSource, true); }
-			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1StampsSingleSource, value); }
+			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1UspsSingleSource, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1UspsSingleSource, value); }
 		}
 
 		/// <summary> The UpsMailInnovationsEnabled property of the Entity ShippingSettings<br/><br/>

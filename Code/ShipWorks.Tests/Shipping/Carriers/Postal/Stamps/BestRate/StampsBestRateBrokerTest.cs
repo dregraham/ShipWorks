@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
     [TestClass]
     public class StampsBestRateBrokerTest
     {
-        private StampsAccountEntity account;
+        private UspsAccountEntity account;
         private RateGroup rateGroup;
         private RateResult rate1;
         private RateResult rate2;
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         /// </summary>
         private List<ShipmentEntity> getRatesShipments;
 
-        private Mock<ICarrierAccountRepository<StampsAccountEntity>> genericRepositoryMock;
+        private Mock<ICarrierAccountRepository<UspsAccountEntity>> genericRepositoryMock;
         private Mock<StampsShipmentType> genericShipmentTypeMock;
 
         public TestContext TestContext { get; set; }
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestInitialize]
         public void Initialize()
         {
-            account = new StampsAccountEntity { StampsAccountID = 1, CountryCode = "US"};
+            account = new UspsAccountEntity { UspsAccountID = 1, CountryCode = "US"};
 
             rate1 = new RateResult("Account 1a", "4", 12, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.TwoDays };
             rate2 = new RateResult("Account 1b", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.FourToSevenDays };
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             
             rateGroup = new RateGroup(new[] { rate1, rate2, rate3 });
 
-            genericRepositoryMock = new Mock<ICarrierAccountRepository<StampsAccountEntity>>();
+            genericRepositoryMock = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
             genericRepositoryMock.Setup(x => x.DefaultProfileAccount)
                                  .Returns(account);
 
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             // Mimic the bare minimum of what the configure method is doing
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
-                            .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity { Stamps = new StampsShipmentEntity() });
+                            .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity { Usps = new UspsShipmentEntity() });
 
             testObject = new StampsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity> { new StampsAccountEntity() });
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
             bool hasAccounts = testObject.HasAccounts;
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         [TestMethod]
         public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts_Test()
         {
-            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());
+            genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
             bool hasAccounts = testObject.HasAccounts;
 
@@ -384,13 +384,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                                    .Callback<ShipmentEntity>(x =>
                                    {
-                                       x.Postal.Stamps.StampsAccountID = 999;
+                                       x.Postal.Usps.UspsAccountID = 999;
                                    });
 
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(getRatesShipments.Any(x => x.Postal.Stamps.StampsAccountID == 1));
-            Assert.IsFalse(getRatesShipments.Any(x => x.Postal.Stamps.StampsAccountID == 999));
+            Assert.IsTrue(getRatesShipments.Any(x => x.Postal.Usps.UspsAccountID == 1));
+            Assert.IsFalse(getRatesShipments.Any(x => x.Postal.Usps.UspsAccountID == 999));
         }
 
         [TestMethod]
@@ -481,7 +481,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
         //    Assert.AreEqual((int)ShipmentTypeCode.Stamps, testShipment.ShipmentType);
         //    Assert.AreEqual((int)PostalServiceType.StampsExpressEarlyAm, testShipment.Stamps.Service);
-        //    Assert.AreEqual(account.StampsAccountID, testShipment.Stamps.StampsAccountID);
+        //    Assert.AreEqual(account.UspsAccountID, testShipment.Stamps.UspsAccountID);
         //}
 
         //[TestMethod]

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
-    public partial class StampsAccountEntity
+    public partial class UspsAccountEntity
     {
         /// <summary>
         /// Gets a friendly description of the Stamps account
@@ -15,7 +15,7 @@ namespace ShipWorks.Data.Model.EntityClasses
             get
             {
                 // Express1 uses terribly long account numbers
-                if (StampsReseller != 1)
+                if (UspsReseller != 1)
                 {
                     return Username;
                 }

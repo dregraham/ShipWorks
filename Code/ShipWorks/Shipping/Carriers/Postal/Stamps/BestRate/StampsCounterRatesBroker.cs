@@ -11,13 +11,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
     /// </summary>
     public class StampsCounterRatesBroker : WebToolsCounterRatesBroker
     {
-        private readonly ICarrierAccountRepository<StampsAccountEntity> stampsAccountRepository;
+        private readonly ICarrierAccountRepository<UspsAccountEntity> stampsAccountRepository;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="accountRepository">Repository that will be used to access Stamps accounts</param>
-        public StampsCounterRatesBroker(ICarrierAccountRepository<StampsAccountEntity> accountRepository) :
+        public StampsCounterRatesBroker(ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             base(new StampsShipmentType())
         {
             stampsAccountRepository = accountRepository;
@@ -30,16 +30,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate
         /// <param name="account"></param>
         protected override void UpdateChildAccountId(PostalShipmentEntity postalShipmentEntity, NullEntity account)
         {
-            StampsAccountEntity stampsAccount = stampsAccountRepository.Accounts.FirstOrDefault();
+            UspsAccountEntity uspsAccount = stampsAccountRepository.Accounts.FirstOrDefault();
 
-            if (postalShipmentEntity.Stamps == null)
+            if (postalShipmentEntity.Usps == null)
             {
-                postalShipmentEntity.Stamps = new StampsShipmentEntity();
+                postalShipmentEntity.Usps = new UspsShipmentEntity();
             }
 
-            if (stampsAccount != null)
+            if (uspsAccount != null)
             {
-                postalShipmentEntity.Stamps.StampsAccountID = stampsAccount.StampsAccountID;
+                postalShipmentEntity.Usps.UspsAccountID = uspsAccount.UspsAccountID;
             }
 
             base.UpdateChildAccountId(postalShipmentEntity, account);
