@@ -44,6 +44,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     public class StampsShipmentType : PostalShipmentType
     {
+        private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsShipmentType"/> class.
         /// </summary>
@@ -322,12 +324,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
         {
             StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
+            UspsAccountEntity uspsAccount = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
             // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
             bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
-            if (contractType == StampsAccountContractType.Commercial && !accountConversionRestricted)
+            TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
+
+            if (contractType == StampsAccountContractType.Commercial && 
+                accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo && 
+                !accountConversionRestricted)
             {
                 // Show the promotional footer for discounted rates 
                 rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));

@@ -494,6 +494,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ContractType", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CreatedDate", fieldHashtable);
 		}
 		#endregion
 
@@ -788,6 +791,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)UspsAccountFieldIndex.ContractType, true); }
 			set	{ SetValue((int)UspsAccountFieldIndex.ContractType, value); }
+		}
+
+		/// <summary> The CreatedDate property of the Entity UspsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."CreatedDate"<br/>
+		/// Table field type characteristics (type, precision, scale, length): DateTime, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.DateTime CreatedDate
+		{
+			get { return (System.DateTime)GetValue((int)UspsAccountFieldIndex.CreatedDate, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.CreatedDate, value); }
 		}
 
 

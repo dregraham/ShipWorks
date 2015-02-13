@@ -2731,7 +2731,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
 		{
-			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 21 );
+			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 22 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsAccountID", "UspsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2753,6 +2753,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UspsAccountEntity", "MailingPostalCode", "MailingPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 18 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsReseller", "UspsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 21 );
 		}
 		/// <summary>Inits UspsProfileEntity's mappings</summary>
 		private void InitUspsProfileEntityMappings()

@@ -9,14 +9,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
     public class StampsCbpRegistrationPromotion : IRegistrationPromotion
     {
         /// <summary>
-        /// This will only return the Standard type.
-        /// </summary>
-        public IEnumerable<PostalAccountRegistrationType> AvailableRegistrationTypes
-        {
-            get { return new List<PostalAccountRegistrationType> { PostalAccountRegistrationType.Standard }; }
-        }
-
-        /// <summary>
         /// Gets a value indicating whether the promotion waives the monthly fee.
         /// </summary>
         public bool IsMonthlyFeeWaived
@@ -28,12 +20,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
         /// Gets the promo code to use when registering an account with Stamps.com based on the
         /// type of account being registered.
         /// </summary>
-        /// <param name="registrationType">The type of account being registered.</param>
         /// <returns>The promotion code to be used during registration.</returns>
-        public string GetPromoCode(PostalAccountRegistrationType registrationType)
+        public string GetPromoCode()
         {
             // The promotion code for creating a standard Stamps.com account with CBP rates.
-            return "ShipWorks4";
+            return "ShipWorks2";
         }
     }
 }

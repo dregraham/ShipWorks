@@ -4493,7 +4493,8 @@ CREATE TABLE [dbo].[UspsAccount]
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsReseller] [int] NOT NULL,
-[ContractType] [int] NOT NULL
+[ContractType] [int] NOT NULL,
+[CreatedDate] [datetime] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'

@@ -62,6 +62,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             uspsAccount.Phone = registration.Phone10Digits;
             uspsAccount.Email = registration.Email;
             uspsAccount.Website = string.Empty;
+
+            uspsAccount.CreatedDate = DateTime.UtcNow;
             
             // Persist the account entity to the database
             StampsAccountManager.SaveAccount(uspsAccount);

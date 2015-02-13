@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -40,9 +38,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Initialization
         /// </summary>
-        protected override void OnLoad(object sender, System.EventArgs e)
+        protected override void OnLoad(object sender, EventArgs e)
         {
             base.OnLoad(sender, e);
+
+            if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
+            {
+                ClearExistingRulesAndProfiles();
+
+                // Need to update any rules to swap out Endicia, Express1, and the original Stamps.com 
+                // with USPS (Stamps.com Expedited) now that those types are not longer active
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
+            }
 
             if (InitialAccountAddress != null)
             {
@@ -50,8 +61,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // created via the Activate Postage Discount dialog
                 PersonControl.LoadEntity(InitialAccountAddress);
             }
-
         }
+
+        /// <summary>
+        /// Remove any existing rules and profiles
+        /// </summary>
+        private static void ClearExistingRulesAndProfiles()
+        {
+            // Make sure that if this is ever called after the Usps shipment type is configured that we don't
+            // delete the users' data
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
+            {
+                return;
+            }
+
+            // Performance is not a big deal here since this code only applies until Usps is configured
+            // for the first time
+            List<ShippingDefaultsRuleEntity> rules = ShippingDefaultsRuleManager.GetRules(ShipmentTypeCode.Usps);
+            foreach (ShippingDefaultsRuleEntity rule in rules)
+            {
+                ShippingProfileEntity profile = ShippingProfileManager.GetProfile(rule.ShippingProfileID);
+                if (profile != null)
+                {
+                    using (SqlAdapter sqlAdapter = new SqlAdapter())
+                    {
+                        sqlAdapter.DeleteEntity(profile);
+                    }    
+                }
+                
+                ShippingDefaultsRuleManager.DeleteRule(rule);
+            }
+        }
+
         /// <summary>
         /// Prepares the stamps account for save. Just sets the reseller type to expedited.
         /// </summary>
@@ -61,7 +102,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccount.UspsReseller = (int) StampsResellerType.StampsExpedited;
         }
 
-        protected override void OnFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        /// <summary>
+        /// Handle the form closing event
+        /// </summary>
+        protected override void OnFormClosing(object sender, FormClosingEventArgs e)
         {
             base.OnFormClosing(sender, e);
 
@@ -84,14 +128,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 settings.ExcludedTypes = excludedTypes.ToArray();
 
                 ShippingSettings.Save(settings);
-
-                // Need to update any rules to swap out Endicia, Express1, and the original Stamps.com 
-                // with USPS (Stamps.com Expedited) now that those types are not longer active
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
 
                 // We may have came from USPS (Stamps.com), which would not have marked USPS as configured, so mark it now.
                 ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
@@ -163,10 +199,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 return 0;
             }
-
+            
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
-            newProfile.Name = string.Format("{0} (Copy)", profile.Name);
+            newProfile.Name = string.Format("{0} (from {1})", profile.Name, EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType));
             newProfile.ShipmentType = (int)ShipmentTypeCode.Usps;
             newProfile.ShipmentTypePrimary = false;
 

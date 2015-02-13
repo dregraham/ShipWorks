@@ -8722,6 +8722,8 @@ namespace ShipWorks.Data.Model
 		UspsReseller,
 		///<summary>ContractType. </summary>
 		ContractType,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
