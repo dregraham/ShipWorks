@@ -854,9 +854,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.Designer.cs">
       <DependentUpon>UspsServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
@@ -4558,11 +4555,11 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.Designer.cs">
       <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSetupWizard.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsSetupWizard.Designer.cs">
-      <DependentUpon>StampsSetupWizard.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.Designer.cs">
+      <DependentUpon>UspsSetupWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebClientRates.cs" />
@@ -9670,8 +9667,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.resx">
       <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsSetupWizard.resx">
-      <DependentUpon>StampsSetupWizard.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.resx">
+      <DependentUpon>UspsSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\WebTools\PostalWebServiceControl.resx">
       <DependentUpon>PostalWebServiceControl.cs</DependentUpon>

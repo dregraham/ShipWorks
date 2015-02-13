@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -65,7 +66,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         private void OnConfigureClick(object sender, EventArgs e)
         {
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-            using (StampsSetupWizard wizard = new StampsSetupWizard(promotion, true))
+            using (UspsSetupWizard wizard = new UspsSetupWizard(promotion, true))
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {
