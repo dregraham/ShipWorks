@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -198,10 +199,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 return 0;
             }
-
+            
             ShippingProfileEntity newProfile = CreateCopy(profile);
 
-            newProfile.Name = string.Format("{0} (Copy)", profile.Name);
+            newProfile.Name = string.Format("{0} (from {1})", profile.Name, EnumHelper.GetDescription((ShipmentTypeCode) profile.ShipmentType));
             newProfile.ShipmentType = (int)ShipmentTypeCode.Usps;
             newProfile.ShipmentTypePrimary = false;
 
