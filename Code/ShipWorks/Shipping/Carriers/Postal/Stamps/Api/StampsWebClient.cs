@@ -1051,7 +1051,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 }
                 else
                 {
-                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength); ;
+                    customs.OtherDescribe = shipment.Postal.CustomsContentDescription.Truncate(MaxCustomsContentDescriptionLength);
                 }
             }
 
@@ -1063,7 +1063,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
 
                 CustomsLine line = new CustomsLine();
-                line.Description = customsItem.Description.Truncate(MaxCustomsItemDescriptionLength); ;
+                line.Description = customsItem.Description.Truncate(MaxCustomsItemDescriptionLength);
                 line.Quantity = customsItem.Quantity;
                 line.Value = customsItem.UnitValue;
 
