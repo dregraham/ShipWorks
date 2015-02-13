@@ -80,35 +80,35 @@
             // 
             // next
             // 
-            this.next.Location = new System.Drawing.Point(494, 612);
+            this.next.Location = new System.Drawing.Point(565, 612);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(575, 612);
+            this.cancel.Location = new System.Drawing.Point(646, 612);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(413, 612);
+            this.back.Location = new System.Drawing.Point(484, 612);
             // 
             // mainPanel
             // 
             this.mainPanel.Controls.Add(this.wizardPageWelcome);
-            this.mainPanel.Size = new System.Drawing.Size(662, 540);
+            this.mainPanel.Size = new System.Drawing.Size(733, 540);
             // 
             // etchBottom
             // 
             this.etchBottom.Location = new System.Drawing.Point(0, 602);
-            this.etchBottom.Size = new System.Drawing.Size(666, 2);
+            this.etchBottom.Size = new System.Drawing.Size(737, 2);
             // 
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.logo_sdc;
-            this.pictureBox.Location = new System.Drawing.Point(509, 3);
+            this.pictureBox.Location = new System.Drawing.Point(580, 3);
             this.pictureBox.Size = new System.Drawing.Size(150, 50);
             // 
             // topPanel
             // 
-            this.topPanel.Size = new System.Drawing.Size(662, 56);
+            this.topPanel.Size = new System.Drawing.Size(733, 56);
             // 
             // wizardPageWelcome
             // 
@@ -119,7 +119,7 @@
             this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
             this.wizardPageWelcome.Name = "wizardPageWelcome";
-            this.wizardPageWelcome.Size = new System.Drawing.Size(662, 540);
+            this.wizardPageWelcome.Size = new System.Drawing.Size(733, 540);
             this.wizardPageWelcome.TabIndex = 0;
             this.wizardPageWelcome.Title = "Setup Stamps.com Shipping";
             // 
@@ -502,7 +502,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(662, 647);
+            this.ClientSize = new System.Drawing.Size(733, 647);
             this.Controls.Add(this.linkStampsPrivacy);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.LastPageCancelable = true;
