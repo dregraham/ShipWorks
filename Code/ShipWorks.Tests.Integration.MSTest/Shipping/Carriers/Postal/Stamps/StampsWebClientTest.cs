@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Mock<IStampsRegistrationGateway> gateway = new Mock<IStampsRegistrationGateway>();
 
             Mock<IRegistrationPromotion> promotion = new Mock<IRegistrationPromotion>();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns(string.Empty);
+            promotion.Setup(p => p.GetPromoCode()).Returns(string.Empty);
 
             StampsRegistration registration = new StampsRegistration(validator.Object, gateway.Object, promotion.Object);            
             registration.UsageType = AccountType.OfficeBasedBusiness;

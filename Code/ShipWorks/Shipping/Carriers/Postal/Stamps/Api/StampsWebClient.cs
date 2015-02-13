@@ -284,7 +284,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 {
                     PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
-                    RateResult baseRate = null;
+                    RateResult baseRate;
 
                     // If its a rate that has sig\deliv, then you can's select the core rate itself
                     if (stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV6.USADC))

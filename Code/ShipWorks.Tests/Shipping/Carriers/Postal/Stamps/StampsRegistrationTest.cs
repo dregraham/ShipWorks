@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>()));
 
             promotion = new Mock<IRegistrationPromotion>();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("shipworks");
+            promotion.Setup(p => p.GetPromoCode()).Returns("shipworks");
 
             testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object, promotion.Object);
         }

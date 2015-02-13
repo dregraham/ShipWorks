@@ -32,6 +32,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         private ShipmentEntity Shipment { get; set; }
 
         /// <summary>
+        /// Notes that this factory should not be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets a value indicating whether to [show single account dialog].
         /// </summary>
         public bool ShowSingleAccountDialog { get; private set; }
