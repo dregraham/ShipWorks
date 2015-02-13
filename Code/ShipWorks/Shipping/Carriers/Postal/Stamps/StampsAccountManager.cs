@@ -110,9 +110,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Return the active list of Stamps.com Expedited accounts
+        /// Return the active list of USPS accounts.
         /// </summary>
-        public static List<UspsAccountEntity> StampsExpeditedAccounts
+        public static List<UspsAccountEntity> UspsAccounts
         {
             get
             {
@@ -125,16 +125,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static UspsAccountEntity GetAccount(long accountID)
         {
-            UspsAccountEntity uspsAccount = StampsAccounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
+            UspsAccountEntity uspsAccount = StampsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
 
             if (uspsAccount == null)
             {
-                uspsAccount = Express1Accounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
+                uspsAccount = Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID);
             }
 
             if (uspsAccount == null)
             {
-                uspsAccount = StampsExpeditedAccounts.Where(a => a.UspsAccountID == accountID).FirstOrDefault();
+                uspsAccount = UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
             }
 
             return uspsAccount;

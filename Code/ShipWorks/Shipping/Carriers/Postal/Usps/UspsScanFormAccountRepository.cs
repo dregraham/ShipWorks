@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual IEnumerable<UspsAccountEntity> AccountList
         {
-            get { return StampsAccountManager.StampsExpeditedAccounts; }
+            get { return StampsAccountManager.UspsAccounts; }
         }
 
         /// <summary>

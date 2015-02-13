@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void LoadExpeditedAccounts(long accountId)
         {
-            List<UspsAccountEntity> accounts = StampsAccountManager.StampsExpeditedAccounts;
+            List<UspsAccountEntity> accounts = StampsAccountManager.UspsAccounts;
 
             expeditedAccounts.Left = expeditedSignup.Left;
             expeditedAccounts.Width = 250;
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Reload the account list if a new account has been added
             if (added)
             {
-                LoadExpeditedAccounts(StampsAccountManager.StampsExpeditedAccounts.Max(a => a.UspsAccountID));
+                LoadExpeditedAccounts(StampsAccountManager.UspsAccounts.Max(a => a.UspsAccountID));
             }
         }
 

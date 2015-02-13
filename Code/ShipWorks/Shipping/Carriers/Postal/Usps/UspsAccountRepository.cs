@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return StampsAccountManager.StampsExpeditedAccounts.ToList();
+                return StampsAccountManager.UspsAccounts.ToList();
             }
         }
 

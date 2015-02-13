@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.shipment = shipment;
 
             if ((shipment.ShipmentType == (int) ShipmentTypeCode.Stamps && StampsAccountManager.StampsAccounts.Any())
-                || shipment.ShipmentType == (int)ShipmentTypeCode.Usps && StampsAccountManager.StampsExpeditedAccounts.Any())
+                || shipment.ShipmentType == (int)ShipmentTypeCode.Usps && StampsAccountManager.UspsAccounts.Any())
             {
                 // There are Stamps-backed accounts, so we want to show the control to convert their existing account
                 requiresSignup = false;

@@ -503,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                    EndiciaAccountManager.Express1Accounts.Any() ||
                    StampsAccountManager.StampsAccounts.Any() ||
                    StampsAccountManager.Express1Accounts.Any() ||
-                   StampsAccountManager.StampsExpeditedAccounts.Any();
+                   StampsAccountManager.UspsAccounts.Any();
         }
 
         /// <summary>
