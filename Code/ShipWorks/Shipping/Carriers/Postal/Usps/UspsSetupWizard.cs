@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private readonly ShipmentTypeCode shipmentTypeCode;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
-        bool registrationComplete = false;
+        bool registrationComplete;
         private readonly bool allowRegisteringExistingAccount;
         private readonly int initialPersonControlHeight;
 
@@ -611,7 +611,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="settings">The settings being updated.</param>
         /// <param name="shipmentTypeToExclude">The shipment type code to be excluded.</param>
-        private void ExcludeShipmentType(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeToExclude)
+        private static void ExcludeShipmentType(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeToExclude)
         {
             if (!settings.ExcludedTypes.Any(t => t == (int)shipmentTypeToExclude))
             {

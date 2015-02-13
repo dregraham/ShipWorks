@@ -25,13 +25,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             : base(ShipmentTypeCode.Express1Stamps, rateControl)
         {
             InitializeComponent();
-
-            // Express1 for Stamps.com required that postage is hidden, so we want
-            // to hide this option and adjust the insurance control accordingly.
-            hidePostalLabel.Visible = false;
-            hidePostage.Visible = false;
-
-            insuranceControl.Top = hidePostage.Top;
         }
 
         /// <summary>
@@ -74,7 +67,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
-
             if (shipments == null)
             {
                 throw new ArgumentNullException("shipments");
@@ -94,7 +86,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 {
                     stampsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Usps.RequireFullAddressValidation);
-                    hidePostage.ApplyMultiCheck(shipment.Postal.Usps.HidePostage);
                     memo.ApplyMultiText(shipment.Postal.Usps.Memo);
                 }
             }
@@ -120,7 +111,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 stampsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long) v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
-                hidePostage.ReadMultiCheck(c => shipment.Postal.Usps.HidePostage = c);
                 memo.ReadMultiText(t => shipment.Postal.Usps.Memo = t);
             }
 
@@ -170,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             bool multiValue = stampsAccount.MultiValued;
             long oldAccount = multiValue ? -1 : (long) stampsAccount.SelectedValue;
 
-            stampsAccount.SelectedValueChanged -= this.OnOriginChanged;
+            stampsAccount.SelectedValueChanged -= OnOriginChanged;
 
             LoadAccounts();
 
@@ -191,24 +181,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 }
             }
 
-            stampsAccount.SelectedValueChanged += this.OnOriginChanged;
+            stampsAccount.SelectedValueChanged += OnOriginChanged;
 
             OnOriginChanged(null, EventArgs.Empty);
-        }
-
-        /// <summary>
-        /// Updates the shipment options based on the configured shipment values
-        /// </summary>
-        /// <param name="postalPackagingType"></param>
-        protected override void UpdateAvailableShipmentOptions(PostalPackagingType? postalPackagingType)
-        {
-            base.UpdateAvailableShipmentOptions(postalPackagingType);
-
-            // Stamps API doesn't allow hidden postage on envelopes
-            bool disableHiddenPostage = postalPackagingType == PostalPackagingType.Envelope;
-            
-            // Disable the hide postage option should for first class envelopes
-            hidePostage.Enabled = !disableHiddenPostage;
         }
     }
 }

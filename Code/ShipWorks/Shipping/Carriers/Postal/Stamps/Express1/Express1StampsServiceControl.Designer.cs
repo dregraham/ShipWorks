@@ -36,8 +36,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.stampsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.hidePostalLabel = new System.Windows.Forms.Label();
-            this.hidePostage = new System.Windows.Forms.CheckBox();
             this.labelStampsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -60,7 +58,7 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Location = new System.Drawing.Point(14, 301);
+            this.insuranceControl.Location = new System.Drawing.Point(14, 277);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
             // 
             // sectionExpress
@@ -108,12 +106,10 @@
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.hidePostalLabel);
-            this.sectionShipment.ContentPanel.Controls.Add(this.hidePostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo);
             this.sectionShipment.Location = new System.Drawing.Point(3, 161);
-            this.sectionShipment.Size = new System.Drawing.Size(378, 384);
+            this.sectionShipment.Size = new System.Drawing.Size(378, 360);
             // 
             // sectionFrom
             // 
@@ -208,27 +204,6 @@
             this.stampsAccount.TabIndex = 3;
             this.stampsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
-            // hidePostalLabel
-            // 
-            this.hidePostalLabel.AutoSize = true;
-            this.hidePostalLabel.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostalLabel.Location = new System.Drawing.Point(33, 278);
-            this.hidePostalLabel.Name = "hidePostalLabel";
-            this.hidePostalLabel.Size = new System.Drawing.Size(45, 13);
-            this.hidePostalLabel.TabIndex = 55;
-            this.hidePostalLabel.Text = "Stealth:";
-            // 
-            // hidePostage
-            // 
-            this.hidePostage.AutoSize = true;
-            this.hidePostage.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostage.Location = new System.Drawing.Point(83, 277);
-            this.hidePostage.Name = "hidePostage";
-            this.hidePostage.Size = new System.Drawing.Size(89, 17);
-            this.hidePostage.TabIndex = 56;
-            this.hidePostage.Text = "Hide Postage";
-            this.hidePostage.UseVisualStyleBackColor = false;
-            // 
             // labelStampsValidation
             // 
             this.labelStampsValidation.AutoSize = true;
@@ -319,7 +294,5 @@
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
         private Templates.Tokens.TemplateTokenTextBox memo;
         private System.Windows.Forms.Label labelMemo;
-        protected System.Windows.Forms.CheckBox hidePostage;
-        protected System.Windows.Forms.Label hidePostalLabel;
     }
 }
