@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
@@ -29,6 +30,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.StampsResellerType = stampsResellerType;
+
+            VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
+        }
+
+        /// <summary>
+        /// Positions the controls based on the visibility of other controls
+        /// </summary>
+        private void PositionControls()
+        {
+            express1SettingsControl.Top = optionsControl.Bottom + 5;
+
+            if (express1SettingsControl.Visible)
+            {
+                panelBottom.Top = express1SettingsControl.Bottom;
+            }
+            else if (express1Options.Visible)
+            {
+                panelBottom.Top = express1Options.Bottom;
+            }
+            else
+            {
+                panelBottom.Top = optionsControl.Bottom;
+            }
         }
 
         /// <summary>
@@ -40,10 +64,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             string reseller = StampsAccountManager.GetResellerName(stampsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
+        }
 
+        /// <summary>
+        /// Updates whether the Express1 controls are displayed
+        /// </summary>
+        private void UpdateExpress1ControlDisplay()
+        {
             express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
+            express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
 
             LoadExpress1Settings();
+            PositionControls();
         }
 
         /// <summary>
@@ -57,14 +89,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
             {
                 express1Options.LoadSettings(settings);
-                panelBottom.Top = express1Options.Bottom + 5;
             }
             else
             {
-                // This isn't Express1 - hide the express1 settings
-                express1Options.Hide();
-                panelBottom.Top = optionsControl.Bottom - 35;
+                if (ShouldHideExpress1Controls())
+                {
+                    // Express1 is restricted - hide the express1 settings
+                    express1SettingsControl.Hide();
+                    express1Options.Hide();
+                }
+                else
+                {
+                    express1SettingsControl.LoadSettings(express1Settings);
+                    express1SettingsControl.Top = optionsControl.Bottom + 5;
+                }
             }
+        }
+
+        /// <summary>
+        /// Determines if the Express1 controls should be hidden
+        /// </summary>
+        private static bool ShouldHideExpress1Controls()
+        {
+            return !StampsAccountManager.GetAccounts(StampsResellerType.Express1).Any() ||
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted; 
         }
 
         /// <summary>
@@ -98,10 +146,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 accountControl.Initialize();
                 loadedAccounts = true;
             }
-
-            // Reload the Express1 settings in the event that an Express1 account was deleted to accurately
-            // show whether to sign-up, remove the deleted account from the list, etc.
-            LoadExpress1Settings();
         }
     }
 }

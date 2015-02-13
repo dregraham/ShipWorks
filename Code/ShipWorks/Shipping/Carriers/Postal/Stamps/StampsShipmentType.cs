@@ -234,7 +234,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
             return AccountRepository.Accounts.Any() ?
-                GetCachedRates<StampsException>(shipment, GetRatesFromApi) :
+                GetRatesInternal(shipment) :
                 GetCounterRates(shipment);
         }
 
@@ -242,7 +242,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get postal rates for the given shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
-        protected virtual RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
+        {
+            return GetCachedRates<StampsException>(shipment, GetRatesFromApi);
+        }
+
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> express1Rates = null;
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
