@@ -11,26 +11,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsProfileControl : PostalProfileControlBase
     {
-        private ShipmentTypeCode shipmentTypeCode;
-
-        /// <summary>
-        /// Need this for the designer...
-        /// </summary>
-        public UspsProfileControl() : this(ShipmentTypeCode.Usps)
-        {
-            
-        }
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsProfileControl(ShipmentTypeCode shipmentTypeCode)
+        public UspsProfileControl()
         {
             InitializeComponent();
 
             ResizeGroupBoxes(tabPage);
-
-            this.shipmentTypeCode = shipmentTypeCode;
         }
 
         /// <summary>
@@ -63,7 +51,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             uspsAccount.DisplayMember = "Key";
             uspsAccount.ValueMember = "Value";
 
-            StampsResellerType uspsResellerType = PostalUtility.GetStampsResellerType(shipmentTypeCode);
+            StampsResellerType uspsResellerType = PostalUtility.GetStampsResellerType(ShipmentTypeCode.Usps);
+
             List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(uspsResellerType);
             if (accounts.Any())
             {

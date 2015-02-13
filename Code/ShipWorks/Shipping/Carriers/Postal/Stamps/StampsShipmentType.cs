@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
-            return new UspsProfileControl(ShipmentTypeCode);
+            return new UspsProfileControl();
         }
 
         /// <summary>
