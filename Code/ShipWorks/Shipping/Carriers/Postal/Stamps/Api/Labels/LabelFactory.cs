@@ -154,17 +154,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
         /// </summary>
         private Label CreateBlankLabel(ShipmentEntity shipment, string name, Rectangle rectangle)
         {
-         
-            // Cate an image and fill it white
-            using (Image image = new Bitmap(rectangle.Width, rectangle.Height))
-            {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    g.FillRectangle(Brushes.White, rectangle);
-                }
+            // Create an image and fill it white
+            Image image = new Bitmap(rectangle.Width, rectangle.Height);
 
-                return new StandardLabel(shipment, name, image, Rectangle.Empty);
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                g.FillRectangle(Brushes.White, rectangle);
             }
+
+            return new StandardLabel(shipment, name, image, Rectangle.Empty);
         }
 
         /// <summary>
