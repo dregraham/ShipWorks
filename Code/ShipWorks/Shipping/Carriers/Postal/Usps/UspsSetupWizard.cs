@@ -150,24 +150,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
             stampsUsageType.SelectedIndex = 0;
-            if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
-            {
-                ClearExistingRulesAndProfiles();
 
-                // Need to update any rules to swap out Endicia, Express1, and the original Stamps.com 
-                // with USPS (Stamps.com Expedited) now that those types are not longer active
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
-            }
+            CopyPostalRules();
 
             if (InitialAccountAddress != null)
             {
                 // Pre-load the person control with our initial account address (in the event an account is being
                 // created via the Activate Postage Discount dialog
                 PersonControl.LoadEntity(InitialAccountAddress);
+            }
+        }
+
+        /// <summary>
+        /// A helper method to copy shipping rules from all other postal providers into the USPS shipment type.
+        /// </summary>
+        private void CopyPostalRules()
+        {
+            if (!ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
+            {
+                ClearExistingRulesAndProfiles();
+
+                // Need to update any rules to swap out Endicia, Express1, and the original Stamps.com 
+                // with USPS (Stamps.com Expedited) now that those types will no longer be active
+                // once the account is added.
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
             }
         }
 
@@ -228,17 +238,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            RequiredFieldChecker checker = new RequiredFieldChecker();
-            checker.Check("Full Name", UspsAccount.FirstName);
-            checker.Check("Street Address", UspsAccount.Street1);
-            checker.Check("City", UspsAccount.City);
-            checker.Check("State", UspsAccount.StateProvCode);
-            checker.Check("Postal Code", UspsAccount.PostalCode);
-            checker.Check("Phone", UspsAccount.Phone);
-            checker.Check("Email", UspsAccount.Email);
-
-            if (HasAcceptedTermsConditions() && checker.Validate(this))
+            
+            if (HasAcceptedTermsConditions() && IsContactInfoComplete())
             {
                 // We have the necessary information, so update our stamps.com registration
                 stampsRegistration.UsageType = ((StampsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
@@ -280,6 +281,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Validation failed
                 e.NextPage = CurrentPage;
             }
+        }
+
+        /// <summary>
+        /// A helper method to determine whether data for all the required contact info fields have been provided.
+        /// </summary>
+        /// <returns><c>true</c> if the [contact information is complete]; otherwise, <c>false</c>.</returns>
+        private bool IsContactInfoComplete()
+        {
+            RequiredFieldChecker checker = new RequiredFieldChecker();
+
+            checker.Check("Full Name", UspsAccount.FirstName);
+            checker.Check("Street Address", UspsAccount.Street1);
+            checker.Check("City", UspsAccount.City);
+            checker.Check("State", UspsAccount.StateProvCode);
+            checker.Check("Postal Code", UspsAccount.PostalCode);
+            checker.Check("Phone", UspsAccount.Phone);
+            checker.Check("Email", UspsAccount.Email);
+
+            return checker.Validate(this);
         }
 
         /// <summary>
@@ -534,29 +554,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     }
                 }
 
-                ShippingSettingsEntity settings = ShippingSettings.Fetch();
-
-                // We also need to exclude Endicia, Express1, and the original Stamps.com from the list 
-                // of active providers since the customer agreed to use USPS (Stamps.com Expedited)
-                ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
-                ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
-                ExcludeShipmentType(settings, ShipmentTypeCode.Express1Stamps);
-                ExcludeShipmentType(settings, ShipmentTypeCode.Stamps);
-                ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
-
-                // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded
-                // before saving the settings
-                List<int> excludedTypes = settings.ExcludedTypes.ToList();
-                excludedTypes.Remove((int) ShipmentTypeCode.Usps);
-                settings.ExcludedTypes = excludedTypes.ToArray();
-
-                ShippingSettings.Save(settings);
+                ExcludeOtherPostalProviders();
 
                 // We may have came from USPS (Stamps.com), which would not have marked USPS as configured, so mark it now.
                 ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
 
                 ShippingSettingsEventDispatcher.DispatchUspsAccountCreated(this, new ShippingSettingsEventArgs(ShipmentTypeCode.Usps));
             }
+        }
+
+        /// <summary>
+        /// Updates the shipping settings so the USPS shipment type is the only active postal provider.
+        /// </summary>
+        private void ExcludeOtherPostalProviders()
+        {
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            // We also need to exclude Endicia, Express1, and the original Stamps.com from the list 
+            // of active providers since the customer agreed to use USPS (Stamps.com Expedited)
+            ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
+            ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
+            ExcludeShipmentType(settings, ShipmentTypeCode.Express1Stamps);
+            ExcludeShipmentType(settings, ShipmentTypeCode.Stamps);
+            ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
+
+            // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded
+            // before saving the settings
+            List<int> excludedTypes = settings.ExcludedTypes.ToList();
+            excludedTypes.Remove((int) ShipmentTypeCode.Usps);
+            settings.ExcludedTypes = excludedTypes.ToArray();
+
+            ShippingSettings.Save(settings);
         }
 
         /// <summary>
