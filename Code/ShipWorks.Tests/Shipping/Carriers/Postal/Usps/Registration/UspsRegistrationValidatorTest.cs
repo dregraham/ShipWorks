@@ -4,20 +4,21 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
 {
     [TestClass]
-    public class StampsRegistrationValidatorTest
+    public class UspsRegistrationValidatorTest
     {
-        private readonly StampsRegistrationValidator testObject;
+        private readonly UspsRegistrationValidator testObject;
 
         private Mock<IRegistrationPromotion> promotion;
-        private Mock<IStampsRegistrationGateway> gateway;        
+        private Mock<IStampsRegistrationGateway> gateway;
 
-        public StampsRegistrationValidatorTest()
+        public UspsRegistrationValidatorTest()
         {
-            testObject = new StampsRegistrationValidator();
+            testObject = new UspsRegistrationValidator();
         }
         
         private StampsRegistration CreateValidUnitedStatesRegistration()

@@ -1924,7 +1924,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationSecuritySettingsControl.Designer.cs">
       <DependentUpon>StampsRegistrationSecuritySettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationValidator.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountEditorDlg.cs">
       <SubType>Form</SubType>
     </Compile>

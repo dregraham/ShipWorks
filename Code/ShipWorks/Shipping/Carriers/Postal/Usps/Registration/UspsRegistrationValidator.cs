@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// Validates the fields within a stamps.com registration according to the Stamps.com documentation.
     /// </summary>
-    public class StampsRegistrationValidator : IStampsRegistrationValidator
+    public class UspsRegistrationValidator : IStampsRegistrationValidator
     {
         // Password must contain at least one letter, one number, and between 6 and 20 characters long
         private const string PasswordRegexPattern = "^(?=.*\\d)(?=.*[a-zA-Z]).{6,20}$";
