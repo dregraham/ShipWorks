@@ -847,7 +847,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
                 // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
                 // updated outside of ShipWorks.
-                if (!StampsContractTypeCache.Contains(account.UspsAccountID) || StampsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
+                if (!UspsContractTypeCache.Contains(account.UspsAccountID) || UspsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
                 {
                     try
                     {
@@ -860,7 +860,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                         // Save the contract to the DB and update the cache
                         AccountRepository.Save(account);
-                        StampsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
+                        UspsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
 
                         if (hasContractChanged)
                         {

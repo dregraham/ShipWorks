@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Caching;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// An in-memory cache for the contract types associated with a Stamps.com account. This is intended
     /// to be used in a manner that reduces the number of calls to the Stamps.com API while also keeping
     /// the contract type of the stamps account up to date in ShipWorks.
     /// </summary>
-    public static class StampsContractTypeCache
+    public static class UspsContractTypeCache
     {
         private static readonly ObjectCache cache = MemoryCache.Default;
         private static readonly object syncLock = new object();

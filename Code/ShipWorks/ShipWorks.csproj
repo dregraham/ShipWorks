@@ -769,7 +769,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsContractTypeCache.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
