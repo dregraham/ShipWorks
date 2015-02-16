@@ -1619,7 +1619,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceRequestWriter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceResponseReader.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceWrapper.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsServiceWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsSingleSourceControl.cs">
       <SubType>UserControl</SubType>

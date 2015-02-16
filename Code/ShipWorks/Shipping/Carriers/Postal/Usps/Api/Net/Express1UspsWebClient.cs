@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private SwsimV29 CreateWebService(string logName, LogActionType logActionType)
         {
-            SwsimV29 webService = new Express1StampsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
+            SwsimV29 webService = new Express1UspsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
             {
                 Url = express1StampsConnectionDetails.ServiceUrl
             };
