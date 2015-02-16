@@ -1,5 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {

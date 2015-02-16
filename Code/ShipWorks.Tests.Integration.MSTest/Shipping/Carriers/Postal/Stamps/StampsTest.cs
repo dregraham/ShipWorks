@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 PostalWebUtility.UseTestServer = true;
                 UspsWebClient.UseTestServer = true;
-                Express1StampsWebClient.UseTestServer = true;
+                Express1UspsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 PostalWebUtility.UseTestServer = true;
                 UspsWebClient.UseTestServer = true;
-                Express1StampsWebClient.UseTestServer = true;
+                Express1UspsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 PostalWebUtility.UseTestServer = true;
                 UspsWebClient.UseTestServer = true;
-                Express1StampsWebClient.UseTestServer = true;
+                Express1UspsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
@@ -209,7 +209,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 PostalWebUtility.UseTestServer = true;
                 UspsWebClient.UseTestServer = true;
-                Express1StampsWebClient.UseTestServer = true;
+                Express1UspsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))

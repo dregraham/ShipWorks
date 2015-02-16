@@ -1,38 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
+using System.Web.Services.Protocols;
+using System.Xml.Linq;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29;
-using Interapptive.Shared.Utility;
-using System.Web.Services.Protocols;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using System.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using System.Drawing;
-using System.IO;
-using System.Drawing.Imaging;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.UI;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore;
-using log4net;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using System.Xml.Linq;
-using Microsoft.Web.Services3;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Templates.Tokens;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Address;
 using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ContentTypeV2;
@@ -45,18 +33,17 @@ using ImageType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Imag
 using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.NonDeliveryOption;
 using PackageTypeV6 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.PackageTypeV6;
 using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.PurchaseStatus;
-using RegistrationStatus = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.RegistrationStatus;
 using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ResidentialDeliveryIndicatorType;
 using ServiceType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ServiceType;
 using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.StatusCodes;
 using UrlType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.UrlType;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
     /// <summary>
     /// Central point where API stuff goes through for stamps.com
     /// </summary>
-    public class Express1StampsWebClient : IUspsWebClient
+    public class Express1UspsWebClient : IUspsWebClient
     {
         // These lengths come from the error that Stamps' API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
@@ -81,20 +68,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         private readonly ICertificateInspector certificateInspector;
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsWebClient"/> class.
+        /// Initializes a new instance of the <see cref="Express1UspsWebClient"/> class.
         /// </summary>
-        public Express1StampsWebClient()
+        public Express1UspsWebClient()
             : this(new Express1StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
+        /// Initializes a new instance of the <see cref="Express1UspsWebClient" /> class.
         /// </summary>
-        public Express1StampsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
+        public Express1UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, LogEntryFactory logEntryFactory, ICertificateInspector certificateInspector)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
-            this.log = LogManager.GetLogger(typeof(Express1StampsWebClient));
+            this.log = LogManager.GetLogger(typeof(Express1UspsWebClient));
             this.certificateInspector = certificateInspector;
         }
 
@@ -273,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            WebServices.v29.PostageBalance postageBalance;
+            Stamps.WebServices.v29.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
@@ -642,7 +629,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
-            WebServices.v29.PostageBalance postageBalance;
+            Stamps.WebServices.v29.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
@@ -909,7 +896,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            Stamps.WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
@@ -1133,39 +1120,39 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Converts a current ServiceType to a v29 ServiceType
         /// </summary>
-        private static WebServices.v29.ServiceType ConvertServiceType(WebServices.ServiceType serviceType)
+        private static ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.ServiceType serviceType)
         {
             switch (serviceType)
             {
-                case WebServices.ServiceType.USFC:
-                    return WebServices.v29.ServiceType.USFC;
-                case WebServices.ServiceType.USPM:
-                    return WebServices.v29.ServiceType.USPM;
-                case WebServices.ServiceType.USXM:
-                    return WebServices.v29.ServiceType.USXM;
-                case WebServices.ServiceType.USMM:
-                    return WebServices.v29.ServiceType.USMM;
-                case WebServices.ServiceType.USBP:
-                    return WebServices.v29.ServiceType.USBP;
-                case WebServices.ServiceType.USLM:
-                    return WebServices.v29.ServiceType.USLM;
-                case WebServices.ServiceType.USEMI:
-                    return WebServices.v29.ServiceType.USEMI;
-                case WebServices.ServiceType.USPMI:
-                    return WebServices.v29.ServiceType.USPMI;
-                case WebServices.ServiceType.USFCI:
-                    return WebServices.v29.ServiceType.USFCI;
-                case WebServices.ServiceType.USCM:
-                    return WebServices.v29.ServiceType.USCM;
-                case WebServices.ServiceType.USPS:
-                    return WebServices.v29.ServiceType.USPS;
+                case Stamps.WebServices.ServiceType.USFC:
+                    return Stamps.WebServices.v29.ServiceType.USFC;
+                case Stamps.WebServices.ServiceType.USPM:
+                    return Stamps.WebServices.v29.ServiceType.USPM;
+                case Stamps.WebServices.ServiceType.USXM:
+                    return Stamps.WebServices.v29.ServiceType.USXM;
+                case Stamps.WebServices.ServiceType.USMM:
+                    return Stamps.WebServices.v29.ServiceType.USMM;
+                case Stamps.WebServices.ServiceType.USBP:
+                    return Stamps.WebServices.v29.ServiceType.USBP;
+                case Stamps.WebServices.ServiceType.USLM:
+                    return Stamps.WebServices.v29.ServiceType.USLM;
+                case Stamps.WebServices.ServiceType.USEMI:
+                    return Stamps.WebServices.v29.ServiceType.USEMI;
+                case Stamps.WebServices.ServiceType.USPMI:
+                    return Stamps.WebServices.v29.ServiceType.USPMI;
+                case Stamps.WebServices.ServiceType.USFCI:
+                    return Stamps.WebServices.v29.ServiceType.USFCI;
+                case Stamps.WebServices.ServiceType.USCM:
+                    return Stamps.WebServices.v29.ServiceType.USCM;
+                case Stamps.WebServices.ServiceType.USPS:
+                    return Stamps.WebServices.v29.ServiceType.USPS;
 
-                case WebServices.ServiceType.DHLPE:
-                case WebServices.ServiceType.DHLPG:
-                case WebServices.ServiceType.DHLPPE:
-                case WebServices.ServiceType.DHLPPG:
-                case WebServices.ServiceType.DHLBPME:
-                case WebServices.ServiceType.DHLBPMG:
+                case Stamps.WebServices.ServiceType.DHLPE:
+                case Stamps.WebServices.ServiceType.DHLPG:
+                case Stamps.WebServices.ServiceType.DHLPPE:
+                case Stamps.WebServices.ServiceType.DHLPPG:
+                case Stamps.WebServices.ServiceType.DHLBPME:
+                case Stamps.WebServices.ServiceType.DHLBPMG:
                 default:
                     throw new ArgumentOutOfRangeException("serviceType");
             }
@@ -1174,32 +1161,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Converts a v29 ServiceType to the ServiceType
         /// </summary>
-        private static WebServices.ServiceType ConvertServiceType(WebServices.v29.ServiceType serviceType)
+        private static ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ServiceType serviceType)
         {
             switch (serviceType)
             {
-                case WebServices.v29.ServiceType.USFC:
-                    return WebServices.ServiceType.USFC;
-                case WebServices.v29.ServiceType.USPM:
-                    return WebServices.ServiceType.USPM;
-                case WebServices.v29.ServiceType.USXM:
-                    return WebServices.ServiceType.USXM;
-                case WebServices.v29.ServiceType.USMM:
-                    return WebServices.ServiceType.USMM;
-                case WebServices.v29.ServiceType.USBP:
-                    return WebServices.ServiceType.USBP;
-                case WebServices.v29.ServiceType.USLM:
-                    return WebServices.ServiceType.USLM;
-                case WebServices.v29.ServiceType.USEMI:
-                    return WebServices.ServiceType.USEMI;
-                case WebServices.v29.ServiceType.USPMI:
-                    return WebServices.ServiceType.USPMI;
-                case WebServices.v29.ServiceType.USFCI:
-                    return WebServices.ServiceType.USFCI;
-                case WebServices.v29.ServiceType.USCM:
-                    return WebServices.ServiceType.USCM;
-                case WebServices.v29.ServiceType.USPS:
-                    return WebServices.ServiceType.USPS;
+                case Stamps.WebServices.v29.ServiceType.USFC:
+                    return Stamps.WebServices.ServiceType.USFC;
+                case Stamps.WebServices.v29.ServiceType.USPM:
+                    return Stamps.WebServices.ServiceType.USPM;
+                case Stamps.WebServices.v29.ServiceType.USXM:
+                    return Stamps.WebServices.ServiceType.USXM;
+                case Stamps.WebServices.v29.ServiceType.USMM:
+                    return Stamps.WebServices.ServiceType.USMM;
+                case Stamps.WebServices.v29.ServiceType.USBP:
+                    return Stamps.WebServices.ServiceType.USBP;
+                case Stamps.WebServices.v29.ServiceType.USLM:
+                    return Stamps.WebServices.ServiceType.USLM;
+                case Stamps.WebServices.v29.ServiceType.USEMI:
+                    return Stamps.WebServices.ServiceType.USEMI;
+                case Stamps.WebServices.v29.ServiceType.USPMI:
+                    return Stamps.WebServices.ServiceType.USPMI;
+                case Stamps.WebServices.v29.ServiceType.USFCI:
+                    return Stamps.WebServices.ServiceType.USFCI;
+                case Stamps.WebServices.v29.ServiceType.USCM:
+                    return Stamps.WebServices.ServiceType.USCM;
+                case Stamps.WebServices.v29.ServiceType.USPS:
+                    return Stamps.WebServices.ServiceType.USPS;
                 default:
                     throw new ArgumentOutOfRangeException("serviceType");
             }
@@ -1208,42 +1195,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Gets the v29 version of the CodewordType
         /// </summary>
-        private static WebServices.v29.PackageTypeV6 ConvertPackageType(WebServices.PackageTypeV6 packageType)
+        private static ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.PackageTypeV6 packageType)
         {
             switch (packageType)
             {
                 case PackageTypeV6.Postcard:
-                    return WebServices.v29.PackageTypeV6.Postcard;
+                    return Stamps.WebServices.v29.PackageTypeV6.Postcard;
                 case PackageTypeV6.Letter:
-                    return WebServices.v29.PackageTypeV6.Letter;
+                    return Stamps.WebServices.v29.PackageTypeV6.Letter;
                 case PackageTypeV6.LargeEnvelopeorFlat:
-                    return WebServices.v29.PackageTypeV6.LargeEnvelopeorFlat;
+                    return Stamps.WebServices.v29.PackageTypeV6.LargeEnvelopeorFlat;
                 case PackageTypeV6.ThickEnvelope:
-                    return WebServices.v29.PackageTypeV6.ThickEnvelope;
+                    return Stamps.WebServices.v29.PackageTypeV6.ThickEnvelope;
                 case PackageTypeV6.Package:
-                    return WebServices.v29.PackageTypeV6.Package;
+                    return Stamps.WebServices.v29.PackageTypeV6.Package;
                 case PackageTypeV6.FlatRateBox:
-                    return WebServices.v29.PackageTypeV6.FlatRateBox;
+                    return Stamps.WebServices.v29.PackageTypeV6.FlatRateBox;
                 case PackageTypeV6.SmallFlatRateBox:
-                    return WebServices.v29.PackageTypeV6.SmallFlatRateBox;
+                    return Stamps.WebServices.v29.PackageTypeV6.SmallFlatRateBox;
                 case PackageTypeV6.LargeFlatRateBox:
-                    return WebServices.v29.PackageTypeV6.LargeFlatRateBox;
+                    return Stamps.WebServices.v29.PackageTypeV6.LargeFlatRateBox;
                 case PackageTypeV6.FlatRateEnvelope:
-                    return WebServices.v29.PackageTypeV6.FlatRateEnvelope;
+                    return Stamps.WebServices.v29.PackageTypeV6.FlatRateEnvelope;
                 case PackageTypeV6.FlatRatePaddedEnvelope:
-                    return WebServices.v29.PackageTypeV6.FlatRatePaddedEnvelope;
+                    return Stamps.WebServices.v29.PackageTypeV6.FlatRatePaddedEnvelope;
                 case PackageTypeV6.LargePackage:
-                    return WebServices.v29.PackageTypeV6.LargePackage;
+                    return Stamps.WebServices.v29.PackageTypeV6.LargePackage;
                 case PackageTypeV6.OversizedPackage:
-                    return WebServices.v29.PackageTypeV6.OversizedPackage;
+                    return Stamps.WebServices.v29.PackageTypeV6.OversizedPackage;
                 case PackageTypeV6.RegionalRateBoxA:
-                    return WebServices.v29.PackageTypeV6.RegionalRateBoxA;
+                    return Stamps.WebServices.v29.PackageTypeV6.RegionalRateBoxA;
                 case PackageTypeV6.RegionalRateBoxB:
-                    return WebServices.v29.PackageTypeV6.RegionalRateBoxB;
+                    return Stamps.WebServices.v29.PackageTypeV6.RegionalRateBoxB;
                 case PackageTypeV6.LegalFlatRateEnvelope:
-                    return WebServices.v29.PackageTypeV6.LegalFlatRateEnvelope;
+                    return Stamps.WebServices.v29.PackageTypeV6.LegalFlatRateEnvelope;
                 case PackageTypeV6.RegionalRateBoxC:
-                    return WebServices.v29.PackageTypeV6.RegionalRateBoxC;
+                    return Stamps.WebServices.v29.PackageTypeV6.RegionalRateBoxC;
                 default:
                     throw new ArgumentOutOfRangeException("packageType");
             }
@@ -1252,26 +1239,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Gets the v29 version of the ContentType
         /// </summary>
-        private static WebServices.v29.ContentTypeV2 ConvertContentType(WebServices.ContentTypeV2 contentType)
+        private static ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ContentTypeV2 ConvertContentType(ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.ContentTypeV2 contentType)
         {
             switch (contentType)
             {
-                case WebServices.ContentTypeV2.CommercialSample:
-                    return WebServices.v29.ContentTypeV2.CommercialSample;
-                case WebServices.ContentTypeV2.Gift:
-                    return WebServices.v29.ContentTypeV2.Gift;
-                case WebServices.ContentTypeV2.Document:
-                    return WebServices.v29.ContentTypeV2.Document;
-                case WebServices.ContentTypeV2.ReturnedGoods:
-                    return WebServices.v29.ContentTypeV2.ReturnedGoods;
-                case WebServices.ContentTypeV2.Other:
-                    return WebServices.v29.ContentTypeV2.Other;
-                case WebServices.ContentTypeV2.Merchandise:
-                    return WebServices.v29.ContentTypeV2.Merchandise;
-                case WebServices.ContentTypeV2.HumanitarianDonation:
-                    return WebServices.v29.ContentTypeV2.HumanitarianDonation;
-                case WebServices.ContentTypeV2.DangerousGoods:
-                    return WebServices.v29.ContentTypeV2.DangerousGoods;
+                case Stamps.WebServices.ContentTypeV2.CommercialSample:
+                    return Stamps.WebServices.v29.ContentTypeV2.CommercialSample;
+                case Stamps.WebServices.ContentTypeV2.Gift:
+                    return Stamps.WebServices.v29.ContentTypeV2.Gift;
+                case Stamps.WebServices.ContentTypeV2.Document:
+                    return Stamps.WebServices.v29.ContentTypeV2.Document;
+                case Stamps.WebServices.ContentTypeV2.ReturnedGoods:
+                    return Stamps.WebServices.v29.ContentTypeV2.ReturnedGoods;
+                case Stamps.WebServices.ContentTypeV2.Other:
+                    return Stamps.WebServices.v29.ContentTypeV2.Other;
+                case Stamps.WebServices.ContentTypeV2.Merchandise:
+                    return Stamps.WebServices.v29.ContentTypeV2.Merchandise;
+                case Stamps.WebServices.ContentTypeV2.HumanitarianDonation:
+                    return Stamps.WebServices.v29.ContentTypeV2.HumanitarianDonation;
+                case Stamps.WebServices.ContentTypeV2.DangerousGoods:
+                    return Stamps.WebServices.v29.ContentTypeV2.DangerousGoods;
                 default:
                     throw new ArgumentOutOfRangeException("contentType");
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;

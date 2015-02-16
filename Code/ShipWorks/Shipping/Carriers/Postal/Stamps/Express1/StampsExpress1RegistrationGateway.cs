@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using Interapptive.Shared.Net;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -42,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             try
             {
                 // This throws a stamps exception if the account credentials are incorrect
-                new Express1StampsWebClient().GetAccountInfo(new UspsAccountEntity
+                new Express1UspsWebClient().GetAccountInfo(new UspsAccountEntity
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,

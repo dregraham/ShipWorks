@@ -1,8 +1,9 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using log4net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             // The Express1 gateway is very similar to that of Stamps, but need to override this method
             // since we need to call into the Express1 API rather than Stamps
-            return new Express1StampsScanFormGateway(new Express1StampsWebClient());
+            return new Express1StampsScanFormGateway(new Express1UspsWebClient());
         }
     }
 }

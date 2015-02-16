@@ -3,8 +3,6 @@ using System.Linq;
 using System.Reflection;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -12,6 +10,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
@@ -90,7 +89,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>An instance of IStampsWebClient.</returns>
         public override IUspsWebClient CreateWebClient()
         {
-            return new Express1StampsWebClient(AccountRepository, new LogEntryFactory(), CertificateInspector);
+            return new Express1UspsWebClient(AccountRepository, new LogEntryFactory(), CertificateInspector);
         }
 
         /// <summary>
@@ -184,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 // Express1 for Stamps.com requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
-                new Express1StampsWebClient().ProcessShipment(shipment);
+                new Express1UspsWebClient().ProcessShipment(shipment);
             }
             catch(UspsException ex)
             {

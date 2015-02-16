@@ -14,7 +14,6 @@ using ShipWorks.Data.Connection;
 using System.Data.SqlClient;
 using ShipWorks.Shipping.Carriers.OnTrac.Net;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using log4net;
 using ShipWorks.Data.Model;
