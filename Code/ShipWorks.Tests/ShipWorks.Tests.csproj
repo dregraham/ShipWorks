@@ -348,7 +348,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostageBalanceTests.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepositoryTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRateAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotionTest.cs" />

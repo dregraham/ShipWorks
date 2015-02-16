@@ -762,7 +762,7 @@
     <Compile Include="Shipping\Carriers\Postal\IPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostageBalance.cs" />
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRateAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaCbpRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsCbpRegistrationPromotion.cs" />

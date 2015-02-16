@@ -367,7 +367,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // No accounts, so use the counter rates broker to allow the user to
             // sign up for the account. We can use the StampsCounterRateAccountRepository 
             // here because the underlying accounts being used are the same.
-            return new UspsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
         }
 
         /// <summary>

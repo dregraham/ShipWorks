@@ -40,6 +40,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -804,7 +805,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // No accounts, so use the counter rates broker to allow the user to
                 // sign up for the account
-                return new StampsCounterRatesBroker(new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+                return new StampsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
             }
         }
 
@@ -908,7 +909,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new StampsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                AccountRepository = new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
                 CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
 
                 // Fetch the rates now that we're setup to use counter rates
