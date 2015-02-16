@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
-            stampsRegistration = new StampsRegistration(new UspsRegistrationValidator(), new StampsRegistrationGateway(resellerType), promotion);
+            stampsRegistration = new StampsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
 
             if (promotion.IsMonthlyFeeWaived)
