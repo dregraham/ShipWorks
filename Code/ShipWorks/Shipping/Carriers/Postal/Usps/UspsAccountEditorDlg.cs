@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void OnUpdatePassword(object sender, EventArgs e)
         {
-            using (StampsAccountUpdatePasswordDlg dlg = new StampsAccountUpdatePasswordDlg(account))
+            using (UspsAccountUpdatePasswordDlg dlg = new UspsAccountUpdatePasswordDlg(account))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

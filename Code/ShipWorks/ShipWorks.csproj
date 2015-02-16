@@ -4533,11 +4533,11 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerDlg.Designer.cs">
       <DependentUpon>UspsAccountManagerDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountUpdatePasswordDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.Designer.cs">
-      <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountUpdatePasswordDlg.Designer.cs">
+      <DependentUpon>UspsAccountUpdatePasswordDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiException.cs" />
@@ -9654,8 +9654,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerDlg.resx">
       <DependentUpon>UspsAccountManagerDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.resx">
-      <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAccountUpdatePasswordDlg.resx">
+      <DependentUpon>UspsAccountUpdatePasswordDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\PostalCustomsControl.resx">
       <DependentUpon>PostalCustomsControl.cs</DependentUpon>
