@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {

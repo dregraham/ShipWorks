@@ -1634,9 +1634,9 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1PasswordEncryptionStrategy.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1RegistrationGateway.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1RegistrationRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Registration\UspsExpress1PasswordEncryptionStrategy.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Registration\UspsExpress1RegistrationGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Registration\UspsExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsDryIceRegulationSet.cs" />

@@ -8,7 +8,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Profiles;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
     /// An implementation of the IExpress1RegistrationRepository interface. This will use the StampsAccountManager 
