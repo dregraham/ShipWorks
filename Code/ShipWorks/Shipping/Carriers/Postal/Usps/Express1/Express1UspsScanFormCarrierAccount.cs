@@ -1,35 +1,31 @@
-﻿using Interapptive.Shared.Utility;
+﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
-using ShipWorks.Shipping.ScanForms;
-using log4net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// An Express1 implementation of the IScanFormCarrierAccount interface.
     /// </summary>
-    public class Express1StampsScanFormCarrierAccount : UspsScanFormCarrierAccount
+    public class Express1UspsScanFormCarrierAccount : UspsScanFormCarrierAccount
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1StampsScanFormCarrierAccount"/> class.
+        /// Initializes a new instance of the <see cref="Express1UspsScanFormCarrierAccount"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
-        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity)
-            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1StampsScanFormCarrierAccount)))
+        public Express1UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity)
+            : this(repository, accountEntity, LogManager.GetLogger(typeof(Express1UspsScanFormCarrierAccount)))
         { }
 
         /// <summary>
-        /// Constructor for testing. Initializes a new instance of the <see cref="Express1StampsScanFormCarrierAccount"/> class.
+        /// Constructor for testing. Initializes a new instance of the <see cref="Express1UspsScanFormCarrierAccount"/> class.
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public Express1StampsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
+        public Express1UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
             : base(repository, accountEntity, log)
         {
         }

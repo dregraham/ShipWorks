@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -25,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <returns>A new instance of IScanFormCarrierAccount</returns>
         protected override IScanFormCarrierAccount CreateScanFormCarrierAccount(UspsAccountEntity accountEntity)
         {
-            return new Express1StampsScanFormCarrierAccount(new UspsScanFormRepository((UspsResellerType)accountEntity.UspsReseller), accountEntity);
+            return new Express1UspsScanFormCarrierAccount(new UspsScanFormRepository((UspsResellerType)accountEntity.UspsReseller), accountEntity);
         }
     }
 }
