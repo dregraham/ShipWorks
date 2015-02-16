@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             UspsAccountEntity account = (UspsAccountEntity)sandGrid.SelectedElements[0].Tag;
 
-            using (StampsAccountEditorDlg dlg = new StampsAccountEditorDlg(account))
+            using (UspsAccountEditorDlg dlg = new UspsAccountEditorDlg(account))
             {
                 dlg.ShowDialog(this);
 
