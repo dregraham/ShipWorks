@@ -1,17 +1,18 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
-    public class StampsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
+    public class UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsShipmentProcessingSynchronizer"/> class.
+        /// Initializes a new instance of the <see cref="UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
+        public UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }
@@ -33,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// to grab the first account (the one just created) and use it to process the shipment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <exception cref="StampsException">An Stamps account must be created to process this shipment.</exception>
+        /// <exception cref="StampsException">A USPS account must be created to process this shipment.</exception>
         public void SaveAccountToShipment(ShipmentEntity shipment)
         {
             if (accountRepository.Accounts.Any())

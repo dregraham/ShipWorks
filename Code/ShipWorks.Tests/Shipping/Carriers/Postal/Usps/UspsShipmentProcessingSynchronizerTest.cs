@@ -4,13 +4,14 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
     [TestClass]
-    public class StampsShipmentProcessingSynchronizerTest
+    public class UspsShipmentProcessingSynchronizerTest
     {
-        private StampsShipmentProcessingSynchronizer testObject;
+        private UspsShipmentProcessingSynchronizer testObject;
 
         private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
 
@@ -19,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
 
-            testObject = new StampsShipmentProcessingSynchronizer(accountRepository.Object);
+            testObject = new UspsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [TestMethod]

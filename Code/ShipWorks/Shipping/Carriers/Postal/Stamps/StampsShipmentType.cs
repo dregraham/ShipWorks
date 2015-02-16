@@ -439,7 +439,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            return new StampsShipmentProcessingSynchronizer(AccountRepository);
+            return new UspsShipmentProcessingSynchronizer(AccountRepository);
         }
 
         /// <summary>
