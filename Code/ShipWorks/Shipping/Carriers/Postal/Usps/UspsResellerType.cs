@@ -13,13 +13,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UspsResellerType
     {
-        [Description("None")]
+        [Description("USPS")]
         None = 0,
 
         [Description("Express1")]
-        Express1 = 1,
-
-        [Description("USPS")]
-        StampsExpedited = 2
+        Express1 = 1
     }
 }

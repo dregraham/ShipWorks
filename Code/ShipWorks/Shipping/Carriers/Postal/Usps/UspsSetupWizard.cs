@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
-            UspsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Usps ? UspsResellerType.None : UspsResellerType.StampsExpedited;
+            UspsResellerType resellerType = UspsResellerType.None;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
@@ -477,7 +477,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void PrepareStampsAccountForSave()
         {
-            UspsAccount.UspsReseller = (int) UspsResellerType.StampsExpedited;
+            UspsAccount.UspsReseller = (int) UspsResellerType.None;
         }
 
         /// <summary>

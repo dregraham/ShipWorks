@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.StampsExpedited, false);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.None, false);
 
             if (accounts.Count > 0)
             {
@@ -224,7 +224,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(UspsResellerType.StampsExpedited))
+            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(UspsResellerType.None))
             {
                 dlg.ShowDialog(this);
             }

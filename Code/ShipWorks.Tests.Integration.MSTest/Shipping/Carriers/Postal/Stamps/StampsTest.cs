@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = UspsResellerType.StampsExpedited;
+                        stampsResellerType = UspsResellerType.None;
                     }
                     else
                     {
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = UspsResellerType.StampsExpedited;
+                        stampsResellerType = UspsResellerType.None;
                     }
                     else
                     {

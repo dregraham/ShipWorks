@@ -31,11 +31,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 switch ((UspsResellerType)account.UspsReseller)
                 {
                     case UspsResellerType.None:
-                        return "Stamps.com";
+                        return "USPS";
                     case UspsResellerType.Express1:
                         return "Express1";
-                    case UspsResellerType.StampsExpedited:
-                        return "USPS";
                     default:
                         throw new ArgumentOutOfRangeException("StampsReseller");
                 }

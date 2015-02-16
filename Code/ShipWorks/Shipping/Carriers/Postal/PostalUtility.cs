@@ -492,7 +492,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return EndiciaAccountManager.EndiciaAccounts.Any() ||
                    EndiciaAccountManager.Express1Accounts.Any() ||
-                   UspsAccountManager.StampsAccounts.Any() ||
                    UspsAccountManager.Express1Accounts.Any() ||
                    UspsAccountManager.UspsAccounts.Any();
         }

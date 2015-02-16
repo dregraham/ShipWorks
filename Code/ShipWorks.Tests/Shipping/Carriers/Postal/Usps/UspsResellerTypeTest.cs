@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
     public class StampsResellerTypeTest
@@ -23,12 +18,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // The upgrade script depends on None value being 0
             Assert.AreEqual(0, (int)UspsResellerType.None);
-        }
-
-        [TestMethod]
-        public void UspsExpedited_HasTwoAsValue_Test()
-        {
-            Assert.AreEqual(2, (int)UspsResellerType.StampsExpedited);
         }
     }
 }

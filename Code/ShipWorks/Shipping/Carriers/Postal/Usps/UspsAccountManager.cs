@@ -85,17 +85,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Return the active list of stamps.com accounts
-        /// </summary>
-        public static List<UspsAccountEntity> StampsAccounts
-        {
-            get
-            {
-                return GetAccounts(UspsResellerType.None, false);
-            }
-        }
-
-        /// <summary>
         /// Return the active list of Express1 accounts
         /// </summary>
         public static List<UspsAccountEntity> Express1Accounts
@@ -113,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return GetAccounts(UspsResellerType.StampsExpedited, false);
+                return GetAccounts(UspsResellerType.None, false);
             }
         }
 
@@ -122,9 +111,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static UspsAccountEntity GetAccount(long accountID)
         {
-            return StampsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
-                Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
-                UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
+            return UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
+                   Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID);
         }
 
         /// <summary>
@@ -227,11 +215,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             switch (stampsResellerType)
             {
                 case UspsResellerType.None:
-                    return "Stamps.com";
+                    return "USPS";
                 case UspsResellerType.Express1:
                     return "Express1";
-                case UspsResellerType.StampsExpedited:
-                    return "USPS";
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");
             }

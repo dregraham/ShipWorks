@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -12,11 +11,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsAccountManagerDlg(UspsResellerType stampsResellerType)
+        public UspsAccountManagerDlg(UspsResellerType resellerType)
         {
             InitializeComponent();
 
-            accountControl.StampsResellerType = stampsResellerType;
+            accountControl.StampsResellerType = resellerType;
         }
 
         /// <summary>
