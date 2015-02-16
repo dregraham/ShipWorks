@@ -196,7 +196,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Gets an instance to the best rate shipping broker for the Express1 for Stamps.com shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of an Express1StampsBestRateBroker.</returns>
+        /// <returns>An instance of an Express1UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             return new NullShippingBroker();

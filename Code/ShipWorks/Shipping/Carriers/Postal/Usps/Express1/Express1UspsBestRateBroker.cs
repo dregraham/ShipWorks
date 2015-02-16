@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Best rate broker for Express1 Stamps accounts
     /// </summary>
-    public class Express1StampsBestRateBroker : UspsBestRateBroker
+    public class Express1UspsBestRateBroker : UspsBestRateBroker
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsBestRateBroker() : this(new Express1StampsShipmentType(), new Express1UspsAccountRepository())
+        public Express1UspsBestRateBroker() : this(new Express1StampsShipmentType(), new Express1UspsAccountRepository())
         {
             
         }
@@ -24,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
+        public Express1UspsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 

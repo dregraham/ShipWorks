@@ -9,11 +9,9 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -69,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsEnabledAndAccountExists_Test()
         {
-            brokers.Add(new Express1StampsBestRateBroker());
+            brokers.Add(new Express1UspsBestRateBroker());
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
         }
 
