@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
-    partial class StampsPaymentControl
+    partial class UspsPaymentControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StampsPaymentControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UspsPaymentControl));
             this.labelPaymentHeading = new System.Windows.Forms.Label();
             this.labelPaymentInfo = new System.Windows.Forms.Label();
             this.labelPaymentMethod = new System.Windows.Forms.Label();

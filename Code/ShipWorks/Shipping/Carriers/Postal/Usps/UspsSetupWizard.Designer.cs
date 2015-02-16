@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountCredentials = new ShipWorks.UI.Wizard.WizardPage();
             this.stampsRegistrationSecuritySettingsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.StampsRegistrationSecuritySettingsControl();
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
-            this.stampsPaymentControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.StampsPaymentControl();
+            this.stampsPaymentControl = new UspsPaymentControl();
             this.linkStampsPrivacy = new ShipWorks.UI.Controls.LinkControl();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -572,7 +573,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private UI.Wizard.WizardPage wizardPageNewAccountCredentials;
         private Stamps.Registration.StampsRegistrationSecuritySettingsControl stampsRegistrationSecuritySettingsControl;
         private UI.Wizard.WizardPage wizardPageNewAccountPayment;
-        private Stamps.Registration.StampsPaymentControl stampsPaymentControl;
+        private UspsPaymentControl stampsPaymentControl;
         private System.Windows.Forms.ComboBox stampsUsageType;
         private System.Windows.Forms.Label labelAccount;
         private UI.Controls.LinkControl linkSpecialOffer;

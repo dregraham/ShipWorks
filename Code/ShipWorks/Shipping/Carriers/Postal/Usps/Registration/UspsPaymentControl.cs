@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// Control for collecting Stamp.com payment information.
     /// </summary>
-    public partial class StampsPaymentControl : UserControl
+    public partial class UspsPaymentControl : UserControl
     {
         private const string CreditCardPaymentMethod = "Credit Card";
         private const string AchAccountPaymentMethod = "ACH Account";
@@ -24,9 +18,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         private const string SavingsAccountTypeName = "Savings";
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsPaymentControl"/> class.
+        /// Initializes a new instance of the <see cref="UspsPaymentControl"/> class.
         /// </summary>
-        public StampsPaymentControl()
+        public UspsPaymentControl()
         {
             InitializeComponent();
         }
