@@ -846,7 +846,6 @@
       <DependentUpon>UspsProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidator.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsServiceControl.cs">
@@ -1930,7 +1929,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountEditorDlg.Designer.cs">
       <DependentUpon>UspsAccountEditorDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccount.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\UPS\CoreExtensions\Filters\UpsReturnServiceCondition.cs" />

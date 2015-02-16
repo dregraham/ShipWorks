@@ -1,5 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.ScanForms;
 using log4net;
@@ -11,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// <summary>
     /// An Express1 implementation of the IScanFormCarrierAccount interface.
     /// </summary>
-    public class Express1StampsScanFormCarrierAccount : StampsScanFormCarrierAccount
+    public class Express1StampsScanFormCarrierAccount : UspsScanFormCarrierAccount
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1StampsScanFormCarrierAccount"/> class.
