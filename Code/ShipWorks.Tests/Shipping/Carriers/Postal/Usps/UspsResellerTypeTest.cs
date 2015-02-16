@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
@@ -25,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        public void StampsExpedited_HasTwoAsValue_Test()
+        public void UspsExpedited_HasTwoAsValue_Test()
         {
             Assert.AreEqual(2, (int)UspsResellerType.StampsExpedited);
         }

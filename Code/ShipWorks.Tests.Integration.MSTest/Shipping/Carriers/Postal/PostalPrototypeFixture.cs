@@ -29,6 +29,7 @@ using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
