@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
             validator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
 
-            Mock<IStampsRegistrationGateway> gateway = new Mock<IStampsRegistrationGateway>();
+            Mock<IUspsRegistrationGateway> gateway = new Mock<IUspsRegistrationGateway>();
 
             Mock<IRegistrationPromotion> promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns(string.Empty);

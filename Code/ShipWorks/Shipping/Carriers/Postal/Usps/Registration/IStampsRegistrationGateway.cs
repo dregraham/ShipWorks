@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
+﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// An interface for registering an account with Stamps.com.
     /// </summary>
-    public interface IStampsRegistrationGateway
+    public interface IUspsRegistrationGateway
     {
         /// <summary>
         /// Registers an account with Stamps.com.

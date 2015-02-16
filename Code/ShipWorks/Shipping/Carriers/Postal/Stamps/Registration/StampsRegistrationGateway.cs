@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     /// An IStampsRegistrationGateway implementation that calls into the Stamps API to register
     /// a new account. 
     /// </summary>
-    public class StampsRegistrationGateway : IStampsRegistrationGateway
+    public class StampsRegistrationGateway : IUspsRegistrationGateway
     {
         private readonly UspsResellerType resellerType;
 

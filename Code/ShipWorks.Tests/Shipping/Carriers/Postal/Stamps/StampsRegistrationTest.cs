@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     {
         StampsRegistration testObject;
         Mock<IUspsRegistrationValidator> mockedValidator;
-        Mock<IStampsRegistrationGateway> mockedGateway;
+        Mock<IUspsRegistrationGateway> mockedGateway;
         private Mock<IRegistrationPromotion> promotion;
 
         [TestInitialize]
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             mockedValidator = new Mock<IUspsRegistrationValidator>();
             mockedValidator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
 
-            mockedGateway = new Mock<IStampsRegistrationGateway>();
+            mockedGateway = new Mock<IUspsRegistrationGateway>();
             mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>()));
 
             promotion = new Mock<IRegistrationPromotion>();

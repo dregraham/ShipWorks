@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         private readonly UspsRegistrationValidator testObject;
 
         private Mock<IRegistrationPromotion> promotion;
-        private Mock<IStampsRegistrationGateway> gateway;
+        private Mock<IUspsRegistrationGateway> gateway;
 
         public UspsRegistrationValidatorTest()
         {
@@ -25,8 +25,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         {
             promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
-           
-            gateway = new Mock<IStampsRegistrationGateway>();
+
+            gateway = new Mock<IUspsRegistrationGateway>();
 
             StampsRegistration registration = new StampsRegistration(testObject, gateway.Object, promotion.Object)
             {
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
 
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object, promotion.Object)
+            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IUspsRegistrationGateway>().Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
