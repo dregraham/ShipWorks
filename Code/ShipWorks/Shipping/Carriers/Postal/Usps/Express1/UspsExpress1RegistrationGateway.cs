@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// Constructor
         /// </summary>
         public UspsExpress1RegistrationGateway()
-            : base(new Express1StampsConnectionDetails())
+            : base(new Express1UspsConnectionDetails())
         {
         }
 

@@ -43,6 +43,7 @@ using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -72,7 +73,7 @@ namespace ShipWorks.ApplicationCore.Options
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
             express1EndiciaTestServer.Checked = Express1EndiciaUtility.UseTestServer;
-            express1StampsTestServer.Checked = Express1StampsConnectionDetails.UseTestServer;
+            express1StampsTestServer.Checked = Express1UspsConnectionDetails.UseTestServer;
             onTracTestServer.Checked = OnTracRequest.UseTestServer;
 
             FedExSettingsRepository fedExSettingsRepo = new FedExSettingsRepository();
@@ -112,7 +113,7 @@ namespace ShipWorks.ApplicationCore.Options
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;
-            Express1StampsConnectionDetails.UseTestServer = express1StampsTestServer.Checked;
+            Express1UspsConnectionDetails.UseTestServer = express1StampsTestServer.Checked;
             OnTracRequest.UseTestServer = onTracTestServer.Checked;
 
             FedExSettingsRepository fedexSettingsRepo = new FedExSettingsRepository();

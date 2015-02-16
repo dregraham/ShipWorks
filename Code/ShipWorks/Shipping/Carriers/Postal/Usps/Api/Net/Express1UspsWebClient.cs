@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Tokens;
@@ -63,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         // Express1 API service connection info 
-        static Express1StampsConnectionDetails express1StampsConnectionDetails = new Express1StampsConnectionDetails();
+        static Express1UspsConnectionDetails express1StampsConnectionDetails = new Express1UspsConnectionDetails();
 
         private readonly ICertificateInspector certificateInspector;
         
@@ -181,7 +182,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // If we are using the test server, it's not https, so none will be returned.
             // Also, our test server credentials should not be using "real money", so not such a terrible thing if someone
             // hi-jacked them.
-            if (Express1StampsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
+            if (Express1UspsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
             {
                 return;
             }

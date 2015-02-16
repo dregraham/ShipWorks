@@ -1630,7 +1630,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostalOptionsControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttribute.cs" />

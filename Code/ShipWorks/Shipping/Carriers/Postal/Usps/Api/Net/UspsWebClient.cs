@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -161,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // If we are using the test server, it's not https, so none will be returned.
             // Also, our test server credentials should not be using "real money", so not such a terrible thing if someone
             // hi-jacked them.
-            if (Express1StampsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
+            if (Express1UspsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
             {
                 return;
             }

@@ -2,12 +2,12 @@
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// Connection details for Express1 stamps integration
+    /// Connection details for Express1-USPS integration
     /// </summary>
-    public class Express1StampsConnectionDetails : IExpress1ConnectionDetails
+    public class Express1UspsConnectionDetails : IExpress1ConnectionDetails
     {
         /// <summary>
         /// Gets the franchise Id (company code)
