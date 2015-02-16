@@ -55,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
         public UspsWebClient(UspsResellerType stampsResellerType)
-            : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType)
+            : this(new UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType)
         { }
 
         /// <summary>

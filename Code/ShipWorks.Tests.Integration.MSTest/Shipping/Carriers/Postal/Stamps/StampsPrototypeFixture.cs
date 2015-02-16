@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             switch (stampsResellerType)
             {
                 case UspsResellerType.None:
-                    return new StampsAccountRepository();
+                    return new UspsAccountRepository();
                 case UspsResellerType.Express1:
                     return new Express1StampsAccountRepository();
                 case UspsResellerType.StampsExpedited:

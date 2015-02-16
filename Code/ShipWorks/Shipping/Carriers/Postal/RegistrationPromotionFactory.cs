@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
@@ -17,7 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public class RegistrationPromotionFactory
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository;
-        private readonly ICarrierAccountRepository<UspsAccountEntity> stampsAccountRepository;
         private readonly bool stampsAccountsExist;
         private readonly bool endiciaAccountsExist;
         private readonly bool express1AccountsExist;
@@ -26,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Initializes a new instance of the <see cref="RegistrationPromotionFactory"/> class.
         /// </summary>
         public RegistrationPromotionFactory() : 
-            this(new UspsAccountRepository(), new StampsAccountRepository(), new Express1StampsAccountRepository(), 
+            this(new UspsAccountRepository(), new Express1StampsAccountRepository(), 
                 new EndiciaAccountRepository(), new Express1EndiciaAccountRepository())
         {
         }
@@ -35,15 +32,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Constructor that allows easier testing of the factory
         /// </summary>
         public RegistrationPromotionFactory(ICarrierAccountRepository<UspsAccountEntity> uspsAccountRepository,
-            ICarrierAccountRepository<UspsAccountEntity> stampsAccountRepository,
             ICarrierAccountRepository<UspsAccountEntity> stampsExpress1AccountRepository,
             ICarrierAccountRepository<EndiciaAccountEntity> endiciaAccountRepository,
             ICarrierAccountRepository<EndiciaAccountEntity> endiciaExpress1AccountRepository)
         {
             this.uspsAccountRepository = uspsAccountRepository;
-            this.stampsAccountRepository = stampsAccountRepository;
 
-            stampsAccountsExist = stampsAccountRepository.Accounts.Any() || uspsAccountRepository.Accounts.Any();
+            stampsAccountsExist = uspsAccountRepository.Accounts.Any();
             endiciaAccountsExist = endiciaAccountRepository.Accounts.Any();
             express1AccountsExist = stampsExpress1AccountRepository.Accounts.Any() || endiciaExpress1AccountRepository.Accounts.Any();
         }
@@ -98,8 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns></returns>
         private bool AnyUspsResellerAccountsExist()
         {
-            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller) ||
-                stampsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller);
+            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller);
         }
     }
 }

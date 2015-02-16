@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
@@ -19,7 +15,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
     {
         MockRepository mockRepository;
         Mock<ICarrierAccountRepository<UspsAccountEntity>> uspsRepository;
-        Mock<ICarrierAccountRepository<UspsAccountEntity>> stampsRepository;
         Mock<ICarrierAccountRepository<UspsAccountEntity>> stampsExpress1Repository;
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaRepository;
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaExpress1Repository;
@@ -29,7 +24,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             mockRepository = new MockRepository(MockBehavior.Loose);
             uspsRepository = CreateEmptyRepository<UspsAccountEntity>();
-            stampsRepository = CreateEmptyRepository<UspsAccountEntity>();
             stampsExpress1Repository = CreateEmptyRepository<UspsAccountEntity>();
             endiciaRepository = CreateEmptyRepository<EndiciaAccountEntity>();
             endiciaExpress1Repository = CreateEmptyRepository<EndiciaAccountEntity>();
@@ -153,43 +147,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(StampsCbpRegistrationPromotion));
         }
 
-        [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsStampsIntuishipRegistrationPromotion_WhenOnlyNonResellerStampsAccountsExist()
-        {
-            stampsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
-
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
-            IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(StampsIntuishipRegistrationPromotion));
-        }
-
-        [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsStampsCbpRegistrationPromotion_WhenOnlyStampsAccountsExistAndIncludesReseller()
-        {
-            stampsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity>
-            {
-                new UspsAccountEntity
-                {
-                    ContractType = (int) UspsAccountContractType.CommercialPlus
-                },
-                new UspsAccountEntity
-                {
-                    ContractType = (int) UspsAccountContractType.Reseller
-                }
-            });
-
-            RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
-            IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(StampsCbpRegistrationPromotion));
-        }
-
         /// <summary>
         /// Create the registration promotion factory using the currently created repositories
         /// </summary>
         private RegistrationPromotionFactory CreateRegistrationPromotionFactory()
         {
-            return new RegistrationPromotionFactory(uspsRepository.Object, stampsRepository.Object,
-                stampsExpress1Repository.Object, endiciaRepository.Object, endiciaExpress1Repository.Object);
+            return new RegistrationPromotionFactory(uspsRepository.Object, stampsExpress1Repository.Object, 
+                endiciaRepository.Object, endiciaExpress1Repository.Object);
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             ShouldRetrieveExpress1Rates = true;
 
             // Use the "live" versions by default
-            AccountRepository = new StampsAccountRepository();
+            AccountRepository = new UspsAccountRepository();
             LogEntryFactory = new LogEntryFactory();            
         }
 
