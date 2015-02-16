@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
                         registration.UserName, result.SuggestedUsername);
                 }
 
-                throw new StampsRegistrationException(message);
+                throw new UspsRegistrationException(message);
             }
 
             return result;

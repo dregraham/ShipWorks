@@ -503,7 +503,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (Exception ex)
             {
-                throw new StampsRegistrationException("Stamps.com encountered an error trying to register your account:\n\n" + ex.Message, ex);
+                throw new UspsRegistrationException("Stamps.com encountered an error trying to register your account:\n\n" + ex.Message, ex);
             }
         }
 

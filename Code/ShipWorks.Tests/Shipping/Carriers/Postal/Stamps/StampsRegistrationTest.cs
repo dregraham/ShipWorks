@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
         
         [TestMethod]
-        [ExpectedException(typeof(StampsRegistrationException))]
+        [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsRegistrationException_WhenValidationFails_Test()
         {
             // Setup our mocked validator to return two errors
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             {
                 testObject.Submit();
             }
-            catch (StampsRegistrationException)
+            catch (UspsRegistrationException)
             { 
                 // Catch the exception here since we just want to make sure
                 // the gateway was not called
@@ -101,11 +101,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsRegistrationException))]
+        [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsStampsException_WhenRegistrationGatewayThrowsException_Test()
         {
             // Setup up our mocked gateway to throw an execption
-            mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>())).Throws(new StampsRegistrationException());
+            mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>())).Throws(new UspsRegistrationException());
             testObject.Submit();
         }
 

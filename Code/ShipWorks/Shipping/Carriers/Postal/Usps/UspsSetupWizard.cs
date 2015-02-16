@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="promotion">The promotion.</param>
         /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering an existing account].</param>
         /// <param name="shipmentTypeCode">The shipment type code.</param>
-        /// <exception cref="StampsRegistrationException">There weren't any registration types provided to the Stamps.com setup wizard.</exception>
+        /// <exception cref="UspsRegistrationException">There weren't any registration types provided to the Stamps.com setup wizard.</exception>
         protected UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
@@ -382,7 +382,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     e.NextPage = CurrentPage;
                 }
             }
-            catch (StampsRegistrationException ex)
+            catch (UspsRegistrationException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;
