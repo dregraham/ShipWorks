@@ -2,10 +2,8 @@
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// UserControl for editing USPS profiles

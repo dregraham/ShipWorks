@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     partial class Express1UspsProfileControl
     {

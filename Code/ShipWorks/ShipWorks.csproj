@@ -735,10 +735,10 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\LabelFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\StandardLabel.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\ThermalLabel.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1UspsProfileControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1UspsProfileControl.Designer.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.Designer.cs">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
@@ -7421,7 +7421,7 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Registration\Express1SetupWizard.resx">
       <DependentUpon>Express1SetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1UspsProfileControl.resx">
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.resx">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\UspsPaymentControl.resx">
