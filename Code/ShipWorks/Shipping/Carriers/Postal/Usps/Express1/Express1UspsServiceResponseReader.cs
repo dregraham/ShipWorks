@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Xml;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
-    public class Express1StampsServiceResponseReader : XmlReader
+    public class Express1UspsServiceResponseReader : XmlReader
     {
         // the decorated XmlReader
         XmlReader wrappedReader;
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsServiceResponseReader(XmlReader originalReader)
+        public Express1UspsServiceResponseReader(XmlReader originalReader)
         {
             this.wrappedReader = originalReader;
         }

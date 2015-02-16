@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         protected override XmlReader GetReaderForMessage(System.Web.Services.Protocols.SoapClientMessage message, int bufferSize)
         {
             // return the custom XmlReader
-            return new Express1StampsServiceResponseReader(base.GetReaderForMessage(message, bufferSize));
+            return new Express1UspsServiceResponseReader(base.GetReaderForMessage(message, bufferSize));
         }
 
         /// <summary>
