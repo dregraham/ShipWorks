@@ -20,6 +20,7 @@ using ShipWorks.Common.Threading;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -110,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 try
                 {
-                    result = (new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
+                    result = (new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
                 }
                 catch (StampsException ex)
                 {

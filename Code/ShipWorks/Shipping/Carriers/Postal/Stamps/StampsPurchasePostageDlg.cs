@@ -15,6 +15,8 @@ using log4net;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -44,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             InitializeComponent();
 
-            postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
+            postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
             
             current.Text = postageBalance.Value.ToString("c");
             this.account = account;
@@ -57,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             InitializeComponent();
 
-            postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
+            postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
 
             current.Text = balance.ToString("c");
             this.account = account;
@@ -75,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             if (postageBalance == null)
             {
-                postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
+                postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
             }
 
             try

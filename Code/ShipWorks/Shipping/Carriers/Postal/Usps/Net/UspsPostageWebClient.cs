@@ -1,22 +1,23 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
 {
     /// <summary>
     /// Interacts with web services to buy postage and retrieve balance.
     /// </summary>
-    public class StampsPostageWebClient : IPostageWebClient
+    public class UspsPostageWebClient : IPostageWebClient
     {
         private readonly UspsAccountEntity account;
         private decimal controlTotal;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsPostageWebClient" /> class.
+        /// Initializes a new instance of the <see cref="UspsPostageWebClient" /> class.
         /// </summary>
         /// <param name="account">The account.</param>        
-        public StampsPostageWebClient(UspsAccountEntity account)
+        public UspsPostageWebClient(UspsAccountEntity account)
         {
             this.account = account;
             controlTotal = decimal.MinValue;
@@ -60,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             else
             {
-                WebServices.v29.AccountInfo accountInfo = (WebServices.v29.AccountInfo)client.GetAccountInfo(account);
+                Stamps.WebServices.v29.AccountInfo accountInfo = (Stamps.WebServices.v29.AccountInfo)client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;
@@ -92,8 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An instance of an IStampsWebClient based on teh shipment type code.</returns>
         private IStampsWebClient CreateWebClient()
         {
-            StampsShipmentType stampsType = ShipmentTypeManager.GetType(ShipmentTypeCode) as StampsShipmentType;
-            return stampsType.CreateWebClient();
+            StampsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as StampsShipmentType;
+            return shipmentType.CreateWebClient();
         }
     }
 }

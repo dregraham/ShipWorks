@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Net;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
@@ -180,18 +181,18 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         {
             ShipmentEntity shipment = CreateShipment();
             UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
-            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(uspsAccount);
+            UspsPostageWebClient uspsPostageWebClient = new UspsPostageWebClient(uspsAccount);
 
-            stampsPostageWebClient.Purchase(amount);
+            uspsPostageWebClient.Purchase(amount);
         }
 
         public decimal CheckPostage()
         {
             ShipmentEntity shipment = CreateShipment();
             UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
-            StampsPostageWebClient stampsPostageWebClient = new StampsPostageWebClient(uspsAccount);
+            UspsPostageWebClient uspsPostageWebClient = new UspsPostageWebClient(uspsAccount);
 
-            return stampsPostageWebClient.GetBalance();
+            return uspsPostageWebClient.GetBalance();
         }
     }
 }
