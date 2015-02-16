@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
@@ -152,7 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(StampsResellerType))
+            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(StampsResellerType))
             {
                 dlg.ShowDialog(this);
             }

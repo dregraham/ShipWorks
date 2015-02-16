@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnManageStampsAccounts(object sender, EventArgs e)
         {
-            using (StampsAccountManagerDlg dlg = new StampsAccountManagerDlg(StampsResellerType.StampsExpedited))
+            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(StampsResellerType.StampsExpedited))
             {
                 dlg.ShowDialog(this);
             }
