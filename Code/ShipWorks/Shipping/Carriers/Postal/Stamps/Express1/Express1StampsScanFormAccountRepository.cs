@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -7,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// <summary>
     /// An Express1/Stamps.com implementation of the IScanFormAccountRepository interface.
     /// </summary>
-    public class Express1StampsScanFormAccountRepository : StampsScanFormAccountRepository
+    public class Express1UspsScanFormAccountRepository : UspsScanFormAccountRepository
     {
         /// <summary>
         /// Gets the accounts that should have scan forms created for them
