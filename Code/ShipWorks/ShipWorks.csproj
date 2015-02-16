@@ -1931,7 +1931,7 @@
       <DependentUpon>StampsAccountEditorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\UPS\CoreExtensions\Filters\UpsReturnServiceCondition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\CoreExtensions\Filters\FedExPackagingTypeCondition.cs" />
@@ -4538,9 +4538,9 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.Designer.cs">
       <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\StampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.cs">
       <SubType>Form</SubType>
