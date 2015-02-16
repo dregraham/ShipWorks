@@ -18,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Nudges
         ShipWorksUpgrade = 0,
 
         /// <summary>
-        /// Prompt the user to create a Stamps.com account
+        /// Prompt the user to create a USPS account
         /// </summary>
         [Description("Create a USPS account")]
         [ApiValue("RegisterStampsAccount")]

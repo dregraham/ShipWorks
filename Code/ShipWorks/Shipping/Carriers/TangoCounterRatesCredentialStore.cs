@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers
         private const string UpsAccessKeyKeyName = "UpsAccessKey";
         public const string UpsCertificateVerificationDataKeyName = "UpsCertificateVerificationData";
 
-        private const string StampsUsernameKeyName = "StampsUsername";
+        private const string StampsUsernameKeyName = "UspsUsername";
         private const string StampsPasswordKeyName = "StampsPassword";
         public const string StampsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
 
@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets data to verify the SSL certificate from Stamps
         /// </summary>
-        public string StampsCertificateVerificationData
+        public string UspsCertificateVerificationData
         {
             get
             {
@@ -217,7 +217,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the  Stamps user name used for obtaining counter rates
         /// </summary>
-        public string StampsUsername
+        public string UspsUsername
         {
             get
             {
@@ -229,7 +229,7 @@ namespace ShipWorks.Shipping.Carriers
         /// <summary>
         /// Gets the  Stamps password used for obtaining counter rates
         /// </summary>
-        public string StampsPassword
+        public string UspsPassword
         {
             get
             {

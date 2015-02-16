@@ -53,18 +53,18 @@ namespace ShipWorks.Shipping.Carriers
         string UpsCertificateVerificationData { get; }
 
         /// <summary>
-        /// Gets the Stamps.com user name used for obtaining counter rates
+        /// Gets the USPS user name used for obtaining counter rates
         /// </summary>
-        string StampsUsername { get; }
+        string UspsUsername { get; }
 
         /// <summary>
-        /// Gets the Stamps.com password used for obtaining counter rates
+        /// Gets the USPS password used for obtaining counter rates
         /// </summary>
-        string StampsPassword { get; }
+        string UspsPassword { get; }
 
         /// <summary>
         /// Gets data to verify the SSL certificate from Stamps.com
         /// </summary>
-        string StampsCertificateVerificationData { get; }
+        string UspsCertificateVerificationData { get; }
     }
 }

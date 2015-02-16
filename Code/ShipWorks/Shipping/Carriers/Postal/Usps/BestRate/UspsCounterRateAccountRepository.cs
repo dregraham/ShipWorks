@@ -33,8 +33,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
                 {
                     UspsAccountEntity account = new UspsAccountEntity()
                     {
-                        Username = credentialStore.StampsUsername,
-                        Password = credentialStore.StampsPassword,
+                        Username = credentialStore.UspsUsername,
+                        Password = credentialStore.UspsPassword,
                         PostalCode = "63102",
                         CountryCode = "US",
                         UspsAccountID = -1052,

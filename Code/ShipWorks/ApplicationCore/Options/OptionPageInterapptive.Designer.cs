@@ -95,7 +95,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.stampsTestServer.Name = "stampsTestServer";
             this.stampsTestServer.Size = new System.Drawing.Size(120, 17);
             this.stampsTestServer.TabIndex = 3;
-            this.stampsTestServer.Text = "USPS (Stamps.com)";
+            this.stampsTestServer.Text = "USPS";
             this.stampsTestServer.UseVisualStyleBackColor = true;
             // 
             // fedexTestServer
@@ -420,7 +420,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.express1StampsTestServer.Name = "express1StampsTestServer";
             this.express1StampsTestServer.Size = new System.Drawing.Size(174, 17);
             this.express1StampsTestServer.TabIndex = 34;
-            this.express1StampsTestServer.Text = "USPS (Express1 - Stamps.com)";
+            this.express1StampsTestServer.Text = "USPS (Express1 - USPS)";
             this.express1StampsTestServer.UseVisualStyleBackColor = true;
             // 
             // labelInsurance

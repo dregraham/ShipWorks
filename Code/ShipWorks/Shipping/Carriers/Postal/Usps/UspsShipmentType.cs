@@ -873,7 +873,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
                 AccountRepository = new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
+                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.UspsCertificateVerificationData);
 
                 // Fetch the rates now that we're setup to use counter rates
                 return GetCachedRates<UspsException>(shipment, GetRates);

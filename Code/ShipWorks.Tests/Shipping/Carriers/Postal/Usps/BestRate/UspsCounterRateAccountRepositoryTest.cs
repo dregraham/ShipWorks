@@ -20,8 +20,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         public UspsCounterRateAccountRepositoryTest()
         {
             credentialStore = new Mock<ICounterRatesCredentialStore>();
-            credentialStore.Setup(s => s.StampsUsername).Returns("stampsUser");
-            credentialStore.Setup(s => s.StampsPassword).Returns("sampsPassword");
+            credentialStore.Setup(s => s.UspsUsername).Returns("stampsUser");
+            credentialStore.Setup(s => s.UspsPassword).Returns("sampsPassword");
 
             testObject = new UspsCounterRateAccountRepository(credentialStore.Object);
         }
@@ -37,8 +37,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             UspsAccountEntity account = testObject.Accounts.First();
 
-            credentialStore.Verify(s => s.StampsUsername, Times.Once());
-            Assert.AreEqual(credentialStore.Object.StampsUsername, account.Username);
+            credentialStore.Verify(s => s.UspsUsername, Times.Once());
+            Assert.AreEqual(credentialStore.Object.UspsUsername, account.Username);
         }
 
         [TestMethod]
@@ -46,8 +46,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             UspsAccountEntity account = testObject.Accounts.First();
 
-            credentialStore.Verify(s => s.StampsPassword, Times.Once());
-            Assert.AreEqual(credentialStore.Object.StampsPassword, account.Password);
+            credentialStore.Verify(s => s.UspsPassword, Times.Once());
+            Assert.AreEqual(credentialStore.Object.UspsPassword, account.Password);
         }
     }
 }

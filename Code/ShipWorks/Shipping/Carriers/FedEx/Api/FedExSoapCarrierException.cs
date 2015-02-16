@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Extract the numeric error code from the Stamps.com exception
+        /// Extract the numeric error code from the FedEx exception
         /// </summary>
         public void ParseException(SoapException ex)
         {

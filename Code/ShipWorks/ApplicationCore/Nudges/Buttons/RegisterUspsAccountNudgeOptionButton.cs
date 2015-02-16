@@ -5,7 +5,7 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.ApplicationCore.Nudges.Buttons
 {
     /// <summary>
-    /// Button for a NudgeOption that will launch the Stamps.com setup wizard when clicked.
+    /// Button for a NudgeOption that will launch the USPS setup wizard when clicked.
     /// </summary>
     public class RegisterUspsAccountNudgeOptionButton : AcknowledgeNudgeOptionButton
     {
@@ -18,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         { }
 
         /// <summary>
-        /// Shows the Usps setup wizard for registering a new Stamps.com account.
+        /// Shows the Usps setup wizard for registering a new USPS account.
         /// </summary>
         public override void HandleClick()
         {

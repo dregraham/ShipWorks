@@ -221,13 +221,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
 
-            // Express1 for Stamps.com fields - password needs to be encrypted
+            // Express1 for USPS fields - password needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
-            // Stamps.com fields - password needs to be encrypted
-            AddCounterRateDictionaryEntry(responseXmlDocument, "StampsUsername", "/CounterRateCredentials/Stamps/Username", results);
-            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["StampsUsername"]);
+            // USPS fields - password needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UspsUsername", "/CounterRateCredentials/Stamps/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["UspsUsername"]);
 
             return results;
         }
