@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+                throw WebHelper.TranslateWebException(ex, typeof(UspsException));
             }
         }
 
@@ -202,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
                 string description = EnumHelper.GetDescription(ShipmentTypeCode.Express1Stamps);
-                throw new StampsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
+                throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
 
@@ -286,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             if (purchaseStatus == PurchaseStatus.Rejected)
             {
-                throw new StampsException(rejectionReason);
+                throw new UspsException(rejectionReason);
             }
         }
 
@@ -299,12 +299,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             if (account == null)
             {
-                throw new StampsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No Stamps.com account is selected for the shipment.");
             }
 
             if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
             {
-                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
             try
@@ -391,7 +391,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                                     account.Username,
                                     Environment.NewLine);
 
-                    throw new StampsException(message, ex);
+                    throw new UspsException(message, ex);
                 }
 
                 // This isn't an authentication exception, so just throw the original exception
@@ -479,11 +479,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 {
                     if (!cityStateZipOK)
                     {
-                        throw new StampsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
+                        throw new UspsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
                     }
                     else if (requireFullMatch)
                     {
-                        throw new StampsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
+                        throw new UspsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
                     }
                 }
             }
@@ -504,7 +504,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             if (uspsAccountEntity == null)
             {
-                throw new StampsException("No Stamps.com account is selected for the SCAN form.");
+                throw new UspsException("No Stamps.com account is selected for the SCAN form.");
             }
 
             XDocument result = new XDocument();
@@ -558,7 +558,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
-                throw new StampsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No Stamps.com account is selected for the shipment.");
             }
 
             AuthenticationWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
@@ -584,7 +584,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
-                throw new StampsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No Stamps.com account is selected for the shipment.");
             }
 
             try
@@ -602,7 +602,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                                     account.Username,
                                     Environment.NewLine);
 
-                    throw new StampsException(message, ex);
+                    throw new UspsException(message, ex);
                 }
 
                 if (ex.Code == 5636353 || ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS"))
@@ -637,7 +637,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(toAddress.Country) && PostalUtility.IsDomesticCountry(fromAddress.Country)))
             {
-                throw new StampsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
@@ -1092,7 +1092,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     }
                     catch (Exception ex)
                     {
-                        throw WebHelper.TranslateWebException(ex, typeof(StampsException));
+                        throw WebHelper.TranslateWebException(ex, typeof(UspsException));
                     }
                 }
             }

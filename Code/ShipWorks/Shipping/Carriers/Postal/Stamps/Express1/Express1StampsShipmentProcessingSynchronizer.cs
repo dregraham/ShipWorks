@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -44,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// to grab the first account (the one just created) and use it to process the shipment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <exception cref="StampsException">An Express1 account must be created to process this shipment.</exception>
+        /// <exception cref="UspsException">An Express1 account must be created to process this shipment.</exception>
         public void SaveAccountToShipment(ShipmentEntity shipment)
         {
             if (accountRepository.Accounts.Any())
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
             else
             {
-                throw new StampsException("An Express1 account must be created to process this shipment.");
+                throw new UspsException("An Express1 account must be created to process this shipment.");
             }
         }
 

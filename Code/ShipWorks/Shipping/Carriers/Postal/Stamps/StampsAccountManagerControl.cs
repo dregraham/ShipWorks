@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     result = (new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
                 }
-                catch (StampsException ex)
+                catch (UspsException ex)
                 {
                     string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller));
                     log.Error(logMessage, ex);

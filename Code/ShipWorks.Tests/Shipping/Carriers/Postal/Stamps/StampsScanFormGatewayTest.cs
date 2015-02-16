@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsStampsException_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
@@ -42,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsStampsException_WhenShipmentsContainNonStampsShipment_Test()
         {
             // Create an Endicia shipment to get the gateway to throw an exception
@@ -58,14 +59,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsStampsException_WhenShipmentsIsNull_Test()
         {
             testObject.CreateScanForms(scanFormBatch, null);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsStampsException_WhenShipmentsIsEmpty_Test()
         {
             testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());

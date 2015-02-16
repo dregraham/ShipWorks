@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using System.IO;
 using System.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -63,19 +64,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             UspsAccountEntity accountEntity = scanFormBatch.AccountEntity as UspsAccountEntity;
             if (accountEntity == null)
             {
-                throw new StampsException(invalidCarrierMessage);
+                throw new UspsException(invalidCarrierMessage);
             }
 
             if (shipments == null || shipments.Count() == 0)
             {
-                throw new StampsException("There must be at least one shipment to create a SCAN form.");
+                throw new UspsException("There must be at least one shipment to create a SCAN form.");
             }
 
             // Grab all the stamps-specific shipments (this should be all of the shipments)
             IEnumerable<UspsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Usps).Where(s => s != null);
             if (stampsShipments.Count() != shipments.Count())
             {
-                throw new StampsException(invalidShipmentMessage);
+                throw new UspsException(invalidShipmentMessage);
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())
             {
-                throw new StampsException("Transactions and SCAN forms must be equal length.");
+                throw new UspsException("Transactions and SCAN forms must be equal length.");
             }
 
             // Create entities for each returned scan form
@@ -126,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
             catch (Exception ex)
             {
-                throw new StampsException("ShipWorks was unable to download the SCAN form from Stamps.com", ex);
+                throw new UspsException("ShipWorks was unable to download the SCAN form from Stamps.com", ex);
             }
         }
     }

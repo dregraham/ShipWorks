@@ -14021,3 +14021,7 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountBusinessAddressException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "type", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.Net.UspsPostageWebClient")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "namespace", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.Net")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Scope = "type", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.UspsException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "type", Target = "ShipWorks.Shipping.Carriers.Postal.Usps.UspsException")]

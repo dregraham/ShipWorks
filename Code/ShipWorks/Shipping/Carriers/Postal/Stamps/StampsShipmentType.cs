@@ -246,7 +246,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
         {
-            return GetCachedRates<StampsException>(shipment, GetRatesFromApi);
+            return GetCachedRates<UspsException>(shipment, GetRatesFromApi);
         }
 
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
@@ -264,7 +264,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                 if (express1Account == null)
                 {
-                    throw new StampsException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
+                    throw new UspsException("The Express1 account to automatically use when processing with Stamps.com has not been selected.");
                 }
 
                 // We temporarily turn this into an Exprss1 shipment to get rated
@@ -542,7 +542,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                         useExpress1 = false;
                     }
                 }
-                catch (StampsException stampsException)
+                catch (UspsException stampsException)
                 {
                     throw new ShippingException(stampsException.Message, stampsException);
                 }
@@ -578,7 +578,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 {
                     CreateWebClient().ProcessShipment(shipment);
                 }
-                catch (StampsException ex)
+                catch (UspsException ex)
                 {
                     throw new ShippingException(ex.Message, ex);
                 }
@@ -624,7 +624,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 CreateWebClient().VoidShipment(shipment);
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
@@ -912,7 +912,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.StampsCertificateVerificationData);
 
                 // Fetch the rates now that we're setup to use counter rates
-                return GetCachedRates<StampsException>(shipment, GetRates);
+                return GetCachedRates<UspsException>(shipment, GetRates);
 
             }
             catch (CounterRatesOriginAddressException)

@@ -60,12 +60,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Initializes the account to convert with the specified stamps account.
         /// </summary>
         /// <param name="uspsAccount">The account to be converted.</param>
-        /// <exception cref="StampsException">Only Stamps.com accounts can be converted.</exception>
+        /// <exception cref="UspsException">Only Stamps.com accounts can be converted.</exception>
         public void Initialize(UspsAccountEntity uspsAccount)
         {
             if (uspsAccount.UspsReseller == (int)StampsResellerType.Express1)
             {
-                throw new StampsException("Express1 accounts cannot be converted.");
+                throw new UspsException("Express1 accounts cannot be converted.");
             }
 
             accountToConvert = uspsAccount;
@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     AccountConverted(this, new UspsAccountConvertedEventArgs(accountToConvert));
                 }
             }
-            catch (StampsException exception)
+            catch (UspsException exception)
             {
                 string message = "An error occurred, and ShipWorks was not able to convert your account at this time.";
                 log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);

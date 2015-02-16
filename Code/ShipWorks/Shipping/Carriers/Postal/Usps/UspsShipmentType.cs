@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             RateGroup rateGroup = shipment.Postal.Usps.RateShop ?
                 GetRatesForAllAccounts(shipment) :
-                GetCachedRates<StampsException>(shipment, GetRatesForSpecifiedAccount);
+                GetCachedRates<UspsException>(shipment, GetRatesForSpecifiedAccount);
 
             return new UspsExpress1RateConsolidator().Consolidate(rateGroup, express1RateTask);
         }
@@ -275,7 +275,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     CreateWebClient().ProcessShipment(shipment);
                 }
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
@@ -315,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (accounts == null)
             {
-                throw new StampsException("Could not get rates for the specified service type");
+                throw new UspsException("Could not get rates for the specified service type");
             }
 
             foreach (UspsAccountEntity account in accounts)

@@ -4540,7 +4540,7 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\StampsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsException.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.cs">
       <SubType>Form</SubType>

@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// to grab the first account (the one just created) and use it to process the shipment
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <exception cref="StampsException">A USPS account must be created to process this shipment.</exception>
+        /// <exception cref="UspsException">A USPS account must be created to process this shipment.</exception>
         public void SaveAccountToShipment(ShipmentEntity shipment)
         {
             if (accountRepository.Accounts.Any())
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                throw new StampsException("An account must be created to process this shipment.");
+                throw new UspsException("An account must be created to process this shipment.");
             }
         }
 

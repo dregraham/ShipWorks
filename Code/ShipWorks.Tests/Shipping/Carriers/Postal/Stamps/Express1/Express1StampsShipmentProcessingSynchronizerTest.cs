@@ -5,6 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -56,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void SaveAccountToShipment_ThrowsStampsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());

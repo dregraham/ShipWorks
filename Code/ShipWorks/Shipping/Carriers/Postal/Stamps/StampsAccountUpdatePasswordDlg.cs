@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -62,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 DialogResult = DialogResult.OK;
 
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
             }

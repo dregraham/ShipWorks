@@ -464,7 +464,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
                 e.NextPage = CurrentPage;

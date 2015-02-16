@@ -13,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Thrown when an SoapException is thrown while connecting to the stamps.com API
     /// </summary>
-    public class UspsApiException : StampsException
+    public class UspsApiException : UspsException
     {
         long code;
 

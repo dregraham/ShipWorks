@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         }
 
         [TestMethod]
-        [ExpectedException(typeof(StampsException))]
+        [ExpectedException(typeof(UspsException))]
         public void SaveAccountToShipment_ThrowsStampsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());

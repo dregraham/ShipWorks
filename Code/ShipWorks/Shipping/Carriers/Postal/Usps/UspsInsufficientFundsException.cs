@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Exception thrown when there are insufficient funds for processing
     /// </summary>
-    public class UspsInsufficientFundsException : StampsException, IInsufficientFunds
+    public class UspsInsufficientFundsException : UspsException, IInsufficientFunds
     {
         private readonly UspsAccountEntity account;
 

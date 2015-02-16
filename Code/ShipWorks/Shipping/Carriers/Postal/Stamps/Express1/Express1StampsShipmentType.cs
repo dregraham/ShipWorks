@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         protected override RateGroup GetCounterRates(ShipmentEntity shipment)
         {
-            return GetCachedRates<StampsException>(shipment, entity => { throw new StampsException("An account is required to view Express1 rates."); });
+            return GetCachedRates<UspsException>(shipment, entity => { throw new UspsException("An account is required to view Express1 rates."); });
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 shipment.Postal.Usps.HidePostage = true;
                 new Express1StampsWebClient().ProcessShipment(shipment);
             }
-            catch(StampsException ex)
+            catch(UspsException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }

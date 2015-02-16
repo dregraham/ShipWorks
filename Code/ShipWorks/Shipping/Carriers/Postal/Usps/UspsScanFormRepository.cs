@@ -10,6 +10,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Data.SqlClient;
 using System.Data;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -72,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="batch">The batch.</param>
         /// <returns>A ScanFormBatchEntity populated using the ScanFormBatch object.</returns>
-        /// <exception cref="StampsException">The SCAN forms in the batch are not Stamps.com SCAN forms.</exception>
+        /// <exception cref="UspsException">The SCAN forms in the batch are not Stamps.com SCAN forms.</exception>
         private ScanFormBatchEntity BuildBatchEntity(ScanFormBatch batch)
         {
             ScanFormBatchEntity batchEntity = new ScanFormBatchEntity();
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (uspsScanFormEntity == null)
                 {
                     string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
-                    throw new StampsException(string.Format("The SCAN form provided was not a/an {0} SCAN form.", carrierName));
+                    throw new UspsException(string.Format("The SCAN form provided was not a/an {0} SCAN form.", carrierName));
                 }
 
                 batchEntity.UspsScanForms.Add(uspsScanFormEntity);
@@ -108,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (accountEntity == null)
             {
                 string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
-                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
+                throw new UspsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
             
             List<ScanForm> scanForms = new List<ScanForm>();
@@ -156,14 +157,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <returns>A collection of ScanFormBatch objects.</returns>
-        /// <exception cref="StampsException">ShipWorks was unable to retrieve existing SCAN forms: the Stamps.com account could not be loaded.</exception>
+        /// <exception cref="UspsException">ShipWorks was unable to retrieve existing SCAN forms: the Stamps.com account could not be loaded.</exception>
         public IEnumerable<ScanFormBatch> GetExistingScanFormBatches(IScanFormCarrierAccount carrierAccount)
         {
             UspsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as UspsAccountEntity;
             if (accountEntity == null)
             {
                 string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
-                throw new StampsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
+                throw new UspsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
 
             List<ScanFormBatch> batches = new List<ScanFormBatch>();

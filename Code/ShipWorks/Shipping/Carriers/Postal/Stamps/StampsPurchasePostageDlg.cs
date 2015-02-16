@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Initializes the account info.
         /// </summary>
-        /// <exception cref="StampsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
+        /// <exception cref="UspsException">ShipWorks could not retrieve the account information from the carrier API.</exception>
         private decimal GetBalance(UspsAccountEntity account)
         {
             // Define these here since they could be used in either inside or outside the try statement
@@ -84,10 +84,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 return postageBalance.Value;
             }
-            catch (StampsException apiException)
+            catch (UspsException apiException)
             {
                 log.Error(string.Format("ShipWorks could not retrieve account information from {0}. {1}", carrierName, apiException.Message), apiException);
-                throw new StampsException(exceptionMessage, apiException);
+                throw new UspsException(exceptionMessage, apiException);
             }
         }
 
@@ -95,14 +95,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// An implementation of the IExpress1PostageDialog interface. This will show the dialog using the
         /// information for the given Stamps account entity provided.
         /// </summary>
-        /// <exception cref="StampsException">ShipWorks could not find information for this account.</exception>
+        /// <exception cref="UspsException">ShipWorks could not find information for this account.</exception>
         public DialogResult ShowDialog(IWin32Window owner, long accountID)
         {
             account = StampsAccountManager.GetAccount(accountID);
             if (account == null)
             {
                 // The account could have been deleted by another user/process
-                throw new StampsException("ShipWorks could not find information for this account.");
+                throw new UspsException("ShipWorks could not find information for this account.");
             }
 
             // We have a valid stamps account, so we can use it to initialize the account info
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 MessageHelper.ShowInformation(this, message);
                 DialogResult = DialogResult.OK;
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 string logMessage = string.Format("{0} purchase postage", carrierName);
                 log.ErrorFormat(logMessage, ex);
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 current.Text = postageBalance.Value.ToString("c");
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, "ShipWorks could not retrieve the postage information for your account.\n\nError: " + ex.Message);
 

@@ -8,6 +8,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using System.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
@@ -69,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
             }
@@ -86,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 MessageHelper.ShowError(this, ex.Message);
             }
@@ -109,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     }
                 }
             }
-            catch (StampsException stampsException)
+            catch (UspsException stampsException)
             {
                 MessageHelper.ShowError(this, stampsException.Message);
             }
@@ -134,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
                     break;
                 }
-                catch (StampsException ex)
+                catch (UspsException ex)
                 {
                     bool keepTrying = false;
                     string message = ex.Message;

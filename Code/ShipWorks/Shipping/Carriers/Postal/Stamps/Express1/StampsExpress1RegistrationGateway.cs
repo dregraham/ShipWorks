@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                     UspsReseller = (int)StampsResellerType.Express1
                 });
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 throw new Express1RegistrationException(ex.Message, ex);
             }
