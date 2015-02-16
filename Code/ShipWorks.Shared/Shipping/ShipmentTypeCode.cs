@@ -34,14 +34,14 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIconAttribute("express1")]
         Express1Endicia = 9,
 
-        [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsShipmentType", "ShipmentTypeName")]
+        [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Express1UspsShipmentType", "ShipmentTypeName")]
         [ShipmentTypeIconAttribute("express1")]
         Express1Stamps = 13,
 
         [Description("FedEx")]
         [ShipmentTypeIconAttribute("fedex")]
         FedEx = 6,
-        
+
         [Description("OnTrac")]
         [ShipmentTypeIconAttribute("ontrac")]
         OnTrac = 11,
