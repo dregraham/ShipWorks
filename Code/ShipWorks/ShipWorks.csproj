@@ -1906,7 +1906,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\CreditCardTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\IStampsRegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\IUspsRegistrationValidator.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\RegistrationValidationError.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\RegistrationValidationError.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsAccountUsageDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsPaymentControl.cs">
       <SubType>UserControl</SubType>

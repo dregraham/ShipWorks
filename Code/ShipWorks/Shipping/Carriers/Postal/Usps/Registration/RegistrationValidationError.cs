@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     public class RegistrationValidationError
     {
