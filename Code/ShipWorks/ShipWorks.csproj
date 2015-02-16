@@ -4288,11 +4288,11 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaProfileControl.Designer.cs">
       <DependentUpon>EndiciaProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.Designer.cs">
-      <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerControl.Designer.cs">
+      <DependentUpon>UspsAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -9575,8 +9575,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\PostalProfileControlBase.resx">
       <DependentUpon>PostalProfileControlBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsAccountManagerControl.resx">
-      <DependentUpon>StampsAccountManagerControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerControl.resx">
+      <DependentUpon>UspsAccountManagerControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsSettingsControl.resx">
       <DependentUpon>UspsSettingsControl.cs</DependentUpon>

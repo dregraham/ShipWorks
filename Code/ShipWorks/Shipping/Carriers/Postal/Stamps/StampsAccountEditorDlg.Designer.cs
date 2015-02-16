@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     partial class StampsAccountEditorDlg
     {
@@ -41,7 +43,7 @@
             this.accountPanel = new System.Windows.Forms.Panel();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.mailingPostalCode = new ShipWorks.UI.Controls.PromptTextBox();
-            this.accountInfoControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.UspsAccountInfoControl();
+            this.accountInfoControl = new UspsAccountInfoControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.accountPanel.SuspendLayout();

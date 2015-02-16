@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
     partial class StampsAccountManagerDlg
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             this.close = new System.Windows.Forms.Button();
-            this.accountControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountManagerControl();
+            this.accountControl = new UspsAccountManagerControl();
             this.SuspendLayout();
             // 
             // close
@@ -79,6 +81,6 @@
         #endregion
 
         private System.Windows.Forms.Button close;
-        private StampsAccountManagerControl accountControl;
+        private UspsAccountManagerControl accountControl;
     }
 }

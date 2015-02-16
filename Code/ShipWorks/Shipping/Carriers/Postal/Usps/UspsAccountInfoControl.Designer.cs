@@ -1,4 +1,4 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     partial class UspsAccountInfoControl
     {

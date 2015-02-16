@@ -1,42 +1,33 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using Divelements.SandGrid;
-using ShipWorks.UI;
-using ShipWorks.Data.Connection;
 using System.Threading;
+using System.Windows.Forms;
+using Divelements.SandGrid;
+using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
-using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// UserControl for managing\editing stamps.com accounts
     /// </summary>
-    public partial class StampsAccountManagerControl : PostalAccountManagerControlBase
+    public partial class UspsAccountManagerControl : PostalAccountManagerControlBase
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof (StampsAccountManagerControl));
+        private static readonly ILog log = LogManager.GetLogger(typeof (UspsAccountManagerControl));
 
-        private long initialAccountID = -1;
+        private const long InitialAccountID = -1;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsAccountManagerControl()
+        public UspsAccountManagerControl()
         {
             InitializeComponent();
         }
@@ -75,11 +66,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             foreach (UspsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
             {
                 string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
-                GridRow row = new GridRow(new string[] { account.Description, contractType, "Checking..." });
+                GridRow row = new GridRow(new[] { account.Description, contractType, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
 
-                if (account.UspsAccountID == initialAccountID)
+                if (account.UspsAccountID == InitialAccountID)
                 {
                     row.Selected = true;
                 }
@@ -141,8 +132,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     InnerGrid innerGrid = row.Grid;
                     if (innerGrid != null)
                     {
-                        SandGridBase sandGrid = innerGrid.SandGrid;
-                        if (sandGrid != null)
+                        SandGridBase sandGridInnerGrid = innerGrid.SandGrid;
+                        if (sandGridInnerGrid != null)
                         {
                             if (row.Cells.Count > 1)
                             {
@@ -184,7 +175,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Selected sheet is changing
         /// </summary>
-        private void OnChangeSelectedAccount(object sender, Divelements.SandGrid.SelectionChangedEventArgs e)
+        private void OnChangeSelectedAccount(object sender, SelectionChangedEventArgs e)
         {
             UpdateButtonState();
         }
@@ -197,7 +188,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             OnEdit(sender, EventArgs.Empty);
         }
 
-        
         /// <summary>
         /// Edit the selected account.
         /// </summary>

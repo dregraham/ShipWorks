@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.wizardPageStampsAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.uspsAccountInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.UspsAccountInfoControl();
+            this.uspsAccountInfo = new UspsAccountInfoControl();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
             this.wizardPageAccountAddress = new ShipWorks.UI.Wizard.WizardPage();
