@@ -8,6 +8,7 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -217,7 +218,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 TangoWebClient.LogStampsAccount(license,
                                                 PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.UspsReseller).ShipmentTypeCode,
                                                 account.Username,
-                                                (StampsAccountContractType) account.ContractType);
+                                                (UspsAccountContractType)account.ContractType);
             }
         }
     }

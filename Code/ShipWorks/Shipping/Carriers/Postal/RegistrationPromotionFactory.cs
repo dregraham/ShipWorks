@@ -97,8 +97,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <returns></returns>
         private bool AnyUspsResellerAccountsExist()
         {
-            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)StampsAccountContractType.Reseller) ||
-                stampsAccountRepository.Accounts.Any(x => x.ContractType == (int)StampsAccountContractType.Reseller);
+            return uspsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller) ||
+                stampsAccountRepository.Accounts.Any(x => x.ContractType == (int)UspsAccountContractType.Reseller);
         }
     }
 }

@@ -774,7 +774,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountContractType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountContractType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizer.cs" />

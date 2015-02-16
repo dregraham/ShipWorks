@@ -136,8 +136,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // can be referred to throughout the wizard via the personControl
             UspsAccount = new UspsAccountEntity
             {
-                CountryCode = "US", 
-                ContractType = (int)StampsAccountContractType.Unknown,
+                CountryCode = "US",
+                ContractType = (int)UspsAccountContractType.Unknown,
                 CreatedDate = DateTime.UtcNow
             };
 
@@ -456,7 +456,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     UspsAccount = new UspsAccountEntity
                     {
-                        ContractType = (int)StampsAccountContractType.Unknown,
+                        ContractType = (int)UspsAccountContractType.Unknown,
                         CreatedDate = DateTime.UtcNow
                     };
                 }

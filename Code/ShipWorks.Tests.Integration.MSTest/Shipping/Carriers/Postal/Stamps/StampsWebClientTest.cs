@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 {
@@ -153,9 +154,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetContract_Connectivity_Test()
         {
-            StampsAccountContractType contractType = testObject.GetContractType(account);
+            UspsAccountContractType contractType = testObject.GetContractType(account);
 
-            Assert.AreEqual(StampsAccountContractType.Reseller, contractType);
+            Assert.AreEqual(UspsAccountContractType.Reseller, contractType);
         }
 
         [TestCategory("Stamps")]

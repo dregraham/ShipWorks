@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Checks with Stamps.com API to get the contract type of the account.
         /// </summary>
-        public StampsAccountContractType GetContractType(UspsAccountEntity account)
+        public UspsAccountContractType GetContractType(UspsAccountEntity account)
         {
             throw new InvalidOperationException("The contract type is not applicable for Express1.");
         }

@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 // Set the ContractType to Unknown so that we rely on Stamps to correctly tell us 
                 // the contract type the next time we get rates or process.
-                accountToConvert.ContractType = (int)StampsAccountContractType.Unknown;
+                accountToConvert.ContractType = (int)UspsAccountContractType.Unknown;
 
                 StampsAccountManager.SaveAccount(accountToConvert);
 

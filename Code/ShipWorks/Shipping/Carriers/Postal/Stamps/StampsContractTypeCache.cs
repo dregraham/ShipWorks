@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Runtime.Caching;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -20,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="accountId">The account ID.</param>
         /// <param name="contractType">Type of the contract.</param>
-        public static void Set(long accountId, StampsAccountContractType contractType)
+        public static void Set(long accountId, UspsAccountContractType contractType)
         {
             lock (syncLock)
             {
@@ -34,12 +35,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         /// <param name="accountId">The account identifier.</param>
         /// <returns>The StampsAccountContractType associated with the given account ID; null is returned if the item is not in the cache.</returns>
-        public static StampsAccountContractType GetContractType(long accountId)
+        public static UspsAccountContractType GetContractType(long accountId)
         {
             lock (syncLock)
             {
                 string key = GetKey(accountId);
-                return (StampsAccountContractType) cache[key];
+                return (UspsAccountContractType)cache[key];
             }
         }
 

@@ -1123,7 +1123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Checks with Stamps.com to get the contract type of the account.
         /// </summary>
-        public StampsAccountContractType GetContractType(UspsAccountEntity account)
+        public UspsAccountContractType GetContractType(UspsAccountEntity account)
         {
             return ExceptionWrapper(() => InternalGetContractType(account), account);
         }
@@ -1131,9 +1131,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// The internal GetContractType implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
-        private StampsAccountContractType InternalGetContractType(UspsAccountEntity account)
+        private UspsAccountContractType InternalGetContractType(UspsAccountEntity account)
         {
-            StampsAccountContractType contract = StampsAccountContractType.Unknown;
+            UspsAccountContractType contract = UspsAccountContractType.Unknown;
             AccountInfo accountInfo;
 
             using (SwsimV40 webService = CreateWebService("GetContractType"))
@@ -1154,20 +1154,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                 {
                     case RatesetType.CBP:
                     case RatesetType.Retail:
-                        contract = StampsAccountContractType.Commercial;
+                        contract = UspsAccountContractType.Commercial;
                         break;
 
                     case RatesetType.CPP:
                     case RatesetType.NSA:
-                        contract = StampsAccountContractType.CommercialPlus;
+                        contract = UspsAccountContractType.CommercialPlus;
                         break;
 
                     case RatesetType.Reseller:
-                        contract = StampsAccountContractType.Reseller;
+                        contract = UspsAccountContractType.Reseller;
                         break;
 
                     default:
-                        contract = StampsAccountContractType.Unknown;
+                        contract = UspsAccountContractType.Unknown;
                         break;
                 }
             }

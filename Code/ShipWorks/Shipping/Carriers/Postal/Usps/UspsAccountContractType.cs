@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using System.ComponentModel;
+﻿using System.ComponentModel;
+using System.Reflection;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum StampsAccountContractType
+    public enum UspsAccountContractType
     {
         /// <summary>
         /// The contract type is unknown at the moment but can/should be obtained from the postal

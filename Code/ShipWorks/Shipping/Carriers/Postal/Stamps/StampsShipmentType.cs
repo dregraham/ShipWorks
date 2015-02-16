@@ -328,7 +328,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="rateGroup">The rate group.</param>
         protected void AddUspsRatePromotionFootnote(ShipmentEntity shipment, RateGroup rateGroup)
         {
-            StampsAccountContractType contractType = (StampsAccountContractType) AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
+            UspsAccountContractType contractType = (UspsAccountContractType)AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
             UspsAccountEntity uspsAccount = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
@@ -337,7 +337,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
             TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
 
-            if (contractType == StampsAccountContractType.Commercial && 
+            if (contractType == UspsAccountContractType.Commercial && 
                 accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo && 
                 !accountConversionRestricted)
             {
@@ -403,8 +403,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
-            } 
-            else if (AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType == (int)StampsAccountContractType.Commercial)
+            }
+            else if (AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType == (int)UspsAccountContractType.Commercial)
             {
                 // Show the promotional footer for discounted rates 
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, false));
@@ -847,20 +847,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 // We want to update the contract if it's not in the cache (or dropped out) or if the contract type is unknown; the cache is used
                 // so we don't have to perform this everytime, but does allow ShipWorks to handle cases where the contract type may have been
                 // updated outside of ShipWorks.
-                if (!StampsContractTypeCache.Contains(account.UspsAccountID) || StampsContractTypeCache.GetContractType(account.UspsAccountID) == StampsAccountContractType.Unknown)
+                if (!StampsContractTypeCache.Contains(account.UspsAccountID) || StampsContractTypeCache.GetContractType(account.UspsAccountID) == UspsAccountContractType.Unknown)
                 {
                     try
                     {
                         // Grab contract type from the Stamps API 
                         IStampsWebClient webClient = CreateWebClient();
-                        StampsAccountContractType contractType = webClient.GetContractType(account);
+                        UspsAccountContractType contractType = webClient.GetContractType(account);
 
                         bool hasContractChanged = account.ContractType != (int) contractType;
                         account.ContractType = (int) contractType;
 
                         // Save the contract to the DB and update the cache
                         AccountRepository.Save(account);
-                        StampsContractTypeCache.Set(account.UspsAccountID, (StampsAccountContractType)account.ContractType);
+                        StampsContractTypeCache.Set(account.UspsAccountID, (UspsAccountContractType)account.ContractType);
 
                         if (hasContractChanged)
                         {

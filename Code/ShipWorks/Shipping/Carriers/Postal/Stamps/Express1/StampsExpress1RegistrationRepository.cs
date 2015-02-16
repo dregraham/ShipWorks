@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             uspsAccount.InitializeNullsToDefault();
             uspsAccount.UspsReseller = (int)StampsResellerType.Express1;
 
-            uspsAccount.ContractType = (int)StampsAccountContractType.NotApplicable;
+            uspsAccount.ContractType = (int)UspsAccountContractType.NotApplicable;
 
             // Translate the registration data into a Stamps account entity
             uspsAccount.Username = registration.UserName;

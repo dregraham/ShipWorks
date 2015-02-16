@@ -15,6 +15,7 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using System.Threading;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -47,8 +48,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             this.account = account;
             this.accountName.Text = account.Description;
             postageBalance = new PostageBalance(new StampsPostageWebClient(account), new TangoWebClientWrapper());
-            
-            contractType.Text = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
+
+            contractType.Text = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
 
             bool isExpress1 = account.UspsReseller == (int)StampsResellerType.Express1;
             

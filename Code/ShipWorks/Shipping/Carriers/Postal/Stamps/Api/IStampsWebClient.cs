@@ -4,6 +4,7 @@ using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
@@ -28,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         /// <summary>
         /// Checks with Stamps.com API to get the contract type of the account.
         /// </summary>
-        StampsAccountContractType GetContractType(UspsAccountEntity account);
+        UspsAccountContractType GetContractType(UspsAccountEntity account);
         
         /// <summary>
         /// Purchase postage for the given account for the specified amount.  ControlTotal is the ControlTotal value last retrieved from GetAccountInfo.

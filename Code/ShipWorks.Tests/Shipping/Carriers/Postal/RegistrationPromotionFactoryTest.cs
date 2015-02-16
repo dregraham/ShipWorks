@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
@@ -111,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             {
                 new UspsAccountEntity
                 {
-                    ContractType = (int) StampsAccountContractType.Reseller
+                    ContractType = (int) UspsAccountContractType.Reseller
                 }
             });
             endiciaRepository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
@@ -138,11 +139,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             {
                 new UspsAccountEntity
                 {
-                    ContractType = (int) StampsAccountContractType.CommercialPlus
+                    ContractType = (int) UspsAccountContractType.CommercialPlus
                 },
                 new UspsAccountEntity
                 {
-                    ContractType = (int) StampsAccountContractType.Reseller
+                    ContractType = (int) UspsAccountContractType.Reseller
                 }
             });
 
@@ -168,11 +169,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             {
                 new UspsAccountEntity
                 {
-                    ContractType = (int) StampsAccountContractType.CommercialPlus
+                    ContractType = (int) UspsAccountContractType.CommercialPlus
                 },
                 new UspsAccountEntity
                 {
-                    ContractType = (int) StampsAccountContractType.Reseller
+                    ContractType = (int) UspsAccountContractType.Reseller
                 }
             });
 

@@ -34,6 +34,7 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -482,7 +483,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Stamps contract type to Tango.
         /// </summary>
-        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, StampsAccountContractType stampsAccountContractType)
+        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -490,7 +491,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("stampscontracttype", ((int)stampsAccountContractType).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
             XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 

@@ -18,6 +18,7 @@ using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -71,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             foreach (UspsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
             {
-                string contractType = EnumHelper.GetDescription((StampsAccountContractType) account.ContractType);
+                string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
                 GridRow row = new GridRow(new string[] { account.Description, contractType, "Checking..." });
                 sandGrid.Rows.Add(row);
                 row.Tag = account;
