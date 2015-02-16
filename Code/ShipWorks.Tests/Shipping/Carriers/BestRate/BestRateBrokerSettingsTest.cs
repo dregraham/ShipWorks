@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
@@ -44,14 +45,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1EnabledAndNoAccount_Test()
         {
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsDisabledForStampsInBestRates_Test()
         {
             settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Stamps };
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
@@ -61,14 +62,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
                 EnumHelper.GetEnumList<ShipmentTypeCode>()
                     .Select(x => x.Value)
                     .Where(x => x != ShipmentTypeCode.Express1Stamps);
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsEnabledAndAccountExists_Test()
         {
             brokers.Add(new Express1UspsBestRateBroker());
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]

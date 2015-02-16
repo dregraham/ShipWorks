@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <returns>An instance of an IStampsWebClient based on teh shipment type code.</returns>
         private IUspsWebClient CreateWebClient()
         {
-            StampsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as StampsShipmentType;
+            UspsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as UspsShipmentType;
             return shipmentType.CreateWebClient();
         }
     }

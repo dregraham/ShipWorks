@@ -520,13 +520,11 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Returns a new StampsShipmentType for a given StampsResellerType
         /// </summary>
-        public static StampsShipmentType GetStampsShipmentTypeForStampsResellerType(UspsResellerType stampsResellerType)
+        public static UspsShipmentType GetStampsShipmentTypeForStampsResellerType(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
                 case UspsResellerType.None:
-                    return new StampsShipmentType();
-                case UspsResellerType.StampsExpedited:
                     return new UspsShipmentType();
                 case UspsResellerType.Express1:
                     return new Express1UspsShipmentType();

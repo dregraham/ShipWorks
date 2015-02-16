@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -50,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -77,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -107,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
@@ -118,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [TestMethod]
-        public void Filter_RetainsStampsPromotionalFootnoteFactory_WhenRateGroupOnlyHasStampsBasedPromoFootnoteFactory_Test()
+        public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasStampsBasedPromoFootnoteFactory_Test()
         {
             List<RateResult> rates = new List<RateResult>
             {
@@ -130,19 +131,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             foreach (RateResult rate in rates)
             {
-                rate.ShipmentType = ShipmentTypeCode.Stamps;
+                rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
 
             RateGroup rateGroup = new RateGroup(rates);
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.AreEqual(ShipmentTypeCode.Stamps, factory.ShipmentType.ShipmentTypeCode);
+            Assert.AreEqual(ShipmentTypeCode.Usps, factory.ShipmentType.ShipmentTypeCode);
         }
     }
 }

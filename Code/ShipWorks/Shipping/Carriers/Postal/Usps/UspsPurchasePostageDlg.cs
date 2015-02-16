@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             Cursor.Current = Cursors.WaitCursor;
             string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
-            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType) account.UspsReseller);
+            UspsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)account.UspsReseller);
 
             try
             {

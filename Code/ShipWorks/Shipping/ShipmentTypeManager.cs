@@ -120,9 +120,6 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.Express1Endicia:
                     return new Express1EndiciaShipmentType();
 
-                case ShipmentTypeCode.Stamps:
-                    return new StampsShipmentType();
-
                 case ShipmentTypeCode.Express1Stamps:
                     return new Express1UspsShipmentType();
 

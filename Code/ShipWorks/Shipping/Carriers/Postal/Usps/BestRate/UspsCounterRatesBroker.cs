@@ -53,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         {
             base.Configure(brokerSettings);
 
-            ((StampsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = false;
+            ((UspsShipmentType)ShipmentType).ShouldRetrieveExpress1Rates = false;
         }
     }
 }

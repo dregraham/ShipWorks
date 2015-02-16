@@ -204,13 +204,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             switch (stampsResellerType)
             {
                 case UspsResellerType.None:
-                    shipmentType = new StampsShipmentType();
+                    shipmentType = new UspsShipmentType();
                     break;
                 case UspsResellerType.Express1:
                     shipmentType = new Express1UspsShipmentType();
-                    break;
-                case UspsResellerType.StampsExpedited:
-                    shipmentType = new UspsShipmentType();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");

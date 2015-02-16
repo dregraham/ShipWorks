@@ -497,7 +497,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountManager.SaveAccount(UspsAccount);
 
             // Update the account contract type
-            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)UspsAccount.UspsReseller);
+            UspsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)UspsAccount.UspsReseller);
             stampsShipmentType.UpdateContractType(UspsAccount);
         }
 
@@ -534,7 +534,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // that a new account has been added.
                 RateCache.Instance.Clear();
 
-                StampsShipmentType shipmentType = (StampsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
+                UspsShipmentType shipmentType = (UspsShipmentType)ShipmentTypeManager.GetType(shipmentTypeCode);
 
                 // If this is the only account, update this shipment type profiles with this account
                 List<UspsAccountEntity> accounts = shipmentType.AccountRepository.Accounts.ToList();

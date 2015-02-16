@@ -519,7 +519,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             testObject.Configure(brokerSettings.Object);
 
             // Best rate should never retrieve Express1 rates
-            Assert.AreEqual(false, ((StampsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
+            Assert.AreEqual(false, ((UspsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
 
         [TestMethod]
