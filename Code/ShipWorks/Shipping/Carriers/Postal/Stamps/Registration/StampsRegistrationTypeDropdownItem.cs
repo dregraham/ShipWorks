@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     public class StampsRegistrationTypeDropdownItem
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsAccountUsageDropdownItem"/> class.
+        /// Initializes a new instance of the <see cref="UspsAccountUsageDropdownItem"/> class.
         /// </summary>
         public StampsRegistrationTypeDropdownItem(PostalAccountRegistrationType registrationType, string displayName)
         {

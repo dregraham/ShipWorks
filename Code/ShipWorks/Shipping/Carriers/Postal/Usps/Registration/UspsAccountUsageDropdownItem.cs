@@ -5,14 +5,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     /// <summary>
     /// Class for populating the Stamps.com usage type combo box.
     /// </summary>
-    public class StampsAccountUsageDropdownItem
+    public class UspsAccountUsageDropdownItem
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsAccountUsageDropdownItem"/> class.
+        /// Initializes a new instance of the <see cref="UspsAccountUsageDropdownItem"/> class.
         /// </summary>
         /// <param name="accountType">Type of the account.</param>
         /// <param name="displayName">The display name.</param>
-        public StampsAccountUsageDropdownItem(AccountType accountType, string displayName)
+        public UspsAccountUsageDropdownItem(AccountType accountType, string displayName)
         {
             AccountType = accountType;
             DisplayName = displayName;

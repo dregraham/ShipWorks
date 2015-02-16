@@ -147,10 +147,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
 
-            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
-            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
-            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
-            stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
+            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
+            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
+            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
+            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
             stampsUsageType.SelectedIndex = 0;
 
             CopyPostalRules();
@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (HasAcceptedTermsConditions() && IsContactInfoComplete())
             {
                 // We have the necessary information, so update our stamps.com registration
-                stampsRegistration.UsageType = ((StampsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
+                stampsRegistration.UsageType = ((UspsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
 
                 stampsRegistration.PhysicalAddress.FirstName = UspsAccount.FirstName;
                 stampsRegistration.PhysicalAddress.LastName = UspsAccount.LastName;
