@@ -1,21 +1,20 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Gateway class for integrating with Express1 and Stamps
     /// </summary>
-    public class StampsExpress1RegistrationGateway : Express1RegistrationGateway
+    public class UspsExpress1RegistrationGateway : Express1RegistrationGateway
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsExpress1RegistrationGateway()
+        public UspsExpress1RegistrationGateway()
             : base(new Express1StampsConnectionDetails())
         {
         }
