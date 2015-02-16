@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,15 +13,14 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 {
     [TestClass]
-    public class StampsBestRateBrokerTest
+    public class UspsBestRateBrokerTest
     {
         private UspsAccountEntity account;
         private RateGroup rateGroup;
@@ -255,8 +253,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         //    TestServiceTypeIsExcluded(PostalServiceType.BoundPrintedMatter);
         //}
 
-        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "Stamps_GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
-        [DeploymentItem(@"Shipping\Carriers\Postal\Stamps\BestRate\Stamps_GetBestRates_DoesNotIncludeTypes.csv")]
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "Usps_GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
+        [DeploymentItem(@"Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv")]
         [TestMethod]
         public void GetBestRates_ExcludesVariousTypes()
         {

@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using System.Text.RegularExpressions;
-using log4net;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsRegistrationTest
+    public class UspsRegistrationTest
     {
         UspsRegistration testObject;
         Mock<IUspsRegistrationValidator> mockedValidator;
