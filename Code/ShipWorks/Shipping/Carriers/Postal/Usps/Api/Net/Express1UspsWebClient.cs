@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Initializes a new instance of the <see cref="Express1UspsWebClient"/> class.
         /// </summary>
         public Express1UspsWebClient()
-            : this(new Express1StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
+            : this(new Express1UspsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector())
         { }
 
         /// <summary>

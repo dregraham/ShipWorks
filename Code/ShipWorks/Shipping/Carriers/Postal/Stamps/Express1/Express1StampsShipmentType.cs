@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public Express1StampsShipmentType()
         {
-            AccountRepository = new Express1StampsAccountRepository();
+            AccountRepository = new Express1UspsAccountRepository();
         }
 
         /// <summary>

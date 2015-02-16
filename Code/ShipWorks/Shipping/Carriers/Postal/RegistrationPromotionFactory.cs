@@ -3,6 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -23,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Initializes a new instance of the <see cref="RegistrationPromotionFactory"/> class.
         /// </summary>
         public RegistrationPromotionFactory() : 
-            this(new UspsAccountRepository(), new Express1StampsAccountRepository(), 
+            this(new UspsAccountRepository(), new Express1UspsAccountRepository(), 
                 new EndiciaAccountRepository(), new Express1EndiciaAccountRepository())
         {
         }

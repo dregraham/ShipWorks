@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsBestRateBroker() : this(new Express1StampsShipmentType(), new Express1StampsAccountRepository())
+        public Express1StampsBestRateBroker() : this(new Express1StampsShipmentType(), new Express1UspsAccountRepository())
         {
             
         }

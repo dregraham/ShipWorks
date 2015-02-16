@@ -8,11 +8,9 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
@@ -66,7 +64,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             }
         }
 
-
         public List<RateResult> GetRates(UspsResellerType stampsResellerType)
         {
             ShipmentEntity shipment = CreateShipment();
@@ -118,7 +115,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 case UspsResellerType.None:
                     return new UspsAccountRepository();
                 case UspsResellerType.Express1:
-                    return new Express1StampsAccountRepository();
+                    return new Express1UspsAccountRepository();
                 case UspsResellerType.StampsExpedited:
                     return new UspsAccountRepository();
                 default:

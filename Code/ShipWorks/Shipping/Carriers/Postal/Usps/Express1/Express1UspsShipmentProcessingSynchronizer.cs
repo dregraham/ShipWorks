@@ -1,8 +1,9 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
     /// <summary>
     /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// Initializes a new instance of the <see cref="Express1UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         public Express1UspsShipmentProcessingSynchronizer()
-            : this(new Express1StampsAccountRepository())
+            : this(new Express1UspsAccountRepository())
         { }
 
         /// <summary>
