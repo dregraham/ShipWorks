@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
