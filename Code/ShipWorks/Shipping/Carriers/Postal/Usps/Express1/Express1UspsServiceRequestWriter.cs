@@ -2,12 +2,12 @@
 using System.Xml;
 using System.Xml.Linq;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Decorating XmlWriter to allow ShipWorks to communicate transparently with Stamps and Express1
     /// </summary>
-    public class Express1StampsServiceRequestWriter : XmlWriter
+    public class Express1UspsServiceRequestWriter : XmlWriter
     {
         // the writer being decorated
         XmlWriter wrappedWriter;
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsServiceRequestWriter(XmlWriter originalWriter)
+        public Express1UspsServiceRequestWriter(XmlWriter originalWriter)
         {
             this.wrappedWriter = originalWriter;
         }

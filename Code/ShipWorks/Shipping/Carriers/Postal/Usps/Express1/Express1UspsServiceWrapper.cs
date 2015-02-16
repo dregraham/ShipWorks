@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             FixupOutgoingSoapMessage(message);
 
             // return the custome XmlWriter
-            return new Express1StampsServiceRequestWriter(base.GetWriterForMessage(message, bufferSize));
+            return new Express1UspsServiceRequestWriter(base.GetWriterForMessage(message, bufferSize));
         }
     }
 }
