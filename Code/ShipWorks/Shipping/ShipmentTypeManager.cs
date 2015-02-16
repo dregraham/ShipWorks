@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Other;
-using ShipWorks.Shipping.Carriers.None;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.ApplicationCore;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping
 {
@@ -127,7 +124,7 @@ namespace ShipWorks.Shipping
                     return new StampsShipmentType();
 
                 case ShipmentTypeCode.Express1Stamps:
-                    return new Express1StampsShipmentType();
+                    return new Express1UspsShipmentType();
 
                 case ShipmentTypeCode.PostalWebTools:
                     return new PostalWebShipmentType();

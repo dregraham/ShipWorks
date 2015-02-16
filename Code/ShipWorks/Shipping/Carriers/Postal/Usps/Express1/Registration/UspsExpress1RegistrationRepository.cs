@@ -90,8 +90,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             }
 
             // Update the account contract type
-            Express1StampsShipmentType stampsShipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-            stampsShipmentType.UpdateContractType(uspsAccount);
+            Express1UspsShipmentType uspsShipmentType = (Express1UspsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
+            uspsShipmentType.UpdateContractType(uspsAccount);
 
             return uspsAccount.UspsAccountID;
         }

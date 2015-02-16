@@ -12,9 +12,9 @@ using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             return Task.Factory.StartNew(() =>
             {
-                RateGroup rateGroup = new Express1StampsShipmentType().GetRates(express1Shipment);
+                RateGroup rateGroup = new Express1UspsShipmentType().GetRates(express1Shipment);
                 foreach (RateResult rate in rateGroup.Rates)
                 {
                     PostalRateSelection tag = rate.Tag as PostalRateSelection;

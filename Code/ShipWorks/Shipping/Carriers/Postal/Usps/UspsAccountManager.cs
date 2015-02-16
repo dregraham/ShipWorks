@@ -11,7 +11,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -207,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     shipmentType = new StampsShipmentType();
                     break;
                 case UspsResellerType.Express1:
-                    shipmentType = new Express1StampsShipmentType();
+                    shipmentType = new Express1UspsShipmentType();
                     break;
                 case UspsResellerType.StampsExpedited:
                     shipmentType = new UspsShipmentType();

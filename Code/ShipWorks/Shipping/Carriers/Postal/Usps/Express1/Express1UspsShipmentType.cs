@@ -2,33 +2,31 @@
 using System.Linq;
 using System.Reflection;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Shipment type for Express 1 for Stamps.com shipments.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = false)]    
-    public class Express1StampsShipmentType : UspsShipmentType
+    public class Express1UspsShipmentType : UspsShipmentType
     {
         /// <summary>
         /// Create an instance of the Express1 Stamps Shipment Type
         /// </summary>
-        public Express1StampsShipmentType()
+        public Express1UspsShipmentType()
         {
             AccountRepository = new Express1UspsAccountRepository();
         }

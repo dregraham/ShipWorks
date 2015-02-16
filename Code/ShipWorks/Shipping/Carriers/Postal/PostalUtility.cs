@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ActiproSoftware.Drawing;
+using System.Text.RegularExpressions;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings.Origin;
-using System.Text.RegularExpressions;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Editions;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -536,7 +529,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 case UspsResellerType.StampsExpedited:
                     return new UspsShipmentType();
                 case UspsResellerType.Express1:
-                    return new Express1StampsShipmentType();
+                    return new Express1UspsShipmentType();
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated Shipment Type.", EnumHelper.GetDescription(stampsResellerType)), "stampsResellerType");
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             catch (Exception ex)
             {
-                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new Express1StampsShipmentType(), ex.GetBaseException()));
+                uspsRateGroup.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(new Express1UspsShipmentType(), ex.GetBaseException()));
             }
 
             return uspsRateGroup;

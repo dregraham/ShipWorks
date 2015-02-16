@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             get
             {
-                long? accountID = new Express1StampsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
+                long? accountID = new Express1UspsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Express1Stamps, accountID);
             }
         }

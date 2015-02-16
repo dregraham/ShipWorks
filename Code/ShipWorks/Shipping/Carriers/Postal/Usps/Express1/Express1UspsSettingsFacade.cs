@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             get
             {
-                return new Express1StampsShipmentType();
+                return new Express1UspsShipmentType();
             }
         }
 

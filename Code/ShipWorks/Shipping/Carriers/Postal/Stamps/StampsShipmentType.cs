@@ -17,11 +17,11 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
@@ -553,7 +553,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
                 shipment.Postal.Usps.UspsAccountID = express1Account.UspsAccountID;
 
-                Express1StampsShipmentType shipmentType = (Express1StampsShipmentType)ShipmentTypeManager.GetType(shipment);
+                Express1UspsShipmentType shipmentType = (Express1UspsShipmentType)ShipmentTypeManager.GetType(shipment);
 
                 // Process via Express1
                 shipmentType.UpdateDynamicShipmentData(shipment);
