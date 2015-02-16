@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.optionsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionsControl.Location = new System.Drawing.Point(0, -1);
             this.optionsControl.Name = "optionsControl";
-            this.optionsControl.ShipmentTypeCode = ShipWorks.Shipping.ShipmentTypeCode.Stamps;
+            this.optionsControl.ShipmentTypeCode = ShipWorks.Shipping.ShipmentTypeCode.Usps;
             this.optionsControl.Size = new System.Drawing.Size(435, 54);
             this.optionsControl.TabIndex = 4;
             // 

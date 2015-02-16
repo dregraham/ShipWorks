@@ -45,8 +45,8 @@ namespace ShipWorks.Shipping
 
                     if (typeCode == ShipmentTypeCode.Express1Stamps)
                     {
-                        // The only time Express1 for Stamps should be excluded is when Stamps has never been setup but Endicia has been setup
-                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Stamps) &&
+                        // The only time Express1 for USPS should be excluded is when USPS has never been setup but Endicia has been setup
+                        if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
                             !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
                         {
                             // Stamps has never been setup, so we want to exclude the Express1/Stamps type since Endicia IS setup in ShipWorks
@@ -157,18 +157,17 @@ namespace ShipWorks.Shipping
             {
                 case ShipmentTypeCode.BestRate: return 1;
                 case ShipmentTypeCode.Usps: return 2;
-                case ShipmentTypeCode.Stamps: return 3;
-                case ShipmentTypeCode.PostalWebTools: return 4;
-                case ShipmentTypeCode.Express1Stamps: return 5;
-                case ShipmentTypeCode.FedEx: return 6;
-                case ShipmentTypeCode.UpsOnLineTools: return 7;
-                case ShipmentTypeCode.UpsWorldShip: return 8;
-                case ShipmentTypeCode.Endicia: return 9;
-                case ShipmentTypeCode.Express1Endicia: return 10;
-                case ShipmentTypeCode.OnTrac: return 11;
-                case ShipmentTypeCode.iParcel: return 12;
-                case ShipmentTypeCode.Other: return 13;
-                case ShipmentTypeCode.None: return 14;
+                case ShipmentTypeCode.PostalWebTools: return 3;
+                case ShipmentTypeCode.Express1Stamps: return 4;
+                case ShipmentTypeCode.FedEx: return 5;
+                case ShipmentTypeCode.UpsOnLineTools: return 6;
+                case ShipmentTypeCode.UpsWorldShip: return 7;
+                case ShipmentTypeCode.Endicia: return 8;
+                case ShipmentTypeCode.Express1Endicia: return 9;
+                case ShipmentTypeCode.OnTrac: return 10;
+                case ShipmentTypeCode.iParcel: return 11;
+                case ShipmentTypeCode.Other: return 12;
+                case ShipmentTypeCode.None: return 13;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");

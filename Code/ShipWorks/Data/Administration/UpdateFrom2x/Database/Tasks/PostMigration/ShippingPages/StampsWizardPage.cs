@@ -46,7 +46,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         {
             if (e.FirstTime)
             {
-                anyStamps = ShipmentCollection.GetCount(SqlAdapter.Default, ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Stamps) > 0;
+                anyStamps = ShipmentCollection.GetCount(SqlAdapter.Default, ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Usps) > 0;
             }
 
             // If there are no UPS accounts or shipments just skip
@@ -54,7 +54,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             {
                 e.Skip = true;
             }
-            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Stamps))
+            else if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
                 ShowConfiguredUI();
             }
@@ -70,7 +70,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             {
                 if (wizard.ShowDialog(this) == DialogResult.OK)
                 {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Stamps);
+                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
 
                     ShowConfiguredUI();
                 }
@@ -92,7 +92,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-            ShippingSettings.MarkAsActivated(ShipmentTypeCode.Stamps);
+            ShippingSettings.MarkAsActivated(ShipmentTypeCode.Usps);
         }
     }
 }

@@ -23,7 +23,10 @@ namespace ShipWorks.Editions.Brown
             }
 
             // We also allow these postal providers to be used.  There are additional restrictions that will kick-in that may limit if they can do APO\FPO, or all
-            if (shipmentType == ShipmentTypeCode.Endicia || shipmentType == ShipmentTypeCode.Stamps || shipmentType == ShipmentTypeCode.Express1Endicia || shipmentType == ShipmentTypeCode.Express1Stamps || shipmentType == ShipmentTypeCode.Usps)
+            if (shipmentType == ShipmentTypeCode.Endicia || 
+                shipmentType == ShipmentTypeCode.Express1Endicia ||
+                shipmentType == ShipmentTypeCode.Express1Stamps ||
+                shipmentType == ShipmentTypeCode.Usps)
             {
                 return true;
             }

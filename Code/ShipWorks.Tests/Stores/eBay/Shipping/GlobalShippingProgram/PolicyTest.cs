@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
 
             express1Shipment = CreateShipment((int) ShipmentTypeCode.Express1Endicia);
 
-            stampsShipment = CreateShipment((int) ShipmentTypeCode.Stamps);
+            stampsShipment = CreateShipment((int) ShipmentTypeCode.Usps);
             stampsShipment.Postal = new PostalShipmentEntity()
             {
                 Usps = new UspsShipmentEntity()

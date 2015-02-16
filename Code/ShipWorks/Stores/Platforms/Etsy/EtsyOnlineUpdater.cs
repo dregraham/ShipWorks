@@ -277,7 +277,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     // Use the default carrier for other Endicia types
                     return "usps";
 
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:

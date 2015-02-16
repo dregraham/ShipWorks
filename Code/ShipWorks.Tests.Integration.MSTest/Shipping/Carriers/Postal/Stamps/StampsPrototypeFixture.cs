@@ -78,7 +78,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             switch (stampsResellerType)
             {
                 case UspsResellerType.None:
-                case UspsResellerType.StampsExpedited:
                     return new UspsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
 
                 case UspsResellerType.Express1:
@@ -93,13 +92,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
 
             IUspsWebClient webClient = null;
-            if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Stamps)
+            if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Usps)
             {
                 webClient = GetWebClient(UspsResellerType.None);
-            }
-            else if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Usps)
-            {
-                webClient = GetWebClient(UspsResellerType.StampsExpedited);
             }
             else
             {
@@ -117,8 +112,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                     return new UspsAccountRepository();
                 case UspsResellerType.Express1:
                     return new Express1UspsAccountRepository();
-                case UspsResellerType.StampsExpedited:
-                    return new UspsAccountRepository();
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");
             }

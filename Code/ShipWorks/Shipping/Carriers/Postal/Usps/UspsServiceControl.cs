@@ -21,15 +21,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsServiceControl : PostalServiceControlBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="UspsServiceControl"/> class.
-        /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public UspsServiceControl(RateControl rateControl)
-            : this(ShipmentTypeCode.Stamps, rateControl) 
-        { }
-
-        /// <summary>
         /// Constructor
         /// </summary>
         public UspsServiceControl(ShipmentTypeCode shipmentTypeCode, RateControl rateControl)

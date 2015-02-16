@@ -51,8 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.settings = ShippingSettings.Fetch();
             this.shipment = shipment;
 
-            if ((shipment.ShipmentType == (int) ShipmentTypeCode.Stamps && UspsAccountManager.StampsAccounts.Any())
-                || shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any())
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any())
             {
                 // There are Stamps-backed accounts, so we want to show the control to convert their existing account
                 requiresSignup = false;
@@ -148,7 +147,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ExcludeShipmentType(ShipmentTypeCode.Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Stamps);
-                ExcludeShipmentType(ShipmentTypeCode.Stamps);
 
                 // Be sure the USPS shipment type is not included in the excluded list
                 List<int> excludedTypes = settings.ExcludedTypes.ToList();
@@ -162,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Usps);
 
                 RateCache.Instance.Clear();
 

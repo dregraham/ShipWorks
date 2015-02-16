@@ -351,7 +351,6 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                     {
                         if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
@@ -410,7 +409,6 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                     {
                         cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);

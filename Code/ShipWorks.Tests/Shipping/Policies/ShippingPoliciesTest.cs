@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         private readonly Dictionary<ShipmentTypeCode, IEnumerable<XElement>> features = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
                 {ShipmentTypeCode.BestRate, LoadElements(bestRateFeatureXml)},
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeatureXml)}
+                {ShipmentTypeCode.Usps, LoadElements(stampsFeatureXml)}
             };
 
         [TestInitialize]
@@ -92,8 +92,8 @@ namespace ShipWorks.Tests.Shipping.Policies
             {
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy1),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy1),
-                CreatePolicyAssociation(ShipmentTypeCode.Stamps, stampsNonApplicablePolicy),
-                CreatePolicyAssociation(ShipmentTypeCode.Stamps, stampsApplicablePolicy),
+                CreatePolicyAssociation(ShipmentTypeCode.Usps, stampsNonApplicablePolicy),
+                CreatePolicyAssociation(ShipmentTypeCode.Usps, stampsApplicablePolicy),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateNonApplicablePolicy),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy2)
             });
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(stampsFeature2Xml)}
             };
 
             ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(stampsFeature2Xml)}
             };
 
             ShippingPolicies.Load(0, extraFeatures, policyFactoryMock.Object);
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(stampsFeature2Xml)}
             };
             ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
 

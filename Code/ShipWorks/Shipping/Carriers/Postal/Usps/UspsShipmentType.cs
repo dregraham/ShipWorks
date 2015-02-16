@@ -564,7 +564,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
-                commonDetail.OriginalShipmentType = ShipmentTypeCode.Stamps;
+                commonDetail.OriginalShipmentType = ShipmentTypeCode.Usps;
             }
 
             return commonDetail;

@@ -54,7 +54,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
@@ -136,8 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         PostalServiceType.StandardPost
                     };
 
-                if (shipmentType == ShipmentTypeCode.Stamps ||
-                    shipmentType == ShipmentTypeCode.Usps ||
+                if (shipmentType == ShipmentTypeCode.Usps ||
                     shipmentType == ShipmentTypeCode.Express1Stamps ||
                     shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
@@ -507,8 +505,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
-                    return UspsResellerType.StampsExpedited;
-                case ShipmentTypeCode.Stamps:
                     return UspsResellerType.None;
                 case ShipmentTypeCode.Express1Stamps:
                     return UspsResellerType.Express1;

@@ -317,7 +317,6 @@ namespace ShipWorks.Shipping.Editing.Rating
             if (ConsolidatePostalRates &&
                 PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
                 !PostalUtility.IsPostalSetup() && 
-                shipmentTypeCode != ShipmentTypeCode.Stamps && 
                 shipmentTypeCode != ShipmentTypeCode.Usps &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Stamps)

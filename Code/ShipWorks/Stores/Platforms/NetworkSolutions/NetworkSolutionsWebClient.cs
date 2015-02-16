@@ -633,7 +633,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.Endicia:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:

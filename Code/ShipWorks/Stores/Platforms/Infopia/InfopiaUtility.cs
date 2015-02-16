@@ -143,7 +143,6 @@ namespace ShipWorks.Stores.Platforms.Infopia
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
 
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Express1Endicia:

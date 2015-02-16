@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
-                string description = EnumHelper.GetDescription(ShipmentTypeCode.Stamps);
+                string description = EnumHelper.GetDescription(ShipmentTypeCode.Usps);
                 throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
@@ -790,10 +790,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Determine what thermal type, if any to use.  If USPS, use it's setting. Otherwise, use the Stamps 
             // settings if it is a Stamps shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
-            }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Stamps || shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
                 thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }

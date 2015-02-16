@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
-            UspsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Stamps ? UspsResellerType.None : UspsResellerType.StampsExpedited;
+            UspsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Usps ? UspsResellerType.None : UspsResellerType.StampsExpedited;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(new ShippingWizardPageFinish(shipmentType));
 
-            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Stamps))
+            if (ShippingManager.IsShipmentTypeConfigured(ShipmentTypeCode.Usps))
             {
                 Pages.Remove(wizardPageOptions);
             }
@@ -178,7 +178,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Stamps);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
             }
         }
@@ -577,7 +576,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Stamps);
-            ExcludeShipmentType(settings, ShipmentTypeCode.Stamps);
             ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
 
             // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded

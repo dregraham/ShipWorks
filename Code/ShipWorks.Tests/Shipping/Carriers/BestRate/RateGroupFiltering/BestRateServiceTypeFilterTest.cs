@@ -223,14 +223,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             };
             rates[0].ShipmentType = ShipmentTypeCode.FedEx;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[2].ShipmentType = ShipmentTypeCode.Usps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
             rates[4].ShipmentType = ShipmentTypeCode.Endicia;
 
             rates[5].ShipmentType = ShipmentTypeCode.FedEx;
             rates[6].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
             rates[7].ShipmentType = ShipmentTypeCode.Endicia;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[8].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
 
@@ -255,7 +255,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             rates[0].ShipmentType = ShipmentTypeCode.Endicia;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
             rates[2].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
             rates[4].ShipmentType = ShipmentTypeCode.Endicia;
 
             RateGroup rateGroup = new RateGroup(rates);
@@ -285,14 +285,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             };
             rates[0].ShipmentType = ShipmentTypeCode.Express1Endicia;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[2].ShipmentType = ShipmentTypeCode.Usps;
             rates[3].ShipmentType = ShipmentTypeCode.Endicia;
             rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
 
             rates[5].ShipmentType = ShipmentTypeCode.FedEx;
             rates[6].ShipmentType = ShipmentTypeCode.Express1Endicia;
             rates[7].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[8].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
 
@@ -316,8 +316,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             };
             rates[0].ShipmentType = ShipmentTypeCode.FedEx;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[2].ShipmentType = ShipmentTypeCode.Usps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
             rates[4].ShipmentType = ShipmentTypeCode.Endicia;
 
             RateGroup rateGroup = new RateGroup(rates);
@@ -373,14 +373,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             };
             rates[0].ShipmentType = ShipmentTypeCode.FedEx;
             rates[1].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
-            rates[2].ShipmentType = ShipmentTypeCode.Stamps;
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[2].ShipmentType = ShipmentTypeCode.Usps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
             rates[4].ShipmentType = ShipmentTypeCode.Express1Stamps;
 
             rates[5].ShipmentType = ShipmentTypeCode.FedEx;
             rates[6].ShipmentType = ShipmentTypeCode.UpsOnLineTools;
             rates[7].ShipmentType = ShipmentTypeCode.Express1Stamps;
-            rates[8].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[8].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
 

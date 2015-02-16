@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             foreach (RateResult rate in rates)
             {
-                rate.ShipmentType = ShipmentTypeCode.Stamps;
+                rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
             // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results 
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
             // Shouldn't have any footnote factories that aren't for stamps
-            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Stamps));
+            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 
 

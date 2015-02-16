@@ -645,10 +645,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Stamps || shipment.Postal.Usps.OriginalUspsAccountID != null)
-            {
-                thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
-            }
             else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;

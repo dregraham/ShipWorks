@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);

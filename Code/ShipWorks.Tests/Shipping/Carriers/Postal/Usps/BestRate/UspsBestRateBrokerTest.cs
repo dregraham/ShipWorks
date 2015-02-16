@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
             genericShipmentTypeMock = new Mock<UspsShipmentType>();
-            genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Stamps);
+            genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Usps);
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                             .Returns(rateGroup)
                             .Callback<ShipmentEntity>(e => getRatesShipments.Add(EntityUtility.CloneEntity(e)));
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
             foreach (var shipment in getRatesShipments)
             {
-                Assert.AreEqual(ShipmentTypeCode.Stamps, (ShipmentTypeCode)shipment.ShipmentType);
+                Assert.AreEqual(ShipmentTypeCode.Usps, (ShipmentTypeCode) shipment.ShipmentType);
                 Assert.AreEqual(12.1, shipment.ContentWeight);
             }
         }

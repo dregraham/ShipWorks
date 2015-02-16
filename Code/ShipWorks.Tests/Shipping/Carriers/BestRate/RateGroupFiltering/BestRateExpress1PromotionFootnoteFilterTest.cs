@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 rates[i].ShipmentType = ShipmentTypeCode.Endicia;
             }
 
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 rates[i].ShipmentType = ShipmentTypeCode.Endicia;
             }
 
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 rates[i].ShipmentType = ShipmentTypeCode.Endicia;
             }
 
-            rates[3].ShipmentType = ShipmentTypeCode.Stamps;
+            rates[3].ShipmentType = ShipmentTypeCode.Usps;
 
             RateGroup rateGroup = new RateGroup(rates);
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));

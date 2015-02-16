@@ -17,10 +17,9 @@ namespace ShipWorks.Shipping.CoreExtensions
         /// </summary>
         public static string GetPostalTypeCondition(SqlGenerationContext context)
         {
-            return string.Format("{0} IN ({1}, {2}, {3}, {4}, {5}, {6})",
+            return string.Format("{0} IN ({1}, {2}, {3}, {4}, {5})",
                 context.GetColumnReference(ShipmentFields.ShipmentType),
                 (int) ShipmentTypeCode.Endicia,
-                (int) ShipmentTypeCode.Stamps,
                 (int) ShipmentTypeCode.Express1Endicia,
                 (int) ShipmentTypeCode.Express1Stamps,
                 (int) ShipmentTypeCode.PostalWebTools,

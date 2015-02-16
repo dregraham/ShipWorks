@@ -59,7 +59,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     break;
 
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Stamps:
