@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
-    partial class Express1StampsServiceControl
+    partial class Express1UspsServiceControl
     {
         /// <summary> 
         /// Required designer variable.
@@ -32,10 +32,10 @@
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
-            this.linkManageStampsAccounts = new ShipWorks.UI.Controls.LinkControl();
+            this.linkManageUspsAccounts = new ShipWorks.UI.Controls.LinkControl();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.stampsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.uspsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelStampsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -148,10 +148,10 @@
             this.panelTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.BackColor = System.Drawing.Color.Transparent;
-            this.panelTop.Controls.Add(this.linkManageStampsAccounts);
+            this.panelTop.Controls.Add(this.linkManageUspsAccounts);
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.label1);
-            this.panelTop.Controls.Add(this.stampsAccount);
+            this.panelTop.Controls.Add(this.uspsAccount);
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(371, 50);
@@ -159,17 +159,17 @@
             // 
             // linkManageStampsAccounts
             // 
-            this.linkManageStampsAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkManageStampsAccounts.AutoSize = true;
-            this.linkManageStampsAccounts.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkManageStampsAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkManageStampsAccounts.ForeColor = System.Drawing.Color.Blue;
-            this.linkManageStampsAccounts.Location = new System.Drawing.Point(300, 28);
-            this.linkManageStampsAccounts.Name = "linkManageStampsAccounts";
-            this.linkManageStampsAccounts.Size = new System.Drawing.Size(57, 13);
-            this.linkManageStampsAccounts.TabIndex = 5;
-            this.linkManageStampsAccounts.Text = "Manage...";
-            this.linkManageStampsAccounts.Click += new System.EventHandler(this.OnManageStampsAccounts);
+            this.linkManageUspsAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkManageUspsAccounts.AutoSize = true;
+            this.linkManageUspsAccounts.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkManageUspsAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkManageUspsAccounts.ForeColor = System.Drawing.Color.Blue;
+            this.linkManageUspsAccounts.Location = new System.Drawing.Point(300, 28);
+            this.linkManageUspsAccounts.Name = "linkManageUspsAccounts";
+            this.linkManageUspsAccounts.Size = new System.Drawing.Size(57, 13);
+            this.linkManageUspsAccounts.TabIndex = 5;
+            this.linkManageUspsAccounts.Text = "Manage...";
+            this.linkManageUspsAccounts.Click += new System.EventHandler(this.OnManageUspsAccounts);
             // 
             // label2
             // 
@@ -193,16 +193,16 @@
             // 
             // uspsAccount
             // 
-            this.stampsAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.uspsAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.stampsAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stampsAccount.FormattingEnabled = true;
-            this.stampsAccount.Location = new System.Drawing.Point(79, 25);
-            this.stampsAccount.Name = "stampsAccount";
-            this.stampsAccount.PromptText = "(Multiple Values)";
-            this.stampsAccount.Size = new System.Drawing.Size(215, 21);
-            this.stampsAccount.TabIndex = 3;
-            this.stampsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
+            this.uspsAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.uspsAccount.FormattingEnabled = true;
+            this.uspsAccount.Location = new System.Drawing.Point(79, 25);
+            this.uspsAccount.Name = "uspsAccount";
+            this.uspsAccount.PromptText = "(Multiple Values)";
+            this.uspsAccount.Size = new System.Drawing.Size(215, 21);
+            this.uspsAccount.TabIndex = 3;
+            this.uspsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // labelStampsValidation
             // 
@@ -251,7 +251,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
-            this.Name = "Express1StampsServiceControl";
+            this.Name = "Express1UspsServiceControl";
             this.Size = new System.Drawing.Size(384, 633);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
@@ -285,11 +285,11 @@
 
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionFrom;
         private ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl originControl;
-        private ShipWorks.UI.Controls.MultiValueComboBox stampsAccount;
+        private ShipWorks.UI.Controls.MultiValueComboBox uspsAccount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label label2;
-        private ShipWorks.UI.Controls.LinkControl linkManageStampsAccounts;
+        private ShipWorks.UI.Controls.LinkControl linkManageUspsAccounts;
         private System.Windows.Forms.Label labelStampsValidation;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
         private Templates.Tokens.TemplateTokenTextBox memo;

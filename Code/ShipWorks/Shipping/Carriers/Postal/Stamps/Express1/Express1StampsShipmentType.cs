@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
-            return new Express1StampsServiceControl(rateControl);
+            return new Express1UspsServiceControl(rateControl);
         }
 
         /// <summary>

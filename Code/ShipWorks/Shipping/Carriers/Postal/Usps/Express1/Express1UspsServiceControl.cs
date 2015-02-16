@@ -2,27 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// Service control for Stamps.com settings
+    /// Service control for Expres1 Usps settings
     /// </summary>
-    public partial class Express1StampsServiceControl : PostalServiceControlBase
+    public partial class Express1UspsServiceControl : PostalServiceControlBase
     {
-        private const UspsResellerType StampsResellerType = UspsResellerType.Express1;
+        private const UspsResellerType ResellerType = UspsResellerType.Express1;
 
         /// <summary>
-        /// Initializes a new <see cref="Express1StampsServiceControl"/> instance.
+        /// Initializes a new <see cref="Express1UspsServiceControl"/> instance.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public Express1StampsServiceControl(RateControl rateControl)
+        public Express1UspsServiceControl(RateControl rateControl)
             : base(ShipmentTypeCode.Express1Stamps, rateControl)
         {
             InitializeComponent();
@@ -37,29 +36,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             originControl.Initialize(ShipmentTypeCode);
 
-            linkManageStampsAccounts.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
+            linkManageUspsAccounts.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
             LoadAccounts();
         }
 
         /// <summary>
-        /// Load the list of stamps.com accounts
+        /// Load the list of Express1 Usps accounts
         /// </summary>
         public override void LoadAccounts()
         {
-            stampsAccount.DisplayMember = "Key";
-            stampsAccount.ValueMember = "Value";
+            uspsAccount.DisplayMember = "Key";
+            uspsAccount.ValueMember = "Value";
 
-            var accounts = UspsAccountManager.GetAccounts(StampsResellerType, false);
+            var accounts = UspsAccountManager.GetAccounts(ResellerType, false);
 
             if (accounts.Count > 0)
             {
-                stampsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.UspsAccountID)).ToList();
-                stampsAccount.Enabled = true;
+                uspsAccount.DataSource = accounts.Select(a => new KeyValuePair<string, long>(a.Description, a.UspsAccountID)).ToList();
+                uspsAccount.Enabled = true;
             }
             else
             {
-                stampsAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
-                stampsAccount.Enabled = false;
+                uspsAccount.DataSource = new List<KeyValuePair<string, long>> { new KeyValuePair<string, long>("(No accounts)", 0) };
+                uspsAccount.Enabled = false;
             }
         }
 
@@ -85,11 +84,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    stampsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
+                    uspsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Usps.RequireFullAddressValidation);
                     memo.ApplyMultiText(shipment.Postal.Usps.Memo);
                 }
             }
+
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
         }
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             // Save the 
             foreach (ShipmentEntity shipment in LoadedShipments)
             {
-                stampsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long) v);
+                uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long) v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
                 memo.ReadMultiText(t => shipment.Postal.Usps.Memo = t);
             }
@@ -126,13 +126,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             string text = "Account: ";
 
-            if (stampsAccount.MultiValued)
+            if (uspsAccount.MultiValued)
             {
                 text += "(Multiple)";
             }
             else
             {
-                UspsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long) stampsAccount.SelectedValue) : null;
+                UspsAccountEntity account = uspsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long) uspsAccount.SelectedValue) : null;
                 if (account != null)
                 {
                     text += account.Description;
@@ -149,40 +149,40 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         }
 
         /// <summary>
-        /// Open the window for managing the available stamps.com accounts
+        /// Open the window for managing the available Usps accounts
         /// </summary>
-        private void OnManageStampsAccounts(object sender, EventArgs e)
+        private void OnManageUspsAccounts(object sender, EventArgs e)
         {
-            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(StampsResellerType))
+            using (UspsAccountManagerDlg dlg = new UspsAccountManagerDlg(ResellerType))
             {
                 dlg.ShowDialog(this);
             }
 
-            bool multiValue = stampsAccount.MultiValued;
-            long oldAccount = multiValue ? -1 : (long) stampsAccount.SelectedValue;
+            bool multiValue = uspsAccount.MultiValued;
+            long oldAccount = multiValue ? -1 : (long) uspsAccount.SelectedValue;
 
-            stampsAccount.SelectedValueChanged -= OnOriginChanged;
+            uspsAccount.SelectedValueChanged -= OnOriginChanged;
 
             LoadAccounts();
 
             if (multiValue)
             {
-                stampsAccount.MultiValued = true;
+                uspsAccount.MultiValued = true;
             }
             else
             {
-                if (stampsAccount.SelectedValue == null || oldAccount != (long) stampsAccount.SelectedValue)
+                if (uspsAccount.SelectedValue == null || oldAccount != (long) uspsAccount.SelectedValue)
                 {
-                    stampsAccount.SelectedValue = oldAccount;
+                    uspsAccount.SelectedValue = oldAccount;
                 }
 
-                if (stampsAccount.SelectedValue == null)
+                if (uspsAccount.SelectedValue == null)
                 {
-                    stampsAccount.SelectedIndex = 0;
+                    uspsAccount.SelectedIndex = 0;
                 }
             }
 
-            stampsAccount.SelectedValueChanged += OnOriginChanged;
+            uspsAccount.SelectedValueChanged += OnOriginChanged;
 
             OnOriginChanged(null, EventArgs.Empty);
         }
