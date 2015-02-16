@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Xml.Linq;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
     /// Decorating XmlWriter to allow ShipWorks to communicate transparently with Stamps and Express1

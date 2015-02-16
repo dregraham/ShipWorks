@@ -21,6 +21,7 @@ using ActiproSoftware.SyntaxEditor;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode

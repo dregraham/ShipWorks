@@ -727,7 +727,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\Express1UspsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\CountryCodeCleanser.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />
@@ -1616,9 +1616,9 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormCarrierAccount.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormGateway.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsServiceRequestWriter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsServiceResponseReader.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsServiceWrapper.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsServiceRequestWriter.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsServiceResponseReader.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsServiceWrapper.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsSettingsFacade.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsSingleSourceControl.cs">
       <SubType>UserControl</SubType>
@@ -1629,11 +1629,11 @@
     <Compile Include="Shipping\Carriers\Postal\PostalOptionsControlBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsConnectionDetails.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsConnectionDetails.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\IExpress1ConnectionDetails.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\RewriteScanFormMessageAttribute.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\RewriteScanFormMessageSoapExtension.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttribute.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageSoapExtension.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1PasswordEncryptionStrategy.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1RegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\UspsExpress1RegistrationRepository.cs" />

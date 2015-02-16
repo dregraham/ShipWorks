@@ -1,12 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Web.Services.Protocols;
-using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Collections;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
     /// Rewrites the SCAN form message since Express1 returns an array instead of a string

@@ -13,12 +13,11 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Tokens;
@@ -39,7 +38,7 @@ using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.Serv
 using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.StatusCodes;
 using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.UrlType;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
     /// Central point where API stuff goes through for stamps.com

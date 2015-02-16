@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Web.Services.Protocols;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
     /// Attribute that marks a method as needing to have its scanform data replaced

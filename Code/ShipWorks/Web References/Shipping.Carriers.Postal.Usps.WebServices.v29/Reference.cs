@@ -13,6 +13,7 @@
 // 
 
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 
 #pragma warning disable 1591
 

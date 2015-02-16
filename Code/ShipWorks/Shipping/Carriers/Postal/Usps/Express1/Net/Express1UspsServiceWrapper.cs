@@ -4,10 +4,9 @@ using System.Reflection;
 using System.Web.Services.Protocols;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
     /// Custome web service proxy that enables ShipWorks to use Express1's web service via the Stamps API 

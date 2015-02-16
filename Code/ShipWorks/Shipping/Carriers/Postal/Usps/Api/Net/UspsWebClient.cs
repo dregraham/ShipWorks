@@ -156,16 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         private void CheckCertificate(string url)
         {
             CertificateRequest certificateRequest = new CertificateRequest(new Uri(url), certificateInspector);
-
             CertificateSecurityLevel certificateSecurityLevel = certificateRequest.Submit();
-
-            // If we are using the test server, it's not https, so none will be returned.
-            // Also, our test server credentials should not be using "real money", so not such a terrible thing if someone
-            // hi-jacked them.
-            if (Express1UspsConnectionDetails.UseTestServer && certificateSecurityLevel == CertificateSecurityLevel.None)
-            {
-                return;
-            }
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {

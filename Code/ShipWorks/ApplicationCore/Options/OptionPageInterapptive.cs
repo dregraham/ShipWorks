@@ -44,6 +44,7 @@ using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 
 namespace ShipWorks.ApplicationCore.Options
 {

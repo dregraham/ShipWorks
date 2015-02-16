@@ -350,7 +350,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRateAccountRepositoryTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizerTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1OnlyRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\NewPostalCustomerRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\UspsCbpRegistrationPromotionTest.cs" />
