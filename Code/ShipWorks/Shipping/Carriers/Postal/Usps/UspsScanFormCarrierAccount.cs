@@ -12,7 +12,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A Stamps.com implementation of the IScanFormCarrierAccount interface.
+    /// A USPS implementation of the IScanFormCarrierAccount interface.
     /// </summary>
     public class UspsScanFormCarrierAccount : IScanFormCarrierAccount
     {
@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <value>The shipment type code.</value>
         public virtual ShipmentTypeCode ShipmentTypeCode 
         { 
-            get { return ShipmentTypeCode.Stamps; }
+            get { return ShipmentTypeCode.Usps; }
         }
 
         /// <summary>

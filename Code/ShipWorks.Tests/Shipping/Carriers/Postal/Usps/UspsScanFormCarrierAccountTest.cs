@@ -48,21 +48,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [TestMethod]
-        public void ShippingCarrierName_ReturnsStampsDotCom_Test()
+        public void ShippingCarrierName_ReturnsUsps_Test()
         {
-            Assert.AreEqual("USPS (Stamps.com)", testObject.ShippingCarrierName);
+            Assert.AreEqual("USPS", testObject.ShippingCarrierName);
         }
 
         [TestMethod]
         public void ShipmentTypeCode_Test()
         {
-            Assert.AreEqual(ShipmentTypeCode.Stamps, testObject.ShipmentTypeCode);
+            Assert.AreEqual(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }
 
         [TestMethod]
         public void GetDescription_Test()
         {
-            Assert.AreEqual("USPS (Stamps.com) - testUsername", testObject.GetDescription());
+            Assert.AreEqual("USPS - testUsername", testObject.GetDescription());
         }
 
         [TestMethod]
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             { }
 
             // Verify the correct message was logged
-            string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS (Stamps.com) at this time. Please try again later. (A null scan form batch tried to be saved.)";
+            string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS at this time. Please try again later. (A null scan form batch tried to be saved.)";
             Assert.AreEqual(expectedMessage, errorMessageFromLogger);
         }
     }
