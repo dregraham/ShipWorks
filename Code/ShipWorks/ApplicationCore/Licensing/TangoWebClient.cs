@@ -494,7 +494,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogUspsAccount");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");

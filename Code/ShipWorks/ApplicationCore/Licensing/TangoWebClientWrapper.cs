@@ -200,10 +200,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Sends Stamps.com account info to Tango.
+        /// Sends Usps account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        public virtual void LogStampsAccount(UspsAccountEntity account)
+        public virtual void LogUspsAccount(UspsAccountEntity account)
         {
             // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
             // depending on the number of stores. May want to look into caching this information, but that could result

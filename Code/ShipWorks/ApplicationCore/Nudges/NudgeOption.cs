@@ -87,7 +87,7 @@ namespace ShipWorks.ApplicationCore.Nudges
                 
                 case NudgeOptionActionType.RegisterStampsAccount:
                 {
-                    button = new RegisterStampsAccountNudgeOptionButton(this);
+                    button = new RegisterUspsAccountNudgeOptionButton(this);
                     break;
                 }
 

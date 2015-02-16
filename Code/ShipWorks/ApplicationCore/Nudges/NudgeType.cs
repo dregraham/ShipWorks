@@ -20,9 +20,9 @@ namespace ShipWorks.ApplicationCore.Nudges
         /// <summary>
         /// Prompt the user to create a Stamps.com account
         /// </summary>
-        [Description("Create a Stamps.com account")]
+        [Description("Create a USPS account")]
         [ApiValue("RegisterStampsAccount")]
-        RegisterStampsAccount = 1,
+        RegisterUspsAccount = 1,
 
         /// <summary>
         /// Notify the user that processing with Endicia may be restricted

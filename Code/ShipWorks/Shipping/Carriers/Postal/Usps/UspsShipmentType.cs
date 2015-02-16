@@ -835,7 +835,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                             // Only notify Tango of changes so it has the latest information (and cuts down on traffic)
                             ITangoWebClient tangoWebClient = new TangoWebClientFactory().CreateWebClient();
-                            tangoWebClient.LogStampsAccount(account);
+                            tangoWebClient.LogUspsAccount(account);
                         }
                     }
                     catch (Exception exception)

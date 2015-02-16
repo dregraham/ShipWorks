@@ -36,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             {
                 new Nudge(1, "Nudge 1", NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 575)),
                 new Nudge(2, "Nudge 2", NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(300, 500)),
-                new Nudge(3, "Nudge 3", NudgeType.RegisterStampsAccount, new Uri("http://www.bing.com"), new Size(400, 600)),
+                new Nudge(3, "Nudge 3", NudgeType.RegisterUspsAccount, new Uri("http://www.bing.com"), new Size(400, 600)),
                 new Nudge(4, "Nudge 4", NudgeType.ProcessEndicia, new Uri("http://www.endicia.com"), new Size(400, 600)),
                 new Nudge(5, "Nudge 5", NudgeType.PurchaseEndicia, new Uri("http://www.endicia.com"), new Size(400, 600)),
             };
@@ -68,10 +68,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Sends Stamps.com account info to Tango.
+        /// Sends USPS account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void LogStampsAccount(UspsAccountEntity account)
+        public override void LogUspsAccount(UspsAccountEntity account)
         {
             // Just log the account contract type to disk to simulate a call to Tango
             LogManager.GetLogger(typeof(FakeTangoWebClient)).InfoFormat("The '{0}' contract type was logged to Tango.  Not really, but just play along.", EnumHelper.GetDescription((UspsResellerType)account.UspsReseller));
