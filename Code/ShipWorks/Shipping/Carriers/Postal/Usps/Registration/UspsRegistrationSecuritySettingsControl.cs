@@ -1,26 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// Control for collecting username, password, and security questions for a Stamps.com registration.
     /// </summary>
-    public partial class StampsRegistrationSecuritySettingsControl : UserControl
+    public partial class UspsRegistrationSecuritySettingsControl : UserControl
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsRegistrationSecuritySettingsControl"/> class.
+        /// Initializes a new instance of the <see cref="UspsRegistrationSecuritySettingsControl"/> class.
         /// </summary>
-        public StampsRegistrationSecuritySettingsControl()
+        public UspsRegistrationSecuritySettingsControl()
         {
             InitializeComponent();
 

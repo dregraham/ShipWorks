@@ -1916,11 +1916,11 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationResult.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationSecuritySettingsControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationSecuritySettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationSecuritySettingsControl.Designer.cs">
-      <DependentUpon>StampsRegistrationSecuritySettingsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationSecuritySettingsControl.Designer.cs">
+      <DependentUpon>UspsRegistrationSecuritySettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountEditorDlg.cs">
@@ -7428,8 +7428,8 @@
       <DependentUpon>UspsPaymentControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationSecuritySettingsControl.resx">
-      <DependentUpon>StampsRegistrationSecuritySettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationSecuritySettingsControl.resx">
+      <DependentUpon>UspsRegistrationSecuritySettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAccountEditorDlg.resx">
       <DependentUpon>UspsAccountEditorDlg.cs</DependentUpon>

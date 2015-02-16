@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
-    partial class StampsRegistrationSecuritySettingsControl
+    partial class UspsRegistrationSecuritySettingsControl
     {
         /// <summary> 
         /// Required designer variable.
