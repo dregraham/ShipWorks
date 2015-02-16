@@ -4556,7 +4556,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsSetupWizard.Designer.cs">
       <DependentUpon>UspsSetupWizard.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebClientRates.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebClientShipping.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\PostalWebServiceControl.cs">
