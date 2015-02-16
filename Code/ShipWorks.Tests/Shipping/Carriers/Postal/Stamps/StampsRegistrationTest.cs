@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Text.RegularExpressions;
 using log4net;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     public class StampsRegistrationTest
     {
         StampsRegistration testObject;
-        Mock<IStampsRegistrationValidator> mockedValidator;
+        Mock<IUspsRegistrationValidator> mockedValidator;
         Mock<IStampsRegistrationGateway> mockedGateway;
         private Mock<IRegistrationPromotion> promotion;
 
@@ -24,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Initialize()
         {
             // Setup a validator so our test object always passes validation
-            mockedValidator = new Mock<IStampsRegistrationValidator>();
+            mockedValidator = new Mock<IUspsRegistrationValidator>();
             mockedValidator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
 
             mockedGateway = new Mock<IStampsRegistrationGateway>();

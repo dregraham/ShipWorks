@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
     /// <summary>
     /// Validates the fields within a stamps.com registration according to the Stamps.com documentation.
     /// </summary>
-    public class UspsRegistrationValidator : IStampsRegistrationValidator
+    public class UspsRegistrationValidator : IUspsRegistrationValidator
     {
         // Password must contain at least one letter, one number, and between 6 and 20 characters long
         private const string PasswordRegexPattern = "^(?=.*\\d)(?=.*[a-zA-Z]).{6,20}$";

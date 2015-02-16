@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 {
@@ -123,7 +124,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         /// <returns>StampsRegistration.</returns>
         private StampsRegistration CreateRegistrationWithoutUsername()
         {
-            Mock<IStampsRegistrationValidator> validator = new Mock<IStampsRegistrationValidator>();
+            Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
             validator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
 
             Mock<IStampsRegistrationGateway> gateway = new Mock<IStampsRegistrationGateway>();

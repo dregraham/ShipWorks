@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
     public class StampsRegistration
     {
-        private readonly IStampsRegistrationValidator validator;
+        private readonly IUspsRegistrationValidator validator;
         private readonly IStampsRegistrationGateway registrationGateway;
         private readonly IRegistrationPromotion promotion;
 
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// </summary>
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
-        public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway)
+        public StampsRegistration(IUspsRegistrationValidator validator, IStampsRegistrationGateway gateway)
             : this(validator, gateway, new RegistrationPromotionFactory().CreateRegistrationPromotion())
         { }
 
@@ -29,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <param name="gateway">The gateway.</param>
         /// <param name="promotion">The promotion.</param>
         /// <exception cref="StampsRegistrationException">Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.</exception>
-        public StampsRegistration(IStampsRegistrationValidator validator, IStampsRegistrationGateway gateway, IRegistrationPromotion promotion)
+        public StampsRegistration(IUspsRegistrationValidator validator, IStampsRegistrationGateway gateway, IRegistrationPromotion promotion)
         {
             this.validator = validator;
             registrationGateway = gateway;
