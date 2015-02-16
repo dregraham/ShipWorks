@@ -5,7 +5,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
     /// Represents a Stamps.com standard label and encapsulates the logic for cropping

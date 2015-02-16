@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
-using ShipWorks.Data.Model.EntityClasses;
 using log4net;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
     /// A factory for creating instances of a Label from the Stamps.com API.
@@ -150,21 +151,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
         }
 
         /// <summary>
-        /// Creates a blank label of the size specified by the rectangle
+        /// Creates a blank label of the size specified by the rectangle. The object creating
+        /// the label is responsible for disposing.
         /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="name">The name.</param>
+        /// <param name="rectangle">The rectangle.</param>
+        /// <returns>Label.</returns>
         private Label CreateBlankLabel(ShipmentEntity shipment, string name, Rectangle rectangle)
         {
-         
-            // Cate an image and fill it white
-            using (Image image = new Bitmap(rectangle.Width, rectangle.Height))
-            {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    g.FillRectangle(Brushes.White, rectangle);
-                }
+            // Create an image and fill it white. Don't wrap this in a using (the object creating
+            // the label is responsible for disposing.
+            Image image = new Bitmap(rectangle.Width, rectangle.Height);
 
-                return new StandardLabel(shipment, name, image, Rectangle.Empty);
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                g.FillRectangle(Brushes.White, rectangle);
             }
+
+            return new StandardLabel(shipment, name, image, Rectangle.Empty);
         }
 
         /// <summary>

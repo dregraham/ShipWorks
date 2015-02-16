@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
     /// Encapuslates all of the cropping styles/sizes to use when manipulating Stamps.com labels.

@@ -1,7 +1,7 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
     /// An abstract class to encapsulate the logic for persisting Stamps.com
