@@ -1,29 +1,29 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
     /// of an Express1 for Stamps shipment 
     /// </summary>
-    public class Express1StampsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
+    public class Express1UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
         private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1StampsShipmentProcessingSynchronizer"/> class.
+        /// Initializes a new instance of the <see cref="Express1UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        public Express1StampsShipmentProcessingSynchronizer()
+        public Express1UspsShipmentProcessingSynchronizer()
             : this(new Express1StampsAccountRepository())
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Express1StampsShipmentProcessingSynchronizer"/> class.
+        /// Initializes a new instance of the <see cref="Express1UspsShipmentProcessingSynchronizer"/> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
-        public Express1StampsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
+        public Express1UspsShipmentProcessingSynchronizer(ICarrierAccountRepository<UspsAccountEntity> accountRepository)
         {
             this.accountRepository = accountRepository;
         }

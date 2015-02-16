@@ -3,16 +3,15 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
     [TestClass]
-    public class Express1StampsShipmentProcessingSynchronizerTest
+    public class Express1UspsShipmentProcessingSynchronizerTest
     {
-        private Express1StampsShipmentProcessingSynchronizer testObject;
+        private Express1UspsShipmentProcessingSynchronizer testObject;
 
         private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
 
@@ -21,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
         {
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
 
-            testObject = new Express1StampsShipmentProcessingSynchronizer(accountRepository.Object);
+            testObject = new Express1UspsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
         [TestMethod]
@@ -34,14 +33,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Express1
         [TestMethod]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
-            List<UspsAccountEntity> StampsAccounts = new List<UspsAccountEntity>()
+            List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
                 new UspsAccountEntity(123),
                 new UspsAccountEntity(456),
                 new UspsAccountEntity(789)
             };
 
-            accountRepository.Setup(r => r.Accounts).Returns(StampsAccounts);
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
 
             ShipmentEntity shipment = new ShipmentEntity
             {

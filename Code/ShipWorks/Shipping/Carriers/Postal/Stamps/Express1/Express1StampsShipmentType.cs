@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            return new Express1StampsShipmentProcessingSynchronizer();
+            return new Express1UspsShipmentProcessingSynchronizer();
         }
 
         /// <summary>

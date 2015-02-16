@@ -349,7 +349,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRateAccountRepositoryTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizerTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\RewriteScanFormMessageAttributeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1OnlyRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\NewPostalCustomerRegistrationPromotionTest.cs" />
@@ -561,7 +561,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Shipping\Carriers\Postal\Stamps\Registration\" />
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
     <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
