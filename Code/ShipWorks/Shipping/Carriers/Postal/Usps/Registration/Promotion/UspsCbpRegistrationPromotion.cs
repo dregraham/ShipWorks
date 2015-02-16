@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     /// <summary>
-    /// An implementation of the IRegistrationPromotion that should be used for creating new 
-    /// Stamps.com accounts when migrating from an existing Endicia account.
+    /// An implementation of the IRegistrationPromotion intended to be used to create a 
+    /// new standard account with CBP rates.
     /// </summary>
-    public class EndiciaIntuishipRegistrationPromotion : IRegistrationPromotion
+    public class UspsCbpRegistrationPromotion : IRegistrationPromotion
     {
-
         /// <summary>
         /// Gets a value indicating whether the promotion waives the monthly fee.
         /// </summary>
@@ -24,8 +23,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion
         /// <returns>The promotion code to be used during registration.</returns>
         public string GetPromoCode()
         {
-            // The promotion code for a new expedited account.
-            return "ShipWorks5";
+            // The promotion code for creating a standard Stamps.com account with CBP rates.
+            return "ShipWorks2";
         }
     }
 }

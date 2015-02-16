@@ -3,7 +3,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
@@ -67,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             }
 
             return AnyUspsResellerAccountsExist() ?
-                (IRegistrationPromotion) new StampsCbpRegistrationPromotion() :
-                new StampsIntuishipRegistrationPromotion();
+                (IRegistrationPromotion) new UspsCbpRegistrationPromotion() :
+                new UspsIntuishipRegistrationPromotion();
         }
 
         /// <summary>

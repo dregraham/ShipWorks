@@ -37,7 +37,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Editions;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // Adding an account through this shipment type should always create an account
             // with CBP rates (primarily for customers migrating from Endicia that have 
             // contracted rates with the postal service).
-		    IRegistrationPromotion promotion = new StampsCbpRegistrationPromotion();
+		    IRegistrationPromotion promotion = new UspsCbpRegistrationPromotion();
 
             // Push customers to the USPS (Stamps.com Expedited) setup wizard
             return new UspsSetupWizard(promotion, true);

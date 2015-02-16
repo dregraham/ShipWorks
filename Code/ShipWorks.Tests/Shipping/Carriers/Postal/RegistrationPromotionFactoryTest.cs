@@ -5,7 +5,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
@@ -124,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(StampsIntuishipRegistrationPromotion));
+            Assert.IsInstanceOfType(promotion, typeof(UspsIntuishipRegistrationPromotion));
         }
 
         [TestMethod]
@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(StampsCbpRegistrationPromotion));
+            Assert.IsInstanceOfType(promotion, typeof(UspsCbpRegistrationPromotion));
         }
 
         /// <summary>

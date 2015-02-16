@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration.Promotion
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     [TestClass]
-    public class StampsCbpRegistrationPromotionTest
+    public class UspsCbpRegistrationPromotionTest
     {
-        private readonly StampsCbpRegistrationPromotion testObject;
+        private readonly UspsCbpRegistrationPromotion testObject;
 
-        public StampsCbpRegistrationPromotionTest()
+        public UspsCbpRegistrationPromotionTest()
         {
-            testObject = new StampsCbpRegistrationPromotion();
+            testObject = new UspsCbpRegistrationPromotion();
         }
 
         [TestMethod]

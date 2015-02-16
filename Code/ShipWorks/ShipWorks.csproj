@@ -741,8 +741,8 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1UspsProfileControl.Designer.cs">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\Express1OnlyRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalAccountRegistrationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalOnlyBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\Postal\BestRate\PostalCounterBrokerFilter.cs" />
@@ -764,10 +764,10 @@
     <Compile Include="Shipping\Carriers\Postal\IRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactory.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\EndiciaCbpRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsCbpRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsIntuishipRegistrationPromotion.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaCbpRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\UspsCbpRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\UspsIntuishipRegistrationPromotion.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationTypeDropdownItem.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsPostageWebClient.cs" />

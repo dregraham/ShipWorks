@@ -2,9 +2,9 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.Registration.Promotion
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     [TestClass]
     public class EndiciaCbpRegistrationPromotionTest
