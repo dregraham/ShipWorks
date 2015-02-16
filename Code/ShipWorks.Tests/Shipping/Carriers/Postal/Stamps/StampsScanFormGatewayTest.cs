@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         private ScanFormBatch scanFormBatch;
         private Mock<IScanFormCarrierAccount> carrierAccount;
         
-        private StampsScanFormGateway testObject;
+        private UspsScanFormGateway testObject;
 
         [TestInitialize]
         public void Initialize()
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
-            testObject = new StampsScanFormGateway(new UspsWebClient(UspsResellerType.None));
+            testObject = new UspsScanFormGateway(new UspsWebClient(UspsResellerType.None));
         }
 
         [TestMethod]

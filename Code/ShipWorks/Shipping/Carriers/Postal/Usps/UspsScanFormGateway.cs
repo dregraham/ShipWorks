@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.ScanForms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,13 +13,13 @@ using System.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// An implementation of the IScanFormGateway interface that communicates with the Stamps.com API
     /// for creating/obtaining SCAN forms.
     /// </summary>
-    public class StampsScanFormGateway : IScanFormGateway
+    public class UspsScanFormGateway : IScanFormGateway
     {
         private string invalidCarrierMessage;
         private string invalidShipmentMessage;
@@ -27,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsScanFormGateway(IUspsWebClient webClient)
+        public UspsScanFormGateway(IUspsWebClient webClient)
         {
             invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
             invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";

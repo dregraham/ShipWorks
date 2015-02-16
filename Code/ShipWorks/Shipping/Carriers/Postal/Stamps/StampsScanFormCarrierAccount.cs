@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using log4net;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <returns>An IScanFormGateway object.</returns>
         public virtual IScanFormGateway GetGateway()
         {
-            return new StampsScanFormGateway(new UspsWebClient((UspsResellerType)accountEntity.UspsReseller));
+            return new UspsScanFormGateway(new UspsWebClient((UspsResellerType)accountEntity.UspsReseller));
         }
         
         /// <summary>

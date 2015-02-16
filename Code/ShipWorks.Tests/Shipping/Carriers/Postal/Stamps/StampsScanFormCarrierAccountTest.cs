@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -67,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetGateway_ReturnsStampsScanFormGateway_Test()
         {
-            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(StampsScanFormGateway));
+            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(UspsScanFormGateway));
         }
         
         [TestMethod]

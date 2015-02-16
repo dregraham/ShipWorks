@@ -778,7 +778,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsBestRateBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\EndiciaUspsAutomaticDiscountControlAdapter.cs" />
@@ -1620,7 +1619,7 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\ScanFormShipmentTypeName.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsScanFormAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsScanFormGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceRequestWriter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceResponseReader.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceWrapper.cs" />
@@ -1933,7 +1932,8 @@
       <DependentUpon>UspsAccountEditorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\UPS\CoreExtensions\Filters\UpsReturnServiceCondition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\CoreExtensions\Filters\FedExPackagingTypeCondition.cs" />
     <Compile Include="Shipping\Carriers\FedEx\CoreExtensions\Filters\FedExServiceTypeCondition.cs" />
