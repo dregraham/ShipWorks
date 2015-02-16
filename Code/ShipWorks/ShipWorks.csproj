@@ -727,7 +727,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\CountryCodeCleanser.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\CountryCodeCleanser.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Api\Express1StampsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />

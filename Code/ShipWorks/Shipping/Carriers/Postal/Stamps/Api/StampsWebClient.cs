@@ -28,6 +28,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 

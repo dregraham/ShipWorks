@@ -1,5 +1,5 @@
 ﻿
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api
 {
     public static class CountryCodeCleanser
     {
