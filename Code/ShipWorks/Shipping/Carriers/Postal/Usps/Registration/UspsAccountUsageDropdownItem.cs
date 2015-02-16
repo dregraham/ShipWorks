@@ -1,6 +1,6 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// Class for populating the Stamps.com usage type combo box.

@@ -16,7 +16,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            Stamps.WebServices.PostageBalance postageBalance;
+            Usps.WebServices.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
@@ -669,7 +669,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV15 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
-            Stamps.WebServices.PostageBalance postageBalance;
+            Usps.WebServices.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.

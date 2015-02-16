@@ -34,13 +34,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
                 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
-                                
-                PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()
+
+                PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address()
                 {
                     Address1 = "123 Prescription Ln",
                     City = "Newport News",
@@ -49,9 +49,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                     Country = "US",
                     PhoneNumber = "5555555555"
                 },
-                
-                MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
-                CreditCard = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreditCard()
+
+                MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
+                CreditCard = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CreditCard()
             };
 
             return registration;
@@ -68,13 +68,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
 
-                PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()
+                PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address()
                 {
                     Address1 = "123 Prescription Ln",
                     City = "Sidcup",
@@ -84,8 +84,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                     PhoneNumber = "5555555555"
                 },
 
-                MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
-                CreditCard = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreditCard()
+                MachineInfo = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.MachineInfo() { IPAddress = "127.0.0.1" },
+                CreditCard = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CreditCard()
             };
 
             return registration;

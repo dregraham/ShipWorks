@@ -1,6 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             else
             {
-                Stamps.WebServices.v29.AccountInfo accountInfo = (Stamps.WebServices.v29.AccountInfo)client.GetAccountInfo(account);
+                Usps.WebServices.v29.AccountInfo accountInfo = (Usps.WebServices.v29.AccountInfo)client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;

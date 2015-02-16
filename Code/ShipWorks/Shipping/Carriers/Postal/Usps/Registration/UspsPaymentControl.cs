@@ -2,7 +2,7 @@
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {

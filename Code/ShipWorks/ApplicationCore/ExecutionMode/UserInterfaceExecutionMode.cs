@@ -2,7 +2,7 @@
 using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
@@ -20,7 +20,7 @@ using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
