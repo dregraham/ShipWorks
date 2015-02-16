@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// A data transfer object that encapsulates the registration status and values of the output parameters
     /// from the Stamps API registration request.
     /// </summary>
-    public class StampsRegistrationResult
+    public class UspsRegistrationResult
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsRegistrationResult"/> class.
+        /// Initializes a new instance of the <see cref="UspsRegistrationResult"/> class.
         /// </summary>
         /// <param name="registrationStatus">The registration status.</param>
         /// <param name="suggestedUsername">The suggested username.</param>
         /// <param name="promoUrl">The promo URL.</param>
-        public StampsRegistrationResult(RegistrationStatus registrationStatus, string suggestedUsername, string promoUrl)
+        public UspsRegistrationResult(RegistrationStatus registrationStatus, string suggestedUsername, string promoUrl)
         {
             IsSuccessful = registrationStatus == RegistrationStatus.Success;
             SuggestedUsername = suggestedUsername;

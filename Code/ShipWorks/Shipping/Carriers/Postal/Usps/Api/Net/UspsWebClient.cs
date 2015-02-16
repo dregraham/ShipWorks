@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Tokens;
@@ -459,7 +460,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Registers a new account with Stamps.com.
         /// </summary>
-        public StampsRegistrationResult RegisterAccount(StampsRegistration registration)
+        public UspsRegistrationResult RegisterAccount(StampsRegistration registration)
         {
             // Output parameters supplied to the request
             string suggestedUserName = string.Empty;
@@ -499,7 +500,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         );
                 }
 
-                return new StampsRegistrationResult(registrationStatus, suggestedUserName, promoUrl);
+                return new UspsRegistrationResult(registrationStatus, suggestedUserName, promoUrl);
             }
             catch (Exception ex)
             {

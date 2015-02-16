@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
@@ -15,6 +16,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>A StampsRegistrationResult object.</returns>
-        StampsRegistrationResult Register(StampsRegistration registration);
+        UspsRegistrationResult Register(StampsRegistration registration);
     }
 }

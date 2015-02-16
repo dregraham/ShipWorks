@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
 {
@@ -24,9 +25,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>A StampsRegistrationResult object.</returns>
-        public StampsRegistrationResult Register(StampsRegistration registration)
+        public UspsRegistrationResult Register(StampsRegistration registration)
         {
-            StampsRegistrationResult result = new UspsWebClient(resellerType).RegisterAccount(registration);
+            UspsRegistrationResult result = new UspsWebClient(resellerType).RegisterAccount(registration);
 
             if (!result.IsSuccessful)
             {

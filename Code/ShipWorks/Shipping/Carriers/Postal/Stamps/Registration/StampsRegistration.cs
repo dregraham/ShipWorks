@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// Submits the registration to Stamps.com.
         /// </summary>
         /// <returns>Any registration validation errors that may have occurred.</returns>
-        public StampsRegistrationResult Submit()
+        public UspsRegistrationResult Submit()
         {
             // Validate the registration info
             IEnumerable<RegistrationValidationError> errors = validator.Validate(this);

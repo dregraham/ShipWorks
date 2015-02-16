@@ -100,7 +100,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             StampsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = "interapptive";
 
-            StampsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
+            UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
             Assert.IsFalse(registrationResult.IsSuccessful);
         }
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             StampsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = DateTime.UtcNow.Ticks.ToString();
 
-            StampsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
+            UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
             Assert.IsTrue(registrationResult.IsSuccessful);
         }
