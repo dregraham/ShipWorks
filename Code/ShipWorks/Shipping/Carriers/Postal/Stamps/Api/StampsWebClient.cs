@@ -28,6 +28,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
@@ -35,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
     /// <summary>
     /// Central point where API stuff goes through for stamps.com
     /// </summary>
-    public class StampsWebClient : IStampsWebClient
+    public class StampsWebClient : IUspsWebClient
     {
         // This value came from Stamps.com (the "standard" account value is 88)
         private const int ExpeditedPlanID = 236;

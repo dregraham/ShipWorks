@@ -3,7 +3,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
     /// <summary>
     /// Interacts with web services to buy postage and retrieve balance.
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
         {
             decimal availablePostage = 0;
 
-            IStampsWebClient client = CreateWebClient();
+            IUspsWebClient client = CreateWebClient();
             if ((StampsResellerType) account.UspsReseller != StampsResellerType.Express1)
             {
                 AccountInfo accountInfo = (AccountInfo)client.GetAccountInfo(account);
@@ -83,7 +83,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
                 GetBalance();
             }
 
-            IStampsWebClient client = CreateWebClient();
+            IUspsWebClient client = CreateWebClient();
             client.PurchasePostage(account, amount, controlTotal);
         }
 
@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Net
         /// Creates the web client for communicating with the carrier API.
         /// </summary>
         /// <returns>An instance of an IStampsWebClient based on teh shipment type code.</returns>
-        private IStampsWebClient CreateWebClient()
+        private IUspsWebClient CreateWebClient()
         {
             StampsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as StampsShipmentType;
             return shipmentType.CreateWebClient();

@@ -30,6 +30,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Address;
@@ -54,7 +55,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
     /// <summary>
     /// Central point where API stuff goes through for stamps.com
     /// </summary>
-    public class Express1StampsWebClient : IStampsWebClient
+    public class Express1StampsWebClient : IUspsWebClient
     {
         // These lengths come from the error that Stamps' API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;

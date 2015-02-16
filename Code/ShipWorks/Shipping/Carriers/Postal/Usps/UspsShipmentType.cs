@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -304,7 +305,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
-            IStampsWebClient client = CreateWebClient();
+            IUspsWebClient client = CreateWebClient();
             List<UspsAccountEntity> accounts = GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)

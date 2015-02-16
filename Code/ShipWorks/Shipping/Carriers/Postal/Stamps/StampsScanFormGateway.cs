@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using System.IO;
 using System.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -21,16 +22,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         private string invalidCarrierMessage;
         private string invalidShipmentMessage;
-        private IStampsWebClient iStampsWebClient;
+        private IUspsWebClient webClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsScanFormGateway(IStampsWebClient iStampsWebClient)
+        public StampsScanFormGateway(IUspsWebClient webClient)
         {
             invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
             invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";
-            this.iStampsWebClient = iStampsWebClient;
+            this.webClient = webClient;
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = iStampsWebClient.CreateScanForm(stampsShipments, accountEntity);
+            XDocument xDocument = webClient.CreateScanForm(stampsShipments, accountEntity);
 
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())
@@ -117,9 +118,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             try
             {
-                using (WebClient webClient = new WebClient())
+                using (WebClient client = new WebClient())
                 {
-                    byte[] image = webClient.DownloadData(url);
+                    byte[] image = client.DownloadData(url);
                     return image;
                 }
             }

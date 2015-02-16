@@ -12,6 +12,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
@@ -87,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// Creates the web client to use to contact the underlying carrier API.
         /// </summary>
         /// <returns>An instance of IStampsWebClient.</returns>
-        public override IStampsWebClient CreateWebClient()
+        public override IUspsWebClient CreateWebClient()
         {
             return new Express1StampsWebClient(AccountRepository, new LogEntryFactory(), CertificateInspector);
         }

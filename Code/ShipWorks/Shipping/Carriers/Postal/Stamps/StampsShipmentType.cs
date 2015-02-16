@@ -39,6 +39,7 @@ using ShipWorks.Editions;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
@@ -111,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Creates the web client to use to contact the underlying carrier API.
         /// </summary>
         /// <returns>An instance of IStampsWebClient. </returns>
-        public virtual IStampsWebClient CreateWebClient()
+        public virtual IUspsWebClient CreateWebClient()
         {
             // This needs to be created each time rather than just being an instance property, 
             // because of counter rates where the account repository is swapped out out prior 
@@ -853,7 +854,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                     try
                     {
                         // Grab contract type from the Stamps API 
-                        IStampsWebClient webClient = CreateWebClient();
+                        IUspsWebClient webClient = CreateWebClient();
                         UspsAccountContractType contractType = webClient.GetContractType(account);
 
                         bool hasContractChanged = account.ContractType != (int) contractType;
