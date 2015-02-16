@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { StampsResellerType = StampsResellerType.Express1 };
             UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
-            StampsPurchasePostageDlg postageDialog = new StampsPurchasePostageDlg();
+            UspsPurchasePostageDlg postageDialog = new UspsPurchasePostageDlg();
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
         }

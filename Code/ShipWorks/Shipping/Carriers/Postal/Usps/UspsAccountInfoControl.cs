@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             try
             {
-                using (StampsPurchasePostageDlg dlg = balance.HasValue ? new StampsPurchasePostageDlg(account, balance.Value) : new StampsPurchasePostageDlg(account))
+                using (UspsPurchasePostageDlg dlg = balance.HasValue ? new UspsPurchasePostageDlg(account, balance.Value) : new UspsPurchasePostageDlg(account))
                 {
                     if (dlg.ShowDialog(this) == DialogResult.OK)
                     {

@@ -4542,11 +4542,11 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsPurchasePostageDlg.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.Designer.cs">
-      <DependentUpon>StampsPurchasePostageDlg.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsPurchasePostageDlg.Designer.cs">
+      <DependentUpon>UspsPurchasePostageDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.cs">
       <SubType>UserControl</SubType>
@@ -9660,8 +9660,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\PostalCustomsControl.resx">
       <DependentUpon>PostalCustomsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsPurchasePostageDlg.resx">
-      <DependentUpon>StampsPurchasePostageDlg.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsPurchasePostageDlg.resx">
+      <DependentUpon>UspsPurchasePostageDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceControl.resx">
       <DependentUpon>Express1StampsServiceControl.cs</DependentUpon>

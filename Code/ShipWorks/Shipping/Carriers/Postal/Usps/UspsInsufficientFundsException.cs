@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public Form CreatePostageDialog()
         {
-            return new StampsPurchasePostageDlg(account);
+            return new UspsPurchasePostageDlg(account);
         }
     }
 }
