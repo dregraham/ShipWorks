@@ -282,7 +282,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
                 foreach (RateV15 stampsRate in ExceptionWrapper(() => GetRatesInternal(shipment, account), account))
                 {
-                    PostalServiceType serviceType = StampsUtility.GetPostalServiceType(stampsRate.ServiceType);
+                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(stampsRate.ServiceType);
 
                     RateResult baseRate;
 
@@ -944,7 +944,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            rate.PackageType = StampsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            rate.PackageType = UspsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
             rate.Length = shipment.Postal.DimsLength;
@@ -966,7 +966,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV15 rate = CreateRateForRating(shipment, account);
-            rate.ServiceType = StampsUtility.GetApiServiceType(serviceType);
+            rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
             rate.PrintLayout = "Normal";
 
             List<AddOnV6> addOns = new List<AddOnV6>();
@@ -1042,7 +1042,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             CustomsV3 customs = new CustomsV3();
 
             // Content type
-            customs.ContentType = StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType);
+            customs.ContentType = UspsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType);
             if (customs.ContentType == ContentTypeV2.Other)
             {
                 if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)

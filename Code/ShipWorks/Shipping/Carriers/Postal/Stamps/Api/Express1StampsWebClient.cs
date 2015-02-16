@@ -29,6 +29,7 @@ using Microsoft.Web.Services3;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Address;
 using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ContentTypeV2;
@@ -309,7 +310,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
                 foreach (RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
-                    PostalServiceType serviceType = StampsUtility.GetPostalServiceType(ConvertServiceType(stampsRate.ServiceType));
+                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(ConvertServiceType(stampsRate.ServiceType));
 
                     RateResult baseRate = null;
 
@@ -905,7 +906,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             rate.WeightLb = weightValue.PoundsOnly;
             rate.WeightOz = weightValue.OuncesOnly;
 
-            WebServices.PackageTypeV6 packageTypeV6 = StampsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
+            WebServices.PackageTypeV6 packageTypeV6 = UspsUtility.GetApiPackageType((PostalPackagingType)shipment.Postal.PackagingType, new DimensionsAdapter(shipment.Postal));
             rate.PackageType = ConvertPackageType(packageTypeV6);
             rate.NonMachinable = shipment.Postal.NonMachinable;
 
@@ -928,7 +929,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
             RateV11 rate = CreateRateForRating(shipment, account);
-            rate.ServiceType = ConvertServiceType(StampsUtility.GetApiServiceType(serviceType));
+            rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal";
 
             List<AddOnV4> addOns = new List<AddOnV4>();
@@ -1004,7 +1005,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             CustomsV2 customs = new CustomsV2();
 
             // Content type
-            customs.ContentType = ConvertContentType(StampsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
+            customs.ContentType = ConvertContentType(UspsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
             if (customs.ContentType == ContentTypeV2.Other)
             {
                 if (shipment.Postal.CustomsContentType == (int)PostalCustomsContentType.Merchandise)

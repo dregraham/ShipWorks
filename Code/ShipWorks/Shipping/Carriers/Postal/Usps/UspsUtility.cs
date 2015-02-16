@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Divelements.SandRibbon;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Utility;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Utility functions for working with Stamps.com
     /// </summary>
-    public static class StampsUtility
+    public static class UspsUtility
     {
         /// <summary>
         /// Get the API value for the given packaging type
