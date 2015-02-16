@@ -2,12 +2,12 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Settings to use Express1 as a single-source for all postal shipping services
     /// </summary>
-    public partial class Express1StampsSingleSourceControl : Express1SingleSourceControl
+    public class Express1UspsSingleSourceControl : Express1SingleSourceControl
     {
         /// <summary>
         /// Load the settings
