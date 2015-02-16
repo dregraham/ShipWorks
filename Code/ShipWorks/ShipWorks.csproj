@@ -1613,9 +1613,9 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1RegistrationRepository.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Registration\IExpress1RegistrationValidator.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\ScanFormShipmentTypeName.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsScanFormAccountRepository.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsScanFormCarrierAccount.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsScanFormGateway.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormAccountRepository.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormCarrierAccount.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Express1\ScanForm\Express1UspsScanFormGateway.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceRequestWriter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsServiceResponseReader.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsServiceWrapper.cs" />
