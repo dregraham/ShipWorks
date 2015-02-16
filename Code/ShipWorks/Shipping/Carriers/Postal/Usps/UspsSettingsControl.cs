@@ -3,6 +3,7 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -13,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public partial class UspsSettingsControl : SettingsControlBase
     {
         bool loadedAccounts = false;
-        Express1StampsSettingsFacade express1Settings;
+        Express1UspsSettingsFacade express1Settings;
         readonly ShipmentTypeCode shipmentTypeCode;
         readonly UspsResellerType stampsResellerType;
 
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void LoadExpress1Settings()
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            express1Settings = new Express1StampsSettingsFacade(settings);
+            express1Settings = new Express1UspsSettingsFacade(settings);
 
             if (shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
             {

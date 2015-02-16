@@ -4,20 +4,20 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// Defines a way of interacting with Express1/Stamps settings
     /// </summary>
-    public class Express1StampsSettingsFacade : IExpress1SettingsFacade
+    public class Express1UspsSettingsFacade : IExpress1SettingsFacade
     {
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="settings"></param>
-        public Express1StampsSettingsFacade(ShippingSettingsEntity settings)
+        public Express1UspsSettingsFacade(ShippingSettingsEntity settings)
         {
             if (settings == null)
             {
