@@ -13,6 +13,8 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
@@ -28,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         private RateResult rate1;
         private RateResult rate2;
         private RateResult rate3;
-        private StampsBestRateBroker testObject;
+        private UspsBestRateBroker testObject;
         private ShipmentEntity testShipment;
 
         /// <summary>
@@ -37,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         private List<ShipmentEntity> getRatesShipments;
 
         private Mock<ICarrierAccountRepository<UspsAccountEntity>> genericRepositoryMock;
-        private Mock<StampsShipmentType> genericShipmentTypeMock;
+        private Mock<UspsShipmentType> genericShipmentTypeMock;
 
         public TestContext TestContext { get; set; }
 
@@ -59,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             getRatesShipments = new List<ShipmentEntity>();
 
             // Save a copy of all the shipment entities passed into the GetRates method so we can inspect them later
-            genericShipmentTypeMock = new Mock<StampsShipmentType>();
+            genericShipmentTypeMock = new Mock<UspsShipmentType>();
             genericShipmentTypeMock.Setup(x => x.ShipmentTypeCode).Returns(ShipmentTypeCode.Stamps);
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>()))
                             .Returns(rateGroup)
@@ -69,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
                             .Callback<ShipmentEntity>(x => x.Postal = new PostalShipmentEntity { Usps = new UspsShipmentEntity() });
 
-            testObject = new StampsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
+            testObject = new UspsBestRateBroker(genericShipmentTypeMock.Object, genericRepositoryMock.Object)
             {
                 GetRatesAction = (shipment, type) => genericShipmentTypeMock.Object.GetRates(shipment)
             };
@@ -466,44 +468,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
             Assert.IsTrue(resultKeys.Contains("PostalStandard Post"));
         }
 
-        //[TestMethod]
-        //public void GetBestRates_ConvertsShipmentToStamps_WhenRateIsSelected()
-        //{
-        //    rateGroup.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, PostalServiceType.StampsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>) rates[0].Tag)(testShipment);
-
-        //    Assert.AreEqual((int)ShipmentTypeCode.Stamps, testShipment.ShipmentType);
-        //    Assert.AreEqual((int)PostalServiceType.StampsExpressEarlyAm, testShipment.Stamps.Service);
-        //    Assert.AreEqual(account.UspsAccountID, testShipment.Stamps.UspsAccountID);
-        //}
-
-        //[TestMethod]
-        //public void GetBestRates_DoesNotAlterOtherShipmentTypeData_WhenRateIsSelected()
-        //{
-        //    rateGroup.Rates.Clear();
-        //    rateGroup3.Rates.Clear();
-
-        //    FedExShipmentEntity fedExEntity = new FedExShipmentEntity();
-        //    testShipment.FedEx = fedExEntity;
-
-        //    RateResult result1 = new RateResult("Account 1a", "4", 4, PostalServiceType.StampsExpressEarlyAm) { ServiceLevel = ServiceLevelType.FourToSevenDays };
-
-        //    rateGroup.Rates.Add(result1);
-
-        //    var rates = testObject.GetBestRates(testShipment);
-        //    ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
-
-        //    Assert.AreEqual(fedExEntity, testShipment.FedEx);
-        //}
-
-        [TestMethod]
+       [TestMethod]
         public void GetBestRates_AddsStampsToDescription_WhenItDoesNotAlreadyExist()
         {
             rateGroup.Rates.Clear();
@@ -528,17 +493,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
         }
 
         [TestMethod]
-        public void Configure_ShouldCallCheckExpress1RatesOnSettings_WithShipmentType()
+        public void Configure_ShouldNotCallCheckExpress1RatesOnSettings_WithShipmentType()
         {
             var brokerSettings = new Mock<IBestRateBrokerSettings>();
 
             testObject.Configure(brokerSettings.Object);
 
-            brokerSettings.Verify(x => x.CheckExpress1Rates(testObject.ShipmentType));
+            brokerSettings.Verify(x => x.CheckExpress1Rates(testObject.ShipmentType), Times.Never);
         }
 
         [TestMethod]
-        public void Configure_SetsRetrieveExpress1RatesToTrue_WhenConfigurationIsTrue()
+        public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsTrue()
         {
             Configure_ShouldRetrieveExpress1RatesTest(true);
         }
@@ -556,7 +521,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps.BestRate
 
             testObject.Configure(brokerSettings.Object);
 
-            Assert.AreEqual(checkExpress1, ((StampsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
+            // Best rate should never retrieve Express1 rates
+            Assert.AreEqual(false, ((StampsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
 
         [TestMethod]

@@ -790,26 +790,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Stamps.com shipment type based on the shipment configuration.
-        /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of a StampsBestRateBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            if (AccountRepository.Accounts.Any())
-            {
-                // We have an account, so use the normal broker
-                return new StampsBestRateBroker(this, AccountRepository);
-            }
-            else
-            {
-                // No accounts, so use the counter rates broker to allow the user to
-                // sign up for the account
-                return new StampsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
-            }
-        }
-
-        /// <summary>
         /// Clear any data that should not be part of a shipment after it has been copied.
         /// </summary>
         public override void ClearDataForCopiedShipment(ShipmentEntity shipment)

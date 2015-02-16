@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -11,7 +13,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
     /// <summary>
     /// Best rate broker for Express1 Stamps accounts
     /// </summary>
-    public class Express1StampsBestRateBroker : StampsBestRateBroker
+    public class Express1StampsBestRateBroker : UspsBestRateBroker
     {
         /// <summary>
         /// Constructor
@@ -24,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate
         /// <summary>
         /// Constructor
         /// </summary>
-        public Express1StampsBestRateBroker(StampsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
+        public Express1StampsBestRateBroker(UspsShipmentType shipmentType, ICarrierAccountRepository<UspsAccountEntity> accountRepository) :
             base(shipmentType, accountRepository, "USPS")
         {
 

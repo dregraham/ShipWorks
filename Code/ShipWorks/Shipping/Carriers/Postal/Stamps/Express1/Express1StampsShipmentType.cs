@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// Shipment type for Express 1 for Stamps.com shipments.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = false)]    
-    public class Express1StampsShipmentType : StampsShipmentType
+    public class Express1StampsShipmentType : UspsShipmentType
     {
         /// <summary>
         /// Create an instance of the Express1 Stamps Shipment Type
