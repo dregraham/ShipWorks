@@ -16,6 +16,7 @@ using Interapptive.Shared.UI;
 using System.Threading;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {

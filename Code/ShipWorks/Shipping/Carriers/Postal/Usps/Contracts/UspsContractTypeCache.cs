@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Runtime.Caching;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Contracts
 {
     /// <summary>
     /// An in-memory cache for the contract types associated with a Stamps.com account. This is intended

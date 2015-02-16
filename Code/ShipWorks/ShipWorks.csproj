@@ -769,12 +769,12 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\StampsIntuishipRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\Promotion\NewPostalCustomerRegistrationPromotion.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Registration\StampsRegistrationTypeDropdownItem.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsContractTypeCache.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\Express1\Express1StampsShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountContractType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsAccountContractType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizer.cs" />

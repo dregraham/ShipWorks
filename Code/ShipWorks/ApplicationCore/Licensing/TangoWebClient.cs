@@ -35,6 +35,7 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {

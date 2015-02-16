@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.UI;
 using log4net;
 using log4net.Core;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {

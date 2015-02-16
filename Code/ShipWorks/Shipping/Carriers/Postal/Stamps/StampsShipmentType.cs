@@ -39,6 +39,7 @@ using ShipWorks.Editions;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration.Promotion;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {

@@ -30,6 +30,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.Address;
 using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.v29.ContentTypeV2;
