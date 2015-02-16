@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
@@ -388,9 +387,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IBestRateShippingBroker broker = new NullShippingBroker();
 
             bool uspsExpeditedAccountsExist = UspsAccountManager.UspsAccounts.Any();
-            bool stampsAccountsExist = UspsAccountManager.GetAccounts(UspsResellerType.None).Any();
+            bool uspsAccountsExist = UspsAccountManager.GetAccounts(UspsResellerType.None).Any();
 
-            if (!stampsAccountsExist && !uspsExpeditedAccountsExist)
+            if (!uspsAccountsExist && !uspsExpeditedAccountsExist)
             {
                 // There aren't any postal based accounts setup, so we want to see if we should 
                 // show counter rates (depending whether Endicia or Stamps.com have been excluded)
@@ -406,15 +405,6 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     // USPS accounts, so use the counter rates broker for USPS
                     broker = new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
                 }
-                else if (!shippingSettings.BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Stamps))
-                {
-                    // Stamps.com has not been excluded from Best Rate, and there aren't any 
-                    // Stamps.com accounts, so use the counter rates broker for Stamps.com
-                    broker = new StampsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
-                }
-
-                // If neither of the above conditions were satisfied, Endicia and Stamps have both been excluded from Best Rate, so do nothing
-                // and just return the null broker
             }
 
             return broker;

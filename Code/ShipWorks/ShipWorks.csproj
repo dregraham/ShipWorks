@@ -772,7 +772,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsContractTypeCache.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsPostageWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\BestRate\StampsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsAccountContractType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
