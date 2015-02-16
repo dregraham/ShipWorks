@@ -4,18 +4,17 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// An implementation of the IExpress1RegistrationRepository interface. This will use the StampsAccountManager 
     /// to save an Express1 registration to the Stamps account table.
     /// </summary>
-    public class StampsExpress1RegistrationRepository : IExpress1RegistrationRepository
+    public class UspsExpress1RegistrationRepository : IExpress1RegistrationRepository
     {
         /// <summary>
         /// Saves the Express1 registration to the appropriate data source (Stamps account table or Endicia account table).
