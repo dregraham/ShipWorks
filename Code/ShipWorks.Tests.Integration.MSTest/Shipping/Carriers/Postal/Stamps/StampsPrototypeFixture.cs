@@ -178,7 +178,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public void PurchasePostage(decimal amount)
         {
             ShipmentEntity shipment = CreateShipment();
-            UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            UspsAccountEntity uspsAccount = UspsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
             UspsPostageWebClient uspsPostageWebClient = new UspsPostageWebClient(uspsAccount);
 
             uspsPostageWebClient.Purchase(amount);
@@ -187,7 +187,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public decimal CheckPostage()
         {
             ShipmentEntity shipment = CreateShipment();
-            UspsAccountEntity uspsAccount = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            UspsAccountEntity uspsAccount = UspsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
             UspsPostageWebClient uspsPostageWebClient = new UspsPostageWebClient(uspsAccount);
 
             return uspsPostageWebClient.GetBalance();

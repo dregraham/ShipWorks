@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return StampsAccountManager.UspsAccounts.ToList();
+                return UspsAccountManager.UspsAccounts.ToList();
             }
         }
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="account">The account.</param>
         public override void Save(UspsAccountEntity account)
         {
-            StampsAccountManager.SaveAccount(account);
+            UspsAccountManager.SaveAccount(account);
         }
     }
 }

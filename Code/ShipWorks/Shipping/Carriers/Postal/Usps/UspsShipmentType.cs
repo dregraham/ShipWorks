@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             bool shouldUseExpress1 = settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
                                      Express1Utilities.IsValidPackagingType(null, packagingType);
 
-            return shouldUseExpress1 ? StampsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account) : null;
+            return shouldUseExpress1 ? UspsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account) : null;
         }
 
         /// <summary>

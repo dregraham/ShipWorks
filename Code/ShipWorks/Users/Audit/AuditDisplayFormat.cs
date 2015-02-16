@@ -6,6 +6,7 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.UI.Controls;
@@ -145,7 +146,7 @@ namespace ShipWorks.Users.Audit
             {
                 case EntityType.UspsAccountEntity:
                     {
-                        UspsAccountEntity account = StampsAccountManager.GetAccount(entityID);
+                        UspsAccountEntity account = UspsAccountManager.GetAccount(entityID);
                         return account != null ? account.Username : "(Deleted)";
                     }
 

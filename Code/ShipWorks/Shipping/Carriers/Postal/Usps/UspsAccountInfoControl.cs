@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller));
+                        message = string.Format("Your {0} account is not ready yet.", UspsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller));
                         keepTrying = true;
                     }
 

@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            var accounts = StampsAccountManager.GetAccounts(StampsResellerType, false);
+            var accounts = UspsAccountManager.GetAccounts(StampsResellerType, false);
 
             if (accounts.Count > 0)
             {
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             }
             else
             {
-                UspsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long) stampsAccount.SelectedValue) : null;
+                UspsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long) stampsAccount.SelectedValue) : null;
                 if (account != null)
                 {
                     text += account.Description;

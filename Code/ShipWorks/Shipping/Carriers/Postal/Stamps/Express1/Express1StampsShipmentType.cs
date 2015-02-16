@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                return StampsAccountManager.Express1Accounts.Any();
+                return UspsAccountManager.Express1Accounts.Any();
             }
         }
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
             UspsPurchasePostageDlg postageDialog = new UspsPurchasePostageDlg();
 
-            return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, StampsAccountManager.Express1Accounts);
+            return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, UspsAccountManager.Express1Accounts);
         }
         
         /// <summary>

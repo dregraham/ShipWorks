@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// </summary>
         protected override IEnumerable<UspsAccountEntity> AccountList
         {
-            get { return StampsAccountManager.Express1Accounts; }
+            get { return UspsAccountManager.Express1Accounts; }
         }
 
         /// <summary>

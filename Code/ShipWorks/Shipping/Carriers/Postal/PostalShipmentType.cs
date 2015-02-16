@@ -387,8 +387,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // the provider that has an account instead of rates from web tools).
             IBestRateShippingBroker broker = new NullShippingBroker();
 
-            bool uspsExpeditedAccountsExist = StampsAccountManager.UspsAccounts.Any();
-            bool stampsAccountsExist = StampsAccountManager.GetAccounts(UspsResellerType.None).Any();
+            bool uspsExpeditedAccountsExist = UspsAccountManager.UspsAccounts.Any();
+            bool stampsAccountsExist = UspsAccountManager.GetAccounts(UspsResellerType.None).Any();
 
             if (!stampsAccountsExist && !uspsExpeditedAccountsExist)
             {

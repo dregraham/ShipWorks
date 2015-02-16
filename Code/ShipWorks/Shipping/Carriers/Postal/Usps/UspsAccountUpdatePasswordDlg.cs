@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     adapter.Commit();
                 }
 
-                StampsAccountManager.CheckForChangesNeeded();
+                UspsAccountManager.CheckForChangesNeeded();
 
                 DialogResult = DialogResult.OK;
 

@@ -81,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             stampsAccount.DisplayMember = "Key";
             stampsAccount.ValueMember = "Value";
 
-            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(UspsResellerType.StampsExpedited, false);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.StampsExpedited, false);
 
             if (accounts.Count > 0)
             {
@@ -210,7 +210,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                UspsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? StampsAccountManager.GetAccount((long)stampsAccount.SelectedValue) : null;
+                UspsAccountEntity account = stampsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long)stampsAccount.SelectedValue) : null;
                 if (account != null && ((stampsAccount.Enabled) || (rateShop.Checked && LoadedShipments.First().Processed)))
                 {
                     text += account.Description;

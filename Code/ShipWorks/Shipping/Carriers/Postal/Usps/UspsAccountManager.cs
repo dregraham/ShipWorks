@@ -1,30 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Data.Utility;
-using ShipWorks.Data.Model.EntityClasses;
-using System.ComponentModel;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Manages the available stamps.com accounts
     /// </summary>
-    public static class StampsAccountManager
+    public static class UspsAccountManager
     {
         static TableSynchronizer<UspsAccountEntity> synchronizer;
-        static bool needCheckForChanges = false;
+        static bool needCheckForChanges;
 
         /// <summary>
         /// Initialize StampsAccountManager
@@ -125,19 +122,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static UspsAccountEntity GetAccount(long accountID)
         {
-            UspsAccountEntity uspsAccount = StampsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
-
-            if (uspsAccount == null)
-            {
-                uspsAccount = Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID);
-            }
-
-            if (uspsAccount == null)
-            {
-                uspsAccount = UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
-            }
-
-            return uspsAccount;
+            return StampsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
+                Express1Accounts.FirstOrDefault(a => a.UspsAccountID == accountID) ??
+                UspsAccounts.FirstOrDefault(a => a.UspsAccountID == accountID);
         }
 
         /// <summary>
@@ -171,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public static string GetDefaultDescription(UspsAccountEntity account)
         {
-            string descriptionBase = account.UspsAccountID.ToString();
+            string descriptionBase = account.UspsAccountID.ToString(CultureInfo.InvariantCulture);
 
             // Express1 uses terribly long account numbers
             if (account.UspsReseller == (int)UspsResellerType.Express1)

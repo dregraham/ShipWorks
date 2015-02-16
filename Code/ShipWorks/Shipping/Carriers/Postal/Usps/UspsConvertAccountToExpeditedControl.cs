@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // the contract type the next time we get rates or process.
                 accountToConvert.ContractType = (int)UspsAccountContractType.Unknown;
 
-                StampsAccountManager.SaveAccount(accountToConvert);
+                UspsAccountManager.SaveAccount(accountToConvert);
 
                 // Notify any listeners
                 if (AccountConverted != null)

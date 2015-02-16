@@ -4526,7 +4526,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountInfoControl.Designer.cs">
       <DependentUpon>UspsAccountInfoControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountManager.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManager.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountManagerDlg.cs">
       <SubType>Form</SubType>
     </Compile>

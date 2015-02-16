@@ -493,7 +493,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccount.Password = encryptedPassword;
 
             // Save the stamps account and use it to initialize the stamps info control
-            StampsAccountManager.SaveAccount(UspsAccount);
+            UspsAccountManager.SaveAccount(UspsAccount);
 
             // Update the account contract type
             StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)UspsAccount.UspsReseller);
@@ -525,7 +525,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             if (DialogResult != DialogResult.OK && UspsAccount != null && !UspsAccount.IsNew)
             {
-                StampsAccountManager.DeleteAccount(UspsAccount);
+                UspsAccountManager.DeleteAccount(UspsAccount);
             }
             else if (DialogResult == DialogResult.OK)
             {

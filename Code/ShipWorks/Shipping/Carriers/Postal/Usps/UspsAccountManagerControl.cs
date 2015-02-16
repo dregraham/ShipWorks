@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             sandGrid.Rows.Clear();
 
-            foreach (UspsAccountEntity account in StampsAccountManager.GetAccounts(StampsResellerType))
+            foreach (UspsAccountEntity account in UspsAccountManager.GetAccounts(StampsResellerType))
             {
                 string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
                 GridRow row = new GridRow(new[] { account.Description, contractType, "Checking..." });
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 catch (UspsException ex)
                 {
-                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller));
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller));
                     log.Error(logMessage, ex);
                 }
                 catch (ORMEntityIsDeletedException ex)
@@ -219,11 +219,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Note: This does not delete your account from {1}.",
-                account.Description, StampsAccountManager.GetResellerName(StampsResellerType)));
+                account.Description, UspsAccountManager.GetResellerName(StampsResellerType)));
 
             if (result == DialogResult.OK)
             {
-                StampsAccountManager.DeleteAccount(account);
+                UspsAccountManager.DeleteAccount(account);
                 LoadAccounts();
             }
         }
@@ -233,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            if (StampsAccountManager.DisplaySetupWizard(this, StampsResellerType))
+            if (UspsAccountManager.DisplaySetupWizard(this, StampsResellerType))
             {
                 LoadAccounts();
             }

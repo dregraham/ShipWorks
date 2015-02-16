@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             optionsControl.LoadSettings();
 
-            string reseller = StampsAccountManager.GetResellerName(stampsResellerType);
+            string reseller = UspsAccountManager.GetResellerName(stampsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
         }
 
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static bool ShouldHideExpress1Controls()
         {
-            return !StampsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
+            return !UspsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
                     ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted; 
         }
 

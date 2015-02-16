@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -16,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return StampsAccountManager.StampsAccounts.ToList();
+                return UspsAccountManager.StampsAccounts.ToList();
             }
         }
 
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="account">The account.</param>
         public override void Save(UspsAccountEntity account)
         {
-            StampsAccountManager.SaveAccount(account);
+            UspsAccountManager.SaveAccount(account);
         }
     }
 }

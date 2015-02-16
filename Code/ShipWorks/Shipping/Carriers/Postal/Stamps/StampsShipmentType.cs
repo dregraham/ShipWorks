@@ -261,7 +261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
                Express1Utilities.IsValidPackagingType((PostalServiceType?)null, (PostalPackagingType)shipment.Postal.PackagingType))
             {
-                var express1Account = StampsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account);
+                var express1Account = UspsAccountManager.GetAccount(settings.UspsAutomaticExpress1Account);
 
                 if (express1Account == null)
                 {
@@ -402,7 +402,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // No longer show any Express1 related footnotes/promotions, but we always want to show the 
             // USPS (Stamps.com Expedited) promotion when Express 1 is restricted and the account has not
             // been converted from a commercial account
-            if (StampsAccountManager.Express1Accounts.Any() && !settings.StampsUspsAutomaticExpedited)
+            if (UspsAccountManager.Express1Accounts.Any() && !settings.StampsUspsAutomaticExpedited)
             {
                 // Show the single account dialog if the customer has Express1 accounts and hasn't converted to USPS (Stamps.com Expedited)
                 finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
@@ -501,7 +501,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
                 Express1Utilities.IsValidPackagingType((PostalServiceType)shipment.Postal.Service, (PostalPackagingType)shipment.Postal.PackagingType) &&
                 ShippingSettings.Fetch().UspsAutomaticExpress1;
 
-            UspsAccountEntity express1Account = StampsAccountManager.GetAccount(ShippingSettings.Fetch().UspsAutomaticExpress1Account);
+            UspsAccountEntity express1Account = UspsAccountManager.GetAccount(ShippingSettings.Fetch().UspsAutomaticExpress1Account);
 
             if (useExpress1)
             {
@@ -636,7 +636,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// </summary>
         public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)
         {
-            UspsAccountEntity account = StampsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            UspsAccountEntity account = UspsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;

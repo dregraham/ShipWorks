@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             // Create a new stamps account entity that will get saved to the database
             UspsAccountEntity uspsAccount = registration.AccountId.HasValue ? 
-                StampsAccountManager.GetAccount(registration.AccountId.Value) : 
+                UspsAccountManager.GetAccount(registration.AccountId.Value) : 
                 new UspsAccountEntity();
 
             // Initialize the nulls to default values and denote that the account is for Express1
@@ -68,10 +68,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             uspsAccount.CreatedDate = DateTime.UtcNow;
             
             // Persist the account entity to the database
-            StampsAccountManager.SaveAccount(uspsAccount);
+            UspsAccountManager.SaveAccount(uspsAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(UspsResellerType.Express1, false);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.Express1, false);
             if (accounts.Count == 1)
             {
                 UspsAccountEntity accountEntity = accounts.First();
@@ -109,11 +109,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             {
                 // The registration has an account ID associated with it, implying there is an account 
                 // entity associated with it. 
-                UspsAccountEntity uspsAccountEntity = StampsAccountManager.GetAccount(registration.AccountId.Value);
+                UspsAccountEntity uspsAccountEntity = UspsAccountManager.GetAccount(registration.AccountId.Value);
                 if (uspsAccountEntity != null)
                 {
                     // We've confirmed this account still does exist and needs to be deleted
-                    StampsAccountManager.DeleteAccount(uspsAccountEntity);
+                    UspsAccountManager.DeleteAccount(uspsAccountEntity);
                 }
             }
         }

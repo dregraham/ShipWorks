@@ -501,9 +501,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return EndiciaAccountManager.EndiciaAccounts.Any() ||
                    EndiciaAccountManager.Express1Accounts.Any() ||
-                   StampsAccountManager.StampsAccounts.Any() ||
-                   StampsAccountManager.Express1Accounts.Any() ||
-                   StampsAccountManager.UspsAccounts.Any();
+                   UspsAccountManager.StampsAccounts.Any() ||
+                   UspsAccountManager.Express1Accounts.Any() ||
+                   UspsAccountManager.UspsAccounts.Any();
         }
 
         /// <summary>

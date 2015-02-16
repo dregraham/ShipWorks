@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                return StampsAccountManager.Express1Accounts;
+                return UspsAccountManager.Express1Accounts;
             }
         }
 
@@ -51,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <param name="account">The account.</param>
         public override void Save(UspsAccountEntity account)
         {
-            StampsAccountManager.SaveAccount(account);
+            UspsAccountManager.SaveAccount(account);
         }
     }
 }

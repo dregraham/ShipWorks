@@ -350,7 +350,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller),
+                                    UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -621,7 +621,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName(stampsResellerType),
+                                    UspsAccountManager.GetResellerName(stampsResellerType),
                                     account.Username,
                                     Environment.NewLine);
 

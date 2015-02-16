@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private decimal GetBalance(UspsAccountEntity uspsAccount)
         {
             // Define these here since they could be used in either inside or outside the try statement
-            string carrierName = StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller); 
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller); 
             string exceptionMessage = string.Format("ShipWorks could not retrieve your account information from {0} at this time. Please try again later.", carrierName);
 
             if (postageBalance == null)
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <exception cref="UspsException">ShipWorks could not find information for this account.</exception>
         public DialogResult ShowDialog(IWin32Window owner, long accountID)
         {
-            account = StampsAccountManager.GetAccount(accountID);
+            account = UspsAccountManager.GetAccount(accountID);
             if (account == null)
             {
                 // The account could have been deleted by another user/process
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnPurchase(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            string carrierName = StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
             StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType) account.UspsReseller);
 
             try

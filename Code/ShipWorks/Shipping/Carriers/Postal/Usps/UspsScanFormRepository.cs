@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 UspsScanFormEntity uspsScanFormEntity = scanForm.ScanFormEntity as UspsScanFormEntity;
                 if (uspsScanFormEntity == null)
                 {
-                    string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                    string carrierName = UspsAccountManager.GetResellerName(stampsResellerType);
                     throw new UspsException(string.Format("The SCAN form provided was not a/an {0} SCAN form.", carrierName));
                 }
 
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (accountEntity == null)
             {
-                string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                string carrierName = UspsAccountManager.GetResellerName(stampsResellerType);
                 throw new UspsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
             
@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as UspsAccountEntity;
             if (accountEntity == null)
             {
-                string carrierName = StampsAccountManager.GetResellerName(stampsResellerType);
+                string carrierName = UspsAccountManager.GetResellerName(stampsResellerType);
                 throw new UspsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             passwordUpdated = false;
 
             // Adjust the note text based on the carrier/reseller
-            string carrierName = StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
+            string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
             labelStamps.Text = carrierName;
             labelNote.Text = string.Format("Any changes made to the address are only for ShipWorks. Your address information with {0} is not updated.", carrierName);
             
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             try
             {
-                StampsAccountManager.SaveAccount(account);
+                UspsAccountManager.SaveAccount(account);
                 DialogResult = DialogResult.OK;
             }
             catch (ORMConcurrencyException)
@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (DialogResult != DialogResult.OK)
             {
                 account.RollbackChanges();
-                StampsAccountManager.CheckForChangesNeeded();
+                UspsAccountManager.CheckForChangesNeeded();
             }
         }
     }
