@@ -26,10 +26,6 @@ namespace ShipWorks.Shipping
         [ShipmentTypeIconAttribute("endicia")]
         Endicia = 2,
 
-        [Description("USPS (Stamps.com)")]
-        [ShipmentTypeIconAttribute("stamps")]
-        Stamps = 3,
-
         [Description("USPS (w/o Postage)")]
         [ShipmentTypeIconAttribute("usps")]
         PostalWebTools = 4,
