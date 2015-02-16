@@ -3377,11 +3377,11 @@
     </Compile>
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResult.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaInsufficientFundsException.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsOptionsControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsOptionsControl.Designer.cs">
-      <DependentUpon>StampsOptionsControl.cs</DependentUpon>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsOptionsControl.Designer.cs">
+      <DependentUpon>UspsOptionsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Settings\Printing\PrintRuleInstallMissingTemplateDlg.cs">
       <SubType>Form</SubType>
@@ -7436,8 +7436,8 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsAccountEditorDlg.resx">
       <DependentUpon>StampsAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Stamps\StampsOptionsControl.resx">
-      <DependentUpon>StampsOptionsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsOptionsControl.resx">
+      <DependentUpon>UspsOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Discounted\UspsRateDiscountedFootnote.resx">
       <DependentUpon>UspsRateDiscountedFootnote.cs</DependentUpon>

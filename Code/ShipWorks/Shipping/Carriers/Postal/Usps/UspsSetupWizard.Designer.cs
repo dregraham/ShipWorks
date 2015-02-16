@@ -47,7 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageStampsAccount = new ShipWorks.UI.Wizard.WizardPage();
             this.uspsAccountInfo = new UspsAccountInfoControl();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
-            this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
+            this.optionsControl = new UspsOptionsControl();
             this.wizardPageAccountAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.panelTerms = new System.Windows.Forms.Panel();
             this.labelTerms2 = new System.Windows.Forms.Label();
@@ -564,7 +564,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private ShipWorks.UI.Wizard.WizardPage wizardPageStampsAccount;
         private UspsAccountInfoControl uspsAccountInfo;
         private UI.Wizard.WizardPage wizardPageOptions;
-        private StampsOptionsControl optionsControl;
+        private UspsOptionsControl optionsControl;
         private System.Windows.Forms.Panel accountTypePanel;
         private System.Windows.Forms.RadioButton radioExistingAccount;
         private System.Windows.Forms.RadioButton radioNewAccount;

@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             this.labelAccountType = new System.Windows.Forms.Label();
             this.accountControl = new UspsAccountManagerControl();
-            this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
+            this.optionsControl = new UspsOptionsControl();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.Express1StampsSingleSourceControl();
             this.panelBottom = new System.Windows.Forms.Panel();
             this.express1SettingsControl = new ShipWorks.Shipping.Carriers.Postal.Express1.AutomaticExpress1ControlBase();
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         private System.Windows.Forms.Label labelAccountType;
         private UspsAccountManagerControl accountControl;
-        private StampsOptionsControl optionsControl;
+        private UspsOptionsControl optionsControl;
         private Stamps.Express1.Express1StampsSingleSourceControl express1Options;
         private System.Windows.Forms.Panel panelBottom;
         private AutomaticExpress1ControlBase express1SettingsControl;
