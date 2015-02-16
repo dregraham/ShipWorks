@@ -639,7 +639,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS") || ex.Message.ToUpperInvariant().Contains("not enough postage".ToUpperInvariant()) ||
                     ex.Message.ToUpperInvariant().Contains("Insufficient Postage".ToUpperInvariant()))
                 {
-                    throw new StampsInsufficientFundsException(account, ex.Message);
+                    throw new UspsInsufficientFundsException(account, ex.Message);
                 }
 
                 // This isn't an exception we can handle, so just throw the original exception

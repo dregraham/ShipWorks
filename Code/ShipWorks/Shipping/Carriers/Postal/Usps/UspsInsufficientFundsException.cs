@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Exception thrown when there are insufficient funds for processing
     /// </summary>
-    public class StampsInsufficientFundsException : StampsException, IInsufficientFunds
+    public class UspsInsufficientFundsException : StampsException, IInsufficientFunds
     {
         private readonly UspsAccountEntity account;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsInsufficientFundsException(UspsAccountEntity account, string message) :
+        public UspsInsufficientFundsException(UspsAccountEntity account, string message) :
             base(message)
         {
             this.account = account;

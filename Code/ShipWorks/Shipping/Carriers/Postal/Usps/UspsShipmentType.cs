@@ -340,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     break;
                 }
-                catch (StampsInsufficientFundsException)
+                catch (UspsInsufficientFundsException)
                 {
                     if (ReferenceEquals(account, accounts.Last()))
                     {
