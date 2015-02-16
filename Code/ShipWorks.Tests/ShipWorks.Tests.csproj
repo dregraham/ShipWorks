@@ -359,7 +359,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerTypeTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormCarrierAccountTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\StampsScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />
