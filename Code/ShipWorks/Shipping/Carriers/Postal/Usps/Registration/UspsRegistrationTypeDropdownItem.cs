@@ -1,15 +1,17 @@
 ﻿
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// Class for populating the Stamps.com registration type combo box.
     /// </summary>
-    public class StampsRegistrationTypeDropdownItem
+    public class UspsRegistrationTypeDropdownItem
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAccountUsageDropdownItem"/> class.
         /// </summary>
-        public StampsRegistrationTypeDropdownItem(PostalAccountRegistrationType registrationType, string displayName)
+        public UspsRegistrationTypeDropdownItem(PostalAccountRegistrationType registrationType, string displayName)
         {
             RegistrationType = registrationType;
             DisplayName = displayName;
