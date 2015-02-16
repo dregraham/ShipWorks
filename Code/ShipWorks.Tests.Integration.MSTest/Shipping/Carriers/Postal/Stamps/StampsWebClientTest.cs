@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                 testObject.CreateScanForm(shipments, account);
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 // Since we just dummied some data up to create a scan form with we're going
                 // to get an exception. Make sure the error code is that of an invalid transaction ID
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 testObject.ChangeToExpeditedPlan(account, "ShipWorks3");
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 Assert.AreEqual(0x005f0302, exception.Code);
             }

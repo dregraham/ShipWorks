@@ -147,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             catch (AggregateException ex)
             {
                 // Try to rethrow the first api exception we got
-                StampsApiException apiException = ex.InnerExceptions.OfType<StampsApiException>().FirstOrDefault();
+                UspsApiException apiException = ex.InnerExceptions.OfType<UspsApiException>().FirstOrDefault();
                 if (apiException != null)
                 {
                     throw apiException;

@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
                 new StampsWebClient((StampsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 if (exception.Code == 0x005f0302)
                 {

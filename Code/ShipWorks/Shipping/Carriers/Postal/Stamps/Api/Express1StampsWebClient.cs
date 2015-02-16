@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             }
             catch (SoapException ex)
             {
-                throw new StampsApiException(ex);
+                throw new UspsApiException(ex);
             }
             catch (Exception ex)
             {
@@ -378,7 +378,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
                 return rates;
             }
-            catch (StampsApiException ex)
+            catch (UspsApiException ex)
             {
                 if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
                 {
@@ -589,7 +589,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
             {
                 AuthenticationWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
             }
-            catch (StampsApiException ex)
+            catch (UspsApiException ex)
             {
                 if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
                 {
@@ -1077,7 +1077,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     }
                     catch (SoapException ex)
                     {
-                        log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", StampsApiException.GetErrorCode(ex), ex.Message);
+                        log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", UspsApiException.GetErrorCode(ex), ex.Message);
 
                         if (triesLeft > 0 && IsStaleAuthenticator(ex))
                         {
@@ -1085,7 +1085,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                         }
                         else
                         {
-                            throw new StampsApiException(ex);
+                            throw new UspsApiException(ex);
                         }
                     }
                     catch (Exception ex)
