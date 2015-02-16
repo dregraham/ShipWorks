@@ -41,7 +41,7 @@
             this.accountPanel = new System.Windows.Forms.Panel();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.mailingPostalCode = new ShipWorks.UI.Controls.PromptTextBox();
-            this.accountInfoControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountInfoControl();
+            this.accountInfoControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.UspsAccountInfoControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.accountPanel.SuspendLayout();
@@ -231,7 +231,7 @@
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Button ok;
         private Data.Controls.PersonControl personControl;
-        private StampsAccountInfoControl accountInfoControl;
+        private UspsAccountInfoControl accountInfoControl;
         private System.Windows.Forms.Panel accountPanel;
     }
 }

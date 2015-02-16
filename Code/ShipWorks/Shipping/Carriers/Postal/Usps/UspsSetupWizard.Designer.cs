@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelUsername = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.wizardPageStampsAccount = new ShipWorks.UI.Wizard.WizardPage();
-            this.stampsAccountInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsAccountInfoControl();
+            this.uspsAccountInfo = new ShipWorks.Shipping.Carriers.Postal.Stamps.UspsAccountInfoControl();
             this.wizardPageOptions = new ShipWorks.UI.Wizard.WizardPage();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Stamps.StampsOptionsControl();
             this.wizardPageAccountAddress = new ShipWorks.UI.Wizard.WizardPage();
@@ -265,7 +265,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // wizardPageStampsAccount
             // 
-            this.wizardPageStampsAccount.Controls.Add(this.stampsAccountInfo);
+            this.wizardPageStampsAccount.Controls.Add(this.uspsAccountInfo);
             this.wizardPageStampsAccount.Description = "Your Stamps.com account information.";
             this.wizardPageStampsAccount.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageStampsAccount.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -278,11 +278,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // stampsAccountInfo
             // 
-            this.stampsAccountInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stampsAccountInfo.Location = new System.Drawing.Point(23, 10);
-            this.stampsAccountInfo.Name = "stampsAccountInfo";
-            this.stampsAccountInfo.Size = new System.Drawing.Size(487, 143);
-            this.stampsAccountInfo.TabIndex = 0;
+            this.uspsAccountInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uspsAccountInfo.Location = new System.Drawing.Point(23, 10);
+            this.uspsAccountInfo.Name = "uspsAccountInfo";
+            this.uspsAccountInfo.Size = new System.Drawing.Size(487, 143);
+            this.uspsAccountInfo.TabIndex = 0;
             // 
             // wizardPageOptions
             // 
@@ -562,7 +562,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.Label labelUsername;
         private ShipWorks.UI.Wizard.WizardPage wizardPageStampsAccount;
-        private StampsAccountInfoControl stampsAccountInfo;
+        private UspsAccountInfoControl uspsAccountInfo;
         private UI.Wizard.WizardPage wizardPageOptions;
         private StampsOptionsControl optionsControl;
         private System.Windows.Forms.Panel accountTypePanel;

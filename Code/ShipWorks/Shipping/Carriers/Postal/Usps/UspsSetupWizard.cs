@@ -505,7 +505,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnSteppingIntoAccountInfo(object sender, WizardSteppingIntoEventArgs e)
         {
-            stampsAccountInfo.Initialize(UspsAccount);
+            uspsAccountInfo.Initialize(UspsAccount);
         }
 
         /// <summary>
