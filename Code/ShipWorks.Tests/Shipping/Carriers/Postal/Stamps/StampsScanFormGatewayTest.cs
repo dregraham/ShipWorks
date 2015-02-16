@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
-            testObject = new StampsScanFormGateway(new UspsWebClient(StampsResellerType.None));
+            testObject = new StampsScanFormGateway(new UspsWebClient(UspsResellerType.None));
         }
 
         [TestMethod]

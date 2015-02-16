@@ -509,16 +509,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Returns the StampsResellerType for a ShipmentTypeCode
         /// </summary>
-        public static StampsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
+        public static UspsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
         {
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
-                    return StampsResellerType.StampsExpedited;
+                    return UspsResellerType.StampsExpedited;
                 case ShipmentTypeCode.Stamps:
-                    return StampsResellerType.None;
+                    return UspsResellerType.None;
                 case ShipmentTypeCode.Express1Stamps:
-                    return StampsResellerType.Express1;
+                    return UspsResellerType.Express1;
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated StampsResellerType.", EnumHelper.GetDescription(shipmentTypeCode)), "shipmentTypeCode");
             }
@@ -527,15 +527,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Returns a new StampsShipmentType for a given StampsResellerType
         /// </summary>
-        public static StampsShipmentType GetStampsShipmentTypeForStampsResellerType(StampsResellerType stampsResellerType)
+        public static StampsShipmentType GetStampsShipmentTypeForStampsResellerType(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
+                case UspsResellerType.None:
                     return new StampsShipmentType();
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.StampsExpedited:
                     return new UspsShipmentType();
-                case StampsResellerType.Express1:
+                case UspsResellerType.Express1:
                     return new Express1StampsShipmentType();
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated Shipment Type.", EnumHelper.GetDescription(stampsResellerType)), "stampsResellerType");

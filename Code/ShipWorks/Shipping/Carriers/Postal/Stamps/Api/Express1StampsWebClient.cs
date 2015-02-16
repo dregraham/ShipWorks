@@ -387,7 +387,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName(StampsResellerType.Express1),
+                                    StampsAccountManager.GetResellerName(UspsResellerType.Express1),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -598,7 +598,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName((StampsResellerType.Express1)),
+                                    StampsAccountManager.GetResellerName((UspsResellerType.Express1)),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -692,7 +692,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)StampsResellerType.Express1;
+            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)UspsResellerType.Express1;
 
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {

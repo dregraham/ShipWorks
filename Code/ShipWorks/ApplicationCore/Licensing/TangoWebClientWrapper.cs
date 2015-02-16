@@ -217,7 +217,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             foreach (LicenseAccountDetail license in licensesForLogging)
             {
                 TangoWebClient.LogStampsAccount(license,
-                                                PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.UspsReseller).ShipmentTypeCode,
+                                                PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode,
                                                 account.Username,
                                                 (UspsAccountContractType)account.ContractType);
             }

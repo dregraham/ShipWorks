@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             get
             {
-                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)account.UspsReseller).ShipmentTypeCode;
+                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)account.UspsReseller).ShipmentTypeCode;
             }
         }
 
@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             decimal availablePostage = 0;
 
             IUspsWebClient client = CreateWebClient();
-            if ((StampsResellerType) account.UspsReseller != StampsResellerType.Express1)
+            if ((UspsResellerType) account.UspsReseller != UspsResellerType.Express1)
             {
                 AccountInfo accountInfo = (AccountInfo)client.GetAccountInfo(account);
 

@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
@@ -9,12 +10,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
     /// </summary>
     public class StampsRegistrationGateway : IStampsRegistrationGateway
     {
-        private readonly StampsResellerType resellerType;
+        private readonly UspsResellerType resellerType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsRegistrationGateway"/> class.
         /// </summary>
-        public StampsRegistrationGateway(StampsResellerType resellerType)
+        public StampsRegistrationGateway(UspsResellerType resellerType)
         {
             this.resellerType = resellerType;
         }

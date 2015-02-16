@@ -5,13 +5,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Enum for Stamps resellers 
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
-    public enum StampsResellerType
+    public enum UspsResellerType
     {
         [Description("None")]
         None = 0,

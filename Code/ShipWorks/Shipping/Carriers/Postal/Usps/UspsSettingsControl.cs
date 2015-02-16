@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         bool loadedAccounts = false;
         Express1StampsSettingsFacade express1Settings;
         readonly ShipmentTypeCode shipmentTypeCode;
-        readonly StampsResellerType stampsResellerType;
+        readonly UspsResellerType stampsResellerType;
 
         /// <summary>
         /// Constructor
@@ -111,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static bool ShouldHideExpress1Controls()
         {
-            return !StampsAccountManager.GetAccounts(StampsResellerType.Express1).Any() ||
+            return !StampsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
                     ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted; 
         }
 

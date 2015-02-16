@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 
             // Initialize the nulls to default values and denote that the account is for Express1
             uspsAccount.InitializeNullsToDefault();
-            uspsAccount.UspsReseller = (int)StampsResellerType.Express1;
+            uspsAccount.UspsReseller = (int)UspsResellerType.Express1;
 
             uspsAccount.ContractType = (int)UspsAccountContractType.NotApplicable;
 
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             StampsAccountManager.SaveAccount(uspsAccount);
 
             // If this is the only account, update this shipment type profiles with this account
-            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.Express1, false);
+            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(UspsResellerType.Express1, false);
             if (accounts.Count == 1)
             {
                 UspsAccountEntity accountEntity = accounts.First();

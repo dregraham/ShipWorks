@@ -3,6 +3,7 @@ using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -50,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
             uspsAccount.DisplayMember = "Key";
             uspsAccount.ValueMember = "Value";
 
-            StampsResellerType uspsResellerType = PostalUtility.GetStampsResellerType(ShipmentTypeCode.Express1Stamps);
+            UspsResellerType uspsResellerType = PostalUtility.GetStampsResellerType(ShipmentTypeCode.Express1Stamps);
             List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(uspsResellerType);
             if (accounts.Any())
             {

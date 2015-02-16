@@ -44,14 +44,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
         /// </summary>
-        public StampsResellerType StampsResellerType { get; set; }
+        public UspsResellerType StampsResellerType { get; set; }
 
         /// <summary>
         /// Determines if an Express1 account is being managed.
         /// </summary>
         private bool IsExpress1
         {
-            get { return StampsResellerType == StampsResellerType.Express1; }
+            get { return StampsResellerType == UspsResellerType.Express1; }
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 catch (UspsException ex)
                 {
-                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller));
+                    string logMessage = string.Format("Error updating grid with {0} account balance.", StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller));
                     log.Error(logMessage, ex);
                 }
                 catch (ORMEntityIsDeletedException ex)

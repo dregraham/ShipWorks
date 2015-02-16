@@ -103,9 +103,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the type of the reseller.
         /// </summary>
-        public virtual StampsResellerType ResellerType
+        public virtual UspsResellerType ResellerType
         {
-            get { return StampsResellerType.None; }
+            get { return UspsResellerType.None; }
         }
 
         /// <summary>

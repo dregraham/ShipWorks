@@ -39,15 +39,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                     Console.WriteLine(string.Format("Executing Test ID {0}", TestContext.DataRow["TestID"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
-                    StampsResellerType stampsResellerType;
+                    UspsResellerType stampsResellerType;
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = StampsResellerType.StampsExpedited;
+                        stampsResellerType = UspsResellerType.StampsExpedited;
                     }
                     else
                     {
-                        stampsResellerType = StampsResellerType.Express1;  
+                        stampsResellerType = UspsResellerType.Express1;  
                     }
 
                     Exception exception = null;
@@ -107,15 +107,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                     Console.WriteLine(string.Format("Executing Test ID {0}", TestContext.DataRow["TestID"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
-                    StampsResellerType stampsResellerType;
+                    UspsResellerType stampsResellerType;
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = StampsResellerType.StampsExpedited;
+                        stampsResellerType = UspsResellerType.StampsExpedited;
                     }
                     else
                     {
-                        stampsResellerType = StampsResellerType.Express1;
+                        stampsResellerType = UspsResellerType.Express1;
                     }
 
                     List<RateResult> rateResults = testObject.GetRates(stampsResellerType);

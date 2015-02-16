@@ -47,13 +47,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         private readonly ICertificateInspector certificateInspector;
-        private readonly StampsResellerType stampsResellerType;
+        private readonly UspsResellerType stampsResellerType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
-        public UspsWebClient(StampsResellerType stampsResellerType)
+        public UspsWebClient(UspsResellerType stampsResellerType)
             : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType)
         { }
 
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
-        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, UspsResellerType stampsResellerType)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
@@ -350,7 +350,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for Stamps is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    StampsAccountManager.GetResellerName((StampsResellerType)account.UspsReseller),
+                                    StampsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller),
                                     account.Username,
                                     Environment.NewLine);
 
@@ -697,7 +697,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)StampsResellerType.Express1;
+            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)UspsResellerType.Express1;
 
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {

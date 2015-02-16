@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private PersonAdapter GetDefaultAccountPerson()
         {
-            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+            List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(UspsResellerType.None);
             return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
         }
     }

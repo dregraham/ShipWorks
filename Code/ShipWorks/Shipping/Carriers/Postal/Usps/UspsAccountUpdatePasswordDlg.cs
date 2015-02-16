@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new UspsWebClient((StampsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
+                new UspsWebClient((UspsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

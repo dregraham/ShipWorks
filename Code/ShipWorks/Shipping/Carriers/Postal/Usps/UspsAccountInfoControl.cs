@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                WebHelper.OpenUrl(new UspsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new UspsWebClient((UspsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (UspsException ex)
             {
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                WebHelper.OpenUrl(new UspsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new UspsWebClient((UspsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (UspsException ex)
             {
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     // This message means we created a new account, but it wasn't ready to go yet
                     if (ex.Message.Contains("Registration timed out while authenticating."))
                     {
-                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((StampsResellerType)uspsAccount.UspsReseller));
+                        message = string.Format("Your {0} account is not ready yet.", StampsAccountManager.GetResellerName((UspsResellerType)uspsAccount.UspsReseller));
                         keepTrying = true;
                     }
 
@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void HideUspsControlsIfExpress1(UspsAccountEntity uspsAccount)
         {
-            bool isExpress1 = uspsAccount.UspsReseller == (int)StampsResellerType.Express1;
+            bool isExpress1 = uspsAccount.UspsReseller == (int)UspsResellerType.Express1;
 
             if (!isExpress1)
             {

@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <exception cref="UspsException">Only Stamps.com accounts can be converted.</exception>
         public void Initialize(UspsAccountEntity uspsAccount)
         {
-            if (uspsAccount.UspsReseller == (int)StampsResellerType.Express1)
+            if (uspsAccount.UspsReseller == (int)UspsResellerType.Express1)
             {
                 throw new UspsException("Express1 accounts cannot be converted.");
             }
@@ -127,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
 
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new UspsWebClient((StampsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
+                new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
             catch (UspsApiException exception)
             {

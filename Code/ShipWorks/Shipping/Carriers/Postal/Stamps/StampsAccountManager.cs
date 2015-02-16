@@ -66,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// Get the Stamps.com accounts in the system.  Optionally include those that have not yet totally completed signup where
         /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<UspsAccountEntity> GetAccounts(StampsResellerType stampsResellerType, bool includeIncomplete)
+        public static List<UspsAccountEntity> GetAccounts(UspsResellerType stampsResellerType, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Get the Stamps.com accounts in the system.
         /// </summary>
-        public static List<UspsAccountEntity> GetAccounts(StampsResellerType stampsResellerType)
+        public static List<UspsAccountEntity> GetAccounts(UspsResellerType stampsResellerType)
         {
             return GetAccounts(stampsResellerType, false);
         }
@@ -94,7 +94,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts(StampsResellerType.None, false);
+                return GetAccounts(UspsResellerType.None, false);
             }
         }
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts(StampsResellerType.Express1, false);
+                return GetAccounts(UspsResellerType.Express1, false);
             }
         }
 
@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         {
             get
             {
-                return GetAccounts(StampsResellerType.StampsExpedited, false);
+                return GetAccounts(UspsResellerType.StampsExpedited, false);
             }
         }
 
@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             string descriptionBase = account.UspsAccountID.ToString();
 
             // Express1 uses terribly long account numbers
-            if (account.UspsReseller == (int)StampsResellerType.Express1)
+            if (account.UspsReseller == (int)UspsResellerType.Express1)
             {
                 // only shorten so long as we know they're still using long account numbers.
                 if (descriptionBase.Length == 36)
@@ -211,18 +211,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Displays the appropriate setup wizard based on the Stamps Reseller
         /// </summary>
-        public static bool DisplaySetupWizard(IWin32Window owner, StampsResellerType stampsResellerType)
+        public static bool DisplaySetupWizard(IWin32Window owner, UspsResellerType stampsResellerType)
         {
             ShipmentType shipmentType;
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
+                case UspsResellerType.None:
                     shipmentType = new StampsShipmentType();
                     break;
-                case StampsResellerType.Express1:
+                case UspsResellerType.Express1:
                     shipmentType = new Express1StampsShipmentType();
                     break;
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.StampsExpedited:
                     shipmentType = new UspsShipmentType();
                     break;
                 default:
@@ -238,15 +238,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Gets the name of the Stamps reseller
         /// </summary>
-        public static string GetResellerName(StampsResellerType stampsResellerType)
+        public static string GetResellerName(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
+                case UspsResellerType.None:
                     return "Stamps.com";
-                case StampsResellerType.Express1:
+                case UspsResellerType.Express1:
                     return "Express1";
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.StampsExpedited:
                     return "USPS";
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");

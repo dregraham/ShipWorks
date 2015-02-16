@@ -20,13 +20,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsScanFormRepository : IScanFormRepository
     {
-        private readonly StampsResellerType stampsResellerType;
+        private readonly UspsResellerType stampsResellerType;
         
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsScanFormRepository"/> class.
         /// </summary>
         /// <param name="stampsResellerType">The stamps reseller type.</param>
-        public UspsScanFormRepository(StampsResellerType stampsResellerType)
+        public UspsScanFormRepository(UspsResellerType stampsResellerType)
         {
             this.stampsResellerType = stampsResellerType;
         }

@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
                 {
                     Username = registration.UserName,
                     Password = registration.EncryptedPassword,
-                    UspsReseller = (int)StampsResellerType.Express1
+                    UspsReseller = (int)UspsResellerType.Express1
                 });
             }
             catch (UspsException ex)

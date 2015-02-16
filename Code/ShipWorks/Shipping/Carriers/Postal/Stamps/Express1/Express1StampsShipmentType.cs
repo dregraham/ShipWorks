@@ -45,9 +45,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         /// <summary>
         /// Gets the type of the reseller.
         /// </summary>
-        public override StampsResellerType ResellerType
+        public override UspsResellerType ResellerType
         {
-            get { return StampsResellerType.Express1; }
+            get { return UspsResellerType.Express1; }
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new StampsExpress1RegistrationGateway(), new StampsExpress1RegistrationRepository(), new StampsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { StampsResellerType = StampsResellerType.Express1 };
+            UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { StampsResellerType = UspsResellerType.Express1 };
             UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Stamps };
             UspsPurchasePostageDlg postageDialog = new UspsPurchasePostageDlg();
 

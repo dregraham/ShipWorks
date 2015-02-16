@@ -4,6 +4,7 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
 {
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                return StampsAccountManager.GetAccounts(StampsResellerType.Express1)
+                return StampsAccountManager.GetAccounts(UspsResellerType.Express1)
                            .Select(a => new KeyValuePair<string, long>(a.Description, a.UspsAccountID))
                            .ToList();
             }
@@ -84,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
         {
             get
             {
-                List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+                List<UspsAccountEntity> accounts = StampsAccountManager.GetAccounts(UspsResellerType.None);
 
                 return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
             }

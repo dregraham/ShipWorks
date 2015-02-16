@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public string HidePostage { get; set; }
         public string StampsAccountID { get; set; }
 
-        public override bool Ship(StampsResellerType stampsResellerType)
+        public override bool Ship(UspsResellerType stampsResellerType)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                 ShippingManager.SaveShipment(shipment);
 
-                if (stampsResellerType == StampsResellerType.Express1)
+                if (stampsResellerType == UspsResellerType.Express1)
                 {
                     // Now void to get our money back.  Sleep for a few seconds so that the carrier can process the void on their side.
                     VoidShipment(shipment);
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         }
 
 
-        public List<RateResult> GetRates(StampsResellerType stampsResellerType)
+        public List<RateResult> GetRates(UspsResellerType stampsResellerType)
         {
             ShipmentEntity shipment = CreateShipment();
 
@@ -75,15 +75,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             return webClient.GetRates(shipment);
         }
 
-        private IUspsWebClient GetWebClient(StampsResellerType stampsResellerType)
+        private IUspsWebClient GetWebClient(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.None:
+                case UspsResellerType.StampsExpedited:
                     return new UspsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
 
-                case StampsResellerType.Express1:
+                case UspsResellerType.Express1:
                     return new Express1StampsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector());
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");
@@ -97,29 +97,29 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             IUspsWebClient webClient = null;
             if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Stamps)
             {
-                webClient = GetWebClient(StampsResellerType.None);
+                webClient = GetWebClient(UspsResellerType.None);
             }
             else if (shipmentType.ShipmentTypeCode == global::ShipWorks.Shipping.ShipmentTypeCode.Usps)
             {
-                webClient = GetWebClient(StampsResellerType.StampsExpedited);
+                webClient = GetWebClient(UspsResellerType.StampsExpedited);
             }
             else
             {
-                webClient = GetWebClient(StampsResellerType.Express1);
+                webClient = GetWebClient(UspsResellerType.Express1);
             }
 
             return webClient;
         }
 
-        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(StampsResellerType stampsResellerType)
+        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
+                case UspsResellerType.None:
                     return new StampsAccountRepository();
-                case StampsResellerType.Express1:
+                case UspsResellerType.Express1:
                     return new Express1StampsAccountRepository();
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.StampsExpedited:
                     return new UspsAccountRepository();
                 default:
                     throw new ArgumentOutOfRangeException("stampsResellerType");

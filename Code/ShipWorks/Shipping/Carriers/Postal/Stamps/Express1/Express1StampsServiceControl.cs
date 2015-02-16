@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
     /// </summary>
     public partial class Express1StampsServiceControl : PostalServiceControlBase
     {
-        private const StampsResellerType StampsResellerType = Stamps.StampsResellerType.Express1;
+        private const UspsResellerType StampsResellerType = UspsResellerType.Express1;
 
         /// <summary>
         /// Initializes a new <see cref="Express1StampsServiceControl"/> instance.

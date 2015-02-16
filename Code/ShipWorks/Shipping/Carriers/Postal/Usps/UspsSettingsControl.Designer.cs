@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.accountControl.Location = new System.Drawing.Point(12, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
-            this.accountControl.StampsResellerType = ShipWorks.Shipping.Carriers.Postal.Stamps.StampsResellerType.None;
+            this.accountControl.StampsResellerType = ShipWorks.Shipping.Carriers.Postal.Usps.UspsResellerType.None;
             this.accountControl.TabIndex = 1;
             // 
             // optionsControl

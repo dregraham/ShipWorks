@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
-            StampsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Stamps ? StampsResellerType.None : StampsResellerType.StampsExpedited;
+            UspsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Stamps ? UspsResellerType.None : UspsResellerType.StampsExpedited;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
@@ -452,7 +452,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new UspsWebClient(StampsResellerType.None).AuthenticateUser(userID, password.Text);
+                new UspsWebClient(UspsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 if (UspsAccount == null)
                 {
@@ -478,7 +478,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected virtual void PrepareStampsAccountForSave()
         {
-            UspsAccount.UspsReseller = (int) StampsResellerType.StampsExpedited;
+            UspsAccount.UspsReseller = (int) UspsResellerType.StampsExpedited;
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             StampsAccountManager.SaveAccount(UspsAccount);
 
             // Update the account contract type
-            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType)UspsAccount.UspsReseller);
+            StampsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)UspsAccount.UspsReseller);
             stampsShipmentType.UpdateContractType(UspsAccount);
         }
 

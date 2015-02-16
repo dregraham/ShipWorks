@@ -55,9 +55,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the type of the reseller.
         /// </summary>
-        public override StampsResellerType ResellerType
+        public override UspsResellerType ResellerType
         {
-            get { return StampsResellerType.StampsExpedited; }
+            get { return UspsResellerType.StampsExpedited; }
         }
 
         /// <summary>
@@ -322,7 +322,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    if (account.UspsReseller == (int)StampsResellerType.Express1)
+                    if (account.UspsReseller == (int)UspsResellerType.Express1)
                     {
                         shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
 

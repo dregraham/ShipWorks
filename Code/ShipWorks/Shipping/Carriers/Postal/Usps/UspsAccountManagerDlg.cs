@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsAccountManagerDlg(StampsResellerType stampsResellerType)
+        public UspsAccountManagerDlg(UspsResellerType stampsResellerType)
         {
             InitializeComponent();
 
