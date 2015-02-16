@@ -1,6 +1,7 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
 {
     /// <summary>
     /// An implementation of the IScanFormGateway interface that communicates with the Express1/Stamps API

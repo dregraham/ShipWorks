@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.ScanForms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
+using System.Data;
+using System.Data.SqlClient;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Data.SqlClient;
-using System.Data;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
     /// A Stamps.com implementation of the IScanFormEntityRepository that saves a Stamps
@@ -45,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Save the scan record.
                 adapter.SaveAndRefetch(batchEntity);
 
-                foreach (ScanForm scanForm in scanFormBatch.ScanForms)
+                foreach (ScanForms.ScanForm scanForm in scanFormBatch.ScanForms)
                 {
                     // Set the ID on our scan form object to the ID value on the entity
                     UspsScanFormEntity uspsScanFormEntity = scanForm.ScanFormEntity as UspsScanFormEntity;
@@ -81,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             batchEntity.ShipmentType = (int)batch.ShipmentType;
             batchEntity.ShipmentCount = batch.ShipmentCount;
 
-            foreach (ScanForm scanForm in batch.ScanForms)
+            foreach (ScanForms.ScanForm scanForm in batch.ScanForms)
             {
                 UspsScanFormEntity uspsScanFormEntity = scanForm.ScanFormEntity as UspsScanFormEntity;
                 if (uspsScanFormEntity == null)
@@ -101,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         /// <param name="carrierAccount">The carrier account.</param>
         /// <returns>A collection of ScanForm objects.</returns>
-        public IEnumerable<ScanForm> GetExistingScanForms(IScanFormCarrierAccount carrierAccount)
+        public IEnumerable<ScanForms.ScanForm> GetExistingScanForms(IScanFormCarrierAccount carrierAccount)
         {
             // We should have a stamps account entity
             UspsAccountEntity accountEntity = carrierAccount.GetAccountEntity() as UspsAccountEntity;
@@ -111,8 +109,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 string carrierName = UspsAccountManager.GetResellerName(stampsResellerType);
                 throw new UspsException(string.Format("ShipWorks was unable to retrieve existing SCAN forms: the {0} account could not be loaded.", carrierName));
             }
-            
-            List<ScanForm> scanForms = new List<ScanForm>();
+
+            List<ScanForms.ScanForm> scanForms = new List<ScanForms.ScanForm>();
             
             UspsScanFormCollection uspsForms = UspsScanFormCollection.Fetch(SqlAdapter.Default,
                 UspsScanFormFields.UspsAccountID == accountEntity.UspsAccountID &
@@ -120,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             foreach (UspsScanFormEntity stampsForm in uspsForms)
             {
-                ScanForm scanForm = new ScanForm(carrierAccount, stampsForm.UspsScanFormID, stampsForm.ScanFormBatchID, stampsForm.Description, stampsForm.CreatedDate);
+                ScanForms.ScanForm scanForm = new ScanForms.ScanForm(carrierAccount, stampsForm.UspsScanFormID, stampsForm.ScanFormBatchID, stampsForm.Description, stampsForm.CreatedDate);
                 scanForms.Add(scanForm);
             }
 
@@ -183,7 +181,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 foreach (ScanFormBatchEntity batchEntity in batchEntities)
                 {
-                    List<ScanForm> scanForms = new List<ScanForm>();
+                    List<ScanForms.ScanForm> scanForms = new List<ScanForms.ScanForm>();
 
                     // Get all the forms for this account from the last 8 days
                     UspsScanFormCollection uspsForms = UspsScanFormCollection.Fetch(SqlAdapter.Default,
@@ -191,7 +189,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                     foreach (UspsScanFormEntity scanFormEntity in uspsForms)
                     {
-                        ScanForm scanForm = new ScanForm(carrierAccount, scanFormEntity.UspsScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate);
+                        ScanForms.ScanForm scanForm = new ScanForms.ScanForm(carrierAccount, scanFormEntity.UspsScanFormID, scanFormEntity.ScanFormBatchID, scanFormEntity.Description, scanFormEntity.CreatedDate);
                         scanForms.Add(scanForm);
                     }
 

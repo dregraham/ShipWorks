@@ -543,7 +543,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string scanFormStampsId = string.Empty;
             string scanFormUrl = string.Empty;
-            ScanForm scanForm = new ScanForm();
+            WebServices.ScanForm scanForm = new WebServices.ScanForm();
 
             using (SwsimV40 webService = CreateWebService("ScanForm"))
             {

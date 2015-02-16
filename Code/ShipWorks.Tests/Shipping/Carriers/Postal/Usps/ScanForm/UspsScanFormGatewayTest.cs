@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 {
     [TestClass]
     public class UspsScanFormGatewayTest

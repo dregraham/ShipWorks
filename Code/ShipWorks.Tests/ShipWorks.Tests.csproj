@@ -342,8 +342,8 @@
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1CreditCardPaymentValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1RegistrationValidatorTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormCarrierAccountTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Express1\Express1ScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\ScanForm\Express1ScanFormCarrierAccountTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Express1\ScanForm\Express1ScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1UtilitiesTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostageBalanceTests.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalUtilityTest.cs" />
@@ -358,8 +358,8 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsRegistrationTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\UspsRegistrationValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerTypeTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormCarrierAccountTest.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsScanFormGatewayTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\ScanForm\UspsScanFormCarrierAccountTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\ScanForm\UspsScanFormGatewayTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />

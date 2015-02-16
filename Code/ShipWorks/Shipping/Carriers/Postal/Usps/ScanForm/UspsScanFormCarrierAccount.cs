@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.ScanForms;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using log4net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
     /// A USPS implementation of the IScanFormCarrierAccount interface.

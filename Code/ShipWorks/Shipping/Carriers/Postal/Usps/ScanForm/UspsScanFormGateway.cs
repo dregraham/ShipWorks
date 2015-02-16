@@ -1,19 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.ScanForms;
+using System.Net;
+using System.Xml.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.Linq;
-using Interapptive.Shared.Net;
-using System.IO;
-using System.Net;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
     /// An implementation of the IScanFormGateway interface that communicates with the Stamps.com API

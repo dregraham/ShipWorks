@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.ScanForms;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
     /// A USPS (Stamps.com Expedited) implementation of the IScanFormAccountRepository interface.

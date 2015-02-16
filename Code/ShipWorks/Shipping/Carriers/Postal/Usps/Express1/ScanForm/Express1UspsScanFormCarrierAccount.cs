@@ -1,9 +1,10 @@
 ﻿using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm;
 using ShipWorks.Shipping.ScanForms;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
 {
     /// <summary>
     /// An Express1 implementation of the IScanFormCarrierAccount interface.
