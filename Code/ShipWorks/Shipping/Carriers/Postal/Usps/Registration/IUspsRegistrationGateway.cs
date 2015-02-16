@@ -12,6 +12,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>A StampsRegistrationResult object.</returns>
-        UspsRegistrationResult Register(StampsRegistration registration);
+        UspsRegistrationResult Register(UspsRegistration registration);
     }
 }

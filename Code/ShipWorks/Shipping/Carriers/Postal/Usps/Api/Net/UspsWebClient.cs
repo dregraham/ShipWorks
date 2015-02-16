@@ -460,7 +460,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Registers a new account with Stamps.com.
         /// </summary>
-        public UspsRegistrationResult RegisterAccount(StampsRegistration registration)
+        public UspsRegistrationResult RegisterAccount(UspsRegistration registration)
         {
             // Output parameters supplied to the request
             string suggestedUserName = string.Empty;

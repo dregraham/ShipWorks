@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
     [TestClass]
     public class StampsRegistrationTest
     {
-        StampsRegistration testObject;
+        UspsRegistration testObject;
         Mock<IUspsRegistrationValidator> mockedValidator;
         Mock<IUspsRegistrationGateway> mockedGateway;
         private Mock<IRegistrationPromotion> promotion;
@@ -26,15 +26,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Setup a validator so our test object always passes validation
             mockedValidator = new Mock<IUspsRegistrationValidator>();
-            mockedValidator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
+            mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>())).Returns(new List<RegistrationValidationError>());
 
             mockedGateway = new Mock<IUspsRegistrationGateway>();
-            mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>()));
+            mockedGateway.Setup(g => g.Register(It.IsAny<UspsRegistration>()));
 
             promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns("shipworks");
 
-            testObject = new StampsRegistration(mockedValidator.Object, mockedGateway.Object, promotion.Object);
+            testObject = new UspsRegistration(mockedValidator.Object, mockedGateway.Object, promotion.Object);
         }
 
         [TestMethod]
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Submit_ThrowsRegistrationException_WhenValidationFails_Test()
         {
             // Setup our mocked validator to return two errors
-            mockedValidator.Setup(v => v.Validate(It.IsAny<StampsRegistration>()))
+            mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
                 .Returns
                 (
                     new List<RegistrationValidationError>() 
@@ -69,14 +69,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             // Using a mocked validator, so there shouldn't be any validation errors
             testObject.Submit();
 
-            mockedGateway.Verify(g => g.Register(It.IsAny<StampsRegistration>()), Times.Once());
+            mockedGateway.Verify(g => g.Register(It.IsAny<UspsRegistration>()), Times.Once());
         }
 
         [TestMethod]
         public void Submit_DoesNotDelegateToGateway_WhenValidationFails_Test()
         {
             // Setup our mocked validator to return two errors
-            mockedValidator.Setup(v => v.Validate(It.IsAny<StampsRegistration>()))
+            mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
                 .Returns
                 (
                     new List<RegistrationValidationError>() 
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
             }
 
             // The gateway should not be called when there are validation errors
-            mockedGateway.Verify(g => g.Register(It.IsAny<StampsRegistration>()), Times.Never());
+            mockedGateway.Verify(g => g.Register(It.IsAny<UspsRegistration>()), Times.Never());
         }
 
         [TestMethod]
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Submit_ThrowsStampsException_WhenRegistrationGatewayThrowsException_Test()
         {
             // Setup up our mocked gateway to throw an execption
-            mockedGateway.Setup(g => g.Register(It.IsAny<StampsRegistration>())).Throws(new UspsRegistrationException());
+            mockedGateway.Setup(g => g.Register(It.IsAny<UspsRegistration>())).Throws(new UspsRegistrationException());
             testObject.Submit();
         }
 

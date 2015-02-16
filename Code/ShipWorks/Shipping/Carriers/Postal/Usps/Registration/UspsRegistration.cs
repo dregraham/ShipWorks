@@ -3,34 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Net;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
-    public class StampsRegistration
+    public class UspsRegistration
     {
         private readonly IUspsRegistrationValidator validator;
         private readonly IUspsRegistrationGateway registrationGateway;
         private readonly IRegistrationPromotion promotion;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsRegistration"/> class.
+        /// Initializes a new instance of the <see cref="UspsRegistration"/> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
-        public StampsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway)
+        public UspsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway)
             : this(validator, gateway, new RegistrationPromotionFactory().CreateRegistrationPromotion())
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsRegistration" /> class.
+        /// Initializes a new instance of the <see cref="UspsRegistration" /> class.
         /// </summary>
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
         /// <param name="promotion">The promotion.</param>
         /// <exception cref="UspsRegistrationException">Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.</exception>
-        public StampsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway, IRegistrationPromotion promotion)
+        public UspsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway, IRegistrationPromotion promotion)
         {
             this.validator = validator;
             registrationGateway = gateway;

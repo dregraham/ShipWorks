@@ -21,14 +21,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             testObject = new UspsRegistrationValidator();
         }
         
-        private StampsRegistration CreateValidUnitedStatesRegistration()
+        private UspsRegistration CreateValidUnitedStatesRegistration()
         {
             promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
 
             gateway = new Mock<IUspsRegistrationGateway>();
 
-            StampsRegistration registration = new StampsRegistration(testObject, gateway.Object, promotion.Object)
+            UspsRegistration registration = new UspsRegistration(testObject, gateway.Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
@@ -57,12 +57,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             return registration;
         }
 
-        private StampsRegistration CreateValidInternationalRegistration()
+        private UspsRegistration CreateValidInternationalRegistration()
         {
             promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
 
-            StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IUspsRegistrationGateway>().Object, promotion.Object)
+            UspsRegistration registration = new UspsRegistration(testObject, new Moq.Mock<IUspsRegistrationGateway>().Object, promotion.Object)
             {
                 UserName = "RonMexico",
                 Password = "H3RP35",
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenUnitedStatesRegistrationIsValid_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(0, errors.Count());
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenInternationalRegistrationIsValid_Test()
         {
-            StampsRegistration registration = CreateValidInternationalRegistration();
+            UspsRegistration registration = CreateValidInternationalRegistration();
             registration.PhysicalAddress.ZIPCode = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -117,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenMissingIPAddress_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.MachineInfo.IPAddress = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenMachineInfoIsNull_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.MachineInfo = null;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -141,7 +141,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPhysicalAddressIsNull_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress = null;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -153,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPhysicalAddressIsMissingCity_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.City = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -165,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPhysicalAddressIsMissingAddress1_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.Address1 = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -177,7 +177,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenUnitedStatesRegistrationIsMissingState_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.State = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -189,7 +189,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenUnitedStatesRegistrationIsMissingZipCode_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.ZIPCode = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -202,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenInternationalRegistrationIsMissingPostalCode_Test()
         {
-            StampsRegistration registration = CreateValidInternationalRegistration();
+            UspsRegistration registration = CreateValidInternationalRegistration();
             registration.PhysicalAddress.PostalCode = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -214,7 +214,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenInternationalRegistrationIsMissingProvince_Test()
         {
-            StampsRegistration registration = CreateValidInternationalRegistration();
+            UspsRegistration registration = CreateValidInternationalRegistration();
             registration.PhysicalAddress.Province = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -226,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenUsernameIsMissing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.UserName = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPasswordIsMissing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -250,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenFirstCodewordValueIsMissing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.FirstCodewordValue = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -262,7 +262,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenSecondCodewordValueIsMissing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordValue = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -274,7 +274,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenEmailIsMissing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Email = string.Empty;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -291,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenUserNameIs15Characters_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.UserName = "123456789012345";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -303,7 +303,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenUserNameIsMoreThan15Characters_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.UserName = "1234567890123456";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -316,7 +316,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         public void Validate_ReturnsEmptyList_WhenUserNameMeetsUpperBound_Test()
         {
             // Set the username to 40 characters
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.UserName = "12345678901234";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -332,7 +332,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPasswordIsTooLong_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "ThisIs1LongPasswordThatShouldCauseAValidationError";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -344,7 +344,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPasswordIsTooShort_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "abc1d";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -356,7 +356,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPasswordOnlyContainsNumbers_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "123456789";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -368,7 +368,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenPasswordOnlyContainsLetters_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "missingNumber";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -380,7 +380,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenPasswordIsValid_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "valid2Password";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -392,7 +392,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         public void Validate_ReturnsEmptyList_WhenPasswordMeetsUpperBound_Test()
         {
             // Set the password to a strong enough password that is 20 characters
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "valid2Password123456";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -404,7 +404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         public void Validate_ReturnsEmptyList_WhenPasswordMeetsLowerBound_Test()
         {
             // Set the password to a strong enough password that is 6 characters long
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Password = "ab12cd";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -417,7 +417,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenCodewordTypesAreSame_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordType = registration.FirstCodewordType;
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -431,7 +431,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenFirstCodewordValueIsTooShort_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.FirstCodewordValue = "a";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -443,7 +443,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenFirstCodewordValueIsTooLong_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.FirstCodewordValue = "1234567890123456789012345678901234";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -455,7 +455,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenFirstCodeWordValueMeetsLowerBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.FirstCodewordValue = "ab";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -466,7 +466,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenFirstCodeWordValueMeetsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.FirstCodewordValue = "123456789012345678901234567890123";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -481,7 +481,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenSecondCodewordValueIsTooShort_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordValue = "a";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -493,7 +493,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenSecondCodewordValueIsTooLong_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordValue = "1234567890123456789012345678901234";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -505,7 +505,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenSecondCodeWordValueMeetsLowerBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordValue = "ab";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -516,7 +516,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenSecondCodeWordValueMeetsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.SecondCodewordValue = "123456789012345678901234567890123";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -529,7 +529,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenEmailExceedsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Email = "somebodyThatExceedsTheUpperBound@WhatBoundaries.com";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -541,7 +541,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenEmailMeetsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Email = "somebody123456789@somewhere1234567890.com";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -552,7 +552,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenEmailDoesNotMeetUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.Email = "somebody@somewhere.com";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -564,7 +564,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         public void Validate_ReturnsOneError_WhenPromoCodeExceedsUpperBound_Test()
         {
             // Create a promo code of 51 characters (exceeds the upper bound by 1)
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             promotion.Setup(p => p.GetPromoCode()).Returns("123456789012345678901234567890123456789012345678901");
             
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -576,7 +576,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenPromoCodeMeetsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             promotion.Setup(p => p.GetPromoCode()).Returns("12345678901234567890123456789012345678901");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -587,7 +587,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsEmptyList_WhenPromoCodeDoesNotMeetsUpperBound_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             promotion.Setup(p => p.GetPromoCode()).Returns("123456789012345");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -598,7 +598,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_ReturnsOneError_WhenBothPaymentMethodsAreNull_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.CreditCard = null;
             registration.AchAccount = null;
 
@@ -611,7 +611,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_CleansesPhoneNumber_WhenLongerThanTenCharacters_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.PhoneNumber = "555-555-5555";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
@@ -622,7 +622,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
         [TestMethod]
         public void Validate_RetrunsOneError_WhenPhoneNumberIsLongerThanTenCharacters_AfterCleansing_Test()
         {
-            StampsRegistration registration = CreateValidUnitedStatesRegistration();
+            UspsRegistration registration = CreateValidUnitedStatesRegistration();
             registration.PhysicalAddress.PhoneNumber = "1-555-555-5555";
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);

@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <param name="registration">The registration.</param>
         /// <returns>A List of RegistrationValidationError objects containing all of the items that
         /// failed to pass validation. An empty list indicates the registration passed validation.</returns>
-        public IEnumerable<RegistrationValidationError> Validate(StampsRegistration registration)
+        public IEnumerable<RegistrationValidationError> Validate(UspsRegistration registration)
         {
             List<RegistrationValidationError> errors = new List<RegistrationValidationError>();
             
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>A List of RegistrationValidationError objects.</returns>
-        private List<RegistrationValidationError> ValidateRequiredFields(StampsRegistration registration)
+        private List<RegistrationValidationError> ValidateRequiredFields(UspsRegistration registration)
         {
             List<RegistrationValidationError> errors = new List<RegistrationValidationError>();
             errors.AddRange(ValidateDataIsProvided(registration.UserName, "Username is required."));

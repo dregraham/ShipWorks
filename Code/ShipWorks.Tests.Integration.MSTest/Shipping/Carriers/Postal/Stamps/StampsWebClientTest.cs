@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
-            StampsRegistration registration = CreateRegistrationWithoutUsername();
+            UspsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = "interapptive";
 
             UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void RegisterAccount_IsSuccessful_Test()
         {
-            StampsRegistration registration = CreateRegistrationWithoutUsername();
+            UspsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = DateTime.UtcNow.Ticks.ToString();
 
             UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
@@ -122,17 +122,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         /// Helper method to create a Stamps.com registration without a username.
         /// </summary>
         /// <returns>StampsRegistration.</returns>
-        private StampsRegistration CreateRegistrationWithoutUsername()
+        private UspsRegistration CreateRegistrationWithoutUsername()
         {
             Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
-            validator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
+            validator.Setup(v => v.Validate(It.IsAny<UspsRegistration>())).Returns(new List<RegistrationValidationError>());
 
             Mock<IUspsRegistrationGateway> gateway = new Mock<IUspsRegistrationGateway>();
 
             Mock<IRegistrationPromotion> promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns(string.Empty);
 
-            StampsRegistration registration = new StampsRegistration(validator.Object, gateway.Object, promotion.Object);            
+            UspsRegistration registration = new UspsRegistration(validator.Object, gateway.Object, promotion.Object);            
             registration.UsageType = AccountType.OfficeBasedBusiness;
             registration.CreditCard = new CreditCard()
             {

@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <param name="registration">The registration.</param>
         /// <returns>A List of RegistrationValidationError objects containing all of the items that
         /// failed to pass validation. An empty list indicates the registration passed validation.</returns>
-        IEnumerable<RegistrationValidationError> Validate(StampsRegistration registration);
+        IEnumerable<RegistrationValidationError> Validate(UspsRegistration registration);
     }
 }

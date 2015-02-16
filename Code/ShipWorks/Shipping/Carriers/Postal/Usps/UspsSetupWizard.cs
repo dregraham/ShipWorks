@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        private readonly StampsRegistration stampsRegistration;
+        private readonly UspsRegistration stampsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
-            stampsRegistration = new StampsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
+            stampsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
 
             if (promotion.IsMonthlyFeeWaived)

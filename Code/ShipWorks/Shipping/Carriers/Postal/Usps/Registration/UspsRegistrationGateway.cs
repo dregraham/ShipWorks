@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         /// <param name="registration">The registration.</param>
         /// <returns>A StampsRegistrationResult object.</returns>
-        public UspsRegistrationResult Register(StampsRegistration registration)
+        public UspsRegistrationResult Register(UspsRegistration registration)
         {
             UspsRegistrationResult result = new UspsWebClient(resellerType).RegisterAccount(registration);
 
