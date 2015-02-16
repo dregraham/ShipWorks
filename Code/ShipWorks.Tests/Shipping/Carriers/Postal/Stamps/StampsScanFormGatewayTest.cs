@@ -10,6 +10,7 @@ using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 {
@@ -29,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
 
             scanFormBatch = new ScanFormBatch(carrierAccount.Object, null, null);
 
-            testObject = new StampsScanFormGateway(new StampsWebClient(StampsResellerType.None));
+            testObject = new StampsScanFormGateway(new UspsWebClient(StampsResellerType.None));
         }
 
         [TestMethod]

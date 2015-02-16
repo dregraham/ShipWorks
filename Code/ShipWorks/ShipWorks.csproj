@@ -4538,7 +4538,7 @@
     <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAccountUpdatePasswordDlg.Designer.cs">
       <DependentUpon>StampsAccountUpdatePasswordDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Stamps\Api\StampsWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\StampsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsApiException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagingType.cs" />

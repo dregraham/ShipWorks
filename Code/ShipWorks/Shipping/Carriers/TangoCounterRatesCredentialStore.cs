@@ -10,6 +10,7 @@ using log4net;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -210,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsWebClient.UseTestServer ?
+                return UspsWebClient.UseTestServer ?
                     TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
             }
         }
@@ -222,7 +223,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsWebClient.UseTestServer ?
+                return UspsWebClient.UseTestServer ?
                     TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
             }
         }
@@ -234,7 +235,7 @@ namespace ShipWorks.Shipping.Carriers
         {
             get
             {
-                return StampsWebClient.UseTestServer ?
+                return UspsWebClient.UseTestServer ?
                     TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
             }
         }

@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new UspsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (UspsException ex)
             {
@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             try
             {
-                WebHelper.OpenUrl(new StampsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
+                WebHelper.OpenUrl(new UspsWebClient((StampsResellerType)account.UspsReseller).GetUrl(account, UrlType.AccountSettingsPage), this);
             }
             catch (UspsException ex)
             {

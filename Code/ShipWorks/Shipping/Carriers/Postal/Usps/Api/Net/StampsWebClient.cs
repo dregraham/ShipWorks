@@ -1,43 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
-using Interapptive.Shared.Utility;
 using System.Web.Services.Protocols;
-using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using System.Net;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data;
-using System.Diagnostics;
-using ShipWorks.Data.Connection;
-using System.Drawing;
-using System.IO;
-using System.Drawing.Imaging;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.UI;
-using ShipWorks.Shipping.Editing;
-using Interapptive.Shared.Business;
-using ShipWorks.ApplicationCore;
-using log4net;
-using ShipWorks.Templates.Tokens;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using System.Xml.Linq;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using log4net;
+using ShipWorks.ApplicationCore;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Templates.Tokens;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
     /// <summary>
     /// Central point where API stuff goes through for stamps.com
     /// </summary>
-    public class StampsWebClient : IUspsWebClient
+    public class UspsWebClient : IUspsWebClient
     {
         // This value came from Stamps.com (the "standard" account value is 88)
         private const int ExpeditedPlanID = 236;
@@ -59,25 +50,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         private readonly StampsResellerType stampsResellerType;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
+        /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
-        public StampsWebClient(StampsResellerType stampsResellerType)
+        public UspsWebClient(StampsResellerType stampsResellerType)
             : this(new StampsAccountRepository(), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType)
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="StampsWebClient" /> class.
+        /// Initializes a new instance of the <see cref="UspsWebClient" /> class.
         /// </summary>
         /// <param name="accountRepository">The account repository.</param>
         /// <param name="logEntryFactory">The log entry factory.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         /// <param name="stampsResellerType">Type of the stamps reseller.</param>
-        public StampsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
+        public UspsWebClient(ICarrierAccountRepository<UspsAccountEntity> accountRepository, ILogEntryFactory logEntryFactory, ICertificateInspector certificateInspector, StampsResellerType stampsResellerType)
         {
             this.accountRepository = accountRepository;
             this.logEntryFactory = logEntryFactory;
-            this.log = LogManager.GetLogger(typeof(StampsWebClient));
+            this.log = LogManager.GetLogger(typeof(UspsWebClient));
             this.certificateInspector = certificateInspector;
             this.stampsResellerType = stampsResellerType;
         }
@@ -246,7 +237,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            WebServices.PostageBalance postageBalance;
+            Stamps.WebServices.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
@@ -676,7 +667,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api
 
             RateV15 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
-            WebServices.PostageBalance postageBalance;
+            Stamps.WebServices.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
             // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.

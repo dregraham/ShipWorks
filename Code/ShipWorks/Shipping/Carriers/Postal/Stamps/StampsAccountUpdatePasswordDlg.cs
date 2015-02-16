@@ -13,6 +13,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {
@@ -48,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsWebClient((StampsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
+                new UspsWebClient((StampsResellerType)account.UspsReseller).AuthenticateUser(account.Username, password.Text);
 
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {

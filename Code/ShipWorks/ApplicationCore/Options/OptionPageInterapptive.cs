@@ -43,6 +43,7 @@ using ShipWorks.ApplicationCore.Options.PrintResultCleanup;
 using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.ApplicationCore.Options
 {
@@ -67,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Options
         private void OnLoad(object sender, EventArgs e)
         {
             postalWebTestServer.Checked = PostalWebUtility.UseTestServer;
-            stampsTestServer.Checked = StampsWebClient.UseTestServer;
+            stampsTestServer.Checked = UspsWebClient.UseTestServer;
             
             upsOnLineTools.Checked = UpsWebClient.UseTestServer;
             endiciaTestServer.Checked = EndiciaApiClient.UseTestServer;
@@ -108,7 +109,7 @@ namespace ShipWorks.ApplicationCore.Options
             base.Save();
 
             PostalWebUtility.UseTestServer = postalWebTestServer.Checked;
-            StampsWebClient.UseTestServer = stampsTestServer.Checked;
+            UspsWebClient.UseTestServer = stampsTestServer.Checked;
             UpsWebClient.UseTestServer = upsOnLineTools.Checked;
             EndiciaApiClient.UseTestServer = endiciaTestServer.Checked;
             Express1EndiciaUtility.UseTestServer = express1EndiciaTestServer.Checked;

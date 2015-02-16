@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -451,7 +452,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsWebClient(StampsResellerType.None).AuthenticateUser(userID, password.Text);
+                new UspsWebClient(StampsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 if (UspsAccount == null)
                 {

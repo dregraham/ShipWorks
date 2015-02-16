@@ -7,6 +7,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 
@@ -28,7 +29,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             try
             {
                 PostalWebUtility.UseTestServer = true;
-                StampsWebClient.UseTestServer = true;
+                UspsWebClient.UseTestServer = true;
                 Express1StampsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
@@ -96,7 +97,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             try
             {
                 PostalWebUtility.UseTestServer = true;
-                StampsWebClient.UseTestServer = true;
+                UspsWebClient.UseTestServer = true;
                 Express1StampsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
@@ -149,7 +150,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             try
             {
                 PostalWebUtility.UseTestServer = true;
-                StampsWebClient.UseTestServer = true;
+                UspsWebClient.UseTestServer = true;
                 Express1StampsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
@@ -206,7 +207,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             try
             {
                 PostalWebUtility.UseTestServer = true;
-                StampsWebClient.UseTestServer = true;
+                UspsWebClient.UseTestServer = true;
                 Express1StampsWebClient.UseTestServer = true;
 
                 if (PopulateTestObject(testObject, StampsMapping.Mapping) &&

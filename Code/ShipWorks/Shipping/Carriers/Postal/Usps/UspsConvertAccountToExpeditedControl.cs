@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.UI;
 using log4net;
 using log4net.Core;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -126,7 +127,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
 
                 IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new StampsWebClient((StampsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
+                new UspsWebClient((StampsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
             catch (UspsApiException exception)
             {

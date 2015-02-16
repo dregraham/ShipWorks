@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             // This needs to be created each time rather than just being an instance property, 
             // because of counter rates where the account repository is swapped out out prior 
             // to creating the web client.
-            return new StampsWebClient(AccountRepository, LogEntryFactory, CertificateInspector, ResellerType);
+            return new UspsWebClient(AccountRepository, LogEntryFactory, CertificateInspector, ResellerType);
         }
 
 		/// <summary>

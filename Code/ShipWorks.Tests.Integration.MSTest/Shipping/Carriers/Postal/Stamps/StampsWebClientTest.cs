@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
@@ -20,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
     [TestClass]
     public class StampsWebClientTest
     {
-        private readonly StampsWebClient testObject;
+        private readonly UspsWebClient testObject;
 
         private readonly Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
         private readonly Mock<ILogEntryFactory> logEntryFactory;
@@ -51,8 +52,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             logEntryFactory = new Mock<ILogEntryFactory>();
             logEntryFactory.Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(new Mock<IApiLogEntry>().Object);
 
-            testObject = new StampsWebClient(accountRepository.Object, logEntryFactory.Object, new TrustingCertificateInspector(), StampsResellerType.StampsExpedited);
-            StampsWebClient.UseTestServer = true;
+            testObject = new UspsWebClient(accountRepository.Object, logEntryFactory.Object, new TrustingCertificateInspector(), StampsResellerType.StampsExpedited);
+            UspsWebClient.UseTestServer = true;
         }
 
         [TestCategory("Stamps")]
