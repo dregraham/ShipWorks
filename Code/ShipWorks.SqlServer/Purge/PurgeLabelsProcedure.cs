@@ -200,7 +200,7 @@ public partial class StoredProcedures
 	                WHERE 
 		                [Shipment].ProcessedDate < @olderThan
 		                AND [Shipment].Processed = 1
-		                AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
+		                AND [Shipment].ShipmentType in (2,9,15,4) -- endicia, express1, stamps, w/o postage
 		                AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 
                 -- find all of the iParcel labels we want to wipe out

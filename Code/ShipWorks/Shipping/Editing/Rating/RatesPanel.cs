@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Called when the shipping settings for using Stamps has changed. We need to refresh the
+        /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
         /// </summary>
         /// <param name="sender">The sender.</param>

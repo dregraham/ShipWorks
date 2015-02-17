@@ -8,7 +8,7 @@ namespace ShipWorks.Data.Model.EntityClasses
     public partial class UspsAccountEntity
     {
         /// <summary>
-        /// Gets a friendly description of the Stamps account
+        /// Gets a friendly description of the Usps account
         /// </summary>
         public string Description
         {
