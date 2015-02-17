@@ -377,7 +377,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         {
             return question.Items
                 .Select(ConvertQuestionItemToBooleanAnswer)
-                .Where(x => x.Value)
                 .Select(x => x.Answer)
                 .DefaultIfEmpty()
                 .Aggregate((x, y) => x + ", " + y);
@@ -391,13 +390,15 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             BooleanAnswerType booleanAnswer = answer as BooleanAnswerType;
             if (booleanAnswer != null)
             {
+                booleanAnswer.Answer = booleanAnswer.ValueSpecified && booleanAnswer.Value ? "Yes" : "No";
+
                 return booleanAnswer;
             }
 
             TextAnswerType textAnswer = answer as TextAnswerType;
             return textAnswer != null ? 
-                new BooleanAnswerType {Answer = textAnswer.Value, Value = true} : 
-                new BooleanAnswerType { Value = false};
+                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } : 
+                new BooleanAnswerType { Answer = "No Answer", Value = false};
         }
 
         /// <summary>
