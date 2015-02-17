@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
@@ -21,7 +18,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         private const bool justLabels = true;
 
         [DataSource("DataSource_Ship_Stamps")]
-        [DeploymentItem("DataSources\\Stamps.xlsx")]
+        [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("Stamps")]
         [TestMethod]
         public void ProcessBatch_UspsAndExpress1Stamps_Test()
@@ -89,7 +86,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         }
 
         [DataSource("DataSource_Ship_Stamps")]
-        [DeploymentItem("DataSources\\Stamps.xlsx")]
+        [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("Stamps")]
         [TestMethod]
         public void GetRates_UspsAndExpress1Stamps_Test()
@@ -142,7 +139,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         }
 
         [DataSource("DataSource_Ship_PurchasePostage")]
-        [DeploymentItem("DataSources\\Stamps.xlsx")]
+        [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("Stamps")]
         [TestMethod]
         public void PurchasePostage_UspsAndExpress1Stamps_Test()
@@ -199,7 +196,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         }
 
         [DataSource("DataSource_Ship_PurchasePostage")]
-        [DeploymentItem("DataSources\\Stamps.xlsx")]
+        [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("Stamps")]
         [TestMethod]
         public void CheckPostage_UspsAndExpress1Stamps_Test()
