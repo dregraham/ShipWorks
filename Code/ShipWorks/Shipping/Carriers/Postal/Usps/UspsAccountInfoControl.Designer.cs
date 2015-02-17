@@ -170,7 +170,7 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "Account:";
             // 
-            // StampsAccountInfoControl
+            // UspsAccountInfoControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// Class for populating the Stamps.com usage type combo box.
+    /// Class for populating the USPS usage type combo box.
     /// </summary>
     public class UspsAccountUsageDropdownItem
     {

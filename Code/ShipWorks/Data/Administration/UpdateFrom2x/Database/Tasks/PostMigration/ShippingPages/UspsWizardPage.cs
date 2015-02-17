@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping;
 using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages
 {
@@ -29,7 +19,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
     /// </summary>
     public partial class UspsWizardPage : WizardPage
     {
-        bool anyStamps;
+        bool anyUsps;
 
         /// <summary>
         /// Constructor
@@ -46,11 +36,11 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         {
             if (e.FirstTime)
             {
-                anyStamps = ShipmentCollection.GetCount(SqlAdapter.Default, ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Usps) > 0;
+                anyUsps = ShipmentCollection.GetCount(SqlAdapter.Default, ShipmentFields.ShipmentType == (int) ShipmentTypeCode.Usps) > 0;
             }
 
             // If there are no UPS accounts or shipments just skip
-            if (!anyStamps)
+            if (!anyUsps)
             {
                 e.Skip = true;
             }

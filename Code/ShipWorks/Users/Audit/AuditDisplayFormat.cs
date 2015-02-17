@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;

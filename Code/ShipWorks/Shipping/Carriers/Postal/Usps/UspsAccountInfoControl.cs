@@ -6,7 +6,6 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
@@ -14,7 +13,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// User control for displaying account info for a stamps.com acount
+    /// User control for displaying account info for a USPS acount
     /// </summary>
     public partial class UspsAccountInfoControl : UserControl
     {
@@ -109,9 +108,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     }
                 }
             }
-            catch (UspsException stampsException)
+            catch (UspsException uspsException)
             {
-                MessageHelper.ShowError(this, stampsException.Message);
+                MessageHelper.ShowError(this, uspsException.Message);
             }
         }
 
@@ -173,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return;
             }
 
-            // Hide the links specific to Stamps.com if this is an Express1 account
+            // Hide the links specific to USPS if this is an Express1 account
             labelStampsWebsite.Visible = false;
             accountSettingsLink.Visible = false;
             onlineReportsLink.Visible = false;

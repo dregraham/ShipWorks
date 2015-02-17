@@ -6,7 +6,6 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -86,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Load the UI for Stamps.com Expedited accounts
+        /// Load the UI for USPS Expedited accounts
         /// </summary>
         private void LoadExpeditedAccounts(long accountId)
         {
@@ -173,13 +172,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             MessageHelper.ShowInformation(this,
                                           "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your " +
                                           "domestic and international Priority and Express shipments." + Environment.NewLine + Environment.NewLine +
-                                          "Simply create a Stamps.com account and ShipWorks will automatically utilize it for discounted rates from " +
+                                          "Simply create a USPS account and ShipWorks will automatically utilize it for discounted rates from " +
                                           "IntuiShip when creating postage labels." + Environment.NewLine + Environment.NewLine + "For more information, " +
                                           "please contact us at www.interapptive.com/company/contact.html.");
         }
 
         /// <summary>
-        /// Gets a person to use as the default for new USPS (Stamps.com Expedited) accounts
+        /// Gets a person to use as the default for new USPS accounts
         /// </summary>
         private PersonAdapter GetDefaultAccountPerson()
         {

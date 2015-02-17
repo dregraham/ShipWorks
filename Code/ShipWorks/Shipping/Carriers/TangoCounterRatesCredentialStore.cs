@@ -48,9 +48,9 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialUpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
         private const string TestCredentialUpsCertificateVerificationData = "<Service><Subject><Value>wwwcie.ups.com</Value><Value>united parcel service</Value></Subject></Service>";
 
-        private const string TestCredentialStampsUsername = "interapptive";
-        private const string TestCredentialStampsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
-        private const string TestCredentialStampsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+        private const string TestCredentialUspsUsername = "interapptive";
+        private const string TestCredentialUspsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
+        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
 
@@ -66,9 +66,9 @@ namespace ShipWorks.Shipping.Carriers
         private const string UpsAccessKeyKeyName = "UpsAccessKey";
         public const string UpsCertificateVerificationDataKeyName = "UpsCertificateVerificationData";
 
-        private const string StampsUsernameKeyName = "UspsUsername";
-        private const string StampsPasswordKeyName = "StampsPassword";
-        public const string StampsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
+        private const string UspsUsernameKeyName = "StampsUsername";
+        private const string UspsPasswordKeyName = "StampsPassword";
+        public const string UspsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
 
         public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
         
@@ -203,38 +203,38 @@ namespace ShipWorks.Shipping.Carriers
         }
         
         /// <summary>
-        /// Gets data to verify the SSL certificate from Stamps
+        /// Gets data to verify the SSL certificate from USPS
         /// </summary>
         public string UspsCertificateVerificationData
         {
             get
             {
                 return UspsWebClient.UseTestServer ?
-                    TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
+                    TestCredentialUspsCertificateVerificationData : GetCertificateVerificationDataValue(UspsCertificateVerificationDataKeyName);
             }
         }
 
         /// <summary>
-        /// Gets the  Stamps user name used for obtaining counter rates
+        /// Gets the USPS user name used for obtaining counter rates
         /// </summary>
         public string UspsUsername
         {
             get
             {
                 return UspsWebClient.UseTestServer ?
-                    TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
+                    TestCredentialUspsUsername : GetCredentialValue(UspsUsernameKeyName);
             }
         }
 
         /// <summary>
-        /// Gets the  Stamps password used for obtaining counter rates
+        /// Gets the USPS password used for obtaining counter rates
         /// </summary>
         public string UspsPassword
         {
             get
             {
                 return UspsWebClient.UseTestServer ?
-                    TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
+                    TestCredentialUspsPassword : GetCredentialValue(UspsPasswordKeyName);
             }
         }
 

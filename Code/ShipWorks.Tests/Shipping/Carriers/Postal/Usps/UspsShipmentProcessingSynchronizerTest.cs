@@ -3,10 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
     public class UspsShipmentProcessingSynchronizerTest

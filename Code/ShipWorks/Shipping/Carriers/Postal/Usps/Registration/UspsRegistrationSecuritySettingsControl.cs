@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// Control for collecting username, password, and security questions for a Stamps.com registration.
+    /// Control for collecting username, password, and security questions for a USPS registration.
     /// </summary>
     public partial class UspsRegistrationSecuritySettingsControl : UserControl
     {

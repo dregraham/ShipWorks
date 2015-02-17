@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// Validates the fields within a stamps.com registration according to the Stamps.com documentation.
+    /// Validates the fields within a USPS registration according to the Stamps.com documentation.
     /// </summary>
     public class UspsRegistrationValidator : IUspsRegistrationValidator
     {
@@ -71,9 +70,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 
                 if (registration.PhysicalAddress.PhoneNumber.Length > 10)
                 {
-                    // Stamps.com API has max length of 10 for phone numbers, so attempt to 
-                    // clean up the phone number that will get sent to Stamps.com. If the phone number
-                    // is still too long, let the request go through and allow Stamps to handle the error
+                    // USPS API has max length of 10 for phone numbers, so attempt to 
+                    // clean up the phone number that will get sent to USPS. If the phone number
+                    // is still too long, let the request go through and allow USPS to handle the error
                     string cleansedPhoneNumber = registration.PhysicalAddress.PhoneNumber.Replace("-", string.Empty);
                     if (cleansedPhoneNumber.Length > 10)
                     {
@@ -82,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
                     }
                     else
                     {
-                        // The cleansed phone number is a valid length, so we'll just use that to pass on to Stamps.com
+                        // The cleansed phone number is a valid length, so we'll just use that to pass on to USPS
                         registration.PhysicalAddress.PhoneNumber = cleansedPhoneNumber;
                     }
                 }

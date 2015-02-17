@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers
         string UspsPassword { get; }
 
         /// <summary>
-        /// Gets data to verify the SSL certificate from Stamps.com
+        /// Gets data to verify the SSL certificate from USPS
         /// </summary>
         string UspsCertificateVerificationData { get; }
     }

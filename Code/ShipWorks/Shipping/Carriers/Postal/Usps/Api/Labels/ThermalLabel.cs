@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
-    /// Represents a Stamps.com thermal label and encapsulates the logic for
+    /// Represents a USPS thermal label and encapsulates the logic for
     /// persisting the label to the data source.
     /// </summary>
     public class ThermalLabel : Label

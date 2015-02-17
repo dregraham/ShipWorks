@@ -35,7 +35,7 @@
             this.labelPassword = new System.Windows.Forms.Label();
             this.labelNote = new System.Windows.Forms.Label();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.labelStamps = new System.Windows.Forms.Label();
+            this.labelUsps = new System.Windows.Forms.Label();
             this.cancel = new System.Windows.Forms.Button();
             this.ok = new System.Windows.Forms.Button();
             this.accountPanel = new System.Windows.Forms.Panel();
@@ -106,15 +106,15 @@
             this.pictureBox.TabIndex = 36;
             this.pictureBox.TabStop = false;
             // 
-            // labelStamps
+            // labelUsps
             // 
-            this.labelStamps.AutoSize = true;
-            this.labelStamps.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStamps.Location = new System.Drawing.Point(12, 9);
-            this.labelStamps.Name = "labelStamps";
-            this.labelStamps.Size = new System.Drawing.Size(50, 13);
-            this.labelStamps.TabIndex = 27;
-            this.labelStamps.Text = "Stamps";
+            this.labelUsps.AutoSize = true;
+            this.labelUsps.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUsps.Location = new System.Drawing.Point(12, 9);
+            this.labelUsps.Name = "labelUsps";
+            this.labelUsps.Size = new System.Drawing.Size(50, 13);
+            this.labelUsps.TabIndex = 27;
+            this.labelUsps.Text = "USPS";
             // 
             // cancel
             // 
@@ -191,7 +191,7 @@
             this.accountInfoControl.Size = new System.Drawing.Size(348, 144);
             this.accountInfoControl.TabIndex = 47;
             // 
-            // StampsAccountEditorDlg
+            // UspsAccountEditorDlg
             // 
             this.AcceptButton = this.ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -200,12 +200,12 @@
             this.ClientSize = new System.Drawing.Size(385, 672);
             this.Controls.Add(this.accountPanel);
             this.Controls.Add(this.accountInfoControl);
-            this.Controls.Add(this.labelStamps);
+            this.Controls.Add(this.labelUsps);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "UspsAccountEditorDlg";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Stamps Account";
+            this.Text = "Usps Account";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.Load += new System.EventHandler(this.OnLoad);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -227,7 +227,7 @@
         private System.Windows.Forms.Label labelPassword;
         private System.Windows.Forms.Label labelNote;
         private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.Label labelStamps;
+        private System.Windows.Forms.Label labelUsps;
         private System.Windows.Forms.Button cancel;
         private System.Windows.Forms.Button ok;
         private Data.Controls.PersonControl personControl;

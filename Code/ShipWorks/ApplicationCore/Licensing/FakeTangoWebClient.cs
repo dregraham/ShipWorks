@@ -8,8 +8,6 @@ using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Stores;
 
@@ -50,7 +48,7 @@ namespace ShipWorks.ApplicationCore.Licensing
 
             // Add one option to the third nudge in the list
             nudges[2].AddNudgeOption(new NudgeOption(4, 0, "Close", nudges[1], NudgeOptionActionType.None));
-            nudges[2].AddNudgeOption(new NudgeOption(5, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterStampsAccount));
+            nudges[2].AddNudgeOption(new NudgeOption(5, 1, "Register Stamps Account", nudges[1], NudgeOptionActionType.RegisterUspsAccount));
 
             nudges[3].AddNudgeOption(new NudgeOption(4, 0, "OK", nudges[3], NudgeOptionActionType.None));
             nudges[4].AddNudgeOption(new NudgeOption(5, 1, "OK", nudges[4], NudgeOptionActionType.None));

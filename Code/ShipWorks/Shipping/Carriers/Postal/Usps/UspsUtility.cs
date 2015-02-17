@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Editing;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Utility functions for working with Stamps.com
+    /// Utility functions for working with USPS
     /// </summary>
     public static class UspsUtility
     {
@@ -40,16 +40,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalPackagingType.RateRegionalBoxC: return PackageTypeV6.RegionalRateBoxC;
 
                 default:
-                    throw new InvalidOperationException(string.Format("Invalid Stamps.com packaging type {0}", packagingType));
+                    throw new InvalidOperationException(string.Format("Invalid USPS packaging type {0}", packagingType));
             }
         }
 
         /// <summary>
-        /// Get our internal service type that represents the given Stamps.com API service type
+        /// Get our internal service type that represents the given USPS API service type
         /// </summary>
-        public static PostalServiceType GetPostalServiceType(ServiceType stampsServiceType)
+        public static PostalServiceType GetPostalServiceType(ServiceType uspsServiceType)
         {
-            switch (stampsServiceType)
+            switch (uspsServiceType)
             {
                 case ServiceType.USFC: return PostalServiceType.FirstClass;
                 case ServiceType.USPM: return PostalServiceType.PriorityMail;
@@ -64,7 +64,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case ServiceType.USCM: return PostalServiceType.CriticalMail;
 
                 default:
-                    throw new InvalidOperationException(string.Format("Invalid Stamps.com service type {0}", stampsServiceType));
+                    throw new InvalidOperationException(string.Format("Invalid USPS service type {0}", uspsServiceType));
             }
         }
 
@@ -89,12 +89,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
 
                 default:
-                    throw new ShippingException(string.Format("Stamps.com does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
+                    throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
             }
         }
 
         /// <summary>
-        /// Get the Stamps.com ContentType api value from our own internal content type enum
+        /// Get the USPS ContentType api value from our own internal content type enum
         /// </summary>
         public static ContentTypeV2 GetApiContentType(PostalCustomsContentType contentType)
         {

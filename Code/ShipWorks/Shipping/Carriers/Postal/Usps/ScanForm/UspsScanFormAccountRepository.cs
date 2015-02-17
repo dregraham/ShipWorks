@@ -6,7 +6,7 @@ using ShipWorks.Shipping.ScanForms;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
-    /// A USPS (Stamps.com Expedited) implementation of the IScanFormAccountRepository interface.
+    /// A USPS implementation of the IScanFormAccountRepository interface.
     /// </summary>
     public class UspsScanFormAccountRepository : IScanFormAccountRepository
     {

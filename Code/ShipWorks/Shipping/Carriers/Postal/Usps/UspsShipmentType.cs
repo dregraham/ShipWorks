@@ -33,9 +33,7 @@ using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A shipment type for the generic USPS shipment type in ShipWorks. This is actually a
-    /// Stamps.com Expedited shipment type (which is why it derives from the StampsShipmentType)
-    /// that gets presented as USPS to the end user.
+    /// A shipment type for the USPS shipment type in ShipWorks. 
     /// </summary>
     public class UspsShipmentType : PostalShipmentType
     {
@@ -97,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Stamps.com supports getting postal service rates
+        /// USPS supports getting postal service rates
         /// </summary>
         public override bool SupportsGetRates
         {
@@ -128,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Creates the web client to use to contact the underlying carrier API.
         /// </summary>
-        /// <returns>An instance of IStampsWebClient. </returns>
+        /// <returns>An instance of IUspsWebClient. </returns>
         public virtual IUspsWebClient CreateWebClient()
         {
             // This needs to be created each time rather than just being an instance property, 
@@ -138,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create the settings control for Stamps.com
+        /// Create the settings control for USPS
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
@@ -156,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create the Form used to do the setup for the Stamps.com API
+        /// Create the Form used to do the setup for the USPS API
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
@@ -167,7 +165,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
+        /// Create the UserControl used to handle USPS profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
@@ -185,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return true;
             }
 
-            // The Stamps or Postal objects may not yet be set if we are in the middle of creating a new shipment
+            // The USPS or Postal objects may not yet be set if we are in the middle of creating a new shipment
             if (originID == (int)ShipmentOriginSource.Account && shipment.Postal != null && shipment.Postal.Usps != null)
             {
                 UspsAccountEntity account = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
@@ -258,10 +256,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private RateGroup GetRatesForSpecifiedAccount(ShipmentEntity shipment)
         {
-            List<RateResult> stampsRates = CreateWebClient().GetRates(shipment);
-            stampsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
+            List<RateResult> uspsRates = CreateWebClient().GetRates(shipment);
+            uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
 
-            RateGroup rateGroup = new RateGroup(stampsRates);
+            RateGroup rateGroup = new RateGroup(uspsRates);
             AddUspsRatePromotionFootnote(shipment, rateGroup);
             return rateGroup;
         }
@@ -383,8 +381,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccountContractType contractType = (UspsAccountContractType)AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID).ContractType;
             UspsAccountEntity uspsAccount = AccountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
 
-            // We may not want to show the conversion promotion for multi-user Stamps.com accounts due 
-            // to a limitation on Stamps' side. (Tango will send these to ShipWorks via data contained
+            // We may not want to show the conversion promotion for multi-user USPS accounts due 
+            // to a limitation on USPS' side. (Tango will send these to ShipWorks via data contained
             // in ShipmentTypeFunctionality
             bool accountConversionRestricted = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.ShippingAccountConversion, ShipmentTypeCode).Level == EditionRestrictionLevel.Forbidden;
             TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
@@ -421,7 +419,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </returns>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
-            // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
+            // We want to perform the processing of the base ShipmentType and not that of the USPS shipment type
             IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
             ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
 
@@ -599,7 +597,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            // We can be called during the creation of the base Postal shipment, before the Stamps one exists
+            // We can be called during the creation of the base Postal shipment, before the USPS one exists
             if (shipment.Postal.Usps != null)
             {
                 // Use the empty guids for now - they'll get set properly during processing
@@ -609,7 +607,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 shipment.Postal.Usps.RateShop = false;
             }
 
-            // We need to call the base after setting up the Stamps.com specific information because LLBLgen was
+            // We need to call the base after setting up the USPS specific information because LLBLgen was
             // sometimes not including the above values when we first save the shipment deep in the customs loader
             base.ConfigureNewShipment(shipment);
         }
@@ -624,11 +622,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the USPS (Stamps.com Expedited) 
-        /// shipment type based on the shipment configuration.
+        /// Gets an instance to the best rate shipping broker for the USPS         /// shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <returns>An instance of a StampsBestRateBroker.</returns>
+        /// <returns>An instance of a UspsBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
             if (AccountRepository.Accounts.Any())
@@ -638,7 +635,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             
             // No accounts, so use the counter rates broker to allow the user to
-            // sign up for the account. We can use the StampsCounterRateAccountRepository 
+            // sign up for the account. We can use the UspsCounterRateAccountRepository 
             // here because the underlying accounts being used are the same.
             return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
         }
@@ -687,7 +684,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             base.ApplyProfile(shipment, profile);
 
-            // We can be called during the creation of the base Postal shipment, before the Stamps one exists
+            // We can be called during the creation of the base Postal shipment, before the USPS one exists
             if (shipment.Postal.Usps != null)
             {
                 UspsShipmentEntity uspsShipment = shipment.Postal.Usps;
@@ -804,7 +801,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Uses the Stamps.com API to update the contract type of the account if it is unkown.
+        /// Uses the USPS API to update the contract type of the account if it is unkown.
         /// </summary>
         /// <param name="account">The account.</param>
         public virtual void UpdateContractType(UspsAccountEntity account)
@@ -818,7 +815,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     try
                     {
-                        // Grab contract type from the Stamps API 
+                        // Grab contract type from the USPS API 
                         IUspsWebClient webClient = CreateWebClient();
                         UspsAccountContractType contractType = webClient.GetContractType(account);
 

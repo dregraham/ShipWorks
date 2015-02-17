@@ -28,14 +28,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Checks the necessary code is information place.
         /// This method will check that code for shipworks is in place. For instance, RewriteScanFromMessage is a required
-        /// attribute on ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CreateScanForm but is generated code
+        /// attribute on ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CreateScanForm but is generated code
         /// and might get lost, hence the check.
         /// </summary>
         [Conditional("DEBUG")]
         public static void CheckNecessaryCodeIsInPlace()
         {
-            Type stampsWebServiceType = typeof(SwsimV29);
-            MethodInfo createScanFormMethod = stampsWebServiceType.GetMethod("CreateScanForm");
+            Type uspsWebServiceType = typeof(SwsimV29);
+            MethodInfo createScanFormMethod = uspsWebServiceType.GetMethod("CreateScanForm");
 
             Type attributeType = typeof(RewriteScanFormMessageAttribute);
 

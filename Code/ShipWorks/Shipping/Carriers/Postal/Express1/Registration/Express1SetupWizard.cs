@@ -8,9 +8,7 @@ using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.WizardPages;
@@ -36,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
-        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Stamps), the caller needs to provide
+        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
         public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, IEnumerable<IEntity2> existingExpress1Accounts) : 
@@ -45,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Express1SetupWizard"/> class. Since this wizard is intended to be
-        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Stamps), the caller needs to provide
+        /// used regardless of the carrier that Express1 partners with (e.g. Endicia or Usps), the caller needs to provide
         /// the appropriate controls and postage dialog that are specific to the Express1 partner.
         /// </summary>
         public Express1SetupWizard(IExpress1PurchasePostageDlg postageDialog, PostalAccountManagerControlBase accountControl, PostalOptionsControlBase optionsControl, Express1Registration registration, bool forceAccountOnly, IEnumerable<IEntity2> existingExpress1Accounts)
@@ -164,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                     Pages.Remove(wizardPageOptions);
                 }
 
-                // In the case of adding Express1 accounts to use for Stamps, we really want to super-simplify the setup.  Thats how this would get set.
+                // In the case of adding Express1 accounts to use for Usps, we really want to super-simplify the setup.  Thats how this would get set.
                 if (hideDetailedConfiguration)
                 {
                     Pages.Remove(wizardPageOptions);
@@ -398,11 +396,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                     MessageHelper.ShowError(this, "An account needs to be created before trying to buy postage.");
                 }
             }
-            catch (UspsException stampsException)
+            catch (UspsException uspsException)
             {
                 // This could be refactored to catch a more general type of "purchase postage" exception
                 // when Endicia is incorporated into this setup wizard
-                MessageHelper.ShowError(this, stampsException.Message);
+                MessageHelper.ShowError(this, uspsException.Message);
             }
         }
 

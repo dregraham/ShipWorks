@@ -59,7 +59,7 @@
             this.labelExpeditedAccount.Name = "labelExpeditedAccount";
             this.labelExpeditedAccount.Size = new System.Drawing.Size(110, 13);
             this.labelExpeditedAccount.TabIndex = 1;
-            this.labelExpeditedAccount.Text = "Stamps.com account:";
+            this.labelExpeditedAccount.Text = "USPS account:";
             // 
             // expeditedAccounts
             // 

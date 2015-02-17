@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Usps || shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {
-                return new StampsUspsAutomaticDiscountControlAdapter(settings);
+                return new UspsAutomaticDiscountControlAdapter(settings);
             }
 
             throw new InvalidOperationException(string.Format("An unexpected shipment type was provided: {0}.", shipmentEntity.ShipmentType));

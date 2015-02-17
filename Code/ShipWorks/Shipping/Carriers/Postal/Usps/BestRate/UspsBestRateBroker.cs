@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Insurance;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
 {
     /// <summary>
-    /// Best rate broker for Stamps accounts
+    /// Best rate broker for USPS accounts
     /// </summary>
     public class UspsBestRateBroker : PostalResellerBestRateBroker<UspsAccountEntity>
     {

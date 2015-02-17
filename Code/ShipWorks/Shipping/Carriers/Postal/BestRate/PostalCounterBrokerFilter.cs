@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             List<IBestRateShippingBroker> filteredBrokers = brokers.ToList();
 
-            // Get the first Stamps broker, or if none exist, the first Stamps.com based broker
+            // Get the first Usps broker
             WebToolsCounterRatesBroker webToolsBroker = filteredBrokers.OfType<UspsCounterRatesBroker>().FirstOrDefault();
 
             return filteredBrokers.Where(x => !(x is WebToolsCounterRatesBroker) || x == webToolsBroker).ToList();

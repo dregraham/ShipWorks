@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// An interface for validating a stamps.com registration.
+    /// An interface for validating a USPS registration.
     /// </summary>
     public interface IUspsRegistrationValidator
     {

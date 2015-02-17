@@ -11,7 +11,7 @@ using ShipWorks.Shipping.ScanForms;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 {
     /// <summary>
-    /// An implementation of the IScanFormGateway interface that communicates with the Stamps.com API
+    /// An implementation of the IScanFormGateway interface that communicates with the USPS API
     /// for creating/obtaining SCAN forms.
     /// </summary>
     public class UspsScanFormGateway : IScanFormGateway
@@ -25,8 +25,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// </summary>
         public UspsScanFormGateway(IUspsWebClient webClient)
         {
-            invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
-            invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";
+            invalidCarrierMessage = "An attempt to create a USPS SCAN form was made for a carrier other than USPS.";
+            invalidShipmentMessage = "Cannot create a USPS SCAN form for a shipment that was not shipped with USPS.";
             this.webClient = webClient;
         }
 
@@ -67,15 +67,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                 throw new UspsException("There must be at least one shipment to create a SCAN form.");
             }
 
-            // Grab all the stamps-specific shipments (this should be all of the shipments)
-            IEnumerable<UspsShipmentEntity> stampsShipments = shipments.Select(s => s.Postal.Usps).Where(s => s != null);
-            if (stampsShipments.Count() != shipments.Count())
+            // Grab all the USPS-specific shipments (this should be all of the shipments)
+            IEnumerable<UspsShipmentEntity> uspsShipments = shipments.Select(s => s.Postal.Usps).Where(s => s != null);
+            if (uspsShipments.Count() != shipments.Count())
             {
                 throw new UspsException(invalidShipmentMessage);
             }
 
-            // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = webClient.CreateScanForm(stampsShipments, accountEntity);
+            // We have our list of USPS shipments, so call the API to create the SCAN form
+            XDocument xDocument = webClient.CreateScanForm(uspsShipments, accountEntity);
 
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
 
             for (int i = 0; i < xDocument.Descendants("TransactionId").Count(); i++)
             {
-                // Populate the stamps scan form entity based on the response from the API
+                // Populate the USPS scan form entity based on the response from the API
                 UspsScanFormEntity scanEntity = new UspsScanFormEntity();
                 scanEntity.UspsAccountID = accountEntity.UspsAccountID;
                 scanEntity.CreatedDate = DateTime.UtcNow;
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
             }
             catch (Exception ex)
             {
-                throw new UspsException("ShipWorks was unable to download the SCAN form from Stamps.com", ex);
+                throw new UspsException("ShipWorks was unable to download the SCAN form from USPS", ex);
             }
         }
     }

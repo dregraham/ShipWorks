@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// <returns>A string describing the account</returns>
         public string GetDescription()
         {
-            // The stamps account doesn't have a description field, so we'll just build it here
+            // The USPS account doesn't have a description field, so we'll just build it here
             return string.Format("{0} - {1}", 
                 EnumHelper.GetDescription(ShipmentTypeCode),
                 accountEntity.Description);

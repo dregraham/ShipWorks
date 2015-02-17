@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Called when the shipping settings for using Stamps Expedited has changed. We need to refresh the
+        /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data displayed to accurately reflect the new shimpent type (USPS).
         /// </summary>
         /// <param name="sender">The sender.</param>

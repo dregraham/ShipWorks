@@ -4,13 +4,12 @@ using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Window for updating the password of a stamps.com account
+    /// Window for updating the password of a USPS account
     /// </summary>
     public partial class UspsAccountUpdatePasswordDlg : Form
     {

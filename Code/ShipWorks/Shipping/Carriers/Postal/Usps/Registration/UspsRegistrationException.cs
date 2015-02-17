@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// An exception that occus during registering an account with Stamps.com
+    /// An exception that occus during registering an account with USPS 
     /// </summary>
     public class UspsRegistrationException : UspsException
     {

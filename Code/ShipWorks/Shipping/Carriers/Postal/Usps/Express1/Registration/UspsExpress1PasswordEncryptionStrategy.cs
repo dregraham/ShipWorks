@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
     /// An implementation of the IExpress1PasswordEncryptionStrategy interface that is specific to the 
-    /// registration of an Express1 for Stamps.com account.
+    /// registration of an Express1 for USPS account.
     /// </summary>
     public class UspsExpress1PasswordEncryptionStrategy : IExpress1PasswordEncryptionStrategy
     {

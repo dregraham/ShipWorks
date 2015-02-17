@@ -4,7 +4,6 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -26,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Adjust the note text based on the carrier/reseller
             string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
-            labelStamps.Text = carrierName;
+            labelUsps.Text = carrierName;
             labelNote.Text = string.Format("Any changes made to the address are only for ShipWorks. Your address information with {0} is not updated.", carrierName);
             
             base.Text = string.Format("{0} Account", carrierName);
@@ -51,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             if (account.CountryCode == string.Empty)
             {
                 // Default the country code to US for any accounts that were created
-                // prior to ShipWorks collecting person data for a stamps account
+                // prior to ShipWorks collecting person data for a USPS account
                 account.CountryCode = "US";
             }
 

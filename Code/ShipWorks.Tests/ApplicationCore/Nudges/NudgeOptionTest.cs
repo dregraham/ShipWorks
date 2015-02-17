@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         [TestMethod]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsRegisterStampsAccount_Test()
         {
-            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.RegisterStampsAccount);
+            testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.RegisterUspsAccount);
 
             NudgeOptionButton button = testObject.CreateButton();
 

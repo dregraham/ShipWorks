@@ -4,17 +4,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api
     public static class CountryCodeCleanser
     {
         /// <summary>
-        /// Cleanse the country code for the Stamps.com API
+        /// Cleanse the country code for the USPS API
         /// </summary>
         public static string CleanseCountryCode(string code)
         {
-            // Stamps.com does not like UK.. only GB
+            // USPS does not like UK.. only GB
             if (code == "UK")
             {
                 code = "GB";
             }
 
-            // Puerto Rico is treated as the United States by Stamps
+            // Puerto Rico is treated as the United States by USPS
             if (code == "PR" || code == "VI")
             {
                 return "US";

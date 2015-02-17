@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             var xmlReader = XmlReader.Create(oldStream);
             XDocument doc = XDocument.Load(xmlReader);
 
-            // Replace the elements that are different between Express1 and Stamps
+            // Replace the elements that are different between Express1 and USPS
             ReplaceArrayWithString(doc, "ScanFormIds", "ScanFormId");
             ReplaceArrayWithString(doc, "Urls", "Url");
 

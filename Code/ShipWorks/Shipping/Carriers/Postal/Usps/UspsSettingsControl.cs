@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// User control for Stamps.com settings
+    /// User control for USPS settings
     /// </summary>
     public partial class UspsSettingsControl : SettingsControlBase
     {
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
         readonly ShipmentTypeCode shipmentTypeCode;
-        readonly UspsResellerType stampsResellerType;
+        readonly UspsResellerType uspsResellerType;
 
         /// <summary>
         /// Constructor
@@ -27,10 +25,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             this.shipmentTypeCode = shipmentTypeCode;
 
-            stampsResellerType = PostalUtility.GetStampsResellerType(shipmentTypeCode);
+            uspsResellerType = PostalUtility.GetUspsResellerType(shipmentTypeCode);
 
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
-            accountControl.StampsResellerType = stampsResellerType;
+            accountControl.UspsResellerType = uspsResellerType;
 
             VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
         }
@@ -63,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             optionsControl.LoadSettings();
 
-            string reseller = UspsAccountManager.GetResellerName(stampsResellerType);
+            string reseller = UspsAccountManager.GetResellerName(uspsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
         }
 
@@ -141,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             base.RefreshContent();
 
             // We do it this way b\c it takes so long.  If we did it in LoadSettings, or each time refresh was called,
-            // we'd be constantly waiting on stamps.com.
+            // we'd be constantly waiting on USPS.
             if (!loadedAccounts)
             {
                 accountControl.Initialize();

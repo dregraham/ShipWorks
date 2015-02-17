@@ -5,9 +5,9 @@ using System.Runtime.Caching;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Contracts
 {
     /// <summary>
-    /// An in-memory cache for the contract types associated with a Stamps.com account. This is intended
-    /// to be used in a manner that reduces the number of calls to the Stamps.com API while also keeping
-    /// the contract type of the stamps account up to date in ShipWorks.
+    /// An in-memory cache for the contract types associated with a USPS account. This is intended
+    /// to be used in a manner that reduces the number of calls to the USPS API while also keeping
+    /// the contract type of the USPS account up to date in ShipWorks.
     /// </summary>
     public static class UspsContractTypeCache
     {
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Contracts
         /// Gets the type of the contract.
         /// </summary>
         /// <param name="accountId">The account identifier.</param>
-        /// <returns>The StampsAccountContractType associated with the given account ID; null is returned if the item is not in the cache.</returns>
+        /// <returns>The UspsAccountContractType associated with the given account ID; null is returned if the item is not in the cache.</returns>
         public static UspsAccountContractType GetContractType(long accountId)
         {
             lock (syncLock)

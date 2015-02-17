@@ -7,7 +7,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Stores;
@@ -217,7 +216,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             foreach (LicenseAccountDetail license in licensesForLogging)
             {
                 TangoWebClient.LogStampsAccount(license,
-                                                PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode,
+                                                PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode,
                                                 account.Username,
                                                 (UspsAccountContractType)account.ContractType);
             }

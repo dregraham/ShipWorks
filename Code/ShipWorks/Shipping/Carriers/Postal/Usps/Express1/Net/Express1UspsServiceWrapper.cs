@@ -9,7 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
-    /// Custome web service proxy that enables ShipWorks to use Express1's web service via the Stamps API 
+    /// Custome web service proxy that enables ShipWorks to use Express1's web service via the USPS API 
     /// classes.
     /// </summary>
     public class Express1UspsServiceWrapper : SwsimV29    
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
         // the namespaces being swapped
         string expressNamespace = "http://www.express1.com/2011/08/ISDCV29Service";
-        string stampsNamespace = "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29";
+        string uspsNamespace = "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29";
 
         WebRequest webRequest = null;
 
@@ -41,9 +41,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             string newAction = message.Action;
 
             // Change the Outgoing message
-            if (newAction.Contains(stampsNamespace))
+            if (newAction.Contains(uspsNamespace))
             {
-                newAction = expressNamespace + message.Action.Remove(0, stampsNamespace.Length);
+                newAction = expressNamespace + message.Action.Remove(0, uspsNamespace.Length);
             }
 
             // see if the action on the message needs to be changed

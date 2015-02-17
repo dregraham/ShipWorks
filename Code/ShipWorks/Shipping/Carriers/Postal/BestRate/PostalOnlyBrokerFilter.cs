@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
     /// <summary>
-    /// Filters for only Stamps.com rates.
+    /// Filters for only Usps rates.
     /// </summary>
     internal class PostalOnlyBrokerFilter : IShippingBrokerFilter
     {

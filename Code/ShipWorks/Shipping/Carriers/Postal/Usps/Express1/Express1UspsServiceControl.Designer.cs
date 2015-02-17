@@ -36,7 +36,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.uspsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.labelStampsValidation = new System.Windows.Forms.Label();
+            this.labelUspsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelMemo = new System.Windows.Forms.Label();
@@ -71,7 +71,7 @@
             // 
             // sectionRecipient.ContentPanel
             // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelStampsValidation);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
@@ -157,7 +157,7 @@
             this.panelTop.Size = new System.Drawing.Size(371, 50);
             this.panelTop.TabIndex = 5;
             // 
-            // linkManageStampsAccounts
+            // linkManageUspsAccounts
             // 
             this.linkManageUspsAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.linkManageUspsAccounts.AutoSize = true;
@@ -189,7 +189,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(77, 13);
             this.label1.TabIndex = 2;
-            this.label1.Text = "Stamps.com";
+            this.label1.Text = "USPS";
             // 
             // uspsAccount
             // 
@@ -204,16 +204,16 @@
             this.uspsAccount.TabIndex = 3;
             this.uspsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
-            // labelStampsValidation
+            // labelUspsValidation
             // 
-            this.labelStampsValidation.AutoSize = true;
-            this.labelStampsValidation.BackColor = System.Drawing.Color.Transparent;
-            this.labelStampsValidation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStampsValidation.Location = new System.Drawing.Point(7, 336);
-            this.labelStampsValidation.Name = "labelStampsValidation";
-            this.labelStampsValidation.Size = new System.Drawing.Size(136, 13);
-            this.labelStampsValidation.TabIndex = 72;
-            this.labelStampsValidation.Text = "Stamps.com Validation";
+            this.labelUspsValidation.AutoSize = true;
+            this.labelUspsValidation.BackColor = System.Drawing.Color.Transparent;
+            this.labelUspsValidation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUspsValidation.Location = new System.Drawing.Point(7, 336);
+            this.labelUspsValidation.Name = "labelUspsValidation";
+            this.labelUspsValidation.Size = new System.Drawing.Size(136, 13);
+            this.labelUspsValidation.TabIndex = 72;
+            this.labelUspsValidation.Text = "USPS Validation";
             // 
             // requireFullAddressValidation
             // 
@@ -245,7 +245,7 @@
             this.labelMemo.Text = "Memo:";
             this.labelMemo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // StampsServiceControl
+            // Express1UspsServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -290,7 +290,7 @@
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label label2;
         private ShipWorks.UI.Controls.LinkControl linkManageUspsAccounts;
-        private System.Windows.Forms.Label labelStampsValidation;
+        private System.Windows.Forms.Label labelUspsValidation;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
         private Templates.Tokens.TemplateTokenTextBox memo;
         private System.Windows.Forms.Label labelMemo;

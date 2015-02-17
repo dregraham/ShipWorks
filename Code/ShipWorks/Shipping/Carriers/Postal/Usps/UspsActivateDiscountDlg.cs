@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Defaults;
@@ -12,7 +11,7 @@ using ShipWorks.Shipping.Settings.Defaults;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A dialog for activating the USPS (Stamps.com Expedited) shipment type and creating 
+    /// A dialog for activating the USPS shipment type and creating 
     /// a new account or converting an existing account.
     /// </summary>
     public partial class UspsActivateDiscountDlg : Form
@@ -53,7 +52,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any())
             {
-                // There are Stamps-backed accounts, so we want to show the control to convert their existing account
+                // There are USPS-backed accounts, so we want to show the control to convert their existing account
                 requiresSignup = false;
                 signUpForExpeditedControl.Visible = false;
                 convertToExpeditedControl.Visible = true;
@@ -72,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 // Prompt the user to sign up/choose an existing account if there aren't any 
-                // Stamps.com accounts or they are the shipment type isn't Stamps.com
+                // USPS accounts or they are the shipment type isn't Stamps.com
                 requiresSignup = true;
                 signUpForExpeditedControl.Visible = true;
                 convertToExpeditedControl.Visible = false;
@@ -130,20 +129,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 ShippingManager.RefreshShipment(shipment);
 
-                // Only way we should require a signup is not already using a Stamps.com account for 
-                // this shipment, so we need to change the shipment type to USPS (Stamps.com Expedited) 
-                // in order to take advantage of the new rates (since Stamps.com API doesn't match 
+                // Only way we should require a signup is not already using a USPS account for 
+                // this shipment, so we need to change the shipment type to USPS
+                // in order to take advantage of the new rates (since USPS API doesn't match 
                 // with Endicia API and shipment configurations differ).
                 shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
                 ShippingManager.SaveShipment(shipment);
 
                 // Now that the shipment has been updated, we need to broadcast that the shipping 
                 // settings have been changed, so any listeners have a chance to react
-                ShippingSettingsEventDispatcher.DispatchStampsUspsAutomaticExpeditedChanged(this, new ShippingSettingsEventArgs((ShipmentTypeCode)shipment.ShipmentType));
+                ShippingSettingsEventDispatcher.DispatchUspsAutomaticExpeditedChanged(this, new ShippingSettingsEventArgs((ShipmentTypeCode)shipment.ShipmentType));
             
 
                 // We also need to exclude Endicia and Express1 from the list of active providers since
-                // the customer agreed to use USPS (Stamps.com Expedited)
+                // the customer agreed to use USPS 
                 ExcludeShipmentType(ShipmentTypeCode.Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Usps);
@@ -155,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 
                 ShippingSettings.Save(settings);
 
-                // Need to update any rules to swap out Endicia and Express1 with USPS (Stamps.com Expedited)
+                // Need to update any rules to swap out Endicia and Express1 with USPS 
                 // now that those types are not longer active
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
@@ -184,9 +183,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Uses the USPS (Stamps.com Expedited) as the shipping provider for any rules using the given shipment type code.
+        /// Uses the USPS as the shipping provider for any rules using the given shipment type code.
         /// </summary>
-        /// <param name="shipmentTypeCode">The shipment type code to be replaced with USPS (Stamps.com Expedited) .</param>
+        /// <param name="shipmentTypeCode">The shipment type code to be replaced with USPS.</param>
         private void UseUspsInDefaultShippingRulesFor(ShipmentTypeCode shipmentTypeCode)
         {
             List<ShippingDefaultsRuleEntity> rules = ShippingDefaultsRuleManager.GetRules(shipmentTypeCode);

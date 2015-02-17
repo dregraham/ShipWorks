@@ -8,7 +8,7 @@ using ShipWorks.UI;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
-    /// Represents a Stamps.com standard label and encapsulates the logic for cropping
+    /// Represents a USPS standard label and encapsulates the logic for cropping
     /// and persisting the label to the data source.
     /// </summary>
     public class StandardLabel : Label

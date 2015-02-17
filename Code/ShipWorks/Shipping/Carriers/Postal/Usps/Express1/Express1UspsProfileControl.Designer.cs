@@ -218,7 +218,7 @@
             this.requireFullAddressValidation.Name = "requireFullAddressValidation";
             this.requireFullAddressValidation.Size = new System.Drawing.Size(231, 17);
             this.requireFullAddressValidation.TabIndex = 17;
-            this.requireFullAddressValidation.Text = "Require full Stamps.com address validation";
+            this.requireFullAddressValidation.Text = "Require full USPS address validation";
             this.requireFullAddressValidation.UseVisualStyleBackColor = true;
             // 
             // kryptonBorderEdge31

@@ -8,7 +8,7 @@ using System.Text;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Enum for Stamps resellers 
+    /// Enum for USPS resellers 
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
     public enum UspsResellerType

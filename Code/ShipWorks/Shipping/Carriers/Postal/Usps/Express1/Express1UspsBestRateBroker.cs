@@ -1,16 +1,13 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// Best rate broker for Express1 Stamps accounts
+    /// Best rate broker for Express1 USPS accounts
     /// </summary>
     public class Express1UspsBestRateBroker : UspsBestRateBroker
     {
@@ -37,8 +34,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> exceptionHandler)
         {
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
-            
-            // Set the shipment type to be express1 for stamps
+
+            // Set the shipment type to be express1 for USPS
             rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Usps);
 
             return rateGroup;

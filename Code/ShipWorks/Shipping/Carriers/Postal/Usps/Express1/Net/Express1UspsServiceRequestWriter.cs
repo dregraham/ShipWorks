@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
-    /// Decorating XmlWriter to allow ShipWorks to communicate transparently with Stamps and Express1
+    /// Decorating XmlWriter to allow ShipWorks to communicate transparently with USPS and Express1
     /// </summary>
     public class Express1UspsServiceRequestWriter : XmlWriter
     {
@@ -39,37 +39,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Translates a Stamps namespace to Express1.
+        /// Translates a Usps namespace to Express1.
         /// </summary>
-        private static string GetExpress1Namespace(string stampsNamespace)
+        private static string GetExpress1Namespace(string uspsNamespace)
         {
-            if(stampsNamespace == null)
+            if(uspsNamespace == null)
                 return null;
 
             string express1Namespace;
-            if(express1NamespaceMap.TryGetValue(stampsNamespace, out express1Namespace))
+            if(express1NamespaceMap.TryGetValue(uspsNamespace, out express1Namespace))
                 return express1Namespace;
 
-            return stampsNamespace;
+            return uspsNamespace;
         }
 
         /// <summary>
-        /// Translates a Stamps namespace to Express1.
+        /// Translates a USPS namespace to Express1.
         /// </summary>
-        private static string GetExpress1LocalName(string stampsLocalName)
+        private static string GetExpress1LocalName(string uspssLocalName)
         {
-            if(stampsLocalName == null)
+            if(uspssLocalName == null)
                 return null;
 
             string express1LocalName;
-            if(express1LocalNameMap.TryGetValue(stampsLocalName, out express1LocalName))
-                return express1LocalName;
 
-            return stampsLocalName;
+            return express1LocalNameMap.TryGetValue(uspssLocalName, out express1LocalName) ?
+                express1LocalName : 
+                uspssLocalName;
         }
 
         /// <summary>
-        /// Translates a Stamps namespace to Express1.
+        /// Translates a USPS namespace to Express1.
         /// </summary>
         private static XAttribute GetExpress1ExtraAttribute(string express1LocalName)
         {
@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Writes an attribute under a namespace, but translate from Stamps to Express1.
+        /// Writes an attribute under a namespace, but translate from USPS to Express1.
         /// </summary>
         public override void WriteStartAttribute(string prefix, string localName, string ns)
         {
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Writes a qualified name under a namespace, but translates from Stamps to Express1.
+        /// Writes a qualified name under a namespace, but translates from USPS to Express1.
         /// </summary>
         public override void WriteQualifiedName(string localName, string ns)
         {
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Writes an element under a namespace, but translate from Stamps to Express1.
+        /// Writes an element under a namespace, but translate from USPS to Express1.
         /// </summary>
         public override void WriteStartElement(string prefix, string localName, string ns)
         {
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Looks up the namespace prefix for a translated Stamps to Express1 namespace.
+        /// Looks up the namespace prefix for a translated USPS to Express1 namespace.
         /// </summary>
         public override string LookupPrefix(string ns)
         {

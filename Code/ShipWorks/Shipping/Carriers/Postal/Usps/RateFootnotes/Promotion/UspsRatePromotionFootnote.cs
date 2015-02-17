@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Editing.Rating;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
 {
     /// <summary>
-    /// A RateFootnoteControl for promoting the USPS (Stamps.com Expedited) shipping provider.
+    /// A RateFootnoteControl for promoting the USPS shipping provider.
     /// </summary>
     public partial class UspsRatePromotionFootnote : RateFootnoteControl
     {
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         public bool ShowSingleAccountDialog { get; private set; }
 
         /// <summary>
-        /// Link to activate the USPS (Stamps.com Expedited) discount
+        /// Link to activate the USPS discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {

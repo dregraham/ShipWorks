@@ -1,17 +1,15 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// An interface for registering an account with Stamps.com.
+    /// An interface for registering an account with USPS.
     /// </summary>
     public interface IUspsRegistrationGateway
     {
         /// <summary>
-        /// Registers an account with Stamps.com.
+        /// Registers an account with USPS.
         /// </summary>
         /// <param name="registration">The registration.</param>
-        /// <returns>A StampsRegistrationResult object.</returns>
+        /// <returns>A UspsRegistrationResult object.</returns>
         UspsRegistrationResult Register(UspsRegistration registration);
     }
 }
