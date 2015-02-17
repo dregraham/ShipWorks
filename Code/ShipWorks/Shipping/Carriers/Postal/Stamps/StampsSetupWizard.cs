@@ -172,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="e"></param>
         private void OnLinkStampsSpecialOffer(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.stamps.com/img/offer/Pro1599_GoldShipper_50offscale_50offprinter_0pwk_1/webreg2-learn-more.html", this);
+            WebHelper.OpenUrl("http://www.stamps.com/offerdetails/622/", this);
         }
 
         /// <summary>
