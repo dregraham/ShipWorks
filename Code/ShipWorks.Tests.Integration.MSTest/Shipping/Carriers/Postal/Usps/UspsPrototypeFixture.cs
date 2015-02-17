@@ -65,25 +65,25 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
         }
 
-        public List<RateResult> GetRates(UspsResellerType stampsResellerType)
+        public List<RateResult> GetRates(UspsResellerType resellerType)
         {
             ShipmentEntity shipment = CreateShipment();
 
-            IUspsWebClient webClient = GetWebClient(stampsResellerType);
+            IUspsWebClient webClient = GetWebClient(resellerType);
             return webClient.GetRates(shipment);
         }
 
-        private IUspsWebClient GetWebClient(UspsResellerType stampsResellerType)
+        private IUspsWebClient GetWebClient(UspsResellerType resellerType)
         {
-            switch (stampsResellerType)
+            switch (resellerType)
             {
                 case UspsResellerType.None:
-                    return new UspsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector(), stampsResellerType);
+                    return new UspsWebClient(GetAccountRepository(resellerType), new LogEntryFactory(), new TrustingCertificateInspector(), resellerType);
 
                 case UspsResellerType.Express1:
-                    return new Express1UspsWebClient(GetAccountRepository(stampsResellerType), new LogEntryFactory(), new TrustingCertificateInspector());
+                    return new Express1UspsWebClient(GetAccountRepository(resellerType), new LogEntryFactory(), new TrustingCertificateInspector());
                 default:
-                    throw new ArgumentOutOfRangeException("stampsResellerType");
+                    throw new ArgumentOutOfRangeException("resellerType");
             }
         }
 
@@ -104,16 +104,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             return webClient;
         }
 
-        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(UspsResellerType stampsResellerType)
+        private ICarrierAccountRepository<UspsAccountEntity> GetAccountRepository(UspsResellerType resellerType)
         {
-            switch (stampsResellerType)
+            switch (resellerType)
             {
                 case UspsResellerType.None:
                     return new UspsAccountRepository();
                 case UspsResellerType.Express1:
                     return new Express1UspsAccountRepository();
                 default:
-                    throw new ArgumentOutOfRangeException("stampsResellerType");
+                    throw new ArgumentOutOfRangeException("resellerType");
             }
         }
 
@@ -121,7 +121,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         {
             if (!IsSaveLabel)
             {
-                string certificationDirectory = LogSession.LogFolder + "\\StampsCertification\\";
+                string certificationDirectory = LogSession.LogFolder + "\\UspsCertification\\";
 
                 if (Directory.Exists(certificationDirectory))
                 {

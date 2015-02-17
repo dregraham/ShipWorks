@@ -118,7 +118,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Helper method to create a Stamps.com registration without a username.
         /// </summary>
-        /// <returns>StampsRegistration.</returns>
         private UspsRegistration CreateRegistrationWithoutUsername()
         {
             Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
