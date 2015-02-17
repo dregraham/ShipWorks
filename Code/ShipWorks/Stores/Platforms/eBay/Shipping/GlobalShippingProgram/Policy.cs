@@ -102,10 +102,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 modifiedFieldList.AddRange(ConfigureShippingAddress(shipment, ebayOrder));
                 modifiedFieldList.AddRange(ConfigureContactInfo(shipment));
 
-                if (shipment.Postal != null && shipment.Postal.Stamps != null)
+                if (shipment.Postal != null && shipment.Postal.Usps != null)
                 {
                     // We don't want Stamps to perform address validation on this shipment
-                    shipment.Postal.Stamps.RequireFullAddressValidation = false;                    
+                    shipment.Postal.Usps.RequireFullAddressValidation = false;                    
                 }
 
                 // GSP shipments will always be commercial and we need to set the residential result 

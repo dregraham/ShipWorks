@@ -10,16 +10,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public class UspsPostalRateSelection : PostalRateSelection
     {
-        public UspsPostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType, StampsAccountEntity account)
+        public UspsPostalRateSelection(PostalServiceType serviceType, PostalConfirmationType confirmationType, UspsAccountEntity account)
             : base(serviceType, confirmationType)
         {
-            Accounts = new List<StampsAccountEntity> { account };
+            Accounts = new List<UspsAccountEntity> { account };
         }
 
         /// <summary>
         /// Accounts associated with this rate
         /// </summary>
-        public List<StampsAccountEntity> Accounts { get; private set; }
+        public List<UspsAccountEntity> Accounts { get; private set; }
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>, is equal to this instance.
@@ -30,8 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             return postalRateSelection != null &&
                 postalRateSelection.Accounts.Count == Accounts.Count &&
-                postalRateSelection.Accounts.Select(account => account.StampsAccountID)
-                    .All(x => Accounts.Select(account => account.StampsAccountID).Contains(x)) &&
+                postalRateSelection.Accounts.Select(account => account.UspsAccountID)
+                    .All(x => Accounts.Select(account => account.UspsAccountID).Contains(x)) &&
                 base.Equals(obj);
         }
 

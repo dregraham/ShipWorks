@@ -311,8 +311,8 @@ namespace ShipWorks.Data.Utility
 
                 case EntityFieldLengthSource.PostalCustomsDescription: return PostalShipmentFields.CustomsContentDescription;
 
-                case EntityFieldLengthSource.StampsUsername: return StampsAccountFields.Username;
-                case EntityFieldLengthSource.StampsPassword: return StampsAccountFields.Password;
+                case EntityFieldLengthSource.StampsUsername: return UspsAccountFields.Username;
+                case EntityFieldLengthSource.StampsPassword: return UspsAccountFields.Password;
 
                 case EntityFieldLengthSource.EndiciaAccountDescription: return EndiciaAccountFields.Description;
                 case EntityFieldLengthSource.EndiciaCustomsSigner: return ShippingSettingsFields.EndiciaCustomsSigner;

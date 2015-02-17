@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             string express1TargetedText = string.Empty;
 
-            if (EndiciaAccountManager.Express1Accounts.Any() || StampsAccountManager.Express1Accounts.Any())
+            if (EndiciaAccountManager.Express1Accounts.Any() || UspsAccountManager.Express1Accounts.Any())
             {
                 express1TargetedText = "No more switching between accounts to get the lowest rates!";
             }

@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void LoadExpeditedAccounts(long accountId)
         {
-            List<StampsAccountEntity> accounts = StampsAccountManager.StampsExpeditedAccounts;
+            List<UspsAccountEntity> accounts = UspsAccountManager.UspsAccounts;
 
             expeditedAccounts.Left = expeditedSignup.Left;
             expeditedAccounts.Width = 250;
@@ -105,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (accounts.Count > 0)
             {
-                expeditedAccounts.DataSource = accounts.Select(a => new { Display = a.Description, value = a.StampsAccountID }).ToList();
+                expeditedAccounts.DataSource = accounts.Select(a => new { Display = a.Description, value = a.UspsAccountID }).ToList();
                 expeditedAccounts.SelectedValue = accountId;
 
                 if (expeditedAccounts.SelectedIndex < 0)
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Reload the account list if a new account has been added
             if (added)
             {
-                LoadExpeditedAccounts(StampsAccountManager.StampsExpeditedAccounts.Max(a => a.StampsAccountID));
+                LoadExpeditedAccounts(UspsAccountManager.UspsAccounts.Max(a => a.UspsAccountID));
             }
         }
 
@@ -183,7 +183,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private PersonAdapter GetDefaultAccountPerson()
         {
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.None);
             return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
         }
     }

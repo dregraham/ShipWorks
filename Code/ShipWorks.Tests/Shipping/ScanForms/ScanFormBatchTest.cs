@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             {
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int)ShipmentTypeCode.Stamps,
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
                     Postal = new PostalShipmentEntity()
                     {
                         Service = (int)PostalServiceType.ExpressMail
@@ -399,7 +399,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             {
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int)ShipmentTypeCode.Stamps,
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
                     Postal = new PostalShipmentEntity()
                     {
                         Service = (int)PostalServiceType.ExpressMail
@@ -407,7 +407,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int)ShipmentTypeCode.Stamps,
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
                     Postal = new PostalShipmentEntity()
                     {
                         Service = (int)PostalServiceType.DhlParcelPlusExpedited
@@ -415,7 +415,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 },
                 new ShipmentEntity()
                 {
-                    ShipmentType = (int)ShipmentTypeCode.Stamps,
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
                     Postal = new PostalShipmentEntity()
                     {
                         Service = (int)PostalServiceType.DhlParcelPlusStandard

@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
                 { "UPS OnLine Tools",  "UPS" },
                 { "WorldShip",         "UPS (WorldShip)" },
                 { "Endicia DAZzle",    "USPS (Endicia)" },
-                { "Stamps.com",        "USPS (Stamps.com)" },
+                { "Stamps.com",        "USPS" },
                 { "USPS Download",     "USPS (w/o Postage)" },
                 { "Other",             "Custom" }
             };

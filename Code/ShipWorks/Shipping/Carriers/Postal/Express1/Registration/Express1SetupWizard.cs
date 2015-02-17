@@ -9,6 +9,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Enums;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
@@ -397,7 +398,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
                     MessageHelper.ShowError(this, "An account needs to be created before trying to buy postage.");
                 }
             }
-            catch (StampsException stampsException)
+            catch (UspsException stampsException)
             {
                 // This could be refactored to catch a more general type of "purchase postage" exception
                 // when Endicia is incorporated into this setup wizard

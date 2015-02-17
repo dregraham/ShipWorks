@@ -34,6 +34,8 @@ using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -219,13 +221,13 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaAccountNumber", "/CounterRateCredentials/Express1[@provider='Endicia']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1EndiciaPassPhrase", "/CounterRateCredentials/Express1[@provider='Endicia']/Password", results, "Endicia");
 
-            // Express1 for Stamps.com fields - password needs to be encrypted
+            // Express1 for USPS fields - password needs to be encrypted
             AddCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsUsername", "/CounterRateCredentials/Express1[@provider='Stamps']/AccountNumber", results);
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
-            // Stamps.com fields - password needs to be encrypted
-            AddCounterRateDictionaryEntry(responseXmlDocument, "StampsUsername", "/CounterRateCredentials/Stamps/Username", results);
-            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["StampsUsername"]);
+            // USPS fields - password needs to be encrypted
+            AddCounterRateDictionaryEntry(responseXmlDocument, "UspsUsername", "/CounterRateCredentials/Stamps/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["UspsUsername"]);
 
             return results;
         }
@@ -482,7 +484,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         /// <summary>
         /// Sends Stamps contract type to Tango.
         /// </summary>
-        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, StampsAccountContractType stampsAccountContractType)
+        public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
         {
             HttpVariableRequestSubmitter postRequest = new HttpVariableRequestSubmitter();
 
@@ -490,9 +492,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("license", license.Key);
             postRequest.Variables.Add("accountidentifier", accountIdentifier);
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
-            postRequest.Variables.Add("stampscontracttype", ((int)stampsAccountContractType).ToString(CultureInfo.InvariantCulture));
+            postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogUspsAccount");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");

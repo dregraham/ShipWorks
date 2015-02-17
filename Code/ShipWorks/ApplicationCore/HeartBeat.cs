@@ -17,6 +17,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -425,7 +426,7 @@ namespace ShipWorks.ApplicationCore
                 UserManager.CheckForChangesNeeded();
                 ActionManager.CheckForChangesNeeded();
                 ShippingOriginManager.CheckForChangesNeeded();
-                StampsAccountManager.CheckForChangesNeeded();
+                UspsAccountManager.CheckForChangesNeeded();
                 EndiciaAccountManager.CheckForChangesNeeded();
                 DimensionsManager.CheckForChangesNeeded();
                 ShippingProfileManager.CheckForChangesNeeded();

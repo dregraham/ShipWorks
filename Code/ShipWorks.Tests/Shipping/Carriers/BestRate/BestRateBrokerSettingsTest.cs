@@ -9,11 +9,10 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             settings.ActivatedTypes = new int[]
             {
                 (int)ShipmentTypeCode.Express1Endicia,
-                (int)ShipmentTypeCode.Express1Stamps
+                (int)ShipmentTypeCode.Express1Usps
             };
 
             testObject = new BestRateBrokerSettings(settings, null);
@@ -46,14 +45,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1EnabledAndNoAccount_Test()
         {
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsDisabledForStampsInBestRates_Test()
         {
-            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Stamps };
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Usps };
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
@@ -62,15 +61,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             testObject.EnabledShipmentTypeCodes =
                 EnumHelper.GetEnumList<ShipmentTypeCode>()
                     .Select(x => x.Value)
-                    .Where(x => x != ShipmentTypeCode.Express1Stamps);
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+                    .Where(x => x != ShipmentTypeCode.Express1Usps);
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
         public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsEnabledAndAccountExists_Test()
         {
-            brokers.Add(new Express1StampsBestRateBroker());
-            Assert.AreEqual(false, testObject.CheckExpress1Rates(new StampsShipmentType()));
+            brokers.Add(new Express1UspsBestRateBroker());
+            Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]

@@ -267,9 +267,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     return "ups";
 
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
-                    // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
+                    // The shipment is an Endicia or Usps shipment, check to see if it's DHL
                     if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
@@ -281,7 +280,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
 
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return "usps";
                 case ShipmentTypeCode.FedEx:
                     return "fedex";

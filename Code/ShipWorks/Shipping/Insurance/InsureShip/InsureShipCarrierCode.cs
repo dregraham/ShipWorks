@@ -47,7 +47,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     break;
 
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
                     if (ShipmentTypeManager.IsDhl(postalServiceType) || ShipmentTypeManager.IsEndiciaConsolidator(postalServiceType))
@@ -62,7 +61,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     carrierCode = ShipmentTypeManager.GetType(shipmentTypeCode).IsDomestic(shipment) ? "USPS" : "USPS-I";
                 break;
 

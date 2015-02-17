@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(RegisterStampsAccountNudgeOptionButton));
+            Assert.IsInstanceOfType(button, typeof(RegisterUspsAccountNudgeOptionButton));
         }
 
         [TestMethod]

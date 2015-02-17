@@ -25,6 +25,7 @@ using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Editing;
@@ -159,7 +160,7 @@ namespace ShipWorks.Users
             FilterLayoutContext.InitializeForCurrentSession();
             FilterNodeColumnManager.InitializeForCurrentSession();
             ShippingOriginManager.InitializeForCurrentSession();
-            StampsAccountManager.InitializeForCurrentSession();
+            UspsAccountManager.InitializeForCurrentSession();
             EndiciaAccountManager.InitializeForCurrentSession();
             DimensionsManager.InitializeForCurrentSession();
             ShippingProfileManager.InitializeForCurrentSession();

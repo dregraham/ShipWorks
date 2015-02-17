@@ -239,12 +239,11 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     return "UPS";
 
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
 
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 

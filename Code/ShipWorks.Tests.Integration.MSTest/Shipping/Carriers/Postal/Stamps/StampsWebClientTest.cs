@@ -9,31 +9,34 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 {
     [TestClass]
     public class StampsWebClientTest
     {
-        private readonly StampsWebClient testObject;
+        private readonly UspsWebClient testObject;
 
-        private readonly Mock<ICarrierAccountRepository<StampsAccountEntity>> accountRepository;
+        private readonly Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
         private readonly Mock<ILogEntryFactory> logEntryFactory;
 
-        private readonly StampsAccountEntity account;
+        private readonly UspsAccountEntity account;
 
         public StampsWebClientTest()
         {
             // This will initialize all of the various static classes
             new StampsPrototypeFixture();
             
-            accountRepository = new Mock<ICarrierAccountRepository<StampsAccountEntity>>();
-            accountRepository.Setup(r => r.Accounts).Returns(new List<StampsAccountEntity>());
+            accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
+            accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
-            account = new StampsAccountEntity()
+            account = new UspsAccountEntity()
             {
                 Username = "interapptive",
                 Password = "AYSaiZOMP3UcalGuDB+4aA==",
@@ -49,8 +52,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             logEntryFactory = new Mock<ILogEntryFactory>();
             logEntryFactory.Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>())).Returns(new Mock<IApiLogEntry>().Object);
 
-            testObject = new StampsWebClient(accountRepository.Object, logEntryFactory.Object, new TrustingCertificateInspector(), StampsResellerType.StampsExpedited);
-            StampsWebClient.UseTestServer = true;
+            testObject = new UspsWebClient(accountRepository.Object, logEntryFactory.Object, new TrustingCertificateInspector(), UspsResellerType.None);
+            UspsWebClient.UseTestServer = true;
         }
 
         [TestCategory("Stamps")]
@@ -73,15 +76,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 // Checking for basic connectivity with the API to make sure there haven't been 
                 // any breaking changes between the web client and API for scan forms
-                List<StampsShipmentEntity> shipments = new List<StampsShipmentEntity>
+                List<UspsShipmentEntity> shipments = new List<UspsShipmentEntity>
                 {
-                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() },
-                    new StampsShipmentEntity { StampsTransactionID = Guid.NewGuid() }
+                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() },
+                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() }
                 };
 
                 testObject.CreateScanForm(shipments, account);
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 // Since we just dummied some data up to create a scan form with we're going
                 // to get an exception. Make sure the error code is that of an invalid transaction ID
@@ -94,10 +97,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
-            StampsRegistration registration = CreateRegistrationWithoutUsername();
+            UspsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = "interapptive";
 
-            StampsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
+            UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
             Assert.IsFalse(registrationResult.IsSuccessful);
         }
@@ -107,10 +110,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void RegisterAccount_IsSuccessful_Test()
         {
-            StampsRegistration registration = CreateRegistrationWithoutUsername();
+            UspsRegistration registration = CreateRegistrationWithoutUsername();
             registration.UserName = DateTime.UtcNow.Ticks.ToString();
 
-            StampsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
+            UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
             Assert.IsTrue(registrationResult.IsSuccessful);
         }
@@ -119,17 +122,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         /// Helper method to create a Stamps.com registration without a username.
         /// </summary>
         /// <returns>StampsRegistration.</returns>
-        private StampsRegistration CreateRegistrationWithoutUsername()
+        private UspsRegistration CreateRegistrationWithoutUsername()
         {
-            Mock<IStampsRegistrationValidator> validator = new Mock<IStampsRegistrationValidator>();
-            validator.Setup(v => v.Validate(It.IsAny<StampsRegistration>())).Returns(new List<RegistrationValidationError>());
+            Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
+            validator.Setup(v => v.Validate(It.IsAny<UspsRegistration>())).Returns(new List<RegistrationValidationError>());
 
-            Mock<IStampsRegistrationGateway> gateway = new Mock<IStampsRegistrationGateway>();
+            Mock<IUspsRegistrationGateway> gateway = new Mock<IUspsRegistrationGateway>();
 
             Mock<IRegistrationPromotion> promotion = new Mock<IRegistrationPromotion>();
             promotion.Setup(p => p.GetPromoCode()).Returns(string.Empty);
 
-            StampsRegistration registration = new StampsRegistration(validator.Object, gateway.Object, promotion.Object);            
+            UspsRegistration registration = new UspsRegistration(validator.Object, gateway.Object, promotion.Object);            
             registration.UsageType = AccountType.OfficeBasedBusiness;
             registration.CreditCard = new CreditCard()
             {
@@ -153,9 +156,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetContract_Connectivity_Test()
         {
-            StampsAccountContractType contractType = testObject.GetContractType(account);
+            UspsAccountContractType contractType = testObject.GetContractType(account);
 
-            Assert.AreEqual(StampsAccountContractType.Reseller, contractType);
+            Assert.AreEqual(UspsAccountContractType.Reseller, contractType);
         }
 
         [TestCategory("Stamps")]
@@ -170,7 +173,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             {
                 testObject.ChangeToExpeditedPlan(account, "ShipWorks3");
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 Assert.AreEqual(0x005f0302, exception.Code);
             }

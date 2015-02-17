@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using ActiproSoftware.Drawing;
+using System.Text.RegularExpressions;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.Shipping.Settings.Origin;
-using System.Text.RegularExpressions;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Editions;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -61,11 +54,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return true;
             }
 
@@ -121,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -143,9 +135,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         PostalServiceType.StandardPost
                     };
 
-                if (shipmentType == ShipmentTypeCode.Stamps ||
-                    shipmentType == ShipmentTypeCode.Usps ||
-                    shipmentType == ShipmentTypeCode.Express1Stamps ||
+                if (shipmentType == ShipmentTypeCode.Usps ||
+                    shipmentType == ShipmentTypeCode.Express1Usps ||
                     shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
                     // As of the 01/28/2013 changes, Stamps.com does not support Parcel Post (now Standard Post)
@@ -167,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     }
                 }
 
-                if (shipmentType == ShipmentTypeCode.Stamps || shipmentType == ShipmentTypeCode.Usps)
+                if (shipmentType == ShipmentTypeCode.Usps)
                 {
                     // If not restricted from Stamps DHL, add them in
                     if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsDhl).Level == EditionRestrictionLevel.None)
@@ -188,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1StampsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -510,24 +501,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             return EndiciaAccountManager.EndiciaAccounts.Any() ||
                    EndiciaAccountManager.Express1Accounts.Any() ||
-                   StampsAccountManager.StampsAccounts.Any() ||
-                   StampsAccountManager.Express1Accounts.Any() ||
-                   StampsAccountManager.StampsExpeditedAccounts.Any();
+                   UspsAccountManager.Express1Accounts.Any() ||
+                   UspsAccountManager.UspsAccounts.Any();
         }
 
         /// <summary>
         /// Returns the StampsResellerType for a ShipmentTypeCode
         /// </summary>
-        public static StampsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
+        public static UspsResellerType GetStampsResellerType(ShipmentTypeCode shipmentTypeCode)
         {
             switch (shipmentTypeCode)
             {
                 case ShipmentTypeCode.Usps:
-                    return StampsResellerType.StampsExpedited;
-                case ShipmentTypeCode.Stamps:
-                    return StampsResellerType.None;
-                case ShipmentTypeCode.Express1Stamps:
-                    return StampsResellerType.Express1;
+                    return UspsResellerType.None;
+                case ShipmentTypeCode.Express1Usps:
+                    return UspsResellerType.Express1;
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated StampsResellerType.", EnumHelper.GetDescription(shipmentTypeCode)), "shipmentTypeCode");
             }
@@ -536,16 +524,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Returns a new StampsShipmentType for a given StampsResellerType
         /// </summary>
-        public static StampsShipmentType GetStampsShipmentTypeForStampsResellerType(StampsResellerType stampsResellerType)
+        public static UspsShipmentType GetStampsShipmentTypeForStampsResellerType(UspsResellerType stampsResellerType)
         {
             switch (stampsResellerType)
             {
-                case StampsResellerType.None:
-                    return new StampsShipmentType();
-                case StampsResellerType.StampsExpedited:
+                case UspsResellerType.None:
                     return new UspsShipmentType();
-                case StampsResellerType.Express1:
-                    return new Express1StampsShipmentType();
+                case UspsResellerType.Express1:
+                    return new Express1UspsShipmentType();
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated Shipment Type.", EnumHelper.GetDescription(stampsResellerType)), "stampsResellerType");
             }

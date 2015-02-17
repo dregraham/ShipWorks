@@ -297,13 +297,12 @@ namespace ShipWorks.Stores.Platforms.Newegg
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
 
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL
                     if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
@@ -384,9 +383,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                     PostalServiceType uspsType = (PostalServiceType)shipmentEntity.Postal.Service;
                     service = EnumHelper.GetDescription(uspsType);

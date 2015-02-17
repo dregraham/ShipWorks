@@ -168,10 +168,10 @@
     <None Include="DataSources\iParcel.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\Stamps.xlsx">
+    <None Include="DataSources\UPSRecert.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="DataSources\UPSRecert.xlsx">
+    <None Include="DataSources\Usps.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
