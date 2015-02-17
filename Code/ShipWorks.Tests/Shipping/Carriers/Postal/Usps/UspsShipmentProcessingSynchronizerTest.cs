@@ -32,14 +32,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         [TestMethod]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
-            List<UspsAccountEntity> StampsAccounts = new List<UspsAccountEntity>()
+            List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
             {
                 new UspsAccountEntity(123),
                 new UspsAccountEntity(456),
                 new UspsAccountEntity(789)
             };
 
-            accountRepository.Setup(r => r.Accounts).Returns(StampsAccounts);
+            accountRepository.Setup(r => r.Accounts).Returns(accounts);
 
             ShipmentEntity shipment = new ShipmentEntity
             {
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void SaveAccountToShipment_ThrowsStampsException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 

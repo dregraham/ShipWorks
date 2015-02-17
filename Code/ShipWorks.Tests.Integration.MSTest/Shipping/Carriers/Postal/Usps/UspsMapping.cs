@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
-    public class StampsMapping : StampsPrototypeFixture
+    public class UspsMapping : UspsPrototypeFixture
     {
         private static List<ColumnPropertyMapDefinition> columnPropertyMap;
 

@@ -10,10 +10,10 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsTest : DataDrivenIntegrationTestBase
+    public class UspsTest : DataDrivenIntegrationTestBase
     {
         private const bool justLabels = true;
 
@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void ProcessBatch_UspsAndExpress1Stamps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -91,7 +91,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void GetRates_UspsAndExpress1Stamps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -99,7 +99,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -144,7 +144,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void PurchasePostage_UspsAndExpress1Stamps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -201,7 +201,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         [TestMethod]
         public void CheckPostage_UspsAndExpress1Stamps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -209,7 +209,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

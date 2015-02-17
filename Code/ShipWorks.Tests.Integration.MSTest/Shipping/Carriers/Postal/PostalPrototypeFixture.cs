@@ -198,7 +198,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
             }
         }
 
-        public abstract bool Ship(UspsResellerType stampsResellerType);
+        public abstract bool Ship(UspsResellerType resellerType);
 
         protected abstract void CleanupLabel();
 

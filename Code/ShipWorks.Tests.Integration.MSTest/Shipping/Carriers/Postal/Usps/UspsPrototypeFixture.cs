@@ -5,8 +5,8 @@ using System.Threading;
 using Interapptive.Shared.Net;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
-using ShipWorks.Shipping;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -14,11 +14,11 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {   
-    public class StampsPrototypeFixture : PostalPrototypeFixture
+    public class UspsPrototypeFixture : PostalPrototypeFixture
     {
-        public StampsPrototypeFixture()
+        public UspsPrototypeFixture()
         {
         }
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public string HidePostage { get; set; }
         public string UspsAccountID { get; set; }
 
-        public override bool Ship(UspsResellerType stampsResellerType)
+        public override bool Ship(UspsResellerType resellerType)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                  //This is helpful to get all the shipments into SW unprocessed so that you can process them with the UI
                 if (!MagicKeysDown)
                 {
-                    IUspsWebClient webClient = GetWebClient(stampsResellerType);
+                    IUspsWebClient webClient = GetWebClient(resellerType);
                     webClient.ProcessShipment(shipment);
 
                     //shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                 ShippingManager.SaveShipment(shipment);
 
-                if (stampsResellerType == UspsResellerType.Express1)
+                if (resellerType == UspsResellerType.Express1)
                 {
                     // Now void to get our money back.  Sleep for a few seconds so that the carrier can process the void on their side.
                     VoidShipment(shipment);

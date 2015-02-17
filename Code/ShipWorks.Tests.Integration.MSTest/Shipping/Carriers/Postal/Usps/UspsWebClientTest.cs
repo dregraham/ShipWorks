@@ -13,10 +13,10 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsWebClientTest
+    public class UspsWebClientTest
     {
         private readonly UspsWebClient testObject;
 
@@ -25,10 +25,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         private readonly UspsAccountEntity account;
 
-        public StampsWebClientTest()
+        public UspsWebClientTest()
         {
             // This will initialize all of the various static classes
-            new StampsPrototypeFixture();
+            new UspsPrototypeFixture();
             
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());

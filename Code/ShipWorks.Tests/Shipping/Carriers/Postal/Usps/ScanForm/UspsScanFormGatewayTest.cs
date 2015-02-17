@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void CreateScanForms_ThrowsUspsException_WhenShipmentsContainNonStampsShipment_Test()
+        public void CreateScanForms_ThrowsUspsException_WhenShipmentsContainNonUspsShipment_Test()
         {
             // Create an Endicia shipment to get the gateway to throw an exception
             List<ShipmentEntity> shipments = new List<ShipmentEntity>()
