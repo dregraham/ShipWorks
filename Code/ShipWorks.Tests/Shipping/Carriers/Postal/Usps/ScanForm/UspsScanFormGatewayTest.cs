@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void CreateScanForms_ThrowsStampsException_WhenAccountEntityIsNull_Test()
+        public void CreateScanForms_ThrowsUspsException_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void CreateScanForms_ThrowsStampsException_WhenShipmentsContainNonStampsShipment_Test()
+        public void CreateScanForms_ThrowsUspsException_WhenShipmentsContainNonStampsShipment_Test()
         {
             // Create an Endicia shipment to get the gateway to throw an exception
             List<ShipmentEntity> shipments = new List<ShipmentEntity>()
@@ -57,14 +57,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void CreateScanForms_ThrowsStampsException_WhenShipmentsIsNull_Test()
+        public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsNull_Test()
         {
             testObject.CreateScanForms(scanFormBatch, null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void CreateScanForms_ThrowsStampsException_WhenShipmentsIsEmpty_Test()
+        public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsEmpty_Test()
         {
             testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
         }

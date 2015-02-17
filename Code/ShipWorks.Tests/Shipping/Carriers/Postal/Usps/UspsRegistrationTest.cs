@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
         [TestMethod]
         [ExpectedException(typeof(UspsRegistrationException))]
-        public void Submit_ThrowsStampsException_WhenRegistrationGatewayThrowsException_Test()
+        public void Submit_ThrowsUspsException_WhenRegistrationGatewayThrowsException_Test()
         {
             // Setup up our mocked gateway to throw an execption
             mockedGateway.Setup(g => g.Register(It.IsAny<UspsRegistration>())).Throws(new UspsRegistrationException());

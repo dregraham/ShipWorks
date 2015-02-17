@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
         public void ProcessBatch_UspsAndExpress1Stamps_Test()
         {
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
         public void GetRates_UspsAndExpress1Stamps_Test()
         {
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
         public void PurchasePostage_UspsAndExpress1Stamps_Test()
         {
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
         public void CheckPostage_UspsAndExpress1Stamps_Test()
         {

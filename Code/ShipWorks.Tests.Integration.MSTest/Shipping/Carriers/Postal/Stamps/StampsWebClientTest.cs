@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             UspsWebClient.UseTestServer = true;
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.IsNotNull(info);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void CreateScanForm_Connectivity_Test()
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             }
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.IsFalse(registrationResult.IsSuccessful);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void RegisterAccount_IsSuccessful_Test()
@@ -148,7 +148,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             return registration;
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void GetContract_Connectivity_Test()
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.AreEqual(UspsAccountContractType.Reseller, contractType);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void ChangeToExpeditedPlan_Connectivity_Test()

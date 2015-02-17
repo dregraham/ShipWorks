@@ -534,7 +534,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("Email address is too long. Stamps.com only allows email addresses that are less than 41 characters long.", errors.First().Message);
+            Assert.AreEqual("Email address is too long. USPS only allows email addresses that are less than 41 characters long.", errors.First().Message);
         }
 
         [TestMethod]
@@ -569,7 +569,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("An invalid promo code was provided. Stamps.com only recognizes promo codes that are 50 characters or less.", errors.First().Message);
+            Assert.AreEqual("An invalid promo code was provided. USPS only recognizes promo codes that are 50 characters or less.", errors.First().Message);
         }
 
         [TestMethod]
@@ -604,7 +604,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
             Assert.AreEqual(1, errors.Count());
-            Assert.AreEqual("Stamps.com requires that either credit card or account be provided in the registration process.", errors.First().Message);
+            Assert.AreEqual("USPS requires that either credit card or account be provided in the registration process.", errors.First().Message);
         }
 
         [TestMethod]
