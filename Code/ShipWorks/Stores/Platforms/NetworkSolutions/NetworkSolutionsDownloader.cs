@@ -356,8 +356,18 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         private static Dictionary<string, string> BuildQuestionAnswerList(IEnumerable<QuestionType> questionList)
         {
             return questionList == null ? 
-                new Dictionary<string, string>() : 
-                questionList.ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+                new Dictionary<string, string>() :
+                questionList.Where(q => !ExcludeSpecificQuestions(q))
+                            .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+        }
+
+        /// <summary>
+        /// Determines if the question should be ignored and not downloaded
+        /// </summary>
+        private static bool ExcludeSpecificQuestions(QuestionType question)
+        {
+            return question.Title.ToUpperInvariant()
+                                 .Contains("Policy Agreement".ToUpperInvariant());
         }
 
         /// <summary>
