@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             repository = new Mock<IExpress1RegistrationRepository>();
             encryptionStrategy = new Mock<IExpress1PasswordEncryptionStrategy>();
 
-            registration = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object, encryptionStrategy.Object, testObject)
+            registration = new Express1Registration(ShipmentTypeCode.Express1Usps, gateway.Object, repository.Object, encryptionStrategy.Object, testObject)
             {
                 MailingAddress = new PersonAdapter()
                 {

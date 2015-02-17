@@ -38,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
         /// <value>The shipment type code.</value>
         public override ShipmentTypeCode ShipmentTypeCode
         {
-            get { return ShipmentTypeCode.Express1Stamps; }
+            get { return ShipmentTypeCode.Express1Usps; }
         }
 
         /// <summary>

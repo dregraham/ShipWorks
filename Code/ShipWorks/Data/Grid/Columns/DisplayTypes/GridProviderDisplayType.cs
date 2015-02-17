@@ -99,7 +99,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             {
                 enabledShipmentTypes.RemoveAll(s =>
                     s.ShipmentTypeCode == ShipmentTypeCode.Usps ||
-                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Usps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);

@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return new EndiciaUspsAutomaticDiscountControlAdapter(settings);
             }
 
-            if (shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Usps || shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Express1Stamps)
+            if (shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Usps || shipmentEntity.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {
                 return new StampsUspsAutomaticDiscountControlAdapter(settings);
             }

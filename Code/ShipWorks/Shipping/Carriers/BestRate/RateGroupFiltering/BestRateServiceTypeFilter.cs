@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering
             {
                 case ShipmentTypeCode.Express1Endicia:
                     return 0;
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return 1;
                 case ShipmentTypeCode.Endicia:
                     return 2;

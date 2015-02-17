@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.CoreExtensions
                 context.GetColumnReference(ShipmentFields.ShipmentType),
                 (int) ShipmentTypeCode.Endicia,
                 (int) ShipmentTypeCode.Express1Endicia,
-                (int) ShipmentTypeCode.Express1Stamps,
+                (int) ShipmentTypeCode.Express1Usps,
                 (int) ShipmentTypeCode.PostalWebTools,
                 (int) ShipmentTypeCode.Usps);
         }

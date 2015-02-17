@@ -793,7 +793,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Stamps)
+            else if (shipment.ShipmentType == (int) ShipmentTypeCode.Express1Usps)
             {
                 thermalType = shipment.RequestedLabelFormat == (int) ThermalLanguage.None ? null : (ThermalLanguage?) shipment.RequestedLabelFormat;
             }

@@ -154,7 +154,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             edit.Enabled = enabled;
             remove.Enabled = enabled;
 
-            bool allowAccountRegistration = ShipmentTypeManager.GetType(IsExpress1 ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Usps).IsAccountRegistrationAllowed;
+            bool allowAccountRegistration = ShipmentTypeManager.GetType(IsExpress1 ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps).IsAccountRegistrationAllowed;
             
             if (!allowAccountRegistration)
             {

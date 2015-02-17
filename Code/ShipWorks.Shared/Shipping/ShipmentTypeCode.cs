@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping
 
         [CallbackDescription("ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Express1UspsShipmentType", "ShipmentTypeName")]
         [ShipmentTypeIconAttribute("express1")]
-        Express1Stamps = 13,
+        Express1Usps = 13,
 
         [Description("FedEx")]
         [ShipmentTypeIconAttribute("fedex")]

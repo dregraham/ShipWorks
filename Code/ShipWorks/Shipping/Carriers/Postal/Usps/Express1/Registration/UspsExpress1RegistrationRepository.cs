@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
                 // in the system. This is to account for the situation where there a multiple
                 // profiles that may be associated with a previous account that has since
                 // been deleted. 
-                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Stamps))
+                foreach (ShippingProfileEntity shippingProfileEntity in ShippingProfileManager.Profiles.Where(p => p.ShipmentType == (int)ShipmentTypeCode.Express1Usps))
                 {
                     if (shippingProfileEntity.Postal.Usps.UspsAccountID.HasValue)
                     {
@@ -90,7 +90,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             }
 
             // Update the account contract type
-            Express1UspsShipmentType uspsShipmentType = (Express1UspsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
+            Express1UspsShipmentType uspsShipmentType = (Express1UspsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps);
             uspsShipmentType.UpdateContractType(uspsAccount);
 
             return uspsAccount.UspsAccountID;

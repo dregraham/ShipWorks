@@ -177,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // once the account is added.
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Usps);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.PostalWebTools);
             }
         }
@@ -575,7 +575,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // of active providers since the customer agreed to use USPS (Stamps.com Expedited)
             ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
-            ExcludeShipmentType(settings, ShipmentTypeCode.Express1Stamps);
+            ExcludeShipmentType(settings, ShipmentTypeCode.Express1Usps);
             ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
 
             // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded

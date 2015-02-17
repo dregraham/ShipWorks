@@ -188,7 +188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             if (certificateSecurityLevel != CertificateSecurityLevel.Trusted)
             {
-                string description = EnumHelper.GetDescription(ShipmentTypeCode.Express1Stamps);
+                string description = EnumHelper.GetDescription(ShipmentTypeCode.Express1Usps);
                 throw new UspsException(string.Format("ShipWorks is unable to make a secure connection to {0}.", description));
             }
         }
@@ -645,7 +645,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }
-            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps)
+            else if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Usps)
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
             }

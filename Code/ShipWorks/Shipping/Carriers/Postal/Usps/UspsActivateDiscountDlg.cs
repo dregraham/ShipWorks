@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // the customer agreed to use USPS (Stamps.com Expedited)
                 ExcludeShipmentType(ShipmentTypeCode.Endicia);
                 ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
-                ExcludeShipmentType(ShipmentTypeCode.Express1Stamps);
+                ExcludeShipmentType(ShipmentTypeCode.Express1Usps);
 
                 // Be sure the USPS shipment type is not included in the excluded list
                 List<int> excludedTypes = settings.ExcludedTypes.ToList();
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // now that those types are not longer active
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Stamps);
+                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Usps);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Usps);
 
                 RateCache.Instance.Clear();

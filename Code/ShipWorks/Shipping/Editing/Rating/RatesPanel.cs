@@ -319,7 +319,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 !PostalUtility.IsPostalSetup() && 
                 shipmentTypeCode != ShipmentTypeCode.Usps &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
+                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
             {
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
 

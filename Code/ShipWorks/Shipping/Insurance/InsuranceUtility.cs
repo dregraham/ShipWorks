@@ -348,7 +348,7 @@ namespace ShipWorks.Shipping.Insurance
                     }
                     break;
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:
@@ -407,7 +407,7 @@ namespace ShipWorks.Shipping.Insurance
                     break;
 
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Usps:
                     {

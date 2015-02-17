@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             RateGroup rateGroup = base.GetBestRates(shipment, exceptionHandler);
             
             // Set the shipment type to be express1 for stamps
-            rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Stamps);
+            rateGroup.Rates.ForEach(rr => rr.ShipmentType = ShipmentTypeCode.Express1Usps);
 
             return rateGroup;
         }

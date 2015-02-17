@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public Express1UspsServiceControl(RateControl rateControl)
-            : base(ShipmentTypeCode.Express1Stamps, rateControl)
+            : base(ShipmentTypeCode.Express1Usps, rateControl)
         {
             InitializeComponent();
         }

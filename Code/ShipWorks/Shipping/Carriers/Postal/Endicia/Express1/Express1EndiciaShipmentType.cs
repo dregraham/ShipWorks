@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             {
                 return 
                     (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) || 
-                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Stamps)) ?
+                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps)) ?
                     "USPS (Express1 for Endicia)" : "USPS (Express1)";
             }
         }

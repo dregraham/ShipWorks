@@ -636,7 +636,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return CarrierCodeType.USPS;
 
                 case ShipmentTypeCode.FedEx:

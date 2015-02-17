@@ -129,8 +129,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             RateGroup rateGroup = CreatePopulatedRateGroup();
             Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
             {
-                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 4.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
-                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 4.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Usps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Usps });
             });
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             foreach (RateResult rate in rateResults.Rates.Where(x => x.Tag != null && x.Selectable))
             {
                 PostalRateSelection tag = rate.Tag as PostalRateSelection;
-                ShipmentTypeCode expectedType = tag.ServiceType == PostalServiceType.PriorityMail ? ShipmentTypeCode.Express1Stamps : ShipmentTypeCode.Usps;
+                ShipmentTypeCode expectedType = tag.ServiceType == PostalServiceType.PriorityMail ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps;
 
                 Assert.AreEqual(expectedType, 
                     rate.ShipmentType, string.Format("{0} rate should be {1}", tag.ServiceType, expectedType));
@@ -154,8 +154,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
             {
                 x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo});
-                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 4.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
-                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 4.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Usps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Usps });
             });
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
@@ -172,8 +172,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
             {
                 x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo });
-                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
-                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 7.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Usps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 7.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Usps });
             });
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
@@ -190,8 +190,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Task<RateGroup> task = CreateTaskThatReturnsRates(x =>
             {
                 x.Add(new RateResult("Priority", "2") { Tag = new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.None), ProviderLogo = Express1Logo });
-                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
-                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Stamps });
+                x.Add(new RateResult("\tDelivery Confirmation ($0.00)", string.Empty, 5.00m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Delivery)) { ShipmentType = ShipmentTypeCode.Express1Usps });
+                x.Add(new RateResult("\tSignature Confirmation ($2.00)", string.Empty, 6.99m, new PostalRateSelection(PostalServiceType.PriorityMail, PostalConfirmationType.Signature)) { ShipmentType = ShipmentTypeCode.Express1Usps });
             });
 
             RateGroup rateResults = consolidator.Consolidate(rateGroup, task);
@@ -225,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             foreach (RateResult rate in rateResults)
             {
                 rate.CarrierDescription = "Express1";
-                rate.ShipmentType = ShipmentTypeCode.Express1Stamps;
+                rate.ShipmentType = ShipmentTypeCode.Express1Usps;
             }
 
             TaskCompletionSource<RateGroup> completionSource = new TaskCompletionSource<RateGroup>();

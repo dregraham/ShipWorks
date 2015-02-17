@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void UpdateExpress1ControlDisplay()
         {
-            express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Stamps;
+            express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Usps;
             express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
 
             LoadExpress1Settings();
@@ -87,7 +87,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             express1Settings = new Express1UspsSettingsFacade(settings);
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
+            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 express1Options.LoadSettings(settings);
             }
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private static bool ShouldHideExpress1Controls()
         {
             return !UspsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
-                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted; 
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted; 
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             optionsControl.SaveSettings(settings);
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Stamps)
+            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 express1Options.SaveSettings(settings);
             }

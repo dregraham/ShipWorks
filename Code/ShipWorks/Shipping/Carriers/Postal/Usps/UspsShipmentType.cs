@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // Start getting rates from Express1
             ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-            express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Stamps;
+            express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Usps;
 
             return Task.Factory.StartNew(() =>
             {
@@ -365,7 +365,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private static UspsAccountEntity GetExpress1AutoRouteAccount(PostalPackagingType packagingType)
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps).IsShipmentTypeRestricted;
+            bool isExpress1Restricted = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted;
             bool shouldUseExpress1 = settings.UspsAutomaticExpress1 && !isExpress1Restricted &&
                                      Express1Utilities.IsValidPackagingType(null, packagingType);
 
@@ -495,7 +495,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     if (account.UspsReseller == (int)UspsResellerType.Express1)
                     {
-                        shipment.ShipmentType = (int)ShipmentTypeCode.Express1Stamps;
+                        shipment.ShipmentType = (int)ShipmentTypeCode.Express1Usps;
 
                         ShipmentType express1ShipmentType = ShipmentTypeManager.GetType(shipment);
                         shipment.Postal.Usps.OriginalUspsAccountID = shipment.Postal.Usps.UspsAccountID;
@@ -563,7 +563,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShipmentCommonDetail commonDetail = base.GetShipmentCommonDetail(shipment);
             commonDetail.OriginAccount = (account == null) ? "" : account.Username;
 
-            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Stamps && shipment.Postal.Usps.OriginalUspsAccountID != null)
+            if (shipment.ShipmentType == (int)ShipmentTypeCode.Express1Usps && shipment.Postal.Usps.OriginalUspsAccountID != null)
             {
                 commonDetail.OriginalShipmentType = ShipmentTypeCode.Usps;
             }

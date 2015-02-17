@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return true;
             }
 
@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1UspsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     };
 
                 if (shipmentType == ShipmentTypeCode.Usps ||
-                    shipmentType == ShipmentTypeCode.Express1Stamps ||
+                    shipmentType == ShipmentTypeCode.Express1Usps ||
                     shipmentType == ShipmentTypeCode.Express1Endicia)
                 {
                     // As of the 01/28/2013 changes, Stamps.com does not support Parcel Post (now Standard Post)
@@ -170,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
             if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
-               (shipmentType == ShipmentTypeCode.Express1Stamps && !settings.Express1UspsSingleSource))
+               (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
                     {
@@ -505,7 +505,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 case ShipmentTypeCode.Usps:
                     return UspsResellerType.None;
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                     return UspsResellerType.Express1;
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated StampsResellerType.", EnumHelper.GetDescription(shipmentTypeCode)), "shipmentTypeCode");

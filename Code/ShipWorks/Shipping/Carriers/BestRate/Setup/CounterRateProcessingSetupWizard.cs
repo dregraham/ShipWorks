@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 ShipmentTypeCode.PostalWebTools,
                 ShipmentTypeCode.Endicia,
                 ShipmentTypeCode.Express1Endicia,
-                ShipmentTypeCode.Express1Stamps
+                ShipmentTypeCode.Express1Usps
             };
 
             setupExistingProvider.Items.Add("Choose...");
