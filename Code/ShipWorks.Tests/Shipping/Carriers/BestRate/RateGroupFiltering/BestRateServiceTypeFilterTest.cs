@@ -241,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
         
         [TestMethod]
-        public void Filter_RatesWithSameCost_ReturnsExpress1StampsForResultKey_Test()
+        public void Filter_RatesWithSameCost_ReturnsExpress1UspsForResultKey_Test()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>
@@ -355,7 +355,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [TestMethod]
-        public void Filter_RatesWithSameCost_ReturnsExpress1StampsForEachResultKey_Test()
+        public void Filter_RatesWithSameCost_ReturnsExpress1UspsForEachResultKey_Test()
         {
             // Setup the broker to return specific rates
             List<RateResult> rates = new List<RateResult>

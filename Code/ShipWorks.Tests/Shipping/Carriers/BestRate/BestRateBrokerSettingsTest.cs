@@ -42,20 +42,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsFalse_StampsExpress1EnabledAndNoAccount_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1EnabledAndNoAccount_Test()
         {
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsDisabledForStampsInBestRates_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInBestRates_Test()
         {
             settings.BestRateExcludedTypes = new[] { (int)ShipmentTypeCode.Express1Usps };
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsDisabledForStampsInSettings_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsDisabledForUspsInSettings_Test()
         {
             testObject.EnabledShipmentTypeCodes =
                 EnumHelper.GetEnumList<ShipmentTypeCode>()
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         }
 
         [TestMethod]
-        public void CheckExpress1Rates_ReturnsFalse_StampsExpress1IsEnabledAndAccountExists_Test()
+        public void CheckExpress1Rates_ReturnsFalse_UspsExpress1IsEnabledAndAccountExists_Test()
         {
             brokers.Add(new Express1UspsBestRateBroker());
             Assert.AreEqual(false, testObject.CheckExpress1Rates(new UspsShipmentType()));

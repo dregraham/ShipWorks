@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            // Shouldn't have any footnote factories that aren't for stamps
+            // Shouldn't have any footnote factories that aren't for USPS
             Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 

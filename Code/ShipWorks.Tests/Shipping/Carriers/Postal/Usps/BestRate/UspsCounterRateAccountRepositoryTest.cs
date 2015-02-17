@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         public UspsCounterRateAccountRepositoryTest()
         {
             credentialStore = new Mock<ICounterRatesCredentialStore>();
-            credentialStore.Setup(s => s.UspsUsername).Returns("stampsUser");
+            credentialStore.Setup(s => s.UspsUsername).Returns("UspsUser");
             credentialStore.Setup(s => s.UspsPassword).Returns("sampsPassword");
 
             testObject = new UspsCounterRateAccountRepository(credentialStore.Object);

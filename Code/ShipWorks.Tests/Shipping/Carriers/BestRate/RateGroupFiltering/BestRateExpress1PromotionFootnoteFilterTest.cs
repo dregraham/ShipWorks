@@ -114,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
         [TestMethod]
-        public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasStampsBasedPromoFootnoteFactory_Test()
+        public void Filter_RetainsUspsPromotionalFootnoteFactory_WhenRateGroupOnlyHasUspsBasedPromoFootnoteFactory_Test()
         {
             List<RateResult> rates = new List<RateResult>
             {
