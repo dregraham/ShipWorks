@@ -164,8 +164,6 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1 = false;
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-            settings.EndiciaUspsAutomaticExpedited = false;
-            settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
@@ -180,8 +178,6 @@ namespace ShipWorks.Shipping.Settings
 
             settings.UspsAutomaticExpress1 = false;
             settings.UspsAutomaticExpress1Account = 0;
-            settings.StampsUspsAutomaticExpedited = false;
-            settings.StampsUspsAutomaticExpeditedAccount = 0;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

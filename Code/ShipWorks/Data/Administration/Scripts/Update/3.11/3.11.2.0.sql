@@ -97,6 +97,12 @@ ALTER TABLE [dbo].[UspsShipment] ADD CONSTRAINT [PK_UspsShipment] PRIMARY KEY CL
 GO
 PRINT N'Altering [dbo].[ShippingSettings]'
 GO
+ALTER TABLE [dbo].[ShippingSettings] DROP
+COLUMN [EndiciaUspsAutomaticExpedited],
+COLUMN [EndiciaUspsAutomaticExpeditedAccount],
+COLUMN [StampsUspsAutomaticExpedited],
+COLUMN [StampsUspsAutomaticExpeditedAccount]
+GO
 EXEC sp_rename N'[dbo].[ShippingSettings].[StampsAutomaticExpress1]', N'UspsAutomaticExpress1', 'COLUMN'
 GO
 EXEC sp_rename N'[dbo].[ShippingSettings].[StampsAutomaticExpress1Account]', N'UspsAutomaticExpress1Account', 'COLUMN'
@@ -128,12 +134,12 @@ CREATE TABLE [dbo].[tmp_rg_xx_UspsAccount]
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
-[CreatedDate] [DateTime] NOT NULL
+[CreatedDate] [datetime] NOT NULL
 )
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UspsAccount] ON
 GO
-INSERT INTO [dbo].[tmp_rg_xx_UspsAccount]([UspsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType], [CreatedDate]) SELECT [StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [StampsReseller], [ContractType], [CreatedDate] FROM [dbo].[UspsAccount]
+INSERT INTO [dbo].[tmp_rg_xx_UspsAccount]([UspsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [UspsReseller], [ContractType]) SELECT [StampsAccountID], [Username], [Password], [FirstName], [MiddleName], [LastName], [Company], [Street1], [Street2], [Street3], [City], [StateProvCode], [PostalCode], [CountryCode], [Phone], [Email], [Website], [MailingPostalCode], [StampsReseller], [ContractType] FROM [dbo].[UspsAccount]
 GO
 SET IDENTITY_INSERT [dbo].[tmp_rg_xx_UspsAccount] OFF
 GO

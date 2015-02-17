@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -48,28 +49,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            if (ShowSingleAccountDialog)
+            using (IDiscountedAccountDlg dlg = CreateDiscountedAccountDialog())
             {
-                using (SingleAccountMarketingDlg dlg = new SingleAccountMarketingDlg())
+                dlg.Initialize(Shipment, ShowSingleAccountDialog);
+                if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
-                    dlg.Initialize(Shipment);
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        RaiseRateCriteriaChanged();
-                    }
+                    RaiseRateCriteriaChanged();
                 }
             }
-            else
-            {
-                using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg())
-                {
-                    dlg.Initialize(Shipment);
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        RaiseRateCriteriaChanged();
-                    }
-                }
-            }
+        }
+
+        /// <summary>
+        /// Create the dialog that should be used to get the discount
+        /// </summary>
+        /// <returns></returns>
+        private IDiscountedAccountDlg CreateDiscountedAccountDialog()
+        {
+            bool convertExistingAccount = Shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any();
+
+            return convertExistingAccount ? 
+                (IDiscountedAccountDlg) new UspsConvertExistingAccountDlg() :
+                new UspsActivateDiscountDlg();
         }
     }
 }
