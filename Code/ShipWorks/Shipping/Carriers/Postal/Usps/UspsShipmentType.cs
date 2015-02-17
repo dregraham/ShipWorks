@@ -244,7 +244,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         protected virtual RateGroup GetRatesInternal(ShipmentEntity shipment)
         {
             // Start getting Express1 rates if necessary so that they should hopefully be ready when we need them
-            var express1RateTask = GetExpress1RatesIfNecessary(shipment);
+            Task<RateGroup> express1RateTask = GetExpress1RatesIfNecessary(shipment);
 
             RateGroup rateGroup = shipment.Postal.Usps.RateShop ?
                 GetRatesForAllAccounts(shipment) :
@@ -318,6 +318,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private Task<RateGroup> GetExpress1RatesIfNecessary(ShipmentEntity shipment)
         {
             UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
+
             return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
                 CreateEmptyExpress1RatesTask();

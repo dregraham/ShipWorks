@@ -132,7 +132,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             return new Express1UspsProfileControl();
         }
-        
+
+        /// <summary>
+        /// Get postal rates for the given shipment
+        /// </summary>
+        /// <param name="shipment">Shipment for which to retrieve rates</param>
+        protected override RateGroup GetRatesInternal(ShipmentEntity shipment)
+        {
+            // Overridden here otherwise relying on the UspsShipmentType to get rates
+            // would result in infinite recursion when using auto-routing since the UspsShipmentType 
+            // is just calling GetRatesInternal on an Express1UspsShipmentType which then creates a new
+            // Express1UspsShipmentType and gets rates, and on and on...
+            List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
+
+            RateGroup rateGroup = new RateGroup(rateResults);
+            return rateGroup;
+        }
+
         /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
