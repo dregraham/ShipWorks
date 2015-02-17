@@ -119,8 +119,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
                     List<RateResult> rateResults = testObject.GetRates(stampsResellerType);
 
-                    Debug.Assert(rateResults == null);
-                    Debug.Assert(!rateResults.Any());
+                    Debug.Assert(rateResults != null);
+                    Debug.Assert(rateResults.Any());
                 }
             }
             catch (Exception ex)

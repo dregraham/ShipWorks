@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         public string Memo { get; set; }
         public string RequireFullAddressValidation { get; set; }
         public string HidePostage { get; set; }
-        public string StampsAccountID { get; set; }
+        public string UspsAccountID { get; set; }
 
         public override bool Ship(UspsResellerType stampsResellerType)
         {
@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             shipment.Postal.Usps.Memo = Memo;
             shipment.Postal.Usps.RequireFullAddressValidation = Convert.ToInt16(RequireFullAddressValidation) == 1;
             shipment.Postal.Usps.HidePostage = Convert.ToInt16(HidePostage) == 1;
-            shipment.Postal.Usps.UspsAccountID = Convert.ToInt16(StampsAccountID);
+            shipment.Postal.Usps.UspsAccountID = Convert.ToInt16(UspsAccountID);
 
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))
