@@ -143,6 +143,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             // would result in infinite recursion when using auto-routing since the UspsShipmentType 
             // is just calling GetRatesInternal on an Express1UspsShipmentType which then creates a new
             // Express1UspsShipmentType and gets rates, and on and on...
+
+            return GetCachedRates<UspsException>(shipment, GetRatesFromApi);
+        }
+
+        /// <summary>
+        /// Gets the rates from the Exprss1 API.
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
 
             RateGroup rateGroup = new RateGroup(rateResults);
