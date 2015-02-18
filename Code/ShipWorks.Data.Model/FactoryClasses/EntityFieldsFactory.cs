@@ -221,6 +221,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.GridColumnPositionEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "GridColumnPositionEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.GrouponOrderEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "GrouponOrderEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.GrouponStoreEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "GrouponStoreEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.InfopiaOrderItemEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "InfopiaOrderItemEntity");
 					break;

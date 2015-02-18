@@ -3769,6 +3769,216 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrder.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum GrouponOrderFieldIndex:int
+	{
+		///<summary>OrderID. Inherited from Order</summary>
+		OrderID_Order,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>CustomerID. </summary>
+		CustomerID,
+		///<summary>OrderNumber. </summary>
+		OrderNumber,
+		///<summary>OrderNumberComplete. </summary>
+		OrderNumberComplete,
+		///<summary>OrderDate. </summary>
+		OrderDate,
+		///<summary>OrderTotal. </summary>
+		OrderTotal,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OnlineLastModified. </summary>
+		OnlineLastModified,
+		///<summary>OnlineCustomerID. </summary>
+		OnlineCustomerID,
+		///<summary>OnlineStatus. </summary>
+		OnlineStatus,
+		///<summary>OnlineStatusCode. </summary>
+		OnlineStatusCode,
+		///<summary>RequestedShipping. </summary>
+		RequestedShipping,
+		///<summary>BillFirstName. </summary>
+		BillFirstName,
+		///<summary>BillMiddleName. </summary>
+		BillMiddleName,
+		///<summary>BillLastName. </summary>
+		BillLastName,
+		///<summary>BillCompany. </summary>
+		BillCompany,
+		///<summary>BillStreet1. </summary>
+		BillStreet1,
+		///<summary>BillStreet2. </summary>
+		BillStreet2,
+		///<summary>BillStreet3. </summary>
+		BillStreet3,
+		///<summary>BillCity. </summary>
+		BillCity,
+		///<summary>BillStateProvCode. </summary>
+		BillStateProvCode,
+		///<summary>BillPostalCode. </summary>
+		BillPostalCode,
+		///<summary>BillCountryCode. </summary>
+		BillCountryCode,
+		///<summary>BillPhone. </summary>
+		BillPhone,
+		///<summary>BillFax. </summary>
+		BillFax,
+		///<summary>BillEmail. </summary>
+		BillEmail,
+		///<summary>BillWebsite. </summary>
+		BillWebsite,
+		///<summary>ShipFirstName. </summary>
+		ShipFirstName,
+		///<summary>ShipMiddleName. </summary>
+		ShipMiddleName,
+		///<summary>ShipLastName. </summary>
+		ShipLastName,
+		///<summary>ShipCompany. </summary>
+		ShipCompany,
+		///<summary>ShipStreet1. </summary>
+		ShipStreet1,
+		///<summary>ShipStreet2. </summary>
+		ShipStreet2,
+		///<summary>ShipStreet3. </summary>
+		ShipStreet3,
+		///<summary>ShipCity. </summary>
+		ShipCity,
+		///<summary>ShipStateProvCode. </summary>
+		ShipStateProvCode,
+		///<summary>ShipPostalCode. </summary>
+		ShipPostalCode,
+		///<summary>ShipCountryCode. </summary>
+		ShipCountryCode,
+		///<summary>ShipPhone. </summary>
+		ShipPhone,
+		///<summary>ShipFax. </summary>
+		ShipFax,
+		///<summary>ShipEmail. </summary>
+		ShipEmail,
+		///<summary>ShipWebsite. </summary>
+		ShipWebsite,
+		///<summary>RollupItemCount. </summary>
+		RollupItemCount,
+		///<summary>RollupItemName. </summary>
+		RollupItemName,
+		///<summary>RollupItemCode. </summary>
+		RollupItemCode,
+		///<summary>RollupItemSKU. </summary>
+		RollupItemSKU,
+		///<summary>RollupItemLocation. </summary>
+		RollupItemLocation,
+		///<summary>RollupItemQuantity. </summary>
+		RollupItemQuantity,
+		///<summary>RollupItemTotalWeight. </summary>
+		RollupItemTotalWeight,
+		///<summary>RollupNoteCount. </summary>
+		RollupNoteCount,
+		///<summary>BillNameParseStatus. </summary>
+		BillNameParseStatus,
+		///<summary>BillUnparsedName. </summary>
+		BillUnparsedName,
+		///<summary>ShipNameParseStatus. </summary>
+		ShipNameParseStatus,
+		///<summary>ShipUnparsedName. </summary>
+		ShipUnparsedName,
+		///<summary>ShipSenseHashKey. </summary>
+		ShipSenseHashKey,
+		///<summary>ShipSenseRecognitionStatus. </summary>
+		ShipSenseRecognitionStatus,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>GrouponOrderID. </summary>
+		GrouponOrderID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponStore.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum GrouponStoreFieldIndex:int
+	{
+		///<summary>StoreID. Inherited from Store</summary>
+		StoreID_Store,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>License. </summary>
+		License,
+		///<summary>Edition. </summary>
+		Edition,
+		///<summary>TypeCode. </summary>
+		TypeCode,
+		///<summary>Enabled. </summary>
+		Enabled,
+		///<summary>SetupComplete. </summary>
+		SetupComplete,
+		///<summary>StoreName. </summary>
+		StoreName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Fax. </summary>
+		Fax,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>AutoDownload. </summary>
+		AutoDownload,
+		///<summary>AutoDownloadMinutes. </summary>
+		AutoDownloadMinutes,
+		///<summary>AutoDownloadOnlyAway. </summary>
+		AutoDownloadOnlyAway,
+		///<summary>ComputerDownloadPolicy. </summary>
+		ComputerDownloadPolicy,
+		///<summary>DefaultEmailAccountID. </summary>
+		DefaultEmailAccountID,
+		///<summary>ManualOrderPrefix. </summary>
+		ManualOrderPrefix,
+		///<summary>ManualOrderPostfix. </summary>
+		ManualOrderPostfix,
+		///<summary>InitialDownloadDays. </summary>
+		InitialDownloadDays,
+		///<summary>InitialDownloadOrder. </summary>
+		InitialDownloadOrder,
+		///<summary>StoreID. </summary>
+		StoreID,
+		///<summary>StoreUrl. </summary>
+		StoreUrl,
+		///<summary>SupplierID. </summary>
+		SupplierID,
+		///<summary>Token. </summary>
+		Token,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: InfopiaOrderItem.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9645,6 +9855,10 @@ namespace ShipWorks.Data.Model
 		GridColumnLayoutEntity,
 		///<summary>GridColumnPosition</summary>
 		GridColumnPositionEntity,
+		///<summary>GrouponOrder</summary>
+		GrouponOrderEntity,
+		///<summary>GrouponStore</summary>
+		GrouponStoreEntity,
 		///<summary>InfopiaOrderItem</summary>
 		InfopiaOrderItemEntity,
 		///<summary>InfopiaStore</summary>

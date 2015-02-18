@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((161 + 0));
+			base.InitClass((163 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -119,6 +119,8 @@ namespace ShipWorks.Data.Adapter
 			InitGridColumnFormatEntityMappings();
 			InitGridColumnLayoutEntityMappings();
 			InitGridColumnPositionEntityMappings();
+			InitGrouponOrderEntityMappings();
+			InitGrouponStoreEntityMappings();
 			InitInfopiaOrderItemEntityMappings();
 			InitInfopiaStoreEntityMappings();
 			InitInsurancePolicyEntityMappings();
@@ -1361,6 +1363,22 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "GridColumnPositionEntity", "Visible", "Visible", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "GridColumnPositionEntity", "Width", "Width", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 			base.AddElementFieldMapping( "GridColumnPositionEntity", "Position", "Position", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 5 );
+		}
+		/// <summary>Inits GrouponOrderEntity's mappings</summary>
+		private void InitGrouponOrderEntityMappings()
+		{
+			base.AddElementMapping( "GrouponOrderEntity", "ShipWorksLocal", @"dbo", "GrouponOrder", 2 );
+			base.AddElementFieldMapping( "GrouponOrderEntity", "OrderID", "OrderID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "GrouponOrderEntity", "GrouponOrderID", "GrouponOrderID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
+		}
+		/// <summary>Inits GrouponStoreEntity's mappings</summary>
+		private void InitGrouponStoreEntityMappings()
+		{
+			base.AddElementMapping( "GrouponStoreEntity", "ShipWorksLocal", @"dbo", "GrouponStore", 4 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "SupplierID", "SupplierID", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 		}
 		/// <summary>Inits InfopiaOrderItemEntity's mappings</summary>
 		private void InitInfopiaOrderItemEntityMappings()

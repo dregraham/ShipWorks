@@ -181,6 +181,8 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				case "InsurancePolicyEntity": return EntityType.InsurancePolicyEntity;
 				case "EbayCombinedOrderRelationEntity": return EntityType.EbayCombinedOrderRelationEntity;
+				case "GrouponStoreEntity": return EntityType.GrouponStoreEntity;
+				case "GrouponOrderEntity": return EntityType.GrouponOrderEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
@@ -283,6 +285,8 @@ namespace ShipWorks.Data.Adapter.Custom
 				case EntityType.SearsOrderItemEntity: return new SearsOrderItemRelations();
 				case EntityType.BigCommerceStoreEntity: return new BigCommerceStoreRelations();
 				case EntityType.BigCommerceOrderItemEntity: return new BigCommerceOrderItemRelations();
+				case EntityType.GrouponStoreEntity: return new GrouponStoreRelations();
+				case EntityType.GrouponOrderEntity: return new GrouponOrderRelations();
 				}
 			
 			throw new ArgumentException(string.Format("Entity type '{0}' is not valid or is not a part of a TargetPerEntity hierarchy.", entityType));

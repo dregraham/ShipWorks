@@ -2307,6 +2307,24 @@
     <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.Designer.cs">
       <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Grid\GridGrouponOrderDisplayType.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>GrouponStoreAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreDownloader.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreException.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreOrderIdentifier.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreType.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreWebClient.cs" />
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.Designer.cs">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -7692,6 +7710,12 @@
     <EmbeddedResource Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.resx">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\GrouponStoreAccountSettingsControl.resx">
+      <DependentUpon>GrouponStoreAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.resx">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Newegg\NeweggDownloadStoreSettingsControl.resx">
       <DependentUpon>NeweggDownloadStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10973,6 +10997,7 @@
     <None Include="Resources\cloudconversion.png" />
     <None Include="Resources\cscart.png" />
     <None Include="Resources\loadedcommerce.png" />
+    <None Include="Resources\groupon.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

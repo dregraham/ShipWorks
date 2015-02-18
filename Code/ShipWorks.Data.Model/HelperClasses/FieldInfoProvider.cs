@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (161 + 0));
+			base.InitClass( (163 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -120,6 +120,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitGridColumnFormatEntityInfos();
 			InitGridColumnLayoutEntityInfos();
 			InitGridColumnPositionEntityInfos();
+			InitGrouponOrderEntityInfos();
+			InitGrouponStoreEntityInfos();
 			InitInfopiaOrderItemEntityInfos();
 			InitInfopiaStoreEntityInfos();
 			InitInsurancePolicyEntityInfos();
@@ -1299,6 +1301,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Visible", typeof(System.Boolean), false, false, false, false,  (int)GridColumnPositionFieldIndex.Visible, 0, 0, 0);
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Width", typeof(System.Int32), false, false, false, false,  (int)GridColumnPositionFieldIndex.Width, 0, 0, 10);
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Position", typeof(System.Int32), false, false, false, false,  (int)GridColumnPositionFieldIndex.Position, 0, 0, 10);
+		}
+		/// <summary>Inits GrouponOrderEntity's FieldInfo objects</summary>
+		private void InitGrouponOrderEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponOrderEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderFieldIndex.GrouponOrderID, 50, 0, 0);
+		}
+		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
+		private void InitGrouponStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)GrouponStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.StoreUrl, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponStoreEntity", "SupplierID", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.SupplierID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.Token, 255, 0, 0);
 		}
 		/// <summary>Inits InfopiaOrderItemEntity's FieldInfo objects</summary>
 		private void InitInfopiaOrderItemEntityInfos()
