@@ -73,6 +73,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 if (accountWasCreated)
                 {
                     ConvertShipmentToUsps();
+                    Close();
                 }
             }
         }
