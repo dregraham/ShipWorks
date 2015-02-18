@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (163 + 0));
+			base.InitClass( (164 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -121,6 +121,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitGridColumnLayoutEntityInfos();
 			InitGridColumnPositionEntityInfos();
 			InitGrouponOrderEntityInfos();
+			InitGrouponOrderItemEntityInfos();
 			InitGrouponStoreEntityInfos();
 			InitInfopiaOrderItemEntityInfos();
 			InitInfopiaStoreEntityInfos();
@@ -1307,6 +1308,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("GrouponOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderFieldIndex.OrderID, 0, 0, 19);
 			base.AddElementFieldInfo("GrouponOrderEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderFieldIndex.GrouponOrderID, 50, 0, 0);
+		}
+		/// <summary>Inits GrouponOrderItemEntity's FieldInfo objects</summary>
+		private void InitGrouponOrderItemEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "Permalink", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.Permalink, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "ChannelSKUProvided", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.ChannelSKUProvided, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineitemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "CILineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.CILineItemID, 255, 0, 0);
 		}
 		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
 		private void InitGrouponStoreEntityInfos()

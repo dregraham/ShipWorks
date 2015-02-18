@@ -8294,6 +8294,131 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity GrouponOrderItemEntity</summary>
+	public partial class GrouponOrderItemFields
+	{
+		/// <summary>Creates a new GrouponOrderItemEntity.OrderItemID_OrderItem field instance</summary>
+		public static EntityField2 OrderItemID_OrderItem
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OrderItemID_OrderItem);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.OrderID field instance</summary>
+		public static EntityField2 OrderID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OrderID);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Name field instance</summary>
+		public static EntityField2 Name
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Name);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Code field instance</summary>
+		public static EntityField2 Code
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Code);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.SKU field instance</summary>
+		public static EntityField2 SKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.SKU);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.ISBN field instance</summary>
+		public static EntityField2 ISBN
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.ISBN);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.UPC field instance</summary>
+		public static EntityField2 UPC
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.UPC);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Description);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Location field instance</summary>
+		public static EntityField2 Location
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Location);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Image field instance</summary>
+		public static EntityField2 Image
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Image);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Thumbnail field instance</summary>
+		public static EntityField2 Thumbnail
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Thumbnail);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.UnitPrice field instance</summary>
+		public static EntityField2 UnitPrice
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.UnitPrice);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.UnitCost field instance</summary>
+		public static EntityField2 UnitCost
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.UnitCost);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Weight field instance</summary>
+		public static EntityField2 Weight
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Weight);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Quantity field instance</summary>
+		public static EntityField2 Quantity
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Quantity);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.LocalStatus field instance</summary>
+		public static EntityField2 LocalStatus
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.LocalStatus);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.IsManual field instance</summary>
+		public static EntityField2 IsManual
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.IsManual);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.OrderItemID field instance</summary>
+		public static EntityField2 OrderItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.OrderItemID);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.Permalink field instance</summary>
+		public static EntityField2 Permalink
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.Permalink);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.ChannelSKUProvided field instance</summary>
+		public static EntityField2 ChannelSKUProvided
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.ChannelSKUProvided);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.FulfillmentLineitemID field instance</summary>
+		public static EntityField2 FulfillmentLineitemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.FulfillmentLineitemID);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.BomSKU field instance</summary>
+		public static EntityField2 BomSKU
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.BomSKU);}
+		}
+		/// <summary>Creates a new GrouponOrderItemEntity.CILineItemID field instance</summary>
+		public static EntityField2 CILineItemID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.CILineItemID);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity GrouponStoreEntity</summary>
 	public partial class GrouponStoreFields
 	{

@@ -29,7 +29,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreWebClient));
 
         //Groupon API Endpoint
-        private static string GrouponEndpoint = "http://10.1.10.132/json";
+        //private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
+        private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
+
 
         // the store instance
         GrouponStoreEntity store;
@@ -48,7 +50,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public JObject GetOrders(int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-            ConfigureRequest(submitter, "/get_orders", page);
+            ConfigureGetRequest(submitter, "/get_orders", page);
 
             return ProcessRequest(submitter, "GetOrders");
         }
@@ -61,14 +63,30 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Uploads shipment details to Groupon
         /// </summary>
+        public void UploadShipmentDetails(List<ShipmentEntity> shipment)
+        {
 
+        }
 
         /// <summary>
-        /// Setup a request 
+        /// Setup a get request 
         /// </summary>
-        private void ConfigureRequest(HttpVariableRequestSubmitter submitter, string operationName, int page)
+        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, string operationName, int page)
         {
             submitter.Verb = HttpVerb.Get;
+
+            submitter.Uri = new Uri(GrouponEndpoint + operationName);
+            submitter.Variables.Add("supplier_id", store.SupplierID);
+            submitter.Variables.Add("token", store.Token);
+            submitter.Variables.Add("page", page.ToString());
+        }
+
+        /// <summary>
+        /// Setup a post request 
+        /// </summary>
+        private void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, int page)
+        {
+            submitter.Verb = HttpVerb.Post;
 
             submitter.Uri = new Uri(GrouponEndpoint + operationName);
             submitter.Variables.Add("supplier_id", store.SupplierID);

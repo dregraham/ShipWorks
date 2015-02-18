@@ -3902,6 +3902,65 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponOrderItem.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum GrouponOrderItemFieldIndex:int
+	{
+		///<summary>OrderItemID. Inherited from OrderItem</summary>
+		OrderItemID_OrderItem,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>OrderID. </summary>
+		OrderID,
+		///<summary>Name. </summary>
+		Name,
+		///<summary>Code. </summary>
+		Code,
+		///<summary>SKU. </summary>
+		SKU,
+		///<summary>ISBN. </summary>
+		ISBN,
+		///<summary>UPC. </summary>
+		UPC,
+		///<summary>Description. </summary>
+		Description,
+		///<summary>Location. </summary>
+		Location,
+		///<summary>Image. </summary>
+		Image,
+		///<summary>Thumbnail. </summary>
+		Thumbnail,
+		///<summary>UnitPrice. </summary>
+		UnitPrice,
+		///<summary>UnitCost. </summary>
+		UnitCost,
+		///<summary>Weight. </summary>
+		Weight,
+		///<summary>Quantity. </summary>
+		Quantity,
+		///<summary>LocalStatus. </summary>
+		LocalStatus,
+		///<summary>IsManual. </summary>
+		IsManual,
+		///<summary>OrderItemID. </summary>
+		OrderItemID,
+		///<summary>Permalink. </summary>
+		Permalink,
+		///<summary>ChannelSKUProvided. </summary>
+		ChannelSKUProvided,
+		///<summary>FulfillmentLineitemID. </summary>
+		FulfillmentLineitemID,
+		///<summary>BomSKU. </summary>
+		BomSKU,
+		///<summary>CILineItemID. </summary>
+		CILineItemID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: GrouponStore.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9857,6 +9916,8 @@ namespace ShipWorks.Data.Model
 		GridColumnPositionEntity,
 		///<summary>GrouponOrder</summary>
 		GrouponOrderEntity,
+		///<summary>GrouponOrderItem</summary>
+		GrouponOrderItemEntity,
 		///<summary>GrouponStore</summary>
 		GrouponStoreEntity,
 		///<summary>InfopiaOrderItem</summary>

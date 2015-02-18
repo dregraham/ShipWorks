@@ -2659,7 +2659,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrder
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -2671,7 +2670,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -2687,6 +2685,50 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public override IEntityFields2 CreateHierarchyFields() 
 		{
 			return new EntityFields2(InheritanceInfoProviderSingleton.GetInstance().GetHierarchyFields("GrouponOrderEntity"), InheritanceInfoProviderSingleton.GetInstance(), null);
+		}
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty GrouponOrderItemEntity objects.</summary>
+	[Serializable]
+	public partial class GrouponOrderItemEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public GrouponOrderItemEntityFactory() : base("GrouponOrderItemEntity", ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity) { }
+
+		/// <summary>Creates a new, empty GrouponOrderItemEntity object.</summary>
+		/// <returns>A new, empty GrouponOrderItemEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new GrouponOrderItemEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderItem
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new GrouponOrderItemEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new GrouponOrderItemEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewGrouponOrderItemUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<GrouponOrderItemEntity>(this);
+		}
+		
+		/// <summary>Creates the hierarchy fields for the entity to which this factory belongs.</summary>
+		/// <returns>IEntityFields2 object with the fields of all the entities in teh hierarchy of this entity or the fields of this entity if the entity isn't in a hierarchy.</returns>
+		public override IEntityFields2 CreateHierarchyFields() 
+		{
+			return new EntityFields2(InheritanceInfoProviderSingleton.GetInstance().GetHierarchyFields("GrouponOrderItemEntity"), InheritanceInfoProviderSingleton.GetInstance(), null);
 		}
 		#region Included Code
 
@@ -6942,6 +6984,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.GrouponOrderEntity:
 					factoryToUse = new GrouponOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity:
+					factoryToUse = new GrouponOrderItemEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.GrouponStoreEntity:
 					factoryToUse = new GrouponStoreEntityFactory();

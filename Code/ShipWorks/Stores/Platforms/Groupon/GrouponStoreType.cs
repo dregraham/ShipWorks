@@ -113,6 +113,22 @@ namespace ShipWorks.Stores.Platforms.Groupon
             return entity;
         }
 
+        /// <summary>
+        /// Creates a custom order item entity
+        /// </summary>
+        public override OrderItemEntity CreateOrderItemInstance()
+        {
+            GrouponOrderItemEntity entity = new GrouponOrderItemEntity();
+
+            entity.Permalink = "";
+            entity.ChannelSKUProvided = "";
+            entity.FulfillmentLineitemID = "";
+            entity.BomSKU = "";
+            entity.CILineItemID = "";
+
+            return entity;
+        }
+
 
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders

@@ -15,6 +15,7 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
+using Interapptive.Shared.Enums;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -36,11 +37,13 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             GrouponStoreWebClient client = new GrouponStoreWebClient((GrouponStoreEntity)Store);
             
-            int currentPage = 1;
-            int numberOfPages = 1;
+            int currentPage = 0;
+            int numberOfPages = 0;
 
             do 
             {
+                currentPage++;
+
                 //Grab orders 
                 JObject result = client.GetOrders(currentPage);
 
@@ -50,8 +53,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 //Load orders 
                 LoadOrders(jsonOrders);
 
-                //Update currentPage
-                currentPage = Convert.ToInt16(result["meta"]["current_page"].ToString());
+                //Update numberOfPages
                 numberOfPages = Convert.ToInt16(result["meta"]["no_of_pages"].ToString());
 
             } while(currentPage < numberOfPages);
@@ -94,10 +96,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
             //Order Items
+            string itemWeightUnit = jsonOrder["shipping"]["product_weight_unit"].ToString();
+
             IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
             foreach (JToken jsonItem in jsonItems)
             {
-                LoadItem(order, jsonItem);
+                LoadItem(order, jsonItem, itemWeightUnit);
             }
 
             //OrderTotal
@@ -110,17 +114,23 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadItem(GrouponOrderEntity order, JToken jsonItem)
+        private void LoadItem(GrouponOrderEntity order, JToken jsonItem, string itemWeightUnit)
         {
-            OrderItemEntity item = InstantiateOrderItem(order);
+            GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
             item.SKU = jsonItem["sku"].ToString();
             item.Name = jsonItem["name"].ToString();
-            item.Weight = Convert.ToDouble(jsonItem["weight"].ToString());
-            item.Code = jsonItem["ci_lineitemid"].ToString();
+            item.Weight = GetWeight(Convert.ToDouble(jsonItem["weight"].ToString()),itemWeightUnit);
             item.UnitPrice = Convert.ToDecimal(jsonItem["unit_price"].ToString());
             item.Quantity = Convert.ToInt16(jsonItem["quantity"].ToString());
 
+
+            //Groupon fields
+            item.Permalink = jsonItem["permalink"].ToString();
+            item.ChannelSKUProvided = jsonItem["channel_sku_provided"].ToString();
+            item.FulfillmentLineitemID = jsonItem["fulfillment_lineitem_id"].ToString();
+            item.BomSKU = jsonItem["bom_sku"].ToString();
+            item.CILineItemID = jsonItem["ci_lineitemid"].ToString();
         }
 
         /// <summary>
@@ -157,9 +167,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
             adapter.Phone = address["phone"].ToString();
         }
 
+        private double GetWeight(double weight, string itemWeightUnit)
+        {
+            //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
+            switch (itemWeightUnit)
+            {
+                case "ounces":
+                    return WeightUtility.Convert(WeightUnitOfMeasure.Ounces, WeightUnitOfMeasure.Pounds, weight);
+                default:
+                    return weight;
+            }
+        }
+
         private DateTime GetDate(string date)
         {
-
             int TimeZonePos = date.IndexOf("UTC");
 
             if (TimeZonePos > 0)
@@ -170,9 +191,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 return DateTime.Parse(date);
             }
-            
         }
-        
-
     }
 }

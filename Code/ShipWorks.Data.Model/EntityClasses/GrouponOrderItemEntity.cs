@@ -28,11 +28,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 	// __LLBLGENPRO_USER_CODE_REGION_END
 
 	/// <summary>
-	/// Entity class which represents the entity 'GrouponOrder'.<br/><br/>
+	/// Entity class which represents the entity 'GrouponOrderItem'.<br/><br/>
 	/// 
 	/// </summary>
 	[Serializable]
-	public partial class GrouponOrderEntity : OrderEntity, ISerializable
+	public partial class GrouponOrderItemEntity : OrderItemEntity, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -53,78 +53,65 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static new partial class MemberNames
 		{
-			/// <summary>Member name Customer</summary>
-			public static readonly string Customer = "Customer";
-			/// <summary>Member name Store</summary>
-			public static readonly string Store = "Store";
-			/// <summary>Member name Notes</summary>
-			public static readonly string Notes = "Notes";
-			/// <summary>Member name OrderCharges</summary>
-			public static readonly string OrderCharges = "OrderCharges";
-			/// <summary>Member name OrderItems</summary>
-			public static readonly string OrderItems = "OrderItems";
-			/// <summary>Member name OrderPaymentDetails</summary>
-			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
-
-
-
-
-
+			/// <summary>Member name Order</summary>
+			public static readonly string Order = "Order";
+			/// <summary>Member name OrderItemAttributes</summary>
+			public static readonly string OrderItemAttributes = "OrderItemAttributes";
 
 
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static GrouponOrderEntity()
+		static GrouponOrderItemEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 
 		/// <summary> CTor</summary>
-		public GrouponOrderEntity()
+		public GrouponOrderItemEntity()
 		{
-			SetName("GrouponOrderEntity");
+			SetName("GrouponOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public GrouponOrderEntity(IEntityFields2 fields):base(fields)
+		public GrouponOrderItemEntity(IEntityFields2 fields):base(fields)
 		{
-			SetName("GrouponOrderEntity");
+			SetName("GrouponOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this GrouponOrderEntity</param>
-		public GrouponOrderEntity(IValidator validator):base(validator)
+		/// <param name="validator">The custom validator object for this GrouponOrderItemEntity</param>
+		public GrouponOrderItemEntity(IValidator validator):base(validator)
 		{
-			SetName("GrouponOrderEntity");
+			SetName("GrouponOrderItemEntity");
 		}
 				
 
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for GrouponOrder which data should be fetched into this GrouponOrder object</param>
+		/// <param name="orderItemID">PK value for GrouponOrderItem which data should be fetched into this GrouponOrderItem object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public GrouponOrderEntity(System.Int64 orderID):base(orderID)
+		public GrouponOrderItemEntity(System.Int64 orderItemID):base(orderItemID)
 		{
-			SetName("GrouponOrderEntity");
+			SetName("GrouponOrderItemEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="orderID">PK value for GrouponOrder which data should be fetched into this GrouponOrder object</param>
-		/// <param name="validator">The custom validator object for this GrouponOrderEntity</param>
+		/// <param name="orderItemID">PK value for GrouponOrderItem which data should be fetched into this GrouponOrderItem object</param>
+		/// <param name="validator">The custom validator object for this GrouponOrderItemEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public GrouponOrderEntity(System.Int64 orderID, IValidator validator):base(orderID, validator)
+		public GrouponOrderItemEntity(System.Int64 orderItemID, IValidator validator):base(orderItemID, validator)
 		{
-			SetName("GrouponOrderEntity");
+			SetName("GrouponOrderItemEntity");
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected GrouponOrderEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected GrouponOrderItemEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -144,7 +131,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((GrouponOrderFieldIndex)fieldIndex)
+			switch((GrouponOrderItemFieldIndex)fieldIndex)
 			{
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -183,7 +170,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
 		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return GrouponOrderEntity.GetRelationsForField(fieldName);
+			return GrouponOrderItemEntity.GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
@@ -199,7 +186,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				default:
-					toReturn = OrderEntity.GetRelationsForField(fieldName);
+					toReturn = OrderItemEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -297,7 +284,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public override IInheritanceInfo GetInheritanceInfo()
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderEntity", false);
+			return InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("GrouponOrderItemEntity", false);
 		}
 		
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
@@ -305,7 +292,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter()
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GrouponOrderEntity", false);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GrouponOrderItemEntity", false);
 		}
 		
 		/// <summary>Gets a predicateexpression which filters on this entity</summary>
@@ -314,7 +301,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <remarks>Only useful in entity fetches.</remarks>
 		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GrouponOrderEntity", negate);
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("GrouponOrderItemEntity", negate);
 		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
@@ -340,7 +327,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
 		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(GrouponOrderFieldIndex fieldIndex)
+		public bool TestOriginalFieldValueForNull(GrouponOrderItemFieldIndex fieldIndex)
 		{
 			return base.Fields[(int)fieldIndex].IsNull;
 		}
@@ -349,7 +336,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
 		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
 		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(GrouponOrderFieldIndex fieldIndex)
+		public bool TestCurrentFieldValueForNull(GrouponOrderItemFieldIndex fieldIndex)
 		{
 			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
 		}
@@ -360,14 +347,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public override bool CheckIfIsSubTypeOf(int typeOfEntity)
 		{
-			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("GrouponOrderEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("GrouponOrderItemEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
 		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		public override List<IEntityRelation> GetAllRelations()
 		{
-			return new GrouponOrderRelations().GetAllRelations();
+			return new GrouponOrderItemRelations().GetAllRelations();
 		}
 		
 
@@ -379,7 +366,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
 		protected override IEntityFields2 CreateFields()
 		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.GrouponOrderEntity);
+			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity);
 		}
 
 		/// <summary>
@@ -394,7 +381,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(GrouponOrderEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(GrouponOrderItemEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -483,17 +470,29 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable = null;
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("OrderID", fieldHashtable);
+			_fieldsCustomProperties.Add("OrderItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("GrouponOrderID", fieldHashtable);
+			_fieldsCustomProperties.Add("Permalink", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ChannelSKUProvided", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("FulfillmentLineitemID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("BomSKU", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CILineItemID", fieldHashtable);
 		}
 		#endregion
 
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this GrouponOrderEntity</param>
+		/// <param name="validator">The validator object for this GrouponOrderItemEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		protected override void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -509,9 +508,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public new static GrouponOrderRelations Relations
+		public new static GrouponOrderItemRelations Relations
 		{
-			get	{ return new GrouponOrderRelations(); }
+			get	{ return new GrouponOrderItemRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -530,7 +529,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return GrouponOrderEntity.CustomProperties;}
+			get { return GrouponOrderItemEntity.CustomProperties;}
 		}
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
@@ -546,29 +545,73 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return GrouponOrderEntity.FieldsCustomProperties;}
+			get { return GrouponOrderItemEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The OrderID property of the Entity GrouponOrder<br/><br/>
+		/// <summary> The OrderItemID property of the Entity GrouponOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "GrouponOrder"."OrderID"<br/>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."OrderItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public override System.Int64 OrderID
+		public override System.Int64 OrderItemID
 		{
-			get { return (System.Int64)GetValue((int)GrouponOrderFieldIndex.OrderID, true); }
-			set	{ SetValue((int)GrouponOrderFieldIndex.OrderID, value); }
+			get { return (System.Int64)GetValue((int)GrouponOrderItemFieldIndex.OrderItemID, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.OrderItemID, value); }
 		}
 
-		/// <summary> The GrouponOrderID property of the Entity GrouponOrder<br/><br/>
+		/// <summary> The Permalink property of the Entity GrouponOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "GrouponOrder"."GrouponOrderID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."Permalink"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String GrouponOrderID
+		public virtual System.String Permalink
 		{
-			get { return (System.String)GetValue((int)GrouponOrderFieldIndex.GrouponOrderID, true); }
-			set	{ SetValue((int)GrouponOrderFieldIndex.GrouponOrderID, value); }
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.Permalink, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.Permalink, value); }
+		}
+
+		/// <summary> The ChannelSKUProvided property of the Entity GrouponOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."ChannelSKUProvided"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ChannelSKUProvided
+		{
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.ChannelSKUProvided, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.ChannelSKUProvided, value); }
+		}
+
+		/// <summary> The FulfillmentLineitemID property of the Entity GrouponOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."FulfillmentLineitemID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String FulfillmentLineitemID
+		{
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, value); }
+		}
+
+		/// <summary> The BomSKU property of the Entity GrouponOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."BomSKU"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String BomSKU
+		{
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.BomSKU, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.BomSKU, value); }
+		}
+
+		/// <summary> The CILineItemID property of the Entity GrouponOrderItem<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."CILineItemID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String CILineItemID
+		{
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.CILineItemID, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.CILineItemID, value); }
 		}
 
 
@@ -592,7 +635,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.GrouponOrderEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity; }
 		}
 		#endregion
 

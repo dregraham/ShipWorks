@@ -253,6 +253,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.GrouponOrderEntity:
 					toReturn = this.GrouponOrder;
 					break;
+				case ShipWorks.Data.Model.EntityType.GrouponOrderItemEntity:
+					toReturn = this.GrouponOrderItem;
+					break;
 				case ShipWorks.Data.Model.EntityType.GrouponStoreEntity:
 					toReturn = this.GrouponStore;
 					break;
@@ -939,6 +942,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<GrouponOrderEntity> GrouponOrder
 		{
 			get { return new DataSource2<GrouponOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting GrouponOrderItemEntity instances in the database.</summary>
+		public DataSource2<GrouponOrderItemEntity> GrouponOrderItem
+		{
+			get { return new DataSource2<GrouponOrderItemEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting GrouponStoreEntity instances in the database.</summary>
