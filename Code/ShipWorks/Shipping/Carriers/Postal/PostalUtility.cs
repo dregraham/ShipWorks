@@ -323,20 +323,27 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (IsMilitaryState(shipment.ShipStateProvCode))
             {
+                // As per Stamps.com, envelopes under 16 oz do not require customs.
+                // https://stamps.custhelp.com/app/answers/detail/a_id/406/related/1
+                if ((PostalPackagingType)shipment.Postal.PackagingType == PostalPackagingType.Envelope && 
+                    shipment.TotalWeight < 1)
+                {
+                    return PostalCustomsForm.None;
+                }
+
                 return (shipment.TotalWeight >= 1 || shipment.CustomsValue >= 400) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
             }
-            else if (IsDomesticCountry(shipment.ShipCountryCode))
+            
+            if (IsDomesticCountry(shipment.ShipCountryCode))
             {
                 return PostalCustomsForm.None;
             }
-            else
-            {
-                return (shipment.CustomsValue >= 400)  ?
+            
+            return (shipment.CustomsValue >= 400)  ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
-            }
         }
 
         /// <summary>
