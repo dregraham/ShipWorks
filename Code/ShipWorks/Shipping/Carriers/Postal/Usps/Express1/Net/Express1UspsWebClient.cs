@@ -41,11 +41,11 @@ using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.UrlType;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
     /// <summary>
-    /// Central point where API stuff goes through for stamps.com
+    /// Central point where API stuff goes through for USPS
     /// </summary>
     public class Express1UspsWebClient : IUspsWebClient
     {
-        // These lengths come from the error that Stamps' API gives us when we send data that is too long
+        // These lengths come from the error that USPS' API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
         private const int MaxCustomsItemDescriptionLength = 60;
 
@@ -53,17 +53,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         private readonly LogEntryFactory logEntryFactory;
         private readonly ICarrierAccountRepository<UspsAccountEntity> accountRepository;
 
-        // Maps stamps.com usernames to their latest authenticator tokens
+        // Maps USPS usernames to their latest authenticator tokens
         static Dictionary<string, string> usernameAuthenticatorMap = new Dictionary<string, string>();
 
-        // Maps stamps.com usernames to the object lock used to make sure only one thread is trying to authenticate at a time
+        // Maps USPS usernames to the object lock used to make sure only one thread is trying to authenticate at a time
         static Dictionary<string, object> authenticationLockMap = new Dictionary<string, object>();
 
         // Cleansed address map so we don't do common addresses over and over again
         static Dictionary<PersonAdapter, Address> cleansedAddressMap = new Dictionary<PersonAdapter, Address>();
 
         // Express1 API service connection info 
-        static Express1UspsConnectionDetails express1StampsConnectionDetails = new Express1UspsConnectionDetails();
+        static Express1UspsConnectionDetails express1UspsConnectionDetails = new Express1UspsConnectionDetails();
 
         private readonly ICertificateInspector certificateInspector;
         
@@ -90,8 +90,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         public static bool UseTestServer
         {
-            get { return InterapptiveOnly.Registry.GetValue("StampsTestServer", false); }
-            set { InterapptiveOnly.Registry.SetValue("StampsTestServer", value); }
+            get { return InterapptiveOnly.Registry.GetValue("UspsTestServer", false); }
+            set { InterapptiveOnly.Registry.SetValue("UspsTestServer", value); }
         }
 
         /// <summary>
@@ -107,22 +107,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private SwsimV29 CreateWebService(string logName, LogActionType logActionType)
         {
-            SwsimV29 webService = new Express1UspsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1Stamps, logName, logActionType))
+            SwsimV29 webService = new Express1UspsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1, logName, logActionType))
             {
-                Url = express1StampsConnectionDetails.ServiceUrl
+                Url = express1UspsConnectionDetails.ServiceUrl
             };
 
             return webService;
         }
 
         /// <summary>
-        /// Authenticate the given user with Stamps.com.  If 
+        /// Authenticate the given user with USPS
         /// </summary>
         public void AuthenticateUser(string username, string password)
         {
             try
             {
-                // Output parameters from stamps.com
+                // Output parameters from USPS
                 DateTime lastLoginTime = new DateTime();
                 bool clearCredential = false;
 
@@ -135,7 +135,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
                     string auth = webService.AuthenticateUser(new Credentials
                     {
-                        IntegrationID = new Guid(express1StampsConnectionDetails.ApiKey),
+                        IntegrationID = new Guid(express1UspsConnectionDetails.ApiKey),
                         Username = username,
                         Password = password
                     }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired);
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Checks with Stamps.com API to get the contract type of the account.
+        /// Checks with USPS API to get the contract type of the account.
         /// </summary>
         public UspsAccountContractType GetContractType(UspsAccountEntity account)
         {
@@ -194,11 +194,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Get the account info for the given Stamps.com user name
+        /// Get the account info for the given USPS user name
         /// </summary>
         public object GetAccountInfo(UspsAccountEntity account)
         {
-            return AuthenticationWrapper(() => { return GetAccountInfoInternal(account); }, account);
+            return AuthenticationWrapper(() => GetAccountInfoInternal(account), account);
         }
 
         /// <summary>
@@ -222,11 +222,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Get the Stamps.com URL of the given urlType
+        /// Get the USPS URL of the given urlType
         /// </summary>
         public string GetUrl(UspsAccountEntity account, UrlType urlType)
         {
-            return AuthenticationWrapper(() => { return GetUrlInternal(account, urlType); }, account);
+            return AuthenticationWrapper(() => GetUrlInternal(account, urlType), account);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             if (account == null)
             {
-                throw new UspsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No USPS account is selected for the shipment.");
             }
 
             if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
@@ -298,18 +298,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV11 stampsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+                foreach (RateV11 uspsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
-                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(ConvertServiceType(stampsRate.ServiceType));
+                    PostalServiceType serviceType = UspsUtility.GetPostalServiceType(ConvertServiceType(uspsRate.ServiceType));
 
                     RateResult baseRate = null;
 
                     // If its a rate that has sig\deliv, then you can's select the core rate itself
-                    if (stampsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
+                    if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            stampsRate.DeliverDays.Replace("Days", ""))
+                            uspsRate.DeliverDays.Replace("Days", ""))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
                             ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
@@ -319,20 +319,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
-                            stampsRate.DeliverDays.Replace("Days", ""),
-                            stampsRate.Amount,
+                            uspsRate.DeliverDays.Replace("Days", ""),
+                            uspsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                         {
                             ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
                         };
                     }
 
-                    PostalUtility.SetServiceDetails(baseRate, serviceType, stampsRate.DeliverDays);
+                    PostalUtility.SetServiceDetails(baseRate, serviceType, uspsRate.DeliverDays);
 
                     rates.Add(baseRate);
 
                     // Add a rate for each add-on
-                    foreach (AddOnV4 addOn in stampsRate.AddOns)
+                    foreach (AddOnV4 addOn in uspsRate.AddOns)
                     {
                         string name = null;
                         PostalConfirmationType confirmationType = PostalConfirmationType.None;
@@ -355,10 +355,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                             RateResult addOnRate = new RateResult(
                                 name,
                                 string.Empty,
-                                stampsRate.Amount + addOn.Amount,
+                                uspsRate.Amount + addOn.Amount,
                                 new PostalRateSelection(serviceType, confirmationType));
 
-                            PostalUtility.SetServiceDetails(addOnRate, serviceType, stampsRate.DeliverDays);
+                            PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
 
                             rates.Add(addOnRate);
                         }
@@ -372,7 +372,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
                 {
                     // Provide a little more context as to which user name/password was incorrect in the case
-                    // where there's multiple accounts or Express1 for Stamps is being used to compare rates
+                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.",
                                     UspsAccountManager.GetResellerName(UspsResellerType.Express1),
                                     account.Username,
@@ -429,7 +429,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Cleans the address of the given person using the specified stamps account
+        /// Cleans the address of the given person using the specified USPS account
         /// </summary>
         private Address CleanseAddress(UspsAccountEntity account, PersonAdapter person, bool requireFullMatch)
         {
@@ -484,14 +484,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Creates the scan form.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="uspsAccountEntity">The stamps account entity.</param>
+        /// <param name="uspsAccountEntity">The USPS account entity.</param>
         /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
-        /// identify results from Stamps.com</returns>
+        /// identify results from USPS</returns>
         public XDocument CreateScanForm(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
             if (uspsAccountEntity == null)
             {
-                throw new UspsException("No Stamps.com account is selected for the SCAN form.");
+                throw new UspsException("No USPS account is selected for the SCAN form.");
             }
 
             XDocument result = new XDocument();
@@ -501,18 +501,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Creates the scan form via the Stamps.com API and intended to be wrapped by the authentication wrapper.
+        /// Creates the scan form via the USPS API and intended to be wrapped by the authentication wrapper.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="uspsAccountEntity">The stamps account entity.</param>
+        /// <param name="uspsAccountEntity">The USPS account entity.</param>
         /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
-        /// identify results from Stamps.com</returns>
+        /// identify results from USPS</returns>
         private XDocument CreateScanFormInternal(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
-            List<Guid> stampsTransactions = shipments.Select(s => s.UspsTransactionID).ToList();
+            List<Guid> uspsTransactions = shipments.Select(s => s.UspsTransactionID).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
 
-            string scanFormStampsId = string.Empty;
+            string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
 
             using (SwsimV29 webService = CreateWebService("ScanForm"))
@@ -520,19 +520,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 webService.CreateScanForm
                     (
                         GetAuthenticator(uspsAccountEntity),
-                        stampsTransactions.ToArray(),
+                        uspsTransactions.ToArray(),
                         CreateScanFormAddress(person),
                         ImageType.Png,
                         false, // Don't print instructions
                         null,
                         false,
-                        out scanFormStampsId,
+                        out scanFormUspsId,
                         out scanFormUrl
                     );
             }
 
             XDocument response = XDocument.Parse("<ScanForm/>");
-            response.Root.Add(scanFormStampsId.Split(new[] { ' ' }).Select(x => new XElement("TransactionId", x)));
+            response.Root.Add(scanFormUspsId.Split(new[] { ' ' }).Select(x => new XElement("TransactionId", x)));
             response.Root.Add(scanFormUrl.Split(new[] { ' ' }).Select(x => new XElement("Url", x)));
             return response;
         }
@@ -545,7 +545,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
-                throw new UspsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No USPS account is selected for the shipment.");
             }
 
             AuthenticationWrapper(() => { VoidShipmentInternal(shipment, account); return true; }, account);
@@ -571,7 +571,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
             if (account == null)
             {
-                throw new UspsException("No Stamps.com account is selected for the shipment.");
+                throw new UspsException("No USPS account is selected for the shipment.");
             }
 
             try
@@ -583,7 +583,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
                 {
                     // Provide a little more context as to which user name/password was incorrect in the case
-                    // where there's multiple accounts or Express1 for Stamps is being used to compare rates
+                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.",
                                     UspsAccountManager.GetResellerName((UspsResellerType.Express1)),
                                     account.Username,
@@ -607,7 +607,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private void ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            Guid stampsGuid;
+            Guid uspsGuid;
             string tracking = string.Empty;
             string labelUrl;
 
@@ -632,7 +632,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             Usps.WebServices.v29.PostageBalance postageBalance;
             string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
-            // Stamps requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
+            // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
             rate.ToZIPCode = toAddress.ZIPCode;
 
@@ -640,7 +640,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             // Determine what thermal type, if any to use.  
             // If USPS, use it's setting.  
-            // Otherwise, use the Stamps settings if it is a Stamps shipment being auto-switched to an Express1 shipment
+            // Otherwise, use the USPS settings if it is a USPS shipment being auto-switched to an Express1 shipment
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Usps)
             {
                 thermalType = shipment.RequestedLabelFormat == (int)ThermalLanguage.None ? null : (ThermalLanguage?)shipment.RequestedLabelFormat;
@@ -651,7 +651,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
             else
             {
-                throw new InvalidOperationException("Unknown Stamps.com shipment type.");
+                throw new InvalidOperationException("Unknown USPS shipment type.");
             }
 
             // For international thermal labels, we need to set the print layout or else most service/package type combinations
@@ -663,7 +663,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 rate.PrintLayout = "Normal4X6CN22";
             }
 
-            // Each request needs to get a new requestID.  If Stamps.com sees a duplicate, it thinks its the same request.  
+            // Each request needs to get a new requestID.  If USPS sees a duplicate, it thinks its the same request.  
             // So if you had an error (like weight was too much) and then changed the weight and resubmitted, it would still 
             // be in error if you used the same ID again.
             shipment.Postal.Usps.IntegratorTransactionID = Guid.NewGuid();
@@ -682,7 +682,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 // Envelopes don't support thermal
                 thermalType = null;
 
-                // A separate service call is used for processing envelope according to Stamps.com as of v. 22
+                // A separate service call is used for processing envelope according to USPS as of v. 22
                 using (SwsimV29 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
@@ -698,7 +698,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         0, // cost code ID
                         false, // do not hide the facing identification mark (FIM) 
                         out tracking,
-                        out stampsGuid,
+                        out uspsGuid,
                         out labelUrl,
                         out postageBalance,
                         out mac_Unused,
@@ -741,7 +741,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         null, // redirectTo
                         null, // OriginalPostageHash 
                         null, false, // returnImageData
-                        out stampsGuid,
+                        out uspsGuid,
                         out labelUrl,
                         out postageBalance,
                         out mac_Unused,
@@ -754,7 +754,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             shipment.TrackingNumber = tracking;
             shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
-            shipment.Postal.Usps.UspsTransactionID = stampsGuid;
+            shipment.Postal.Usps.UspsTransactionID = uspsGuid;
 
             // Set the thermal type for the shipment
             shipment.ActualLabelFormat = (int?)thermalType;
@@ -813,7 +813,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Create a Stamps.com Address API object based on the given person address
+        /// Create a USPS Address API object based on the given person address
         /// </summary>
         private static Address CreateAddress(PersonAdapter person)
         {
@@ -925,7 +925,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
 
-                // If the service type is Parcel Select, Force DC, otherwise stamps throws an error
+                // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
                 if (confirmation == PostalConfirmationType.Delivery)
                 {
                     addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USADC });
@@ -1006,7 +1006,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             List<CustomsLine> lines = new List<CustomsLine>();
 
-            // Go through each of the customs contents to create  the stamps.com custom line entity
+            // Go through each of the customs contents to create  the USPS custom line entity
             foreach (ShipmentCustomsItemEntity customsItem in shipment.CustomsItems)
             {
                 WeightValue weightValue = new WeightValue(customsItem.Weight);
@@ -1062,7 +1062,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     }
                     catch (SoapException ex)
                     {
-                        log.ErrorFormat("Failed connecting to Stamps.com: {0}, {1}", UspsApiException.GetErrorCode(ex), ex.Message);
+                        log.ErrorFormat("Failed connecting to USPS: {0}, {1}", UspsApiException.GetErrorCode(ex), ex.Message);
 
                         if (triesLeft > 0 && IsStaleAuthenticator(ex))
                         {

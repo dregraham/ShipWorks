@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
-    /// Encapuslates all of the cropping styles/sizes to use when manipulating Stamps.com labels.
+    /// Encapuslates all of the cropping styles/sizes to use when manipulating USPS labels.
     /// </summary>
     public static class CroppingStyles
     {
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 
         /// <summary>
         /// Gets the cropping style for international shipments where there is only
-        /// one label sent from Stamps.com such as the CN22.
+        /// one label sent from USPS such as the CN22.
         /// </summary>
         public static Rectangle SingleInternationalCrop
         {

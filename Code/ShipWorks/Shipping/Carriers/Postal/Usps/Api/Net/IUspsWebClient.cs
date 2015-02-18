@@ -9,12 +9,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     public interface IUspsWebClient
     {
         /// <summary>
-        /// Authenticate the given user with Stamps.com.
+        /// Authenticate the given user with USPS.
         /// </summary>
         void AuthenticateUser(string username, string password);
 
         /// <summary>
-        /// Get the account info for the given Stamps.com user name
+        /// Get the account info for the given USPS user name
         /// </summary>
         object GetAccountInfo(UspsAccountEntity account);
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         void ChangeToExpeditedPlan(UspsAccountEntity account, string promoCode);
 
         /// <summary>
-        /// Checks with Stamps.com API to get the contract type of the account.
+        /// Checks with USPS API to get the contract type of the account.
         /// </summary>
         UspsAccountContractType GetContractType(UspsAccountEntity account);
         
@@ -42,9 +42,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Creates the scan form.
         /// </summary>
         /// <param name="shipments">The shipments.</param>
-        /// <param name="uspsAccountEntity">The stamps account entity.</param>
+        /// <param name="uspsAccountEntity">The USPS account entity.</param>
         /// <returns>An XDocument having a ScanForm node as the root which contains a TransactionId and Url nodes to 
-        /// identify results from Stamps.com</returns>
+        /// identify results from USPS</returns>
         XDocument CreateScanForm(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity);
 
         /// <summary>

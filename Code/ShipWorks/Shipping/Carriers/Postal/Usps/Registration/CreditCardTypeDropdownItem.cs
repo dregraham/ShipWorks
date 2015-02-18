@@ -7,7 +7,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
-    /// Class for populating the Stamps.com cred card type combo box.
+    /// Class for populating the USPS credit card type combo box.
     /// </summary>
     public class CreditCardTypeDropDownItem
     {

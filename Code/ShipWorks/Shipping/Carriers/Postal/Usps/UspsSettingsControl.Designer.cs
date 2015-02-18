@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -49,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelAccountType.Name = "labelAccountType";
             this.labelAccountType.Size = new System.Drawing.Size(132, 13);
             this.labelAccountType.TabIndex = 0;
-            this.labelAccountType.Text = "Stamps.com Accounts";
+            this.labelAccountType.Text = "USPS Accounts";
             // 
             // accountControl
             // 
@@ -57,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.accountControl.Location = new System.Drawing.Point(12, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
-            this.accountControl.StampsResellerType = ShipWorks.Shipping.Carriers.Postal.Usps.UspsResellerType.None;
+            this.accountControl.UspsResellerType = ShipWorks.Shipping.Carriers.Postal.Usps.UspsResellerType.None;
             this.accountControl.TabIndex = 1;
             // 
             // optionsControl
@@ -94,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.express1SettingsControl.Size = new System.Drawing.Size(468, 160);
             this.express1SettingsControl.TabIndex = 7;
             // 
-            // StampsSettingsControl
+            // UspsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

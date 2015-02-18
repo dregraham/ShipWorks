@@ -10,20 +10,20 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsTest : DataDrivenIntegrationTestBase
+    public class UspsTest : DataDrivenIntegrationTestBase
     {
         private const bool justLabels = true;
 
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
-        public void ProcessBatch_UspsAndExpress1Stamps_Test()
+        public void ProcessBatch_UspsAndExpress1Usps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -31,22 +31,22 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing Test ID {0}", TestContext.DataRow["TestID"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
-                    UspsResellerType stampsResellerType;
+                    UspsResellerType resellerType;
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = UspsResellerType.None;
+                        resellerType = UspsResellerType.None;
                     }
                     else
                     {
-                        stampsResellerType = UspsResellerType.Express1;  
+                        resellerType = UspsResellerType.Express1;  
                     }
 
                     Exception exception = null;
@@ -56,7 +56,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                     {
                         try
                         {
-                            testObject.Ship(stampsResellerType);
+                            testObject.Ship(resellerType);
                         }
                         catch (Exception ex)
                         {
@@ -87,11 +87,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
-        public void GetRates_UspsAndExpress1Stamps_Test()
+        public void GetRates_UspsAndExpress1Usps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -99,25 +99,25 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing Test ID {0}", TestContext.DataRow["TestID"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
-                    UspsResellerType stampsResellerType;
+                    UspsResellerType resellerType;
 
                     if (testObject.ShipmentType == "15")
                     {
-                        stampsResellerType = UspsResellerType.None;
+                        resellerType = UspsResellerType.None;
                     }
                     else
                     {
-                        stampsResellerType = UspsResellerType.Express1;
+                        resellerType = UspsResellerType.Express1;
                     }
 
-                    List<RateResult> rateResults = testObject.GetRates(stampsResellerType);
+                    List<RateResult> rateResults = testObject.GetRates(resellerType);
 
                     Debug.Assert(rateResults != null);
                     Debug.Assert(rateResults.Any());
@@ -140,11 +140,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
-        public void PurchasePostage_UspsAndExpress1Stamps_Test()
+        public void PurchasePostage_UspsAndExpress1Usps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -197,11 +197,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestMethod]
-        public void CheckPostage_UspsAndExpress1Stamps_Test()
+        public void CheckPostage_UspsAndExpress1Usps_Test()
         {
-            StampsMapping testObject = new StampsMapping();
+            UspsMapping testObject = new UspsMapping();
 
             try
             {
@@ -209,7 +209,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, StampsMapping.Mapping) &&
+                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);

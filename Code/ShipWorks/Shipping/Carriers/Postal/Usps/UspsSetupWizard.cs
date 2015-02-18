@@ -10,12 +10,10 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Controls;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -26,11 +24,11 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Setup wizard for processing shipments with Stamps.com
+    /// Setup wizard for processing shipments with USPS
     /// </summary>
     public partial class UspsSetupWizard : ShipmentTypeSetupWizardForm
     {
-        private readonly UspsRegistration stampsRegistration;
+        private readonly UspsRegistration uspsRegistration;
         private readonly ShipmentTypeCode shipmentTypeCode;
         private readonly Dictionary<long, long> profileMap = new Dictionary<long, long>();
 
@@ -60,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="promotion">The promotion.</param>
         /// <param name="allowRegisteringExistingAccount">if set to <c>true</c> [allow registering an existing account].</param>
         /// <param name="shipmentTypeCode">The shipment type code.</param>
-        /// <exception cref="UspsRegistrationException">There weren't any registration types provided to the Stamps.com setup wizard.</exception>
+        /// <exception cref="UspsRegistrationException">There weren't any registration types provided to the USPS setup wizard.</exception>
         protected UspsSetupWizard(IRegistrationPromotion promotion, bool allowRegisteringExistingAccount, ShipmentTypeCode shipmentTypeCode)
         {
             InitializeComponent();
@@ -70,9 +68,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.shipmentTypeCode = shipmentTypeCode;
             UspsResellerType resellerType = UspsResellerType.None;
 
-            // Load up a registration object using the stamps validator and the gateway to 
-            // the stamps.com API
-            stampsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
+            // Load up a registration object using the USPS validator and the gateway to 
+            // the USPS API
+            uspsRegistration = new UspsRegistration(new UspsRegistrationValidator(), new UspsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
 
             if (promotion.IsMonthlyFeeWaived)
@@ -80,13 +78,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 RemoveMonthlyFeeText();
             }
 
-            // Set the shipment type is set correctly (could be USPS or Stamps.com), so the 
+            // Set the shipment type is set correctly (could be USPS), so the 
             // label type gets persisted to the correct profile
             optionsControl.ShipmentTypeCode = this.shipmentTypeCode;
         }
 
         /// <summary>
-        /// Gets the stamps account.
+        /// Gets the USPS account.
         /// </summary>
         protected UspsAccountEntity UspsAccount { get; private set; }
 
@@ -108,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.LoadSettings();
 
             // Hide the panel that lets the customer select to register a new account or use an existing account
-            // until Stamps.com has enabled ShipWorks to register new accounts
+            // until USPS has enabled ShipWorks to register new accounts
             accountTypePanel.Visible = allowRegisteringExistingAccount;
             
             if (!allowRegisteringExistingAccount)
@@ -134,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 wizardPageOptions.StepNext += OnPageOptionsStepNext;
             }
 
-            // Set default values on the stamps account and load the person control. Now the stampsAccount will
+            // Set default values on the USPS account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
             UspsAccount = new UspsAccountEntity
             {
@@ -147,11 +145,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             personControl.LoadEntity(new PersonAdapter(UspsAccount, string.Empty));
 
-            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
-            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
-            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
-            stampsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
-            stampsUsageType.SelectedIndex = 0;
+            uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.Individual, "Individual"));
+            uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeOffice, "Home Office"));
+            uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
+            uspsUsageType.Items.Add(new UspsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
+            uspsUsageType.SelectedIndex = 0;
 
             CopyPostalRules();
 
@@ -172,8 +170,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 ClearExistingRulesAndProfiles();
 
-                // Need to update any rules to swap out Endicia, Express1, and the original Stamps.com 
-                // with USPS (Stamps.com Expedited) now that those types will no longer be active
+                // Need to update any rules to swap out Endicia, Express1, and the original USPS
+                // with USPS now that those types will no longer be active
                 // once the account is added.
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
                 UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
@@ -183,11 +181,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// User clicked the link to view the Stamps.com terms and conditions.
+        /// User clicked the link to view the USPS terms and conditions.
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnLinkStampsTermsConditions(object sender, EventArgs e)
+        private void OnLinkUspsTermsConditions(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://www.stamps.com/conditions/terms.html", this);
         }
@@ -195,19 +193,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Open the Stamps.com privacy policy
         /// </summary>
-        private void OnLinkStampsPrivacyPolicy(object sender, EventArgs e)
+        private void OnLinkUspsPrivacyPolicy(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://www.stamps.com/privacy-policy/", this);
         }
 
         /// <summary>
-        /// User clicked the link to view the Stamps.com special offer
+        /// User clicked the link to view the USPS special offer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnLinkStampsSpecialOffer(object sender, EventArgs e)
+        private void OnLinkUspsSpecialOffer(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.stamps.com/img/offer/Pro1599_GoldShipper_50offscale_50offprinter_0pwk_1/webreg2-learn-more.html", this);
+            WebHelper.OpenUrl("http://www.stamps.com/offerdetails/622/", this);
         }
 
         /// <summary>
@@ -230,8 +228,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void OnStepNextAccountAddress(object sender, WizardStepEventArgs e)
         {
             // Save the data entered in the person control back to our uspsAccount
-            PersonAdapter updatedStampsAccountAdapter = new PersonAdapter(UspsAccount, string.Empty);
-            personControl.SaveToEntity(updatedStampsAccountAdapter);
+            PersonAdapter updatedUspsAccountAdapter = new PersonAdapter(UspsAccount, string.Empty);
+            personControl.SaveToEntity(updatedUspsAccountAdapter);
 
             if (UspsAccount.CountryCode != "US")
             {
@@ -242,38 +240,38 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             if (HasAcceptedTermsConditions() && IsContactInfoComplete())
             {
-                // We have the necessary information, so update our stamps.com registration
-                stampsRegistration.UsageType = ((UspsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
+                // We have the necessary information, so update our USPS registration
+                uspsRegistration.UsageType = ((UspsAccountUsageDropdownItem)uspsUsageType.SelectedItem).AccountType;
 
-                stampsRegistration.PhysicalAddress.FirstName = UspsAccount.FirstName;
-                stampsRegistration.PhysicalAddress.LastName = UspsAccount.LastName;
-                stampsRegistration.PhysicalAddress.Company = UspsAccount.Company;
+                uspsRegistration.PhysicalAddress.FirstName = UspsAccount.FirstName;
+                uspsRegistration.PhysicalAddress.LastName = UspsAccount.LastName;
+                uspsRegistration.PhysicalAddress.Company = UspsAccount.Company;
 
-                stampsRegistration.PhysicalAddress.PhoneNumber = UspsAccount.Phone;
-                stampsRegistration.Email = UspsAccount.Email;
+                uspsRegistration.PhysicalAddress.PhoneNumber = UspsAccount.Phone;
+                uspsRegistration.Email = UspsAccount.Email;
 
-                stampsRegistration.PhysicalAddress.Address1 = UspsAccount.Street1;
-                stampsRegistration.PhysicalAddress.Address2 = UspsAccount.Street2;
-                stampsRegistration.PhysicalAddress.City = UspsAccount.City;
-                stampsRegistration.PhysicalAddress.State = Geography.GetStateProvCode(UspsAccount.StateProvCode);
-                stampsRegistration.PhysicalAddress.Country = Geography.GetCountryCode(UspsAccount.CountryCode);
+                uspsRegistration.PhysicalAddress.Address1 = UspsAccount.Street1;
+                uspsRegistration.PhysicalAddress.Address2 = UspsAccount.Street2;
+                uspsRegistration.PhysicalAddress.City = UspsAccount.City;
+                uspsRegistration.PhysicalAddress.State = Geography.GetStateProvCode(UspsAccount.StateProvCode);
+                uspsRegistration.PhysicalAddress.Country = Geography.GetCountryCode(UspsAccount.CountryCode);
 
-                if (PostalUtility.IsDomesticCountry(stampsRegistration.PhysicalAddress.Country))
+                if (PostalUtility.IsDomesticCountry(uspsRegistration.PhysicalAddress.Country))
                 {
-                    // stamps.com inspects the ZIP code for US addresses
-                    stampsRegistration.PhysicalAddress.ZIPCode = UspsAccount.PostalCode;
+                    // USPS inspects the ZIP code for US addresses
+                    uspsRegistration.PhysicalAddress.ZIPCode = UspsAccount.PostalCode;
                 }
                 else
                 {
-                    // stamps.com inspects the postal code for international addresses
-                    stampsRegistration.PhysicalAddress.PostalCode = UspsAccount.PostalCode;
+                    // USPS inspects the postal code for international addresses
+                    uspsRegistration.PhysicalAddress.PostalCode = UspsAccount.PostalCode;
                 }
 
                 // Determine which wizard page to go next
                 if (radioExistingAccount.Checked)
                 {
-                     // The user has opted to use an existing stamps account, so skip to the
-                     // existing credentials page for entering a username/password
+                    // The user has opted to use an existing USPS account, so skip to the
+                    // existing credentials page for entering a username/password
                     e.NextPage = wizardPageExistingAccountCredentials;
                 }
             }
@@ -312,11 +310,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            IEnumerable<RegistrationValidationError> validationErrors = stampsRegistrationSecuritySettingsControl.ValidateRegistrationSettings();
+            IEnumerable<RegistrationValidationError> validationErrors = uspsRegistrationSecuritySettingsControl.ValidateRegistrationSettings();
             
             if (validationErrors.Any())
             {
-                string validationMessage = "ShipWorks cannot create a Stamps.com account with the information provided. Stamps.com requires that the following field(s) be corrected:"
+                string validationMessage = "ShipWorks cannot create a USPS account with the information provided. Stamps.com requires that the following field(s) be corrected:"
                     + System.Environment.NewLine + System.Environment.NewLine;
 
                 validationErrors.ToList().ForEach(v => validationMessage += "\t" + v.Message + System.Environment.NewLine);
@@ -326,16 +324,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
             else
             {
-                // The data passed validation, so we can update the stamps registration with the data provided
+                // The data passed validation, so we can update the USPS registration with the data provided
                 // and move to the next step in teh wizard
-                stampsRegistration.UserName = stampsRegistrationSecuritySettingsControl.Username;
-                stampsRegistration.Password = stampsRegistrationSecuritySettingsControl.Password;
+                uspsRegistration.UserName = uspsRegistrationSecuritySettingsControl.Username;
+                uspsRegistration.Password = uspsRegistrationSecuritySettingsControl.Password;
 
-                stampsRegistration.FirstCodewordType = stampsRegistrationSecuritySettingsControl.FirstSecurityQuestionType;
-                stampsRegistration.FirstCodewordValue = stampsRegistrationSecuritySettingsControl.FirstSecurityQuestionAnswer;
+                uspsRegistration.FirstCodewordType = uspsRegistrationSecuritySettingsControl.FirstSecurityQuestionType;
+                uspsRegistration.FirstCodewordValue = uspsRegistrationSecuritySettingsControl.FirstSecurityQuestionAnswer;
 
-                stampsRegistration.SecondCodewordType = stampsRegistrationSecuritySettingsControl.SecondSecurityQuestionType;
-                stampsRegistration.SecondCodewordValue = stampsRegistrationSecuritySettingsControl.SecondSecurityQuestionAnswer;
+                uspsRegistration.SecondCodewordType = uspsRegistrationSecuritySettingsControl.SecondSecurityQuestionType;
+                uspsRegistration.SecondCodewordValue = uspsRegistrationSecuritySettingsControl.SecondSecurityQuestionAnswer;
             }
         }
 
@@ -350,28 +348,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                if (stampsPaymentControl.ValidatePaymentData())
+                if (uspsPaymentControl.ValidatePaymentData())
                 {
-                    // We now have all the user-supplied data needed to register the account with Stamps.com
-                    if (stampsPaymentControl.CreditCard != null)
+                    // We now have all the user-supplied data needed to register the account with USPS
+                    if (uspsPaymentControl.CreditCard != null)
                     {
-                        stampsRegistration.CreditCard = stampsPaymentControl.CreditCard;
+                        uspsRegistration.CreditCard = uspsPaymentControl.CreditCard;
 
-                        string cardholder = stampsRegistration.CreditCard.BillingAddress.FullName;
-                        stampsRegistration.CreditCard.BillingAddress = stampsRegistration.PhysicalAddress;
-                        stampsRegistration.CreditCard.BillingAddress.FirstName = "";
-                        stampsRegistration.CreditCard.BillingAddress.LastName = "";
-                        stampsRegistration.CreditCard.BillingAddress.FullName = cardholder;
+                        string cardholder = uspsRegistration.CreditCard.BillingAddress.FullName;
+                        uspsRegistration.CreditCard.BillingAddress = uspsRegistration.PhysicalAddress;
+                        uspsRegistration.CreditCard.BillingAddress.FirstName = "";
+                        uspsRegistration.CreditCard.BillingAddress.LastName = "";
+                        uspsRegistration.CreditCard.BillingAddress.FullName = cardholder;
                     }
                     else
                     {
-                        stampsRegistration.AchAccount = stampsPaymentControl.BankAccount;
+                        uspsRegistration.AchAccount = uspsPaymentControl.BankAccount;
                     }
                                         
-                    stampsRegistration.Submit();
+                    uspsRegistration.Submit();
 
-                    // Save the stamps account now that it has been succesfully created
-                    SaveStampsAccount(stampsRegistration.UserName, SecureText.Encrypt(stampsRegistration.Password, stampsRegistration.UserName));
+                    // Save the USPS account now that it has been succesfully created
+                    SaveUspsAccount(uspsRegistration.UserName, SecureText.Encrypt(uspsRegistration.Password, uspsRegistration.UserName));
 
                     registrationComplete = true;
                 }
@@ -423,10 +421,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <param name="e">The <see cref="ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs"/> instance containing the event data.</param>
         private void OnSteppingIntoExistingCredentials(object sender, WizardSteppingIntoEventArgs e)
         {
-            // account registration is enabled (i.e. stamps has allowed ShipWorks to register accounts)
+            // account registration is enabled (i.e. USPS has allowed ShipWorks to register accounts)
             if (radioNewAccount.Checked)
             {
-                // The customer opted to create a new stamps.com account, so we'll skip the page 
+                // The customer opted to create a new USPS account, so we'll skip the page 
                 // asking for existing credentials
                 e.Skip = true;
                 BackEnabled = false;
@@ -462,7 +460,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     };
                 }
 
-                SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));
+                SaveUspsAccount(userID, SecureText.Encrypt(password.Text, userID));
             }
             catch (UspsException ex)
             {
@@ -472,32 +470,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Prepares the stamps account for save. This is just a hook to allow derived
+        /// Prepares the USPS account for save. This is just a hook to allow derived
         /// classes a chance to manipulate the account prior to it being persisted.
         /// </summary>
-        protected virtual void PrepareStampsAccountForSave()
+        protected virtual void PrepareUspsAccountForSave()
         {
             UspsAccount.UspsReseller = (int) UspsResellerType.None;
         }
 
         /// <summary>
-        /// Saves the stamps accountand initializes the stamps info control.
+        /// Saves the usps accountand initializes the stamps info control.
         /// </summary>
         /// <param name="accountUserName">The username.</param>
         /// <param name="encryptedPassword">The encrypted password.</param>
-        protected virtual void SaveStampsAccount(string accountUserName, string encryptedPassword)
+        protected virtual void SaveUspsAccount(string accountUserName, string encryptedPassword)
         {
-            PrepareStampsAccountForSave();
+            PrepareUspsAccountForSave();
 
             UspsAccount.Username = accountUserName;
             UspsAccount.Password = encryptedPassword;
 
-            // Save the stamps account and use it to initialize the stamps info control
+            // Save the USPS account and use it to initialize the stamps info control
             UspsAccountManager.SaveAccount(UspsAccount);
 
             // Update the account contract type
-            UspsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)UspsAccount.UspsReseller);
-            stampsShipmentType.UpdateContractType(UspsAccount);
+            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)UspsAccount.UspsReseller);
+            uspsShipmentType.UpdateContractType(UspsAccount);
         }
 
         /// <summary>
@@ -557,9 +555,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 ExcludeOtherPostalProviders();
 
-                // We may have came from USPS (Stamps.com), which would not have marked USPS as configured, so mark it now.
-                ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Usps);
-
                 ShippingSettingsEventDispatcher.DispatchUspsAccountCreated(this, new ShippingSettingsEventArgs(ShipmentTypeCode.Usps));
             }
         }
@@ -571,18 +566,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            // We also need to exclude Endicia, Express1, and the original Stamps.com from the list 
-            // of active providers since the customer agreed to use USPS (Stamps.com Expedited)
+            // We also need to exclude Endicia, and Express1 from the list 
+            // of active providers since the customer agreed to use USPS
             ExcludeShipmentType(settings, ShipmentTypeCode.Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Endicia);
             ExcludeShipmentType(settings, ShipmentTypeCode.Express1Usps);
             ExcludeShipmentType(settings, ShipmentTypeCode.PostalWebTools);
-
-            // There's a chance we came from Stamps.com shipment type, so make sure USPS is not excluded
-            // before saving the settings
-            List<int> excludedTypes = settings.ExcludedTypes.ToList();
-            excludedTypes.Remove((int) ShipmentTypeCode.Usps);
-            settings.ExcludedTypes = excludedTypes.ToArray();
 
             ShippingSettings.Save(settings);
         }
@@ -591,9 +580,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Removes the text about the $15.99 monthly fee for an account. This is intended for those users that
         /// may be signing up from that only have an Express1 account.
         /// </summary>
-        protected void RemoveMonthlyFeeText()
+        private void RemoveMonthlyFeeText()
         {
-            stampsPaymentControl.RemoveMonthlyFeeText();
+            uspsPaymentControl.RemoveMonthlyFeeText();
         }
 
         /// <summary>
@@ -651,9 +640,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Uses the USPS (Stamps.com Expedited) as the shipping provider for any rules using the given shipment type code.
+        /// Uses the USPS as the shipping provider for any rules using the given shipment type code.
         /// </summary>
-        /// <param name="shipmentType">The shipment type code to be replaced with USPS (Stamps.com Expedited) .</param>
+        /// <param name="shipmentType">The shipment type code to be replaced with USPS.</param>
         private void UseUspsInDefaultShippingRulesFor(ShipmentTypeCode shipmentType)
         {
             List<ShippingDefaultsRuleEntity> rules = ShippingDefaultsRuleManager.GetRules(shipmentType);

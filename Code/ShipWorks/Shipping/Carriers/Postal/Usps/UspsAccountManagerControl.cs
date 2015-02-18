@@ -9,14 +9,13 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// UserControl for managing\editing stamps.com accounts
+    /// UserControl for managing\editing USPS accounts
     /// </summary>
     public partial class UspsAccountManagerControl : PostalAccountManagerControlBase
     {
@@ -42,16 +41,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets and sets whether this control will work with Express1 Stamps accounts or regular Stamps accounts
+        /// Gets and sets whether this control will work with Express1 USPS accounts or regular USPS accounts
         /// </summary>
-        public UspsResellerType StampsResellerType { get; set; }
+        public UspsResellerType UspsResellerType { get; set; }
 
         /// <summary>
         /// Determines if an Express1 account is being managed.
         /// </summary>
         private bool IsExpress1
         {
-            get { return StampsResellerType == UspsResellerType.Express1; }
+            get { return UspsResellerType == UspsResellerType.Express1; }
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             sandGrid.Rows.Clear();
 
-            foreach (UspsAccountEntity account in UspsAccountManager.GetAccounts(StampsResellerType))
+            foreach (UspsAccountEntity account in UspsAccountManager.GetAccounts(UspsResellerType))
             {
                 string contractType = EnumHelper.GetDescription((UspsAccountContractType)account.ContractType);
                 GridRow row = new GridRow(new[] { account.Description, contractType, "Checking..." });
@@ -113,11 +112,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     // The call to obtain account info from the Stmaps.com API has been known to 
                     // take a few seconds, so a user could have deleted the account by the time
-                    // the call from Stamps.com completes.
+                    // the call from USPS completes.
 
                     // We don't have the account info anymore, so we can only use the username value
                     // that was cached above. 
-                    string logMessage = string.Format("The Stamps.com account ({0}) was deleted from ShipWorks while trying to obtain its account balance.", username);
+                    string logMessage = string.Format("The USPS account ({0}) was deleted from ShipWorks while trying to obtain its account balance.", username);
                     log.Warn(logMessage, ex);
                 }
             }
@@ -219,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             DialogResult result = MessageHelper.ShowQuestion(this, MessageBoxIcon.Warning,
                 string.Format("Remove the account '{0}' from ShipWorks?\n\n" +
                 "Note: This does not delete your account from {1}.",
-                account.Description, UspsAccountManager.GetResellerName(StampsResellerType)));
+                account.Description, UspsAccountManager.GetResellerName(UspsResellerType)));
 
             if (result == DialogResult.OK)
             {
@@ -229,11 +228,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Add a stamps.com account for use with ShipWorks
+        /// Add a USPS account for use with ShipWorks
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {
-            if (UspsAccountManager.DisplaySetupWizard(this, StampsResellerType))
+            if (UspsAccountManager.DisplaySetupWizard(this, UspsResellerType))
             {
                 LoadAccounts();
             }

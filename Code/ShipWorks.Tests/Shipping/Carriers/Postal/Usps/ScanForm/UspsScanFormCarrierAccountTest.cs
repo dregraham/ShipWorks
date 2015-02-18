@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [TestMethod]
-        public void GetGateway_ReturnsStampsScanFormGateway_Test()
+        public void GetGateway_ReturnsUspsScanFormGateway_Test()
         {
             Assert.IsInstanceOfType(testObject.GetGateway(), typeof(UspsScanFormGateway));
         }

@@ -1,41 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Linq;
-using System.Web.UI.WebControls;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Interapptive.Shared.Net;
-using System.Xml;
 using System.Net;
+using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml;
+using System.Xml.Linq;
+using Interapptive.Shared.Business;
+using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Insurance.InsureShip;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Stores;
-using ShipWorks.Data;
-using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Data.Connection;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
-using System.Security.Cryptography.X509Certificates;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Editions;
-using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using System.Reflection;
-using ShipWorks.Stores.Content;
-using ShipWorks.Shipping.Editing.Enums;
-using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
-using ShipWorks.ApplicationCore.Nudges;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Insurance.InsureShip;
+using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.AmeriCommerce.WebServices;
 
 namespace ShipWorks.ApplicationCore.Licensing
 {
@@ -276,7 +268,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "FedEx", TangoCounterRatesCredentialStore.FedExCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "UPS", TangoCounterRatesCredentialStore.UpsCertificateVerificationDataKeyName, results);
             AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "InsureShip", TangoCounterRatesCredentialStore.InsureShipCertificateVerificationDataKeyName, results);
-            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCounterRatesCredentialStore.StampsCertificateVerificationDataKeyName, results);
+            AddCarrierCertificateVerificationDataDictionaryEntries(responseXmlDocument, "Stamps", TangoCounterRatesCredentialStore.UspsCertificateVerificationDataKeyName, results);
             
             return results;
         }
@@ -482,7 +474,7 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Sends Stamps contract type to Tango.
+        /// Sends USPS contract type to Tango.
         /// </summary>
         public static void LogStampsAccount(LicenseAccountDetail license, ShipmentTypeCode shipmentTypeCode, string accountIdentifier, UspsAccountContractType uspsAccountContractType)
         {
@@ -494,7 +486,7 @@ namespace ShipWorks.ApplicationCore.Licensing
             postRequest.Variables.Add("swtype", ((int)shipmentTypeCode).ToString(CultureInfo.InvariantCulture));
             postRequest.Variables.Add("stampscontracttype", ((int)uspsAccountContractType).ToString(CultureInfo.InvariantCulture));
 
-            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogUspsAccount");
+            XmlDocument xmlResponse = ProcessXmlRequest(postRequest, "LogStampsAccount");
 
             // Check for error
             XmlNode errorNode = xmlResponse.SelectSingleNode("//Error");

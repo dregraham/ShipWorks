@@ -7412,20 +7412,12 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
-		///<summary>EndiciaUspsAutomaticExpedited. </summary>
-		EndiciaUspsAutomaticExpedited,
-		///<summary>EndiciaUspsAutomaticExpeditedAccount. </summary>
-		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
 		///<summary>UspsAutomaticExpress1. </summary>
 		UspsAutomaticExpress1,
 		///<summary>UspsAutomaticExpress1Account. </summary>
 		UspsAutomaticExpress1Account,
-		///<summary>StampsUspsAutomaticExpedited. </summary>
-		StampsUspsAutomaticExpedited,
-		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
-		StampsUspsAutomaticExpeditedAccount,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>

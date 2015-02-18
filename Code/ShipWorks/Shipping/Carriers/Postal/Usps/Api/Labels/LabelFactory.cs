@@ -10,7 +10,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
-    /// A factory for creating instances of a Label from the Stamps.com API.
+    /// A factory for creating instances of a Label from the USPS API.
     /// </summary>
     public class LabelFactory
     {
@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         }
 
         /// <summary>
-        /// Download the stamps.com label image from the given URL
+        /// Download the USPS label image from the given URL
         /// </summary>
         public Image DownloadLabelImage(string url)
         {
@@ -226,7 +226,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             }
             catch (Exception ex)
             {
-                log.Error(string.Format("Failed processing stamps image at URL '{0}'", url), ex);
+                log.Error(string.Format("Failed processing USPS image at URL '{0}'", url), ex);
                 throw;
             }
         }

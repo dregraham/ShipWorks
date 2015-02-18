@@ -54,7 +54,7 @@
             this.accountControl.Size = new System.Drawing.Size(415, 148);
             this.accountControl.TabIndex = 0;
             // 
-            // StampsAccountManagerDlg
+            // UspsAccountManagerDlg
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -70,7 +70,7 @@
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Stamps.com Accounts";
+            this.Text = "USPS Accounts";
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
 

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {

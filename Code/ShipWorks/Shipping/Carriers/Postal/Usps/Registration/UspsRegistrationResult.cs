@@ -4,7 +4,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 {
     /// <summary>
     /// A data transfer object that encapsulates the registration status and values of the output parameters
-    /// from the Stamps API registration request.
+    /// from the USPS API registration request.
     /// </summary>
     public class UspsRegistrationResult
     {

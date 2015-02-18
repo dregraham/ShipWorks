@@ -10,7 +10,6 @@ using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         private ShipmentEntity testShipment;
 
         /// <summary>
-        /// This holds a collection of all the shipment objects that were passed into the StampsShipmentType.GetRates method
+        /// This holds a collection of all the shipment objects that were passed into the UspsShipmentType.GetRates method
         /// </summary>
         private List<ShipmentEntity> getRatesShipments;
 
@@ -307,13 +306,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [TestMethod]
-        public void GetBestRates_OriginalStampsShipmentDetailsAreRestoredAfterCall()
+        public void GetBestRates_OriginalUspsShipmentDetailsAreRestoredAfterCall()
         {
-            PostalShipmentEntity stampsShipment = new PostalShipmentEntity();
-            testShipment.Postal = stampsShipment;
+            PostalShipmentEntity UspsShipment = new PostalShipmentEntity();
+            testShipment.Postal = UspsShipment;
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.AreEqual(stampsShipment, testShipment.Postal);
+            Assert.AreEqual(UspsShipment, testShipment.Postal);
         }
 
         [TestMethod]
@@ -451,7 +450,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         {
             rateGroup.Rates.Clear();
 
-            RateResult result1 = new RateResult("Stamps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
+            RateResult result1 = new RateResult("Usps Ground", "4", 4, new PostalRateSelection(PostalServiceType.ExpressMailPremium, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
             RateResult result2 = new RateResult("Some Service", "3", 4, new PostalRateSelection(PostalServiceType.StandardPost, PostalConfirmationType.None)) { ServiceLevel = ServiceLevelType.OneDay };
 
             rateGroup.Rates.Add(result1);
@@ -466,7 +465,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
        [TestMethod]
-        public void GetBestRates_AddsStampsToDescription_WhenItDoesNotAlreadyExist()
+        public void GetBestRates_AddsUspsToDescription_WhenItDoesNotAlreadyExist()
         {
             rateGroup.Rates.Clear();
 

@@ -10,13 +10,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         XmlReader wrappedReader;
 
         // A list of namespaces from which we want to translate
-        private static readonly Dictionary<string, string> stampsNamespaceMap =
+        private static readonly Dictionary<string, string> uspsNamespaceMap =
             new Dictionary<string, string> {
                 { "http://www.express1.com/2011/08", "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29" }
             };
 
         // A list of local names we want to translate
-        private static readonly Dictionary<string, string> stampsLocalNameMap =
+        private static readonly Dictionary<string, string> uspsLocalNameMap =
             new Dictionary<string, string> {
                 { "AuthenticateUserResult", "Authenticator" },
                 { "GetAccountInfoResult", "Authenticator" },
@@ -39,47 +39,44 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Translates the Express1 local name to Stamps.
+        /// Translates the Express1 local name to USPS.
         /// </summary>
         public override string LocalName
         {
             get
             {
-                if(wrappedReader.LocalName == null)
-                    return null;
+                string uspsLocalName;
 
-                string stampsLocalName;
-                if(stampsLocalNameMap.TryGetValue(wrappedReader.LocalName, out stampsLocalName))
-                    return stampsLocalName;
-
-                return wrappedReader.LocalName;
+                return uspsLocalNameMap.TryGetValue(wrappedReader.LocalName, out uspsLocalName) ?
+                    uspsLocalName : 
+                    wrappedReader.LocalName;
             }
         }
 
         /// <summary>
-        /// Translates the Express1 namespace to Stamps.
+        /// Translates the Express1 namespace to USPS.
         /// </summary>
         public override string NamespaceURI
         {
             get
             {
-                return GetStampsNamespace(wrappedReader.NamespaceURI);
+                return GetUspsNamespace(wrappedReader.NamespaceURI);
             }
         }
 
         /// <summary>
-        /// Translates an Express1 namespace to Stamps.
+        /// Translates an Express1 namespace to USPS.
         /// </summary>
-        private static string GetStampsNamespace(string express1Namespace)
+        private static string GetUspsNamespace(string express1Namespace)
         {
             if(express1Namespace == null)
                 return null;
 
-            string stampsNamespace;
-            if(stampsNamespaceMap.TryGetValue(express1Namespace, out stampsNamespace))
-                return stampsNamespace;
+            string uspsNamespace;
 
-            return express1Namespace;
+            return uspsNamespaceMap.TryGetValue(express1Namespace, out uspsNamespace) ?
+                uspsNamespace : 
+                express1Namespace;
         }
 
         /// <summary>
@@ -87,7 +84,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         public override bool MoveToAttribute(string name, string ns)
         {
-            return wrappedReader.MoveToAttribute(name, GetStampsNamespace(ns));
+            return wrappedReader.MoveToAttribute(name, GetUspsNamespace(ns));
         }
 
         /// <summary>
@@ -95,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         public override string GetAttribute(string name, string namespaceURI)
         {
-            return wrappedReader.GetAttribute(name, GetStampsNamespace(namespaceURI));
+            return wrappedReader.GetAttribute(name, GetUspsNamespace(namespaceURI));
         }
 
         /// <summary>

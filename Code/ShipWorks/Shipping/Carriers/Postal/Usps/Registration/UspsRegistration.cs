@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Net;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
@@ -29,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <param name="validator">The validator.</param>
         /// <param name="gateway">The gateway.</param>
         /// <param name="promotion">The promotion.</param>
-        /// <exception cref="UspsRegistrationException">Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.</exception>
+        /// <exception cref="UspsRegistrationException">USPS requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.</exception>
         public UspsRegistration(IUspsRegistrationValidator validator, IUspsRegistrationGateway gateway, IRegistrationPromotion promotion)
         {
             this.validator = validator;
@@ -62,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
             }
             catch (NetworkException ex)
             {
-                throw new UspsRegistrationException("Stamps.com requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.", ex);
+                throw new UspsRegistrationException("USPS requires an IP address for registration, but ShipWorks could not obtain the IP address of this machine.", ex);
             }
             
             CreditCard = new CreditCard();
@@ -163,7 +162,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         public AchAccount AchAccount { get; set; }
 
         /// <summary>
-        /// Submits the registration to Stamps.com.
+        /// Submits the registration to USPS 
         /// </summary>
         /// <returns>Any registration validation errors that may have occurred.</returns>
         public UspsRegistrationResult Submit()
@@ -177,7 +176,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
                 throw registrationException;
             }
 
-            // Send the registration data to the stamps.com web service API
+            // Send the registration data to the USPS web service API
             return registrationGateway.Register(this);
         }
 
@@ -185,10 +184,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// Creates a registration exception.
         /// </summary>
         /// <param name="validationErrors">The validation errors.</param>
-        /// <returns>A StampsRegistrationException object.</returns>
+        /// <returns>A UspsRegistrationException object.</returns>
         private UspsRegistrationException CreateRegistrationException(IEnumerable<RegistrationValidationError> validationErrors)
         {
-            StringBuilder message = new StringBuilder("There were problems registering your account with Stamps.com. Please correct the following field(s) in your stamps.com registration:" + Environment.NewLine);
+            StringBuilder message = new StringBuilder("There were problems registering your account with USPS. Please correct the following field(s) in your USPS registration:" + Environment.NewLine);
 
             foreach (RegistrationValidationError error in validationErrors)
             {

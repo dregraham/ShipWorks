@@ -727,6 +727,13 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\IDiscountedAccountDlg.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsConvertExistingAccountDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsConvertExistingAccountDlg.Designer.cs">
+      <DependentUpon>UspsConvertExistingAccountDlg.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\CountryCodeCleanser.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
@@ -778,7 +785,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerType.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\EndiciaUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnote.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -786,13 +792,6 @@
       <DependentUpon>UspsRateNotQualifiedFootnote.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\RateFootnotes\NotQualified\UspsRateNotQualifiedFootnoteFactory.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\SingleAccountMarketingDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\SingleAccountMarketingDlg.Designer.cs">
-      <DependentUpon>SingleAccountMarketingDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\StampsUspsAutomaticDiscountControlAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsActivateDiscountDlg.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -818,20 +817,6 @@
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsActualSavingsDlg.Designer.cs">
       <DependentUpon>UspsActualSavingsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControl.Designer.cs">
-      <DependentUpon>UspsAutomaticDiscountControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControlAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControlAdapterFactory.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.Designer.cs">
-      <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsAccountConvertedEventArgs.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\BestRate\UspsCounterRatesBroker.cs" />
@@ -7418,6 +7403,9 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Express1\Registration\Express1SetupWizard.resx">
       <DependentUpon>Express1SetupWizard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsConvertExistingAccountDlg.resx">
+      <DependentUpon>UspsConvertExistingAccountDlg.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.resx">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7443,22 +7431,11 @@
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\RateFootnotes\Promotion\UspsRatePromotionFootnote.resx">
       <DependentUpon>UspsRatePromotionFootnote.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\SingleAccountMarketingDlg.resx">
-      <DependentUpon>SingleAccountMarketingDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsActivateDiscountDlg.resx">
       <DependentUpon>UspsActivateDiscountDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsActualSavingsDlg.resx">
       <DependentUpon>UspsActualSavingsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsAutomaticDiscountControl.resx">
-      <DependentUpon>UspsAutomaticDiscountControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsConvertAccountToExpeditedControl.resx">
-      <DependentUpon>UspsConvertAccountToExpeditedControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Usps\UspsProfileControl.resx">
       <DependentUpon>UspsProfileControl.cs</DependentUpon>
@@ -9646,6 +9623,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\WebTools\PostalWebSetupWizard.resx">
       <DependentUpon>PostalWebSetupWizard.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\UPS\UpsAccountEditorDlg.resx">
       <DependentUpon>UpsAccountEditorDlg.cs</DependentUpon>

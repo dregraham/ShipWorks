@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Actions;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Dashboard.Content;
@@ -22,12 +23,11 @@ using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -40,8 +40,6 @@ using ShipWorks.Templates;
 using ShipWorks.Templates.Media;
 using ShipWorks.Users.Audit;
 using ShipWorks.Users.Security;
-using log4net;
-using ShipWorks.SqlServer.Data.Auditing;
 
 namespace ShipWorks.Users
 {

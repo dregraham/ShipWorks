@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             uspsAccount.DisplayMember = "Key";
             uspsAccount.ValueMember = "Value";
 
-            UspsResellerType uspsResellerType = PostalUtility.GetStampsResellerType(ShipmentTypeCode.Express1Usps);
+            UspsResellerType uspsResellerType = PostalUtility.GetUspsResellerType(ShipmentTypeCode.Express1Usps);
             List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(uspsResellerType);
             if (accounts.Any())
             {

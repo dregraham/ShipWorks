@@ -5,13 +5,12 @@ using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Window for purchasing more stamps.com postage
+    /// Window for purchasing more USPS postage
     /// </summary>
     public partial class UspsPurchasePostageDlg : Form, IExpress1PurchasePostageDlg
     {
@@ -82,7 +81,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         /// <summary>
         /// An implementation of the IExpress1PostageDialog interface. This will show the dialog using the
-        /// information for the given Stamps account entity provided.
+        /// information for the given USPS account entity provided.
         /// </summary>
         /// <exception cref="UspsException">ShipWorks could not find information for this account.</exception>
         public DialogResult ShowDialog(IWin32Window owner, long accountID)
@@ -94,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new UspsException("ShipWorks could not find information for this account.");
             }
 
-            // We have a valid stamps account, so we can use it to initialize the account info
+            // We have a valid USPS account, so we can use it to initialize the account info
             // and show the dialog
             current.Text = GetBalance(account).ToString("c");
             return ShowDialog(owner);
@@ -107,12 +106,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             Cursor.Current = Cursors.WaitCursor;
             string carrierName = UspsAccountManager.GetResellerName((UspsResellerType)account.UspsReseller);
-            UspsShipmentType stampsShipmentType = PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)account.UspsReseller);
+            UspsShipmentType uspsShipmentType = PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)account.UspsReseller);
 
             try
             {
                 // Take this opportunity to update the contract type of the account
-                stampsShipmentType.UpdateContractType(account);
+                uspsShipmentType.UpdateContractType(account);
                 postageBalance.Purchase(postage.Amount);
 
                 string message = string.Format("The purchase request has been submitted to {0}.\n\n" +

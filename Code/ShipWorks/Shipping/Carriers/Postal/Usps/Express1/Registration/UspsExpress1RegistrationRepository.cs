@@ -4,20 +4,19 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
-    /// An implementation of the IExpress1RegistrationRepository interface. This will use the StampsAccountManager 
-    /// to save an Express1 registration to the Stamps account table.
+    /// An implementation of the IExpress1RegistrationRepository interface. This will use the UspsAccountManager 
+    /// to save an Express1 registration to the USPS account table.
     /// </summary>
     public class UspsExpress1RegistrationRepository : IExpress1RegistrationRepository
     {
         /// <summary>
-        /// Saves the Express1 registration to the appropriate data source (Stamps account table or Endicia account table).
+        /// Saves the Express1 registration to the appropriate data source (USPS account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
         /// <exception cref="System.NotImplementedException"></exception>
@@ -28,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
                 throw new ArgumentNullException("registration");
             }
 
-            // Create a new stamps account entity that will get saved to the database
+            // Create a new USPS account entity that will get saved to the database
             UspsAccountEntity uspsAccount = registration.AccountId.HasValue ? 
                 UspsAccountManager.GetAccount(registration.AccountId.Value) : 
                 new UspsAccountEntity();
@@ -39,7 +38,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 
             uspsAccount.ContractType = (int)UspsAccountContractType.NotApplicable;
 
-            // Translate the registration data into a Stamps account entity
+            // Translate the registration data into a USPS account entity
             uspsAccount.Username = registration.UserName;
             uspsAccount.Password = registration.EncryptedPassword;
 
@@ -98,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 
 
         /// <summary>
-        /// Uses the StampsAccountManager to Delete the carrier account (if it exists) associated with the 
+        /// Uses the UspsAccountManager to Delete the carrier account (if it exists) associated with the 
         /// given registration from the uspsAccount table.
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>

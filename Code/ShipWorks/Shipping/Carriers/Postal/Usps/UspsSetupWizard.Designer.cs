@@ -1,5 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
+﻿using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -57,14 +56,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.termsCheckBox = new System.Windows.Forms.CheckBox();
             this.labelTerms = new System.Windows.Forms.Label();
             this.panelAccountType = new System.Windows.Forms.Panel();
-            this.stampsUsageType = new System.Windows.Forms.ComboBox();
+            this.uspsUsageType = new System.Windows.Forms.ComboBox();
             this.labelUsageType = new System.Windows.Forms.Label();
             this.labelAccount = new System.Windows.Forms.Label();
             this.personControl = new ShipWorks.Data.Controls.AutofillPersonControl();
             this.wizardPageNewAccountCredentials = new ShipWorks.UI.Wizard.WizardPage();
-            this.stampsRegistrationSecuritySettingsControl = new UspsRegistrationSecuritySettingsControl();
+            this.uspsRegistrationSecuritySettingsControl = new UspsRegistrationSecuritySettingsControl();
             this.wizardPageNewAccountPayment = new ShipWorks.UI.Wizard.WizardPage();
-            this.stampsPaymentControl = new UspsPaymentControl();
+            this.uspsPaymentControl = new UspsPaymentControl();
             this.linkStampsPrivacy = new ShipWorks.UI.Controls.LinkControl();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
@@ -150,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.linkSpecialOffer.Size = new System.Drawing.Size(132, 13);
             this.linkSpecialOffer.TabIndex = 10;
             this.linkSpecialOffer.Text = "special Stamps.com offers";
-            this.linkSpecialOffer.Click += new System.EventHandler(this.OnLinkStampsSpecialOffer);
+            this.linkSpecialOffer.Click += new System.EventHandler(this.OnLinkUspsSpecialOffer);
             // 
             // labelSpecialOffer2
             // 
@@ -355,7 +354,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.linkTerms.Size = new System.Drawing.Size(110, 13);
             this.linkTerms.TabIndex = 7;
             this.linkTerms.Text = "Terms and Conditions";
-            this.linkTerms.Click += new System.EventHandler(this.OnLinkStampsTermsConditions);
+            this.linkTerms.Click += new System.EventHandler(this.OnLinkUspsTermsConditions);
             // 
             // labelTerms1
             // 
@@ -389,7 +388,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // panelAccountType
             // 
-            this.panelAccountType.Controls.Add(this.stampsUsageType);
+            this.panelAccountType.Controls.Add(this.uspsUsageType);
             this.panelAccountType.Controls.Add(this.labelUsageType);
             this.panelAccountType.Controls.Add(this.labelAccount);
             this.panelAccountType.Location = new System.Drawing.Point(23, 8);
@@ -397,14 +396,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.panelAccountType.Size = new System.Drawing.Size(345, 46);
             this.panelAccountType.TabIndex = 0;
             // 
-            // stampsUsageType
+            // uspsUsageType
             // 
-            this.stampsUsageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stampsUsageType.FormattingEnabled = true;
-            this.stampsUsageType.Location = new System.Drawing.Point(100, 19);
-            this.stampsUsageType.Name = "stampsUsageType";
-            this.stampsUsageType.Size = new System.Drawing.Size(143, 21);
-            this.stampsUsageType.TabIndex = 4;
+            this.uspsUsageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.uspsUsageType.FormattingEnabled = true;
+            this.uspsUsageType.Location = new System.Drawing.Point(100, 19);
+            this.uspsUsageType.Name = "uspsUsageType";
+            this.uspsUsageType.Size = new System.Drawing.Size(143, 21);
+            this.uspsUsageType.TabIndex = 4;
             // 
             // labelUsageType
             // 
@@ -447,7 +446,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // wizardPageNewAccountCredentials
             // 
-            this.wizardPageNewAccountCredentials.Controls.Add(this.stampsRegistrationSecuritySettingsControl);
+            this.wizardPageNewAccountCredentials.Controls.Add(this.uspsRegistrationSecuritySettingsControl);
             this.wizardPageNewAccountCredentials.Description = "Create a new Stamps.com account for use with ShipWorks.";
             this.wizardPageNewAccountCredentials.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageNewAccountCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -458,17 +457,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountCredentials.Title = "Account Registration";
             this.wizardPageNewAccountCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextRegistrationCredentials);
             // 
-            // stampsRegistrationSecuritySettingsControl
+            // uspsRegistrationSecuritySettingsControl
             // 
-            this.stampsRegistrationSecuritySettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stampsRegistrationSecuritySettingsControl.Location = new System.Drawing.Point(20, 7);
-            this.stampsRegistrationSecuritySettingsControl.Name = "stampsRegistrationSecuritySettingsControl";
-            this.stampsRegistrationSecuritySettingsControl.Size = new System.Drawing.Size(458, 395);
-            this.stampsRegistrationSecuritySettingsControl.TabIndex = 0;
+            this.uspsRegistrationSecuritySettingsControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uspsRegistrationSecuritySettingsControl.Location = new System.Drawing.Point(20, 7);
+            this.uspsRegistrationSecuritySettingsControl.Name = "uspsRegistrationSecuritySettingsControl";
+            this.uspsRegistrationSecuritySettingsControl.Size = new System.Drawing.Size(458, 395);
+            this.uspsRegistrationSecuritySettingsControl.TabIndex = 0;
             // 
             // wizardPageNewAccountPayment
             // 
-            this.wizardPageNewAccountPayment.Controls.Add(this.stampsPaymentControl);
+            this.wizardPageNewAccountPayment.Controls.Add(this.uspsPaymentControl);
             this.wizardPageNewAccountPayment.Description = "Create a new Stamps.com account for use with ShipWorks.";
             this.wizardPageNewAccountPayment.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageNewAccountPayment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -479,13 +478,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.wizardPageNewAccountPayment.Title = "Account Registration";
             this.wizardPageNewAccountPayment.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextNewAccountPayment);
             // 
-            // stampsPaymentControl
+            // uspsPaymentControl
             // 
-            this.stampsPaymentControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stampsPaymentControl.Location = new System.Drawing.Point(21, 11);
-            this.stampsPaymentControl.Name = "stampsPaymentControl";
-            this.stampsPaymentControl.Size = new System.Drawing.Size(461, 310);
-            this.stampsPaymentControl.TabIndex = 0;
+            this.uspsPaymentControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.uspsPaymentControl.Location = new System.Drawing.Point(21, 11);
+            this.uspsPaymentControl.Name = "uspsPaymentControl";
+            this.uspsPaymentControl.Size = new System.Drawing.Size(461, 310);
+            this.uspsPaymentControl.TabIndex = 0;
             // 
             // linkStampsPrivacy
             // 
@@ -499,7 +498,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.linkStampsPrivacy.Size = new System.Drawing.Size(133, 13);
             this.linkStampsPrivacy.TabIndex = 6;
             this.linkStampsPrivacy.Text = "Stamps.com Privacy Policy";
-            this.linkStampsPrivacy.Click += new System.EventHandler(this.OnLinkStampsPrivacyPolicy);
+            this.linkStampsPrivacy.Click += new System.EventHandler(this.OnLinkUspsPrivacyPolicy);
             // 
             // StampsSetupWizard
             // 
@@ -571,10 +570,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.RadioButton radioNewAccount;
         private UI.Wizard.WizardPage wizardPageAccountAddress;
         private UI.Wizard.WizardPage wizardPageNewAccountCredentials;
-        private UspsRegistrationSecuritySettingsControl stampsRegistrationSecuritySettingsControl;
+        private UspsRegistrationSecuritySettingsControl uspsRegistrationSecuritySettingsControl;
         private UI.Wizard.WizardPage wizardPageNewAccountPayment;
-        private UspsPaymentControl stampsPaymentControl;
-        private System.Windows.Forms.ComboBox stampsUsageType;
+        private UspsPaymentControl uspsPaymentControl;
+        private System.Windows.Forms.ComboBox uspsUsageType;
         private System.Windows.Forms.Label labelAccount;
         private UI.Controls.LinkControl linkSpecialOffer;
         private System.Windows.Forms.Label labelSpecialOffer2;

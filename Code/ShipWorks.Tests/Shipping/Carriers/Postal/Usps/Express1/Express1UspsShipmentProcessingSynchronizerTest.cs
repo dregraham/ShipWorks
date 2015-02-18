@@ -3,8 +3,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 
         [TestMethod]
         [ExpectedException(typeof(UspsException))]
-        public void SaveAccountToShipment_ThrowsStampsException_WhenNoAccounts_Test()
+        public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 

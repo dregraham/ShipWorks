@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
@@ -49,7 +48,7 @@ namespace ShipWorks.Shipping
                         if (!ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Usps) &&
                             !ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Usps) && ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia))
                         {
-                            // Stamps has never been setup, so we want to exclude the Express1/Stamps type since Endicia IS setup in ShipWorks
+                            // USPS has never been setup, so we want to exclude the Express1/USPS type since Endicia IS setup in ShipWorks
                             continue;
                         }
                         

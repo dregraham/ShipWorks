@@ -6,7 +6,7 @@ using System.Text;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Base for all exceptions thrown by the Stamps.com integration
+    /// Base for all exceptions thrown by the USPS integration
     /// </summary>
     public class UspsException : Exception
     {

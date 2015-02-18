@@ -55,7 +55,7 @@
             this.requestedLabelFormat.Size = new System.Drawing.Size(344, 25);
             this.requestedLabelFormat.TabIndex = 60;
             // 
-            // StampsOptionsControl
+            // UspsOptionsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;

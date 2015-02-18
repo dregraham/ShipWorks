@@ -6,7 +6,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
 {
     /// <summary>
-    /// A repository for Stamps.com counter rate accounts
+    /// A repository for USPS counter rate accounts
     /// </summary>
     public class UspsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity>
     {

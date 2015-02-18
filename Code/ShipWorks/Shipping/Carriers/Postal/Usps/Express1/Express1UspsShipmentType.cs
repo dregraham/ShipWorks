@@ -5,7 +5,6 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Editing;
@@ -18,13 +17,13 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// Shipment type for Express 1 for Stamps.com shipments.
+    /// Shipment type for Express 1 for USPS shipments.
     /// </summary>
     [Obfuscation(Exclude = true, ApplyToMembers = false)]    
     public class Express1UspsShipmentType : UspsShipmentType
     {
         /// <summary>
-        /// Create an instance of the Express1 Stamps Shipment Type
+        /// Create an instance of the Express1 USPS Shipment Type
         /// </summary>
         public Express1UspsShipmentType()
         {
@@ -69,10 +68,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             get
             {
-                return
-                    (ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Endicia) ||
-                    ShippingManager.IsShipmentTypeActivated(ShipmentTypeCode.Express1Endicia)) ?
-                    "USPS (Express1 for Stamps)" : "USPS (Express1)";
+                return "USPS (Express1)";
             }
         }
 
@@ -87,14 +83,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// <summary>
         /// Creates the web client to use to contact the underlying carrier API.
         /// </summary>
-        /// <returns>An instance of IStampsWebClient.</returns>
+        /// <returns>An instance of IUspsWebClient.</returns>
         public override IUspsWebClient CreateWebClient()
         {
             return new Express1UspsWebClient(AccountRepository, new LogEntryFactory(), CertificateInspector);
         }
 
         /// <summary>
-        /// Creates the Express1/Stamps service control.
+        /// Creates the Express1/USPS service control.
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
@@ -104,13 +100,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Creates the Express1/Stamps setup wizard.
+        /// Creates the Express1/USPS setup wizard.
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             Express1Registration registration = new Express1Registration(ShipmentTypeCode, new UspsExpress1RegistrationGateway(), new UspsExpress1RegistrationRepository(), new UspsExpress1PasswordEncryptionStrategy(), new Express1RegistrationValidator());
 
-            UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { StampsResellerType = UspsResellerType.Express1 };
+            UspsAccountManagerControl accountManagerControl = new UspsAccountManagerControl { UspsResellerType = UspsResellerType.Express1 };
             UspsOptionsControl optionsControl = new UspsOptionsControl { ShipmentTypeCode = ShipmentTypeCode.Express1Usps };
             UspsPurchasePostageDlg postageDialog = new UspsPurchasePostageDlg();
 
@@ -118,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
         
         /// <summary>
-        /// Creates the Express1/Stamps settings control.
+        /// Creates the Express1/USPS settings control.
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
@@ -126,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps w/ Express1 profiles
+        /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
@@ -190,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         /// </returns>
         public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
         {
-            // We want to perform the processing of the base ShipmentType and not that of the Stamps.com shipment type
+            // We want to perform the processing of the base ShipmentType and not that of the USPS shipment type
             IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
             ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
 
@@ -206,7 +202,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 
             try
             {
-                // Express1 for Stamps.com requires that postage be hidden per their negotiated
+                // Express1 for USPS requires that postage be hidden per their negotiated
                 // service agreement
                 shipment.Postal.Usps.HidePostage = true;
                 new Express1UspsWebClient().ProcessShipment(shipment);
@@ -218,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Gets an instance to the best rate shipping broker for the Express1 for Stamps.com shipment type based on the shipment configuration.
+        /// Gets an instance to the best rate shipping broker for the Express1 for USPS shipment type based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an Express1UspsBestRateBroker.</returns>

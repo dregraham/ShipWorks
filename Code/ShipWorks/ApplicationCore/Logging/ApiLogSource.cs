@@ -59,7 +59,7 @@ namespace ShipWorks.ApplicationCore.Logging
         UspsNoPostage,
 
         [ApiPrivateLogSource]
-        UspsStamps,
+        Usps,
 
         [ApiPrivateLogSource]
         UspsEndicia,
@@ -68,7 +68,7 @@ namespace ShipWorks.ApplicationCore.Logging
         UspsExpress1Endicia,
 
         [ApiPrivateLogSource]
-        UspsExpress1Stamps,
+        UspsExpress1,
 
         [ApiPrivateLogSource]
         FedEx,

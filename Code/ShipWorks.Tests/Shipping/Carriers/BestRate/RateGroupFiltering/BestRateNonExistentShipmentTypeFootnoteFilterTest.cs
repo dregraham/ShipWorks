@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
@@ -54,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            // Shouldn't have any footnote factories that aren't for stamps
+            // Shouldn't have any footnote factories that aren't for USPS
             Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 

@@ -1,5 +1,4 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -29,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             get
             {
-                return PostalUtility.GetStampsShipmentTypeForStampsResellerType((UspsResellerType)account.UspsReseller).ShipmentTypeCode;
+                return PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType)account.UspsReseller).ShipmentTypeCode;
             }
         }
 
@@ -89,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Creates the web client for communicating with the carrier API.
         /// </summary>
-        /// <returns>An instance of an IStampsWebClient based on teh shipment type code.</returns>
+        /// <returns>An instance of an IUspsWebClient based on teh shipment type code.</returns>
         private IUspsWebClient CreateWebClient()
         {
             UspsShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode) as UspsShipmentType;

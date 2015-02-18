@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Gets the url of the postage service to use for Stamps version of Express1
+        /// Gets the url of the postage service to use for USPS version of Express1
         /// </summary>
         public string ServiceUrl
         {
@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         {
             get
             {
-                return ApiLogSource.UspsExpress1Stamps;
+                return ApiLogSource.UspsExpress1;
             }
         }
 
@@ -83,11 +83,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         {
             get
             {
-                return InterapptiveOnly.Registry.GetValue("Express1StampsTestServer", false);
+                return InterapptiveOnly.Registry.GetValue("Express1UspsTestServer", false);
             }
             set
             {
-                InterapptiveOnly.Registry.SetValue("Express1StampsTestServer", value);
+                InterapptiveOnly.Registry.SetValue("Express1UspsTestServer", value);
             }
         }
     }

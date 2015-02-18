@@ -10,13 +10,12 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Manages the available stamps.com accounts
+    /// Manages the available USPS accounts
     /// </summary>
     public static class UspsAccountManager
     {
@@ -24,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         static bool needCheckForChanges;
 
         /// <summary>
-        /// Initialize StampsAccountManager
+        /// Initialize UspsAccountManager
         /// </summary>
         public static void InitializeForCurrentSession()
         {
@@ -60,10 +59,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get the Stamps.com accounts in the system.  Optionally include those that have not yet totally completed signup where
+        /// Get the USPS accounts in the system.  Optionally include those that have not yet totally completed signup where
         /// the user is yet to enter the account ID.
         /// </summary>
-        public static List<UspsAccountEntity> GetAccounts(UspsResellerType stampsResellerType, bool includeIncomplete)
+        public static List<UspsAccountEntity> GetAccounts(UspsResellerType uspsResellerType, bool includeIncomplete)
         {
             lock (synchronizer)
             {
@@ -72,16 +71,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     InternalCheckForChanges();
                 }
 
-                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.UspsReseller == (int)stampsResellerType)));
+                return EntityUtility.CloneEntityCollection(synchronizer.EntityCollection.Where(a => ((includeIncomplete || a.Username != null) && a.UspsReseller == (int)uspsResellerType)));
             }
         }
 
         /// <summary>
-        /// Get the Stamps.com accounts in the system.
+        /// Get the USPS accounts in the system.
         /// </summary>
-        public static List<UspsAccountEntity> GetAccounts(UspsResellerType stampsResellerType)
+        public static List<UspsAccountEntity> GetAccounts(UspsResellerType uspsResellerType)
         {
-            return GetAccounts(stampsResellerType, false);
+            return GetAccounts(uspsResellerType, false);
         }
 
         /// <summary>
@@ -116,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Save the given stamps account
+        /// Save the given USPS account
         /// </summary>
         public static void SaveAccount(UspsAccountEntity account)
         {
@@ -129,7 +128,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Delete the given stamps account
+        /// Delete the given USPS account
         /// </summary>
         public static void DeleteAccount(UspsAccountEntity account)
         {
@@ -184,12 +183,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Displays the appropriate setup wizard based on the Stamps Reseller
+        /// Displays the appropriate setup wizard based on the USPS Reseller
         /// </summary>
-        public static bool DisplaySetupWizard(IWin32Window owner, UspsResellerType stampsResellerType)
+        public static bool DisplaySetupWizard(IWin32Window owner, UspsResellerType uspsResellerType)
         {
             ShipmentType shipmentType;
-            switch (stampsResellerType)
+            switch (uspsResellerType)
             {
                 case UspsResellerType.None:
                     shipmentType = new UspsShipmentType();
@@ -198,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     shipmentType = new Express1UspsShipmentType();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException("stampsResellerType");
+                    throw new ArgumentOutOfRangeException("uspsResellerType");
             }
 
             using (Form dlg = shipmentType.CreateSetupWizard())
@@ -208,18 +207,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Gets the name of the Stamps reseller
+        /// Gets the name of the USPS reseller
         /// </summary>
-        public static string GetResellerName(UspsResellerType stampsResellerType)
+        public static string GetResellerName(UspsResellerType uspsResellerType)
         {
-            switch (stampsResellerType)
+            switch (uspsResellerType)
             {
                 case UspsResellerType.None:
                     return "USPS";
                 case UspsResellerType.Express1:
                     return "Express1";
                 default:
-                    throw new ArgumentOutOfRangeException("stampsResellerType");
+                    throw new ArgumentOutOfRangeException("uspsResellerType");
             }
         }
     }

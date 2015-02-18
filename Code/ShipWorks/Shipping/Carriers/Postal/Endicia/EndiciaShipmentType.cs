@@ -1,4 +1,5 @@
-﻿using Interapptive.Shared.Business;
+﻿using System.Diagnostics.Contracts;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -15,6 +16,8 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
@@ -139,7 +142,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com shipments
+        /// Create the UserControl used to handle Endicia shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
@@ -149,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
+        /// Create the UserControl used to handle Endicia profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
@@ -157,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
         
         /// <summary>
-        /// Create the settings control for stamps.com
+        /// Create the settings control for Endicia
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
@@ -561,28 +564,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }).ToList());
 
                     // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
-                    // Express1 with Endicia and can show promotion for USPS (Stamps.com Expedited) shipping. So when discount rate
-                    // messaging is restricted on Endicia, we want to show the Stamps.com promo
+                    // Express1 with Endicia and can show promotion for USPS shipping. So when discount rate
+                    // messaging is restricted on Endicia, we want to show the Usps promo
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted - show the
-                        // single account dialog if Endicia has Express1 accounts and is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
-                        finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
+                        // Always show the USPS promotion when Express 1 is restricted
+                        finalGroup.AddFootnoteFactory(CreateUspsRatePromotionFootnoteFactory(shipment));
                     }
 
                     return finalGroup;
                 }
                 else
                 {
-                    // Express1 wasn't used, so we want to promote USPS (Stamps.com expedited)
+                    // Express1 wasn't used, so we want to promote USPS
                     RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
 
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
-                        finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS
+                        finalEndiciaOnlyRates.AddFootnoteFactory(CreateUspsRatePromotionFootnoteFactory(shipment));
                     }
 
                     return finalEndiciaOnlyRates;
@@ -595,13 +595,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                 if (IsRateDiscountMessagingRestricted)
                 {
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS (Stamps.com Expedited)
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
                     // poromo footnote to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }
 
                 return express1Group;
             }
+        }
+
+        /// <summary>
+        /// Create a promotion factory for Endicia or Express1
+        /// </summary>
+        private UspsRatePromotionFootnoteFactory CreateUspsRatePromotionFootnoteFactory(ShipmentEntity shipment)
+        {
+            // Show the single account dialog if Endicia has Express1 accounts and is not using USPS
+            bool alreadyHasDiscountedUspsAccount = UspsAccountManager.UspsAccounts.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
+            bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !alreadyHasDiscountedUspsAccount;
+            return new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog);
         }
 
         /// <summary>

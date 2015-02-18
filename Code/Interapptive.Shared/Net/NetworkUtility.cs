@@ -43,7 +43,7 @@ namespace Interapptive.Shared.Net
         {
             string ipAddress;
 
-            // Grab the version 4 IP address of the client machine before submitting the registration to Stamps.com
+            // Grab the version 4 IP address of the client machine before submitting the registration to USPS
             string hostName = Dns.GetHostName();
             if (!string.IsNullOrEmpty(hostName))
             {

@@ -47,8 +47,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.ScanForm
         /// <returns>An IScanFormGateway object.</returns>
         public override IScanFormGateway GetGateway()
         {
-            // The Express1 gateway is very similar to that of Stamps, but need to override this method
-            // since we need to call into the Express1 API rather than Stamps
+            // The Express1 gateway is very similar to that of USPS, but need to override this method
+            // since we need to call into the Express1 API rather than USPS
             return new Express1UspsScanFormGateway(new Express1UspsWebClient());
         }
     }

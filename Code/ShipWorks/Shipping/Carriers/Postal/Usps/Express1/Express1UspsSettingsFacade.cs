@@ -4,12 +4,11 @@ using System.Linq;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
-    /// Defines a way of interacting with Express1/Stamps settings
+    /// Defines a way of interacting with Express1/Usps settings
     /// </summary>
     public class Express1UspsSettingsFacade : IExpress1SettingsFacade
     {
@@ -64,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Save the Express1/Stamps settings into the actual settings entity
+        /// Save the Express1/USPS settings into the actual settings entity
         /// </summary>
         /// <param name="settings">Settings entity into which the settings should be saved</param>
         public void SaveSettings(ShippingSettingsEntity settings)

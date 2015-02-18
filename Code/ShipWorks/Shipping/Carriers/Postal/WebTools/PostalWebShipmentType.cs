@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         }
 
         /// <summary>
-        /// Stamps.com supports getting postal service rates
+        /// USPS supports getting postal service rates
         /// </summary>
         public override bool SupportsGetRates
         {

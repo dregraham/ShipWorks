@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Window for adding and removing stamps.com accounts
+    /// Window for adding and removing USPS accounts
     /// </summary>
     public partial class UspsAccountManagerDlg : Form
     {
@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             InitializeComponent();
 
-            accountControl.StampsResellerType = resellerType;
+            accountControl.UspsResellerType = resellerType;
         }
 
         /// <summary>

@@ -6,12 +6,11 @@ using System.Web.Services.Protocols;
 using System.Globalization;
 using System.Xml;
 using System.Text.RegularExpressions;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Thrown when an SoapException is thrown while connecting to the stamps.com API
+    /// Thrown when an SoapException is thrown while connecting to the USPS API
     /// </summary>
     public class UspsApiException : UspsException
     {
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 switch (code)
                 {
-                    // Errors coming from the Express1 version of the API (prior to hitting Stamps) always 
+                    // Errors coming from the Express1 version of the API (prior to hitting USPS) always 
                     // return an error code of 0
                     case 0x00000000: return GetExpress1Message();
 
@@ -106,7 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Get the Stamps.com API error code of the exception
+        /// Get the USPS API error code of the exception
         /// </summary>
         public override long Code
         {
@@ -117,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Extract the numeric error code from the Stamps.com exception
+        /// Extract the numeric error code from the USPS exception
         /// </summary>
         public static long GetErrorCode(SoapException ex)
         {
@@ -140,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Extracts a message that is specific to the Express1 version of the Stamps.com API (i.e. when the 
+        /// Extracts a message that is specific to the Express1 version of the USPS API (i.e. when the 
         /// error code in the SoapException is 0).
         /// </summary>
         private string GetExpress1Message()
@@ -159,7 +158,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
                 else
                 {
-                    // Errors coming from the Express1 version of the API (prior to hitting Stamps) have a decent error
+                    // Errors coming from the Express1 version of the API (prior to hitting USPS) have a decent error
                     // message, so we can just return the exception message
                     message = soapException.Message;
                 }

@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
     {
         MockRepository mockRepository;
         Mock<ICarrierAccountRepository<UspsAccountEntity>> uspsRepository;
-        Mock<ICarrierAccountRepository<UspsAccountEntity>> stampsExpress1Repository;
+        Mock<ICarrierAccountRepository<UspsAccountEntity>> uspsExpress1Repository;
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaRepository;
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaExpress1Repository;
 
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             mockRepository = new MockRepository(MockBehavior.Loose);
             uspsRepository = CreateEmptyRepository<UspsAccountEntity>();
-            stampsExpress1Repository = CreateEmptyRepository<UspsAccountEntity>();
+            uspsExpress1Repository = CreateEmptyRepository<UspsAccountEntity>();
             endiciaRepository = CreateEmptyRepository<EndiciaAccountEntity>();
             endiciaExpress1Repository = CreateEmptyRepository<EndiciaAccountEntity>();
         }
@@ -38,9 +38,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenOnlyStampsExpress1Exists()
+        public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenOnlyUspsExpress1Exists()
         {
-            stampsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            uspsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
@@ -58,9 +58,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenBothStampsAndEndiciaExpress1Exists()
+        public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenBothUspsAndEndiciaExpress1Exists()
         {
-            stampsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            uspsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
             endiciaExpress1Repository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
@@ -90,10 +90,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsEndiciaRegistrationPromotion_WhenEndiciaAndStampsExpress1AccountsExist()
+        public void CreateRegistrationPromotion_ReturnsEndiciaRegistrationPromotion_WhenEndiciaAndUspsExpress1AccountsExist()
         {
             endiciaRepository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
-            stampsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
+            uspsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsStampsIntuishipRegistrationPromotion_WhenOnlyNonResellerUspsAccountsExist()
+        public void CreateRegistrationPromotion_ReturnsUspsIntuishipRegistrationPromotion_WhenOnlyNonResellerUspsAccountsExist()
         {
             uspsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
 
@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         }
 
         [TestMethod]
-        public void CreateRegistrationPromotion_ReturnsStampsCbpRegistrationPromotion_WhenOnlyUspsAccountsExistAndIncludesReseller()
+        public void CreateRegistrationPromotion_ReturnsUspsCbpRegistrationPromotion_WhenOnlyUspsAccountsExistAndIncludesReseller()
         {
             uspsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity>
             {
@@ -152,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         /// </summary>
         private RegistrationPromotionFactory CreateRegistrationPromotionFactory()
         {
-            return new RegistrationPromotionFactory(uspsRepository.Object, stampsExpress1Repository.Object, 
+            return new RegistrationPromotionFactory(uspsRepository.Object, uspsExpress1Repository.Object, 
                 endiciaRepository.Object, endiciaExpress1Repository.Object);
         }
 

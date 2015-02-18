@@ -6,7 +6,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 {
     /// <summary>
-    /// Gateway class for integrating with Express1 and Stamps
+    /// Gateway class for integrating with Express1 and USPS
     /// </summary>
     public class UspsExpress1RegistrationGateway : Express1RegistrationGateway
     {
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
 
             try
             {
-                // This throws a stamps exception if the account credentials are incorrect
+                // This throws a USPS exception if the account credentials are incorrect
                 new Express1UspsWebClient().GetAccountInfo(new UspsAccountEntity
                 {
                     Username = registration.UserName,

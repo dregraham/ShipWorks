@@ -4,7 +4,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     /// <summary>
     /// An implementation of the IRegistrationPromotion that should be used for creating new 
-    /// Stamps.com accounts when migrating from an existing Endicia account.
+    /// USPS accounts when migrating from an existing Endicia account.
     /// </summary>
     public class EndiciaIntuishipRegistrationPromotion : IRegistrationPromotion
     {
@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         /// <summary>
-        /// Gets the promo code to use when registering an account with Stamps.com based on the
+        /// Gets the promo code to use when registering an account with USPS based on the
         /// type of account being registered.
         /// </summary>
         /// <returns>The promotion code to be used during registration.</returns>

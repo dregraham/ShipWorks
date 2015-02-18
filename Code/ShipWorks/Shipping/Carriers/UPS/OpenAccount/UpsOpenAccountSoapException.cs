@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
         }
 
         /// <summary>
-        /// Extract the numeric errror code from the Stamps.com exception
+        /// Extract the numeric errror code from the USPS exception
         /// </summary>
         private void ParseException(SoapException ex)
         {

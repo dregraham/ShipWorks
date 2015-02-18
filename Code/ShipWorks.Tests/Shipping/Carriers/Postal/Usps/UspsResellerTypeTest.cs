@@ -4,7 +4,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsResellerTypeTest
+    public class UspsResellerTypeTest
     {
         [TestMethod]
         public void Express1_HasOneAsValue_Test()

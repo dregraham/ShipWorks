@@ -1,13 +1,11 @@
 ﻿using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Express1
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
     /// <summary>
     /// An IShipmentProcessingSynchronizer implementation to handle the PreProcessing 
-    /// of an Express1 for Stamps shipment 
+    /// of an Express1 for USPS shipment 
     /// </summary>
     public class Express1UspsShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {

@@ -382,7 +382,7 @@
             this.labelAccountType.Text = "Account Type:";
             this.labelAccountType.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // StampsPaymentControl
+            // UspsPaymentControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -393,7 +393,7 @@
             this.Controls.Add(this.labelPaymentHeading);
             this.Controls.Add(this.panelCreditCardInfo);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
-            this.Name = "StampsPaymentControl";
+            this.Name = "UspsPaymentControl";
             this.Size = new System.Drawing.Size(401, 532);
             this.Load += new System.EventHandler(this.OnLoad);
             this.panelCreditCardInfo.ResumeLayout(false);

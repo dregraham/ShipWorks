@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {

@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// UserControl for editing options specific to the Stamps.com integration
+    /// UserControl for editing options specific to the USPS integration
     /// </summary>
     public partial class UspsOptionsControl : PostalOptionsControlBase
     {
@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// The stamps reseller type.
+        /// The USPS reseller type.
         /// </summary>
         public ShipmentTypeCode ShipmentTypeCode
         { 

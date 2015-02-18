@@ -7,7 +7,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
     /// <summary>
     /// An implementation of the IRegistrationPromotion that should be used for creating new 
-    /// Stamps.com accounts when already has a Stamps reseller account
+    /// USPS accounts when already has a USPS reseller account
     /// </summary>
     public class EndiciaCbpRegistrationPromotion : IRegistrationPromotion
     {
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion
         }
 
         /// <summary>
-        /// Gets the promo code to use when registering an account with Stamps.com based on the
+        /// Gets the promo code to use when registering an account with USPS based on the
         /// type of account being registered.
         /// </summary>
         /// <returns>The promotion code to be used during registration.</returns>

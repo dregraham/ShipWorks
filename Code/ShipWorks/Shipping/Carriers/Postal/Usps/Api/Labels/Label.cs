@@ -4,7 +4,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
     /// <summary>
-    /// An abstract class to encapsulate the logic for persisting Stamps.com
+    /// An abstract class to encapsulate the logic for persisting USPS 
     /// labels to the data source.
     /// </summary>
     public abstract class Label : IDisposable

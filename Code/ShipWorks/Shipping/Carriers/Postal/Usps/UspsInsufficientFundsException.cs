@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -35,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     case UspsResellerType.Express1:
                         return "Express1";
                     default:
-                        throw new ArgumentOutOfRangeException("StampsReseller");
+                        throw new ArgumentOutOfRangeException("UspsReseller");
                 }
             }
         }

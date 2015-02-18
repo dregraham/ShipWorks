@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Linq;
 using Interapptive.Shared.Net;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -8,18 +7,16 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
-namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
     [TestClass]
-    public class StampsWebClientTest
+    public class UspsWebClientTest
     {
         private readonly UspsWebClient testObject;
 
@@ -28,10 +25,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
 
         private readonly UspsAccountEntity account;
 
-        public StampsWebClientTest()
+        public UspsWebClientTest()
         {
             // This will initialize all of the various static classes
-            new StampsPrototypeFixture();
+            new UspsPrototypeFixture();
             
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
@@ -56,7 +53,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             UspsWebClient.UseTestServer = true;
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
@@ -67,7 +64,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.IsNotNull(info);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void CreateScanForm_Connectivity_Test()
@@ -92,7 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             }
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
@@ -105,7 +102,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.IsFalse(registrationResult.IsSuccessful);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void RegisterAccount_IsSuccessful_Test()
@@ -121,7 +118,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
         /// <summary>
         /// Helper method to create a Stamps.com registration without a username.
         /// </summary>
-        /// <returns>StampsRegistration.</returns>
         private UspsRegistration CreateRegistrationWithoutUsername()
         {
             Mock<IUspsRegistrationValidator> validator = new Mock<IUspsRegistrationValidator>();
@@ -151,7 +147,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             return registration;
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void GetContract_Connectivity_Test()
@@ -161,7 +157,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Stamps
             Assert.AreEqual(UspsAccountContractType.Reseller, contractType);
         }
 
-        [TestCategory("Stamps")]
+        [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
         [TestMethod]
         public void ChangeToExpeditedPlan_Connectivity_Test()

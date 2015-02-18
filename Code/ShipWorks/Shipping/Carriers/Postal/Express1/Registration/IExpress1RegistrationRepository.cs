@@ -9,14 +9,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
     public interface IExpress1RegistrationRepository
     {
         /// <summary>
-        /// Saves the Express1 registration to the appropriate data source (Stamps account table or Endicia account table).
+        /// Saves the Express1 registration to the appropriate data source (USPS account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
         long Save(Express1Registration registration);
 
         /// <summary>
         /// Deletes the carrier account (if it exists) associated with the given registration from the appropriate data
-        /// source (Stamps account table or Endicia account table).
+        /// source (USPS account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>
         void Delete(Express1Registration registration);

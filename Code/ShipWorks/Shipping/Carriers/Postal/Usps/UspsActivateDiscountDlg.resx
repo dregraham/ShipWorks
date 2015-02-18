@@ -117,10 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="convertToExpeditedControl.DescriptionText" xml:space="preserve">
-    <value>ShipWorks offers discounted postage rates on Priority and Express Mail shipments through Intuiship, a partner of the USPS.  There are no additional monthly fees and the service, tracking, and labels are exactly the same.  The only difference is that you pay less for postage.</value>
-  </data>
-  <data name="signUpForExpeditedControl.DiscountText" xml:space="preserve">
-    <value>ShipWorks offers discounted postage rates on Priority and Express Mail shipments through Intuiship, a partner of the USPS.  There are no additional monthly fees and the service, tracking, and labels are exactly the same.  The only difference is that you pay less for postage.</value>
+  <data name="labelDiscountInfo.Text" xml:space="preserve">
+    <value>You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and IntuiShip, all through one single Stamps.com account. 
+
+To get these discounts, you just need to open a Stamps.com account which will enable you to easily print both USPS Priority Mail and Priority Mail Express labels and First Class shipping labels.</value>
   </data>
 </root>
