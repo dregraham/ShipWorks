@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 if (accountWasCreated)
                 {
-                    ConvertShipmentToUsps();
+                    ConvertShipmentToUsps(setupWizard.UspsAccount);
                     Close();
                 }
             }
@@ -93,7 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Update the shipment to use Usps
         /// </summary>
-        private void ConvertShipmentToUsps()
+        /// <param name="uspsAccount"></param>
+        private void ConvertShipmentToUsps(UspsAccountEntity uspsAccount)
         {
             ShippingManager.RefreshShipment(shipment);
 
@@ -102,6 +103,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // in order to take advantage of the new rates (since USPS API doesn't match 
             // with Endicia API and shipment configurations differ).
             shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
+            ShippingManager.EnsureShipmentLoaded(shipment);
+            shipment.Postal.Usps.UspsAccountID = uspsAccount != null ? uspsAccount.UspsAccountID : 0;
             ShippingManager.SaveShipment(shipment);
 
             // Now that the shipment has been updated, we need to broadcast that the shipping 
