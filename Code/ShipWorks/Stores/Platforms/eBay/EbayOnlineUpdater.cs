@@ -392,7 +392,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-
                 case ShipmentTypeCode.Endicia:
 
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
