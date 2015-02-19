@@ -5,6 +5,7 @@ using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -115,7 +116,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Need to convert the account to get discounted rates via the expedited contract/plan
                 log.InfoFormat("Converting USPS account ({0}) to get discounted postage.", accountToConvert.Username);
 
-                IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
+                // ShipWorks3 must be used when converting an account, so always use the Intuiship promotion when converting an account. 
+                IRegistrationPromotion promotion = new UspsIntuishipRegistrationPromotion();
                 new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
             catch (UspsApiException exception)
