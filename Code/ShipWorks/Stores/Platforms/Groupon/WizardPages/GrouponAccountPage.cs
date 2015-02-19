@@ -42,7 +42,6 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
 
             GrouponStoreEntity store = GetStore<GrouponStoreEntity>();
 
-            store.StoreUrl = urlTextBox.Text;
             store.SupplierID = supplierIDTextbox.Text;
             store.Token = tokenTextBox.Text;
 

@@ -16,13 +16,14 @@ using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
 using Interapptive.Shared.Enums;
+using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    class GrouponStoreDownloader : StoreDownloader
+    class GrouponDownloader : StoreDownloader
     {
 
-        public GrouponStoreDownloader(StoreEntity store)
+        public GrouponDownloader(StoreEntity store)
             : base(store)
         {
 
@@ -33,46 +34,62 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         protected override void Download()
         {
-            Progress.Detail = "Downloading New Orders...";
+            Progress.Detail = "Downloading Orders...";
 
-            GrouponStoreWebClient client = new GrouponStoreWebClient((GrouponStoreEntity)Store);
+            GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
             
             int currentPage = 0;
             int numberOfPages = 0;
+            int numberOfOrders = 0;
 
             do 
             {
+                // check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
                 currentPage++;
 
                 //Grab orders 
                 JToken result = client.GetOrders(currentPage);
 
+                //Number of Orders
+                numberOfOrders = (int)result["meta"]["no_of_items"];
+
+                //Update numberOfPages
+                numberOfPages = (int)result["meta"]["no_of_pages"];
+
                 // get JSON result objects into a list
                 IList<JToken> jsonOrders = result["data"].Children().ToList();
 
                 //Load orders 
-                LoadOrders(jsonOrders);
+                foreach (JToken jsonOrder in jsonOrders)
+                {
+                    // check for cancellation
+                    if (Progress.IsCancelRequested)
+                    {
+                        return;
+                    }
 
-                //Update numberOfPages
-                numberOfPages = Convert.ToInt16(result["meta"]["no_of_pages"].ToString());
+                    // set the progress detail
+                    Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
+
+                    LoadOrder(jsonOrder);
+
+                    // move the progress bar along
+                    Progress.PercentComplete = Math.Min(100 * QuantitySaved / numberOfOrders, 100);
+
+                }
 
             } while(currentPage < numberOfPages);
-        }
-
-        private void LoadOrders(IList<JToken> jsonOrders)
-        {
-            foreach (JToken jsonOrder in jsonOrders)
-            {
-                LoadOrder(jsonOrder);
-
-
-            }
         }
 
         private void LoadOrder(JToken jsonOrder)
         {
             string orderid =  jsonOrder["orderid"].ToString();
-            GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponStoreOrderIdentifier(orderid));
+            GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponOrderIdentifier(orderid));
 
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
@@ -89,23 +106,26 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.OnlineLastModified = orderDate;
 
             //Order Address
-            JToken jsonAddress = jsonOrder["customer"];
-            LoadAddressInfo(order, jsonAddress);
+            GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
+            LoadAddressInfo(order, customer);
 
             //Order requestedshipping
             order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
-            //Order Items
+            //Unit of measurement used for weight  
             string itemWeightUnit = jsonOrder["shipping"]["product_weight_unit"].ToString();
 
+            //List of order items
             IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
             foreach (JToken jsonItem in jsonItems)
             {
-                LoadItem(order, jsonItem, itemWeightUnit);
+                //Deserialized into grouponitem
+                GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
+                LoadItem(order, item, itemWeightUnit);
             }
 
             //OrderTotal
-            order.OrderTotal = Convert.ToDecimal(jsonOrder["amount"]["total"].ToString());
+            order.OrderTotal = (decimal)jsonOrder["amount"]["total"];
 
             SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
             retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
@@ -114,58 +134,49 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadItem(GrouponOrderEntity order, JToken jsonItem, string itemWeightUnit)
+        private void LoadItem(GrouponOrderEntity order, GrouponItem gItem, string itemWeightUnit)
         {
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
-            item.SKU = jsonItem["sku"].ToString();
-            item.Name = jsonItem["name"].ToString();
-            item.Weight = GetWeight(Convert.ToDouble(jsonItem["weight"].ToString()),itemWeightUnit);
-            item.UnitPrice = Convert.ToDecimal(jsonItem["unit_price"].ToString());
-            item.Quantity = Convert.ToInt16(jsonItem["quantity"].ToString());
-
+            item.SKU = gItem.sku;
+            item.Name = gItem.name;
+            item.Weight = GetWeight(gItem.weight,itemWeightUnit);
+            item.UnitPrice = gItem.unit_price;
+            item.Quantity = gItem.quantity;
 
             //Groupon fields
-            item.Permalink = jsonItem["permalink"].ToString();
-            item.ChannelSKUProvided = jsonItem["channel_sku_provided"].ToString();
-            item.FulfillmentLineitemID = jsonItem["fulfillment_lineitem_id"].ToString();
-            item.BomSKU = jsonItem["bom_sku"].ToString();
-            item.CILineItemID = jsonItem["ci_lineitemid"].ToString();
+            item.Permalink = gItem.permalink;
+            item.ChannelSKUProvided = gItem.channel_sku_provided;
+            item.FulfillmentLineitemID = gItem.fulfillment_lineitem_id;
+            item.BomSKU = gItem.bom_sku;
+            item.CILineItemID = gItem.ci_lineitemid;
         }
 
         /// <summary>
         /// Loads Shipping and Billing address into the order entity
         /// </summary>
-        private void LoadAddressInfo(GrouponOrderEntity order, JToken address)
+        private void LoadAddressInfo(GrouponOrderEntity order, GrouponCustomer customer)
         {
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
 
-            // Fill in the address info
-            LoadAddressInfo(shipAdapter ,address ,"Ship");
+            PersonName name = PersonName.Parse(customer.name);
+            shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
+            shipAdapter.FirstName = name.First;
+            shipAdapter.MiddleName = name.First;
+            shipAdapter.LastName = name.Last;
+            shipAdapter.Street1 = customer.address1;
+            shipAdapter.Street2 = customer.address2;
+            shipAdapter.City = customer.city;
+            shipAdapter.StateProvCode = Geography.GetStateProvCode(customer.state);
+            shipAdapter.PostalCode = customer.zip;
+            shipAdapter.CountryCode = Geography.GetCountryCode(customer.country);
+            shipAdapter.Phone = customer.phone;
 
             //Groupon does not provide a bill to address so we copy from shipping to billing
             PersonAdapter.Copy(shipAdapter, billAdapter);
         }
 
-        /// <summary>
-        /// Loads address information from xml to the person adapter
-        /// </summary>
-        private void LoadAddressInfo(PersonAdapter adapter, JToken address, string prefix)
-        {
-            PersonName name = PersonName.Parse(address["name"].ToString());
-            adapter.NameParseStatus = PersonNameParseStatus.Simple; 
-            adapter.FirstName = name.First;
-            adapter.MiddleName = name.First;
-            adapter.LastName = name.Last;
-            adapter.Street1 = address["address1"].ToString();
-            adapter.Street2 = address["address2"].ToString();
-            adapter.City = address["city"].ToString();
-            adapter.StateProvCode = Geography.GetStateProvCode(address["state"].ToString());
-            adapter.PostalCode = address["zip"].ToString();
-            adapter.CountryCode = Geography.GetCountryCode(address["country"].ToString());
-            adapter.Phone = address["phone"].ToString();
-        }
 
         private double GetWeight(double weight, string itemWeightUnit)
         {

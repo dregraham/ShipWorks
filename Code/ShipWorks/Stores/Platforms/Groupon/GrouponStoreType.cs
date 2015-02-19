@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            GrouponStoreAccountSettingsControl settingsControl = new GrouponStoreAccountSettingsControl();
+            GrouponAccountSettingsControl settingsControl = new GrouponAccountSettingsControl();
             //settingsControl.Initialize(this);
 
             return settingsControl;
@@ -82,7 +82,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override StoreDownloader CreateDownloader()
         {
-            return new GrouponStoreDownloader(Store);
+            return new GrouponDownloader(Store);
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new GrouponStoreOrderIdentifier(((GrouponOrderEntity)order).GrouponOrderID);
+            return new GrouponOrderIdentifier(((GrouponOrderEntity)order).GrouponOrderID);
         }
     }
 }

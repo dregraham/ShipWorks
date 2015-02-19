@@ -23,10 +23,10 @@ using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    class GrouponStoreWebClient
+    class GrouponWebClient
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreWebClient));
+        static readonly ILog log = LogManager.GetLogger(typeof(GrouponWebClient));
 
         //Groupon API Endpoint
         private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
@@ -39,7 +39,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreWebClient(GrouponStoreEntity store)
+        public GrouponWebClient(GrouponStoreEntity store)
         {
             this.store = store;
         }
@@ -116,7 +116,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(GrouponStoreException));
+                throw WebHelper.TranslateWebException(ex, typeof(GrouponException));
             }
         }
     }

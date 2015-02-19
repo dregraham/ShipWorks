@@ -20,12 +20,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// <summary>
     /// Account settings for GenericStore
     /// </summary>
-    public partial class GrouponStoreAccountSettingsControl : AccountSettingsControlBase
+    public partial class GrouponAccountSettingsControl : AccountSettingsControlBase
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreAccountSettingsControl()
+        public GrouponAccountSettingsControl()
         {
             InitializeComponent();
         }
@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 throw new ArgumentException("A non GenericStore store was passed to GrouponStore account settings.");
             }
 
-            urlTextBox.Text = grouponStore.StoreUrl;
+
             tokenTextBox.Text = grouponStore.Token;
             supplierIDTextbox.Text = grouponStore.SupplierID;
         }
@@ -67,7 +67,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 throw new ArgumentException("A non GenericStore store was passed to GrouponStore account settings.");
             }
-            grouponStore.StoreUrl = urlTextBox.Text;
+
             grouponStore.Token = tokenTextBox.Text;
             grouponStore.SupplierID = supplierIDTextbox.Text;
 

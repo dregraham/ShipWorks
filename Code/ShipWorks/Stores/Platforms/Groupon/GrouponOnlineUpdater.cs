@@ -85,7 +85,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public void UploadShipmentDetails(List<ShipmentEntity> shipments)
         {
-            GrouponStoreWebClient client = new GrouponStoreWebClient(store);
+            GrouponWebClient client = new GrouponWebClient(store);
             
             client.UploadShipmentDetails(shipments);
         }

@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// <summary>
     /// Uniquely identifies an GrouponStore order in the database
     /// </summary>
-    public class GrouponStoreOrderIdentifier : OrderIdentifier
+    public class GrouponOrderIdentifier : OrderIdentifier
     {
         // GrouponStore's Order ID
         string GrouponStoreOrderID = "";
@@ -19,7 +19,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// Constructor
         /// </summary>
         /// <param name="GrouponStoreOrderID"></param>
-        public GrouponStoreOrderIdentifier(string GrouponStoreOrderID)
+        public GrouponOrderIdentifier(string GrouponStoreOrderID)
         {
             this.GrouponStoreOrderID = GrouponStoreOrderID;
         }

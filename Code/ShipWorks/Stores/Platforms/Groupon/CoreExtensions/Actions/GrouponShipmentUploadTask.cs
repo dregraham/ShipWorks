@@ -115,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
                 GrouponOnlineUpdater updater = new GrouponOnlineUpdater(store);
                 updater.UploadShipmentDetails(shipmentKeys);
             }
-            catch (GrouponStoreException ex)
+            catch (GrouponException ex)
             {
                 throw new ActionTaskRunException(ex.Message, ex);
             }

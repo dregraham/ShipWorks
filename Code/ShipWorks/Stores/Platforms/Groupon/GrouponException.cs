@@ -10,7 +10,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
     /// Exception to wrap error messages and codes coming back from failed Groupon calls
     /// </summary>
     [Serializable]
-    class GrouponStoreException : Exception
+    class GrouponException : Exception
     {
         /// <summary>
         /// If the response is invalid Json, the original string will be here
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Constructor
         /// </summary>
-        public GrouponStoreException(string message, Exception inner)
+        public GrouponException(string message, Exception inner)
             : base(message, inner)
         {
         }
@@ -36,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Constructor for specifying the response from Groupon wasn't valid
         /// </summary>
-        public GrouponStoreException(string message, string badResponseData)
+        public GrouponException(string message, string badResponseData)
             : base(message)
         {
             this.badResponseData = badResponseData;
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Constructor for just message
         /// </summary>
-        public GrouponStoreException(string message)
+        public GrouponException(string message)
             : base(message)
         {
         }
@@ -53,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Serialization constructor
         /// </summary>
-        protected GrouponStoreException(SerializationInfo info, StreamingContext context)
+        protected GrouponException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             badResponseData = info.GetString("badResponseData");
