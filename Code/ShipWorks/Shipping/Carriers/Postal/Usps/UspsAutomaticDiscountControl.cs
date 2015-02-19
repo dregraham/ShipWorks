@@ -88,16 +88,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
 
-            LoadExpeditedAccounts();
+            LoadResellerAccounts();
         }
 
         /// <summary>
-        /// Load the UI for USPS Expedited accounts
+        /// Load the UI for USPS reseller accounts
         /// </summary>
-        private void LoadExpeditedAccounts()
+        private void LoadResellerAccounts()
         {
-            List<UspsAccountEntity> accounts = UspsAccountManager.UspsAccounts.Where(account => account.ContractType == (int) UspsAccountContractType.Reseller).ToList();
+            LoadAccounts(UspsAccountManager.UspsAccounts.Where(account => account.ContractType == (int)UspsAccountContractType.Reseller).ToList());
+        }
 
+        /// <summary>
+        /// Load the UI with the accounts provided.
+        /// </summary>
+        private void LoadAccounts(List<UspsAccountEntity> accounts)
+        {
             expeditedAccounts.Left = expeditedSignup.Left;
             expeditedAccounts.Width = 250;
 
@@ -109,7 +115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             expeditedAccounts.DisplayMember = "Display";
             expeditedAccounts.ValueMember = "Value";
 
-            if (accounts.Count > 0)
+            if (accounts.Any())
             {
                 expeditedAccounts.DataSource = accounts.Select(a => new { Display = a.Description, value = a.UspsAccountID }).ToList();
             }
@@ -144,7 +150,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Reload the account list if a new account has been added
             if (added)
             {
-                LoadExpeditedAccounts();
+                LoadResellerAccounts();
+
+                if (expeditedAccounts.Items.Count == 0)
+                {
+                    // We know we added a new account but haven't gotten the contract type back yet,
+                    // so force the account to be loaded into the dropdown. Otherwise, you won't be able
+                    // to close the postage discount dialog this control is hosted in.
+                    LoadAccounts(UspsAccountManager.UspsAccounts);
+                }
             }
         }
 
