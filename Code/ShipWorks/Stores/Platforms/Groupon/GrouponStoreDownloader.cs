@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 currentPage++;
 
                 //Grab orders 
-                JObject result = client.GetOrders(currentPage);
+                JToken result = client.GetOrders(currentPage);
 
                 // get JSON result objects into a list
                 IList<JToken> jsonOrders = result["data"].Children().ToList();

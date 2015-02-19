@@ -29,8 +29,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreWebClient));
 
         //Groupon API Endpoint
-        //private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
-        private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
+        private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
+        //private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
 
 
         // the store instance
@@ -47,7 +47,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Dwonload orders from Groupon
         /// </summary>
-        public JObject GetOrders(int page)
+        public JToken GetOrders(int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             ConfigureGetRequest(submitter, "/get_orders", page);
@@ -97,7 +97,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Executes a request
         /// </summary>
-        private JObject ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 
-                    JObject document = JObject.Parse(responseData);
+                    JToken document = JToken.Parse(responseData);
                     return document;
                 }
             }
