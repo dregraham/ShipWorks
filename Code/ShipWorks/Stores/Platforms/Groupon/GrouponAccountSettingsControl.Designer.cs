@@ -41,7 +41,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(42, 61);
+            this.label4.Location = new System.Drawing.Point(42, 74);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 13;
@@ -50,7 +50,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 34);
+            this.label3.Location = new System.Drawing.Point(19, 47);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 12;
@@ -58,14 +58,14 @@
             // 
             // tokenTextBox
             // 
-            this.tokenTextBox.Location = new System.Drawing.Point(91, 58);
+            this.tokenTextBox.Location = new System.Drawing.Point(91, 71);
             this.tokenTextBox.Name = "tokenTextBox";
             this.tokenTextBox.Size = new System.Drawing.Size(315, 21);
             this.tokenTextBox.TabIndex = 11;
             // 
             // supplierIDTextbox
             // 
-            this.supplierIDTextbox.Location = new System.Drawing.Point(91, 31);
+            this.supplierIDTextbox.Location = new System.Drawing.Point(91, 44);
             this.supplierIDTextbox.Name = "supplierIDTextbox";
             this.supplierIDTextbox.Size = new System.Drawing.Size(315, 21);
             this.supplierIDTextbox.TabIndex = 10;
@@ -79,7 +79,7 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Enter your Groupon account information :";
             // 
-            // GrouponStoreAccountSettingsControl
+            // GrouponAccountSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -88,7 +88,7 @@
             this.Controls.Add(this.tokenTextBox);
             this.Controls.Add(this.supplierIDTextbox);
             this.Controls.Add(this.label1);
-            this.Name = "GrouponStoreAccountSettingsControl";
+            this.Name = "GrouponAccountSettingsControl";
             this.Size = new System.Drawing.Size(482, 283);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);

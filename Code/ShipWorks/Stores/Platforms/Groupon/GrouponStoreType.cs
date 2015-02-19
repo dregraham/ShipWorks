@@ -163,6 +163,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             store.StoreUrl = "";
             store.SupplierID = "";
             store.Token = "";
+            store.StoreName = "Groupon";
 
             return store;
         }

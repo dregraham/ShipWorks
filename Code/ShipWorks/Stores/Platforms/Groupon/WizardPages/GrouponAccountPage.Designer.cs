@@ -46,14 +46,14 @@
             // 
             // supplierIDTextbox
             // 
-            this.supplierIDTextbox.Location = new System.Drawing.Point(107, 30);
+            this.supplierIDTextbox.Location = new System.Drawing.Point(100, 41);
             this.supplierIDTextbox.Name = "supplierIDTextbox";
             this.supplierIDTextbox.Size = new System.Drawing.Size(315, 21);
             this.supplierIDTextbox.TabIndex = 3;
             // 
             // tokenTextBox
             // 
-            this.tokenTextBox.Location = new System.Drawing.Point(107, 57);
+            this.tokenTextBox.Location = new System.Drawing.Point(100, 68);
             this.tokenTextBox.Name = "tokenTextBox";
             this.tokenTextBox.Size = new System.Drawing.Size(315, 21);
             this.tokenTextBox.TabIndex = 4;
@@ -61,7 +61,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(35, 33);
+            this.label3.Location = new System.Drawing.Point(28, 44);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(63, 13);
             this.label3.TabIndex = 5;
@@ -70,7 +70,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(58, 60);
+            this.label4.Location = new System.Drawing.Point(51, 71);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(40, 13);
             this.label4.TabIndex = 6;
