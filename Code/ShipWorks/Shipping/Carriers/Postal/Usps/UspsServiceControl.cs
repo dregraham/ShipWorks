@@ -197,7 +197,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 UspsAccountEntity account = uspsAccount.SelectedIndex >= 0 ? UspsAccountManager.GetAccount((long)uspsAccount.SelectedValue) : null;
-                if (account != null && ((uspsAccount.Enabled) || (rateShop.Checked && LoadedShipments.First().Processed)))
+                if (account != null && (uspsAccount.Enabled || LoadedShipments.First().Processed))
                 {
                     text += account.Description;
                 }
