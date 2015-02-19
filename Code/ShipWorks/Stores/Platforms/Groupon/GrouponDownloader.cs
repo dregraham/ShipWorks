@@ -34,7 +34,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         protected override void Download()
         {
-            Progress.Detail = "Downloading Orders...";
+            Progress.Detail = "Downloading New Orders...";
 
             GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
             
@@ -42,30 +42,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             int numberOfPages = 0;
             int numberOfOrders = 0;
 
-            do 
+            try
             {
-                // check for cancellation
-                if (Progress.IsCancelRequested)
-                {
-                    return;
-                }
-
-                currentPage++;
-
-                //Grab orders 
-                JToken result = client.GetOrders(currentPage);
-
-                //Number of Orders
-                numberOfOrders = (int)result["meta"]["no_of_items"];
-
-                //Update numberOfPages
-                numberOfPages = (int)result["meta"]["no_of_pages"];
-
-                // get JSON result objects into a list
-                IList<JToken> jsonOrders = result["data"].Children().ToList();
-
-                //Load orders 
-                foreach (JToken jsonOrder in jsonOrders)
+                do 
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -73,17 +52,47 @@ namespace ShipWorks.Stores.Platforms.Groupon
                         return;
                     }
 
-                    // set the progress detail
-                    Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
+                    currentPage++;
 
-                    LoadOrder(jsonOrder);
+                    //Grab orders 
+                    JToken result = client.GetOrders(currentPage);
 
-                    // move the progress bar along
-                    Progress.PercentComplete = Math.Min(100 * QuantitySaved / numberOfOrders, 100);
+                    //Number of Orders
+                    numberOfOrders = (int)result["meta"]["no_of_items"];
 
-                }
+                    //Update numberOfPages
+                    numberOfPages = (int)result["meta"]["no_of_pages"];
 
-            } while(currentPage < numberOfPages);
+                    // get JSON result objects into a list
+                    IList<JToken> jsonOrders = result["data"].Children().ToList();
+
+                    //Load orders 
+                    foreach (JToken jsonOrder in jsonOrders)
+                    {
+                        // check for cancellation
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
+
+                        LoadOrder(jsonOrder);
+
+                        // move the progress bar along
+                        //Progress.PercentComplete = Math.Min(100 * QuantitySaved / numberOfOrders, 100);
+                    }
+
+                } while(currentPage < numberOfPages);
+
+            }
+            catch (GrouponException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+            catch (SqlForeignKeyException ex)
+            {
+                throw new DownloadException(ex.Message, ex);
+            }
+
         }
 
         private void LoadOrder(JToken jsonOrder)
@@ -96,6 +105,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 return;
             }
+
+            // set the progress detail
+            Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
             //OrderNumber
             order.OrderNumber = GetNextOrderNumber();

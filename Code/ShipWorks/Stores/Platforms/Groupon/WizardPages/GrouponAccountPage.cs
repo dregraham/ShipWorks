@@ -45,6 +45,40 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
             store.SupplierID = supplierIDTextbox.Text;
             store.Token = tokenTextBox.Text;
 
+            if (supplierIDTextbox.Text.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Please enter your Supplier ID");
+                e.NextPage = this;
+                return;
+            }
+
+            if (tokenTextBox.Text.Length == 0)
+            {
+                MessageHelper.ShowError(this, "Please enter your Token");
+                e.NextPage = this;
+                return;
+            }
+
+            try
+            {
+                GrouponWebClient client = new GrouponWebClient(store);
+                client.GetOrders(1);
+            }
+            catch (GrouponException ex)
+            {
+                ShowConnectionException(ex);
+                e.NextPage = this;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Hook to allow derivatives add custom error handling for connectivity testing failures.
+        /// Return true to indicate the error has been handled.
+        /// </summary>
+        protected virtual void ShowConnectionException(GrouponException ex)
+        {
+            MessageHelper.ShowError(this, ex.Message);
         }
     }
 }

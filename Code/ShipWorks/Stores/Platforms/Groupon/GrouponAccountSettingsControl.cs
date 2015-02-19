@@ -30,16 +30,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             InitializeComponent();
         }
 
-        /// <summary>
-        /// Initializes the control with settings from the given store type. This is to allow
-        /// the control to pull any store specific settings from the store type (i.e. the URL
-        /// for the help link).
-        /// </summary>
-        /// <param name="storeType">Type of the store.</param>
-        //public void Initialize(GrouponStoreType storeType)
-        //{
-        //    //helpLink.Url = storeType.AccountSettingsHelpUrl;
-        //}
 
         /// <summary>
         /// Load store settings from the entity to the GUI
@@ -71,27 +61,48 @@ namespace ShipWorks.Stores.Platforms.Groupon
             grouponStore.Token = tokenTextBox.Text;
             grouponStore.SupplierID = supplierIDTextbox.Text;
 
-            return true;
+            // see if we need to test the settings because they changed in some way
+            if (ConnectionVerificationNeeded(grouponStore))
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                try
+                {
+                    GrouponWebClient client = new GrouponWebClient(grouponStore);
+                    client.GetOrders(1);
+
+                    return true;
+                }
+                catch (GrouponException ex)
+                {
+                    ShowConnectionException(ex);
+
+                    return false;
+                }
+            }
+            else
+            {
+                // Nothing changed
+                return true;
+            }
         }
 
         /// <summary>
         /// Hook to allow derivatives add custom error handling for connectivity testing failures.
         /// Return true to indicate the error has been handled.
         /// </summary>
-        //protected virtual void ShowConnectionException(GenericStoreException ex)
-        //{
-        //    MessageHelper.ShowError(this, ex.Message);
-        //}
+        protected virtual void ShowConnectionException(GrouponException ex)
+        {
+            MessageHelper.ShowError(this, ex.Message);
+        }
 
         /// <summary>
         /// For determining if the connection needs to be tested
         /// </summary>
-        //protected virtual bool ConnectionVerificationNeeded(GenericModuleStoreEntity genericStore)
-        //{
-        //    return (genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleUsername].IsChanged ||
-        //            genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModulePassword].IsChanged ||
-        //            genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleUrl].IsChanged ||
-        //            genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleOnlineStoreCode].IsChanged);
-        //}
+        protected virtual bool ConnectionVerificationNeeded(GrouponStoreEntity store)
+        {
+            return (store.Fields[(int)GrouponStoreFieldIndex.Token].IsChanged ||
+                    store.Fields[(int)GrouponStoreFieldIndex.SupplierID].IsChanged);
+        }
     }
 }
