@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.Contracts;
-using Interapptive.Shared.Business;
+﻿using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.ApplicationCore;
@@ -16,8 +15,6 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
@@ -568,8 +565,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // messaging is restricted on Endicia, we want to show the Usps promo
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Always show the USPS promotion when Express 1 is restricted
-                        finalGroup.AddFootnoteFactory(CreateUspsRatePromotionFootnoteFactory(shipment));
+                        // Always show the USPS promotion when Express 1 is restricted - show the
+                        // single account dialog if Endicia has Express1 accounts and is not using USPS
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
+                        finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
                     return finalGroup;
@@ -581,8 +580,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS
-                        finalEndiciaOnlyRates.AddFootnoteFactory(CreateUspsRatePromotionFootnoteFactory(shipment));
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
+                        finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
                     return finalEndiciaOnlyRates;
@@ -602,17 +602,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 return express1Group;
             }
-        }
-
-        /// <summary>
-        /// Create a promotion factory for Endicia or Express1
-        /// </summary>
-        private UspsRatePromotionFootnoteFactory CreateUspsRatePromotionFootnoteFactory(ShipmentEntity shipment)
-        {
-            // Show the single account dialog if Endicia has Express1 accounts and is not using USPS
-            bool alreadyHasDiscountedUspsAccount = UspsAccountManager.UspsAccounts.Any(x => x.ContractType == (int) UspsAccountContractType.Reseller);
-            bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !alreadyHasDiscountedUspsAccount;
-            return new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog);
         }
 
         /// <summary>

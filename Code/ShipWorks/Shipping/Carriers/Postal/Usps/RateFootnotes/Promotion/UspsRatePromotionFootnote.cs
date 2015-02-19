@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -11,6 +10,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
     /// </summary>
     public partial class UspsRatePromotionFootnote : RateFootnoteControl
     {
+        private readonly ShipmentEntity shipment;
+        private readonly bool showSingleAccountDialog;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsRatePromotionFootnote" /> class.
         /// </summary>
@@ -20,9 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// is displayed.</param>
         public UspsRatePromotionFootnote(ShipmentEntity shipment, bool showSingleAccountDialog)
         {
+            this.shipment = shipment;
+            this.showSingleAccountDialog = showSingleAccountDialog;
             InitializeComponent();
-            Shipment = shipment;
-            ShowSingleAccountDialog = showSingleAccountDialog;
         }
 
         /// <summary>
@@ -34,25 +36,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         }
 
         /// <summary>
-        /// Gets the shipment.
-        /// </summary>
-        public ShipmentEntity Shipment { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to [show single account dialog] when 
-        /// the activate link is clicked. 
-        /// </summary>
-        public bool ShowSingleAccountDialog { get; private set; }
-
-        /// <summary>
         /// Link to activate the USPS discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            using (IDiscountedAccountDlg dlg = CreateDiscountedAccountDialog())
+            int originalShipmentTypeCode = shipment.ShipmentType;
+
+            using (UspsActivateDiscountDlg dlg = GetDiscountDialog())
             {
-                dlg.Initialize(Shipment, ShowSingleAccountDialog);
-                if (dlg.ShowDialog(this) == DialogResult.OK)
+                dlg.Initialize(shipment);
+
+                // If they clicked ok and it didn't cause the shipment type to change, refresh rates.
+                if (dlg.ShowDialog(this) == DialogResult.OK && originalShipmentTypeCode == shipment.ShipmentType)
                 {
                     RaiseRateCriteriaChanged();
                 }
@@ -60,16 +55,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         }
 
         /// <summary>
-        /// Create the dialog that should be used to get the discount
+        /// Gets the appropriate discount dialog based on ShowSingleAccountDialog.
         /// </summary>
-        /// <returns></returns>
-        private IDiscountedAccountDlg CreateDiscountedAccountDialog()
+        private UspsActivateDiscountDlg GetDiscountDialog()
         {
-            bool convertExistingAccount = Shipment.ShipmentType == (int)ShipmentTypeCode.Usps && UspsAccountManager.UspsAccounts.Any();
-
-            return convertExistingAccount ? 
-                (IDiscountedAccountDlg) new UspsConvertExistingAccountDlg() :
-                new UspsActivateDiscountDlg();
+            return showSingleAccountDialog ? new SingleAccountMarketingDlg() : new UspsActivateDiscountDlg();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ShipWorks.Shipping.Carriers.Postal.Usps
+﻿namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     partial class UspsActivateDiscountDlg
     {
@@ -32,63 +30,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UspsActivateDiscountDlg));
             this.close = new System.Windows.Forms.Button();
-            this.labelDiscountedPostage = new System.Windows.Forms.Label();
-            this.labelDiscountInfo = new System.Windows.Forms.Label();
-            this.expeditedSignup = new System.Windows.Forms.Button();
-            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
+            this.convertToExpeditedControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsConvertAccountToExpeditedControl();
+            this.signUpForExpeditedControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsAutomaticDiscountControl();
             this.SuspendLayout();
             // 
             // close
             // 
             this.close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.close.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.close.Location = new System.Drawing.Point(353, 174);
+            this.close.Location = new System.Drawing.Point(353, 447);
             this.close.Name = "close";
             this.close.Size = new System.Drawing.Size(75, 23);
             this.close.TabIndex = 1;
             this.close.Text = "Close";
             this.close.UseVisualStyleBackColor = true;
             // 
-            // labelDiscountedPostage
+            // convertToExpeditedControl
             // 
-            this.labelDiscountedPostage.AutoSize = true;
-            this.labelDiscountedPostage.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelDiscountedPostage.Location = new System.Drawing.Point(10, 12);
-            this.labelDiscountedPostage.Name = "labelDiscountedPostage";
-            this.labelDiscountedPostage.Size = new System.Drawing.Size(105, 13);
-            this.labelDiscountedPostage.TabIndex = 15;
-            this.labelDiscountedPostage.Text = "Postage Discount";
+            this.convertToExpeditedControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.convertToExpeditedControl.DescriptionText = resources.GetString("convertToExpeditedControl.DescriptionText");
+            this.convertToExpeditedControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.convertToExpeditedControl.LinkText = "Click here to add these discounted rates from IntuiShip through your existing Sta" +
+    "mps.com account at no additional cost.";
+            this.convertToExpeditedControl.Location = new System.Drawing.Point(3, 225);
+            this.convertToExpeditedControl.Name = "convertToExpeditedControl";
+            this.convertToExpeditedControl.Size = new System.Drawing.Size(425, 193);
+            this.convertToExpeditedControl.TabIndex = 2;
             // 
-            // labelDiscountInfo
+            // signUpForExpeditedControl
             // 
-            this.labelDiscountInfo.Location = new System.Drawing.Point(29, 37);
-            this.labelDiscountInfo.Name = "labelDiscountInfo";
-            this.labelDiscountInfo.Size = new System.Drawing.Size(379, 101);
-            this.labelDiscountInfo.TabIndex = 16;
-            this.labelDiscountInfo.Text = resources.GetString("labelDiscountInfo.Text");
-            // 
-            // expeditedSignup
-            // 
-            this.expeditedSignup.Location = new System.Drawing.Point(31, 141);
-            this.expeditedSignup.Name = "expeditedSignup";
-            this.expeditedSignup.Size = new System.Drawing.Size(94, 23);
-            this.expeditedSignup.TabIndex = 13;
-            this.expeditedSignup.Text = "Signup for Free";
-            this.expeditedSignup.UseVisualStyleBackColor = true;
-            this.expeditedSignup.Click += new System.EventHandler(this.OnSignup);
-            // 
-            // expeditedLearnMore
-            // 
-            this.expeditedLearnMore.AutoSize = true;
-            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
-            this.expeditedLearnMore.Location = new System.Drawing.Point(130, 146);
-            this.expeditedLearnMore.Name = "expeditedLearnMore";
-            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
-            this.expeditedLearnMore.TabIndex = 14;
-            this.expeditedLearnMore.Text = "(Learn more)";
-            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
+            this.signUpForExpeditedControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.signUpForExpeditedControl.DiscountText = resources.GetString("signUpForExpeditedControl.DiscountText");
+            this.signUpForExpeditedControl.HeaderText = "Postage Discount";
+            this.signUpForExpeditedControl.Location = new System.Drawing.Point(3, 12);
+            this.signUpForExpeditedControl.Name = "signUpForExpeditedControl";
+            this.signUpForExpeditedControl.Size = new System.Drawing.Size(425, 182);
+            this.signUpForExpeditedControl.TabIndex = 0;
+            this.signUpForExpeditedControl.UseExpeditedOptionText = "Automatically save postage costs on domestic and international Priority and Expre" +
+    "ss shipments:";
             // 
             // UspsActivateDiscountDlg
             // 
@@ -96,12 +77,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.close;
-            this.ClientSize = new System.Drawing.Size(443, 205);
-            this.Controls.Add(this.labelDiscountedPostage);
-            this.Controls.Add(this.expeditedLearnMore);
-            this.Controls.Add(this.labelDiscountInfo);
-            this.Controls.Add(this.expeditedSignup);
+            this.ClientSize = new System.Drawing.Size(443, 478);
+            this.Controls.Add(this.convertToExpeditedControl);
             this.Controls.Add(this.close);
+            this.Controls.Add(this.signUpForExpeditedControl);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -111,17 +90,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Activate Postage Discount";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button close;
-        private System.Windows.Forms.Label labelDiscountedPostage;
-        private UI.Controls.LinkControl expeditedLearnMore;
-        private System.Windows.Forms.Label labelDiscountInfo;
-        private System.Windows.Forms.Button expeditedSignup;
+        protected UspsAutomaticDiscountControl signUpForExpeditedControl;
+        protected UspsConvertAccountToExpeditedControl convertToExpeditedControl;
     }
 }
