@@ -2310,6 +2310,7 @@
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponCustomer.cs" />
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponItem.cs" />
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponOrder.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponUrlUtilities.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Actions\GrouponShipmentUploadTask.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Grid\GridGrouponOrderDisplayType.cs" />

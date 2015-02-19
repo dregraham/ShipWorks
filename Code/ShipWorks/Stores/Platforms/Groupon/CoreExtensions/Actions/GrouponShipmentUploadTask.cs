@@ -110,14 +110,17 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
         /// </summary>
         private void UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
         {
-            try
+            foreach (long shipmentKey in shipmentKeys)
             {
-                GrouponOnlineUpdater updater = new GrouponOnlineUpdater(store);
-                updater.UploadShipmentDetails(shipmentKeys);
-            }
-            catch (GrouponException ex)
-            {
-                throw new ActionTaskRunException(ex.Message, ex);
+                try
+                {
+                    GrouponOnlineUpdater updater = new GrouponOnlineUpdater(store);
+                    updater.UpdateShipmentDetails(shipmentKey);
+                }
+                catch (GrouponException ex)
+                {
+                    throw new ActionTaskRunException(ex.Message, ex);
+                }
             }
         }
     }

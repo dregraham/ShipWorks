@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data;
+using ShipWorks.Data.Connection;
+using log4net;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping;
 using ShipWorks.Stores.Platforms.Groupon;
+using ShipWorks.Stores.Platforms.Groupon.DTO;
 using System.Threading;
 
 namespace ShipWorks.Stores.Platforms.Groupon
@@ -32,11 +36,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
             this.store = store;
         }
 
-
         /// <summary>
         /// Update the online status of the given order
         /// </summary>
-        public void UploadOrderShipmentDetails(IEnumerable<long> orderKeys)
+        public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
@@ -50,44 +53,73 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 }
                 else
                 {
-                    shipments.Add(shipment);
+                    UpdateShipmentDetails(shipment);
                 }
             }
-
-            UploadShipmentDetails(shipments);
         }
 
         /// <summary>
-        /// Uploads shipmnent details for a particular shipment
+        /// Push the online status for an order.
         /// </summary>
-        public void UploadShipmentDetails(IEnumerable<long> shipmentKeys)
+        public void UpdateShipmentDetails(OrderEntity order)
         {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
-
-            foreach (long shipmentID in shipmentKeys)
+            // upload tracking number for the most recent processed, not voided shipment
+            ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
+            if (shipment == null)
             {
-                ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
-                if (shipment == null)
-                {
-                    log.InfoFormat(String.Format("Not uploading shipment details, since the shipment {0} was deleted.", shipmentID));
-                }
-                else
-                {
-                    shipments.Add(shipment);
-                }
+                // log that there was no shipment, and return
+                log.DebugFormat("There was no shipment found for order Id: {0}", order.OrderID);
+                return;
             }
 
-            UploadShipmentDetails(shipments);
+            UpdateShipmentDetails(shipment);
         }
 
         /// <summary>
-        /// Uploads shipmnent details for a particular shipment
+        /// Push the shipment details to the store.
         /// </summary>
-        public void UploadShipmentDetails(List<ShipmentEntity> shipments)
+        public void UpdateShipmentDetails(long shipmentID)
         {
+            ShipmentEntity shipment = ShippingManager.GetShipment(shipmentID);
+            if (shipment == null)
+            {
+                log.WarnFormat("Not updating status of shipment {0} as it has gone away.", shipmentID);
+                return;
+            }
+
+            UpdateShipmentDetails(shipment);
+        }
+
+        /// <summary>
+        /// Push the online status for an shipment.
+        /// </summary>
+        private void UpdateShipmentDetails(ShipmentEntity shipment)
+        {
+            OrderEntity order = shipment.Order;
+            if (order.IsManual)
+            {
+                log.WarnFormat("Not updating order {0} since it is manual.", shipment.Order.OrderNumberComplete);
+                return;
+            }
+
+            // Fetch the order items
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
+            // Groupon requires order items to create a shipment, so make sure we have some
+            if (order.OrderItems == null || order.OrderItems.Count == 0)
+            {
+                throw new GrouponException(string.Format("Unable to upload shipment details because no order items were found for order number {0}", order.OrderNumber));
+            }
+
             GrouponWebClient client = new GrouponWebClient(store);
-            
-            client.UploadShipmentDetails(shipments);
+
+            foreach(GrouponOrderItemEntity item in order.OrderItems)
+            {
+                client.UploadShipmentDetails(shipment, item.CILineItemID);
+            }
         }
     }
 }

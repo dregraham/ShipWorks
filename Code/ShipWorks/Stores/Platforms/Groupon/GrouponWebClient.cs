@@ -63,9 +63,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Uploads shipment details to Groupon
         /// </summary>
-        public void UploadShipmentDetails(List<ShipmentEntity> shipment)
+        public void UploadShipmentDetails(ShipmentEntity shipment, string CILineItemID)
         {
+            OrderEntity order = shipment.Order;
 
+            
         }
 
         /// <summary>

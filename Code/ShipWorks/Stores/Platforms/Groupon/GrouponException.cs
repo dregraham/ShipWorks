@@ -2,71 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
     /// <summary>
-    /// Exception to wrap error messages and codes coming back from failed Groupon calls
+    /// Handleable exception thrown by Generic store and derivatives
     /// </summary>
-    [Serializable]
-    class GrouponException : Exception
+    public class GrouponException : Exception
     {
-        /// <summary>
-        /// If the response is invalid Json, the original string will be here
-        /// </summary>
-        private string badResponseData = "";
-
-        /// <summary>
-        /// Invalid Json returned by Groupon
-        /// </summary>
-        public string BadResponseData
+        public GrouponException()
         {
-            get { return badResponseData; }
+
         }
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public GrouponException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
-        /// <summary>
-        /// Constructor for specifying the response from Groupon wasn't valid
-        /// </summary>
-        public GrouponException(string message, string badResponseData)
-            : base(message)
-        {
-            this.badResponseData = badResponseData;
-        }
-
-        /// <summary>
-        /// Constructor for just message
-        /// </summary>
         public GrouponException(string message)
             : base(message)
         {
+
         }
 
-        /// <summary>
-        /// Serialization constructor
-        /// </summary>
-        protected GrouponException(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        public GrouponException(string message, Exception inner)
+            : base(message, inner)
         {
-            badResponseData = info.GetString("badResponseData");
-        }
 
-        /// <summary>
-        /// Deserilization 
-        /// </summary>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
-            base.GetObjectData(info, context);
-
-            info.AddValue("badResponseData", badResponseData);
         }
     }
 }
