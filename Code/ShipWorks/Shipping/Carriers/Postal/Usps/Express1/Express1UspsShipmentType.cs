@@ -13,6 +13,7 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
+using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -149,8 +150,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-
             RateGroup rateGroup = new RateGroup(rateResults);
+
+            if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
+            {
+                rateGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
+            }
+
             return rateGroup;
         }
 
