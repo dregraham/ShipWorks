@@ -15,6 +15,7 @@ using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using log4net;
 using ShipWorks.Actions;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
 {
@@ -24,8 +25,6 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
     [ActionTask("Upload shipment details", "GrouponShipmentUploadTask", ActionTaskCategory.UpdateOnline)]
     public class GrouponShipmentUploadTask : StoreInstanceTaskBase
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponShipmentUploadTask));
-
         const long maxBatchSize = 1000;
 
         /// <summary>
@@ -108,19 +107,22 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Actions
         /// <summary>
         /// Run the batched up (already combined from postponed tasks, if any) input keys through the task
         /// </summary>
-        private void UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
+        private static void UpdloadShipmentDetails(GrouponStoreEntity store, IEnumerable<long> shipmentKeys)
         {
-            foreach (long shipmentKey in shipmentKeys)
+            try
             {
-                try
+                foreach(long shipmentKey in shipmentKeys)
                 {
                     GrouponOnlineUpdater updater = new GrouponOnlineUpdater(store);
-                    updater.UpdateShipmentDetails(shipmentKey);
+
+                    ShipmentEntity shipment = ShippingManager.GetShipment(shipmentKey);
+
+                    updater.UpdateShipmentDetails(shipment);
                 }
-                catch (GrouponException ex)
-                {
-                    throw new ActionTaskRunException(ex.Message, ex);
-                }
+            }
+            catch (GrouponException ex)
+            {
+                throw new ActionTaskRunException(ex.Message, ex);
             }
         }
     }

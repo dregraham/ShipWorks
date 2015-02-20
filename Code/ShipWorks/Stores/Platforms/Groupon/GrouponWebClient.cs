@@ -4,33 +4,35 @@ using System.Linq;
 using System.Text;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using System.Collections.Specialized;
 using Interapptive.Shared.Net;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using System.IO;
-using ShipWorks.Shipping;
 using System.Web;
 using System.Globalization;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
-using ShipWorks.Shipping.Carriers.UPS;
-using ShipWorks.Shipping.Carriers.UPS.Enums;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Model;
+using ShipWorks.Data;
+using ShipWorks.Stores.Content;
+using ShipWorks.Stores.Platforms.Groupon;
+using ShipWorks.Stores.Platforms.Groupon.DTO;
+using System.Threading;
+
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
     class GrouponWebClient
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponWebClient));
 
         //Groupon API Endpoint
-        private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
-        //private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
+        //private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
+        private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
 
 
         // the store instance
@@ -59,16 +61,36 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// Mark lineitems as exported
         /// </summary>
 
-
         /// <summary>
-        /// Uploads shipment details to Groupon
+        /// Uploads a batch of shipments to Groupon
         /// </summary>
-        public void UploadShipmentDetails(ShipmentEntity shipment, string CILineItemID)
+        public void UploadShipmentDetails(List<GrouponTracking> trackingItmes)
         {
-            OrderEntity order = shipment.Order;
+            List<string> trackingList = new List<string>();
+            foreach(GrouponTracking trackingItem in trackingItmes)
+            {
+                trackingList.Add(JsonConvert.SerializeObject(trackingItem));
+            }
 
-            
+            string trackingParameter = "[" + String.Join(",", trackingList) + "]";
+
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+
+            Dictionary<string, string> parameters = new Dictionary<string,string>();
+
+            parameters.Add("supplier_id", store.SupplierID);
+            parameters.Add("token", store.Token);
+            parameters.Add("tracking_info", trackingParameter);
+
+            ConfigurePostRequest(submitter, "/tracking_notification", parameters);
+
+            ProcessRequest(submitter, "UploadShipmentDetails");
+
+            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Groupon, "TESTLOG");
+            logEntry.LogResponse(submitter.GetPostContent().ToString(), "txt");
+
         }
+           
 
         /// <summary>
         /// Setup a get request 
@@ -86,20 +108,22 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Setup a post request 
         /// </summary>
-        private void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, int page)
+        private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter,string operationName , Dictionary<string,string> parameters)
         {
             submitter.Verb = HttpVerb.Post;
 
             submitter.Uri = new Uri(GrouponEndpoint + operationName);
-            submitter.Variables.Add("supplier_id", store.SupplierID);
-            submitter.Variables.Add("token", store.Token);
-            submitter.Variables.Add("page", page.ToString());
+
+            foreach(KeyValuePair<string, string> parameter in parameters)
+            {
+                submitter.Variables.Add(parameter.Key, parameter.Value);
+            }
         }
 
         /// <summary>
         /// Executes a request
         /// </summary>
-        private JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
+        private static JToken ProcessRequest(HttpRequestSubmitter submitter, string action)
         {
             try
             {

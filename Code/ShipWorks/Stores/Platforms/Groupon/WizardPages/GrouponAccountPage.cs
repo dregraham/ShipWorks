@@ -20,9 +20,6 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
     /// </summary>
     public partial class GrouponStoreAccountPage : AddStoreWizardPage
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreAccountPage));
-
         /// <summary>
         /// Constructor
         /// </summary>

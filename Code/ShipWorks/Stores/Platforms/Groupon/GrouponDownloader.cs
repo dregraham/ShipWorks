@@ -40,7 +40,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             
             int currentPage = 0;
             int numberOfPages = 0;
-            int numberOfOrders = 0;
 
             try
             {
@@ -56,9 +55,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     //Grab orders 
                     JToken result = client.GetOrders(currentPage);
-
-                    //Number of Orders
-                    numberOfOrders = (int)result["meta"]["no_of_items"];
 
                     //Update numberOfPages
                     numberOfPages = (int)result["meta"]["no_of_pages"];
@@ -76,9 +72,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
                         }
 
                         LoadOrder(jsonOrder);
-
-                        // move the progress bar along
-                        //Progress.PercentComplete = Math.Min(100 * QuantitySaved / numberOfOrders, 100);
                     }
 
                 } while(currentPage < numberOfPages);
@@ -167,7 +160,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Loads Shipping and Billing address into the order entity
         /// </summary>
-        private void LoadAddressInfo(GrouponOrderEntity order, GrouponCustomer customer)
+        private static void LoadAddressInfo(GrouponOrderEntity order, GrouponCustomer customer)
         {
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
@@ -190,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
 
-        private double GetWeight(double weight, string itemWeightUnit)
+        private static double GetWeight(double weight, string itemWeightUnit)
         {
             //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
             switch (itemWeightUnit)
@@ -202,7 +195,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
         }
 
-        private DateTime GetDate(string date)
+        private static DateTime GetDate(string date)
         {
             int TimeZonePos = date.IndexOf("UTC");
 

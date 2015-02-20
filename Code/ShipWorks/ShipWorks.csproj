@@ -2310,10 +2310,10 @@
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponCustomer.cs" />
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponItem.cs" />
     <Compile Include="Stores\Platforms\Groupon\DTO\GrouponOrder.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponTracking.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponUrlUtilities.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Actions\GrouponShipmentUploadTask.cs" />
-    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Grid\GridGrouponOrderDisplayType.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2324,6 +2324,7 @@
     <Compile Include="Stores\Platforms\Groupon\GrouponException.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponStoreType.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponCarrier.cs" />
     <Compile Include="Stores\Platforms\Groupon\GrouponWebClient.cs" />
     <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.cs">
       <SubType>UserControl</SubType>
