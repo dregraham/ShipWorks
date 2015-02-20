@@ -14,7 +14,7 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
@@ -413,7 +413,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 return address;
             }
 
-            StampsAddressValidationResults results = ValidateAddress(person, account);
+            UspsAddressValidationResults results = ValidateAddress(person, account);
 
             if (!results.IsSuccessfulMatch)
             {
@@ -436,7 +436,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address of the given person
         /// </summary>
-        public StampsAddressValidationResults ValidateAddress(PersonAdapter person)
+        public UspsAddressValidationResults ValidateAddress(PersonAdapter person)
         {
             return ValidateAddress(person, null);
         }
@@ -444,7 +444,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address of the given person using the specified stamps account
         /// </summary>
-        private StampsAddressValidationResults ValidateAddress(PersonAdapter person, UspsAccountEntity account)
+        private UspsAddressValidationResults ValidateAddress(PersonAdapter person, UspsAccountEntity account)
         {
             Address address = CreateAddress(person);
 
@@ -486,7 +486,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
                 }
 
-                return new StampsAddressValidationResults
+                return new UspsAddressValidationResults
                 {
                     IsSuccessfulMatch = addressMatch,
                     IsCityStateZipOk = cityStateZipOk,

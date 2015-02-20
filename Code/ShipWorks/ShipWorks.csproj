@@ -840,7 +840,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsAccountContractType.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Stamps\StampsAddressValidationResults.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAddressValidationResults.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerType.cs" />

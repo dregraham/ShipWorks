@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps
+namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
     /// Contains the results of performing an address validation
     /// </summary>
-    public class StampsAddressValidationResults
+    public class UspsAddressValidationResults
     {
         /// <summary>
         /// Do the results contain a successful match
