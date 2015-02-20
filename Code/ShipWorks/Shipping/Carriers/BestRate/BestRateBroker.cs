@@ -31,6 +31,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             this.AccountRepository = accountRepository;
             this.carrierDescription = carrierDescription;
+            shipmentType.ShouldApplyShipSense = false;
             ShipmentType = shipmentType;
             GetRatesAction = ShippingManager.GetRates;
         }
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Shipment type for the broker
         /// </summary>
-        public ShipmentType ShipmentType { get; private set; }
+        public virtual ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
         /// The action to GetRates.
@@ -262,6 +263,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         {
             // Get distinct types of footnotes
             IEnumerable<IRateFootnoteFactory> distinctFootnoteFactories = accountRates.SelectMany(x => x.Value.FootnoteFactories)
+                                                                                      .Where(f => f.AllowedForBestRate)
                                                                                       .GroupBy(f => f.GetType())
                                                                                       .Select(f => f.FirstOrDefault());
 
@@ -397,6 +399,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             currentShipment.OriginOriginID = originalShipment.OriginOriginID;
             currentShipment.Insurance = originalShipment.Insurance;
             currentShipment.BestRateEvents = originalShipment.BestRateEvents;
+            currentShipment.ShipSenseStatus = originalShipment.ShipSenseStatus;
+            currentShipment.ShipSenseChangeSets = originalShipment.ShipSenseChangeSets;
 
             UpdateShipmentOriginAddress(currentShipment, originalShipment, account);
         }

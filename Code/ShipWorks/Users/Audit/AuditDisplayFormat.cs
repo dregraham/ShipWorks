@@ -6,12 +6,12 @@ using Interapptive.Shared.Enums;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.iParcel;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Stores.Content;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
 using Interapptive.Shared.Utility;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings.Origin;
@@ -22,8 +22,6 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Shipping.Carriers.EquaShip.Enums;
-using ShipWorks.Stores.Platforms.Etsy.Enums;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -69,8 +67,6 @@ namespace ShipWorks.Users.Audit
             enumMapping[115] = typeof(UpsServiceType);
             enumMapping[116] = typeof(UpsDeliveryConfirmationType);
             enumMapping[117] = typeof(UpsPayorType);
-            enumMapping[118] = typeof(EquaShipServiceType);
-            enumMapping[119] = typeof(EquaShipPackageType);
             enumMapping[121] = typeof(ShopifyPaymentStatus);
             enumMapping[122] = typeof(ShopifyFulfillmentStatus);
             enumMapping[123] = typeof(FedExDropoffType);
@@ -147,9 +143,9 @@ namespace ShipWorks.Users.Audit
             EntityType entityType = EntityUtility.GetEntityType(entityID);
             switch (entityType)
             {
-                case EntityType.StampsAccountEntity:
+                case EntityType.UspsAccountEntity:
                     {
-                        StampsAccountEntity account = StampsAccountManager.GetAccount(entityID);
+                        UspsAccountEntity account = UspsAccountManager.GetAccount(entityID);
                         return account != null ? account.Username : "(Deleted)";
                     }
 

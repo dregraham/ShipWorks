@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 			toReturn.Add(this.EndiciaProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.ShippingProfileEntityUsingShippingProfileID);
-			toReturn.Add(this.StampsProfileEntityUsingShippingProfileID);
+			toReturn.Add(this.UspsProfileEntityUsingShippingProfileID);
 
 			return toReturn;
 		}
@@ -79,21 +79,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between PostalProfileEntity and StampsProfileEntity over the 1:1 relation they have, using the relation between the fields:
-		/// PostalProfile.ShippingProfileID - StampsProfile.ShippingProfileID
+		/// <summary>Returns a new IEntityRelation object, between PostalProfileEntity and UspsProfileEntity over the 1:1 relation they have, using the relation between the fields:
+		/// PostalProfile.ShippingProfileID - UspsProfile.ShippingProfileID
 		/// </summary>
-		public virtual IEntityRelation StampsProfileEntityUsingShippingProfileID
+		public virtual IEntityRelation UspsProfileEntityUsingShippingProfileID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Stamps", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Usps", true);
 
-				relation.AddEntityFieldPair(PostalProfileFields.ShippingProfileID, StampsProfileFields.ShippingProfileID);
+				relation.AddEntityFieldPair(PostalProfileFields.ShippingProfileID, UspsProfileFields.ShippingProfileID);
 
 
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PostalProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsProfileEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UspsProfileEntity", false);
 				return relation;
 			}
 		}

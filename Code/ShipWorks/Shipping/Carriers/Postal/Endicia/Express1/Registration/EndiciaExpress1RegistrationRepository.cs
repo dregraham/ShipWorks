@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
     public class EndiciaExpress1RegistrationRepository : IExpress1RegistrationRepository
     {
         /// <summary>
-        /// Saves the Express1 registration to the appropriate data source (Stamps account table or Endicia account table).
+        /// Saves the Express1 registration to the appropriate data source (Usps account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being saved.</param>
         /// <returns></returns>
@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
             }
 
             
-            // Create a new stamps account entity that will get saved to the database
+            // Create a new usps account entity that will get saved to the database
             EndiciaAccountEntity endiciaAccount = registration.AccountId.HasValue ?
                 EndiciaAccountManager.GetAccount(registration.AccountId.Value) :
                 new EndiciaAccountEntity();
@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration
 
         /// <summary>
         /// Deletes the carrier account (if it exists) associated with the given registration from the appropriate data
-        /// source (Stamps account table or Endicia account table).
+        /// source (Usps account table or Endicia account table).
         /// </summary>
         /// <param name="registration">The registration object containing the Express1 account info being deleted.</param>
         public void Delete(Express1Registration registration)

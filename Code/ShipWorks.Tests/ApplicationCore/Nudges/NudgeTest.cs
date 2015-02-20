@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         public NudgeTest()
         {
-            testObject = new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 500));
+            testObject = new Nudge(1, "Nudge 1", NudgeType.ShipWorksUpgrade, new Uri("http://www.shipworks.com"), new Size(625, 500));
 
             testObject.AddNudgeOption(new NudgeOption(1, 2, "Two", testObject, NudgeOptionActionType.None));
             testObject.AddNudgeOption(new NudgeOption(2, 0, "Zero", testObject, NudgeOptionActionType.None));

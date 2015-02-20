@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-				relation.AddEntityFieldPair(PostalProfileFields.ShippingProfileID, StampsProfileFields.ShippingProfileID);
+				relation.AddEntityFieldPair(PostalProfileFields.ShippingProfileID, UspsProfileFields.ShippingProfileID);
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PostalProfileEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsProfileEntity", true);

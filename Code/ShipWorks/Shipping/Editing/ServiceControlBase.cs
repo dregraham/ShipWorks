@@ -99,6 +99,8 @@ namespace ShipWorks.Shipping.Editing
             // service controls (i.e. best rate) can override this as needed 
             RateControl = rateControl;
             RateControl.ShowAllRates = true;
+            RateControl.ShowSingleRate = false;
+            RateControl.ActionLinkVisible = false;
 
             personControl.EnableValidationControls = true;
         }

@@ -100,7 +100,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             testShipment = new ShipmentEntity { ShipmentType = (int)ShipmentTypeCode.BestRate, 
                 ContentWeight = 12.1, 
-                BestRate = new BestRateShipmentEntity(),
+                BestRate = new BestRateShipmentEntity
+                {
+                    DimsWeight = 3.4,
+                    DimsAddWeight = true
+                },
                 OriginCountryCode = "US"};
 
             bestRateBrokerSettings = new Mock<IBestRateBrokerSettings>();
@@ -437,8 +441,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
                 Assert.AreEqual(3, shipment.Postal.DimsHeight);
                 Assert.AreEqual(5, shipment.Postal.DimsWidth);
                 Assert.AreEqual(2, shipment.Postal.DimsLength);
-                Assert.IsFalse(shipment.Postal.DimsAddWeight);
-                Assert.AreEqual(12.1, shipment.Postal.DimsWeight);
+                Assert.AreEqual(testShipment.BestRate.DimsAddWeight, shipment.Postal.DimsAddWeight);
+                Assert.AreEqual(3.4, shipment.Postal.DimsWeight);
             }
         }
 
@@ -489,18 +493,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.AreEqual(12.1, shipment.Postal.DimsWeight);
+                Assert.AreEqual(3.4, shipment.Postal.DimsWeight);
             }
         }
 
         [TestMethod]
-        public void GetBestRates_ReturnsRatesAsRegularRateResults_Test()
+        public void GetBestRates_OverridesDimsAddWeight_Test()
         {
-            var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
+            genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
+                                   .Callback<ShipmentEntity>(x =>
+                                   {
+                                       x.ContentWeight = 123;
+                                   });
 
-            foreach (var rate in rates.Rates)
+            testObject.GetBestRates(testShipment, new List<BrokerException>());
+
+            foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.IsNotInstanceOfType(rate, typeof(NoncompetitiveRateResult));
+                Assert.AreEqual(testShipment.BestRate.DimsAddWeight, shipment.Postal.DimsAddWeight);
             }
         }
 

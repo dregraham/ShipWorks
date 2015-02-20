@@ -209,6 +209,10 @@ namespace ShipWorks.Shipping
             shipment.ContentWeight = orderItems.OfType<OrderItemEntity>().Sum(i => i.Quantity * i.Weight);
             shipment.TotalWeight = shipment.ContentWeight;
 
+            // Set the rating billing info.
+            shipment.BilledType = (int)BilledType.Unknown;
+            shipment.BilledWeight = shipment.TotalWeight;
+
             // Content items aren't generated until they are needed
             shipment.CustomsGenerated = false;
             shipment.CustomsValue = 0;
@@ -649,10 +653,6 @@ namespace ShipWorks.Shipping
             else if (shipmentTypeCode == ShipmentTypeCode.Other)
             {
                 return "Other";
-            }
-            else if (shipmentTypeCode == ShipmentTypeCode.EquaShip)
-            {
-                return "EquaShip";
             }
             else if (shipmentTypeCode == ShipmentTypeCode.OnTrac)
             {
@@ -1277,25 +1277,6 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Clears out any other shipment data that is not application to the actual type of the shipment
-        /// </summary>
-        /// <param name="shipment">Shipment from which to clear extra data</param>
-        /// <param name="adapter">SqlAdapter that will be used to delete other shipment data</param>
-        private static void ClearNonActiveShipmentData(ShipmentEntity shipment, IDataAccessAdapter adapter)
-        {
-            ClearOtherShipmentData(adapter, shipment, typeof(UpsShipmentEntity), UpsShipmentFields.ShipmentID, ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip);
-            ClearOtherShipmentData(adapter, shipment, typeof(EndiciaShipmentEntity), EndiciaShipmentFields.ShipmentID, ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia);
-            ClearOtherShipmentData(adapter, shipment, typeof(StampsShipmentEntity), StampsShipmentFields.ShipmentID, ShipmentTypeCode.Stamps, ShipmentTypeCode.Express1Stamps, ShipmentTypeCode.Usps);
-            ClearOtherShipmentData(adapter, shipment, typeof(PostalShipmentEntity), PostalShipmentFields.ShipmentID, ShipmentTypeCode.PostalWebTools, ShipmentTypeCode.Endicia, ShipmentTypeCode.Stamps, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Stamps);
-            ClearOtherShipmentData(adapter, shipment, typeof(FedExShipmentEntity), FedExShipmentFields.ShipmentID, ShipmentTypeCode.FedEx);
-            ClearOtherShipmentData(adapter, shipment, typeof(OnTracShipmentEntity), OnTracShipmentFields.ShipmentID, ShipmentTypeCode.OnTrac);
-            ClearOtherShipmentData(adapter, shipment, typeof(IParcelShipmentEntity), IParcelShipmentFields.ShipmentID, ShipmentTypeCode.iParcel);
-            ClearOtherShipmentData(adapter, shipment, typeof(OtherShipmentEntity), OtherShipmentFields.ShipmentID, ShipmentTypeCode.Other);
-            ClearOtherShipmentData(adapter, shipment, typeof(EquaShipShipmentEntity), EquaShipShipmentFields.ShipmentID, ShipmentTypeCode.EquaShip);
-            ClearOtherShipmentData(adapter, shipment, typeof(BestRateShipmentEntity), BestRateShipmentFields.ShipmentID, ShipmentTypeCode.BestRate);
-        }
-
-        /// <summary>
         /// Clear specified shipment data if not relevant
         /// </summary>
         /// <param name="adapter">SqlAdapter that will be used to delete child shipment entities</param>
@@ -1356,7 +1337,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeConfigured(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }
@@ -1370,7 +1351,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static bool IsShipmentTypeActivated(ShipmentTypeCode shipmentTypeCode)
         {
-            if (shipmentTypeCode == ShipmentTypeCode.None)
+            if (shipmentTypeCode == ShipmentTypeCode.None || shipmentTypeCode == ShipmentTypeCode.BestRate)
             {
                 return true;
             }

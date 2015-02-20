@@ -32,6 +32,7 @@ using ShipWorks.Data.Utility;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Triggers;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions.Orders;
@@ -950,6 +951,12 @@ namespace ShipWorks.Stores.Management
 
                     adapter.Commit();
                 }
+
+                // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the addition of this store.
+                // Ask the store manager to check for changes so that it returns the store we just added.  The heart beat may
+                // not have run to force the check yet.
+                StoreManager.CheckForChanges();
+                NudgeManager.Refresh(StoreManager.GetAllStores());
             }
             catch (DuplicateNameException ex)
             {

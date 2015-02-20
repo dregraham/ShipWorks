@@ -21,10 +21,6 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public partial class RateControl : UserControl
     {
-        // This is the maximum rates to display when the control is configured 
-        // with ShowAllRates = false
-        const short RestrictedRateCount = 5;
-
         FootnoteParameters footnoteParameters;
 
         readonly object syncLock = new object();
@@ -40,6 +36,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
         // The text to display for the action link, if its visible
         string actionLinkText = "Select";
+        private bool hasMoreLinkBeenClicked;
 
         /// <summary>
         /// Raised when the user selects a rate row
@@ -69,8 +66,10 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             ShowAllRates = true;
             ShowSpinner = false;
+            RestrictedRateCount = 5;
 
             sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
+            hasMoreLinkBeenClicked = false;
         }
 
         /// <summary>
@@ -119,11 +118,20 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// <value>
         ///   <c>true</c> if [show all rates]; otherwise, <c>false</c>.
         /// </value>
-        public bool ShowAllRates 
-        { 
-            get; 
-            set; 
-        }
+        public bool ShowAllRates { get; set; }
+
+        /// <summary>
+        /// Gets or sets the restricted rate count. This is the maximum rates to display when the 
+        /// control is configured with ShowAllRates = false
+        /// </summary>
+        /// <value>The restricted rate count.</value>
+        public int RestrictedRateCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to [show single rate].
+        /// </summary>
+        /// <value><c>true</c> if [show single rate]; otherwise, <c>false</c>.</value>
+        public bool ShowSingleRate { get; set; }
 
         /// <summary>
         /// Indicates if the control will automatically resize it's height to be just enough to fit
@@ -327,47 +335,78 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
+        /// The rate control will track whether the More link has been clicked. This will 
+        /// collapse the rates only if the link has not been previously clicked (i.e. the
+        /// user elected to see more rates at some point, so we want to retain that view).
+        /// </summary>
+        public void TryCollapseRateResults()
+        {
+            if (!hasMoreLinkBeenClicked)
+            {
+                // The more link has not been clicked yet, so we can collapse
+                // the results
+                ShowAllRates = false;
+            }
+        }
+
+        /// <summary>
+        /// Resets the state of the control to behave as if the more link has not 
+        /// been clicked.
+        /// </summary>
+        public void ResetCollapsibleState()
+        {
+            hasMoreLinkBeenClicked = false;
+        }
+
+        /// <summary>
         /// Adds the show more rates row if the control is configured to not show all rates and 
         /// the list of rates exceeds the restricted rate count.
         /// </summary>
         private void AddShowMoreRatesRow()
         {
-            // Honor the restricted rate count setting
-            if (!ShowAllRates && RateGroup.Rates.Count > RestrictedRateCount)
+            if (!ShowSingleRate)
             {
-                // Make a copy of the original full list, it's needed for showing all
-                RateGroup originalRateGroup = RateGroup.CopyWithRates(RateGroup.Rates);
-
-                string description = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - RestrictedRateCount);
-                RateResult showMoreRatesRateResult = new RateResult(description, "", 0, originalRateGroup)
+                // Honor the restricted rate count setting
+                if (!ShowAllRates && RateGroup.Rates.Count > RestrictedRateCount)
                 {
-                    Tag = new BestRateResultTag()
+                    // Make a copy of the original full list, it's needed for showing all
+                    RateGroup originalRateGroup = RateGroup.CopyWithRates(RateGroup.Rates);
+
+                    string description = string.Format("{0} more expensive rates available.", originalRateGroup.Rates.Count - RestrictedRateCount);
+                    RateResult showMoreRatesRateResult = new RateResult(description, "", 0, originalRateGroup)
                     {
-                        IsRealRate = false,
-                        RateSelectionDelegate = entity =>
+                        Tag = new BestRateResultTag()
                         {
-                            // The user wants to expand the rates, so set the ShowAllRates
-                            // to true and load the full list of original rates
-                            ShowAllRates = true;
-                            LoadRates(originalRateGroup);
+                            IsRealRate = false,
+                            RateSelectionDelegate = entity =>
+                            {
+                                // The user wants to expand the rates, so set the ShowAllRates to true and load the full list of original rates
+                                ShowAllRates = true;
+
+                                // Capture that the more link has been clicked, so we don't collapse the rates again. The user 
+                                // elected to see more rates, so we want to retain view
+                                hasMoreLinkBeenClicked = true;
+                                
+                                LoadRates(originalRateGroup);
+                            }
                         }
-                    }
-                };
+                    };
 
-                // Create the row with the "More" link
-                GridRow row = new GridRow(new[]
-                {
-                    new GridCell(""),
-                    new GridCell(showMoreRatesRateResult.Description),
-                    new GridCell(""),
-                    new GridCell(""),
-                    new GridCell(""),
-                    new GridCell(""),
-                    new GridCell(""),
-                    new GridHyperlinkCell("More...")
-                }) { Tag = showMoreRatesRateResult };
+                    // Create the row with the "More" link
+                    GridRow row = new GridRow(new[]
+                    {
+                        new GridCell(""),
+                        new GridCell(showMoreRatesRateResult.Description),
+                        new GridCell(""),
+                        new GridCell(""),
+                        new GridCell(""),
+                        new GridCell(""),
+                        new GridCell(""),
+                        new GridHyperlinkCell("More...")
+                    }) { Tag = showMoreRatesRateResult };
 
-                sandGrid.Rows.Add(row);
+                    sandGrid.Rows.Add(row);
+                }
             }
         }
 
@@ -382,7 +421,11 @@ namespace ShipWorks.Shipping.Editing.Rating
 
                 if (sandGrid.Rows.Count == 0)
                 {
-                    height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+                    // This was causing a crash when length was 0. 
+                    if (sandGrid.Columns.DisplayColumns.Length > 0)
+                    {
+                        height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+                    }
 
                     if (!string.IsNullOrEmpty(sandGrid.EmptyText))
                     {

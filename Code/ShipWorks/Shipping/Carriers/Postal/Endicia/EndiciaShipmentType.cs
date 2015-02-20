@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com shipments
+        /// Create the UserControl used to handle Endicia shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
+        /// Create the UserControl used to handle Endicia profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
         
         /// <summary>
-        /// Create the settings control for stamps.com
+        /// Create the settings control for Endicia
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
@@ -185,7 +185,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override bool SupportsCounterRates
         {
-            get { return true; }
+            get { return false; }
         }
 
         /// <summary>
@@ -438,11 +438,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <param name="shipment">Shipment for which to retrieve rates</param>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            // Get counter rates if we don't have any Endicia accounts, letting the Postal shipment type take care of caching
+            // Get the rates, letting the Postal shipment type take care of caching
             // since it should be using a different cache key
-            return AccountRepository.Accounts.Any() ? 
-                GetCachedRates<EndiciaException>(shipment, GetRatesFromApi) : 
-                GetCounterRates(shipment);
+            if (AccountRepository.Accounts.Any())
+            {
+                return GetCachedRates<EndiciaException>(shipment, GetRatesFromApi);
+            }
+
+            // We don't have any Endicia accounts, so let the user know they need an account.
+            string shipmentTypeName = EnumHelper.GetDescription(ShipmentTypeCode);
+            EndiciaException endiciaException = new EndiciaException(string.Format("An account is required to view {0} rates.", shipmentTypeName));
+            RateGroup invalidRateGroup = CacheInvalidRateGroup(shipment, endiciaException);
+            InvalidRateGroupShippingException shippingException = new InvalidRateGroupShippingException(invalidRateGroup, endiciaException.Message, endiciaException);
+
+            throw shippingException;
         }
 
         /// <summary>
@@ -552,13 +561,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }).ToList());
 
                     // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
-                    // Express1 with Endicia and can show promotion for USPS (Stamps.com Expedited) shipping. So when discount rate
-                    // messaging is restricted on Endicia, we want to show the Stamps.com promo
+                    // Express1 with Endicia and can show promotion for USPS shipping. So when discount rate
+                    // messaging is restricted on Endicia, we want to show the Usps promo
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted - show the
-                        // single account dialog if Endicia has Express1 accounts and is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        // Always show the USPS promotion when Express 1 is restricted - show the
+                        // single account dialog if Endicia has Express1 accounts and is not using USPS
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
                         finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
@@ -566,13 +575,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 else
                 {
-                    // Express1 wasn't used, so we want to promote USPS (Stamps.com expedited)
+                    // Express1 wasn't used, so we want to promote USPS
                     RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
 
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
                         finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
@@ -586,7 +595,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                 if (IsRateDiscountMessagingRestricted)
                 {
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS (Stamps.com Expedited)
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
                     // poromo footnote to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }
@@ -870,8 +879,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <returns>An instance of an EndiciaBestRateBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            IBestRateShippingBroker counterBroker = base.GetShippingBroker(shipment);
-            return counterBroker is NullShippingBroker ? new EndiciaBestRateBroker() : counterBroker;
+            return new NullShippingBroker();
         }
 
         /// <summary>

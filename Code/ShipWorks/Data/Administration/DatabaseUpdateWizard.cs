@@ -947,7 +947,7 @@ namespace ShipWorks.Data.Administration
                     new FedExWizardPage(),
                     new UpsShipperWizardPage(),
                     new WorldShipWizardPage(),
-                    new StampsWizardPage(),
+                    new UspsWizardPage(),
                     new EndiciaWizardPage(),
                     new Express1WizardPage(),
                     new OtherShipperWizardPage(),

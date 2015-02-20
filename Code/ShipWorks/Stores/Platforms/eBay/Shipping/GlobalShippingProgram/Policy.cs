@@ -102,10 +102,10 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 modifiedFieldList.AddRange(ConfigureShippingAddress(shipment, ebayOrder));
                 modifiedFieldList.AddRange(ConfigureContactInfo(shipment));
 
-                if (shipment.Postal != null && shipment.Postal.Stamps != null)
+                if (shipment.Postal != null && shipment.Postal.Usps != null)
                 {
-                    // We don't want Stamps to perform address validation on this shipment
-                    shipment.Postal.Stamps.RequireFullAddressValidation = false;                    
+                    // We don't want USPS to perform address validation on this shipment
+                    shipment.Postal.Usps.RequireFullAddressValidation = false;                    
                 }
 
                 // GSP shipments will always be commercial and we need to set the residential result 
@@ -168,7 +168,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram
                 // The layout of other carriers have the company name below the recipient's name, so
                 // we can set the first and last name based on the GSP address info. 
 
-                // Note: Postal WebTools and Stamps.com require a recipient name otherwise we could 
+                // Note: Postal WebTools and USPS require a recipient name otherwise we could 
                 // just set the name to an empty string for all carriers
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipFirstName, ebayOrder.GspFirstName);
                 SetShipmentFieldValue(modifiedFieldList, shipment, ShipmentFieldIndex.ShipMiddleName, string.Empty);

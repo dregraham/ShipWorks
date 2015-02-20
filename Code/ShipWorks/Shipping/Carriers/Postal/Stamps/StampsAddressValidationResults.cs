@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 {

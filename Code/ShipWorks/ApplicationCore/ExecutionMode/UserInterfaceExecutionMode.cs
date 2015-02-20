@@ -2,7 +2,7 @@
 using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
@@ -10,13 +10,19 @@ using ShipWorks.Data.Connection;
 using ShipWorks.UI;
 using ShipWorks.Users;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using System.IO;
 using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
+using ShipWorks.ApplicationCore.Nudges;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -147,10 +153,26 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // For syntax editor
             SemanticParserService.Start();
 
+            // Register nudge refreshing
+            IdleWatcher.RegisterDatabaseIndependentWork("Refresh Nudges", RefreshNudgeThread, TimeSpan.FromHours(8));
+
             // Register some idle cleanup work.
             DataResourceManager.RegisterResourceCacheCleanup();
             DataPath.RegisterTempFolderCleanup();
             LogSession.RegisterLogCleanup();
+        }
+
+        /// <summary>
+        /// Runs on a schedule to refresh nudges.
+        /// </summary>
+        private static void RefreshNudgeThread()
+        {
+            if (UserSession.IsLoggedOn)
+            {
+                // The user has to be logged on in order to get the stores
+                IEnumerable<StoreEntity> stores = StoreManager.GetAllStores();
+                NudgeManager.Refresh(stores);
+            }
         }
 
         /// <summary>

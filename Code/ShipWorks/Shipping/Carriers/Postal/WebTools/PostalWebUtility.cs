@@ -53,6 +53,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             {
                 return "Saint Kitts";
             }
+            if (countryCode == "BA")
+            {
+                return "Bosnia-Herzegovina";
+            }
             else
             {
                 return Geography.GetCountryName(countryCode);

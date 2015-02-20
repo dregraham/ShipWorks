@@ -63,7 +63,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.FedEx.Packages[0].Weight = originalShipment.ContentWeight;
-            currentShipment.FedEx.Packages[0].DimsAddWeight = false;
+            currentShipment.FedEx.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
+            currentShipment.FedEx.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
+
             currentShipment.FedEx.PackagingType = (int)FedExPackagingType.Custom;
             currentShipment.FedEx.Service = (int)FedExServiceType.FedExGround;
             SetAccount(currentShipment, account);

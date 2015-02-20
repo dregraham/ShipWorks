@@ -77,18 +77,18 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ActionQueueStepEntity": return EntityType.ActionQueueStepEntity;
 				case "ShippingOriginEntity": return EntityType.ShippingOriginEntity;
 				case "ShipmentCustomsItemEntity": return EntityType.ShipmentCustomsItemEntity;
-				case "StampsAccountEntity": return EntityType.StampsAccountEntity;
+				case "UspsAccountEntity": return EntityType.UspsAccountEntity;
 				case "ChannelAdvisorStoreEntity": return EntityType.ChannelAdvisorStoreEntity;
 				case "ChannelAdvisorOrderItemEntity": return EntityType.ChannelAdvisorOrderItemEntity;
 				case "ChannelAdvisorOrderEntity": return EntityType.ChannelAdvisorOrderEntity;
 				case "DimensionsProfileEntity": return EntityType.DimensionsProfileEntity;
-				case "StampsShipmentEntity": return EntityType.StampsShipmentEntity;
+				case "UspsShipmentEntity": return EntityType.UspsShipmentEntity;
 				case "PostalShipmentEntity": return EntityType.PostalShipmentEntity;
 				case "ShippingProfileEntity": return EntityType.ShippingProfileEntity;
 				case "FedExAccountEntity": return EntityType.FedExAccountEntity;
 				case "UpsAccountEntity": return EntityType.UpsAccountEntity;
 				case "PostalProfileEntity": return EntityType.PostalProfileEntity;
-				case "StampsProfileEntity": return EntityType.StampsProfileEntity;
+				case "UspsProfileEntity": return EntityType.UspsProfileEntity;
 				case "OtherProfileEntity": return EntityType.OtherProfileEntity;
 				case "ShippingPrintOutputRuleEntity": return EntityType.ShippingPrintOutputRuleEntity;
 				case "ShippingPrintOutputEntity": return EntityType.ShippingPrintOutputEntity;
@@ -146,9 +146,6 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "GenericModuleStoreEntity": return EntityType.GenericModuleStoreEntity;
 				case "FtpAccountEntity": return EntityType.FtpAccountEntity;
 				case "MivaOrderItemAttributeEntity": return EntityType.MivaOrderItemAttributeEntity;
-				case "EquaShipProfileEntity": return EntityType.EquaShipProfileEntity;
-				case "EquaShipAccountEntity": return EntityType.EquaShipAccountEntity;
-				case "EquaShipShipmentEntity": return EntityType.EquaShipShipmentEntity;
 				case "NeweggStoreEntity": return EntityType.NeweggStoreEntity;
 				case "NeweggOrderItemEntity": return EntityType.NeweggOrderItemEntity;
 				case "NeweggOrderEntity": return EntityType.NeweggOrderEntity;
@@ -169,7 +166,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "OnTracProfileEntity": return EntityType.OnTracProfileEntity;
 				case "BigCommerceOrderItemEntity": return EntityType.BigCommerceOrderItemEntity;
 				case "OnTracShipmentEntity": return EntityType.OnTracShipmentEntity;
-				case "StampsScanFormEntity": return EntityType.StampsScanFormEntity;
+				case "UspsScanFormEntity": return EntityType.UspsScanFormEntity;
 				case "IParcelShipmentEntity": return EntityType.IParcelShipmentEntity;
 				case "IParcelProfileEntity": return EntityType.IParcelProfileEntity;
 				case "IParcelAccountEntity": return EntityType.IParcelAccountEntity;
@@ -181,10 +178,10 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ShippingSettingsEntity": return EntityType.ShippingSettingsEntity;
 				case "BestRateShipmentEntity": return EntityType.BestRateShipmentEntity;
 				case "BestRateProfileEntity": return EntityType.BestRateProfileEntity;
-				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				case "InsurancePolicyEntity": return EntityType.InsurancePolicyEntity;
 				case "EbayCombinedOrderRelationEntity": return EntityType.EbayCombinedOrderRelationEntity;
+				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

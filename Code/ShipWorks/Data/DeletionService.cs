@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.UI;
 using System.Threading;
 using ShipWorks.Data;
@@ -27,6 +28,7 @@ using ShipWorks.Data.Administration;
 using System.Data.SqlClient;
 using ShipWorks.Stores;
 using ShipWorks.Actions;
+using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Users.Audit;
 using ShipWorks.SqlServer.Data.Auditing;
 
@@ -108,6 +110,12 @@ namespace ShipWorks.Data
             {
                 deletingStore = false;
             }
+
+            // Refresh the nudges, just in case there were any that shouldn't be displayed now due to the deletion of this store.
+            // Ask the store manager to check for changes so that it doesn't return the store we just deleted.  The heart beat may
+            // not have run to force the check yet.
+            StoreManager.CheckForChanges();
+            NudgeManager.Refresh(StoreManager.GetAllStores());
         }
 
         /// <summary>
@@ -229,6 +237,8 @@ namespace ShipWorks.Data
             // We delete the clone, so the original store doesnt get marked as Deleted until the StoreManager updates itself.
             StoreEntity clone = (StoreEntity) GeneralEntityFactory.Create(EntityUtility.GetEntityType(store.GetType()));
             clone.Fields = store.Fields.Clone();
+
+            ShippingPolicies.Unload(clone.StoreID);
 
             // Delete the store
             adapter.DeleteEntity(clone);

@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             encryptionStrategy = new Mock<IExpress1PasswordEncryptionStrategy>();
             encryptionStrategy.Setup(s => s.EncryptPassword(It.IsAny<Express1Registration>())).Returns("ThePasswordHasBeenEncrypted");
 
-            testObject = new Express1Registration(ShipmentTypeCode.Express1Stamps, gateway.Object, repository.Object,encryptionStrategy.Object, validator.Object);
+            testObject = new Express1Registration(ShipmentTypeCode.Express1Usps, gateway.Object, repository.Object,encryptionStrategy.Object, validator.Object);
         }
 
         [TestMethod]

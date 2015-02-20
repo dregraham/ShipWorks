@@ -4,16 +4,14 @@ using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     public partial class UspsAutomaticDiscountControl : UserControl
     {
-        private ShippingSettingsEntity settings;
-        private IUspsAutomaticDiscountControlAdapter discountControlAdapter;
         private IRegistrationPromotion promotion;
 
         /// <summary>
@@ -50,47 +48,55 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             get { return checkBoxUseExpedited.Text; }
             set { checkBoxUseExpedited.Text = value; }
         }
-        
+
         /// <summary>
-        /// Gets a value indicating whether the user opted to [use expedited].
+        /// Gets a value indicating whether [use expedited].
         /// </summary>
-        /// <value>
-        ///   <c>true</c> if [use expedited]; otherwise, <c>false</c>.
-        /// </value>
-        public bool UseExpedited
+                public bool UseExpedited 
         {
-            get { return discountControlAdapter.UsingUspsAutomaticExpedited; }
+            get { return checkBoxUseExpedited.Checked; }
         }
 
         /// <summary>
-        /// Gets the expedited account ID.
+        /// Gets the expedited account identifier.
         /// </summary>
         public long ExpeditedAccountID
         {
-            get { return discountControlAdapter.UspsAutomaticExpeditedAccount; }
+            get
+            {
+                long expeditedAccountID;
+
+                if (expeditedAccounts.Items.Count == 0)
+                {
+                    expeditedAccountID = 0;
+                }
+                else
+                {
+                    expeditedAccountID = (long) expeditedAccounts.SelectedValue;
+                }
+
+                return expeditedAccountID;
+            }
         }
 
         /// <summary>
         /// Load the settings
         /// </summary>
-        public void LoadSettings(ShippingSettingsEntity shippingSettings, ShipmentEntity shipment)
+        public void LoadSettings()
         {
-            this.settings = shippingSettings;
-            discountControlAdapter = new UspsAutomaticDiscountControlAdapterFactory().CreateAdapter(settings, shipment);
             promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-
-            checkBoxUseExpedited.Checked = discountControlAdapter.UsingUspsAutomaticExpedited;
+            
             OnChangeUseExpedited(checkBoxUseExpedited, EventArgs.Empty);
 
-            LoadExpeditedAccounts(settings.StampsUspsAutomaticExpeditedAccount);
+            LoadExpeditedAccounts();
         }
 
         /// <summary>
-        /// Load the UI for Stamps.com Expedited accounts
+        /// Load the UI for USPS Expedited accounts
         /// </summary>
-        private void LoadExpeditedAccounts(long accountId)
+        private void LoadExpeditedAccounts()
         {
-            List<StampsAccountEntity> accounts = StampsAccountManager.StampsExpeditedAccounts;
+            List<UspsAccountEntity> accounts = UspsAccountManager.UspsAccounts.Where(account => account.ContractType == (int) UspsAccountContractType.Reseller).ToList();
 
             expeditedAccounts.Left = expeditedSignup.Left;
             expeditedAccounts.Width = 250;
@@ -105,13 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (accounts.Count > 0)
             {
-                expeditedAccounts.DataSource = accounts.Select(a => new { Display = a.Description, value = a.StampsAccountID }).ToList();
-                expeditedAccounts.SelectedValue = accountId;
-
-                if (expeditedAccounts.SelectedIndex < 0)
-                {
-                    expeditedAccounts.SelectedIndex = accounts.Count - 1;
-                }
+                expeditedAccounts.DataSource = accounts.Select(a => new { Display = a.Description, value = a.UspsAccountID }).ToList();
             }
         }
 
@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Reload the account list if a new account has been added
             if (added)
             {
-                LoadExpeditedAccounts(StampsAccountManager.StampsExpeditedAccounts.Max(a => a.StampsAccountID));
+                LoadExpeditedAccounts();
             }
         }
 
@@ -153,16 +153,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnChangeUseExpedited(object sender, EventArgs e)
         {
-            discountControlAdapter.UsingUspsAutomaticExpedited = checkBoxUseExpedited.Checked;
             panelDiscountAccount.Enabled = checkBoxUseExpedited.Checked;
-        }
-
-        /// <summary>
-        /// The selected Expedited account has changed
-        /// </summary>
-        private void OnExpeditedAccountsSelectedIndexChanged(object sender, EventArgs e)
-        {
-            discountControlAdapter.UspsAutomaticExpeditedAccount = (expeditedAccounts.SelectedIndex >= 0) ? (long)expeditedAccounts.SelectedValue : 0;
         }
 
         /// <summary>
@@ -173,17 +164,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             MessageHelper.ShowInformation(this,
                                           "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your " +
                                           "domestic and international Priority and Express shipments." + Environment.NewLine + Environment.NewLine +
-                                          "Simply create a Stamps.com account and ShipWorks will automatically utilize it for discounted rates from " +
+                                          "Simply create a USPS account and ShipWorks will automatically utilize it for discounted rates from " +
                                           "IntuiShip when creating postage labels." + Environment.NewLine + Environment.NewLine + "For more information, " +
                                           "please contact us at www.interapptive.com/company/contact.html.");
         }
 
         /// <summary>
-        /// Gets a person to use as the default for new USPS (Stamps.com Expedited) accounts
+        /// Gets a person to use as the default for new USPS accounts
         /// </summary>
         private PersonAdapter GetDefaultAccountPerson()
         {
-            List<StampsAccountEntity> accounts = StampsAccountManager.GetAccounts(StampsResellerType.None);
+            List<UspsAccountEntity> accounts = UspsAccountManager.GetAccounts(UspsResellerType.None);
             return accounts.Count == 1 ? new PersonAdapter(accounts.Single(), "") : null;
         }
     }

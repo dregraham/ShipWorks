@@ -1,6 +1,8 @@
 ﻿using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.AddressValidation
 {
@@ -28,7 +30,7 @@ namespace ShipWorks.AddressValidation
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 
-            StampsApiSession session = new StampsApiSession();
+            UspsWebClient session = new UspsWebClient(UspsResellerType.None);
 
             try
             {
@@ -50,7 +52,7 @@ namespace ShipWorks.AddressValidation
                     validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, stampsResult.IsPoBox, stampsResult.ResidentialIndicator));
                 }
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 validationResult.AddressValidationError = ex.Message;
             }

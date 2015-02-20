@@ -16,8 +16,8 @@
         Shutdown = 1,
 
         /// <summary>
-        /// Open the register stamps account wizard
+        /// Open the register Usps account wizard
         /// </summary>
-        RegisterStampsAccount = 2
+        RegisterUspsAccount = 2
     }
 }

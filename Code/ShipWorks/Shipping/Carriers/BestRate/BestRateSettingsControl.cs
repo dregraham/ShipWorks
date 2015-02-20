@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Policies;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
@@ -15,7 +16,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.None,
             ShipmentTypeCode.BestRate,
             ShipmentTypeCode.Other,
-            ShipmentTypeCode.PostalWebTools
+            ShipmentTypeCode.PostalWebTools,
+            ShipmentTypeCode.Endicia,
+            ShipmentTypeCode.Express1Endicia,
+            ShipmentTypeCode.Express1Usps
         };
 
         private bool isDirty;
@@ -81,7 +85,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes.Where(IsCarrierShippingType), 
+            List<ShipmentTypeCode> carriersHiddenByShipmentPolicy = new List<ShipmentTypeCode>();
+            ShippingPolicies.Current.Apply(ShipmentTypeCode.BestRate, carriersHiddenByShipmentPolicy);
+
+            panelProviders.LoadProviders(ShipmentTypeManager.ShipmentTypes
+                .Where(c => !carriersHiddenByShipmentPolicy.Contains(c.ShipmentTypeCode) && IsCarrierShippingType(c)),
                 typeCode => !settings.BestRateExcludedTypes.Contains((int)typeCode));
         }
 

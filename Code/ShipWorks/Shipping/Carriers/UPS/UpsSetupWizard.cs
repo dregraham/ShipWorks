@@ -372,14 +372,14 @@ namespace ShipWorks.Shipping.Carriers.UPS
             //
             // This is a UPS requirement - but it causes annoyance and problems for our customers. They probably will never notice.
             //
-            NativeMethods.POINT point = new NativeMethods.POINT();
-            NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
+            //NativeMethods.POINT point = new NativeMethods.POINT();
+            //NativeMethods.SendMessage(licenseAgreement.Handle, NativeMethods.EM_GETSCROLLPOS, IntPtr.Zero, ref point);
 
-            if (point.y <= 7550)
-            {
-                MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
-                e.NextPage = CurrentPage;
-            }
+            //if (point.y <= 7550)
+            //{
+            //    MessageHelper.ShowInformation(this, "UPS requires that we make you scroll to the bottom of the agreement before moving on.");
+            //    e.NextPage = CurrentPage;
+            //}
         }
 
         /// <summary>

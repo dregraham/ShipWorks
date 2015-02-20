@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
         public NudgeOptionDeserializerTest()
         {
-            nudge = new Nudge(1, NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(500, 400));
+            nudge = new Nudge(1, "Nudge 1", NudgeType.ShipWorksUpgrade, new Uri("http://www.google.com"), new Size(500, 400));
         }
         
         [TestMethod]

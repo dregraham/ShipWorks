@@ -1,34 +1,33 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// Basic repository for retrieving USPS (Stamps.com Expedited) accounts
+    /// Basic repository for retrieving USPS accounts
     /// </summary>
-    public class UspsAccountRepository : CarrierAccountRepositoryBase<StampsAccountEntity>, ICarrierAccountRepository<StampsAccountEntity>
+    public class UspsAccountRepository : CarrierAccountRepositoryBase<UspsAccountEntity>
     {
         /// <summary>
-        /// Returns a list of USPS (Stamps.com Expedited) accounts.
+        /// Returns a list of USPS accounts.
         /// </summary>
-        public override IEnumerable<StampsAccountEntity> Accounts
+        public override IEnumerable<UspsAccountEntity> Accounts
         {
             get
             {
-                return StampsAccountManager.StampsExpeditedAccounts.ToList();
+                return UspsAccountManager.UspsAccounts.ToList();
             }
         }
 
         /// <summary>
-        /// Returns a USPS (Stamps.com Expedited) account for the provided accountID.
+        /// Returns a USPS account for the provided accountID.
         /// </summary>
         /// <param name="accountID">The account ID for which to return an account.</param>
         /// <returns>The matching account.</returns>
-        public override StampsAccountEntity GetAccount(long accountID)
+        public override UspsAccountEntity GetAccount(long accountID)
         {
-            return Accounts.ToList().FirstOrDefault(a => a.StampsAccountID == accountID);
+            return Accounts.ToList().FirstOrDefault(a => a.UspsAccountID == accountID);
         }
 
         /// <summary>
@@ -37,11 +36,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <value>
         /// The default profile account.
         /// </value>
-        public override StampsAccountEntity DefaultProfileAccount
+        public override UspsAccountEntity DefaultProfileAccount
         {
             get
             {
-                long? accountID = new StampsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
+                long? accountID = new UspsShipmentType().GetPrimaryProfile().Postal.Usps.UspsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Usps, accountID);
             }
         }
@@ -50,9 +49,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Saves the specified account.
         /// </summary>
         /// <param name="account">The account.</param>
-        public override void Save(StampsAccountEntity account)
+        public override void Save(UspsAccountEntity account)
         {
-            StampsAccountManager.SaveAccount(account);
+            UspsAccountManager.SaveAccount(account);
         }
     }
 }

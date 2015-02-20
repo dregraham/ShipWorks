@@ -48,6 +48,8 @@ namespace ShipWorks.Shipping.Carriers.Endicia
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+
                     EndiciaShipmentEntity endicia = shipment.Postal.Endicia;
                     scanBasedReturn.ReadMultiCheck(v => endicia.ScanBasedReturn = v);
                 }

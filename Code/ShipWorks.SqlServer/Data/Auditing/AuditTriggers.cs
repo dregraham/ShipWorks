@@ -60,10 +60,10 @@ public partial class Triggers
         AuditService.AuditExecutingTrigger("PostalShipment");
     }
 
-    [SqlTrigger(Target = "StampsShipment", Event = "FOR INSERT, UPDATE, DELETE")]
-    public static void StampsShipmentAuditTrigger()
+    [SqlTrigger(Target = "UspsShipment", Event = "FOR INSERT, UPDATE, DELETE")]
+    public static void UspsShipmentAuditTrigger()
     {
-        AuditService.AuditExecutingTrigger("StampsShipment");
+        AuditService.AuditExecutingTrigger("UspsShipment");
     }
 
     [SqlTrigger(Target = "EndiciaShipment", Event = "FOR INSERT, UPDATE, DELETE")]
@@ -82,12 +82,6 @@ public partial class Triggers
     public static void UpsShipmentAuditTrigger()
     {
         AuditService.AuditExecutingTrigger("UpsShipment");
-    }
-
-    [SqlTrigger(Target = "EquaShipShipment", Event = "FOR INSERT, UPDATE, DELETE")]
-    public static void EquashipShipmentAuditTrigger()
-    {
-        AuditService.AuditExecutingTrigger("EquaShipShipment");
     }
 
     [SqlTrigger(Target = "iParcelShipment", Event = "FOR INSERT, UPDATE, DELETE")]
