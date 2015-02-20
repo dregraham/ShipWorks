@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
@@ -37,7 +38,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public string DiscountText
         {
             get { return labelDiscountInfo1.Text; }
-            set { labelDiscountInfo1.Text = value; }
+            set
+            {
+                labelDiscountInfo1.Text = value;
+                using (Graphics g = CreateGraphics())
+                {
+                    // Adjust the location of the checkbox and account panel based on the size of the
+                    // text otherwise the description text may appear truncated
+                    SizeF size = g.MeasureString(labelDiscountInfo1.Text, labelDiscountInfo1.Font, labelDiscountInfo1.Size);
+                    
+                    checkBoxUseExpedited.Top = labelDiscountInfo1.Top + (int) size.Height + 5;
+                    panelDiscountAccount.Top = checkBoxUseExpedited.Bottom + 5;
+                }
+            }
         }
 
         /// <summary>
@@ -52,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets a value indicating whether [use expedited].
         /// </summary>
-                public bool UseExpedited 
+        public bool UseExpedited
         {
             get { return checkBoxUseExpedited.Checked; }
         }
