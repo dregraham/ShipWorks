@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Model;
-using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared.Net;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms;
-using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Editors;
-using log4net;
 using ShipWorks.Actions;
 using ShipWorks.Shipping;
 

@@ -42,7 +42,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
-            List<GrouponTracking> tracking = new List<GrouponTracking>();
+            List<GrouponTracking> trackingList = new List<GrouponTracking>();
             foreach(long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
@@ -54,38 +54,47 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     continue;
                 }
 
-                OrderEntity order = shipment.Order;
+                trackingList.AddRange(GetGrouponTracking(shipment));
+            }
 
-                // Fetch the order items
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
-                }
+            if(trackingList.Count > 0)
+            {
+                GrouponWebClient client = new GrouponWebClient(store);
 
-                // Groupon requires order items to create a shipment, so make sure we have some
-                if (order.OrderItems == null || order.OrderItems.Count == 0)
-                {
-                    //Check to see if the order has items
-                    log.InfoFormat("Not uploading order order {0} has no items.", order.OrderID);
-                    continue;
-                }
+                client.UploadShipmentDetails(trackingList);
+            }
+        }
 
-                try
-                {
-                    ShippingManager.EnsureShipmentLoaded(shipment);
-                }
-                catch (ObjectDeletedException)
-                {
-                    // Shipment was deleted
-                    return;
-                }
-                catch (SqlForeignKeyException)
-                {
-                    // Shipment was deleted
-                    return;
-                }
+        /// <summary>
+        /// Push the online status for an shipment.
+        /// </summary>
+        public void UpdateShipmentDetails(ShipmentEntity shipment)
+        {
+            List<GrouponTracking> trackingList = GetGrouponTracking(shipment);
 
-                foreach(GrouponOrderItemEntity item in order.OrderItems)
+            if(trackingList.Count > 0)
+            {
+                GrouponWebClient client = new GrouponWebClient(store);
+
+                client.UploadShipmentDetails(trackingList);
+            }
+        }
+
+        private static List<GrouponTracking> GetGrouponTracking(ShipmentEntity shipment)
+        {
+            OrderEntity order = shipment.Order;
+
+            List<GrouponTracking> tracking = new List<GrouponTracking>();
+            // Fetch the order items
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
+            }
+
+            foreach (GrouponOrderItemEntity item in order.OrderItems)
+            {
+                //Need to have a CI_LineItemID to upload tracking
+                if(item.CILineItemID != null && item.CILineItemID.Length == 0)
                 {
                     string trackingNumber = shipment.TrackingNumber;
                     string carrier = GrouponCarrier.GetCarrierCode(shipment);
@@ -96,75 +105,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     tracking.Add(gTracking);
                 }
             }
-
-            if(tracking.Count > 0)
-            {
-                GrouponWebClient client = new GrouponWebClient(store);
-
-                client.UploadShipmentDetails(tracking);
-            }
-        }
-
-        /// <summary>
-        /// Push the online status for an shipment.
-        /// </summary>
-        public void UpdateShipmentDetails(ShipmentEntity shipment)
-        {
-            OrderEntity order = shipment.Order;
-            
-            if (order.IsManual)
-            {
-                log.WarnFormat("Not updating order {0} since it is manual.", shipment.Order.OrderNumberComplete);
-                return;
-            }
-
-            // Fetch the order items
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(order.OrderItems, new RelationPredicateBucket(OrderItemFields.OrderID == order.OrderID));
-            }
-
-            // Groupon requires order items to create a shipment, so make sure we have some
-            if (order.OrderItems == null || order.OrderItems.Count == 0)
-            {
-                log.InfoFormat("Not uploading order {0} has no items.", order.OrderID);
-                return;
-            }
-
-            try
-            {
-                ShippingManager.EnsureShipmentLoaded(shipment);
-            }
-            catch (ObjectDeletedException)
-            {
-                // Shipment was deleted
-                return;
-            }
-            catch (SqlForeignKeyException)
-            {
-                // Shipment was deleted
-                return;
-            }
-
-            List<GrouponTracking> tracking = new List<GrouponTracking>();
-
-            foreach (GrouponOrderItemEntity item in order.OrderItems)
-            {
-                string trackingNumber = shipment.TrackingNumber;
-                string carrier = GrouponCarrier.GetCarrierCode(shipment);
-                Int64 CILineItemID = Convert.ToInt64(item.CILineItemID);
-
-                GrouponTracking gTracking = new GrouponTracking(carrier, CILineItemID, trackingNumber);
-
-                tracking.Add(gTracking);
-            }
-
-            if(tracking.Count > 0)
-            {
-                GrouponWebClient client = new GrouponWebClient(store);
-
-                client.UploadShipmentDetails(tracking);
-            }
+            return tracking;
         }
     }
 }

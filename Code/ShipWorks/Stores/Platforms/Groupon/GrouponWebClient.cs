@@ -1,28 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using System.Collections.Specialized;
 using Interapptive.Shared.Net;
-using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using log4net;
-using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
-using System.IO;
-using System.Web;
-using System.Globalization;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
-using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.Groupon;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
-using System.Threading;
 
 
 namespace ShipWorks.Stores.Platforms.Groupon
@@ -66,17 +49,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public void UploadShipmentDetails(List<GrouponTracking> trackingItmes)
         {
-            List<string> trackingList = new List<string>();
-            foreach(GrouponTracking trackingItem in trackingItmes)
-            {
-                trackingList.Add(JsonConvert.SerializeObject(trackingItem));
-            }
-
-            string trackingParameter = "[" + String.Join(",", trackingList) + "]";
+            string trackingParameter = JsonConvert.SerializeObject(trackingItmes);
 
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
-            Dictionary<string, string> parameters = new Dictionary<string,string>();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.Add("supplier_id", store.SupplierID);
             parameters.Add("token", store.Token);
@@ -85,10 +62,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             ConfigurePostRequest(submitter, "/tracking_notification", parameters);
 
             ProcessRequest(submitter, "UploadShipmentDetails");
-
-            ApiLogEntry logEntry = new ApiLogEntry(ApiLogSource.Groupon, "TESTLOG");
-            logEntry.LogResponse(submitter.GetPostContent().ToString(), "txt");
-
         }
            
 

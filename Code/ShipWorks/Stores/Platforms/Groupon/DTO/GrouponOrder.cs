@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
     /// <summary>

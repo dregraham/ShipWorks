@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,11 +9,7 @@ using ShipWorks.Data.Connection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Interapptive.Shared.Utility;
-using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
-using System.Text.RegularExpressions;
-using log4net;
-using System.Globalization;
 using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 
