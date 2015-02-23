@@ -100,10 +100,6 @@ PRINT N'Dropping foreign keys from [dbo].[BestRateShipment]'
 GO
 ALTER TABLE [dbo].[BestRateShipment] DROP CONSTRAINT [FK_BestRateShipment_Shipment]
 GO
-PRINT N'Dropping foreign keys from [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] DROP CONSTRAINT [FK_EquashipShipment_Shipment]
-GO
 PRINT N'Dropping foreign keys from [dbo].[FedExShipment]'
 GO
 ALTER TABLE [dbo].[FedExShipment] DROP CONSTRAINT [FK_FedExShipment_Shipment]
@@ -1006,10 +1002,6 @@ GO
 PRINT N'Adding foreign keys to [dbo].[BestRateShipment]'
 GO
 ALTER TABLE [dbo].[BestRateShipment] ADD CONSTRAINT [FK_BestRateShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
-GO
-PRINT N'Adding foreign keys to [dbo].[EquaShipShipment]'
-GO
-ALTER TABLE [dbo].[EquaShipShipment] ADD CONSTRAINT [FK_EquashipShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[FedExShipment]'
 GO
