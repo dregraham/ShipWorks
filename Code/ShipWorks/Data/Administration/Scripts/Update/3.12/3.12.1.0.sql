@@ -91,7 +91,10 @@ CREATE TABLE [dbo].[tmp_rg_xx_PostalShipment]
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-INSERT INTO [dbo].[tmp_rg_xx_PostalShipment]([ShipmentID], [Service], [Confirmation], [PackagingType], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [NonRectangular], [NonMachinable], [CustomsContentType], [CustomsContentDescription], [InsuranceValue], [ExpressSignatureWaiver], [SortType], [EntryFacility]) SELECT [ShipmentID], [Service], [Confirmation], [PackagingType], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [NonRectangular], [NonMachinable], [CustomsContentType], [CustomsContentDescription], [InsuranceValue], [ExpressSignatureWaiver], [SortType], [EntryFacility] FROM [dbo].[PostalShipment]
+INSERT INTO [dbo].[tmp_rg_xx_PostalShipment]([ShipmentID], [Service], [Confirmation], [PackagingType], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [NonRectangular], [NonMachinable], [CustomsContentType], [CustomsContentDescription], [InsuranceValue], [ExpressSignatureWaiver], [SortType], 
+	[EntryFacility], [Memo1], [Memo2], [Memo3]) 
+SELECT [ShipmentID], [Service], [Confirmation], [PackagingType], [DimsProfileID], [DimsLength], [DimsWidth], [DimsHeight], [DimsWeight], [DimsAddWeight], [NonRectangular], [NonMachinable], [CustomsContentType], [CustomsContentDescription], [InsuranceValue], [ExpressSignatureWaiver], [SortType], 
+	[EntryFacility], '', '', '' FROM [dbo].[PostalShipment]
 GO
 DROP TABLE [dbo].[PostalShipment]
 GO
@@ -102,15 +105,15 @@ GO
 ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [PK_PostalShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 UPDATE PostalShipment
-	SET Memo1 = RubberStamp1,
-		Memo2 = RubberStamp2,
-		Memo3 = RubberStamp3
+	SET Memo1 = ISNULL(RubberStamp1, ''),
+		Memo2 = ISNULL(RubberStamp2, ''),
+		Memo3 = ISNULL(RubberStamp3, '')
 	FROM PostalShipment
 		INNER JOIN EndiciaShipment
 			ON PostalShipment.ShipmentID = EndiciaShipment.ShipmentID
 GO
 UPDATE PostalShipment
-	SET Memo1 = Memo
+	SET Memo1 = ISNULL(Memo, '')
 	FROM PostalShipment
 		INNER JOIN UspsShipment
 			ON PostalShipment.ShipmentID = UspsShipment.ShipmentID
