@@ -608,6 +608,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("EntryFacility", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo3", fieldHashtable);
 		}
 		#endregion
 
@@ -1002,6 +1011,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Int32>)GetValue((int)PostalProfileFieldIndex.EntryFacility, false); }
 			set	{ SetValue((int)PostalProfileFieldIndex.EntryFacility, value); }
+		}
+
+		/// <summary> The Memo1 property of the Entity PostalProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalProfile"."Memo1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Memo1
+		{
+			get { return (System.String)GetValue((int)PostalProfileFieldIndex.Memo1, true); }
+			set	{ SetValue((int)PostalProfileFieldIndex.Memo1, value); }
+		}
+
+		/// <summary> The Memo2 property of the Entity PostalProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalProfile"."Memo2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Memo2
+		{
+			get { return (System.String)GetValue((int)PostalProfileFieldIndex.Memo2, true); }
+			set	{ SetValue((int)PostalProfileFieldIndex.Memo2, value); }
+		}
+
+		/// <summary> The Memo3 property of the Entity PostalProfile<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalProfile"."Memo3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String Memo3
+		{
+			get { return (System.String)GetValue((int)PostalProfileFieldIndex.Memo3, true); }
+			set	{ SetValue((int)PostalProfileFieldIndex.Memo3, value); }
 		}
 
 

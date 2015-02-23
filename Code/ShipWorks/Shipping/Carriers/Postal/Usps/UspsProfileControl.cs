@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             AddValueMapping(uspsProfile, UspsProfileFields.HidePostage, stateStealth, hidePostage, labelStealth);
             AddValueMapping(uspsProfile, UspsProfileFields.RequireFullAddressValidation, validationState, requireFullAddressValidation, labelValidation);
-            AddValueMapping(uspsProfile, UspsProfileFields.Memo, stateMemo, memo, labelMemo);
+            AddValueMapping(uspsProfile, PostalProfileFields.Memo1, stateMemo, memo, labelMemo);
 
             // Labels
             AddValueMapping(profile, ShippingProfileFields.RequestedLabelFormat, requestedLabelFormatState, requestedLabelFormat);

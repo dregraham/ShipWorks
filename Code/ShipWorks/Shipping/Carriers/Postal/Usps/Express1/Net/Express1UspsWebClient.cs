@@ -629,8 +629,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
-            Usps.WebServices.v29.PostageBalance postageBalance;
-            string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
+            WebServices.v29.PostageBalance postageBalance;
+            string memo = TemplateTokenProcessor.ProcessTokens(shipment.Postal.Memo1, shipment.ShipmentID).Truncate(200);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;

@@ -113,7 +113,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     rateShop.ApplyMultiCheck(shipment.Postal.Usps.RateShop);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Usps.RequireFullAddressValidation);
                     hidePostage.ApplyMultiCheck(shipment.Postal.Usps.HidePostage);
-                    memo.ApplyMultiText(shipment.Postal.Usps.Memo);
+                    memo.ApplyMultiText(shipment.Postal.Memo1);
                     LoadAccountValue(scope);
                 }
             }
@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long)v == 0 ? shipment.Postal.Usps.UspsAccountID : (long)v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Usps.HidePostage = c);
-                memo.ReadMultiText(t => shipment.Postal.Usps.Memo = t);
+                memo.ReadMultiText(t => shipment.Postal.Memo1 = t);
             }
 
             ResumeRateCriteriaChangeEvent();
