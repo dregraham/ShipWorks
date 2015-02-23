@@ -131,15 +131,14 @@ namespace ShipWorks.AddressValidation
                         .ToList();
                 }
 
-                pendingOrders.ForEach(x =>
+                pendingOrders.ForEach(orderEntity =>
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    ValidateAddressEntities(x, (sqlAdapter, toValidate, originalShippingAddress, originalAddress, suggestedAddresses, prefix) =>
-                         ValidatedAddressManager.SaveValidatedOrder(sqlAdapter, (OrderEntity) toValidate, originalShippingAddress, originalAddress, suggestedAddresses));
+                    ValidateAddressEntities(orderEntity, ValidatedAddressManager.SaveValidatedOrder);
                 });
                 
             } while (shouldContinue(pendingOrders));
@@ -164,44 +163,29 @@ namespace ShipWorks.AddressValidation
                         .ToList();
                 }
 
-                pendingShipments.ForEach(x =>
+                pendingShipments.ForEach(shipment =>
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    ValidateAddressEntities(x, (sqlAdapter, toValidate, originalShippingAddress, originalAddress, suggestedAddresses, prefix) =>
-                         ValidatedAddressManager.SaveValidatedEntity(sqlAdapter, toValidate, originalAddress, suggestedAddresses, "Ship"));
+                    ValidateAddressEntities(shipment, ValidatedAddressManager.SaveValidatedShipmentAddress);
                 });
 
             } while (shouldContinue(pendingShipments));
         }
 
         /// <summary>
-        /// Validates the specified order identifier.
+        /// Validates the specified shipment identifier.
         /// </summary>
-        private static void ValidateAddressEntities(IEntity2 toValidate, Action<SqlAdapter, IEntity2, AddressAdapter, ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>, string> saveAction)
+        private static void ValidateAddressEntities(ShipmentEntity shipmentToValidate, Action<SqlAdapter, ValidatedShippingAddress> saveAction)
         {
             try
             {
-                AddressAdapter originalShippingAddress = new AddressAdapter();
-                AddressAdapter.Copy(toValidate, "Ship", originalShippingAddress);
-
-                if (toValidate != null && validatableStatuses.Contains((int) toValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
+                if (IsCandidateForValidation(shipmentToValidate))
                 {
-                    StoreEntity store = StoreManager.GetRelatedStore((long) toValidate.Fields["OrderID"].CurrentValue);
-                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int) AddressValidationStoreSettingType.ValidateAndNotify;
-
-                    addressValidator.Validate(toValidate, "Ship", shouldAutomaticallyAdjustAddress,
-                        (originalAddress, suggestedAddresses) =>
-                        {
-                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
-                            {
-                                saveAction(sqlAdapter, toValidate, originalShippingAddress, originalAddress, suggestedAddresses, "Ship");
-                                sqlAdapter.Commit();
-                            }
-                        });
+                    ValidateShipmentAddress(shipmentToValidate, saveAction);
                 }
             }
             catch (ObjectDeletedException)
@@ -216,6 +200,99 @@ namespace ShipWorks.AddressValidation
             {
                 // Don't worry about this...  The next pass through will grab this order again
             }
+        }
+
+        /// <summary>
+        /// Validates the specified order identifier.
+        /// </summary>
+        private static void ValidateAddressEntities(OrderEntity orderToValidate, Action<SqlAdapter, ValidatedOrderAddress, AddressAdapter> saveAction)
+        {
+            try
+            {
+                if (IsCandidateForValidation(orderToValidate))
+                {
+                    ValidateOrderAddress(orderToValidate, saveAction);
+                }
+            }
+            catch (ObjectDeletedException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (SqlForeignKeyException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (ORMConcurrencyException)
+            {
+                // Don't worry about this...  The next pass through will grab this order again
+            }
+        }
+
+        /// <summary>
+        /// A helper method to determine whether the specified entity [is a candidate for validation].
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <returns><c>true</c> if the entity [is a candidate for validation]; otherwise, <c>false</c>.</returns>
+        private static bool IsCandidateForValidation(IEntity2 entity)
+        {
+            return entity != null && validatableStatuses.Contains((int)entity.Fields["ShipAddressValidationStatus"].CurrentValue);
+        }
+
+        /// <summary>
+        /// A helper method to determine whether the address should automatically be adjusted.
+        /// </summary>
+        private static bool ShouldAutoAdjustAddress(IEntity2 entity)
+        {
+            StoreEntity store = StoreManager.GetRelatedStore((long)entity.Fields["OrderID"].CurrentValue);
+            bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
+
+            return shouldAutomaticallyAdjustAddress;
+        }
+
+        /// <summary>
+        /// Validates the order address.
+        /// </summary>
+        /// <param name="orderToValidate">The order to validate.</param>
+        /// <param name="saveAction">The save action.</param>
+        private static void ValidateOrderAddress(OrderEntity orderToValidate, Action<SqlAdapter, ValidatedOrderAddress, AddressAdapter> saveAction)
+        {
+            AddressAdapter originalShippingAddress = new AddressAdapter();
+            AddressAdapter.Copy(orderToValidate, "Ship", originalShippingAddress);
+
+            addressValidator.Validate(orderToValidate, "Ship", ShouldAutoAdjustAddress(orderToValidate),
+                        (originalAddress, suggestedAddresses) =>
+                        {
+                            using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                            {
+                                ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(orderToValidate, originalAddress, suggestedAddresses);
+                                saveAction(sqlAdapter, validatedOrderAddress, originalShippingAddress);
+
+                                sqlAdapter.Commit();
+                            }
+                        });
+        }
+
+        /// <summary>
+        /// Validates the shipment address.
+        /// </summary>
+        /// <param name="shipmentToValidate">The shipment to validate.</param>
+        /// <param name="saveAction">The save action.</param>
+        private static void ValidateShipmentAddress(ShipmentEntity shipmentToValidate, Action<SqlAdapter, ValidatedShippingAddress> saveAction)
+        {
+            AddressAdapter originalShippingAddress = new AddressAdapter();
+            AddressAdapter.Copy(shipmentToValidate, "Ship", originalShippingAddress);
+
+            addressValidator.Validate(shipmentToValidate, "Ship", ShouldAutoAdjustAddress(shipmentToValidate),
+                (originalAddress, suggestedAddresses) =>
+                {
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    {
+                        ValidatedShippingAddress validatedShippingAddress = new ValidatedShippingAddress(shipmentToValidate, originalAddress, suggestedAddresses);
+                        saveAction(sqlAdapter, validatedShippingAddress);
+
+                        sqlAdapter.Commit();
+                    }
+                });
         }
 
         /// <summary>
