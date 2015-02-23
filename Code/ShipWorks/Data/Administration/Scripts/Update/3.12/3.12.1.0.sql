@@ -43,6 +43,17 @@ ALTER TABLE [dbo].[PostalProfile] ADD
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 GO
+
+PRINT N'Updating primary Postal Profile'
+GO
+UPDATE [dbo].[PostalProfile]
+SET 
+	[Memo1] = '',
+	[Memo2] = '',
+	[Memo3] = ''
+WHERE ShippingProfileID in (SELECT ShippingProfileID FROM ShippingProfile WHERE ShipmentType IN (2, 4, 9, 13, 15) AND ShipmentTypePrimary = 1)
+GO
+
 UPDATE PostalProfile
 	SET Memo1 = RubberStamp1,
 		Memo2 = RubberStamp2,
