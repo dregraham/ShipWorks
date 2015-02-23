@@ -17372,6 +17372,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.ContractType);}
 		}
+		/// <summary>Creates a new StampsAccountEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.CreatedDate);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity StampsProfileEntity</summary>

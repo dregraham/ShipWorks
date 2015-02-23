@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Registration
         /// <value>The promo code.</value>
         public string PromoCode
         {
-            get { return promotion.GetPromoCode(RegistrationType); }
+            get { return promotion.GetPromoCode(); }
         }
 
         /// <summary>

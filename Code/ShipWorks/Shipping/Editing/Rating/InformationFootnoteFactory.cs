@@ -27,6 +27,14 @@ namespace ShipWorks.Shipping.Editing.Rating
         public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
+        /// Notes that this factory should be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Creates a footnote control.
         /// </summary>
         /// <param name="parameters">Parameters that allow footnotes to interact with the rates grid</param>

@@ -36,10 +36,10 @@
             this.accountSettingsLink = new System.Windows.Forms.Label();
             this.onlineReportsLink = new System.Windows.Forms.Label();
             this.panelInfo = new System.Windows.Forms.Panel();
-            this.purchase = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
             this.labelContractType = new System.Windows.Forms.Label();
             this.contractType = new System.Windows.Forms.Label();
+            this.purchase = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.panelInfo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -132,6 +132,25 @@
             this.panelInfo.Size = new System.Drawing.Size(273, 101);
             this.panelInfo.TabIndex = 3;
             // 
+            // labelContractType
+            // 
+            this.labelContractType.AutoSize = true;
+            this.labelContractType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelContractType.Location = new System.Drawing.Point(13, 8);
+            this.labelContractType.Name = "labelContractType";
+            this.labelContractType.Size = new System.Drawing.Size(61, 13);
+            this.labelContractType.TabIndex = 6;
+            this.labelContractType.Text = "Rate Type:";
+            // 
+            // contractType
+            // 
+            this.contractType.AutoSize = true;
+            this.contractType.Location = new System.Drawing.Point(78, 8);
+            this.contractType.Name = "contractType";
+            this.contractType.Size = new System.Drawing.Size(50, 13);
+            this.contractType.TabIndex = 7;
+            this.contractType.Text = "CPP/NSA";
+            // 
             // purchase
             // 
             this.purchase.Location = new System.Drawing.Point(131, 23);
@@ -150,25 +169,6 @@
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "Account:";
-            // 
-            // labelContractType
-            // 
-            this.labelContractType.AutoSize = true;
-            this.labelContractType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelContractType.Location = new System.Drawing.Point(21, 8);
-            this.labelContractType.Name = "labelContractType";
-            this.labelContractType.Size = new System.Drawing.Size(53, 13);
-            this.labelContractType.TabIndex = 6;
-            this.labelContractType.Text = "Contract:";
-            // 
-            // contractType
-            // 
-            this.contractType.AutoSize = true;
-            this.contractType.Location = new System.Drawing.Point(78, 8);
-            this.contractType.Name = "contractType";
-            this.contractType.Size = new System.Drawing.Size(50, 13);
-            this.contractType.TabIndex = 7;
-            this.contractType.Text = "CPP/NSA";
             // 
             // StampsAccountInfoControl
             // 

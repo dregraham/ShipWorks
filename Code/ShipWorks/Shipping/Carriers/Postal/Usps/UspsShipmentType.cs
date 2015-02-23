@@ -70,8 +70,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
+            EnsureAccountsHaveCurrentContractData();
+
             IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
             return new UspsSetupWizard(promotion, true);
+        }
+
+        /// <summary>
+        /// Ensure that all USPS accounts have up to date contract information
+        /// </summary>
+        private void EnsureAccountsHaveCurrentContractData()
+        {
+            Task[] tasks = AccountRepository.Accounts
+                .Select(account => Task.Factory.StartNew(() => UpdateContractType(account)))
+                .ToArray();
+
+            Task.WaitAll(tasks);
         }
 
         /// <summary>

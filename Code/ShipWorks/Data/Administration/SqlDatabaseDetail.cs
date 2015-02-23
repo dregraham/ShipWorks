@@ -57,6 +57,13 @@ namespace ShipWorks.Data.Administration
 
                 detail.status = SqlDatabaseStatus.NoAccess;
             }
+            catch (ArgumentException ex)
+            {
+                // Catching this exception to handle bad schema versions
+                log.Error("Could not load database detail for " + database, ex);
+
+                detail.status = SqlDatabaseStatus.NoAccess;
+            }
 
             return detail;
         }

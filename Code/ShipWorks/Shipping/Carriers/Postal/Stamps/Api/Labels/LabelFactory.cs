@@ -46,12 +46,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
                     {
                         labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
                         labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                        
+                        // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
+                        if (labelUrls.Count >= 2)
+                        {
+                            labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
+                            labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                        }
                     }
                     else
                     {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
+                        // Cropping the envelopes shouldn't occur
+                        Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType) shipment.Postal.PackagingType ? CroppingStyles.None : CroppingStyles.SingleInternationalCrop;
+
+                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
                     }
                 }
                 else
@@ -154,17 +162,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.Api.Labels
         /// </summary>
         private Label CreateBlankLabel(ShipmentEntity shipment, string name, Rectangle rectangle)
         {
-         
-            // Cate an image and fill it white
-            using (Image image = new Bitmap(rectangle.Width, rectangle.Height))
-            {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    g.FillRectangle(Brushes.White, rectangle);
-                }
+            // Create an image and fill it white
+            Image image = new Bitmap(rectangle.Width, rectangle.Height);
 
-                return new StandardLabel(shipment, name, image, Rectangle.Empty);
+            using (Graphics g = Graphics.FromImage(image))
+            {
+                g.FillRectangle(Brushes.White, rectangle);
             }
+
+            return new StandardLabel(shipment, name, image, Rectangle.Empty);
         }
 
         /// <summary>
