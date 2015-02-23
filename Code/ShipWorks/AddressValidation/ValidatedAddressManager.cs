@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
-using System.Windows.Forms;
 using Interapptive.Shared.Business;
-using RestSharp.Validation;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Actions;
-using ShipWorks.Common.Threading;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.AddressValidation
@@ -148,55 +140,46 @@ namespace ShipWorks.AddressValidation
         /// Save an order that has just been validated
         /// </summary>
         /// <param name="context">Interface with the database</param>
-        /// <param name="order">Order that was validated</param>
-        /// <param name="originalAddress">The address of the order before any changes were made to it</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(ActionStepContext context, OrderEntity order, AddressAdapter originalAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        /// <param name="validatedOrderAddressInfo">The validated order address information.</param>
+        public static void SaveValidatedOrder(ActionStepContext context, ValidatedOrderShipAddress validatedOrderAddressInfo)
         {
-            SaveValidatedOrderShipAddress(new ContextAddressValidationDataAccess(context), order, originalAddress, enteredAddress, suggestedAddresses);
+            SaveValidatedOrderShipAddress(new ContextAddressValidationDataAccess(context), validatedOrderAddressInfo);
         }
 
         /// <summary>
         /// Save an order that has just been validated
         /// </summary>
         /// <param name="adapter">Interface with the database</param>
-        /// <param name="order">Order that was validated</param>
-        /// <param name="originalAddress">The address of the order before any changes were made to it</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrder(SqlAdapter adapter, OrderEntity order, AddressAdapter originalAddress, ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        /// <param name="validatedOrderAddressInfo">The validated order address information.</param>
+        public static void SaveValidatedOrder(SqlAdapter adapter, ValidatedOrderShipAddress validatedOrderAddressInfo)
         {
-            SaveValidatedOrderShipAddress(new AdapterAddressValidationDataAccess(adapter), order, originalAddress, enteredAddress, suggestedAddresses);
+            SaveValidatedOrderShipAddress(new AdapterAddressValidationDataAccess(adapter), validatedOrderAddressInfo);
         }
 
         /// <summary>
         /// Save an order that has just been validated
         /// </summary>
         /// <param name="dataAccess">Interface with the database</param>
-        /// <param name="order">Order that was validated</param>
-        /// <param name="originalAddress">The address of the order before any changes were made to it</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        public static void SaveValidatedOrderShipAddress(IAddressValidationDataAccess dataAccess, OrderEntity order, AddressAdapter originalAddress,
-            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses)
+        /// <param name="validatedOrderAddressInfo">The validated order address information.</param>
+        public static void SaveValidatedOrderShipAddress(IAddressValidationDataAccess dataAccess, ValidatedOrderShipAddress validatedOrderAddressInfo)
         {
-            SaveValidatedEntity(dataAccess, order, enteredAddress, suggestedAddresses, "Ship");
+            SaveValidatedEntity(dataAccess, validatedOrderAddressInfo);
 
-            AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
+            AddressAdapter newShippingAddress = new AddressAdapter(validatedOrderAddressInfo.Entity, validatedOrderAddressInfo.Prefix);
 
             // We can't guarantee that the suggested addresses we need to copy have been stored in the database yet.  For example,
             // Action Tasks do everything in a unit of work so they don't get written until the end
             List<ValidatedAddressEntity> addressSuggestions = new List<ValidatedAddressEntity>();
-            
-            if (enteredAddress != null)
-            {
-                addressSuggestions.Add(enteredAddress);
-            }
-            addressSuggestions.AddRange(suggestedAddresses);
 
-            PropagateAddressChangesToShipments(dataAccess, order.OrderID, originalAddress, newShippingAddress, addressSuggestions);
-            PropagateAddressChangeToBilling(dataAccess, order, originalAddress, newShippingAddress, addressSuggestions);
+            if (validatedOrderAddressInfo.EnteredAddress != null)
+            {
+                addressSuggestions.Add(validatedOrderAddressInfo.EnteredAddress);
+            }
+            addressSuggestions.AddRange(validatedOrderAddressInfo.SuggestedAddresses);
+
+            OrderEntity order = (OrderEntity) validatedOrderAddressInfo.Entity;
+            PropagateAddressChangesToShipments(dataAccess, order.OrderID, validatedOrderAddressInfo.OriginalShippingAddress, newShippingAddress, addressSuggestions);
+            PropagateAddressChangeToBilling(dataAccess, order, validatedOrderAddressInfo.OriginalShippingAddress, newShippingAddress, addressSuggestions);
         }
 
         /// <summary>
@@ -219,35 +202,25 @@ namespace ShipWorks.AddressValidation
         /// Save a shipment that has just been validated
         /// </summary>
         /// <param name="adapter">Interface with the database</param>
-        /// <param name="shipment">Shipment that was validated</param>
-        /// <param name="enteredAddress">The address entered into the order, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        /// <param name="prefix">Address prefix for the entity</param>
-        public static void SaveValidatedEntity(SqlAdapter adapter, IEntity2 shipment,
-            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses,
-            string prefix)
+        /// <param name="validatedShippingAddress">The validated shipping address.</param>
+        public static void SaveValidatedShipmentAddress(SqlAdapter adapter, ValidatedShipmentShipAddress validatedShippingAddress)
         {
-            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), shipment, enteredAddress, suggestedAddresses, prefix);
+            SaveValidatedEntity(new AdapterAddressValidationDataAccess(adapter), validatedShippingAddress);
         }
 
         /// <summary>
         /// Save an entity that has just been validated
         /// </summary>
         /// <param name="dataAccess">Interface with the database</param>
-        /// <param name="entity">Entity that was validated</param>
-        /// <param name="enteredAddress">The address entered into the entity, either manually or from a download</param>
-        /// <param name="suggestedAddresses">List of addresses suggested by validation</param>
-        /// <param name="prefix">Address prefix for the entity</param>
-        public static void SaveValidatedEntity(IAddressValidationDataAccess dataAccess, IEntity2 entity,
-            ValidatedAddressEntity enteredAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses,
-            string prefix)
+        /// <param name="validatedAddress">The validated address.</param>
+        private static void SaveValidatedEntity(IAddressValidationDataAccess dataAccess, ValidatedShipAddressBase validatedAddress)
         {
-            long entityId = EntityUtility.GetEntityId(entity);
+            long entityId = EntityUtility.GetEntityId(validatedAddress.Entity);
 
-            DeleteExistingAddresses(dataAccess, entityId, prefix);
-            SaveEntityAddress(dataAccess, entityId, enteredAddress);
+            DeleteExistingAddresses(dataAccess, entityId, validatedAddress.Prefix);
+            SaveEntityAddress(dataAccess, entityId, validatedAddress.EnteredAddress);
 
-            List<ValidatedAddressEntity> suggestedAddressList = suggestedAddresses.ToList();
+            List<ValidatedAddressEntity> suggestedAddressList = validatedAddress.SuggestedAddresses.ToList();
 
             foreach (ValidatedAddressEntity address in suggestedAddressList)
             {
@@ -256,16 +229,16 @@ namespace ShipWorks.AddressValidation
 
             // Ensure that we're using optimistic concurrency with this entity because we don't want to overwrite
             // changes that may have happened elsewhere
-            IConcurrencyPredicateFactory previousConcurrencyPredicateFactory = entity.ConcurrencyPredicateFactoryToUse;
-            entity.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();
+            IConcurrencyPredicateFactory previousConcurrencyPredicateFactory = validatedAddress.Entity.ConcurrencyPredicateFactoryToUse;
+            validatedAddress.Entity.ConcurrencyPredicateFactoryToUse = new OptimisticConcurrencyFactory();
 
             try
             {
-                dataAccess.SaveEntity(entity);
+                dataAccess.SaveEntity(validatedAddress.Entity);
             }
             finally
             {
-                entity.ConcurrencyPredicateFactoryToUse = previousConcurrencyPredicateFactory;
+                validatedAddress.Entity.ConcurrencyPredicateFactoryToUse = previousConcurrencyPredicateFactory;
             }
         }
 
@@ -358,7 +331,9 @@ namespace ShipWorks.AddressValidation
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                             {
-                                SaveValidatedOrder(sqlAdapter, order, originalShippingAddress, originalAddress, suggestedAddresses);
+                                ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses.ToList(), originalShippingAddress);
+                                SaveValidatedOrder(sqlAdapter, validatedOrderAddress);
+
                                 sqlAdapter.Commit();
                             }
                         }
@@ -386,7 +361,9 @@ namespace ShipWorks.AddressValidation
                             {
                                 using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                                 {
-                                    SaveValidatedEntity(sqlAdapter, shipment, originalAddress, suggestedAddresses, "Ship");
+                                    ValidatedShipmentShipAddress shippingAddress = new ValidatedShipmentShipAddress(shipment, originalAddress, suggestedAddresses);
+                                    SaveValidatedShipmentAddress(sqlAdapter, shippingAddress);
+
                                     sqlAdapter.Commit();
                                 }
                             }

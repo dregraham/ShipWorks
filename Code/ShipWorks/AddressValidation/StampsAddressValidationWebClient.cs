@@ -13,18 +13,19 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate the address
         /// </summary>
-        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip, string countryCode)
+        public AddressValidationWebClientValidateAddressResult ValidateAddress(AddressAdapter addressAdapter)
         {
-            PersonAdapter adapter = new PersonAdapter
+            // The underlying web client expects a PersonAdapter, so convert the address adapter to a person adapter
+            PersonAdapter personAdapter = new PersonAdapter()
             {
                 FirstName = "Sample",
                 LastName = "Name",
-                Street1 = street1,
-                Street2 = street2,
-                City = city,
-                StateProvCode = state,
-                PostalCode = zip,
-                CountryCode = countryCode
+                Street1 = addressAdapter.Street1,
+                Street2 = addressAdapter.Street2,
+                City = addressAdapter.City,
+                StateProvCode = addressAdapter.StateProvCode,
+                PostalCode = addressAdapter.PostalCode,
+                CountryCode = addressAdapter.CountryCode
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
@@ -33,7 +34,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                UspsAddressValidationResults uspsResult = session.ValidateAddress(adapter);
+                UspsAddressValidationResults uspsResult = session.ValidateAddress(personAdapter);
 
                 if (uspsResult.IsSuccessfulMatch)
                 {
