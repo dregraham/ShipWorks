@@ -155,8 +155,8 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_CallsDelete_OnlyOnAddressesAssociatedWithOrder()
         {
-            ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(testOrder, null, new List<ValidatedAddressEntity>());
-            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress, new AddressAdapter());
+            ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, null, new List<ValidatedAddressEntity>(), new AddressAdapter());
+            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress);
 
             dataAccess.Verify(x => x.DeleteEntity(addressForOrder), Times.Once);
             dataAccess.Verify(x => x.DeleteEntity(addressForOtherOrder), Times.Never);
@@ -170,8 +170,8 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Setup(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()))
                 .Callback<IEntity2>(x => savedAddresses.Add(x as ValidatedAddressEntity));
 
-            ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(testOrder, orderAddress, new List<ValidatedAddressEntity>());
-            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress, originalAddress);
+            ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, orderAddress, new List<ValidatedAddressEntity>(), originalAddress);
+            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress);
 
             AssertSavedAddress(savedAddresses, orderAddress, true);
         }
@@ -188,8 +188,8 @@ namespace ShipWorks.Tests.AddressValidation
                 .Callback<IEntity2>(x => savedAddresses.Add(x as ValidatedAddressEntity));
 
 
-            ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(testOrder, orderAddress, new List<ValidatedAddressEntity> { suggestion1, suggestion2 });
-            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress, originalAddress);
+            ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, orderAddress, new List<ValidatedAddressEntity> { suggestion1, suggestion2 }, originalAddress);
+            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress);
 
             AssertSavedAddress(savedAddresses, suggestion1, false);
             AssertSavedAddress(savedAddresses, suggestion2, false);
@@ -198,8 +198,8 @@ namespace ShipWorks.Tests.AddressValidation
         [TestMethod]
         public void SaveValidatedOrder_SavesOrder()
         {
-            ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(testOrder, null, new List<ValidatedAddressEntity>());
-            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress, originalAddress);
+            ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, null, new List<ValidatedAddressEntity>(), originalAddress);
+            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress);
 
             dataAccess.Verify(x => x.SaveEntity(testOrder));
         }
@@ -209,8 +209,8 @@ namespace ShipWorks.Tests.AddressValidation
         {
             testOrder.ShipStreet1 = "999 Main";
 
-            ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(testOrder, null, new List<ValidatedAddressEntity>());
-            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress, new AddressAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 });
+            ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, null, new List<ValidatedAddressEntity>(), new AddressAdapter { Street1 = shipmentWithOrderAddress.ShipStreet1 });
+            ValidatedAddressManager.SaveValidatedOrderShipAddress(dataAccess.Object, validatedOrderAddress);
             
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOrderAddress), Times.Once);
             dataAccess.Verify(x => x.SaveEntity(shipmentWithOtherAddress), Times.Never);

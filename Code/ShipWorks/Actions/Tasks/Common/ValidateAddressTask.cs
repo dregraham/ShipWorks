@@ -71,7 +71,7 @@ namespace ShipWorks.Actions.Tasks.Common
                 try
                 {
                     validator.Validate(order, "Ship", true, (originalAddress, suggestedAddresses) =>
-                        ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderAddress(order, originalAddress, suggestedAddresses), originalShippingAddress));
+                        ValidatedAddressManager.SaveValidatedOrder(context, new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, originalShippingAddress)));
                 }
                 catch (AddressValidationException ex)
                 {

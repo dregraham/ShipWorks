@@ -511,9 +511,9 @@
     <Compile Include="AddressValidation\Predicates\IPredicateProvider.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
-    <Compile Include="AddressValidation\ValidatedOrderAddress.cs" />
-    <Compile Include="AddressValidation\ValidatedAddress.cs" />
-    <Compile Include="AddressValidation\ValidatedAddressBase.cs" />
+    <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
+    <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
+    <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
     <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
     <Compile Include="AddressValidation\ValidatedAddressScope.cs" />

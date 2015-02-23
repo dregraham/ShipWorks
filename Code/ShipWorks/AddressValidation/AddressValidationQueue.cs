@@ -90,13 +90,13 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateAddresses(AddressValidationStatusType.Pending, orders => orders.Any());
+                    ValidateOrderAddresses(AddressValidationStatusType.Pending, orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
-                    ValidateAddresses(AddressValidationStatusType.Error, 
-                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
+                    ValidateOrderAddresses(AddressValidationStatusType.Error,
+                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
                     ValidateShipmentAddresses(AddressValidationStatusType.Pending, shipments => shipments.Any());
@@ -115,7 +115,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static void ValidateAddresses(AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
+        private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
         {
             List<OrderEntity> pendingOrders;
 
@@ -126,7 +126,7 @@ namespace ShipWorks.AddressValidation
                     LinqMetaData linqMetaData = new LinqMetaData(adapter);
 
                     pendingOrders = linqMetaData.Order
-                        .Where(x => x.ShipAddressValidationStatus == (int) statusToValidate)
+                        .Where(x => x.ShipAddressValidationStatus == (int)statusToValidate)
                         .Take(50)
                         .ToList();
                 }
@@ -138,14 +138,14 @@ namespace ShipWorks.AddressValidation
                         return;
                     }
 
-                    ValidateAddressEntities(orderEntity, ValidatedAddressManager.SaveValidatedOrder);
+                    ValidateAddressEntities(orderEntity);
                 });
-                
+
             } while (shouldContinue(pendingOrders));
         }
 
         /// <summary>
-        /// Validate orders with a given address validation status
+        /// Validate shipments with a given address validation status
         /// </summary>
         private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<List<ShipmentEntity>, bool> shouldContinue)
         {
@@ -170,7 +170,7 @@ namespace ShipWorks.AddressValidation
                         return;
                     }
 
-                    ValidateAddressEntities(shipment, ValidatedAddressManager.SaveValidatedShipmentAddress);
+                    ValidateAddressEntities(shipment);
                 });
 
             } while (shouldContinue(pendingShipments));
@@ -179,120 +179,63 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validates the specified shipment identifier.
         /// </summary>
-        private static void ValidateAddressEntities(ShipmentEntity shipmentToValidate, Action<SqlAdapter, ValidatedShippingAddress> saveAction)
+        private static void ValidateAddressEntities(IEntity2 entityToValidate)
         {
             try
             {
-                if (IsCandidateForValidation(shipmentToValidate))
+                AddressAdapter originalEntityAddress = new AddressAdapter();
+                AddressAdapter.Copy(entityToValidate, "Ship", originalEntityAddress);
+
+                if (entityToValidate != null && validatableStatuses.Contains((int)entityToValidate.Fields["ShipAddressValidationStatus"].CurrentValue))
                 {
-                    ValidateShipmentAddress(shipmentToValidate, saveAction);
-                }
-            }
-            catch (ObjectDeletedException)
-            {
-                // object has been deleted, no more need to validate.
-            }
-            catch (SqlForeignKeyException)
-            {
-                // object has been deleted, no more need to validate.
-            }
-            catch (ORMConcurrencyException)
-            {
-                // Don't worry about this...  The next pass through will grab this order again
-            }
-        }
+                    StoreEntity store = StoreManager.GetRelatedStore((long)entityToValidate.Fields["OrderID"].CurrentValue);
+                    bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
 
-        /// <summary>
-        /// Validates the specified order identifier.
-        /// </summary>
-        private static void ValidateAddressEntities(OrderEntity orderToValidate, Action<SqlAdapter, ValidatedOrderAddress, AddressAdapter> saveAction)
-        {
-            try
-            {
-                if (IsCandidateForValidation(orderToValidate))
-                {
-                    ValidateOrderAddress(orderToValidate, saveAction);
-                }
-            }
-            catch (ObjectDeletedException)
-            {
-                // object has been deleted, no more need to validate.
-            }
-            catch (SqlForeignKeyException)
-            {
-                // object has been deleted, no more need to validate.
-            }
-            catch (ORMConcurrencyException)
-            {
-                // Don't worry about this...  The next pass through will grab this order again
-            }
-        }
-
-        /// <summary>
-        /// A helper method to determine whether the specified entity [is a candidate for validation].
-        /// </summary>
-        /// <param name="entity">The entity.</param>
-        /// <returns><c>true</c> if the entity [is a candidate for validation]; otherwise, <c>false</c>.</returns>
-        private static bool IsCandidateForValidation(IEntity2 entity)
-        {
-            return entity != null && validatableStatuses.Contains((int)entity.Fields["ShipAddressValidationStatus"].CurrentValue);
-        }
-
-        /// <summary>
-        /// A helper method to determine whether the address should automatically be adjusted.
-        /// </summary>
-        private static bool ShouldAutoAdjustAddress(IEntity2 entity)
-        {
-            StoreEntity store = StoreManager.GetRelatedStore((long)entity.Fields["OrderID"].CurrentValue);
-            bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
-
-            return shouldAutomaticallyAdjustAddress;
-        }
-
-        /// <summary>
-        /// Validates the order address.
-        /// </summary>
-        /// <param name="orderToValidate">The order to validate.</param>
-        /// <param name="saveAction">The save action.</param>
-        private static void ValidateOrderAddress(OrderEntity orderToValidate, Action<SqlAdapter, ValidatedOrderAddress, AddressAdapter> saveAction)
-        {
-            AddressAdapter originalShippingAddress = new AddressAdapter();
-            AddressAdapter.Copy(orderToValidate, "Ship", originalShippingAddress);
-
-            addressValidator.Validate(orderToValidate, "Ship", ShouldAutoAdjustAddress(orderToValidate),
+                    addressValidator.Validate(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))
                             {
-                                ValidatedOrderAddress validatedOrderAddress = new ValidatedOrderAddress(orderToValidate, originalAddress, suggestedAddresses);
-                                saveAction(sqlAdapter, validatedOrderAddress, originalShippingAddress);
+                                ValidatedShipAddressBase validatedAddress = CreateValidatedAddress(entityToValidate, originalAddress, suggestedAddresses, originalEntityAddress);
+                                validatedAddress.Save(sqlAdapter);
 
                                 sqlAdapter.Commit();
                             }
                         });
+                }
+            }
+            catch (ObjectDeletedException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (SqlForeignKeyException)
+            {
+                // object has been deleted, no more need to validate.
+            }
+            catch (ORMConcurrencyException)
+            {
+                // Don't worry about this...  The next pass through will grab this order again
+            }
         }
-
+        
         /// <summary>
-        /// Validates the shipment address.
+        /// A factory method to instantiate the appropriate instance of ValidatedShipAddressBase.
         /// </summary>
-        /// <param name="shipmentToValidate">The shipment to validate.</param>
-        /// <param name="saveAction">The save action.</param>
-        private static void ValidateShipmentAddress(ShipmentEntity shipmentToValidate, Action<SqlAdapter, ValidatedShippingAddress> saveAction)
+        private static ValidatedShipAddressBase CreateValidatedAddress(IEntity2 entity, ValidatedAddressEntity originalAddress, IEnumerable<ValidatedAddressEntity> suggestedAddresses, AddressAdapter addressAdapter)
         {
-            AddressAdapter originalShippingAddress = new AddressAdapter();
-            AddressAdapter.Copy(shipmentToValidate, "Ship", originalShippingAddress);
+            OrderEntity order = entity as OrderEntity;
+            if (order != null)
+            {
+                return new ValidatedOrderShipAddress(order, originalAddress, suggestedAddresses, addressAdapter);
+            }
 
-            addressValidator.Validate(shipmentToValidate, "Ship", ShouldAutoAdjustAddress(shipmentToValidate),
-                (originalAddress, suggestedAddresses) =>
-                {
-                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
-                    {
-                        ValidatedShippingAddress validatedShippingAddress = new ValidatedShippingAddress(shipmentToValidate, originalAddress, suggestedAddresses);
-                        saveAction(sqlAdapter, validatedShippingAddress);
+            ShipmentEntity shipment = entity as ShipmentEntity;
+            if (shipment != null)
+            {
+                return new ValidatedShipmentShipAddress(shipment, originalAddress, suggestedAddresses);
+            }
 
-                        sqlAdapter.Commit();
-                    }
-                });
+            throw new InvalidOperationException("ShipWorks could not create a validated address. An unexpected entity type was provided.");
         }
 
         /// <summary>
