@@ -8,9 +8,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         /// <summary>
         /// The contract type is unknown at the moment but can/should be obtained from the postal
-        /// provder's API.
+        /// provder's API. An account is most likely in this state immediately after creating the 
+        /// account until it has been completely processed by Stamps.com.
         /// </summary>
-        [Description("Unknown")]
+        [Description("Pending")]
         Unknown = 0,
 
         /// <summary>

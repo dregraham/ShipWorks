@@ -2260,6 +2260,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("StampsAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.MailingPostalCode, 20, 0, 0);
 			base.AddElementFieldInfo("StampsAccountEntity", "StampsReseller", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.StampsReseller, 0, 0, 10);
 			base.AddElementFieldInfo("StampsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.ContractType, 0, 0, 10);
+			base.AddElementFieldInfo("StampsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)StampsAccountFieldIndex.CreatedDate, 0, 0, 0);
 		}
 		/// <summary>Inits StampsProfileEntity's FieldInfo objects</summary>
 		private void InitStampsProfileEntityInfos()

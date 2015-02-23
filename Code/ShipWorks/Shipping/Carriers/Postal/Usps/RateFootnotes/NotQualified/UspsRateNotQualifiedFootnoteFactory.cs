@@ -22,6 +22,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
         public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
+        /// Notes that this factory should not be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Create an USPS rate not qualified control
         /// </summary>
         public RateFootnoteControl CreateFootnote(FootnoteParameters parameters)
