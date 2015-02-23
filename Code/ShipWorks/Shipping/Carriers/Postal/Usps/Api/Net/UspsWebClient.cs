@@ -730,7 +730,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         isSampleOnly,
                         thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
-                        BuildMemoField(shipment.Postal), // Memo
+                        UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
                         false, // delivery notify
                         null,  // shipment notification
@@ -770,21 +770,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string[] labelUrls = labelUrl.Split(' ');
             SaveLabels(shipment, labelUrls);
-        }
-
-        /// <summary>
-        /// Builds the string to send to USPS as the memo.  If multiple memo fields have content, the wrap character is injected
-        /// between each.
-        /// </summary>
-        public static string BuildMemoField(PostalShipmentEntity postalShipment)
-        {
-            string memo1 = TemplateTokenProcessor.ProcessTokens(postalShipment.Memo1, postalShipment.ShipmentID).Truncate(200);
-            string memo2 = TemplateTokenProcessor.ProcessTokens(postalShipment.Memo2, postalShipment.ShipmentID).Truncate(200);
-            string memo3 = TemplateTokenProcessor.ProcessTokens(postalShipment.Memo3, postalShipment.ShipmentID).Truncate(200);
-
-            var memo = string.Format("\x09{0}\r\n{1}\r\n{2}", memo1, memo2, memo3).Truncate(200);
-            
-            return memo;
         }
 
         /// <summary>

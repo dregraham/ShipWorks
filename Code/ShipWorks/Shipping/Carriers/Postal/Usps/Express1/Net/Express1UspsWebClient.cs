@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Services.Protocols;
+using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
@@ -630,7 +631,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             RateV11 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
             WebServices.v29.PostageBalance postageBalance;
-            string memo = TemplateTokenProcessor.ProcessTokens(shipment.Postal.Memo1, shipment.ShipmentID).Truncate(200);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -722,7 +722,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         isSampleOnly,
                         thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
-                        memo, // Memo
+                        UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
                         "", // recipient email
                         false, // delivery notify
