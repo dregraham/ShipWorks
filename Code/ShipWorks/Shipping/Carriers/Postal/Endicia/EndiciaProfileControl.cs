@@ -57,9 +57,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             AddValueMapping(endiciaProfile, EndiciaProfileFields.StealthPostage, stateStealth, hidePostage, labelStealth);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.NoPostage, stateNoPostage, noPostage, labelNoPostage);
 
-            AddValueMapping(endiciaProfile, PostalProfileFields.Memo1, stateRubberStamp1, rubberStamp1, labelRubberStamp1);
-            AddValueMapping(endiciaProfile, PostalProfileFields.Memo2, stateRubberStamp2, rubberStamp2, labelRubberStamp2);
-            AddValueMapping(endiciaProfile, PostalProfileFields.Memo3, stateRubberStamp3, rubberStamp3, labelRubberStamp3);
+            AddValueMapping(profile.Postal, PostalProfileFields.Memo1, stateRubberStamp1, rubberStamp1, labelRubberStamp1);
+            AddValueMapping(profile.Postal, PostalProfileFields.Memo2, stateRubberStamp2, rubberStamp2, labelRubberStamp2);
+            AddValueMapping(profile.Postal, PostalProfileFields.Memo3, stateRubberStamp3, rubberStamp3, labelRubberStamp3);
             AddValueMapping(endiciaProfile, EndiciaProfileFields.ReferenceID, stateReferenceID, referenceID, labelReferenceID);
 
             if (IsScanBasedReturnsEnabled())
