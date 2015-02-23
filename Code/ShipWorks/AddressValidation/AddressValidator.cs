@@ -70,7 +70,8 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-                AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter.Street1, addressAdapter.Street2, addressAdapter.City, addressAdapter.StateProvCode, addressAdapter.PostalCode, addressAdapter.CountryCode);
+
+                AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();
