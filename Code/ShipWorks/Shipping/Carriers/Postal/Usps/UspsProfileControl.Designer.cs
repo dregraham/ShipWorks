@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.labelAccount = new System.Windows.Forms.Label();
             this.uspsAccount = new System.Windows.Forms.ComboBox();
@@ -40,9 +42,9 @@
             this.kryptonBorderEdge31 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.labelValidation = new System.Windows.Forms.Label();
             this.validationState = new System.Windows.Forms.CheckBox();
-            this.labelMemo = new System.Windows.Forms.Label();
-            this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
-            this.stateMemo = new System.Windows.Forms.CheckBox();
+            this.labelMemo1 = new System.Windows.Forms.Label();
+            this.memo1 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.stateMemo1 = new System.Windows.Forms.CheckBox();
             this.groupLabels = new System.Windows.Forms.GroupBox();
             this.requestedLabelFormat = new ShipWorks.Shipping.Editing.RequestedLabelFormatProfileControl();
             this.requestedLabelFormatState = new System.Windows.Forms.CheckBox();
@@ -50,6 +52,12 @@
             this.rateShop = new System.Windows.Forms.CheckBox();
             this.labelRateShop = new System.Windows.Forms.Label();
             this.stateRateShop = new System.Windows.Forms.CheckBox();
+            this.memo2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelMemo2 = new System.Windows.Forms.Label();
+            this.memo3 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelMemo3 = new System.Windows.Forms.Label();
+            this.stateMemo2 = new System.Windows.Forms.CheckBox();
+            this.stateMemo3 = new System.Windows.Forms.CheckBox();
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.tabPage.SuspendLayout();
@@ -82,21 +90,33 @@
             // 
             // groupShipment
             // 
-            this.groupShipment.Controls.Add(this.stateMemo);
-            this.groupShipment.Controls.Add(this.memo);
-            this.groupShipment.Controls.Add(this.labelMemo);
+            this.groupShipment.Controls.Add(this.stateMemo3);
+            this.groupShipment.Controls.Add(this.stateMemo2);
+            this.groupShipment.Controls.Add(this.memo3);
+            this.groupShipment.Controls.Add(this.labelMemo3);
+            this.groupShipment.Controls.Add(this.memo2);
+            this.groupShipment.Controls.Add(this.labelMemo2);
+            this.groupShipment.Controls.Add(this.stateMemo1);
+            this.groupShipment.Controls.Add(this.memo1);
+            this.groupShipment.Controls.Add(this.labelMemo1);
             this.groupShipment.Controls.Add(this.hidePostage);
             this.groupShipment.Controls.Add(this.labelStealth);
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 166);
-            this.groupShipment.Size = new System.Drawing.Size(400, 270);
+            this.groupShipment.Size = new System.Drawing.Size(400, 332);
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.hidePostage, 0);
-            this.groupShipment.Controls.SetChildIndex(this.labelMemo, 0);
-            this.groupShipment.Controls.SetChildIndex(this.memo, 0);
-            this.groupShipment.Controls.SetChildIndex(this.stateMemo, 0);
+            this.groupShipment.Controls.SetChildIndex(this.labelMemo1, 0);
+            this.groupShipment.Controls.SetChildIndex(this.memo1, 0);
+            this.groupShipment.Controls.SetChildIndex(this.stateMemo1, 0);
+            this.groupShipment.Controls.SetChildIndex(this.labelMemo2, 0);
+            this.groupShipment.Controls.SetChildIndex(this.memo2, 0);
+            this.groupShipment.Controls.SetChildIndex(this.labelMemo3, 0);
+            this.groupShipment.Controls.SetChildIndex(this.memo3, 0);
+            this.groupShipment.Controls.SetChildIndex(this.stateMemo2, 0);
+            this.groupShipment.Controls.SetChildIndex(this.stateMemo3, 0);
             // 
             // senderState
             // 
@@ -112,14 +132,13 @@
             // 
             // groupBoxCustoms
             // 
-            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 593);
-            this.groupBoxCustoms.Size = new System.Drawing.Size(400, 54);
+            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 653);
             // 
             // tabPage
             // 
             this.tabPage.Controls.Add(this.groupTo);
             this.tabPage.Controls.Add(this.groupLabels);
-            this.tabPage.Size = new System.Drawing.Size(431, 757);
+            this.tabPage.Size = new System.Drawing.Size(431, 833);
             this.tabPage.Controls.SetChildIndex(this.groupExpressMail, 0);
             this.tabPage.Controls.SetChildIndex(this.groupInsurance, 0);
             this.tabPage.Controls.SetChildIndex(this.groupLabels, 0);
@@ -131,18 +150,16 @@
             // 
             // groupReturns
             // 
-            this.groupReturns.Location = new System.Drawing.Point(8, 714);
+            this.groupReturns.Location = new System.Drawing.Point(8, 774);
             this.groupReturns.Size = new System.Drawing.Size(400, 53);
             // 
             // groupInsurance
             // 
-            this.groupInsurance.Location = new System.Drawing.Point(8, 505);
-            this.groupInsurance.Size = new System.Drawing.Size(400, 82);
+            this.groupInsurance.Location = new System.Drawing.Point(8, 565);
             // 
             // groupExpressMail
             // 
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 654);
-            this.groupExpressMail.Size = new System.Drawing.Size(400, 53);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 714);
             // 
             // kryptonBorderEdge1
             // 
@@ -150,7 +167,7 @@
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 238);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 300);
             // 
             // labelAccount
             // 
@@ -203,7 +220,7 @@
             // 
             this.labelStealth.AutoSize = true;
             this.labelStealth.BackColor = System.Drawing.Color.Transparent;
-            this.labelStealth.Location = new System.Drawing.Point(56, 214);
+            this.labelStealth.Location = new System.Drawing.Point(59, 214);
             this.labelStealth.Name = "labelStealth";
             this.labelStealth.Size = new System.Drawing.Size(45, 13);
             this.labelStealth.TabIndex = 68;
@@ -229,7 +246,7 @@
             this.requireFullAddressValidation.AutoSize = true;
             this.requireFullAddressValidation.Location = new System.Drawing.Point(110, 23);
             this.requireFullAddressValidation.Name = "requireFullAddressValidation";
-            this.requireFullAddressValidation.Size = new System.Drawing.Size(231, 17);
+            this.requireFullAddressValidation.Size = new System.Drawing.Size(198, 17);
             this.requireFullAddressValidation.TabIndex = 17;
             this.requireFullAddressValidation.Text = "Require full USPS address validation";
             this.requireFullAddressValidation.UseVisualStyleBackColor = true;
@@ -265,34 +282,34 @@
             this.validationState.TabIndex = 0;
             this.validationState.UseVisualStyleBackColor = true;
             // 
-            // labelMemo
+            // labelMemo1
             // 
-            this.labelMemo.Location = new System.Drawing.Point(61, 236);
-            this.labelMemo.Name = "labelMemo";
-            this.labelMemo.Size = new System.Drawing.Size(40, 21);
-            this.labelMemo.TabIndex = 70;
-            this.labelMemo.Text = "Memo:";
-            this.labelMemo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelMemo1.Location = new System.Drawing.Point(54, 236);
+            this.labelMemo1.Name = "labelMemo1";
+            this.labelMemo1.Size = new System.Drawing.Size(50, 21);
+            this.labelMemo1.TabIndex = 70;
+            this.labelMemo1.Text = "Memo 1:";
+            this.labelMemo1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // memo
+            // memo1
             // 
-            this.memo.Location = new System.Drawing.Point(107, 236);
-            this.memo.MaxLength = 32767;
-            this.memo.Name = "memo";
-            this.memo.Size = new System.Drawing.Size(210, 21);
-            this.memo.TabIndex = 71;
-            this.memo.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.memo1.Location = new System.Drawing.Point(107, 236);
+            this.memo1.MaxLength = 32767;
+            this.memo1.Name = "memo1";
+            this.memo1.Size = new System.Drawing.Size(210, 21);
+            this.memo1.TabIndex = 71;
+            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
-            // stateMemo
+            // stateMemo1
             // 
-            this.stateMemo.AutoSize = true;
-            this.stateMemo.Checked = true;
-            this.stateMemo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.stateMemo.Location = new System.Drawing.Point(9, 240);
-            this.stateMemo.Name = "stateMemo";
-            this.stateMemo.Size = new System.Drawing.Size(15, 14);
-            this.stateMemo.TabIndex = 72;
-            this.stateMemo.UseVisualStyleBackColor = true;
+            this.stateMemo1.AutoSize = true;
+            this.stateMemo1.Checked = true;
+            this.stateMemo1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.stateMemo1.Location = new System.Drawing.Point(9, 240);
+            this.stateMemo1.Name = "stateMemo1";
+            this.stateMemo1.Size = new System.Drawing.Size(15, 14);
+            this.stateMemo1.TabIndex = 72;
+            this.stateMemo1.UseVisualStyleBackColor = true;
             // 
             // groupLabels
             // 
@@ -301,7 +318,7 @@
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
             this.groupLabels.Controls.Add(this.requestedLabelFormatState);
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
-            this.groupLabels.Location = new System.Drawing.Point(8, 442);
+            this.groupLabels.Location = new System.Drawing.Point(8, 502);
             this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(400, 58);
             this.groupLabels.TabIndex = 13;
@@ -367,12 +384,70 @@
             this.stateRateShop.TabIndex = 21;
             this.stateRateShop.UseVisualStyleBackColor = true;
             // 
+            // memo2
+            // 
+            this.memo2.Location = new System.Drawing.Point(107, 263);
+            this.memo2.MaxLength = 32767;
+            this.memo2.Name = "memo2";
+            this.memo2.Size = new System.Drawing.Size(210, 21);
+            this.memo2.TabIndex = 74;
+            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            // 
+            // labelMemo2
+            // 
+            this.labelMemo2.Location = new System.Drawing.Point(54, 263);
+            this.labelMemo2.Name = "labelMemo2";
+            this.labelMemo2.Size = new System.Drawing.Size(50, 21);
+            this.labelMemo2.TabIndex = 73;
+            this.labelMemo2.Text = "Memo 2:";
+            this.labelMemo2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // memo3
+            // 
+            this.memo3.Location = new System.Drawing.Point(107, 290);
+            this.memo3.MaxLength = 32767;
+            this.memo3.Name = "memo3";
+            this.memo3.Size = new System.Drawing.Size(210, 21);
+            this.memo3.TabIndex = 76;
+            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
+            // labelMemo3
+            // 
+            this.labelMemo3.Location = new System.Drawing.Point(54, 290);
+            this.labelMemo3.Name = "labelMemo3";
+            this.labelMemo3.Size = new System.Drawing.Size(50, 21);
+            this.labelMemo3.TabIndex = 75;
+            this.labelMemo3.Text = "Memo 3:";
+            this.labelMemo3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // stateMemo2
+            // 
+            this.stateMemo2.AutoSize = true;
+            this.stateMemo2.Checked = true;
+            this.stateMemo2.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.stateMemo2.Location = new System.Drawing.Point(9, 267);
+            this.stateMemo2.Name = "stateMemo2";
+            this.stateMemo2.Size = new System.Drawing.Size(15, 14);
+            this.stateMemo2.TabIndex = 77;
+            this.stateMemo2.UseVisualStyleBackColor = true;
+            // 
+            // stateMemo3
+            // 
+            this.stateMemo3.AutoSize = true;
+            this.stateMemo3.Checked = true;
+            this.stateMemo3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.stateMemo3.Location = new System.Drawing.Point(9, 294);
+            this.stateMemo3.Name = "stateMemo3";
+            this.stateMemo3.Size = new System.Drawing.Size(15, 14);
+            this.stateMemo3.TabIndex = 78;
+            this.stateMemo3.UseVisualStyleBackColor = true;
+            // 
             // UspsProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "UspsProfileControl";
-            this.Size = new System.Drawing.Size(439, 783);
+            this.Size = new System.Drawing.Size(439, 859);
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
             this.groupShipment.ResumeLayout(false);
@@ -405,9 +480,9 @@
         private System.Windows.Forms.Label labelValidation;
         private System.Windows.Forms.CheckBox validationState;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
-        private System.Windows.Forms.Label labelMemo;
-        private Templates.Tokens.TemplateTokenTextBox memo;
-        private System.Windows.Forms.CheckBox stateMemo;
+        private System.Windows.Forms.Label labelMemo1;
+        private Templates.Tokens.TemplateTokenTextBox memo1;
+        private System.Windows.Forms.CheckBox stateMemo1;
 
         protected ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge11;
         protected System.Windows.Forms.GroupBox groupLabels;
@@ -416,5 +491,11 @@
         private System.Windows.Forms.CheckBox rateShop;
         private System.Windows.Forms.Label labelRateShop;
         private System.Windows.Forms.CheckBox stateRateShop;
+        private Templates.Tokens.TemplateTokenTextBox memo3;
+        private System.Windows.Forms.Label labelMemo3;
+        private Templates.Tokens.TemplateTokenTextBox memo2;
+        private System.Windows.Forms.Label labelMemo2;
+        private System.Windows.Forms.CheckBox stateMemo3;
+        private System.Windows.Forms.CheckBox stateMemo2;
     }
 }
