@@ -59,7 +59,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
                 GrouponWebClient client = new GrouponWebClient(store);
                 //Check to see if we have access to Groupon with the new creds
                 //Ask for page 99 because its faster to get an empty response
-                client.GetOrders(99);
+                client.GetOrders(1);
             }
             catch (GrouponException ex)
             {
