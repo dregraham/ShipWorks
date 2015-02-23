@@ -28,13 +28,11 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
             InitializeComponent();
         }
 
-     
         /// <summary>
         /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
-
             Cursor.Current = Cursors.WaitCursor;
 
             GrouponStoreEntity store = GetStore<GrouponStoreEntity>();
@@ -59,7 +57,9 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
             try
             {
                 GrouponWebClient client = new GrouponWebClient(store);
-                client.GetOrders(1);
+                //Check to see if we have access to Groupon with the new creds
+                //Ask for page 99 because its faster to get an empty response
+                client.GetOrders(99);
             }
             catch (GrouponException ex)
             {

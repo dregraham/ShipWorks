@@ -8,7 +8,7 @@ using ShipWorks.Stores.Management;
 namespace ShipWorks.Stores.Platforms.Groupon
 {
     /// <summary>
-    /// Account settings for GenericStore
+    /// Account settings for Groupon Store
     /// </summary>
     public partial class GrouponAccountSettingsControl : AccountSettingsControlBase
     {
@@ -20,7 +20,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             InitializeComponent();
         }
 
-
         /// <summary>
         /// Load store settings from the entity to the GUI
         /// </summary>
@@ -31,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 throw new ArgumentException("A non GenericStore store was passed to GrouponStore account settings.");
             }
-
 
             tokenTextBox.Text = grouponStore.Token;
             supplierIDTextbox.Text = grouponStore.SupplierID;
@@ -59,7 +57,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 try
                 {
                     GrouponWebClient client = new GrouponWebClient(grouponStore);
-                    client.GetOrders(1);
+                    //Check to see if we have access to Groupon with the new creds
+                    //Ask for page 99 because its faster to get an empty response
+                    client.GetOrders(99);
 
                     return true;
                 }

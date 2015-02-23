@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
@@ -20,16 +19,28 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
     //        "phone": ""
     //    }
 
+        [JsonProperty("city")]
+        public string City { get; set; }
 
-        public string city { get; set; }
-        public string state { get; set; }
-        public string name { get; set; }
-        public string zip { get; set; }
-        public string country { get; set; }
-        public string address1 { get; set; }
-        public string address2 { get; set; }
-        public string phone { get; set; }
+        [JsonProperty("state")]
+        public string State { get; set; }
 
+        [JsonProperty("name")]
+        public string Name { get; set; }
 
+        [JsonProperty("zip")]
+        public string Zip { get; set; }
+
+        [JsonProperty("country")]
+        public string Country { get; set; }
+
+        [JsonProperty("address1")]
+        public string Address1 { get; set; }
+
+        [JsonProperty("address2")]
+        public string Address2 { get; set; }
+
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
     }
 }

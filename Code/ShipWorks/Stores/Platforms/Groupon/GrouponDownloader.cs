@@ -17,7 +17,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 {
     class GrouponDownloader : StoreDownloader
     {
-
         public GrouponDownloader(StoreEntity store)
             : base(store)
         {
@@ -83,6 +82,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
         }
 
+        /// <summary>
+        /// LoadORder from JToken
+        /// </summary>
         private void LoadOrder(JToken jsonOrder)
         {
             string orderid =  jsonOrder["orderid"].ToString();
@@ -113,7 +115,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
             //Unit of measurement used for weight  
-            string itemWeightUnit = jsonOrder["shipping"]["product_weight_unit"].ToString();
+            string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
 
             //List of order items
             IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
@@ -134,22 +136,22 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadItem(GrouponOrderEntity order, GrouponItem gItem, string itemWeightUnit)
+        private void LoadItem(GrouponOrderEntity order, GrouponItem grouponItem, string itemWeightUnit)
         {
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
-            item.SKU = gItem.sku;
-            item.Name = gItem.name;
-            item.Weight = GetWeight(gItem.weight,itemWeightUnit);
-            item.UnitPrice = gItem.unit_price;
-            item.Quantity = gItem.quantity;
+            item.SKU = grouponItem.Sku;
+            item.Name = grouponItem.Name;
+            item.Weight = GetWeight(grouponItem.Weight, itemWeightUnit);
+            item.UnitPrice = grouponItem.UnitPrice;
+            item.Quantity = grouponItem.Quantity;
 
             //Groupon fields
-            item.Permalink = gItem.permalink;
-            item.ChannelSKUProvided = gItem.channel_sku_provided;
-            item.FulfillmentLineitemID = gItem.fulfillment_lineitem_id;
-            item.BomSKU = gItem.bom_sku;
-            item.CILineItemID = gItem.ci_lineitemid;
+            item.Permalink = grouponItem.Permalink;
+            item.ChannelSKUProvided = grouponItem.ChannelSkuProvided;
+            item.FulfillmentLineItemID = grouponItem.FulfillmentLineitemId;
+            item.BomSKU = grouponItem.BomSku;
+            item.GrouponLineItemID = grouponItem.GrouponLineitemId;
         }
 
         /// <summary>
@@ -160,24 +162,27 @@ namespace ShipWorks.Stores.Platforms.Groupon
             PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
             PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
 
-            PersonName name = PersonName.Parse(customer.name);
+            PersonName name = PersonName.Parse(customer.Name);
             shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
             shipAdapter.FirstName = name.First;
             shipAdapter.MiddleName = name.First;
             shipAdapter.LastName = name.Last;
-            shipAdapter.Street1 = customer.address1;
-            shipAdapter.Street2 = customer.address2;
-            shipAdapter.City = customer.city;
-            shipAdapter.StateProvCode = Geography.GetStateProvCode(customer.state);
-            shipAdapter.PostalCode = customer.zip;
-            shipAdapter.CountryCode = Geography.GetCountryCode(customer.country);
-            shipAdapter.Phone = customer.phone;
+            shipAdapter.Street1 = customer.Address1;
+            shipAdapter.Street2 = customer.Address2;
+            shipAdapter.City = customer.City;
+            //Groupon can send "null" as the state, check for null test and use blank instead 
+            shipAdapter.StateProvCode = Geography.GetStateProvCode((customer.State == "null") ? customer.State : "");
+            shipAdapter.PostalCode = customer.Zip;
+            shipAdapter.CountryCode = Geography.GetCountryCode((customer.Country == "null") ? customer.Country : "");
+            shipAdapter.Phone = customer.Phone;
 
             //Groupon does not provide a bill to address so we copy from shipping to billing
             PersonAdapter.Copy(shipAdapter, billAdapter);
         }
 
-
+        /// <summary>
+        /// convert to lbs from Groupon weight
+        /// </summary>
         private static double GetWeight(double weight, string itemWeightUnit)
         {
             //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
@@ -190,6 +195,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
         }
 
+        /// <summary>
+        /// Remove UTC from end of Groupon date time string
+        /// </summary>
         private static DateTime GetDate(string date)
         {
             int TimeZonePos = date.IndexOf("UTC");

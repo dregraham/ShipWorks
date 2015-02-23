@@ -3949,12 +3949,12 @@ namespace ShipWorks.Data.Model
 		Permalink,
 		///<summary>ChannelSKUProvided. </summary>
 		ChannelSKUProvided,
-		///<summary>FulfillmentLineitemID. </summary>
-		FulfillmentLineitemID,
+		///<summary>FulfillmentLineItemID. </summary>
+		FulfillmentLineItemID,
 		///<summary>BomSKU. </summary>
 		BomSKU,
-		///<summary>CILineItemID. </summary>
-		CILineItemID,
+		///<summary>GrouponLineItemID. </summary>
+		GrouponLineItemID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4026,8 +4026,6 @@ namespace ShipWorks.Data.Model
 		InitialDownloadOrder,
 		///<summary>StoreID. </summary>
 		StoreID,
-		///<summary>StoreUrl. </summary>
-		StoreUrl,
 		///<summary>SupplierID. </summary>
 		SupplierID,
 		///<summary>Token. </summary>

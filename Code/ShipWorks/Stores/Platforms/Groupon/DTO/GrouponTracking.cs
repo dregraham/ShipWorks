@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
@@ -9,15 +7,20 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
     {
         public GrouponTracking(string Carrier, Int64 CILineItemID, string Tracking)
         {
-            this.carrier = Carrier;
-            this.ci_lineitem_id = CILineItemID;
-            this.tracking = Tracking;
+            this.Carrier = Carrier;
+            this.GrouponLineitemId = CILineItemID;
+            this.Tracking = Tracking;
 
         }
 
-        public string carrier { get; set; }
-        public Int64 ci_lineitem_id { get; set; }
-        public string tracking { get; set; }
+        [JsonProperty("carrier")]
+        public string Carrier { get; set; }
+
+        [JsonProperty("ci_lineitem_id")]
+        public Int64 GrouponLineitemId { get; set; }
+
+        [JsonProperty("tracking")]
+        public string Tracking { get; set; }
 
     }
 }

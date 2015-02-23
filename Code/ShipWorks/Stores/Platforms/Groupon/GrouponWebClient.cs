@@ -14,12 +14,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
     {
 
         //Groupon API Endpoint
-        //private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
-        private static string GrouponEndpoint = "http://10.1.10.132/json/json/";
+        private static string GrouponEndpoint = "https://scm.commerceinterface.com/api/v2";
+        //private static string GrouponEndpoint = "http://10.1.10.132/json";
 
 
         // the store instance
-        GrouponStoreEntity store;
+        private readonly GrouponStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -35,21 +35,17 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public JToken GetOrders(int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-            ConfigureGetRequest(submitter, "/get_orders", page);
+            ConfigureGetRequest(submitter, "get_orders", page);
 
             return ProcessRequest(submitter, "GetOrders");
         }
 
         /// <summary>
-        /// Mark lineitems as exported
-        /// </summary>
-
-        /// <summary>
         /// Uploads a batch of shipments to Groupon
         /// </summary>
-        public void UploadShipmentDetails(List<GrouponTracking> trackingItmes)
+        public void UploadShipmentDetails(List<GrouponTracking> trackingItems)
         {
-            string trackingParameter = JsonConvert.SerializeObject(trackingItmes);
+            string trackingParameter = JsonConvert.SerializeObject(trackingItems);
 
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
@@ -59,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             parameters.Add("token", store.Token);
             parameters.Add("tracking_info", trackingParameter);
 
-            ConfigurePostRequest(submitter, "/tracking_notification", parameters);
+            ConfigurePostRequest(submitter, "tracking_notification", parameters);
 
             ProcessRequest(submitter, "UploadShipmentDetails");
         }
@@ -72,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             submitter.Verb = HttpVerb.Get;
 
-            submitter.Uri = new Uri(GrouponEndpoint + operationName);
+            submitter.Uri = new Uri(GrouponEndpoint + "/" + operationName);
             submitter.Variables.Add("supplier_id", store.SupplierID);
             submitter.Variables.Add("token", store.Token);
             submitter.Variables.Add("page", page.ToString());
@@ -81,11 +77,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Setup a post request 
         /// </summary>
-        private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter,string operationName , Dictionary<string,string> parameters)
+        private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
         {
             submitter.Verb = HttpVerb.Post;
 
-            submitter.Uri = new Uri(GrouponEndpoint + operationName);
+            submitter.Uri = new Uri(GrouponEndpoint + "/" + operationName);
 
             foreach(KeyValuePair<string, string> parameter in parameters)
             {
@@ -105,7 +101,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                 using (IHttpResponseReader reader = submitter.GetResponse())
                 {
-
                     string responseData = reader.ReadResult();
                     logEntry.LogResponse(responseData, "txt");
 

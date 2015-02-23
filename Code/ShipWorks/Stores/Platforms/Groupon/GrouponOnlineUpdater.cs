@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponOnlineUpdater));
 
         // the store this instance for
-        GrouponStoreEntity store;
+        private readonly GrouponStoreEntity store;
 
         /// <summary>
         /// Constructor
@@ -94,11 +94,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
             foreach (GrouponOrderItemEntity item in order.OrderItems)
             {
                 //Need to have a CI_LineItemID to upload tracking
-                if(item.CILineItemID != null && item.CILineItemID.Length == 0)
+                if(item.GrouponLineItemID != null && item.GrouponLineItemID.Length != 0)
                 {
                     string trackingNumber = shipment.TrackingNumber;
                     string carrier = GrouponCarrier.GetCarrierCode(shipment);
-                    Int64 CILineItemID = Convert.ToInt64(item.CILineItemID);
+                    Int64 CILineItemID = Convert.ToInt64(item.GrouponLineItemID);
 
                     GrouponTracking gTracking = new GrouponTracking(carrier, CILineItemID, trackingNumber);
 

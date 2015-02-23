@@ -8402,20 +8402,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.ChannelSKUProvided);}
 		}
-		/// <summary>Creates a new GrouponOrderItemEntity.FulfillmentLineitemID field instance</summary>
-		public static EntityField2 FulfillmentLineitemID
+		/// <summary>Creates a new GrouponOrderItemEntity.FulfillmentLineItemID field instance</summary>
+		public static EntityField2 FulfillmentLineItemID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.FulfillmentLineitemID);}
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.FulfillmentLineItemID);}
 		}
 		/// <summary>Creates a new GrouponOrderItemEntity.BomSKU field instance</summary>
 		public static EntityField2 BomSKU
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.BomSKU);}
 		}
-		/// <summary>Creates a new GrouponOrderItemEntity.CILineItemID field instance</summary>
-		public static EntityField2 CILineItemID
+		/// <summary>Creates a new GrouponOrderItemEntity.GrouponLineItemID field instance</summary>
+		public static EntityField2 GrouponLineItemID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.CILineItemID);}
+			get { return (EntityField2)EntityFieldFactory.Create(GrouponOrderItemFieldIndex.GrouponLineItemID);}
 		}
 	}
 
@@ -8571,11 +8571,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 StoreID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.StoreID);}
-		}
-		/// <summary>Creates a new GrouponStoreEntity.StoreUrl field instance</summary>
-		public static EntityField2 StoreUrl
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(GrouponStoreFieldIndex.StoreUrl);}
 		}
 		/// <summary>Creates a new GrouponStoreEntity.SupplierID field instance</summary>
 		public static EntityField2 SupplierID

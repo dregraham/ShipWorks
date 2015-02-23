@@ -10,15 +10,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
     public class GrouponOrderIdentifier : OrderIdentifier
     {
         // GrouponStore's Order ID
-        string GrouponStoreOrderID = "";
+        private readonly string GrouponStoreOrderId = "";
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="GrouponStoreOrderID"></param>
-        public GrouponOrderIdentifier(string GrouponStoreOrderID)
+        public GrouponOrderIdentifier(string GrouponStoreOrderId)
         {
-            this.GrouponStoreOrderID = GrouponStoreOrderID;
+            this.GrouponStoreOrderId = GrouponStoreOrderId;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 throw new InvalidOperationException("A non GrouponStore order was passed to the GrouponStore order identifier.");
             }
 
-            GrouponStoreOrder.GrouponOrderID = GrouponStoreOrderID;
+            GrouponStoreOrder.GrouponOrderID = GrouponStoreOrderId;
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            downloadDetail.ExtraStringData1 = GrouponStoreOrderID;
+            downloadDetail.ExtraStringData1 = GrouponStoreOrderId;
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override string ToString()
         {
-            return string.Format("GrouponStoreOrderID:{0}", GrouponStoreOrderID);
+            return string.Format("GrouponStoreOrderID:{0}", GrouponStoreOrderId);
         }
     }
 }

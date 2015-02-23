@@ -1,4 +1,5 @@
-﻿
+﻿using Newtonsoft.Json;
+
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
     /// <summary>
@@ -26,9 +27,11 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
     //    "supplier": "AZ SHOPPING"
     //}
 
+        [JsonProperty("orderid")]
+        public string OrderId { get; set; }
 
-        public string orderid { get; set; }
-        public string date { get; set; }
+        [JsonProperty("date")]
+        public string Date { get; set; }
 
     }
 }

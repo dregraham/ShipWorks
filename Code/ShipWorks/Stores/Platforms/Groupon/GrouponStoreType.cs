@@ -20,7 +20,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 {
     class GrouponStoreType : StoreType
     {
-
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
 
@@ -122,7 +121,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
             GrouponAccountSettingsControl settingsControl = new GrouponAccountSettingsControl();
-            //settingsControl.Initialize(this);
 
             return settingsControl;
         }
@@ -156,7 +154,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             InitializeStoreDefaults(store);
 
-            store.StoreUrl = "";
             store.SupplierID = "";
             store.Token = "";
             store.StoreName = "Groupon";
@@ -169,11 +166,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override OrderEntity CreateOrderInstance()
         {
-            GrouponOrderEntity entity = new GrouponOrderEntity();
-
-            entity.GrouponOrderID = "";
-            
-            return entity;
+            return new GrouponOrderEntity { GrouponOrderID = string.Empty};
         }
 
         /// <summary>
@@ -185,9 +178,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             entity.Permalink = "";
             entity.ChannelSKUProvided = "";
-            entity.FulfillmentLineitemID = "";
+            entity.FulfillmentLineItemID = "";
             entity.BomSKU = "";
-            entity.CILineItemID = "";
+            entity.GrouponLineItemID = "";
 
             return entity;
         }
@@ -214,8 +207,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void GridHyperlinkClick(EntityField2 field, EntityBase2 entity, IWin32Window owner)
         {
-            WebHelper.OpenUrl(GrouponUrlUtilities.GetItemUrl(((GrouponOrderItemEntity)entity).Permalink), owner);
+            string grouponURL = "http://www.groupon.com/deals";
+            string itemPermalink = ((GrouponOrderItemEntity)entity).Permalink;
 
+            string itemURL = string.Format("{0}/{1}", grouponURL, itemPermalink);
+
+            WebHelper.OpenUrl(itemURL, owner);
         }
     }
 }

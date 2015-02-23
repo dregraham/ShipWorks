@@ -1379,18 +1379,17 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "GrouponOrderItemEntity", "OrderItemID", "OrderItemID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "GrouponOrderItemEntity", "Permalink", "Permalink", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "GrouponOrderItemEntity", "ChannelSKUProvided", "ChannelSKUProvided", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "GrouponOrderItemEntity", "FulfillmentLineitemID", "FulfillmentLineitemID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "GrouponOrderItemEntity", "FulfillmentLineItemID", "FulfillmentLineItemID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "GrouponOrderItemEntity", "BomSKU", "BomSKU", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "GrouponOrderItemEntity", "CILineItemID", "CILineItemID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "GrouponOrderItemEntity", "GrouponLineItemID", "GrouponLineItemID", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 5 );
 		}
 		/// <summary>Inits GrouponStoreEntity's mappings</summary>
 		private void InitGrouponStoreEntityMappings()
 		{
-			base.AddElementMapping( "GrouponStoreEntity", "ShipWorksLocal", @"dbo", "GrouponStore", 4 );
+			base.AddElementMapping( "GrouponStoreEntity", "ShipWorksLocal", @"dbo", "GrouponStore", 3 );
 			base.AddElementFieldMapping( "GrouponStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
-			base.AddElementFieldMapping( "GrouponStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
-			base.AddElementFieldMapping( "GrouponStoreEntity", "SupplierID", "SupplierID", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "GrouponStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "SupplierID", "SupplierID", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
+			base.AddElementFieldMapping( "GrouponStoreEntity", "Token", "Token", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 2 );
 		}
 		/// <summary>Inits InfopiaOrderItemEntity's mappings</summary>
 		private void InitInfopiaOrderItemEntityMappings()

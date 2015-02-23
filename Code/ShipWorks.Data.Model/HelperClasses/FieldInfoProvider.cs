@@ -1315,15 +1315,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("GrouponOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderItemFieldIndex.OrderItemID, 0, 0, 19);
 			base.AddElementFieldInfo("GrouponOrderItemEntity", "Permalink", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.Permalink, 255, 0, 0);
 			base.AddElementFieldInfo("GrouponOrderItemEntity", "ChannelSKUProvided", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.ChannelSKUProvided, 255, 0, 0);
-			base.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineitemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
 			base.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
-			base.AddElementFieldInfo("GrouponOrderItemEntity", "CILineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.CILineItemID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
 		}
 		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
 		private void InitGrouponStoreEntityInfos()
 		{
 			base.AddElementFieldInfo("GrouponStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)GrouponStoreFieldIndex.StoreID, 0, 0, 19);
-			base.AddElementFieldInfo("GrouponStoreEntity", "StoreUrl", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.StoreUrl, 255, 0, 0);
 			base.AddElementFieldInfo("GrouponStoreEntity", "SupplierID", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.SupplierID, 255, 0, 0);
 			base.AddElementFieldInfo("GrouponStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.Token, 255, 0, 0);
 		}

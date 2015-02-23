@@ -475,9 +475,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("StoreUrl", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("SupplierID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -553,17 +550,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)GrouponStoreFieldIndex.StoreID, true); }
 			set	{ SetValue((int)GrouponStoreFieldIndex.StoreID, value); }
-		}
-
-		/// <summary> The StoreUrl property of the Entity GrouponStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "GrouponStore"."StoreUrl"<br/>
-		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String StoreUrl
-		{
-			get { return (System.String)GetValue((int)GrouponStoreFieldIndex.StoreUrl, true); }
-			set	{ SetValue((int)GrouponStoreFieldIndex.StoreUrl, value); }
 		}
 
 		/// <summary> The SupplierID property of the Entity GrouponStore<br/><br/>

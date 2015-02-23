@@ -479,13 +479,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ChannelSKUProvided", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("FulfillmentLineitemID", fieldHashtable);
+			_fieldsCustomProperties.Add("FulfillmentLineItemID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("BomSKU", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("CILineItemID", fieldHashtable);
+			_fieldsCustomProperties.Add("GrouponLineItemID", fieldHashtable);
 		}
 		#endregion
 
@@ -581,15 +581,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)GrouponOrderItemFieldIndex.ChannelSKUProvided, value); }
 		}
 
-		/// <summary> The FulfillmentLineitemID property of the Entity GrouponOrderItem<br/><br/>
+		/// <summary> The FulfillmentLineItemID property of the Entity GrouponOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "GrouponOrderItem"."FulfillmentLineitemID"<br/>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."FulfillmentLineItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String FulfillmentLineitemID
+		public virtual System.String FulfillmentLineItemID
 		{
-			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, true); }
-			set	{ SetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineitemID, value); }
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, value); }
 		}
 
 		/// <summary> The BomSKU property of the Entity GrouponOrderItem<br/><br/>
@@ -603,15 +603,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)GrouponOrderItemFieldIndex.BomSKU, value); }
 		}
 
-		/// <summary> The CILineItemID property of the Entity GrouponOrderItem<br/><br/>
+		/// <summary> The GrouponLineItemID property of the Entity GrouponOrderItem<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "GrouponOrderItem"."CILineItemID"<br/>
+		/// <remarks>Mapped on  table field: "GrouponOrderItem"."GrouponLineItemID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String CILineItemID
+		public virtual System.String GrouponLineItemID
 		{
-			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.CILineItemID, true); }
-			set	{ SetValue((int)GrouponOrderItemFieldIndex.CILineItemID, value); }
+			get { return (System.String)GetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, true); }
+			set	{ SetValue((int)GrouponOrderItemFieldIndex.GrouponLineItemID, value); }
 		}
 
 
