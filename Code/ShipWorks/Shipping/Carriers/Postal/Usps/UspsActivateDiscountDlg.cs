@@ -76,9 +76,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 signUpForExpeditedControl.Visible = true;
                 convertToExpeditedControl.Visible = false;
 
-                Height = signUpForExpeditedControl.Bottom + 60;
-                close.Top = Height - 60;
-                close.Left = Right - close.Width - 22;
+                Height = signUpForExpeditedControl.Bottom + 80;
+                close.Top = Height - 70;
+                close.Left = signUpForExpeditedControl.Right - close.Width - 22;
 
                 signUpForExpeditedControl.LoadSettings();
             }
