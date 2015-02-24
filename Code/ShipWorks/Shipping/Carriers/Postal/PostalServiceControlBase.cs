@@ -1,21 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
-using ShipWorks.Common;
+using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
-using ShipWorks.Data;
-using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Postal
 {
@@ -25,13 +17,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public partial class PostalServiceControlBase : ServiceControlBase
     {
         /// <summary>
-        /// Prevents a default instance of the <see cref="PostalServiceControlBase"/> class from being created.
+        /// Constructor that is needed for the designer to work
         /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        private PostalServiceControlBase(RateControl rateControl)
-            : base(ShipmentTypeCode.None, rateControl)
+        protected PostalServiceControlBase()
         {
+            if (!DesignModeDetector.IsDesignerHosted(this))
+            {
+                throw new InvalidOperationException("The default constructor for PostalServiceControlBase should only be used by the VS designer");
+            }
+
             InitializeComponent();
         }
 
