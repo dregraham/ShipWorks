@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         protected UspsServiceControl()
         {
-            if (!DesignModeDetector.IsDesignerHosted(this))
+            if (!DesignModeDetector.IsDesignerHosted())
             {
                 throw new InvalidOperationException("The default constructor for UspsServiceControl should only be used by the VS designer");
             }

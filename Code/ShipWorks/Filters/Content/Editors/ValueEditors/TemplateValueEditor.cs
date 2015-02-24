@@ -42,7 +42,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (!DesignModeDetector.IsDesignerHosted(this))
+            if (!DesignModeDetector.IsDesignerHosted())
             {
                 templateComboBox.LoadTemplates();
                 templateComboBox.SelectedTemplateID = condition.TemplateID;

@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Utility
         {
             foreach (var pair in lengthMap)
             {
-                if (!DesignMode && !DesignModeDetector.IsDesignerHosted(pair.Key))
+                if (!DesignMode && !DesignModeDetector.IsDesignerHosted())
                 {
                     SetControlMaxLength(pair.Key, GetMaxLength(pair.Value));
                 }

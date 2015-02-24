@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         protected PostalServiceControlBase()
         {
-            if (!DesignModeDetector.IsDesignerHosted(this))
+            if (!DesignModeDetector.IsDesignerHosted())
             {
                 throw new InvalidOperationException("The default constructor for PostalServiceControlBase should only be used by the VS designer");
             }

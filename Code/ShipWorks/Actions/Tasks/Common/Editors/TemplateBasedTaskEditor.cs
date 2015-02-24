@@ -46,7 +46,7 @@ namespace ShipWorks.Actions.Tasks.Common.Editors
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (DesignModeDetector.IsDesignerHosted(this))
+            if (DesignModeDetector.IsDesignerHosted())
             {
                 return;
             }

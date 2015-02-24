@@ -119,7 +119,7 @@ namespace ShipWorks.UI.Controls.Krypton
         /// </summary>
         private void UpdateTextDisplay()
         {
-            if (DesignModeDetector.IsDesignerHosted(this))
+            if (DesignModeDetector.IsDesignerHosted())
             {
                 return;
             }
