@@ -69,12 +69,12 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Location = new System.Drawing.Point(21, 355);
+            this.insuranceControl.Location = new System.Drawing.Point(21, 351);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 500);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 496);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionRecipient
@@ -107,7 +107,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 529);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 525);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionShipment
@@ -124,11 +124,11 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.memo1);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
-            this.sectionShipment.Size = new System.Drawing.Size(378, 432);
+            this.sectionShipment.Size = new System.Drawing.Size(378, 428);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 558);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 554);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionFrom
@@ -241,7 +241,7 @@
             // 
             this.hidePostalLabel.AutoSize = true;
             this.hidePostalLabel.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostalLabel.Location = new System.Drawing.Point(39, 332);
+            this.hidePostalLabel.Location = new System.Drawing.Point(39, 328);
             this.hidePostalLabel.Name = "hidePostalLabel";
             this.hidePostalLabel.Size = new System.Drawing.Size(45, 13);
             this.hidePostalLabel.TabIndex = 55;
@@ -251,7 +251,7 @@
             // 
             this.hidePostage.AutoSize = true;
             this.hidePostage.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostage.Location = new System.Drawing.Point(90, 331);
+            this.hidePostage.Location = new System.Drawing.Point(90, 327);
             this.hidePostage.Name = "hidePostage";
             this.hidePostage.Size = new System.Drawing.Size(89, 17);
             this.hidePostage.TabIndex = 56;
