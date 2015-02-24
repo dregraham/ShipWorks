@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
-    class GrouponTracking
+    public class GrouponTracking
     {
         public GrouponTracking(string Carrier, Int64 CILineItemID, string Tracking)
         {

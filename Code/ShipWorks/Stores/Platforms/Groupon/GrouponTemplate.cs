@@ -11,7 +11,7 @@ using log4net;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    class GrouponTemplate
+    public class GrouponTemplate
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
@@ -83,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             template.PrintCopies = 1;
             template.PrintCollate = false;
             template.SaveFileName = "Order {//Order/Number}";
-            template.ParentFolder = invoices;
+            template.ParentFolder = parent;
             template.TemplateTree = tree;
             template.SaveFileFolder = TemplateHelper.DefaultTemplateSaveDirectory;
             template.SaveFilePrompt = 1;

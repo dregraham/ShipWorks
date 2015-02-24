@@ -10,7 +10,7 @@ using ShipWorks.Stores.Platforms.Groupon.DTO;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    class GrouponWebClient
+    public class GrouponWebClient
     {
 
         //Groupon API Endpoint
