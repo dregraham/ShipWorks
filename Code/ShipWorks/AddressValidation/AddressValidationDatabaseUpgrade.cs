@@ -21,7 +21,7 @@ namespace ShipWorks.AddressValidation
             FilterNodeEntity orderNode = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
 
             FilterNodeEntity examplesNode = orderNode.ChildNodes.FirstOrDefault(filter => filter.Filter.Name == "Examples") ?? 
-                FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), orderNode, orderNode.ChildNodes.Count)[0];
+                FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), orderNode, orderNode.ChildNodes.Count,sqlAdapter)[0];
 
             FilterNodeEntity addressValidationNode =
                 FilterLayoutContext.Current.AddFilter(
