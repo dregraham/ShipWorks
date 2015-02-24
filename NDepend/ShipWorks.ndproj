@@ -4176,7 +4176,7 @@ from  m in JustMyCode.Methods where
 
 select new { m, m.NbLinesOfCode }]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="True" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Jenkins Build Rules: # of methods w/ too many parameters exceeded</Name>
-warnif count > 95 from  m in JustMyCode.Methods where
+warnif count > 94 from  m in JustMyCode.Methods where
  m.NbParameters > 5
  orderby m.NbParameters
 
