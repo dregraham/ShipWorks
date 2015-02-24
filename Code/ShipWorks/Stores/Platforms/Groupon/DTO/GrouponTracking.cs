@@ -10,7 +10,6 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
             this.Carrier = Carrier;
             this.GrouponLineitemId = CILineItemID;
             this.Tracking = Tracking;
-
         }
 
         [JsonProperty("carrier")]

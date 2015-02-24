@@ -11,7 +11,7 @@ using log4net;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    public class GrouponTemplate
+    public static class GrouponTemplate
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
