@@ -12,9 +12,11 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     class GrouponDownloader : StoreDownloader
     {
         public GrouponDownloader(StoreEntity store)
