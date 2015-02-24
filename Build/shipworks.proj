@@ -418,10 +418,6 @@
       <ExeAppend>_UPS</ExeAppend>
     </InstallerTypes>
   </ItemGroup>
-  
-  <ItemGroup>
-    <VersionFile Include="ShipWorksVersions.json"></VersionFile>
-  </ItemGroup>
     
   <!-- Create the installer -->
   <Target Name="InnoSetup" >
