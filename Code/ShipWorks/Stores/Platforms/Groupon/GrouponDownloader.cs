@@ -90,6 +90,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
             string orderid =  jsonOrder["orderid"].ToString();
             GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponOrderIdentifier(orderid));
 
+            //OrderNumber
+            string orderNumber = orderid.Substring(0,orderid.IndexOf("-"));
+
+            //OrderNumberPostfix
+            string orderNumberPostfix = orderid.Substring(orderid.IndexOf("-"));
+
             // Nothing to do if its not new - they don't change
             if (!order.IsNew)
             {
@@ -100,7 +106,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
             Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
 
             //OrderNumber
-            order.OrderNumber = GetNextOrderNumber();
+            order.OrderNumber = Convert.ToInt64(orderNumber);
+
+            //OrderNumberPostfix
+            order.ApplyOrderNumberPostfix(orderNumberPostfix);
 
             //Order Date
             DateTime orderDate = GetDate(jsonOrder["date"].ToString());

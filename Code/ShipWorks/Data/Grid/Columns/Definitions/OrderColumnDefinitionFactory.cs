@@ -539,13 +539,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridMoneyDisplayType(), "Total", 1024.18m,
                         OrderFields.OrderTotal), 
 
-                    new GridColumnDefinition("{5140E360-BEB3-4099-87F7-8188DE445B99}", true,
-                        new GridTextDisplayType(), "Groupon Order #", "FFB7A681BE",
-                        GrouponOrderFields.GrouponOrderID)
-                        {
-                            StoreTypeCode = StoreTypeCode.Groupon
-                        },
-
                 };
 
             return definitions;

@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using Interapptive.Shared.UI;
-using log4net;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
 {
@@ -67,6 +58,8 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
                 e.NextPage = this;
                 return;
             }
+
+            GrouponTemplate.InstallGrouponTemplate();
         }
 
         /// <summary>
