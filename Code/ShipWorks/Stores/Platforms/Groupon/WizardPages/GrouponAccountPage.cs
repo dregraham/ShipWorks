@@ -18,8 +18,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
         {
             InitializeComponent();
 
-            GrouponStoreType store = new GrouponStoreType(new StoreEntity { TypeCode = (int)StoreTypeCode.Groupon });
-            helpLink.Url = store.AccountSettingsHelpUrl;
+            helpLink.Url = GrouponStoreType.AccountSettingsHelpUrl;
         }
 
         /// <summary>
