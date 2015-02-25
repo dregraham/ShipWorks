@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
     /// <summary>
     /// Order dto object that gets populated by the JsonConvert.DeserializeObject 
     /// </summary>
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class GrouponCustomer
     {
   

@@ -1,8 +1,10 @@
 ﻿using System;
 using Newtonsoft.Json;
+using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Groupon.DTO
 {
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class GrouponTracking
     {
         public GrouponTracking(string Carrier, Int64 CILineItemID, string Tracking)
