@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using Interapptive.Shared.Properties;
 using System.Collections;
-using log4net;
 
 namespace Interapptive.Shared.Business
 {
@@ -14,9 +13,6 @@ namespace Interapptive.Shared.Business
     /// </summary>
     public static class Geography
     {
-        // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(Geography));
-
         static SortedList<string, string> countries = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
         static SortedList<string, string> states = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
         static SortedList<string, string> provinces = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
@@ -60,18 +56,11 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public static string GetCountryCode(string name)
         {
-            log.Warn("Start GetCountryCode");
-
             string code;
-
-            
             if (countries.TryGetValue(name, out code))
             {
-                log.Warn(code);
                 return code;
             }
-
-            log.Warn("Finish GetCountryCode");
 
             // Saint Croix is just US VI, but not in our list of names.  But we want to be able support carts that send us that name
             if (name == "Saint Croix")
