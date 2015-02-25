@@ -18,6 +18,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Editions
 {
@@ -81,16 +82,53 @@ namespace ShipWorks.Editions
         /// </summary>
         private static void UpdateRestrictions(IEnumerable<StoreEntity> stores)
         {
-            List<EditionRestriction> restrictions = new List<EditionRestriction>();            
+            // Convert to a List so we can iterate it more than once.
+            List<StoreEntity> storeEntities = (List<StoreEntity>)(stores as IList<StoreEntity> ?? stores.ToList());
 
-            foreach (StoreEntity store in stores)
+            // If no stores were passed, like from Initalization, just return.
+            if (!storeEntities.Any())
+            {
+                return;
+            }
+
+            List<EditionRestriction> restrictions = new List<EditionRestriction>();
+
+            foreach (StoreEntity store in storeEntities)
             {
                 Edition edition = EditionSerializer.Restore(store);
 
                 restrictions.AddRange(edition.GetRestrictions());
             }
 
+            // Now that we have the full list of restrictions, remove any registration restrictions if needed.
+            restrictions = RemoveShipmentTypeRegistrationIfNeeded(restrictions, storeEntities);
+
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
+        }
+
+        /// <summary>
+        /// If the only shipment type registration restrictions are for trial stores, and no restrictions for non-trial stores exist,
+        /// the user should be able to add the shipping account.
+        /// 
+        /// This will return an modified list of restrictions if only trial restrictions exist. 
+        /// </summary>
+        public static List<EditionRestriction> RemoveShipmentTypeRegistrationIfNeeded(List<EditionRestriction> restrictions, List<StoreEntity> stores)
+        {
+            // Get the Endicia shipment type registration restrictions
+            List<EditionRestriction> allRegistrationRestrictions = restrictions
+                .Where(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode) r.Data == ShipmentTypeCode.Endicia).ToList();
+
+            List<StoreEntity> restrictedStores = allRegistrationRestrictions.Select(r => r.Edition.Store).ToList();
+
+            // Only check for enabled stores, as they are the only ones with up to date restrictions.
+            // If there are any stores left over that don't have restrictions, then we should allow registration, so
+            // remove the restictions from the list.
+            if (stores.Where(s => s.Enabled).Except(restrictedStores).Any())
+            {
+                restrictions = restrictions.Except(allRegistrationRestrictions).ToList();
+            }
+
+            return restrictions;
         }
 
         /// <summary>
