@@ -214,5 +214,13 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             WebHelper.OpenUrl(itemURL, owner);
         }
+
+        /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public static string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
+        }
     }
 }

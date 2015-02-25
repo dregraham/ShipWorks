@@ -33,6 +33,8 @@
             this.tokenTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -76,10 +78,35 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Token:";
             // 
+            // helpLink
+            // 
+            this.helpLink.AutoSize = true;
+            this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink.Location = new System.Drawing.Point(245, 92);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(55, 18);
+            this.helpLink.TabIndex = 12;
+            this.helpLink.TabStop = true;
+            this.helpLink.Text = "click here.";
+            this.helpLink.Url = "http://www.interapptive.com/shipworks/help";
+            this.helpLink.UseCompatibleTextRendering = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(97, 92);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(223, 29);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "For help with adding Groupon";
+            // 
             // GrouponStoreAccountPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpLink);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tokenTextBox);
@@ -101,5 +128,7 @@
         private System.Windows.Forms.TextBox tokenTextBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private ApplicationCore.Interaction.HelpLink helpLink;
+        private System.Windows.Forms.Label label5;
     }
 }
