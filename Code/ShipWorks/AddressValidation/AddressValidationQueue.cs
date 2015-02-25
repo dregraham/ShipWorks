@@ -120,16 +120,32 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<OrderEntity>, bool> shouldContinue)
         {
-            EntityCollection<OrderEntity> pendingOrders;
+            ValidateAddresses(new OrdersWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
+        }
+
+        /// <summary>
+        /// Validate shipments with a given address validation status
+        /// </summary>
+        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<ShipmentEntity>, bool> shouldContinue)
+        {
+            ValidateAddresses(new UnprocessedShipmentsWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
+        }
+
+        /// <summary>
+        /// Validate orders with a given address validation status
+        /// </summary>
+        private static void ValidateAddresses<T>(IPredicateProvider predicate, Func<ICollection<T>, bool> shouldContinue) where T : EntityBase2
+        {
+            EntityCollection<T> pendingOrders;
 
             do
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    pendingOrders = adapter.GetCollectionFromPredicate<OrderEntity>(new OrdersWithShipValidationStatusPredicate(statusToValidate));
+                    pendingOrders = adapter.GetCollectionFromPredicate<T>(predicate);
                 }
 
-                foreach (OrderEntity order in pendingOrders)
+                foreach (T order in pendingOrders)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -140,33 +156,6 @@ namespace ShipWorks.AddressValidation
                 }
 
             } while (shouldContinue(pendingOrders));
-        }
-
-        /// <summary>
-        /// Validate shipments with a given address validation status
-        /// </summary>
-        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<ShipmentEntity>, bool> shouldContinue)
-        {
-            EntityCollection<ShipmentEntity> pendingShipments;
-
-            do
-            {
-                using (SqlAdapter adapter = new SqlAdapter())
-                {
-                    pendingShipments = adapter.GetCollectionFromPredicate<ShipmentEntity>(new UnprocessedShipmentsWithShipValidationStatusPredicate(statusToValidate));
-                }
-                
-                foreach (ShipmentEntity shipment in pendingShipments)
-                {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    ValidateAddressEntities(shipment);
-                }
-
-            } while (shouldContinue(pendingShipments));
         }
 
         /// <summary>
