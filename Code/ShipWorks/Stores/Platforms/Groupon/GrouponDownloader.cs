@@ -16,7 +16,6 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
-    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     class GrouponDownloader : StoreDownloader
     {
         public GrouponDownloader(StoreEntity store)
@@ -71,7 +70,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     }
 
                 } while(currentPage < numberOfPages);
-
             }
             catch (GrouponException ex)
             {
@@ -81,7 +79,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 throw new DownloadException(ex.Message, ex);
             }
-
         }
 
         /// <summary>
@@ -182,9 +179,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             shipAdapter.Street2 = customer.Address2;
             shipAdapter.City = customer.City;
             //Groupon can send "null" as the state, check for null test and use blank instead 
-            shipAdapter.StateProvCode = Geography.GetStateProvCode((customer.State != "null") ? customer.State : "");
+            shipAdapter.StateProvCode = Geography.GetStateProvCode(customer.State);
             shipAdapter.PostalCode = customer.Zip;
-            shipAdapter.CountryCode = Geography.GetCountryCode((customer.Country != "null") ? customer.Country : "");
+            shipAdapter.CountryCode = Geography.GetCountryCode(customer.Country);
             shipAdapter.Phone = customer.Phone;
 
             //Groupon does not provide a bill to address so we copy from shipping to billing
