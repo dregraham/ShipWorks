@@ -9,6 +9,7 @@ Albacore.configure do |config|
 		msbuild.use :net40
 		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+		msbuild.command = "C:\\Program Files (x86)\\MSBuild\\12.0\\Bin\\msbuild.exe"
 	end
 
 	config.mstest do |mstest|
