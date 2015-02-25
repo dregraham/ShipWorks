@@ -8,9 +8,12 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.LinqSupportClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Data.Utility;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Tracking;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
@@ -115,31 +118,26 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate orders with a given address validation status
         /// </summary>
-        private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<List<OrderEntity>, bool> shouldContinue)
+        private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<OrderEntity>, bool> shouldContinue)
         {
-            List<OrderEntity> pendingOrders;
+            EntityCollection<OrderEntity> pendingOrders;
 
             do
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    LinqMetaData linqMetaData = new LinqMetaData(adapter);
-
-                    pendingOrders = linqMetaData.Order
-                        .Where(x => x.ShipAddressValidationStatus == (int)statusToValidate)
-                        .Take(50)
-                        .ToList();
+                    pendingOrders = adapter.GetCollectionFromPredicate<OrderEntity>(new OrdersWithShipValidationStatusPredicate(statusToValidate));
                 }
 
-                pendingOrders.ForEach(orderEntity =>
+                foreach (OrderEntity order in pendingOrders)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    ValidateAddressEntities(orderEntity);
-                });
+                    ValidateAddressEntities(order);
+                }
 
             } while (shouldContinue(pendingOrders));
         }
@@ -147,23 +145,18 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<List<ShipmentEntity>, bool> shouldContinue)
+        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<ShipmentEntity>, bool> shouldContinue)
         {
-            List<ShipmentEntity> pendingShipments;
+            EntityCollection<ShipmentEntity> pendingShipments;
 
             do
             {
                 using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    LinqMetaData linqMetaData = new LinqMetaData(adapter);
-
-                    pendingShipments = linqMetaData.Shipment
-                        .Where(x => x.ShipAddressValidationStatus == (int)statusToValidate && !x.Processed)
-                        .Take(50)
-                        .ToList();
+                    pendingShipments = adapter.GetCollectionFromPredicate<ShipmentEntity>(new UnprocessedShipmentsWithShipValidationStatusPredicate(statusToValidate));
                 }
-
-                pendingShipments.ForEach(shipment =>
+                
+                foreach (ShipmentEntity shipment in pendingShipments)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -171,7 +164,7 @@ namespace ShipWorks.AddressValidation
                     }
 
                     ValidateAddressEntities(shipment);
-                });
+                }
 
             } while (shouldContinue(pendingShipments));
         }

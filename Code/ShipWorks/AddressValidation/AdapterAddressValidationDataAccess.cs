@@ -1,11 +1,8 @@
-using System;
 using System.Collections.Generic;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.Linq;
 using ShipWorks.Data.Utility;
 
 namespace ShipWorks.AddressValidation

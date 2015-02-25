@@ -136,6 +136,7 @@
     <Compile Include="AddressValidation\AddressValidatorTest.cs" />
     <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicateTest.cs" />
     <Compile Include="AddressValidation\Predicates\FakePredicateExpression.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicateTest.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicateTest.cs" />
     <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />

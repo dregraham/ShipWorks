@@ -508,8 +508,11 @@
     <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\AddressValidator.cs" />
     <Compile Include="AddressValidation\EntityGridAddressSelector.cs" />
+    <Compile Include="AddressValidation\Predicates\ILimitResultRows.cs" />
     <Compile Include="AddressValidation\Predicates\IPredicateProvider.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsWithShipValidationStatusPredicate.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />

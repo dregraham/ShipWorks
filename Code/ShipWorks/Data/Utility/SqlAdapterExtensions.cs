@@ -16,13 +16,20 @@ namespace ShipWorks.Data.Utility
         /// </summary>
         public static EntityCollection<T> GetCollectionFromPredicate<T>(this SqlAdapter sqlAdapter, IPredicateProvider predicateProvider) where T : EntityBase2
         {
-            return GetCollectionFromPredicate<T>(sqlAdapter, predicateProvider.Apply);
+            int limitToRows = 0;
+            ILimitResultRows rowLimiter = predicateProvider as ILimitResultRows;
+            if (rowLimiter != null)
+            {
+                limitToRows = rowLimiter.MaximumRows;
+            }
+
+            return GetCollectionFromPredicate<T>(sqlAdapter, predicateProvider.Apply, limitToRows);
         }
 
         /// <summary>
         /// Get a collection of entities using the given predicate configuration
         /// </summary>
-        public static EntityCollection<T> GetCollectionFromPredicate<T>(this SqlAdapter sqlAdapter, Action<IPredicateExpression> predicateConfigurator) where T : EntityBase2
+        public static EntityCollection<T> GetCollectionFromPredicate<T>(this SqlAdapter sqlAdapter, Action<IPredicateExpression> predicateConfigurator, int maxRowsToReturn = 0) where T : EntityBase2
         {
             if (sqlAdapter == null)
             {
@@ -37,7 +44,7 @@ namespace ShipWorks.Data.Utility
             }
 
             EntityCollection<T> entities = new EntityCollection<T>();
-            sqlAdapter.FetchEntityCollection(entities, bucket);
+            sqlAdapter.FetchEntityCollection(entities, bucket, maxRowsToReturn);
 
             return entities;
         }
