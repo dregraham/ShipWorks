@@ -36,38 +36,26 @@ namespace ShipWorks.Email.Accounts
         }
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="EmailSettingsSearchResult"/> class.
         /// </summary>
-        public EmailSettingsSearchResult
-            (
-                string smtpHost,
-                int smtpPort,
-                string smtpUsername,
-                string smtpPassword,
-                SmtpSecurity smtpSecurity,
-
-                string incomingHost,
-                EmailIncomingServerType incomingHostType,
-                int incomingPort,
-                string incomingUsername,
-                string incomingPassword,
-                EmailIncomingSecurityType incomingSecurity
-            )
+        /// <param name="smtpResult">The SMTP result.</param>
+        /// <param name="incomingResult">The incoming result.</param>
+        public EmailSettingsSearchResult(SmtpProbeResult smtpResult, IncomingProbeResult incomingResult)
         {
-            this.success = true;
+            success = true;
 
-            this.smtpHost = smtpHost;
-            this.smtpPort = smtpPort;
-            this.smtpUsername = smtpUsername;
-            this.smtpPassword = smtpPassword;
-            this.smtpSecurity = smtpSecurity;
+            smtpHost = smtpResult.Host;
+            smtpPort = smtpResult.Port;
+            smtpUsername = smtpResult.Username;
+            smtpPassword = smtpResult.Password;
+            smtpSecurity = smtpResult.SmtpSecurity;
 
-            this.incomingHost = incomingHost;
-            this.incomingHostType = incomingHostType;
-            this.incomingPort = incomingPort;
-            this.incomingUsername = incomingUsername;
-            this.incomingPassword = incomingPassword;
-            this.incomingSecurity = incomingSecurity;
+            incomingHost = incomingResult.Host;
+            incomingHostType = incomingResult.HostType;
+            incomingPort = incomingResult.Port;
+            incomingUsername = incomingResult.Username;
+            incomingPassword = incomingResult.Password;
+            incomingSecurity = incomingResult.IncomingSecurity;
         }
 
         /// <summary>
