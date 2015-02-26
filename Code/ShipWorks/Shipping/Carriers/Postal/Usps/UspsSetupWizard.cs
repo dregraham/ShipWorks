@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the USPS account.
         /// </summary>
-        protected UspsAccountEntity UspsAccount { get; private set; }
+        public UspsAccountEntity UspsAccount { get; private set; }
 
         /// <summary>
         /// Gets the person control associated with the Stamps.com account.

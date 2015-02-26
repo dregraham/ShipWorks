@@ -68,7 +68,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // The bottom half of Guam are instructions we do not need.
                     if (shipment.ShipCountryCode == "GU" || shipment.ShipStateProvCode == "GU")
                     {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.PrimaryCrop));
+                        // Cropping the envelopes shouldn't occur
+                        Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? CroppingStyles.None : CroppingStyles.PrimaryCrop;
+
+                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
                     }
                     else
                     {

@@ -2,6 +2,8 @@
 DECLARE @UspsShipmentTypeCode INT = 15
 DECLARE @IsUspsConfigured BIT = 0
 DECLARE @IsStampsConfigured BIT = 0
+DECLARE @IsStampsAndUspsExcluded BIT = 0
+DECLARE @Excluded NVARCHAR(45) = ''
 
 -- Check whether Usps is configured
 DECLARE @UspsShipmentTypeCodeString VARCHAR(2)
@@ -9,12 +11,17 @@ SELECT @UspsShipmentTypeCodeString = CAST(@UspsShipmentTypeCode AS VARCHAR(2))
 
 IF EXISTS(SELECT *
 	FROM ShippingSettings 
-	WHERE Configured LIKE '%,' + @UspsShipmentTypeCodeString + ',%'
-		OR Configured LIKE '%,' + @UspsShipmentTypeCodeString
-		OR Configured LIKE @UspsShipmentTypeCodeString + ',%'
-		OR Configured = @UspsShipmentTypeCodeString)
+	WHERE ',' + Configured + ',' LIKE '%,' + @UspsShipmentTypeCodeString + ',%')
 BEGIN
 	SET @IsUspsConfigured = 1
+END
+
+IF EXISTS(SELECT * 
+	FROM ShippingSettings
+	WHERE ',' + Excluded + ',' LIKE '%,' + @UspsShipmentTypeCodeString + ',%' AND
+		  ',' + Excluded + ',' LIKE '%,' + CAST(@StampsShipmentTypeCode AS varchar(2)) + ',%')
+BEGIN
+	SET @IsStampsAndUspsExcluded = 1
 END
 
 -- Check whether Usps is configured
@@ -23,13 +30,11 @@ SELECT @StampsShipmentTypeCodeString = CAST(@StampsShipmentTypeCode AS VARCHAR(2
 
 IF EXISTS(SELECT *
 	FROM ShippingSettings 
-	WHERE Configured LIKE '%,' + @StampsShipmentTypeCodeString + ',%'
-		OR Configured LIKE '%,' + @StampsShipmentTypeCodeString
-		OR Configured LIKE @StampsShipmentTypeCodeString + ',%'
-		OR Configured = @StampsShipmentTypeCodeString)
+	WHERE ',' + Configured + ',' LIKE '%,' + @StampsShipmentTypeCodeString + ',%')
 BEGIN
 	SET @IsStampsConfigured = 1
 END
+
 
 -- Update the default shipment type when Stamps.com is the default. If Usps is configured, set it to Usps else set it to none
 UPDATE ShippingSettings
@@ -38,6 +43,13 @@ UPDATE ShippingSettings
 										THEN ',' + @UspsShipmentTypeCodeString
 										ELSE ''
 									END
+IF(@IsStampsAndUspsExcluded = 0)
+BEGIN
+	SELECT @Excluded = ',' + Excluded + ',' FROM ShippingSettings
+	SELECT @Excluded = REPLACE(@Excluded, ',' + @UspsShipmentTypeCodeString + ',', ',')
+	SELECT @Excluded = SUBSTRING(@Excluded, 2, LEN(@Excluded) - 2)
+	Update ShippingSettings SET Excluded = @Excluded
+END
 
 UPDATE ScanFormBatch
 	SET ShipmentType = @UspsShipmentTypeCode
@@ -94,6 +106,10 @@ BEGIN
 	UPDATE ShippingProfile
 		SET ShipmentType = @UspsShipmentTypeCode 
 		WHERE ShipmentType = @StampsShipmentTypeCode
+
+	UPDATE [Action]
+		SET InternalOwner = REPLACE(InternalOwner, 'Ship3-', 'Ship15-')
+		WHERE InternalOwner LIKE 'Ship3-%'
 END
 ELSE
 BEGIN
@@ -106,4 +122,16 @@ BEGIN
 
 	DELETE FROM ShippingProfile
 		WHERE ShipmentType = @StampsShipmentTypeCode
+
+	-- The USPS shipment type was already setup, so there will be duplicates that can 
+	-- be deleted from the action table otherwise we'll get duplicate print jobs, emails, etc.
+	DELETE FROM [ActionFilterTrigger]
+		WHERE ActionId IN (SELECT ActionID FROM [Action] WHERE InternalOwner LIKE 'Ship3-%')
+
+	DELETE FROM [ActionTask]
+		WHERE ActionId IN (SELECT ActionID FROM [Action] WHERE InternalOwner LIKE 'Ship3-%')
+
+	DELETE FROM [Action]
+		WHERE InternalOwner LIKE 'Ship3-%'
+	
 END
