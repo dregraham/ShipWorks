@@ -49,6 +49,8 @@
             this.labelMemo3 = new System.Windows.Forms.Label();
             this.memo2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelMemo2 = new System.Windows.Forms.Label();
+            this.pictureBoxMemoWarning = new System.Windows.Forms.PictureBox();
+            this.labelMemoWarning = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -59,22 +61,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
+            this.sectionShipment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
             this.panelTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMemoWarning)).BeginInit();
             this.SuspendLayout();
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Location = new System.Drawing.Point(21, 351);
+            this.insuranceControl.Location = new System.Drawing.Point(21, 372);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 496);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 488);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionRecipient
@@ -89,7 +93,6 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(378, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
@@ -111,11 +114,12 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 525);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 517);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionShipment
             // 
+            this.sectionShipment.BackColor = System.Drawing.Color.White;
             // 
             // sectionShipment.ContentPanel
             // 
@@ -129,12 +133,13 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.hidePostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo1);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
-            this.sectionShipment.Size = new System.Drawing.Size(378, 428);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelMemoWarning);
+            this.sectionShipment.ContentPanel.Controls.Add(this.pictureBoxMemoWarning);
+            this.sectionShipment.Size = new System.Drawing.Size(378, 449);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 554);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 546);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionFrom
@@ -149,7 +154,7 @@
             this.sectionFrom.ContentPanel.Controls.Add(this.panelTop);
             this.sectionFrom.ExpandedHeight = 541;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 575);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -247,7 +252,7 @@
             // 
             this.hidePostalLabel.AutoSize = true;
             this.hidePostalLabel.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostalLabel.Location = new System.Drawing.Point(39, 328);
+            this.hidePostalLabel.Location = new System.Drawing.Point(39, 349);
             this.hidePostalLabel.Name = "hidePostalLabel";
             this.hidePostalLabel.Size = new System.Drawing.Size(45, 13);
             this.hidePostalLabel.TabIndex = 19;
@@ -257,7 +262,7 @@
             // 
             this.hidePostage.AutoSize = true;
             this.hidePostage.BackColor = System.Drawing.Color.Transparent;
-            this.hidePostage.Location = new System.Drawing.Point(90, 327);
+            this.hidePostage.Location = new System.Drawing.Point(90, 348);
             this.hidePostage.Name = "hidePostage";
             this.hidePostage.Size = new System.Drawing.Size(89, 17);
             this.hidePostage.TabIndex = 20;
@@ -343,6 +348,25 @@
             this.labelMemo2.Text = "Memo 2:";
             this.labelMemo2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // pictureBoxMemoWarning
+            // 
+            this.pictureBoxMemoWarning.Image = global::ShipWorks.Properties.Resources.exclamation16;
+            this.pictureBoxMemoWarning.Location = new System.Drawing.Point(40, 319);
+            this.pictureBoxMemoWarning.Name = "pictureBoxMemoWarning";
+            this.pictureBoxMemoWarning.Size = new System.Drawing.Size(16, 16);
+            this.pictureBoxMemoWarning.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.pictureBoxMemoWarning.TabIndex = 6;
+            this.pictureBoxMemoWarning.TabStop = false;
+            // 
+            // labelMemoWarning
+            // 
+            this.labelMemoWarning.AutoSize = true;
+            this.labelMemoWarning.Location = new System.Drawing.Point(56, 321);
+            this.labelMemoWarning.Name = "labelMemoWarning";
+            this.labelMemoWarning.Size = new System.Drawing.Size(315, 13);
+            this.labelMemoWarning.TabIndex = 7;
+            this.labelMemoWarning.Text = "Express Mail and International labels do not display memo fields.";
+            // 
             // UspsServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -351,12 +375,12 @@
             this.Controls.Add(this.sectionFrom);
             this.Name = "UspsServiceControl";
             this.Size = new System.Drawing.Size(384, 633);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
@@ -369,6 +393,8 @@
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            this.sectionShipment.ResumeLayout(false);
+            this.sectionShipment.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
@@ -376,6 +402,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMemoWarning)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -400,5 +427,7 @@
         private System.Windows.Forms.Label labelMemo2;
         private Templates.Tokens.TemplateTokenTextBox memo3;
         private System.Windows.Forms.Label labelMemo3;
+        private System.Windows.Forms.PictureBox pictureBoxMemoWarning;
+        private System.Windows.Forms.Label labelMemoWarning;
     }
 }
