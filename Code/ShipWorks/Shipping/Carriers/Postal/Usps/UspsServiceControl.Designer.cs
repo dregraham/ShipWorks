@@ -82,6 +82,10 @@
             // 
             // sectionRecipient.ContentPanel
             // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
@@ -115,6 +119,8 @@
             // 
             // sectionShipment.ContentPanel
             // 
+            this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
+            this.sectionShipment.ContentPanel.Controls.Add(this.service);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo2);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo2);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo3);
@@ -160,7 +166,7 @@
             this.originControl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.originControl.Name = "originControl";
             this.originControl.Size = new System.Drawing.Size(371, 488);
-            this.originControl.TabIndex = 1;
+            this.originControl.TabIndex = 0;
             this.originControl.OriginChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // panelTop
@@ -244,7 +250,7 @@
             this.hidePostalLabel.Location = new System.Drawing.Point(39, 328);
             this.hidePostalLabel.Name = "hidePostalLabel";
             this.hidePostalLabel.Size = new System.Drawing.Size(45, 13);
-            this.hidePostalLabel.TabIndex = 55;
+            this.hidePostalLabel.TabIndex = 19;
             this.hidePostalLabel.Text = "Stealth:";
             // 
             // hidePostage
@@ -254,7 +260,7 @@
             this.hidePostage.Location = new System.Drawing.Point(90, 327);
             this.hidePostage.Name = "hidePostage";
             this.hidePostage.Size = new System.Drawing.Size(89, 17);
-            this.hidePostage.TabIndex = 56;
+            this.hidePostage.TabIndex = 20;
             this.hidePostage.Text = "Hide Postage";
             this.hidePostage.UseVisualStyleBackColor = false;
             // 
@@ -286,7 +292,7 @@
             this.memo1.MaxLength = 32767;
             this.memo1.Name = "memo1";
             this.memo1.Size = new System.Drawing.Size(210, 21);
-            this.memo1.TabIndex = 73;
+            this.memo1.TabIndex = 14;
             this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelMemo1
@@ -295,7 +301,7 @@
             this.labelMemo1.Location = new System.Drawing.Point(30, 241);
             this.labelMemo1.Name = "labelMemo1";
             this.labelMemo1.Size = new System.Drawing.Size(54, 21);
-            this.labelMemo1.TabIndex = 74;
+            this.labelMemo1.TabIndex = 13;
             this.labelMemo1.Text = "Memo 1:";
             this.labelMemo1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -305,7 +311,7 @@
             this.memo3.MaxLength = 32767;
             this.memo3.Name = "memo3";
             this.memo3.Size = new System.Drawing.Size(210, 21);
-            this.memo3.TabIndex = 75;
+            this.memo3.TabIndex = 18;
             this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelMemo3
@@ -314,7 +320,7 @@
             this.labelMemo3.Location = new System.Drawing.Point(31, 295);
             this.labelMemo3.Name = "labelMemo3";
             this.labelMemo3.Size = new System.Drawing.Size(53, 21);
-            this.labelMemo3.TabIndex = 76;
+            this.labelMemo3.TabIndex = 17;
             this.labelMemo3.Text = "Memo 3:";
             this.labelMemo3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -324,7 +330,7 @@
             this.memo2.MaxLength = 32767;
             this.memo2.Name = "memo2";
             this.memo2.Size = new System.Drawing.Size(210, 21);
-            this.memo2.TabIndex = 77;
+            this.memo2.TabIndex = 16;
             this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelMemo2
@@ -333,7 +339,7 @@
             this.labelMemo2.Location = new System.Drawing.Point(35, 268);
             this.labelMemo2.Name = "labelMemo2";
             this.labelMemo2.Size = new System.Drawing.Size(49, 21);
-            this.labelMemo2.TabIndex = 78;
+            this.labelMemo2.TabIndex = 15;
             this.labelMemo2.Text = "Memo 2:";
             this.labelMemo2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
