@@ -14,7 +14,7 @@ using ShipWorks.Properties;
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
 {
     /// <summary>
-    /// Base class for postal reseller brokers, like Stamps and Endicia
+    /// Base class for postal reseller brokers, like Usps and Endicia
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class PostalResellerBestRateBroker<T> : BestRateBroker<T> where T : EntityBase2

@@ -7,7 +7,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore.Licensing
@@ -198,10 +199,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         }
 
         /// <summary>
-        /// Sends Stamps.com account info to Tango.
+        /// Sends Usps account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        public virtual void LogStampsAccount(StampsAccountEntity account)
+        public virtual void LogUspsAccount(UspsAccountEntity account)
         {
             // Send licenses for each distinct customer ID of the enabled stores. This could take a couple of seconds 
             // depending on the number of stores. May want to look into caching this information, but that could result
@@ -215,9 +216,9 @@ namespace ShipWorks.ApplicationCore.Licensing
             foreach (LicenseAccountDetail license in licensesForLogging)
             {
                 TangoWebClient.LogStampsAccount(license,
-                                                PostalUtility.GetStampsShipmentTypeForStampsResellerType((StampsResellerType) account.StampsReseller).ShipmentTypeCode,
+                                                PostalUtility.GetUspsShipmentTypeForUspsResellerType((UspsResellerType) account.UspsReseller).ShipmentTypeCode,
                                                 account.Username,
-                                                (StampsAccountContractType) account.ContractType);
+                                                (UspsAccountContractType)account.ContractType);
             }
         }
     }

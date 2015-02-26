@@ -33,13 +33,13 @@
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
             this.rateShop = new System.Windows.Forms.CheckBox();
-            this.linkManageStampsAccounts = new ShipWorks.UI.Controls.LinkControl();
+            this.linkManageUspsAccounts = new ShipWorks.UI.Controls.LinkControl();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.stampsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
+            this.uspsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.hidePostalLabel = new System.Windows.Forms.Label();
             this.hidePostage = new System.Windows.Forms.CheckBox();
-            this.labelStampsValidation = new System.Windows.Forms.Label();
+            this.labelUspsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
             this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
             this.labelMemo = new System.Windows.Forms.Label();
@@ -74,7 +74,7 @@
             // 
             // sectionRecipient.ContentPanel
             // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelStampsValidation);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
@@ -154,10 +154,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelTop.BackColor = System.Drawing.Color.Transparent;
             this.panelTop.Controls.Add(this.rateShop);
-            this.panelTop.Controls.Add(this.linkManageStampsAccounts);
+            this.panelTop.Controls.Add(this.linkManageUspsAccounts);
             this.panelTop.Controls.Add(this.label2);
             this.panelTop.Controls.Add(this.label1);
-            this.panelTop.Controls.Add(this.stampsAccount);
+            this.panelTop.Controls.Add(this.uspsAccount);
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(371, 73);
@@ -175,19 +175,19 @@
             this.rateShop.UseVisualStyleBackColor = false;
             this.rateShop.CheckedChanged += new System.EventHandler(this.OnRateShopChanged);
             // 
-            // linkManageStampsAccounts
+            // linkManageUspsAccounts
             // 
-            this.linkManageStampsAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkManageStampsAccounts.AutoSize = true;
-            this.linkManageStampsAccounts.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.linkManageStampsAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkManageStampsAccounts.ForeColor = System.Drawing.Color.Blue;
-            this.linkManageStampsAccounts.Location = new System.Drawing.Point(300, 51);
-            this.linkManageStampsAccounts.Name = "linkManageStampsAccounts";
-            this.linkManageStampsAccounts.Size = new System.Drawing.Size(57, 13);
-            this.linkManageStampsAccounts.TabIndex = 5;
-            this.linkManageStampsAccounts.Text = "Manage...";
-            this.linkManageStampsAccounts.Click += new System.EventHandler(this.OnManageStampsAccounts);
+            this.linkManageUspsAccounts.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkManageUspsAccounts.AutoSize = true;
+            this.linkManageUspsAccounts.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.linkManageUspsAccounts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkManageUspsAccounts.ForeColor = System.Drawing.Color.Blue;
+            this.linkManageUspsAccounts.Location = new System.Drawing.Point(300, 51);
+            this.linkManageUspsAccounts.Name = "linkManageUspsAccounts";
+            this.linkManageUspsAccounts.Size = new System.Drawing.Size(57, 13);
+            this.linkManageUspsAccounts.TabIndex = 5;
+            this.linkManageUspsAccounts.Text = "Manage...";
+            this.linkManageUspsAccounts.Click += new System.EventHandler(this.OnManageUspsAccounts);
             // 
             // label2
             // 
@@ -209,18 +209,18 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "USPS";
             // 
-            // stampsAccount
+            // uspsAccount
             // 
-            this.stampsAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.uspsAccount.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.stampsAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.stampsAccount.FormattingEnabled = true;
-            this.stampsAccount.Location = new System.Drawing.Point(79, 48);
-            this.stampsAccount.Name = "stampsAccount";
-            this.stampsAccount.PromptText = "(Multiple Values)";
-            this.stampsAccount.Size = new System.Drawing.Size(215, 21);
-            this.stampsAccount.TabIndex = 3;
-            this.stampsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
+            this.uspsAccount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.uspsAccount.FormattingEnabled = true;
+            this.uspsAccount.Location = new System.Drawing.Point(79, 48);
+            this.uspsAccount.Name = "uspsAccount";
+            this.uspsAccount.PromptText = "(Multiple Values)";
+            this.uspsAccount.Size = new System.Drawing.Size(215, 21);
+            this.uspsAccount.TabIndex = 3;
+            this.uspsAccount.SelectedValueChanged += new System.EventHandler(this.OnOriginChanged);
             // 
             // hidePostalLabel
             // 
@@ -243,16 +243,16 @@
             this.hidePostage.Text = "Hide Postage";
             this.hidePostage.UseVisualStyleBackColor = false;
             // 
-            // labelStampsValidation
+            // labelUspsValidation
             // 
-            this.labelStampsValidation.AutoSize = true;
-            this.labelStampsValidation.BackColor = System.Drawing.Color.Transparent;
-            this.labelStampsValidation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelStampsValidation.Location = new System.Drawing.Point(7, 336);
-            this.labelStampsValidation.Name = "labelStampsValidation";
-            this.labelStampsValidation.Size = new System.Drawing.Size(136, 13);
-            this.labelStampsValidation.TabIndex = 72;
-            this.labelStampsValidation.Text = "USPS Validation";
+            this.labelUspsValidation.AutoSize = true;
+            this.labelUspsValidation.BackColor = System.Drawing.Color.Transparent;
+            this.labelUspsValidation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelUspsValidation.Location = new System.Drawing.Point(7, 336);
+            this.labelUspsValidation.Name = "labelUspsValidation";
+            this.labelUspsValidation.Size = new System.Drawing.Size(136, 13);
+            this.labelUspsValidation.TabIndex = 72;
+            this.labelUspsValidation.Text = "USPS Validation";
             // 
             // requireFullAddressValidation
             // 
@@ -324,12 +324,12 @@
 
         private ShipWorks.UI.Controls.CollapsibleGroupControl sectionFrom;
         private ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl originControl;
-        private ShipWorks.UI.Controls.MultiValueComboBox stampsAccount;
+        private ShipWorks.UI.Controls.MultiValueComboBox uspsAccount;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelTop;
         private System.Windows.Forms.Label label2;
-        private ShipWorks.UI.Controls.LinkControl linkManageStampsAccounts;
-        private System.Windows.Forms.Label labelStampsValidation;
+        private ShipWorks.UI.Controls.LinkControl linkManageUspsAccounts;
+        private System.Windows.Forms.Label labelUspsValidation;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
         private Templates.Tokens.TemplateTokenTextBox memo;
         private System.Windows.Forms.Label labelMemo;

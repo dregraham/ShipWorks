@@ -419,18 +419,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ShopSiteStoreEntity");
 					break;
-				case ShipWorks.Data.Model.EntityType.StampsAccountEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StampsAccountEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsProfileEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StampsProfileEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsScanFormEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StampsScanFormEntity");
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsShipmentEntity:
-					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StampsShipmentEntity");
-					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "StatusPresetEntity");
 					break;
@@ -484,6 +472,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UserSettingsEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsAccountEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UspsAccountEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsProfileEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UspsProfileEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsScanFormEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UspsScanFormEntity");
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsShipmentEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UspsShipmentEntity");
 					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "VersionSignoffEntity");

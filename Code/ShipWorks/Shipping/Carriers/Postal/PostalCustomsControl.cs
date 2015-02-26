@@ -14,7 +14,7 @@ using ShipWorks.Data.Model.EntityClasses;
 namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
-    /// Stamps.com specific customs stuff
+    /// USPS specific customs stuff
     /// </summary>
     public partial class PostalCustomsControl : CustomsControlBase
     {

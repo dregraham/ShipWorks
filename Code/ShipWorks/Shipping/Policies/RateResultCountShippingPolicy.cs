@@ -68,8 +68,8 @@ namespace ShipWorks.Shipping.Policies
 
             if (rateControl != null)
             {
-                rateControl.ShowAllRates = false;
                 rateControl.RestrictedRateCount = RateResultQuantity;
+                rateControl.TryCollapseRateResults();
 
                 // Tell the control that we only want to show a single rate 
                 // when the count is 1 (i.e. don't show the "more" rates link)

@@ -136,7 +136,7 @@ namespace ShipWorks.Shipping.Settings
             settings.ConfiguredTypes = new int[0];
 
             // Only want to show the single USPS provider by default
-            settings.ExcludedTypes = new int[] { (int) ShipmentTypeCode.Endicia, (int) ShipmentTypeCode.Express1Endicia, (int) ShipmentTypeCode.Express1Stamps, (int) ShipmentTypeCode.PostalWebTools, (int) ShipmentTypeCode.Stamps, (int) ShipmentTypeCode.iParcel, (int) ShipmentTypeCode.OnTrac };
+            settings.ExcludedTypes = new int[] { (int) ShipmentTypeCode.Endicia, (int) ShipmentTypeCode.Express1Endicia, (int) ShipmentTypeCode.Express1Usps, (int) ShipmentTypeCode.PostalWebTools, (int) ShipmentTypeCode.iParcel, (int) ShipmentTypeCode.OnTrac };
             settings.DefaultType = (int) ShipmentTypeCode.None;
 
             settings.BlankPhoneOption = (int) ShipmentBlankPhoneOption.ShipperPhone;
@@ -164,8 +164,6 @@ namespace ShipWorks.Shipping.Settings
             settings.EndiciaAutomaticExpress1 = false;
             settings.EndiciaAutomaticExpress1Account = 0;
             settings.EndiciaInsuranceProvider = (int) InsuranceProvider.ShipWorks;
-            settings.EndiciaUspsAutomaticExpedited = false;
-            settings.EndiciaUspsAutomaticExpeditedAccount = 0;
 
             settings.Express1EndiciaCustomsCertify = false;
             settings.Express1EndiciaCustomsSigner = "";
@@ -173,15 +171,13 @@ namespace ShipWorks.Shipping.Settings
             settings.Express1EndiciaThermalDocTabType = (int)ThermalDocTabType.Leading;
             settings.Express1EndiciaSingleSource = false;
 
-            settings.Express1StampsSingleSource = false;
+            settings.Express1UspsSingleSource = false;
 
             settings.WorldShipLaunch = false;
             settings.UpsMailInnovationsEnabled = false;
 
-            settings.StampsAutomaticExpress1 = false;
-            settings.StampsAutomaticExpress1Account = 0;
-            settings.StampsUspsAutomaticExpedited = false;
-            settings.StampsUspsAutomaticExpeditedAccount = 0;
+            settings.UspsAutomaticExpress1 = false;
+            settings.UspsAutomaticExpress1Account = 0;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

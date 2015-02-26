@@ -107,8 +107,8 @@ namespace ShipWorks.Data.Utility
 
         PostalCustomsDescription,
 
-        StampsUsername,
-        StampsPassword,
+        UspsUsername,
+        UspsPassword,
 
         EndiciaAccountDescription,
 

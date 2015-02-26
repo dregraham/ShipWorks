@@ -66,7 +66,7 @@
             this.signUpForExpeditedControl.HeaderText = "Postage Discount";
             this.signUpForExpeditedControl.Location = new System.Drawing.Point(3, 12);
             this.signUpForExpeditedControl.Name = "signUpForExpeditedControl";
-            this.signUpForExpeditedControl.Size = new System.Drawing.Size(425, 182);
+            this.signUpForExpeditedControl.Size = new System.Drawing.Size(425, 207);
             this.signUpForExpeditedControl.TabIndex = 0;
             this.signUpForExpeditedControl.UseExpeditedOptionText = "Automatically save postage costs on domestic and international Priority and Expre" +
     "ss shipments:";

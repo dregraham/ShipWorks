@@ -112,9 +112,9 @@ namespace ShipWorks.ApplicationCore.Licensing
         void LogNudgeOption(NudgeOption option);
 
         /// <summary>
-        /// Sends Stamps.com account info to Tango.
+        /// Sends USPS account info to Tango.
         /// </summary>
         /// <param name="account">The account.</param>
-        void LogStampsAccount(StampsAccountEntity account);
+        void LogUspsAccount(UspsAccountEntity account);
     }
 }

@@ -199,7 +199,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.EmailPassword:
                 case EntityFieldLengthSource.AmazonSellerPassword:
                 case EntityFieldLengthSource.GenericPassword:
-                case EntityFieldLengthSource.StampsPassword:
+                case EntityFieldLengthSource.UspsPassword:
                 case EntityFieldLengthSource.EndiciaWebPassword:
                 case EntityFieldLengthSource.EndiciaApiPassword:
                 case EntityFieldLengthSource.OrderPaymentDetailValue:
@@ -311,8 +311,8 @@ namespace ShipWorks.Data.Utility
 
                 case EntityFieldLengthSource.PostalCustomsDescription: return PostalShipmentFields.CustomsContentDescription;
 
-                case EntityFieldLengthSource.StampsUsername: return StampsAccountFields.Username;
-                case EntityFieldLengthSource.StampsPassword: return StampsAccountFields.Password;
+                case EntityFieldLengthSource.UspsUsername: return UspsAccountFields.Username;
+                case EntityFieldLengthSource.UspsPassword: return UspsAccountFields.Password;
 
                 case EntityFieldLengthSource.EndiciaAccountDescription: return EndiciaAccountFields.Description;
                 case EntityFieldLengthSource.EndiciaCustomsSigner: return ShippingSettingsFields.EndiciaCustomsSigner;

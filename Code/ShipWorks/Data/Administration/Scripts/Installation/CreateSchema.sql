@@ -3090,28 +3090,28 @@ PRINT N'Creating primary key [PK_ShopifyStore] on [dbo].[ShopifyStore]'
 GO
 ALTER TABLE [dbo].[ShopifyStore] ADD CONSTRAINT [PK_ShopifyStore] PRIMARY KEY CLUSTERED  ([StoreID])
 GO
-PRINT N'Creating [dbo].[StampsProfile]'
+PRINT N'Creating [dbo].[UspsProfile]'
 GO
-CREATE TABLE [dbo].[StampsProfile]
+CREATE TABLE [dbo].[UspsProfile]
 (
 [ShippingProfileID] [bigint] NOT NULL,
-[StampsAccountID] [bigint] NULL,
+[UspsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RateShop] [bit] NULL
 )
 GO
-PRINT N'Creating primary key [PK_StampsProfile] on [dbo].[StampsProfile]'
+PRINT N'Creating primary key [PK_UspsProfile] on [dbo].[UspsProfile]'
 GO
-ALTER TABLE [dbo].[StampsProfile] ADD CONSTRAINT [PK_StampsProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
+ALTER TABLE [dbo].[UspsProfile] ADD CONSTRAINT [PK_UspsProfile] PRIMARY KEY CLUSTERED  ([ShippingProfileID])
 GO
-PRINT N'Creating [dbo].[StampsScanForm]'
+PRINT N'Creating [dbo].[UspsScanForm]'
 GO
-CREATE TABLE [dbo].[StampsScanForm]
+CREATE TABLE [dbo].[UspsScanForm]
 (
-[StampsScanFormID] [bigint] NOT NULL IDENTITY(1072, 1000),
-[StampsAccountID] [bigint] NOT NULL,
+[UspsScanFormID] [bigint] NOT NULL IDENTITY(1072, 1000),
+[UspsAccountID] [bigint] NOT NULL,
 [ScanFormTransactionID] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ScanFormUrl] [varchar] (2048) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [CreatedDate] [datetime] NOT NULL,
@@ -3119,30 +3119,30 @@ CREATE TABLE [dbo].[StampsScanForm]
 [Description] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_StampsScanForm] on [dbo].[StampsScanForm]'
+PRINT N'Creating primary key [PK_UspsScanForm] on [dbo].[UspsScanForm]'
 GO
-ALTER TABLE [dbo].[StampsScanForm] ADD CONSTRAINT [PK_StampsScanForm] PRIMARY KEY CLUSTERED  ([StampsScanFormID])
+ALTER TABLE [dbo].[UspsScanForm] ADD CONSTRAINT [PK_UspsScanForm] PRIMARY KEY CLUSTERED  ([UspsScanFormID])
 GO
-PRINT N'Creating [dbo].[StampsShipment]'
+PRINT N'Creating [dbo].[UspsShipment]'
 GO
-CREATE TABLE [dbo].[StampsShipment]
+CREATE TABLE [dbo].[UspsShipment]
 (
 [ShipmentID] [bigint] NOT NULL,
-[StampsAccountID] [bigint] NOT NULL,
+[UspsAccountID] [bigint] NOT NULL,
 [HidePostage] [bit] NOT NULL,
 [RequireFullAddressValidation] [bit] NOT NULL,
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
-[StampsTransactionID] [uniqueidentifier] NOT NULL,
+[UspsTransactionID] [uniqueidentifier] NOT NULL,
 [Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[OriginalStampsAccountID] [bigint] NULL,
+[OriginalUspsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,
 [RateShop] [bit] NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_StampsShipment] on [dbo].[StampsShipment]'
+PRINT N'Creating primary key [PK_UspsShipment] on [dbo].[UspsShipment]'
 GO
-ALTER TABLE [dbo].[StampsShipment] ADD CONSTRAINT [PK_StampsShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
+ALTER TABLE [dbo].[UspsShipment] ADD CONSTRAINT [PK_UspsShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
 GO
 PRINT N'Creating [dbo].[StatusPreset]'
 GO
@@ -4426,13 +4426,9 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1] [bit] NOT NULL,
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
-[EndiciaUspsAutomaticExpedited] [bit] NOT NULL,
-[EndiciaUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
-[StampsAutomaticExpress1] [bit] NOT NULL,
-[StampsAutomaticExpress1Account] [bigint] NOT NULL,
-[StampsUspsAutomaticExpedited] [bit] NOT NULL,
-[StampsUspsAutomaticExpeditedAccount] [bigint] NOT NULL,
+[UspsAutomaticExpress1] [bit] NOT NULL,
+[UspsAutomaticExpress1Account] [bigint] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
@@ -4442,7 +4438,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [OnTracInsurancePennyOne] [bit] NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
-[Express1StampsSingleSource] [bit] NOT NULL,
+[Express1UspsSingleSource] [bit] NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,
 [BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -4469,11 +4465,11 @@ PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnow
 GO
 ALTER TABLE [dbo].[ShipSenseKnowledgeBase] ADD CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED  ([Hash])
 GO
-PRINT N'Creating [dbo].[StampsAccount]'
+PRINT N'Creating [dbo].[UspsAccount]'
 GO
-CREATE TABLE [dbo].[StampsAccount]
+CREATE TABLE [dbo].[UspsAccount]
 (
-[StampsAccountID] [bigint] NOT NULL IDENTITY(1052, 1000),
+[UspsAccountID] [bigint] NOT NULL IDENTITY(1052, 1000),
 [RowVersion] [timestamp] NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
@@ -4492,16 +4488,16 @@ CREATE TABLE [dbo].[StampsAccount]
 [Email] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Website] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [MailingPostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[StampsReseller] [int] NOT NULL,
+[UspsReseller] [int] NOT NULL,
 [ContractType] [int] NOT NULL,
 [CreatedDate] [datetime] NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_PostalStampsAccount] on [dbo].[StampsAccount]'
+PRINT N'Creating primary key [PK_PostalUspsAccount] on [dbo].[UspsAccount]'
 GO
-ALTER TABLE [dbo].[StampsAccount] ADD CONSTRAINT [PK_PostalStampsAccount] PRIMARY KEY CLUSTERED  ([StampsAccountID])
+ALTER TABLE [dbo].[UspsAccount] ADD CONSTRAINT [PK_PostalUspsAccount] PRIMARY KEY CLUSTERED  ([UspsAccountID])
 GO
-ALTER TABLE [dbo].[StampsAccount] ENABLE CHANGE_TRACKING
+ALTER TABLE [dbo].[UspsAccount] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[SystemData]'
 GO
@@ -4601,7 +4597,7 @@ PRINT N'Altering [dbo].[ShippingOrigin]'
 GO
 PRINT N'Altering [dbo].[ShippingProviderRule]'
 GO
-PRINT N'Altering [dbo].[StampsAccount]'
+PRINT N'Altering [dbo].[UspsAccount]'
 GO
 PRINT N'Altering [dbo].[UpsAccount]'
 GO
@@ -5026,26 +5022,26 @@ PRINT N'Adding foreign keys to [dbo].[PostalProfile]'
 GO
 ALTER TABLE [dbo].[PostalProfile] ADD CONSTRAINT [FK_PostalProfile_ShippingProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[ShippingProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[StampsProfile]'
+PRINT N'Adding foreign keys to [dbo].[UspsProfile]'
 GO
-ALTER TABLE [dbo].[StampsProfile] ADD CONSTRAINT [FK_StampsProfile_PostalProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[PostalProfile] ([ShippingProfileID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[UspsProfile] ADD CONSTRAINT [FK_UspsProfile_PostalProfile] FOREIGN KEY ([ShippingProfileID]) REFERENCES [dbo].[PostalProfile] ([ShippingProfileID]) ON DELETE CASCADE
 GO
 PRINT N'Adding foreign keys to [dbo].[PostalShipment]'
 GO
 ALTER TABLE [dbo].[PostalShipment] ADD CONSTRAINT [FK_PostalShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
-PRINT N'Adding foreign keys to [dbo].[StampsShipment]'
+PRINT N'Adding foreign keys to [dbo].[UspsShipment]'
 GO
-ALTER TABLE [dbo].[StampsShipment] ADD CONSTRAINT [FK_StampsShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE
-ALTER TABLE [dbo].[StampsShipment] ADD CONSTRAINT [FK_StampsShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
+ALTER TABLE [dbo].[UspsShipment] ADD CONSTRAINT [FK_UspsShipment_PostalShipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[PostalShipment] ([ShipmentID]) ON DELETE CASCADE
+ALTER TABLE [dbo].[UspsShipment] ADD CONSTRAINT [FK_UspsShipment_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
 GO
 PRINT N'Adding foreign keys to [dbo].[ProStoresStore]'
 GO
 ALTER TABLE [dbo].[ProStoresStore] ADD CONSTRAINT [FK_ProStoresStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
-PRINT N'Adding foreign keys to [dbo].[StampsScanForm]'
+PRINT N'Adding foreign keys to [dbo].[UspsScanForm]'
 GO
-ALTER TABLE [dbo].[StampsScanForm] ADD CONSTRAINT [FK_StampsScanForm_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
+ALTER TABLE [dbo].[UspsScanForm] ADD CONSTRAINT [FK_UspsScanForm_ScanFormBatch] FOREIGN KEY ([ScanFormBatchID]) REFERENCES [dbo].[ScanFormBatch] ([ScanFormBatchID])
 GO
 PRINT N'Adding foreign keys to [dbo].[Scheduling_CRON_TRIGGERS]'
 GO
@@ -5650,11 +5646,11 @@ EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'S
 GO
 EXEC sp_addextendedproperty N'AuditName', N'Shop Name', 'SCHEMA', N'dbo', 'TABLE', N'ShopifyStore', 'COLUMN', N'ShopifyShopUrlName'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'StampsShipment', 'COLUMN', N'IntegratorTransactionID'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UspsShipment', 'COLUMN', N'IntegratorTransactionID'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'StampsShipment', 'COLUMN', N'StampsAccountID'
+EXEC sp_addextendedproperty N'AuditFormat', N'4', 'SCHEMA', N'dbo', 'TABLE', N'UspsShipment', 'COLUMN', N'UspsAccountID'
 GO
-EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'StampsShipment', 'COLUMN', N'StampsTransactionID'
+EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'UspsShipment', 'COLUMN', N'UspsTransactionID'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'ThreeDCartStore', 'COLUMN', N'ApiUserKey'
 GO

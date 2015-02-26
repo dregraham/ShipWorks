@@ -30,7 +30,7 @@ namespace ShipWorks.ApplicationCore.Options
         {
             this.sectionShipping = new ShipWorks.UI.Controls.SectionTitle();
             this.postalWebTestServer = new System.Windows.Forms.CheckBox();
-            this.stampsTestServer = new System.Windows.Forms.CheckBox();
+            this.uspsTestServer = new System.Windows.Forms.CheckBox();
             this.fedexTestServer = new System.Windows.Forms.CheckBox();
             this.upsOnLineTools = new System.Windows.Forms.CheckBox();
             this.sectionDatabase = new ShipWorks.UI.Controls.SectionTitle();
@@ -62,7 +62,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.onTracTestServer = new System.Windows.Forms.CheckBox();
             this.newegg = new System.Windows.Forms.CheckBox();
             this.endiciaTestServers = new System.Windows.Forms.ComboBox();
-            this.express1StampsTestServer = new System.Windows.Forms.CheckBox();
+            this.express1UspsTestServer = new System.Windows.Forms.CheckBox();
             this.labelInsurance = new System.Windows.Forms.Label();
             this.useInsureShipTestServer = new System.Windows.Forms.CheckBox();
             this.panelBuyDotCom.SuspendLayout();
@@ -88,15 +88,15 @@ namespace ShipWorks.ApplicationCore.Options
             this.postalWebTestServer.Text = "USPS (w/o Postage)";
             this.postalWebTestServer.UseVisualStyleBackColor = true;
             // 
-            // stampsTestServer
+            // uspsTestServer
             // 
-            this.stampsTestServer.AutoSize = true;
-            this.stampsTestServer.Location = new System.Drawing.Point(46, 83);
-            this.stampsTestServer.Name = "stampsTestServer";
-            this.stampsTestServer.Size = new System.Drawing.Size(120, 17);
-            this.stampsTestServer.TabIndex = 3;
-            this.stampsTestServer.Text = "USPS (Stamps.com)";
-            this.stampsTestServer.UseVisualStyleBackColor = true;
+            this.uspsTestServer.AutoSize = true;
+            this.uspsTestServer.Location = new System.Drawing.Point(46, 83);
+            this.uspsTestServer.Name = "uspsTestServer";
+            this.uspsTestServer.Size = new System.Drawing.Size(120, 17);
+            this.uspsTestServer.TabIndex = 3;
+            this.uspsTestServer.Text = "USPS";
+            this.uspsTestServer.UseVisualStyleBackColor = true;
             // 
             // fedexTestServer
             // 
@@ -413,15 +413,15 @@ namespace ShipWorks.ApplicationCore.Options
             this.endiciaTestServers.Size = new System.Drawing.Size(213, 21);
             this.endiciaTestServers.TabIndex = 32;
             // 
-            // express1StampsTestServer
+            // express1UspsTestServer
             // 
-            this.express1StampsTestServer.AutoSize = true;
-            this.express1StampsTestServer.Location = new System.Drawing.Point(46, 169);
-            this.express1StampsTestServer.Name = "express1StampsTestServer";
-            this.express1StampsTestServer.Size = new System.Drawing.Size(174, 17);
-            this.express1StampsTestServer.TabIndex = 34;
-            this.express1StampsTestServer.Text = "USPS (Express1 - Stamps.com)";
-            this.express1StampsTestServer.UseVisualStyleBackColor = true;
+            this.express1UspsTestServer.AutoSize = true;
+            this.express1UspsTestServer.Location = new System.Drawing.Point(46, 169);
+            this.express1UspsTestServer.Name = "express1UspsTestServer";
+            this.express1UspsTestServer.Size = new System.Drawing.Size(174, 17);
+            this.express1UspsTestServer.TabIndex = 34;
+            this.express1UspsTestServer.Text = "USPS (Express1 - USPS)";
+            this.express1UspsTestServer.UseVisualStyleBackColor = true;
             // 
             // labelInsurance
             // 
@@ -450,7 +450,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.useInsureShipTestServer);
             this.Controls.Add(this.labelInsurance);
-            this.Controls.Add(this.express1StampsTestServer);
+            this.Controls.Add(this.express1UspsTestServer);
             this.Controls.Add(this.sectionBuyDotCom);
             this.Controls.Add(this.endiciaTestServers);
             this.Controls.Add(this.onTracTestServer);
@@ -481,7 +481,7 @@ namespace ShipWorks.ApplicationCore.Options
             this.Controls.Add(this.sectionDatabase);
             this.Controls.Add(this.upsOnLineTools);
             this.Controls.Add(this.fedexTestServer);
-            this.Controls.Add(this.stampsTestServer);
+            this.Controls.Add(this.uspsTestServer);
             this.Controls.Add(this.postalWebTestServer);
             this.Controls.Add(this.sectionShipping);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -498,7 +498,7 @@ namespace ShipWorks.ApplicationCore.Options
 
         private ShipWorks.UI.Controls.SectionTitle sectionShipping;
         private System.Windows.Forms.CheckBox postalWebTestServer;
-        private System.Windows.Forms.CheckBox stampsTestServer;
+        private System.Windows.Forms.CheckBox uspsTestServer;
         private System.Windows.Forms.CheckBox fedexTestServer;
         private System.Windows.Forms.CheckBox upsOnLineTools;
         private ShipWorks.UI.Controls.SectionTitle sectionDatabase;
@@ -530,7 +530,7 @@ namespace ShipWorks.ApplicationCore.Options
         private System.Windows.Forms.CheckBox onTracTestServer;
         private System.Windows.Forms.CheckBox newegg;
         private System.Windows.Forms.ComboBox endiciaTestServers;
-        private System.Windows.Forms.CheckBox express1StampsTestServer;
+        private System.Windows.Forms.CheckBox express1UspsTestServer;
         private System.Windows.Forms.Label labelInsurance;
         private System.Windows.Forms.CheckBox useInsureShipTestServer;
     }

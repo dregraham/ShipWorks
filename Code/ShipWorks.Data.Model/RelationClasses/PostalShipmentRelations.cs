@@ -33,7 +33,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 			toReturn.Add(this.EndiciaShipmentEntityUsingShipmentID);
 			toReturn.Add(this.ShipmentEntityUsingShipmentID);
-			toReturn.Add(this.StampsShipmentEntityUsingShipmentID);
+			toReturn.Add(this.UspsShipmentEntityUsingShipmentID);
 
 			return toReturn;
 		}
@@ -79,21 +79,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between PostalShipmentEntity and StampsShipmentEntity over the 1:1 relation they have, using the relation between the fields:
-		/// PostalShipment.ShipmentID - StampsShipment.ShipmentID
+		/// <summary>Returns a new IEntityRelation object, between PostalShipmentEntity and UspsShipmentEntity over the 1:1 relation they have, using the relation between the fields:
+		/// PostalShipment.ShipmentID - UspsShipment.ShipmentID
 		/// </summary>
-		public virtual IEntityRelation StampsShipmentEntityUsingShipmentID
+		public virtual IEntityRelation UspsShipmentEntityUsingShipmentID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Stamps", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Usps", true);
 
-				relation.AddEntityFieldPair(PostalShipmentFields.ShipmentID, StampsShipmentFields.ShipmentID);
+				relation.AddEntityFieldPair(PostalShipmentFields.ShipmentID, UspsShipmentFields.ShipmentID);
 
 
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PostalShipmentEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsShipmentEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UspsShipmentEntity", false);
 				return relation;
 			}
 		}

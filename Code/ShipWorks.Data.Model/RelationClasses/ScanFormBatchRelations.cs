@@ -32,8 +32,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 			toReturn.Add(this.EndiciaScanFormEntityUsingScanFormBatchID);
 			toReturn.Add(this.EndiciaShipmentEntityUsingScanFormBatchID);
-			toReturn.Add(this.StampsScanFormEntityUsingScanFormBatchID);
-			toReturn.Add(this.StampsShipmentEntityUsingScanFormBatchID);
+			toReturn.Add(this.UspsScanFormEntityUsingScanFormBatchID);
+			toReturn.Add(this.UspsShipmentEntityUsingScanFormBatchID);
 
 
 			return toReturn;
@@ -71,32 +71,32 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and StampsScanFormEntity over the 1:n relation they have, using the relation between the fields:
-		/// ScanFormBatch.ScanFormBatchID - StampsScanForm.ScanFormBatchID
+		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and UspsScanFormEntity over the 1:n relation they have, using the relation between the fields:
+		/// ScanFormBatch.ScanFormBatchID - UspsScanForm.ScanFormBatchID
 		/// </summary>
-		public virtual IEntityRelation StampsScanFormEntityUsingScanFormBatchID
+		public virtual IEntityRelation UspsScanFormEntityUsingScanFormBatchID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "StampsScanForms" , true);
-				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, StampsScanFormFields.ScanFormBatchID);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UspsScanForms" , true);
+				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, UspsScanFormFields.ScanFormBatchID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsScanFormEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UspsScanFormEntity", false);
 				return relation;
 			}
 		}
 
-		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and StampsShipmentEntity over the 1:n relation they have, using the relation between the fields:
-		/// ScanFormBatch.ScanFormBatchID - StampsShipment.ScanFormBatchID
+		/// <summary>Returns a new IEntityRelation object, between ScanFormBatchEntity and UspsShipmentEntity over the 1:n relation they have, using the relation between the fields:
+		/// ScanFormBatch.ScanFormBatchID - UspsShipment.ScanFormBatchID
 		/// </summary>
-		public virtual IEntityRelation StampsShipmentEntityUsingScanFormBatchID
+		public virtual IEntityRelation UspsShipmentEntityUsingScanFormBatchID
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "StampsShipment" , true);
-				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, StampsShipmentFields.ScanFormBatchID);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "UspsShipment" , true);
+				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, UspsShipmentFields.ScanFormBatchID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsShipmentEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("UspsShipmentEntity", false);
 				return relation;
 			}
 		}
