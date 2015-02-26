@@ -146,7 +146,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             shipment.Postal.Memo1 = Memo;
             shipment.Postal.Usps.RequireFullAddressValidation = Convert.ToInt16(RequireFullAddressValidation) == 1;
             shipment.Postal.Usps.HidePostage = Convert.ToInt16(HidePostage) == 1;
-            shipment.Postal.Usps.UspsAccountID = Convert.ToInt16(UspsAccountID);
+            shipment.Postal.Usps.UspsAccountID = Convert.ToInt64(UspsAccountID);
 
             // Save the record
             using (SqlAdapter adapter = new SqlAdapter(true))

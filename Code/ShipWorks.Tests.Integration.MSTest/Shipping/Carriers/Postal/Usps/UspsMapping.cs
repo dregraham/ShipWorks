@@ -78,7 +78,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DimsAddWeight", PropertyName = "DimsAddWeight", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "DimsWeight", PropertyName = "DimsWeight", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ScanFormBatchID", PropertyName = "ScanFormBatchID", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Memo", PropertyName = "Memo", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Memo", PropertyName = "Memo1", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Memo2", PropertyName = "Memo2", SpreadsheetColumnIndex = -1 });
+                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Memo3", PropertyName = "Memo3", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequireFullAddressValidation", PropertyName = "RequireFullAddressValidation", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "HidePostage", PropertyName = "HidePostage", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "UspsAccountID", PropertyName = "UspsAccountID", SpreadsheetColumnIndex = -1 });
