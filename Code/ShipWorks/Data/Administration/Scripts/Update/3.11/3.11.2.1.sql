@@ -106,6 +106,10 @@ BEGIN
 	UPDATE ShippingProfile
 		SET ShipmentType = @UspsShipmentTypeCode 
 		WHERE ShipmentType = @StampsShipmentTypeCode
+
+	UPDATE [Action]
+		SET InternalOwner = REPLACE(InternalOwner, 'Ship3-', 'Ship15-')
+		WHERE InternalOwner LIKE 'Ship3-%'
 END
 ELSE
 BEGIN
@@ -118,4 +122,16 @@ BEGIN
 
 	DELETE FROM ShippingProfile
 		WHERE ShipmentType = @StampsShipmentTypeCode
+
+	-- The USPS shipment type was already setup, so there will be duplicates that can 
+	-- be deleted from the action table otherwise we'll get duplicate print jobs, emails, etc.
+	DELETE FROM [ActionFilterTrigger]
+		WHERE ActionId IN (SELECT ActionID FROM [Action] WHERE InternalOwner LIKE 'Ship3-%')
+
+	DELETE FROM [ActionTask]
+		WHERE ActionId IN (SELECT ActionID FROM [Action] WHERE InternalOwner LIKE 'Ship3-%')
+
+	DELETE FROM [Action]
+		WHERE InternalOwner LIKE 'Ship3-%'
+	
 END
