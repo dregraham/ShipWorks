@@ -336,6 +336,7 @@
     <Compile Include="Shipping\Carriers\Postal\Endicia\EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Endicia\Express1\Express1EndiciaShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\RegistrationPromotionFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\UspsWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaCbpRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotionTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Express1\Express1AchPaymentValidatorTest.cs" />
