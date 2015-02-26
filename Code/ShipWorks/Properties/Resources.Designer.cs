@@ -1473,16 +1473,6 @@ namespace ShipWorks.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap EquashipLogo {
-            get {
-                object obj = ResourceManager.GetObject("EquashipLogo", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap error_arrow {
             get {
                 object obj = ResourceManager.GetObject("error_arrow", resourceCulture);

@@ -398,6 +398,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
             shipment.TotalWeight = ShipmentTotalWeightValue;
 
+            shipment.BilledWeight = shipment.TotalWeight;
+            shipment.BilledType = (int) BilledType.Unknown;
+
             shipment.OriginFirstName = ShipperPersonName;
             shipment.OriginMiddleName = string.Empty;
             shipment.OriginLastName = ShipperPersonName;
@@ -679,9 +682,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             package.DryIceWeight = 0;
             package.DeclaredValue = 0M;
 
-            package.DimsLength = 0;
-            package.DimsHeight = 0;
-            package.DimsWidth = 0;
+            package.DimsLength = 2;
+            package.DimsHeight = 1;
+            package.DimsWidth = 1;
             package.DimsWeight = 0;
             package.DimsAddWeight = false;
 

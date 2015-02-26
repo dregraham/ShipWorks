@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.ScanForms
         }
 
         /// <summary>
-        /// Gets or sets the shipment type (Endicia, Stamps.com, etc.).
+        /// Gets or sets the shipment type (Endicia, USPS, etc.).
         /// </summary>
         /// <value>The type of the shipment.</value>
         public ShipmentTypeCode ShipmentType { get; set; }

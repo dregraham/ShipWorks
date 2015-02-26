@@ -31,6 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SingleAccountMarketingDlg));
             this.SuspendLayout();
             // 
+            // signUpForExpeditedControl
+            // 
+            this.signUpForExpeditedControl.Size = new System.Drawing.Size(445, 207);
+            // 
             // convertToExpeditedControl
             // 
             this.convertToExpeditedControl.DescriptionText = resources.GetString("convertToExpeditedControl.DescriptionText");
@@ -40,7 +44,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(460, 367);
+            this.ClientSize = new System.Drawing.Size(460, 369);
             this.Name = "SingleAccountMarketingDlg";
             this.ResumeLayout(false);
 

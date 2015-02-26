@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Get the Stamps.com API error code of the exception
+        /// Get the FedEx API error code of the exception
         /// </summary>
         public override long Code
         {
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Extract the numeric errror code from the Stamps.com exception
+        /// Extract the numeric errror code from FedEx exception
         /// </summary>
         public void ParseException(SoapException ex)
         {

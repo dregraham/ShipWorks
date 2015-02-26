@@ -16,17 +16,18 @@ namespace ShipWorks.Tests.Stores.osCommerce
         /// </summary>
         private void DoTest(string url)
         {
-            DoTest(url, "www.interapptive.com/osc/");
+            DoTest(url, "www.interapptive.com/osc/", "1.0.0.0");
         }
         
         /// <summary>
         /// Check that the normalization of the given url is the desired identifier
         /// </summary>
-        private void DoTest(string url, string identifier)
+        private void DoTest(string url, string identifier, string schemaVersion)
         {
             GenericModuleStoreEntity oscStore = new GenericModuleStoreEntity();
             oscStore.ModuleUrl = url;
             oscStore.TypeCode = (int) StoreTypeCode.osCommerce;
+            oscStore.SchemaVersion = schemaVersion;
 
             StoreType storeType = StoreTypeManager.GetType(oscStore);
 
@@ -72,19 +73,22 @@ namespace ShipWorks.Tests.Stores.osCommerce
         [TestMethod]
         public void TestMultiLevelShipWorksPhp()
         {
-            DoTest("www.interapptive.com/osc/mysite/whoever/shipworks.php", "www.interapptive.com/osc/mysite/whoever/");
+            DoTest("www.interapptive.com/osc/mysite/whoever/shipworks.php", "www.interapptive.com/osc/mysite/whoever/", "1.0.0.0");
+            DoTest("www.interapptive.com/osc/mysite/whoever/shipworks.php", "www.interapptive.com/osc/mysite/whoever/", "1.1.0.0");
         }
 
         [TestMethod]
         public void TestMultiLevelSomethingElse()
         {
-            DoTest("www.interapptive.com/osc/admin/mysite/whoever/shipworks.php", "www.interapptive.com/osc/admin/mysite/whoever/");
+            DoTest("www.interapptive.com/osc/admin/mysite/whoever/shipworks.php", "www.interapptive.com/osc/admin/mysite/whoever/", "1.0.0.0");
+            DoTest("www.interapptive.com/osc/admin/mysite/whoever/shipworks.php", "www.interapptive.com/osc/admin/mysite/whoever/", "1.1.0.0");
         }
 
         [TestMethod]
         public void TestTwoAdmins()
         {
-            DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/");
+            DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/", "1.0.0.0");
+            DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "1.1.0.0");
         }
 
     }

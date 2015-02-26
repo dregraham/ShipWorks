@@ -5,12 +5,12 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
 using System.Drawing;
+using System.Globalization;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 {
@@ -106,8 +106,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// Loads the rate information for the best rate that was found.
         /// </summary>
         private void LoadInitialRateInfo()
-        {
+        {            
             LoadCreateCarrierDescriptionText();
+            PositionSignUpButton();
             
             if (ShipmentTypeManager.IsPostal(initialShipmentType.ShipmentTypeCode))
             {
@@ -117,25 +118,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // Some service types already contain USPS in the service description, so only add it if
                 // the service description does not already start with USPS
                 bestRateCarrierName.Text = string.Format("{0}{1}", initialRate.Description.StartsWith("USPS ", StringComparison.OrdinalIgnoreCase) ? string.Empty : "USPS ", initialRate.Description);
-
-                panelVia.Visible = true;
-                panelVia.Left = bestRateCarrierName.Right;
-                viaCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
-
-                switch (initialShipmentType.ShipmentTypeCode)
-                {
-                    case ShipmentTypeCode.Endicia: viaCarrierName.Text = "Endicia"; break;
-                    case ShipmentTypeCode.Stamps: viaCarrierName.Text = "Stamps.com"; break;
-                    case ShipmentTypeCode.Express1Endicia:
-                    case ShipmentTypeCode.Express1Stamps:
-                        viaCarrierName.Text = "Express1";
-                        break;
-                    default:
-                        viaCarrierName.Text = ShipmentTypeManager.GetType(initialShipmentType.ShipmentTypeCode).ShipmentTypeName;
-                        break;
-                }
-
-                viaParenClose.Left = viaCarrierName.Right;
             }
             else
             {
@@ -143,13 +125,26 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 bestRateAccountCarrierLogo.Image = EnumHelper.GetImage(initialShipmentType.ShipmentTypeCode);
 
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
-                NoncompetitiveRateResult noncompetitiveRate = initialRate as NoncompetitiveRateResult;
-                bestRateCarrierName.Text = noncompetitiveRate == null ? initialRate.Description : noncompetitiveRate.OriginalRate.Description;
-
-                panelVia.Visible = false;
+                bestRateCarrierName.Text = initialRate.Description;
             }
 
             bestRateAmount.Text = string.Format("{0:C2}", initialRate.Amount);
+        }
+
+        /// <summary>
+        /// Positions the sign up button in relation to the size of the string contained in the createCarrierAccountDescription 
+        /// label. This prevents a chunk of empty space appearing between the label and the button when there is only a single
+        /// line of text in the label.
+        /// </summary>
+        private void PositionSignUpButton()
+        {
+            using (Graphics g = CreateGraphics())
+            {
+                // Use the size of the control hosting the text to find the height and 
+                // adjust the sign-up button accordingly
+                SizeF size = g.MeasureString(createCarrierAccountDescription.Text, createCarrierAccountDescription.Font, createCarrierAccountDescription.Size);
+                signUpButton.Top = createCarrierAccountDescription.Top + (int) size.Height + 3;
+            }
         }
 
         /// <summary>
@@ -175,8 +170,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 useExistingCarrierLogo.Image = EnumHelper.GetImage(existingRateShipmentType.ShipmentTypeCode);
 
                 // "Unmask" the description of non-competitive rates to be consistent with the logo
-                NoncompetitiveRateResult noncompetitiveRate = existingAccountRate as NoncompetitiveRateResult;
-                useExistingCarrierServiceDescription.Text = noncompetitiveRate == null ? existingAccountRate.Description : noncompetitiveRate.OriginalRate.Description;
+                useExistingCarrierServiceDescription.Text = existingAccountRate.Description;
 
                 useExistingAccountDescription.Text = useExistingAccountDescription.Text.Replace("{ProviderName}", EnumHelper.GetDescription(existingRateShipmentType.ShipmentTypeCode));
                 
@@ -184,8 +178,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 // the cheapest available rate
                 existingAccountRateAmount.Text = string.Format("{0:C2}", existingAccountRate.Amount);
 
+                // Use the absolute value in the difference to avoid double parentheses if the existing
+                // rate difference value is negative: "($6.24 less)" instead of "(($6.24) less)
                 decimal difference = existingAccountRate.Amount - initialRate.Amount;
-                existingAccountRateDifference.Text = string.Format("({0:C2} {1})", difference, difference > 0 ? "more" : "less");
+                existingAccountRateDifference.Text = string.Format("({0:C2} {1})", Math.Abs(difference), difference > 0 ? "more" : "less");
                 existingAccountRateAmount.ForeColor = difference > 0 ? Color.Red : Color.Green;
                 existingAccountRateDifference.Left = existingAccountRateAmount.Right - 3;
 
@@ -219,7 +215,10 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 ShipmentTypeCode.BestRate,
                 ShipmentTypeCode.None,
                 ShipmentTypeCode.Other,
-                ShipmentTypeCode.PostalWebTools
+                ShipmentTypeCode.PostalWebTools,
+                ShipmentTypeCode.Endicia,
+                ShipmentTypeCode.Express1Endicia,
+                ShipmentTypeCode.Express1Usps
             };
 
             setupExistingProvider.Items.Add("Choose...");
@@ -241,19 +240,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             switch (initialShipmentType.ShipmentTypeCode)
             {
-                case ShipmentTypeCode.Endicia:
-                    description = "USPS partners with Endicia to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " + 
-                                  "an account with Endicia.";
-                    break;
-
-                case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-                    description = "USPS partners with Express1 to enable printing USPS shipping labels directly from your printer. To continue you'll need an " + 
-                                  "account with Express1. There is no monthly fee for the account.";
-                    break;
-                    
-                case ShipmentTypeCode.Stamps:
-                    description = "USPS partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
+                case ShipmentTypeCode.Usps:
+                    description = "ShipWorks partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
                                   "an account with Stamps.com.";
                     break;
 
@@ -276,7 +264,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnSignUp(object sender, System.EventArgs e)
+        private void OnSignUp(object sender, EventArgs e)
         {
             IgnoreAllCounterRates = false;
 
@@ -299,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <summary>
         /// Called when the value in the setup existing provider drop down list has changed.
         /// </summary>
-        private void OnSetupExistingProviderChanged(object sender, System.EventArgs e)
+        private void OnSetupExistingProviderChanged(object sender, EventArgs e)
         {
             // Disable the "Add my account" button if a provider is not selected
             ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
@@ -311,7 +299,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnAddExistingAccount(object sender, System.EventArgs e)
+        private void OnAddExistingAccount(object sender, EventArgs e)
         {
             ImageComboBoxItem selectedItem = setupExistingProvider.SelectedItem as ImageComboBoxItem;
 
@@ -338,7 +326,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 {
                     // Give the user a chance to cancel out of the wizard if they accidentally 
                     // chose the wrong provider type and canceled out of the wizard
-                    Show(this.Owner);
+                    Show(Owner);
                 }
             }
         }
@@ -365,7 +353,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private void OnUseExistingAccount(object sender, System.EventArgs e)
+        private void OnUseExistingAccount(object sender, EventArgs e)
         {
             // Choosing to ignore counter rates for the rest of the batch
             IgnoreAllCounterRates = true; 
@@ -393,24 +381,11 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools);
                     break;
                 case ShipmentTypeCode.PostalWebTools:
-                    setupShipmentType = ShippingSettings.Fetch().BestRateExcludedTypes.Contains((int)ShipmentTypeCode.Endicia) ? 
-                        ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps) : 
-                        ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
+                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Usps);
                     break;
-                case ShipmentTypeCode.Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Stamps);
-                    break;
-                case ShipmentTypeCode.Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Endicia:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Endicia);
-                    break;
-                case ShipmentTypeCode.Express1Stamps:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Stamps);
-                    break;
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.FedEx:
-                    setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx);
+                    setupShipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
                     break;
                 default:
                     throw new InvalidOperationException("The requested shipment type is not a valid counter rate shipment type.");

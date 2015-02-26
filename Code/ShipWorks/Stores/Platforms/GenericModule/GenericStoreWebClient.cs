@@ -35,7 +35,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         private Version requiredModuleVersion;
 
         // Current schema version
-        private Version currentSchemaVersion = new Version("1.0.0");
+        private Version currentSchemaVersion = new Version("1.1.0");
 
 		/// <summary>
 		/// Constructor for using the client to talk to a given store
@@ -181,10 +181,41 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             request.Variables.Add("shippingcost", shipment.ShipmentCost.ToString());
             request.Variables.Add("shippingdate", FormatDate(shipment.ShipDate));
 
+            AppendExtendedShipmentDetails(request, shipment);
+
             ProcessRequest(request, "updateshipment");
         }
 
         /// <summary>
+        /// Appends the extended shipment details to the request's Variables collection if the store's module
+        /// version >= 3.10.0.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="shipment">The shipment.</param>
+	    private void AppendExtendedShipmentDetails(HttpVariableRequestSubmitter request, ShipmentEntity shipment)
+	    {
+	        Version moduleVersion = new Version(store.ModuleVersion);
+	        if (moduleVersion.CompareTo(new Version("3.10.0")) >= 0)
+	        {
+	            // The version of the module is >= 3.10.0, so add the extended shipment 
+	            // information to the request. We wanted module providers to opt-in to 
+	            // this functionality to avoid negatively impacting overly strict module
+	            // implementations that may refuse a request if the variables do not match
+	            // exactly what the server is expecting.
+	            request.Variables.Add("processeddate", shipment.ProcessedDate.HasValue ? shipment.ProcessedDate.Value.ToString("s") : string.Empty);
+
+	            request.Variables.Add("voided", shipment.Voided.ToString(CultureInfo.InvariantCulture));
+	            request.Variables.Add("voideddate", shipment.VoidedDate.HasValue ? shipment.VoidedDate.Value.ToString("s") : string.Empty);
+	            request.Variables.Add("voideduser", shipment.VoidedUserID.HasValue ? shipment.VoidedUserID.Value.ToString(CultureInfo.InvariantCulture) : string.Empty);
+                
+                request.Variables.Add("serviceused", ShippingManager.GetServiceUsed(shipment));
+                request.Variables.Add("totalcharges", shipment.ShipmentCost.ToString());
+                request.Variables.Add("totalweight", shipment.TotalWeight.ToString(CultureInfo.InvariantCulture));
+                request.Variables.Add("returnshipment", shipment.ReturnShipment.ToString(CultureInfo.InvariantCulture));
+            }
+	    }
+
+	    /// <summary>
         /// Retrieves the status code definitions from the online store
         /// </summary>
         public GenericModuleResponse GetStatusCodes()

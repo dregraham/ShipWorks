@@ -83,7 +83,7 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Truncate the given string to the specified length.  If it's already less than or equal to the given length, nothing is done.
         /// </summary>
-        public static string Truncate(string text, int maxLength)
+        public static string Truncate(this string text, int maxLength)
         {
             if (string.IsNullOrEmpty(text))
             {

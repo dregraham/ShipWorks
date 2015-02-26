@@ -120,6 +120,6 @@
   <data name="label2.Text" xml:space="preserve">
     <value>The USPS (w/o Postage) feature generates USPS labels that do not have postage applied.  You will need to purchase and apply postage before shipping with the label.  The post office expects each label generated to be received by a post office on the configured ship date.
 
-If you would like to print labels with postage already applied, please look into our Stamps.com and Endicia shipping features.</value>
+If you would like to print labels with postage already applied, please look into our USPS shipping features.</value>
   </data>
 </root>

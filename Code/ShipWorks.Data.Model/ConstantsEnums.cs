@@ -2630,151 +2630,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipAccountFieldIndex:int
-	{
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>Username. </summary>
-		Username,
-		///<summary>Password. </summary>
-		Password,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>FirstName. </summary>
-		FirstName,
-		///<summary>MiddleName. </summary>
-		MiddleName,
-		///<summary>LastName. </summary>
-		LastName,
-		///<summary>Company. </summary>
-		Company,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>Street2. </summary>
-		Street2,
-		///<summary>Street3. </summary>
-		Street3,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>Phone. </summary>
-		Phone,
-		///<summary>Email. </summary>
-		Email,
-		///<summary>Website. </summary>
-		Website,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipProfileFieldIndex:int
-	{
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>Service. </summary>
-		Service,
-		///<summary>PackageType. </summary>
-		PackageType,
-		///<summary>ReferenceNumber. </summary>
-		ReferenceNumber,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>ShippingNotes. </summary>
-		ShippingNotes,
-		///<summary>Weight. </summary>
-		Weight,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
-		///<summary>EmailNotification. </summary>
-		EmailNotification,
-		///<summary>SaturdayDelivery. </summary>
-		SaturdayDelivery,
-		///<summary>Confirmation. </summary>
-		Confirmation,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EquaShipShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum EquaShipShipmentFieldIndex:int
-	{
-		///<summary>ShipmentID. </summary>
-		ShipmentID,
-		///<summary>EquaShipAccountID. </summary>
-		EquaShipAccountID,
-		///<summary>Service. </summary>
-		Service,
-		///<summary>PackageType. </summary>
-		PackageType,
-		///<summary>ReferenceNumber. </summary>
-		ReferenceNumber,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>ShippingNotes. </summary>
-		ShippingNotes,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>InsuranceValue. </summary>
-		InsuranceValue,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
-		///<summary>EmailNotification. </summary>
-		EmailNotification,
-		///<summary>SaturdayDelivery. </summary>
-		SaturdayDelivery,
-		///<summary>Confirmation. </summary>
-		Confirmation,
-		///<summary>RequestedLabelFormat. </summary>
-		RequestedLabelFormat,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: EtsyOrder.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -4025,6 +3880,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -4733,6 +4590,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
@@ -5129,6 +4988,8 @@ namespace ShipWorks.Data.Model
 		ModuleHttpExpect100Continue,
 		///<summary>ModuleResponseEncoding. </summary>
 		ModuleResponseEncoding,
+		///<summary>SchemaVersion. </summary>
+		SchemaVersion,
 		///<summary>StoreID. </summary>
 		StoreID,
 		///<summary>EncryptionPassphrase. </summary>
@@ -7763,6 +7624,10 @@ namespace ShipWorks.Data.Model
 		ShipSenseEntry,
 		///<summary>OnlineShipmentID. </summary>
 		OnlineShipmentID,
+		///<summary>BilledType. </summary>
+		BilledType,
+		///<summary>BilledWeight. </summary>
+		BilledWeight,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -8019,20 +7884,12 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
-		///<summary>EndiciaUspsAutomaticExpedited. </summary>
-		EndiciaUspsAutomaticExpedited,
-		///<summary>EndiciaUspsAutomaticExpeditedAccount. </summary>
-		EndiciaUspsAutomaticExpeditedAccount,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
-		///<summary>StampsAutomaticExpress1. </summary>
-		StampsAutomaticExpress1,
-		///<summary>StampsAutomaticExpress1Account. </summary>
-		StampsAutomaticExpress1Account,
-		///<summary>StampsUspsAutomaticExpedited. </summary>
-		StampsUspsAutomaticExpedited,
-		///<summary>StampsUspsAutomaticExpeditedAccount. </summary>
-		StampsUspsAutomaticExpeditedAccount,
+		///<summary>UspsAutomaticExpress1. </summary>
+		UspsAutomaticExpress1,
+		///<summary>UspsAutomaticExpress1Account. </summary>
+		UspsAutomaticExpress1Account,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>
@@ -8051,8 +7908,8 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>Express1StampsSingleSource. </summary>
-		Express1StampsSingleSource,
+		///<summary>Express1UspsSingleSource. </summary>
+		Express1UspsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
@@ -8468,136 +8325,6 @@ namespace ShipWorks.Data.Model
 		DownloadPageSize,
 		///<summary>RequestTimeout. </summary>
 		RequestTimeout,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StampsAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StampsAccountFieldIndex:int
-	{
-		///<summary>StampsAccountID. </summary>
-		StampsAccountID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>Username. </summary>
-		Username,
-		///<summary>Password. </summary>
-		Password,
-		///<summary>FirstName. </summary>
-		FirstName,
-		///<summary>MiddleName. </summary>
-		MiddleName,
-		///<summary>LastName. </summary>
-		LastName,
-		///<summary>Company. </summary>
-		Company,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>Street2. </summary>
-		Street2,
-		///<summary>Street3. </summary>
-		Street3,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>Phone. </summary>
-		Phone,
-		///<summary>Email. </summary>
-		Email,
-		///<summary>Website. </summary>
-		Website,
-		///<summary>MailingPostalCode. </summary>
-		MailingPostalCode,
-		///<summary>StampsReseller. </summary>
-		StampsReseller,
-		///<summary>ContractType. </summary>
-		ContractType,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StampsProfile.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StampsProfileFieldIndex:int
-	{
-		///<summary>ShippingProfileID. </summary>
-		ShippingProfileID,
-		///<summary>StampsAccountID. </summary>
-		StampsAccountID,
-		///<summary>HidePostage. </summary>
-		HidePostage,
-		///<summary>RequireFullAddressValidation. </summary>
-		RequireFullAddressValidation,
-		///<summary>Memo. </summary>
-		Memo,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StampsScanForm.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StampsScanFormFieldIndex:int
-	{
-		///<summary>StampsScanFormID. </summary>
-		StampsScanFormID,
-		///<summary>StampsAccountID. </summary>
-		StampsAccountID,
-		///<summary>ScanFormTransactionID. </summary>
-		ScanFormTransactionID,
-		///<summary>ScanFormUrl. </summary>
-		ScanFormUrl,
-		///<summary>CreatedDate. </summary>
-		CreatedDate,
-		///<summary>ScanFormBatchID. </summary>
-		ScanFormBatchID,
-		///<summary>Description. </summary>
-		Description,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: StampsShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum StampsShipmentFieldIndex:int
-	{
-		///<summary>ShipmentID. </summary>
-		ShipmentID,
-		///<summary>StampsAccountID. </summary>
-		StampsAccountID,
-		///<summary>HidePostage. </summary>
-		HidePostage,
-		///<summary>RequireFullAddressValidation. </summary>
-		RequireFullAddressValidation,
-		///<summary>IntegratorTransactionID. </summary>
-		IntegratorTransactionID,
-		///<summary>StampsTransactionID. </summary>
-		StampsTransactionID,
-		///<summary>Memo. </summary>
-		Memo,
-		///<summary>OriginalStampsAccountID. </summary>
-		OriginalStampsAccountID,
-		///<summary>ScanFormBatchID. </summary>
-		ScanFormBatchID,
-		///<summary>RequestedLabelFormat. </summary>
-		RequestedLabelFormat,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9442,6 +9169,142 @@ namespace ShipWorks.Data.Model
 		TemplateExpandedFolders,
 		///<summary>TemplateLastSelected. </summary>
 		TemplateLastSelected,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsAccount.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum UspsAccountFieldIndex:int
+	{
+		///<summary>UspsAccountID. </summary>
+		UspsAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>Username. </summary>
+		Username,
+		///<summary>Password. </summary>
+		Password,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		///<summary>MailingPostalCode. </summary>
+		MailingPostalCode,
+		///<summary>UspsReseller. </summary>
+		UspsReseller,
+		///<summary>ContractType. </summary>
+		ContractType,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsProfile.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum UspsProfileFieldIndex:int
+	{
+		///<summary>ShippingProfileID. </summary>
+		ShippingProfileID,
+		///<summary>UspsAccountID. </summary>
+		UspsAccountID,
+		///<summary>HidePostage. </summary>
+		HidePostage,
+		///<summary>RequireFullAddressValidation. </summary>
+		RequireFullAddressValidation,
+		///<summary>Memo. </summary>
+		Memo,
+		///<summary>RateShop. </summary>
+		RateShop,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsScanForm.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum UspsScanFormFieldIndex:int
+	{
+		///<summary>UspsScanFormID. </summary>
+		UspsScanFormID,
+		///<summary>UspsAccountID. </summary>
+		UspsAccountID,
+		///<summary>ScanFormTransactionID. </summary>
+		ScanFormTransactionID,
+		///<summary>ScanFormUrl. </summary>
+		ScanFormUrl,
+		///<summary>CreatedDate. </summary>
+		CreatedDate,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
+		///<summary>Description. </summary>
+		Description,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: UspsShipment.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum UspsShipmentFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>UspsAccountID. </summary>
+		UspsAccountID,
+		///<summary>HidePostage. </summary>
+		HidePostage,
+		///<summary>RequireFullAddressValidation. </summary>
+		RequireFullAddressValidation,
+		///<summary>IntegratorTransactionID. </summary>
+		IntegratorTransactionID,
+		///<summary>UspsTransactionID. </summary>
+		UspsTransactionID,
+		///<summary>Memo. </summary>
+		Memo,
+		///<summary>OriginalUspsAccountID. </summary>
+		OriginalUspsAccountID,
+		///<summary>ScanFormBatchID. </summary>
+		ScanFormBatchID,
+		///<summary>RequestedLabelFormat. </summary>
+		RequestedLabelFormat,
+		///<summary>RateShop. </summary>
+		RateShop,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10315,12 +10178,6 @@ namespace ShipWorks.Data.Model
 		EndiciaScanFormEntity,
 		///<summary>EndiciaShipment</summary>
 		EndiciaShipmentEntity,
-		///<summary>EquaShipAccount</summary>
-		EquaShipAccountEntity,
-		///<summary>EquaShipProfile</summary>
-		EquaShipProfileEntity,
-		///<summary>EquaShipShipment</summary>
-		EquaShipShipmentEntity,
 		///<summary>EtsyOrder</summary>
 		EtsyOrderEntity,
 		///<summary>EtsyStore</summary>
@@ -10495,14 +10352,6 @@ namespace ShipWorks.Data.Model
 		ShopifyStoreEntity,
 		///<summary>ShopSiteStore</summary>
 		ShopSiteStoreEntity,
-		///<summary>StampsAccount</summary>
-		StampsAccountEntity,
-		///<summary>StampsProfile</summary>
-		StampsProfileEntity,
-		///<summary>StampsScanForm</summary>
-		StampsScanFormEntity,
-		///<summary>StampsShipment</summary>
-		StampsShipmentEntity,
 		///<summary>StatusPreset</summary>
 		StatusPresetEntity,
 		///<summary>Store</summary>
@@ -10539,6 +10388,14 @@ namespace ShipWorks.Data.Model
 		UserColumnSettingsEntity,
 		///<summary>UserSettings</summary>
 		UserSettingsEntity,
+		///<summary>UspsAccount</summary>
+		UspsAccountEntity,
+		///<summary>UspsProfile</summary>
+		UspsProfileEntity,
+		///<summary>UspsScanForm</summary>
+		UspsScanFormEntity,
+		///<summary>UspsShipment</summary>
+		UspsShipmentEntity,
 		///<summary>ValidatedAddress</summary>
 		ValidatedAddressEntity,
 		///<summary>VersionSignoff</summary>

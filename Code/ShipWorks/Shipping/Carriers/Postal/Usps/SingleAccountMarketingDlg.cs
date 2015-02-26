@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
@@ -20,19 +19,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             string express1TargetedText = string.Empty;
 
-            if (EndiciaAccountManager.Express1Accounts.Any() || StampsAccountManager.Express1Accounts.Any())
+            if (EndiciaAccountManager.Express1Accounts.Any() || UspsAccountManager.Express1Accounts.Any())
             {
                 express1TargetedText = "No more switching between accounts to get the lowest rates!";
             }
 
             this.signUpForExpeditedControl.DiscountText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
-                                                          "IntuiShip, all through one single Stamps.com account. " + express1TargetedText 
+                                                          "IntuiShip, all through one single USPS account. " + express1TargetedText 
                                                           + Environment.NewLine + Environment.NewLine + "To get these discounts, you " +
-                                                          "just need to open a free Stamps.com account which will enable you to easily print both USPS Priority Mail " +
+                                                          "just need to open a free USPS account which will enable you to easily print both USPS Priority Mail " +
                                                           "and Priority Mail Express labels and First Class shipping labels, all within one account.";
 
             this.convertToExpeditedControl.DescriptionText = "You can now save up to 46% on USPS Priority Mail and Priority Mail Express Shipments with ShipWorks and " +
-                                                             "IntuiShip, all through one single Stamps.com account. No " +
+                                                             "IntuiShip, all through one single USPS account. No " +
                                                              "more switching between accounts to get the lowest rates!" + Environment.NewLine + Environment.NewLine + 
                                                              "ShipWorks offers these discounted rates through IntuiShip, a partner of the USPS.";
 

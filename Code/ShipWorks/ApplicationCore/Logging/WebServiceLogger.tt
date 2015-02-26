@@ -8,8 +8,8 @@
 <#
 	var services = new object[]
 	{
-		"ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices", "SwsimV29",
-		"ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract", "SwsimV39",
+		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV40",
+		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29", "SwsimV29",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
 		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService", "CustomerService",
@@ -35,7 +35,6 @@
 		"ShipWorks.Stores.Platforms.AmeriCommerce.WebServices", "AmeriCommerceDatabaseIO",
 		"ShipWorks.Stores.Platforms.NetworkSolutions.WebServices", "NetSolEcomService",
 		"ShipWorks.Stores.Platforms.Magento.WebServices", "MagentoService",		
-		"ShipWorks.Shipping.Carriers.EquaShip.WebServices", "EquashipAPI",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",

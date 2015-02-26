@@ -83,6 +83,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment {
         private string sortCodeField;
         
         private int rateZoneField;
+
+        private double billedWeight;
         
         /// <remarks/>
         public string UID {
@@ -221,6 +223,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment {
             }
             set {
                 this.rateZoneField = value;
+            }
+        }
+
+        public double BilledWeight
+        {
+            get
+            {
+                return this.billedWeight;
+            }
+            set
+            {
+                billedWeight = value;
             }
         }
     }

@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
 
         private ShipmentEntity endiciaShipment;
         private ShipmentEntity express1Shipment;
-        private ShipmentEntity stampsShipment;
+        private ShipmentEntity uspsShipment;
         private ShipmentEntity fedexShipment;
         private ShipmentEntity upsShipment;
 
@@ -104,10 +104,10 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
 
             express1Shipment = CreateShipment((int) ShipmentTypeCode.Express1Endicia);
 
-            stampsShipment = CreateShipment((int) ShipmentTypeCode.Stamps);
-            stampsShipment.Postal = new PostalShipmentEntity()
+            uspsShipment = CreateShipment((int) ShipmentTypeCode.Usps);
+            uspsShipment.Postal = new PostalShipmentEntity()
             {
-                Stamps = new StampsShipmentEntity()
+                Usps = new UspsShipmentEntity()
             };
 
             fedexShipment = CreateShipment((int) ShipmentTypeCode.FedEx);
@@ -288,19 +288,19 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         [TestMethod]
         public void ConfigureShipmentForGlobalShippingProgram_RecipientNameIsGSPName_WhenShippingWithCarrierOtherThanExpress1Endicia_Test()
         {
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(shipmentOrder.GspFirstName, stampsShipment.ShipFirstName);
-            Assert.AreEqual(string.Empty, stampsShipment.ShipMiddleName);
-            Assert.AreEqual(shipmentOrder.GspLastName, stampsShipment.ShipLastName);
+            Assert.AreEqual(shipmentOrder.GspFirstName, uspsShipment.ShipFirstName);
+            Assert.AreEqual(string.Empty, uspsShipment.ShipMiddleName);
+            Assert.AreEqual(shipmentOrder.GspLastName, uspsShipment.ShipLastName);
         }
 
         [TestMethod]
-        public void ConfigureShipmentForGlobalShippingProgram_AddressVerificationIsNotRequired_WhenShippingWithStamps_Test()
+        public void ConfigureShipmentForGlobalShippingProgram_AddressVerificationIsNotRequired_WhenShippingWithUsps_Test()
         {
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.IsFalse(stampsShipment.Postal.Stamps.RequireFullAddressValidation);
+            Assert.IsFalse(uspsShipment.Postal.Usps.RequireFullAddressValidation);
         }
 
         [TestMethod]
@@ -314,24 +314,24 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         [TestMethod]
         public void ConfigureShipmentForGlobalShippingProgram_PhoneNumberIsWiped_WhenNotShippingWithFedEx_Test()
         {
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, stampsShipment.ShipPhone);
+            Assert.AreEqual(string.Empty, uspsShipment.ShipPhone);
         }
 
         [TestMethod]
         public void ConfigureShipmentForGlobalShippingProgram_EmailIsWiped_Test()
         {
             // This is not carrier specific, so any carrier will do
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, stampsShipment.ShipEmail);
+            Assert.AreEqual(string.Empty, uspsShipment.ShipEmail);
         }
 
         [TestMethod]
         public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenNotFedExShipment_Test()
         {
-            List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
             Assert.AreEqual(13, modifiedFields.Count);
         }
 
@@ -348,9 +348,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             shipmentOrder.GspPostalCode = "41018-3190";
 
             // This is not carrier specific, so any carrier will do
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual("41018", stampsShipment.ShipPostalCode);
+            Assert.AreEqual("41018", uspsShipment.ShipPostalCode);
         }
 
         [TestMethod]
@@ -360,9 +360,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             shipmentOrder.GspPostalCode = "41018-319";
 
             // This is not carrier specific, so any carrier will do
-            testObject.ConfigureShipmentForGlobalShippingProgram(stampsShipment, shipmentOrder);
+            testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual("41018", stampsShipment.ShipPostalCode);
+            Assert.AreEqual("41018", uspsShipment.ShipPostalCode);
         }
     }
 }

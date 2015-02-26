@@ -9,12 +9,12 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV29
+    partial class SwsimV40
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV29(IApiLogEntry logEntry)
+        internal SwsimV40(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -146,24 +146,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices
     }
 }		
 
-namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV39
+    partial class SwsimV29
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV39(IApiLogEntry logEntry)
+        internal SwsimV29(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -197,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -222,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Contract
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3576,143 +3586,6 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
         /// Constructor
         /// </summary>
         internal MagentoService(IApiLogEntry logEntry)
-            : this()
-        {
-            this.logEntry = logEntry;
-        }
-
-		/// <summary>
-        /// Only log error result.
-        /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
-
-        /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
-        /// </summary>
-        public WebServiceRawSoap RawSoap
-        {
-            get { return rawSoap; }
-        }
-        
-        /// <summary>
-        /// The log entry being used to log the request and response
-        /// </summary>
-		public IApiLogEntry ApiLogEntry
-        {
-			get { return logEntry; }
-		}
-
-        /// <summary>
-        /// Get the writer for the message
-        /// </summary>
-        protected override XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
-        {
-            rawSoap.ReadOutgoingMessage(message);
-
-            return base.GetWriterForMessage(message, bufferSize);
-        }
-
-        /// <summary>
-        /// Get the response to the message that has been generated
-        /// </summary>
-        protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
-        {
-            // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
-            {
-                logEntry.LogRequest(rawSoap.RequestXml);
-            }
-
-			// get the reponse
-            System.Net.WebResponse baseResponse = base.GetWebResponse(request);
-
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
-
-			return baseResponse;
-        }
-
-        /// <summary>
-        /// Get the XmlReader used to read the response message
-        /// </summary>
-        protected override XmlReader GetReaderForMessage(SoapClientMessage message, int bufferSize)
-        {
-            rawSoap.ReadIncomingMessage(message);
-
-            // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
-            {
-                logEntry.LogResponse(rawSoap.ResponseXml);
-            }
-
-            return base.GetReaderForMessage(message, bufferSize);
-        }
-
-        /// <summary>
-        /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
-        /// </summary>
-		private bool IsSoap(string contentType)
-        {
-            if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
-            {
-                return (contentType.StartsWith("application/soap+xml", System.StringComparison.OrdinalIgnoreCase));
-            }
-
-            return true;
-        }
-
-		/// <summary>
-        /// Extract the response and raise an exception
-        /// </summary>
-        private void RaiseInvalidSoapException(System.Net.WebResponse response)
-        {
-            using (System.IO.Stream responseStream = response.GetResponseStream())
-            {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(responseStream))
-                {
-                    string responseContent = reader.ReadToEnd();
-
-                    // http-specific properties
-                    System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK;
-                    string statusDescription = "";
-
-                    System.Net.HttpWebResponse httpWebResponse = response as System.Net.HttpWebResponse;
-                    if (httpWebResponse != null)
-                    {
-                        statusCode = httpWebResponse.StatusCode;
-                        statusDescription = httpWebResponse.StatusDescription;
-                    }
-
-                    throw new Interapptive.Shared.Net.InvalidSoapException(statusCode, statusDescription, responseContent);
-                }
-            }
-        }
-    }
-}		
-
-namespace ShipWorks.Shipping.Carriers.EquaShip.WebServices
-{
-    /// <summary>
-    /// Partial class for the webservices generated class, to help with logging
-    /// </summary>
-    partial class EquashipAPI
-    {
-        WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        internal EquashipAPI(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

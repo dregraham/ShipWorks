@@ -4,13 +4,11 @@ using System.Linq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using log4net;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Insurance.InsureShip;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers
 {
@@ -41,8 +39,8 @@ namespace ShipWorks.Shipping.Carriers
         // Credentials to use when ShipWorks is using a provider's test environment
         private const string TestCredentialFedExAccountNumber = "603103343";
         private const string TestCredentialFedExMeterNumber = "118601174";
-        private const string TestCredentialFedExUsername = "51LPnQ5iP1uPARkC";
-        private const string TestCredentialFedExPassword = "VYnYkYqui2OIux8DO+Po0YQKvySBei17NsODezd5bRY=";
+        private const string TestCredentialFedExUsername = "V1SpblgVtC3MeMRJ";
+        private const string TestCredentialFedExPassword = "1BezuPhxWfkaMpPhng+RssQYIAy7LOdoNDFBWxYTgzI=";
         private const string TestCredentialFedExCertificateVerificationData = "<Service><Subject><Value>wsbeta.fedex.com</Value><Value>OU=EIS-WSAS</Value></Subject></Service>";
 
         private const string TestCredentialUpsUserId = "6863e0f62cdd4a1b";
@@ -50,18 +48,9 @@ namespace ShipWorks.Shipping.Carriers
         private const string TestCredentialUpsAccessKey = "YbeKtEkBXqxQYcW0MonRIXPCPFKuLQ6l";
         private const string TestCredentialUpsCertificateVerificationData = "<Service><Subject><Value>wwwcie.ups.com</Value><Value>united parcel service</Value></Subject></Service>";
 
-        private const string TestCredentialExpress1EndiciaAccountNumber = "ba66e5d7-5224-4273-a7e4-6176e2b06d7b";
-        private const string TestCredentialExpress1EndiciaPassPhrase = "Y71yGErhEfgAqBkCprcEXA==";
-        // Express1 does not use SSL on its test server
-        private const string TestCredentialExpress1EndiciaCertificateVerificationData = "";
-
-        private const string TestCredentialExpress1StampsUsername = "759cc789-25ab-4701-b791-b0c7d4b47701";
-        private const string TestCredentialExpress1StampsPassword = "nqsNMvjHqa3u3qX1qav5BldJ+6deGykO4i/B3T3YR/1PTXRSkBcTfA==";
-        private const string TestCredentialExpress1StampsCertificateVerificationData = "<Service><Subject><Value>test</Value><Value></Value></Subject></Service>";
-
-        private const string TestCredentialStampsUsername = "interapptive";
-        private const string TestCredentialStampsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
-        private const string TestCredentialStampsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
+        private const string TestCredentialUspsUsername = "interapptive";
+        private const string TestCredentialUspsPassword = "AYSaiZOMP3UcalGuDB+4aA==";
+        private const string TestCredentialUspsCertificateVerificationData = "<Service><Subject><Value>CN=swsim.testing.stamps.com, OU=Data Center Operations, O=Stamps.com</Value><Value></Value></Subject></Service>";
 
         private const string TestCredentialInsureCertificateVerficationData = "<Service><Subject><Value>*.insureship.com</Value><Value>Domain Control Validated</Value></Subject></Service>";
 
@@ -77,23 +66,11 @@ namespace ShipWorks.Shipping.Carriers
         private const string UpsAccessKeyKeyName = "UpsAccessKey";
         public const string UpsCertificateVerificationDataKeyName = "UpsCertificateVerificationData";
 
-        private const string Express1EndiciaAccountNumberKeyName = "Express1EndiciaAccountNumber";
-        private const string Express1EndiciaPassPhraseKeyName = "Express1EndiciaPassPhrase";
-        public const string Express1EndiciaCertificateVerificationDataKeyName = "Express1EndiciaCertificateVerificationData";
+        private const string UspsUsernameKeyName = "StampsUsername";
+        private const string UspsPasswordKeyName = "StampsPassword";
+        public const string UspsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
 
-        private const string Express1StampsUsernameKeyName = "Express1StampsUsername";
-        private const string Express1StampsPasswordKeyName = "Express1StampsPassword";
-        public const string Express1StampsCertificateVerificationDataKeyName = "Express1StampsCertificateVerificationData";
-
-        private const string StampsUsernameKeyName = "StampsUsername";
-        private const string StampsPasswordKeyName = "StampsPassword";
-        public const string StampsCertificateVerificationDataKeyName = "StampsCertificateVerificationData";
-
-        private const string EndiciaAccountNumberKeyName = "EndiciaAccountNumber";
-        private const string EndiciaApiUserPasswordKeyName = "EndiciaApiUserPassword";
-        public const string EndiciaCertificateVerificationDataKeyName = "EndiciaCertificateVerificationData";
         public const string InsureShipCertificateVerificationDataKeyName = "InsureShipeCertificateVerificationData";
-
         
         
         /// <summary>
@@ -224,145 +201,40 @@ namespace ShipWorks.Shipping.Carriers
                     TestCredentialUpsCertificateVerificationData : GetCertificateVerificationDataValue(UpsCertificateVerificationDataKeyName);
             }
         }
-
+        
         /// <summary>
-        /// Gets the Express1 Endicia account number used for obtaining counter rates
+        /// Gets data to verify the SSL certificate from USPS
         /// </summary>
-        public string Express1EndiciaAccountNumber
+        public string UspsCertificateVerificationData
         {
             get
             {
-                return Express1EndiciaUtility.UseTestServer ? 
-                    TestCredentialExpress1EndiciaAccountNumber : GetCredentialValue(Express1EndiciaAccountNumberKeyName);
+                return UspsWebClient.UseTestServer ?
+                    TestCredentialUspsCertificateVerificationData : GetCertificateVerificationDataValue(UspsCertificateVerificationDataKeyName);
             }
         }
 
         /// <summary>
-        /// Gets the Express1 Endicia pass phrase used for obtaining counter rates
+        /// Gets the USPS user name used for obtaining counter rates
         /// </summary>
-        public string Express1EndiciaPassPhrase
+        public string UspsUsername
         {
             get
             {
-                return Express1EndiciaUtility.UseTestServer ? 
-                    TestCredentialExpress1EndiciaPassPhrase : GetCredentialValue(Express1EndiciaPassPhraseKeyName);
+                return UspsWebClient.UseTestServer ?
+                    TestCredentialUspsUsername : GetCredentialValue(UspsUsernameKeyName);
             }
         }
 
         /// <summary>
-        /// Gets data to verify the SSL certificate from Express1Endicia
+        /// Gets the USPS password used for obtaining counter rates
         /// </summary>
-        public string Express1EndiciaCertificateVerificationData
+        public string UspsPassword
         {
             get
             {
-                return Express1EndiciaUtility.UseTestServer ?
-                    TestCredentialExpress1EndiciaCertificateVerificationData : GetCertificateVerificationDataValue(Express1EndiciaCertificateVerificationDataKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the Express1 Stamps user name used for obtaining counter rates
-        /// </summary>
-        public string Express1StampsUsername
-        {
-            get
-            {
-                return Express1StampsConnectionDetails.UseTestServer ? 
-                    TestCredentialExpress1StampsUsername : GetCredentialValue(Express1StampsUsernameKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the Express1 Stamps password used for obtaining counter rates
-        /// </summary>
-        public string Express1StampsPassword
-        {
-            get
-            {
-                return Express1StampsConnectionDetails.UseTestServer ? 
-                    TestCredentialExpress1StampsPassword : GetCredentialValue(Express1StampsPasswordKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets data to verify the SSL certificate from Stamps
-        /// </summary>
-        public string StampsCertificateVerificationData
-        {
-            get
-            {
-                return StampsApiSession.UseTestServer ?
-                    TestCredentialStampsCertificateVerificationData : GetCertificateVerificationDataValue(StampsCertificateVerificationDataKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the  Stamps user name used for obtaining counter rates
-        /// </summary>
-        public string StampsUsername
-        {
-            get
-            {
-                return StampsApiSession.UseTestServer ?
-                    TestCredentialStampsUsername : GetCredentialValue(StampsUsernameKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the  Stamps password used for obtaining counter rates
-        /// </summary>
-        public string StampsPassword
-        {
-            get
-            {
-                return StampsApiSession.UseTestServer ?
-                    TestCredentialStampsPassword : GetCredentialValue(StampsPasswordKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets data to verify the SSL certificate from Express1Stamps
-        /// </summary>
-        public string Express1StampsCertificateVerificationData
-        {
-            get
-            {
-                return Express1StampsConnectionDetails.UseTestServer ?
-                    TestCredentialExpress1StampsCertificateVerificationData : GetCertificateVerificationDataValue(Express1StampsCertificateVerificationDataKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the endicia account number used to validate an address
-        /// </summary>
-        public string EndiciaAccountNumber
-        {
-            get
-            {
-                return GetCredentialValue(EndiciaAccountNumberKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets the endicia API user password used to validate an address
-        /// </summary>
-        public string EndiciaApiUserPassword
-        {
-            get
-            {
-                return GetCredentialValue(EndiciaApiUserPasswordKeyName);
-            }
-        }
-
-        /// <summary>
-        /// Gets data to verify the SSL certificate from DialAZip - an Endicia Service
-        /// </summary>
-        public string EndiciaCertificateVerificationData
-        {
-            get
-            {
-                return GetCertificateVerificationDataValue(EndiciaCertificateVerificationDataKeyName);
+                return UspsWebClient.UseTestServer ?
+                    TestCredentialUspsPassword : GetCredentialValue(UspsPasswordKeyName);
             }
         }
 

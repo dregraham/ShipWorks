@@ -409,10 +409,9 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             else
             {
                 sortedOrders = from XmlNode node in ordersToReturn
-                               orderby DateTime.Parse(string.Format("{0} {1}", 
-                                                      node["Date"].InnerText, 
-                                                      node["Time"] != null ? DateTime.Parse(node["Time"].InnerText).TimeOfDay.ToString() : DateTime.MinValue.TimeOfDay.ToString()))
-                               select node;  
+                               orderby DateTime.Parse(node["Date"].InnerText).Date +  
+                                       (node["Time"] != null ? DateTime.Parse(node["Time"].InnerText).TimeOfDay : DateTime.MinValue.TimeOfDay)
+                               select node;
             }
             return sortedOrders.Select(o => o).ToList();
         }

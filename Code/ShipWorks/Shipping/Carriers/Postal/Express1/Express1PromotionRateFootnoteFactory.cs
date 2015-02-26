@@ -27,6 +27,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
         public ShipmentType ShipmentType { get; private set; }
 
         /// <summary>
+        /// Notes that this factory should not be used in BestRate
+        /// </summary>
+        public bool AllowedForBestRate
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Create an Express1 rate promotion control
         /// </summary>
         /// <param name="parameters"></param>

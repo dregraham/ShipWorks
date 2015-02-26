@@ -370,9 +370,8 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 newOrder.EbayOrderID = 0;
             }
 
+            // At this point, EbayCombinedOrderRelation should be an empty collection as this order was just created.
             EntityCollection<EbayCombinedOrderRelationEntity> combinedOrderRelations = newOrder.EbayCombinedOrderRelation;
-            LinqMetaData metaData = new LinqMetaData(adapter);
-
 
             // For every order that is to be combined, we need to merge in items, charges, and payment details
             foreach (EbayCombinedOrderComponent component in toCombine)
@@ -387,27 +386,29 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 {
                     if (component.Order.CombinedLocally)
                     {
-                        // Add EbayCombinedOrderRelation to the new order
-                        metaData.EbayCombinedOrderRelation
-                            .Where(oldRelation => oldRelation.OrderID == component.Order.OrderID && oldRelation.StoreID == component.Order.StoreID)
-                            .ToList()
-                            .ForEach(oldRelation =>
-                            {
-                                AddCombinedOrderRelation(
-                                    combinedOrderRelations,
-                                    oldRelation.EbayOrderID,
-                                    oldRelation.StoreID);
+                        IPredicateExpression relationFilter = new PredicateExpression();
+                        relationFilter.Add(EbayCombinedOrderRelationFields.OrderID == component.Order.OrderID);
+                        relationFilter.AddWithAnd(EbayCombinedOrderRelationFields.StoreID == component.Order.StoreID);
 
+                        RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
+                        relationPredicateBucket.PredicateExpression.Add(relationFilter);
+
+                        using (EntityCollection<EbayCombinedOrderRelationEntity> relationCollection = new EntityCollection<EbayCombinedOrderRelationEntity>())
+                        {
+                            SqlAdapter.Default.FetchEntityCollection(relationCollection, relationPredicateBucket);
+                            foreach (EbayCombinedOrderRelationEntity oldRelation in relationCollection)
+                            {
+                                AddCombinedOrderRelation(combinedOrderRelations, oldRelation.EbayOrderID, oldRelation.StoreID);
                                 adapter.DeleteEntity(oldRelation);
                             }
-                        );
+                        }
                     }
                     else if (component.Order.EbayOrderID != 0 && combinedOrderRelations.All(e => e.EbayOrderID != component.Order.EbayOrderID))
                     {
                         // Create new EbayCombinedOrderRelation
                         AddCombinedOrderRelation(
-                            combinedOrderRelations, 
-                            component.Order.EbayOrderID, 
+                            combinedOrderRelations,
+                            component.Order.EbayOrderID,
                             component.Order.StoreID);
                     }
                 }

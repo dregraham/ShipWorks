@@ -336,7 +336,7 @@ namespace ShipWorks.Stores.Management
 
                     if (!storeDisabled.Checked)
                     {
-                        accountDetail = TangoWebClient.GetLicenseStatus(license.Key, store);
+                        accountDetail = new TangoWebClientFactory().CreateWebClient().GetLicenseStatus(license.Key, store);
                         licenseStatus.Text = accountDetail.Description;
 
                         if (accountDetail.ActivationState == LicenseActivationState.ActiveElsewhere)

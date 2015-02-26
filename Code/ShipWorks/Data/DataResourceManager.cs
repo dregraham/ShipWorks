@@ -261,6 +261,10 @@ namespace ShipWorks.Data
                 {
                     log.Warn("Couldn't update file " + filePath, ex);
                 }
+                catch (UnauthorizedAccessException ex)
+                {
+                    log.Warn(string.Format("Unable to access file {0}", filePath), ex);
+                }
             }
 
             return resourceID;

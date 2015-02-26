@@ -1,6 +1,7 @@
 ﻿using Interapptive.Shared.Business;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.AddressValidation
 {
@@ -12,45 +13,46 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate the address
         /// </summary>
-        public AddressValidationWebClientValidateAddressResult ValidateAddress(string street1, string street2, string city, string state, string zip, string countryCode)
+        public AddressValidationWebClientValidateAddressResult ValidateAddress(AddressAdapter addressAdapter)
         {
-            PersonAdapter adapter = new PersonAdapter
+            // The underlying web client expects a PersonAdapter, so convert the address adapter to a person adapter
+            PersonAdapter personAdapter = new PersonAdapter()
             {
                 FirstName = "Sample",
                 LastName = "Name",
-                Street1 = street1,
-                Street2 = street2,
-                City = city,
-                StateProvCode = state,
-                PostalCode = zip,
-                CountryCode = countryCode
+                Street1 = addressAdapter.Street1,
+                Street2 = addressAdapter.Street2,
+                City = addressAdapter.City,
+                StateProvCode = addressAdapter.StateProvCode,
+                PostalCode = addressAdapter.PostalCode,
+                CountryCode = addressAdapter.CountryCode
             };
 
             AddressValidationWebClientValidateAddressResult validationResult = new AddressValidationWebClientValidateAddressResult();
 
-            StampsApiSession session = new StampsApiSession();
+            UspsWebClient session = new UspsWebClient(UspsResellerType.None);
 
             try
             {
-                StampsAddressValidationResults stampsResult = session.ValidateAddress(adapter);
+                UspsAddressValidationResults uspsResult = session.ValidateAddress(personAdapter);
 
-                if (stampsResult.IsSuccessfulMatch)
+                if (uspsResult.IsSuccessfulMatch)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(stampsResult.MatchedAddress, true, stampsResult.IsPoBox, stampsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(uspsResult.MatchedAddress, true, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
                 }
                 else
                 {
-                    validationResult.AddressValidationError = stampsResult.IsCityStateZipOk ?
+                    validationResult.AddressValidationError = uspsResult.IsCityStateZipOk ?
                         "City, State and ZIP Code are valid, but street address is not a match." :
                         "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
                 }
 
-                foreach (Address address in stampsResult.Candidates)
+                foreach (Address address in uspsResult.Candidates)
                 {
-                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, stampsResult.IsPoBox, stampsResult.ResidentialIndicator));
+                    validationResult.AddressValidationResults.Add(CreateAddressValidationResult(address, false, uspsResult.IsPoBox, uspsResult.ResidentialIndicator));
                 }
             }
-            catch (StampsException ex)
+            catch (UspsException ex)
             {
                 validationResult.AddressValidationError = ex.Message;
             }

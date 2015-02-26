@@ -159,6 +159,36 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(nudge.ContentDimensions.Width, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Width")));
             Assert.AreEqual(nudge.ContentDimensions.Height, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Height")));
         }
+
+        [TestMethod]
+        public void NudgeDeserializer_NudgeHasCorrectName_WhenNameIsProvided_Test()
+        {
+            XElement nudgeElement = XElement.Parse(GoodNudgeXml);
+
+            Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
+
+            Assert.AreEqual(GetValue(nudgeElement, "Name"), nudge.Name);            
+        }
+
+        [TestMethod]
+        public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsOmittedInXml_Test()
+        {
+            XElement nudgeElement = XElement.Parse(NudgeXmlWithoutNameNode);
+
+            Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
+
+            Assert.AreEqual(string.Empty, nudge.Name);
+        }
+
+        [TestMethod]
+        public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsEmpty_Test()
+        {
+            XElement nudgeElement = XElement.Parse(NudgeXmlWithEmptyNameNode);
+
+            Nudge nudge = NudgeDeserializer.Deserialize(nudgeElement);
+
+            Assert.AreEqual(string.Empty, nudge.Name);
+        }
         
         /// <summary>
         /// Gets the string value of an element
@@ -169,6 +199,35 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         }
 
         private const string GoodNudgeXml = @"
+            <Nudges>
+                 <Nudge>
+                     <NudgeID>12345</NudgeID>
+                     <Name>The nudge name</Name>
+                     <NudgeType>0</NudgeType>
+                     <ContentUri>https://www.shipworks.com/blah</ContentUri>
+                     <ContentDimensions>
+                         <Width>1024</Width>
+                         <Height>768</Height>
+                     </ContentDimensions>
+                     <Options>
+                         <Option>
+                             <OptionId>1</OptionId>
+                             <Index>0</Index>
+                             <Text>OK</Text>
+                             <Action>0</Action>
+                         </Option>
+                         <Option>
+                             <OptionId>2</OptionId>
+                             <Index>1</Index>
+                             <Text>Close</Text>
+                             <Action>1</Action>
+                         </Option>
+                     </Options>
+                 </Nudge>
+             </Nudges>";
+
+
+        private const string NudgeXmlWithoutNameNode = @"
             <Nudges>
                  <Nudge>
                      <NudgeID>12345</NudgeID>
@@ -195,6 +254,33 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
                  </Nudge>
              </Nudges>";
 
+        private const string NudgeXmlWithEmptyNameNode = @"
+            <Nudges>
+                 <Nudge>
+                     <NudgeID>12345</NudgeID>
+                     <Name></Name>
+                     <NudgeType>0</NudgeType>
+                     <ContentUri>https://www.shipworks.com/blah</ContentUri>
+                     <ContentDimensions>
+                         <Width>1024</Width>
+                         <Height>768</Height>
+                     </ContentDimensions>
+                     <Options>
+                         <Option>
+                             <OptionId>1</OptionId>
+                             <Index>0</Index>
+                             <Text>OK</Text>
+                             <Action>0</Action>
+                         </Option>
+                         <Option>
+                             <OptionId>2</OptionId>
+                             <Index>1</Index>
+                             <Text>Close</Text>
+                             <Action>1</Action>
+                         </Option>
+                     </Options>
+                 </Nudge>
+             </Nudges>";
     }
 
 }

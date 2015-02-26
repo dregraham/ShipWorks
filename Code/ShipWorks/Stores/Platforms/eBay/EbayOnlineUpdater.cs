@@ -389,16 +389,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-
-                // For now, treating Equaship as Postal until eBay accepts EquaShip. (1/27/2012)
-                case ShipmentTypeCode.EquaShip:
-
-                    carrierType = ShippingCarrierCodeType.USPS;
-                    break;
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.Endicia:
 
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;

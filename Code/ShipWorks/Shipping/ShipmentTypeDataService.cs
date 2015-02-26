@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping
 
         /// <summary>
         /// Load an existing shipment data into the parent entity, or create if it doesnt exist.  If its already loaded and present
-        /// it can be optionally refreshed. "shipment" and "parent" could be different in the case of dervied ShipmentTypes, like for Stamps.com
+        /// it can be optionally refreshed. "shipment" and "parent" could be different in the case of dervied ShipmentTypes, like for USPS
         /// where "parent" is the PostalShipment, not the actual Shipment
         /// </summary>
         public static void LoadShipmentData(ShipmentType shipmentType, ShipmentEntity shipment, EntityBase2 parent, string childProperty, Type entityType, bool refreshIfPresent)

@@ -73,48 +73,12 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(0, testObject.ScanForms.Count());
         }
 
-        //[TestMethod]
-        //public void Create_ScanFormsListCountIsOne_WhenCarrierIsNotExpress1_AndShipmentsListDoesNotContainCubicPackages_Test()
-        //{
-        //    List<ShipmentEntity> shipments = new List<ShipmentEntity>
-        //    {
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Stamps,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.FlatRateEnvelope
-        //            }
-        //        },
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Stamps,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.Package
-        //            }
-        //        },
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Stamps,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.FlatRateLargeBox
-        //            }
-        //        }
-        //    };
-
-        //    testObject.Create(shipments);
-
-        //    Assert.AreEqual(1, testObject.ScanForms.Count());
-        //}
-
         [TestMethod]
         public void Create_DelegatesCreationToGateway_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);
@@ -127,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);
@@ -140,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>
                 {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Stamps }
+                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
                 };
 
             testObject.Create(shipments);
@@ -173,53 +137,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(1, testObject.ScanForms.Count());
             Assert.AreEqual(result, testObject.ScanForms.ElementAt(0));
         }
-
-
-
-        //[TestMethod]
-        //public void Create_SeparatesCubicPackages_WhenCarrierIsExpress1_AndShipmentsListContainsCubicPackages_Test()
-        //{
-        //    List<ShipmentEntity> shipments = new List<ShipmentEntity>
-        //    {
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.Cubic
-        //            }
-        //        },
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.Cubic
-        //            }
-        //        },
-        //        new ShipmentEntity()
-        //        {
-        //            ShipmentType = (int) ShipmentTypeCode.Express1Endicia,
-        //            Postal = new PostalShipmentEntity
-        //            {
-        //                PackagingType = (int) PostalPackagingType.FlatRateLargeBox
-        //            }
-        //        }
-        //    };
-
-        //    testObject.Create(shipments);
-            
-        //    // A bit kludgy since we're depending on the order that scan forms get added to the list.
-        //    // Would be ideal to be able to find the list containing the cubic packages
-        //    EndiciaScanFormEntity cubicScanFormEntity = (EndiciaScanFormEntity) testObject.ScanForms.ToList()[0].ScanFormEntity;
-        //    EndiciaScanFormEntity allOtherScanFormEntity = (EndiciaScanFormEntity)testObject.ScanForms.ToList()[1].ScanFormEntity;
-
-        //    // Can do this since the property on the entity is being assigned based on the shipment count of the shipment list
-        //    // provided to the mocked gateway
-        //    Assert.AreEqual(2, cubicScanFormEntity.ShipmentCount);
-        //    Assert.AreEqual(1, allOtherScanFormEntity.ShipmentCount);
-        //}
-
+        
         [TestMethod]
         public void Print_DelegatesToBatchPrinter_WhenBatchSizeIsGreaterThanOne_Test()
         {

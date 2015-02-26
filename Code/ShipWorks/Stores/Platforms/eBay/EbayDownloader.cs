@@ -235,7 +235,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
             UpdatePayPal(order, orderType);
 
             // Charges
-            UpdateCharges(order, orderType);
+            if (!order.CombinedLocally)
+            {
+                UpdateCharges(order, orderType);                
+            }
 
             // Notes
             UpdateNotes(order, orderType);
@@ -251,7 +254,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Need to 
             MergeOrderItemsFromDb(order);
-            MergeChargesFromDb(order);
 
             // Make totals adjustments
             double amount = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
@@ -292,35 +294,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 .Where(fromEbay => orderLinesFromDb.All(fromDb => fromDb.OrderItemID != fromEbay.OrderItemID)) // select new items from ebay
                 .ToList()
                 .ForEach(fromEbay => order.OrderItems.Add(fromEbay)); // add them to the database
-        }
-
-        /// <summary>
-        /// Merges the charges from database.
-        /// </summary>
-        private static void MergeChargesFromDb(OrderEntity order)
-        {
-            List<OrderChargeEntity> chargesFromEbay = order.OrderCharges.ToList();
-            order.OrderCharges.Clear();
-
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
-                adapter.FetchEntityCollection(order.OrderCharges, new RelationPredicateBucket(OrderChargeFields.OrderID == order.OrderID));
-            }
-
-            EntityCollection<OrderChargeEntity> chargesFromDb = order.OrderCharges;
-
-            for (int index = 0; index < chargesFromDb.Count; index++)
-            {
-                OrderChargeEntity chargeFromDb = chargesFromDb[index];
-                OrderChargeEntity updatedLineFromEbay =
-                    chargesFromEbay.SingleOrDefault(line => line.OrderChargeID == chargeFromDb.OrderChargeID);
-
-                // Replace the order item from DB with potentially updated Ebay line.
-                if (updatedLineFromEbay != null)
-                {
-                    order.OrderCharges[index] = updatedLineFromEbay;
-                }
-            }
         }
 
         /// <summary>
@@ -1091,7 +1064,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 if (ebayOrder==null)
                 {
-                    ebayOrder = GetCombinedOrder(identifier, prefetch);
+                    ebayOrder = GetCombinedOrder(identifier, includeCharges);
                 }
 
                 return ebayOrder;
@@ -1101,26 +1074,39 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Gets the locally combined order if it exists.
         /// </summary>
-        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, PrefetchPath2 prefetch)
+        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, bool includeCharges)
         {
             EbayOrderEntity ebayOrder = null;
 
             if (identifier.EbayOrderID != 0)
             {
-                LinqMetaData metaData = new LinqMetaData(SqlAdapter.Default);
-                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity = metaData
-                    .EbayCombinedOrderRelation
-                    .FirstOrDefault(relation => relation.EbayOrderID == identifier.EbayOrderID && relation.StoreID == Store.StoreID);
+                IPredicateExpression relationFilter = new PredicateExpression();
+                relationFilter.Add(EbayCombinedOrderRelationFields.EbayOrderID == identifier.EbayOrderID);
+                relationFilter.AddWithAnd(EbayCombinedOrderRelationFields.StoreID == Store.StoreID);
+
+                RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
+                relationPredicateBucket.PredicateExpression.Add(relationFilter);
+
+                PrefetchPath2 prefetch = new PrefetchPath2(EntityType.EbayCombinedOrderRelationEntity);
+                if (includeCharges)
+                {
+                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder).SubPath.Add(OrderEntity.PrefetchPathOrderCharges);
+                }
+                else
+                {
+                    prefetch.Add(EbayCombinedOrderRelationEntity.PrefetchPathEbayOrder);
+                }
+
+                EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity;
+                using (EntityCollection<EbayCombinedOrderRelationEntity> relationCollection = new EntityCollection<EbayCombinedOrderRelationEntity>())
+                {
+                    SqlAdapter.Default.FetchEntityCollection(relationCollection, relationPredicateBucket, prefetch);
+                    ebayCombinedOrderRelationEntity = relationCollection.FirstOrDefault();
+                }
 
                 if (ebayCombinedOrderRelationEntity != null)
                 {
-                    RelationPredicateBucket bucket = new RelationPredicateBucket(EbayOrderFields.OrderID == ebayCombinedOrderRelationEntity.OrderID);
-
-                    using (EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>())
-                    {
-                        SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
-                        ebayOrder = collection.FirstOrDefault();
-                    }
+                    ebayOrder = ebayCombinedOrderRelationEntity.EbayOrder;
                 }
             }
 

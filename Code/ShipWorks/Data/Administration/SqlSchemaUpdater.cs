@@ -65,6 +65,16 @@ namespace ShipWorks.Data.Administration
 
                     throw;
                 }
+                catch (ArgumentException ex)
+                {
+                    // We can't figure out the version, which means it's been modified
+                    if (ex.Message.Contains("Version"))
+                    {
+                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                    }
+
+                    throw;
+                }
             }
         }
         /// <summary>
@@ -222,29 +232,9 @@ namespace ShipWorks.Data.Administration
                                     cmd.ExecuteNonQuery();
                                 });
                             }
-                            // If we were upgrading from 3.1.21 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
-                            if (installed < new Version(3, 1, 21, 0))
-                            {
-                                ExistingConnectionScope.ExecuteWithCommand(cmd =>
-                                {
-                                    cmd.CommandText = @"
-
-                                        DECLARE @dbName nvarchar(100)
-                                        DECLARE @dataName nvarchar(100)
-                                        DECLARE @logName nvarchar(100)
-
-                                        SET @dbName = DB_NAME()
-                                        SELECT @dataName = name FROM sys.database_files WHERE type = 0
-                                        SELECT @logName = name FROM sys.database_files WHERE type = 1
-
-                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @dataName + ''', FILEGROWTH = 100MB)' )
-                                        EXECUTE ('ALTER DATABASE ' + @dbName + ' MODIFY FILE ( NAME = N''' + @logName + ''', FILEGROWTH = 100MB)' )";
-
-                                    cmd.ExecuteNonQuery();
-                                });
-                            }
+                            
                             // If we were upgrading from this version, add AddressValidation filters.
-                            if (installed < new Version(3, 11, 0, 0))
+                            if (installed < new Version(3, 12, 0, 0))
                             {
                                 AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
                                 ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);

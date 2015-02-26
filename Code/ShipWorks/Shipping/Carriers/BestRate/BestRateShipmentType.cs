@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -21,8 +22,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Carriers.BestRate
 {
@@ -34,7 +33,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         private readonly ILog log;
         private readonly IBestRateShippingBrokerFactory brokerFactory;
         private readonly IRateGroupFilterFactory filterFactory;
-        private readonly int numberOfRatesToReturn = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class. This
@@ -62,11 +60,9 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <summary>
         /// Initializes a new instance of the <see cref="BestRateShipmentType"/> class.
         /// </summary>
-        public BestRateShipmentType(BestRateShippingBrokerFactory bestRateShippingBrokerFactory, int numberOfRatesToReturn)
+        public BestRateShipmentType(BestRateShippingBrokerFactory bestRateShippingBrokerFactory)
             : this(bestRateShippingBrokerFactory, new BestRateFilterFactory(), LogManager.GetLogger(typeof(BestRateShipmentType)))
-        {
-            this.numberOfRatesToReturn = numberOfRatesToReturn;
-        }
+        { }
 
         /// <summary>
         /// The ShipmentTypeCode represented by this ShipmentType
@@ -233,14 +229,14 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 List<BrokerException> brokerExceptions = new List<BrokerException>();
                 IEnumerable<RateGroup> rateGroups = GetRates(shipment, brokerExceptions);
 
-                RateGroup rateGroup = CompileBestRates(shipment, rateGroups, InterapptiveOnly.MagicKeysDown ? 100 : numberOfRatesToReturn);
+                RateGroup rateGroup = CompileBestRates(shipment, rateGroups);
 
                 // Get a list of distinct exceptions based on the message text ordered by the severity level (highest to lowest)
                 IEnumerable<BrokerException> distinctExceptions = brokerExceptions
                     .Where(ex => ex != null)
                     // I got an exception because this was null. I wasn't able to reproduce. this is here just in case. I don't like it.
                     .OrderBy(ex => ex.SeverityLevel, new BrokerExceptionSeverityLevelComparer())
-                    .GroupBy(e => e.Message)
+                    .GroupBy(e => e.Message + e.ShipmentType.ToString())
                     .Select(m => m.First()).ToList();
 
                 if (distinctExceptions.Any())
@@ -313,24 +309,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
 
             return compiledRateGroup;
         }
-
-        /// <summary>
-        /// Create a single, filtered rate group from a collection of rate groups
-        /// </summary>
-        private RateGroup CompileBestRates(ShipmentEntity shipment, IEnumerable<RateGroup> rateGroups, int count)
-        {
-            RateGroup compiledRateGroup = CompileBestRates(shipment, rateGroups);
-            compiledRateGroup = compiledRateGroup.CopyWithRates(compiledRateGroup.Rates.Take(count));
-
-            // Allow each rate result the chance to mask its description if needed based on the 
-            // other rate results in the list. This is for UPS that does not want its named-rates
-            // intermingled with rates from other carriers
-            compiledRateGroup.Rates.ForEach(x => x.MaskDescription(compiledRateGroup.Rates));
-            compiledRateGroup.Carrier = ShipmentTypeCode.BestRate;
-
-            return compiledRateGroup;
-        }
-
+        
         /// <summary>
         /// Starts getting rates for a broker
         /// </summary>

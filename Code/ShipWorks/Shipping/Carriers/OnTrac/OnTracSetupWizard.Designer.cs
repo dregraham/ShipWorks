@@ -1,5 +1,4 @@
-﻿using ShipWorks.Shipping.Carriers.Postal.Stamps;
-namespace ShipWorks.Shipping.Carriers.OnTrac
+﻿namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     partial class OnTracSetupWizard
     {
