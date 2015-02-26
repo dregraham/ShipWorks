@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
@@ -377,9 +376,10 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         {
             return question.Items
                 .Select(ConvertQuestionItemToBooleanAnswer)
+                .Where(x => x.Value)
                 .Select(x => x.Answer)
                 .DefaultIfEmpty()
-                .Aggregate((x, y) => x + ", " + y);
+                .Aggregate((x, y) => x + ", " + y) ?? "No Answer";
         }
 
         /// <summary>
@@ -390,15 +390,13 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
             BooleanAnswerType booleanAnswer = answer as BooleanAnswerType;
             if (booleanAnswer != null)
             {
-                booleanAnswer.Answer = booleanAnswer.ValueSpecified && booleanAnswer.Value ? "Yes" : "No";
-
                 return booleanAnswer;
             }
 
             TextAnswerType textAnswer = answer as TextAnswerType;
             return textAnswer != null ? 
                 new BooleanAnswerType { Answer = textAnswer.Value, Value = true } : 
-                new BooleanAnswerType { Answer = "No Answer", Value = false};
+                new BooleanAnswerType { Value = false};
         }
 
         /// <summary>
