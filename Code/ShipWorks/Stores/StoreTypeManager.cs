@@ -138,6 +138,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
                 case StoreTypeCode.LoadedCommerce: return new Platforms.LoadedCommerce.LoadedCommerceStoreType(store);
                 case StoreTypeCode.NoMoreRack: return new Platforms.NoMoreRack.NoMoreRackStoreType(store);
+                case StoreTypeCode.StageBloc: return new Platforms.StageBloc.StageBlocStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");
