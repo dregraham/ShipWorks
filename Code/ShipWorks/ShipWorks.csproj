@@ -638,6 +638,8 @@
     <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionality.cs" />
     <Compile Include="Editions\ShipmentTypeRestrictionType.cs" />
+    <Compile Include="Email\Accounts\IncomingProbeResult.cs" />
+    <Compile Include="Email\Accounts\SmtpProbeResult.cs" />
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
