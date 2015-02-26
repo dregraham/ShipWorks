@@ -129,7 +129,15 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         public void UpdateFilterCount()
         {
-            FilterCount count = FilterContentManager.GetCount(filterNode.FilterNodeID);
+            FilterNodeEntity currentFilterNode = filterNode;
+
+            if (currentFilterNode == null)
+            {
+                log.Warn("Cannot update filter count, current filter node is null");
+                return;
+            }
+
+            FilterCount count = FilterContentManager.GetCount(currentFilterNode.FilterNodeID);
             if (count != filterCount)
             {
                 filterCount = count;
