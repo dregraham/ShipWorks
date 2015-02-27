@@ -120,7 +120,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                 }
                 catch (SqlException ex)
                 {
-                    throw new MigrationException(string.Format("Failure executing script '{0}", script.Name), ex); ;
+                    throw new MigrationException(string.Format("Failure executing script '{0}", script.Name), ex);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized
                     catch (SqlException ex)
                     {
                         log.ErrorFormat("Failure executing migration script '{0}:{1}' for task instance {2}: {3}", script.Name, ex.LineNumber, ExecutionPlanIdentifier, ex.Message);
-                        throw new MigrationException(string.Format("Failure executing script '{0}':\n\n{1}: {2}", script.Name, ex.LineNumber, ex.Message), ex); ;
+                        throw new MigrationException(string.Format("Failure executing script '{0}':\n\n{1}: {2}", script.Name, ex.LineNumber, ex.Message), ex);
                     }
                 }
             }

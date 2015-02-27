@@ -2762,7 +2762,7 @@ namespace ShipWorks.UI.Controls.Html
             get {return (htmlSite != null) && (htmlSite.Document != null);}
         }
 
-        // <summary>
+        /// <summary>
         /// Executes The short cut keys that should be available and handles all of the cases of design mode versus not.
         /// </summary>
         internal void DoShortCut(Keys key) 

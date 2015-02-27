@@ -731,7 +731,6 @@ namespace ICSharpCode.SharpZipLib.Tar
 			}
 			else {
 				using (Stream inputStream = File.OpenRead(entryFilename)) {
-					int numWritten = 0;
 					byte[] localBuffer = new byte[32 * 1024];
 					while (true) {
 						int numRead = inputStream.Read(localBuffer, 0, localBuffer.Length);
@@ -741,11 +740,10 @@ namespace ICSharpCode.SharpZipLib.Tar
 						}
 						
 						tarOut.Write(localBuffer, 0, numRead);
-						numWritten +=  numRead;
 					}
 				}
 				
-				if ( (tempFileName != null) && (tempFileName.Length > 0) ) {
+				if (!string.IsNullOrEmpty(tempFileName)) {
 					File.Delete(tempFileName);
 				}
 				

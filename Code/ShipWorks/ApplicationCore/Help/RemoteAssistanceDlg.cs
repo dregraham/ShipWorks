@@ -134,6 +134,7 @@ namespace ShipWorks.ApplicationCore.Help
 
         /// <summary>
         /// Luanch the support client
+        /// </summary>
         private void LaunchClient(string clientExe)
         {
             FileInfo fileInfo = new FileInfo(clientExe);
