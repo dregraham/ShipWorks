@@ -31,6 +31,7 @@
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.sandGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnName = new Divelements.SandGrid.GridColumn();
+            this.gridColumnContractType = new Divelements.SandGrid.GridColumn();
             this.gridColumnPostage = new Divelements.SandGrid.GridColumn();
             this.add = new System.Windows.Forms.Button();
             this.remove = new System.Windows.Forms.Button();
@@ -43,8 +44,10 @@
             this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.sandGrid.ColumnClickBehavior = Divelements.SandGrid.ColumnClickBehavior.None;
             this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnName,
+            this.gridColumnContractType,
             this.gridColumnPostage});
             this.sandGrid.CommitOnLoseFocus = true;
             this.sandGrid.ImageTextSeparation = 1;
@@ -67,6 +70,14 @@
             this.gridColumnName.HeaderText = "Name";
             this.gridColumnName.MinimumWidth = 50;
             this.gridColumnName.Width = 240;
+            // 
+            // gridColumnContractType
+            // 
+            this.gridColumnContractType.AllowReorder = false;
+            this.gridColumnContractType.AutoSize = Divelements.SandGrid.ColumnAutoSizeMode.Spring;
+            this.gridColumnContractType.Clickable = false;
+            this.gridColumnContractType.HeaderText = "Rate Type";
+            this.gridColumnContractType.MinimumWidth = 50;
             // 
             // gridColumnPostage
             // 
@@ -135,5 +146,6 @@
         private System.Windows.Forms.Button add;
         private System.Windows.Forms.Button remove;
         private System.Windows.Forms.Button edit;
+        private Divelements.SandGrid.GridColumn gridColumnContractType;
     }
 }

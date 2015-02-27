@@ -958,7 +958,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             {
                                 // Use an error message that is slightly more informative, to let the user know which of their accounts
                                 // had the problem in the event that they have multiple accounts for Endicia and/or have an Express1 account
-                                errorMessage = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.", 
+                                errorMessage = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}Check that your account credentials are correct.", 
                                     account.EndiciaReseller == 0 ? "Endicia" : "Express1",
                                     account.AccountNumber,
                                     Environment.NewLine);

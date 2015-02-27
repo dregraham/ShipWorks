@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// <summary>
     /// Basic repository for retrieving USPS (Stamps.com Expedited) accounts
     /// </summary>
-    public class UspsAccountRepository : CarrierAccountRepositoryBase<StampsAccountEntity>, ICarrierAccountRepository<StampsAccountEntity>
+    public class UspsAccountRepository : CarrierAccountRepositoryBase<StampsAccountEntity>
     {
         /// <summary>
         /// Returns a list of USPS (Stamps.com Expedited) accounts.
@@ -41,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                long? accountID = new StampsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
+                long? accountID = new UspsShipmentType().GetPrimaryProfile().Postal.Stamps.StampsAccountID;
                 return GetProfileAccount(ShipmentTypeCode.Usps, accountID);
             }
         }

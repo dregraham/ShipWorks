@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.UI.Wizard;
@@ -24,13 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     public partial class StampsSetupWizard : ShipmentTypeSetupWizardForm
     {
         private readonly StampsRegistration stampsRegistration;
-        private readonly IEnumerable<PostalAccountRegistrationType> availableRegistrationTypes;
         private readonly ShipmentTypeCode shipmentTypeCode;
 
         bool registrationComplete = false;
         private readonly bool allowRegisteringExistingAccount;
         private int initialPersonControlHeight;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StampsSetupWizard"/> class.
@@ -55,17 +54,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             initialPersonControlHeight = personControl.Height;
 
             this.shipmentTypeCode = shipmentTypeCode;
+            StampsResellerType resellerType = shipmentTypeCode == ShipmentTypeCode.Stamps ? StampsResellerType.None : StampsResellerType.StampsExpedited;
 
             // Load up a registration object using the stamps validator and the gateway to 
             // the stamps.com API
-            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(), promotion);
+            stampsRegistration = new StampsRegistration(new StampsRegistrationValidator(), new StampsRegistrationGateway(resellerType), promotion);
             this.allowRegisteringExistingAccount = allowRegisteringExistingAccount;
-            availableRegistrationTypes = promotion.AvailableRegistrationTypes;
-
-            if (!availableRegistrationTypes.Any())
-            {
-                throw new StampsRegistrationException("There weren't any registration types provided to the Stamps.com setup wizard.");
-            }
 
             if (promotion.IsMonthlyFeeWaived)
             {
@@ -128,7 +122,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
 
             // Set default values on the stamps account and load the person control. Now the stampsAccount will
             // can be referred to throughout the wizard via the personControl
-            StampsAccount = new StampsAccountEntity { CountryCode = "US", ContractType = (int)StampsAccountContractType.Unknown };
+            StampsAccount = new StampsAccountEntity
+            {
+                CountryCode = "US", 
+                ContractType = (int)StampsAccountContractType.Unknown,
+                CreatedDate = DateTime.UtcNow
+            };
             StampsAccount.InitializeNullsToDefault();
 
             personControl.LoadEntity(new PersonAdapter(StampsAccount, string.Empty));
@@ -138,39 +137,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.HomeBasedBusiness, "Home-based Business"));
             stampsUsageType.Items.Add(new StampsAccountUsageDropdownItem(AccountType.OfficeBasedBusiness, "Office-based Business"));
             stampsUsageType.SelectedIndex = 0;
-
-            LoadAccountRegistrationTypes();
         }
-
-        private void LoadAccountRegistrationTypes()
-        {
-            stampsAccountRegistrationType.Items.Clear();
-            foreach (PostalAccountRegistrationType type in availableRegistrationTypes)
-            {
-                stampsAccountRegistrationType.Items.Add(new StampsRegistrationTypeDropdownItem(type, EnumHelper.GetDescription(type)));
-            }
-
-            if (stampsAccountRegistrationType.Items.Count == 1)
-            {
-                int adjustedHeight = stampsUsageType.Top - stampsAccountRegistrationType.Top;
-
-                // Don't show the registration drop down if there's only one item available
-                // and move up the other controls accordingly
-                stampsAccountRegistrationType.Visible = false;
-                stampsUsageType.Top = stampsAccountRegistrationType.Top;
-                
-                labelUsageType.Top = labelAccountType.Top;
-                labelAccountType.Visible = false;
-
-                panelAccountType.Height -= adjustedHeight;
-                personControl.Top -= adjustedHeight;
-                panelTerms.Top -= adjustedHeight;
-            }
-
-            // Default the selection to the first item in the list (in case it's hidden)
-            stampsAccountRegistrationType.SelectedIndex = 0;
-        }
-        
 
         /// <summary>
         /// User clicked the link to open the stamps.com website
@@ -205,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         /// <param name="e"></param>
         private void OnLinkStampsSpecialOffer(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.stamps.com/img/offer/Pro1599_GoldShipper_50offscale_50offprinter_0pwk_1/webreg2-learn-more.html", this);
+            WebHelper.OpenUrl("http://www.stamps.com/offerdetails/622/", this);
         }
 
         /// <summary>
@@ -251,9 +218,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 // We have the necessary information, so update our stamps.com registration
                 stampsRegistration.UsageType = ((StampsAccountUsageDropdownItem)stampsUsageType.SelectedItem).AccountType;
-
-                StampsRegistrationTypeDropdownItem selectedStampsRegistrationTypeDropdownItem = (StampsRegistrationTypeDropdownItem) stampsAccountRegistrationType.SelectedItem;
-                stampsRegistration.RegistrationType = selectedStampsRegistrationTypeDropdownItem.RegistrationType;
 
                 stampsRegistration.PhysicalAddress.FirstName = StampsAccount.FirstName;
                 stampsRegistration.PhysicalAddress.LastName = StampsAccount.LastName;
@@ -424,7 +388,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
         }
 
-
         /// <summary>
         /// Stepping next from the credentials page
         /// </summary>
@@ -443,11 +406,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                new StampsApiSession().AuthenticateUser(userID, password.Text, StampsResellerType.None);
+                new StampsWebClient(StampsResellerType.None).AuthenticateUser(userID, password.Text);
 
                 if (StampsAccount == null)
                 {
-                    StampsAccount = new StampsAccountEntity { ContractType = (int)StampsAccountContractType.Unknown };
+                    StampsAccount = new StampsAccountEntity
+                    {
+                        ContractType = (int)StampsAccountContractType.Unknown,
+                        CreatedDate = DateTime.UtcNow
+                    };
                 }
 
                 SaveStampsAccount(userID, SecureText.Encrypt(password.Text, userID));

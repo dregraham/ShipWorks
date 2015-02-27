@@ -64,6 +64,16 @@ namespace ShipWorks.Data.Administration
 
                     throw;
                 }
+                catch (ArgumentException ex)
+                {
+                    // We can't figure out the version, which means it's been modified
+                    if (ex.Message.Contains("Version"))
+                    {
+                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                    }
+
+                    throw;
+                }
             }
         }
         /// <summary>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
 using ShipWorks.Shipping.ScanForms;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -20,14 +21,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
     {
         private string invalidCarrierMessage;
         private string invalidShipmentMessage;
+        private IStampsWebClient iStampsWebClient;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public StampsScanFormGateway()
+        public StampsScanFormGateway(IStampsWebClient iStampsWebClient)
         {
             invalidCarrierMessage = "An attempt to create a Stamps.com SCAN form was made for a carrier other than Stamps.com.";
             invalidShipmentMessage = "Cannot create a Stamps.com SCAN form for a shipment that was not shipped with Stamps.com.";
+            this.iStampsWebClient = iStampsWebClient;
         }
 
         /// <summary>
@@ -75,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
             }
 
             // We have our list of Stamps.com shipments, so call the API to create the SCAN form
-            XDocument xDocument = new StampsApiSession().CreateScanForm(stampsShipments, accountEntity);
+            XDocument xDocument = iStampsWebClient.CreateScanForm(stampsShipments, accountEntity);
 
             // Ensure that we have the correct amount of transactions and urls
             if (xDocument.Descendants("TransactionId").Count() != xDocument.Descendants("Url").Count())

@@ -26,6 +26,7 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Tracking;
 using log4net;
+using ReturnedRateType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ReturnedRateType;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
 using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
@@ -599,12 +600,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new RateGroup(overallResults);
             }
-            catch (InvalidPackageDimensionsException ex)
-            {
-                RateGroup errorRates = new RateGroup(new List<RateResult>());
-                errorRates.AddFootnoteFactory(new InvalidPackageDimensionsRateFootnoteFactory(new FedExShipmentType(), ex.Message));
-                return errorRates;
-            }
             catch (Exception ex)
             {
                 throw (HandleException(ex));
@@ -733,7 +728,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="shipment">The shipment.</param>
         /// <param name="rateDetails">The rate details.</param>
         /// <returns>A List of RateResult objects.</returns>
-        private static List<RateResult> BuildRateResults(ShipmentEntity shipment, List<RateReplyDetail> rateDetails)
+        private List<RateResult> BuildRateResults(ShipmentEntity shipment, List<RateReplyDetail> rateDetails)
         {
             List<RateResult> results = new List<RateResult>();
 
@@ -771,10 +766,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
 
                 // Cost
-                decimal cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetCharge.Amount;
-                if (shipment.OriginCountryCode.ToUpper() == "CA" && rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsRequestedRateType) ?? 
+                    rateDetail.RatedShipmentDetails[0];
+
+                decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
+                if (shipment.OriginCountryCode.ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
                 {
-                    cost = rateDetail.RatedShipmentDetails[0].ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
                 }
 
                 // Add the shipworks rate object
@@ -792,6 +790,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             }
 
             return results;
+        }
+
+        /// <summary>
+        /// Is the rated shipment detail of the type requested by the customer
+        /// </summary>
+        private bool IsRequestedRateType(RatedShipmentDetail detail)
+        {
+            return detail.ShipmentRateDetail.RateTypeSpecified && 
+                detail.ShipmentRateDetail.RateType == RequestedRateType;
+        }
+
+        /// <summary>
+        /// Gets the rate type requested by the customer
+        /// </summary>
+        private ReturnedRateType RequestedRateType
+        {
+            get
+            {
+                return settingsRepository.UseListRates ? 
+                    ReturnedRateType.PAYOR_LIST_PACKAGE : 
+                    ReturnedRateType.PAYOR_ACCOUNT_PACKAGE;
+            }
         }
 
         /// <summary>
@@ -985,6 +1005,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 return new FedExException(errorMessage, carrierException);
             }
+            else if (exception is InvalidPackageDimensionsException)
+            {
+                return new FedExException(exception.Message, exception);
+            }
             else
             {
                 log.Error(exception.Message);
@@ -1054,7 +1078,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (exceptionMessage.Length > 0)
                 {
-                    exceptionMessage += string.Format("{0}Package dimensions must be greater than 0 and not 1x1x1.  ", System.Environment.NewLine);
+                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }

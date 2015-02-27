@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         private StampsRegistration CreateValidUnitedStatesRegistration()
         {
             promotion = new Mock<IRegistrationPromotion>();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+            promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
            
             gateway = new Mock<IStampsRegistrationGateway>();
 
@@ -33,10 +33,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
                 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
                                 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         private StampsRegistration CreateValidInternationalRegistration()
         {
             promotion = new Mock<IRegistrationPromotion>();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("valid promo code");
+            promotion.Setup(p => p.GetPromoCode()).Returns("valid promo code");
 
             StampsRegistration registration = new StampsRegistration(testObject, new Moq.Mock<IStampsRegistrationGateway>().Object, promotion.Object)
             {
@@ -67,10 +67,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.CodewordType2.PetsName,
                 SecondCodewordValue = "Fighting",
 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Stamps.WebServices.Address()
@@ -564,7 +564,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         {
             // Create a promo code of 51 characters (exceeds the upper bound by 1)
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345678901234567890123456789012345678901");
+            promotion.Setup(p => p.GetPromoCode()).Returns("123456789012345678901234567890123456789012345678901");
             
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -576,7 +576,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("12345678901234567890123456789012345678901");
+            promotion.Setup(p => p.GetPromoCode()).Returns("12345678901234567890123456789012345678901");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 
@@ -587,7 +587,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Stamps
         public void Validate_ReturnsEmptyList_WhenPromoCodeDoesNotMeetsUpperBound_Test()
         {
             StampsRegistration registration = CreateValidUnitedStatesRegistration();
-            promotion.Setup(p => p.GetPromoCode(It.IsAny<PostalAccountRegistrationType>())).Returns("123456789012345");
+            promotion.Setup(p => p.GetPromoCode()).Returns("123456789012345");
 
             IEnumerable<RegistrationValidationError> errors = testObject.Validate(registration);
 

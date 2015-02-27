@@ -35,7 +35,7 @@ namespace ShipWorks.Editions
             }
 
             // Initialize to an empty shipment type restriction set
-            ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize((XElement)null);
+            ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, (XElement)null);
 
             this.store = store;
         }

@@ -32,7 +32,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
 			toReturn.Add(this.BestRateProfileEntityUsingShippingProfileID);
-			toReturn.Add(this.EquaShipProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.FedExProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.IParcelProfileEntityUsingShippingProfileID);
 			toReturn.Add(this.OnTracProfileEntityUsingShippingProfileID);
@@ -61,25 +60,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("BestRateProfileEntity", false);
-				return relation;
-			}
-		}
-
-		/// <summary>Returns a new IEntityRelation object, between ShippingProfileEntity and EquaShipProfileEntity over the 1:1 relation they have, using the relation between the fields:
-		/// ShippingProfile.ShippingProfileID - EquaShipProfile.ShippingProfileID
-		/// </summary>
-		public virtual IEntityRelation EquaShipProfileEntityUsingShippingProfileID
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "EquaShip", true);
-
-				relation.AddEntityFieldPair(ShippingProfileFields.ShippingProfileID, EquaShipProfileFields.ShippingProfileID);
-
-
-
-				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShippingProfileEntity", true);
-				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("EquaShipProfileEntity", false);
 				return relation;
 			}
 		}

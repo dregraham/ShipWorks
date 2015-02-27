@@ -55,7 +55,9 @@ namespace ShipWorks.Shipping.Carriers.iParcel.BestRate
 
             // ConfigureNewShipment sets these fields, but we need to make sure they're what we expect
             currentShipment.IParcel.Packages[0].Weight = originalShipment.ContentWeight;
-            currentShipment.IParcel.Packages[0].DimsAddWeight = false;
+            currentShipment.IParcel.Packages[0].DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
+            currentShipment.IParcel.Packages[0].DimsWeight = originalShipment.BestRate.DimsWeight;
+
             currentShipment.IParcel.Service = (int)iParcelServiceType.Saver;
             currentShipment.IParcel.IParcelAccountID = account.IParcelAccountID;
 

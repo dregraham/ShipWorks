@@ -950,24 +950,6 @@
     <Compile Include=".\RelationClasses\MivaOrderItemAttributeRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
-    <Compile Include=".\EntityClasses\EquashipShipmentEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\EquashipShipmentRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityClasses\EquashipProfileEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\EntityClasses\EquashipAccountEntity.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\EquashipAccountRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
-    <Compile Include=".\RelationClasses\EquashipProfileRelations.cs">
-      <GeneratedBy>LLBLGen Pro</GeneratedBy>
-    </Compile>
     <Compile Include=".\EntityClasses\ShopifyOrderEntity.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>

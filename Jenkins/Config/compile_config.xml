@@ -76,7 +76,7 @@ rake setup:registry[$KEY] &quot;setup:sqlSession[$KEY,ShipWorks_SeedData]&quot;<
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@-code-analysis,@@FEATURE_NAME@@-units</childProjects>
+      <childProjects>@@FEATURE_NAME@@-code-analysis,@@FEATURE_NAME@@-units,@@FEATURE_NAME@@-ndepend</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

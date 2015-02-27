@@ -20,6 +20,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Stamps
         private ShipmentTypeCode shipmentTypeCode;
 
         /// <summary>
+        /// Need this for the designer...
+        /// </summary>
+        public StampsProfileControl() : this(ShipmentTypeCode.Stamps)
+        {
+            
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public StampsProfileControl(ShipmentTypeCode shipmentTypeCode)

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using log4net;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Stores.Communication;
@@ -327,18 +326,6 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private void LoadOrderItemAttributes(OrderItemEntity orderItem, LineItemType lineItem)
         {
-            //if (lineItem.SelectedVariationList != null)
-            //{
-            //    foreach (SelectedVariationType variation in lineItem.SelectedVariationList)
-            //    {
-            //        OrderItemAttributeEntity attribute = InstantiateOrderItemAttribute(orderItem);
-
-            //        attribute.Name = variation.Group;
-            //        attribute.Description = variation.Option;
-            //        attribute.UnitPrice = 0;
-            //    }
-            //}
-
             IEnumerable<KeyValuePair<string, string>> attributes = BuildVariationList(lineItem.SelectedVariationList)
                 .Concat(BuildQuestionAnswerList(lineItem.QuestionList));
 
@@ -368,8 +355,18 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         private static Dictionary<string, string> BuildQuestionAnswerList(IEnumerable<QuestionType> questionList)
         {
             return questionList == null ? 
-                new Dictionary<string, string>() : 
-                questionList.ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+                new Dictionary<string, string>() :
+                questionList.Where(q => !ExcludeSpecificQuestions(q))
+                            .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+        }
+
+        /// <summary>
+        /// Determines if the question should be ignored and not downloaded
+        /// </summary>
+        private static bool ExcludeSpecificQuestions(QuestionType question)
+        {
+            return question.Title.ToUpperInvariant()
+                                 .Contains("Policy Agreement".ToUpperInvariant());
         }
 
         /// <summary>
@@ -381,7 +378,8 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
                 .Select(ConvertQuestionItemToBooleanAnswer)
                 .Where(x => x.Value)
                 .Select(x => x.Answer)
-                .Aggregate((x, y) => x + ", " + y);
+                .DefaultIfEmpty()
+                .Aggregate((x, y) => x + ", " + y) ?? "No Answer";
         }
 
         /// <summary>
@@ -397,7 +395,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
 
             TextAnswerType textAnswer = answer as TextAnswerType;
             return textAnswer != null ? 
-                new BooleanAnswerType {Answer = textAnswer.Value, Value = true} : 
+                new BooleanAnswerType { Answer = textAnswer.Value, Value = true } : 
                 new BooleanAnswerType { Value = false};
         }
 

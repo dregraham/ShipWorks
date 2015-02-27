@@ -150,7 +150,7 @@
             this.accountPanel.Controls.Add(this.mailingPostalCode);
             this.accountPanel.Controls.Add(this.labelPassword);
             this.accountPanel.Controls.Add(this.labelMailingPostOffice);
-            this.accountPanel.Location = new System.Drawing.Point(3, 146);
+            this.accountPanel.Location = new System.Drawing.Point(3, 169);
             this.accountPanel.Name = "accountPanel";
             this.accountPanel.Size = new System.Drawing.Size(368, 491);
             this.accountPanel.TabIndex = 48;
@@ -167,6 +167,7 @@
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.personControl.FullName = "";
             this.personControl.Location = new System.Drawing.Point(8, 37);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 328);
@@ -187,7 +188,7 @@
             this.accountInfoControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.accountInfoControl.Location = new System.Drawing.Point(23, 25);
             this.accountInfoControl.Name = "accountInfoControl";
-            this.accountInfoControl.Size = new System.Drawing.Size(348, 121);
+            this.accountInfoControl.Size = new System.Drawing.Size(348, 144);
             this.accountInfoControl.TabIndex = 47;
             // 
             // StampsAccountEditorDlg
@@ -196,7 +197,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(385, 649);
+            this.ClientSize = new System.Drawing.Size(385, 672);
             this.Controls.Add(this.accountPanel);
             this.Controls.Add(this.accountInfoControl);
             this.Controls.Add(this.labelStamps);

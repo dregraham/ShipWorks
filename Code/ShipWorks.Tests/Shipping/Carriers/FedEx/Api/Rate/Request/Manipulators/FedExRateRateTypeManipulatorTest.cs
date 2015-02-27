@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             RateRequestType[] rateTypes = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
 
             Assert.AreEqual(1, rateTypes.Length);
-            Assert.AreEqual(RateRequestType.PREFERRED, rateTypes[0]);
+            Assert.AreEqual(RateRequestType.NONE, rateTypes[0]);
         }
     }
 }
