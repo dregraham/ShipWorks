@@ -586,6 +586,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             }
         }
 
+        /// <summary>
         /// Load an order charge for the given values for the order
         /// </summary>
         private void LoadCharge(OrderEntity order, string type, string name, decimal amount)
