@@ -101,7 +101,11 @@ namespace ShipWorks.Editions
             }
 
             // Now that we have the full list of restrictions, remove any registration restrictions if needed.
-            restrictions = RemoveShipmentTypeRegistrationIfNeeded(restrictions, storeEntities);
+            restrictions = RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia,  restrictions, storeEntities);
+
+            // If there weren't any accounts for Endicia and registration was restricted, we disable the shipment type too.  So remove that restriction 
+            // if needed.
+            restrictions = RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentType, ShipmentTypeCode.Endicia, restrictions, storeEntities);
 
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
         }
@@ -112,11 +116,11 @@ namespace ShipWorks.Editions
         /// 
         /// This will return an modified list of restrictions if only trial restrictions exist. 
         /// </summary>
-        public static List<EditionRestriction> RemoveShipmentTypeRegistrationIfNeeded(List<EditionRestriction> restrictions, List<StoreEntity> stores)
+        public static List<EditionRestriction> RemoveShipmentTypeRegistrationIfNeeded(EditionFeature editionFeature, ShipmentTypeCode shipmentTypeCode, List<EditionRestriction> restrictions, List<StoreEntity> stores)
         {
-            // Get the Endicia shipment type registration restrictions
+            // Get the shipment type registration restrictions
             List<EditionRestriction> allRegistrationRestrictions = restrictions
-                .Where(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode) r.Data == ShipmentTypeCode.Endicia).ToList();
+                .Where(r => r.Feature == editionFeature && (ShipmentTypeCode)r.Data == shipmentTypeCode).ToList();
 
             List<StoreEntity> restrictedStores = allRegistrationRestrictions.Select(r => r.Edition.Store).ToList();
 

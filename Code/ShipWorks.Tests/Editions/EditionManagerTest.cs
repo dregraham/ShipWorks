@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Editions
                 trialStore
             };
 
-            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(restrictions, stores);
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Editions
                 disabledStore2
             };
 
-            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(restrictions, stores);
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Editions
                 trialStore
             };
 
-            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(restrictions, stores);
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
@@ -123,7 +123,7 @@ namespace ShipWorks.Tests.Editions
                 enabledStore2
             };
 
-            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(restrictions, stores);
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
@@ -145,7 +145,7 @@ namespace ShipWorks.Tests.Editions
                 disabledStore2
             };
 
-            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(restrictions, stores);
+            List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
