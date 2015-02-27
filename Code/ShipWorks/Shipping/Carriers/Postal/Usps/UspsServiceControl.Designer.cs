@@ -363,6 +363,7 @@
             this.labelMemoWarning.AutoSize = true;
             this.labelMemoWarning.Location = new System.Drawing.Point(56, 321);
             this.labelMemoWarning.Name = "labelMemoWarning";
+            this.labelMemoWarning.ForeColor = System.Drawing.Color.DimGray;
             this.labelMemoWarning.Size = new System.Drawing.Size(315, 13);
             this.labelMemoWarning.TabIndex = 7;
             this.labelMemoWarning.Text = "Express Mail and International labels do not display memo fields.";
@@ -375,12 +376,12 @@
             this.Controls.Add(this.sectionFrom);
             this.Name = "UspsServiceControl";
             this.Size = new System.Drawing.Size(384, 633);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
