@@ -5472,21 +5472,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID);}
 		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp1 field instance</summary>
-		public static EntityField2 RubberStamp1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp1);}
-		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp2 field instance</summary>
-		public static EntityField2 RubberStamp2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp2);}
-		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp3 field instance</summary>
-		public static EntityField2 RubberStamp3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp3);}
-		}
 		/// <summary>Creates a new EndiciaProfileEntity.ScanBasedReturn field instance</summary>
 		public static EntityField2 ScanBasedReturn
 		{
@@ -5566,21 +5551,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferenceID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp1 field instance</summary>
-		public static EntityField2 RubberStamp1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp1);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp2 field instance</summary>
-		public static EntityField2 RubberStamp2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp2);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp3 field instance</summary>
-		public static EntityField2 RubberStamp3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp3);}
 		}
 		/// <summary>Creates a new EndiciaShipmentEntity.TransactionID field instance</summary>
 		public static EntityField2 TransactionID
@@ -14282,6 +14252,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.EntryFacility);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.Memo1 field instance</summary>
+		public static EntityField2 Memo1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo1);}
+		}
+		/// <summary>Creates a new PostalProfileEntity.Memo2 field instance</summary>
+		public static EntityField2 Memo2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo2);}
+		}
+		/// <summary>Creates a new PostalProfileEntity.Memo3 field instance</summary>
+		public static EntityField2 Memo3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo3);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -14376,6 +14361,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 EntryFacility
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.EntryFacility);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo1 field instance</summary>
+		public static EntityField2 Memo1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo1);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo2 field instance</summary>
+		public static EntityField2 Memo2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo2);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo3 field instance</summary>
+		public static EntityField2 Memo3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo3);}
 		}
 	}
 
@@ -19747,11 +19747,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.RequireFullAddressValidation);}
 		}
-		/// <summary>Creates a new UspsProfileEntity.Memo field instance</summary>
-		public static EntityField2 Memo
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.Memo);}
-		}
 		/// <summary>Creates a new UspsProfileEntity.RateShop field instance</summary>
 		public static EntityField2 RateShop
 		{
@@ -19831,11 +19826,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UspsTransactionID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.UspsTransactionID);}
-		}
-		/// <summary>Creates a new UspsShipmentEntity.Memo field instance</summary>
-		public static EntityField2 Memo
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.Memo);}
 		}
 		/// <summary>Creates a new UspsShipmentEntity.OriginalUspsAccountID field instance</summary>
 		public static EntityField2 OriginalUspsAccountID

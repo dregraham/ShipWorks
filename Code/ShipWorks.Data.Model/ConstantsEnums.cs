@@ -2552,12 +2552,6 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>ReferenceID. </summary>
 		ReferenceID,
-		///<summary>RubberStamp1. </summary>
-		RubberStamp1,
-		///<summary>RubberStamp2. </summary>
-		RubberStamp2,
-		///<summary>RubberStamp3. </summary>
-		RubberStamp3,
 		///<summary>ScanBasedReturn. </summary>
 		ScanBasedReturn,
 		/// <summary></summary>
@@ -2608,12 +2602,6 @@ namespace ShipWorks.Data.Model
 		NoPostage,
 		///<summary>ReferenceID. </summary>
 		ReferenceID,
-		///<summary>RubberStamp1. </summary>
-		RubberStamp1,
-		///<summary>RubberStamp2. </summary>
-		RubberStamp2,
-		///<summary>RubberStamp3. </summary>
-		RubberStamp3,
 		///<summary>TransactionID. </summary>
 		TransactionID,
 		///<summary>RefundFormID. </summary>
@@ -6634,6 +6622,12 @@ namespace ShipWorks.Data.Model
 		SortType,
 		///<summary>EntryFacility. </summary>
 		EntryFacility,
+		///<summary>Memo1. </summary>
+		Memo1,
+		///<summary>Memo2. </summary>
+		Memo2,
+		///<summary>Memo3. </summary>
+		Memo3,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -6681,6 +6675,12 @@ namespace ShipWorks.Data.Model
 		SortType,
 		///<summary>EntryFacility. </summary>
 		EntryFacility,
+		///<summary>Memo1. </summary>
+		Memo1,
+		///<summary>Memo2. </summary>
+		Memo2,
+		///<summary>Memo3. </summary>
+		Memo3,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -9243,8 +9243,6 @@ namespace ShipWorks.Data.Model
 		HidePostage,
 		///<summary>RequireFullAddressValidation. </summary>
 		RequireFullAddressValidation,
-		///<summary>Memo. </summary>
-		Memo,
 		///<summary>RateShop. </summary>
 		RateShop,
 		/// <summary></summary>
@@ -9295,8 +9293,6 @@ namespace ShipWorks.Data.Model
 		IntegratorTransactionID,
 		///<summary>UspsTransactionID. </summary>
 		UspsTransactionID,
-		///<summary>Memo. </summary>
-		Memo,
 		///<summary>OriginalUspsAccountID. </summary>
 		OriginalUspsAccountID,
 		///<summary>ScanFormBatchID. </summary>

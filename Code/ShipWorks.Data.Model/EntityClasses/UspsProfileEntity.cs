@@ -478,9 +478,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RequireFullAddressValidation", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Memo", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("RateShop", fieldHashtable);
 		}
 		#endregion
@@ -632,17 +629,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)UspsProfileFieldIndex.RequireFullAddressValidation, false); }
 			set	{ SetValue((int)UspsProfileFieldIndex.RequireFullAddressValidation, value); }
-		}
-
-		/// <summary> The Memo property of the Entity UspsProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."Memo"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String Memo
-		{
-			get { return (System.String)GetValue((int)UspsProfileFieldIndex.Memo, true); }
-			set	{ SetValue((int)UspsProfileFieldIndex.Memo, value); }
 		}
 
 		/// <summary> The RateShop property of the Entity UspsProfile<br/><br/>

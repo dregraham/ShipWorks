@@ -1467,7 +1467,10 @@ CREATE TABLE [dbo].[PostalProfile]
 [CustomsContentDescription] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ExpressSignatureWaiver] [bit] NULL,
 [SortType] [int] NULL,
-[EntryFacility] [int] NULL
+[EntryFacility] [int] NULL,
+[Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1483,9 +1486,6 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [StealthPostage] [bit] NULL,
 [NoPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ScanBasedReturn] [bit] NULL
 )
 GO
@@ -1545,7 +1545,10 @@ CREATE TABLE [dbo].[PostalShipment]
 [InsuranceValue] [money] NOT NULL,
 [ExpressSignatureWaiver] [bit] NOT NULL,
 [SortType] [int] NOT NULL,
-[EntryFacility] [int] NOT NULL
+[EntryFacility] [int] NOT NULL,
+[Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1562,9 +1565,6 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [StealthPostage] [bit] NOT NULL,
 [NoPostage] [bit] NOT NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
 [ScanFormBatchID] [bigint] NULL,
@@ -3192,7 +3192,6 @@ CREATE TABLE [dbo].[UspsProfile]
 [UspsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RateShop] [bit] NULL
 )
 GO
@@ -3227,7 +3226,6 @@ CREATE TABLE [dbo].[UspsShipment]
 [RequireFullAddressValidation] [bit] NOT NULL,
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
 [UspsTransactionID] [uniqueidentifier] NOT NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalUspsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,

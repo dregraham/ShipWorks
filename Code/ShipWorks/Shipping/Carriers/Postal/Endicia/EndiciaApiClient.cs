@@ -517,14 +517,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // Reference and rubber
-            postal.Endicia.RubberStamp1 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp1, postal), 50);
-            postal.Endicia.RubberStamp2 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp2, postal), 50);
-            postal.Endicia.RubberStamp3 = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.RubberStamp3, postal), 50);
-            postal.Endicia.ReferenceID = StringUtility.Truncate(ProcessTokenizedField(postal.Endicia.ReferenceID, postal), 50);
+            postal.Memo1 = ProcessTokenizedField(postal.Memo1, postal).Truncate(50);
+            postal.Memo2 = ProcessTokenizedField(postal.Memo2, postal).Truncate(50);
+            postal.Memo3 = ProcessTokenizedField(postal.Memo3, postal).Truncate(50);
+            postal.Endicia.ReferenceID = ProcessTokenizedField(postal.Endicia.ReferenceID, postal).Truncate(50);
 
-            request.RubberStamp1 = postal.Endicia.RubberStamp1;
-            request.RubberStamp2 = postal.Endicia.RubberStamp2;
-            request.RubberStamp3 = postal.Endicia.RubberStamp3;
+            request.RubberStamp1 = postal.Memo1;
+            request.RubberStamp2 = postal.Memo2;
+            request.RubberStamp3 = postal.Memo3;
             request.ReferenceID = postal.Endicia.ReferenceID;
 
             // If it's supposed to be Endicia insurance

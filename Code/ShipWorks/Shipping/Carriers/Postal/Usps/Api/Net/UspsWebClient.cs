@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 Url = ServiceUrl
             };
-
+            
             return webService;
         }
 
@@ -710,7 +710,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             RateV15 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
             Usps.WebServices.PostageBalance postageBalance;
-            string memo = StringUtility.Truncate(TemplateTokenProcessor.ProcessTokens(shipment.Postal.Usps.Memo, shipment.ShipmentID), 200);
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -784,7 +783,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         isSampleOnly,
                         thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
-                        memo, // Memo
+                        UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
                         false, // delivery notify
                         null,  // shipment notification

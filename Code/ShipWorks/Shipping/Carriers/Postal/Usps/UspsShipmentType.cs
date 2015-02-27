@@ -672,7 +672,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             usps.UspsAccountID = AccountRepository.Accounts.Any() ? AccountRepository.Accounts.First().UspsAccountID : 0;
             usps.RequireFullAddressValidation = true;
             usps.HidePostage = true;
-            usps.Memo = string.Empty;
 
             profile.Postal.Usps.RateShop = true;
         }
@@ -693,7 +692,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.UspsAccountID, uspsShipment, UspsShipmentFields.UspsAccountID);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RequireFullAddressValidation, uspsShipment, UspsShipmentFields.RequireFullAddressValidation);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.HidePostage, uspsShipment, UspsShipmentFields.HidePostage);
-                ShippingProfileUtility.ApplyProfileValue(uspsProfile.Memo, uspsShipment, UspsShipmentFields.Memo);
                 ShippingProfileUtility.ApplyProfileValue(uspsProfile.RateShop, uspsShipment, UspsShipmentFields.RateShop);
             }
         }

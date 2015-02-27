@@ -41,7 +41,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 18;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 21;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 51;
             tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 149;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;

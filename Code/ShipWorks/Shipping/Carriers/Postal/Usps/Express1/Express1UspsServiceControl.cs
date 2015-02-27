@@ -86,7 +86,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 {
                     uspsAccount.ApplyMultiValue(shipment.Postal.Usps.UspsAccountID);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Usps.RequireFullAddressValidation);
-                    memo.ApplyMultiText(shipment.Postal.Usps.Memo);
+                    memo1.ApplyMultiText(shipment.Postal.Memo1);
+                    memo2.ApplyMultiText(shipment.Postal.Memo2);
+                    memo3.ApplyMultiText(shipment.Postal.Memo3);
                 }
             }
 
@@ -112,7 +114,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             {
                 uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long) v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
-                memo.ReadMultiText(t => shipment.Postal.Usps.Memo = t);
+                memo1.ReadMultiText(t => shipment.Postal.Memo1 = t);
+                memo2.ReadMultiText(t => shipment.Postal.Memo2 = t);
+                memo3.ReadMultiText(t => shipment.Postal.Memo3 = t);
             }
 
             ResumeRateCriteriaChangeEvent();
