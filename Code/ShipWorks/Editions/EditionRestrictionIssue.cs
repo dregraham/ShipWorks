@@ -49,12 +49,10 @@ namespace ShipWorks.Editions
         public string GetDescription()
         {
             object requiredData = Data;
-            object actualData = conflictingData;
 
             if (Feature == EditionFeature.ShipmentType)
             {
                 requiredData = ShipmentTypeManager.GetType((ShipmentTypeCode) Data).ShipmentTypeName;
-                actualData = ShipmentTypeManager.GetType((ShipmentTypeCode) conflictingData).ShipmentTypeName;
             }
 
             // You can optionall separte "RequiresUpgrade" and "Forbidden" descriptions with a Pipe

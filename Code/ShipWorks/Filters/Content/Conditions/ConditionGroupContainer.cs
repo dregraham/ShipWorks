@@ -89,7 +89,7 @@ namespace ShipWorks.Filters.Content.Conditions
             {
                 sb.Append(firstSql);
 
-                /// See if we are going to need the second
+                // See if we are going to need the second
                 if (!string.IsNullOrEmpty(secondSql))
                 {
                     sb.AppendFormat("\n{0}{1}\n", context.IndentString, (joinType == ConditionGroupJoinType.And ? "AND" : "OR"));

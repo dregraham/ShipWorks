@@ -44,10 +44,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Dime
             // write our contents to the original stream, then close the original stream
             using (BinaryWriter writer = new BinaryWriter(originalStream))
             {
-                uint dimeSize = 0;
                 for (int i = 0; i < attachments.Count; i++)
                 {
-                    dimeSize += attachments[i].WriteDimeRecord(writer, i == 0, i == (attachments.Count - 1));
+                    attachments[i].WriteDimeRecord(writer, i == 0, i == (attachments.Count - 1));
                 }
             }
 

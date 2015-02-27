@@ -168,7 +168,7 @@ namespace ShipWorks.Email.Accounts
                 emailAccount.OutgoingSecurityType = (int) SmtpSecurity.Unsecure;
             }
 
-            /// Save the credential source
+            // Save the credential source
             emailAccount.OutgoingCredentialSource = (int) credentialSource;
 
             DialogResult = DialogResult.OK;
