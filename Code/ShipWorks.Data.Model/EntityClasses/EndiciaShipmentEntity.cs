@@ -515,15 +515,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferenceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("RubberStamp1", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RubberStamp2", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RubberStamp3", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("TransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -752,39 +743,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.ReferenceID, true); }
 			set	{ SetValue((int)EndiciaShipmentFieldIndex.ReferenceID, value); }
-		}
-
-		/// <summary> The RubberStamp1 property of the Entity EndiciaShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaShipment"."RubberStamp1"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String RubberStamp1
-		{
-			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.RubberStamp1, true); }
-			set	{ SetValue((int)EndiciaShipmentFieldIndex.RubberStamp1, value); }
-		}
-
-		/// <summary> The RubberStamp2 property of the Entity EndiciaShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaShipment"."RubberStamp2"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String RubberStamp2
-		{
-			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.RubberStamp2, true); }
-			set	{ SetValue((int)EndiciaShipmentFieldIndex.RubberStamp2, value); }
-		}
-
-		/// <summary> The RubberStamp3 property of the Entity EndiciaShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaShipment"."RubberStamp3"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String RubberStamp3
-		{
-			get { return (System.String)GetValue((int)EndiciaShipmentFieldIndex.RubberStamp3, true); }
-			set	{ SetValue((int)EndiciaShipmentFieldIndex.RubberStamp3, value); }
 		}
 
 		/// <summary> The TransactionID property of the Entity EndiciaShipment<br/><br/>

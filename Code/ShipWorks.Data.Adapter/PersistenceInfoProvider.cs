@@ -831,16 +831,13 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits EndiciaProfileEntity's mappings</summary>
 		private void InitEndiciaProfileEntityMappings()
 		{
-			base.AddElementMapping( "EndiciaProfileEntity", "ShipWorksLocal", @"dbo", "EndiciaProfile", 9 );
+			base.AddElementMapping( "EndiciaProfileEntity", "ShipWorksLocal", @"dbo", "EndiciaProfile", 6 );
 			base.AddElementFieldMapping( "EndiciaProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "EndiciaProfileEntity", "EndiciaAccountID", "EndiciaAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "EndiciaProfileEntity", "StealthPostage", "StealthPostage", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
 			base.AddElementFieldMapping( "EndiciaProfileEntity", "NoPostage", "NoPostage", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "EndiciaProfileEntity", "ReferenceID", "ReferenceID", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "EndiciaProfileEntity", "RubberStamp1", "RubberStamp1", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "EndiciaProfileEntity", "RubberStamp2", "RubberStamp2", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "EndiciaProfileEntity", "RubberStamp3", "RubberStamp3", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "EndiciaProfileEntity", "ScanBasedReturn", "ScanBasedReturn", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
+			base.AddElementFieldMapping( "EndiciaProfileEntity", "ScanBasedReturn", "ScanBasedReturn", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
 		}
 		/// <summary>Inits EndiciaScanFormEntity's mappings</summary>
 		private void InitEndiciaScanFormEntityMappings()
@@ -857,21 +854,18 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits EndiciaShipmentEntity's mappings</summary>
 		private void InitEndiciaShipmentEntityMappings()
 		{
-			base.AddElementMapping( "EndiciaShipmentEntity", "ShipWorksLocal", @"dbo", "EndiciaShipment", 14 );
+			base.AddElementMapping( "EndiciaShipmentEntity", "ShipWorksLocal", @"dbo", "EndiciaShipment", 11 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "EndiciaAccountID", "EndiciaAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "OriginalEndiciaAccountID", "OriginalEndiciaAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 2 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "StealthPostage", "StealthPostage", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "NoPostage", "NoPostage", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 4 );
 			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ReferenceID", "ReferenceID", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RubberStamp1", "RubberStamp1", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RubberStamp2", "RubberStamp2", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RubberStamp3", "RubberStamp3", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "TransactionID", "TransactionID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RefundFormID", "RefundFormID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 11 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 12 );
-			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 13 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "TransactionID", "TransactionID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 6 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RefundFormID", "RefundFormID", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "ScanBasedReturn", "ScanBasedReturn", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
+			base.AddElementFieldMapping( "EndiciaShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
 		}
 		/// <summary>Inits EtsyOrderEntity's mappings</summary>
 		private void InitEtsyOrderEntityMappings()
@@ -1890,7 +1884,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits PostalProfileEntity's mappings</summary>
 		private void InitPostalProfileEntityMappings()
 		{
-			base.AddElementMapping( "PostalProfileEntity", "ShipWorksLocal", @"dbo", "PostalProfile", 18 );
+			base.AddElementMapping( "PostalProfileEntity", "ShipWorksLocal", @"dbo", "PostalProfile", 21 );
 			base.AddElementFieldMapping( "PostalProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "PostalProfileEntity", "Service", "Service", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "PostalProfileEntity", "Confirmation", "Confirmation", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -1909,11 +1903,14 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "PostalProfileEntity", "ExpressSignatureWaiver", "ExpressSignatureWaiver", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
 			base.AddElementFieldMapping( "PostalProfileEntity", "SortType", "SortType", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
 			base.AddElementFieldMapping( "PostalProfileEntity", "EntryFacility", "EntryFacility", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
+			base.AddElementFieldMapping( "PostalProfileEntity", "Memo1", "Memo1", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "PostalProfileEntity", "Memo2", "Memo2", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "PostalProfileEntity", "Memo3", "Memo3", true, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 20 );
 		}
 		/// <summary>Inits PostalShipmentEntity's mappings</summary>
 		private void InitPostalShipmentEntityMappings()
 		{
-			base.AddElementMapping( "PostalShipmentEntity", "ShipWorksLocal", @"dbo", "PostalShipment", 18 );
+			base.AddElementMapping( "PostalShipmentEntity", "ShipWorksLocal", @"dbo", "PostalShipment", 21 );
 			base.AddElementFieldMapping( "PostalShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "PostalShipmentEntity", "Service", "Service", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "PostalShipmentEntity", "Confirmation", "Confirmation", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 2 );
@@ -1932,6 +1929,9 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "PostalShipmentEntity", "ExpressSignatureWaiver", "ExpressSignatureWaiver", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 15 );
 			base.AddElementFieldMapping( "PostalShipmentEntity", "SortType", "SortType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
 			base.AddElementFieldMapping( "PostalShipmentEntity", "EntryFacility", "EntryFacility", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 17 );
+			base.AddElementFieldMapping( "PostalShipmentEntity", "Memo1", "Memo1", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "PostalShipmentEntity", "Memo2", "Memo2", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "PostalShipmentEntity", "Memo3", "Memo3", false, (int)SqlDbType.NVarChar, 300, 0, 0, false, "", null, typeof(System.String), 20 );
 		}
 		/// <summary>Inits PrintResultEntity's mappings</summary>
 		private void InitPrintResultEntityMappings()
@@ -2754,13 +2754,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UspsProfileEntity's mappings</summary>
 		private void InitUspsProfileEntityMappings()
 		{
-			base.AddElementMapping( "UspsProfileEntity", "ShipWorksLocal", @"dbo", "UspsProfile", 6 );
+			base.AddElementMapping( "UspsProfileEntity", "ShipWorksLocal", @"dbo", "UspsProfile", 5 );
 			base.AddElementFieldMapping( "UspsProfileEntity", "ShippingProfileID", "ShippingProfileID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UspsProfileEntity", "UspsAccountID", "UspsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "UspsProfileEntity", "HidePostage", "HidePostage", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
 			base.AddElementFieldMapping( "UspsProfileEntity", "RequireFullAddressValidation", "RequireFullAddressValidation", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
-			base.AddElementFieldMapping( "UspsProfileEntity", "Memo", "Memo", true, (int)SqlDbType.NVarChar, 200, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "UspsProfileEntity", "RateShop", "RateShop", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
+			base.AddElementFieldMapping( "UspsProfileEntity", "RateShop", "RateShop", true, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 4 );
 		}
 		/// <summary>Inits UspsScanFormEntity's mappings</summary>
 		private void InitUspsScanFormEntityMappings()
@@ -2777,18 +2776,17 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UspsShipmentEntity's mappings</summary>
 		private void InitUspsShipmentEntityMappings()
 		{
-			base.AddElementMapping( "UspsShipmentEntity", "ShipWorksLocal", @"dbo", "UspsShipment", 11 );
+			base.AddElementMapping( "UspsShipmentEntity", "ShipWorksLocal", @"dbo", "UspsShipment", 10 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "UspsAccountID", "UspsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "HidePostage", "HidePostage", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "RequireFullAddressValidation", "RequireFullAddressValidation", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "IntegratorTransactionID", "IntegratorTransactionID", false, (int)SqlDbType.UniqueIdentifier, 0, 0, 0, false, "", null, typeof(System.Guid), 4 );
 			base.AddElementFieldMapping( "UspsShipmentEntity", "UspsTransactionID", "UspsTransactionID", false, (int)SqlDbType.UniqueIdentifier, 0, 0, 0, false, "", null, typeof(System.Guid), 5 );
-			base.AddElementFieldMapping( "UspsShipmentEntity", "Memo", "Memo", false, (int)SqlDbType.NVarChar, 200, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "UspsShipmentEntity", "OriginalUspsAccountID", "OriginalUspsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
-			base.AddElementFieldMapping( "UspsShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
-			base.AddElementFieldMapping( "UspsShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 9 );
-			base.AddElementFieldMapping( "UspsShipmentEntity", "RateShop", "RateShop", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 10 );
+			base.AddElementFieldMapping( "UspsShipmentEntity", "OriginalUspsAccountID", "OriginalUspsAccountID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
+			base.AddElementFieldMapping( "UspsShipmentEntity", "ScanFormBatchID", "ScanFormBatchID", true, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 7 );
+			base.AddElementFieldMapping( "UspsShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 8 );
+			base.AddElementFieldMapping( "UspsShipmentEntity", "RateShop", "RateShop", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
 		}
 		/// <summary>Inits VersionSignoffEntity's mappings</summary>
 		private void InitVersionSignoffEntityMappings()

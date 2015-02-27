@@ -107,6 +107,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             postal.SortType = (int) PostalSortType.Nonpresorted;
             postal.EntryFacility = (int) PostalEntryFacility.Other;
+
+            postal.Memo1 = string.Empty;
+            postal.Memo2 = string.Empty;
+            postal.Memo3 = string.Empty;
         }
 
         /// <summary>
@@ -149,6 +153,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             ShippingProfileUtility.ApplyProfileValue(postalProfile.SortType, postalShipment, PostalShipmentFields.SortType);
             ShippingProfileUtility.ApplyProfileValue(postalProfile.EntryFacility, postalShipment, PostalShipmentFields.EntryFacility);
+
+            ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo1, postalShipment, PostalShipmentFields.Memo1);
+            ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo2, postalShipment, PostalShipmentFields.Memo2);
+            ShippingProfileUtility.ApplyProfileValue(postalProfile.Memo3, postalShipment, PostalShipmentFields.Memo3);
 
             UpdateDynamicShipmentData(shipment);
 

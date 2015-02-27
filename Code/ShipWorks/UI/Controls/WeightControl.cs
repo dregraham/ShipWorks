@@ -86,7 +86,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            if (DesignModeDetector.IsDesignerHosted(this))
+            if (DesignModeDetector.IsDesignerHosted())
             {
                 return;
             }

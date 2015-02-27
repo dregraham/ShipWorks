@@ -71,7 +71,7 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
         protected override void OnLoad(EventArgs e)
         {
             // Can't be called inthe constructor since its virtual
-            if (!DesignModeDetector.IsDesignerHosted(this))
+            if (!DesignModeDetector.IsDesignerHosted())
             {
                 UpdateValueVisibility();
             }

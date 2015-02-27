@@ -67,7 +67,7 @@ namespace ShipWorks.Templates.Media
         /// </summary>
         private void UpdateLabelSheetDetails()
         {
-            if (DesignModeDetector.IsDesignerHosted(this))
+            if (DesignModeDetector.IsDesignerHosted())
             {
                 return;
             }

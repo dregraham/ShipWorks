@@ -237,9 +237,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endicia.StealthPostage = true;
             endicia.NoPostage = false;
             endicia.ReferenceID = "{//Order/Number}";
-            endicia.RubberStamp1 = "";
-            endicia.RubberStamp2 = "";
-            endicia.RubberStamp3 = "";
             endicia.ScanBasedReturn = false;
         }
 
@@ -260,9 +257,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.NoPostage, endiciaShipment, EndiciaShipmentFields.NoPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp1, endiciaShipment, EndiciaShipmentFields.RubberStamp1);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp2, endiciaShipment, EndiciaShipmentFields.RubberStamp2);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp3, endiciaShipment, EndiciaShipmentFields.RubberStamp3);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
             }
         }

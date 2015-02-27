@@ -119,9 +119,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     hidePostage.ApplyMultiCheck(shipment.Postal.Endicia.StealthPostage);
                     noPostage.ApplyMultiCheck(shipment.Postal.Endicia.NoPostage);
 
-                    rubberStamp1.ApplyMultiText(shipment.Postal.Endicia.RubberStamp1);
-                    rubberStamp2.ApplyMultiText(shipment.Postal.Endicia.RubberStamp2);
-                    rubberStamp3.ApplyMultiText(shipment.Postal.Endicia.RubberStamp3);
+                    rubberStamp1.ApplyMultiText(shipment.Postal.Memo1);
+                    rubberStamp2.ApplyMultiText(shipment.Postal.Memo2);
+                    rubberStamp3.ApplyMultiText(shipment.Postal.Memo3);
 
                     referenceID.ApplyMultiText(shipment.Postal.Endicia.ReferenceID);
 
@@ -160,9 +160,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Endicia.StealthPostage = c);
                 noPostage.ReadMultiCheck(c => shipment.Postal.Endicia.NoPostage = c);
 
-                rubberStamp1.ReadMultiText(t => shipment.Postal.Endicia.RubberStamp1 = t);
-                rubberStamp2.ReadMultiText(t => shipment.Postal.Endicia.RubberStamp2 = t);
-                rubberStamp3.ReadMultiText(t => shipment.Postal.Endicia.RubberStamp3 = t);
+                rubberStamp1.ReadMultiText(t => shipment.Postal.Memo1 = t);
+                rubberStamp2.ReadMultiText(t => shipment.Postal.Memo2 = t);
+                rubberStamp3.ReadMultiText(t => shipment.Postal.Memo3 = t);
 
                 referenceID.ReadMultiText(t => shipment.Postal.Endicia.ReferenceID = t);
 

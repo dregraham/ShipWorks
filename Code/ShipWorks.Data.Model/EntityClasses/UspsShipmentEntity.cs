@@ -515,9 +515,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UspsTransactionID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("Memo", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("OriginalUspsAccountID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -743,17 +740,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Guid)GetValue((int)UspsShipmentFieldIndex.UspsTransactionID, true); }
 			set	{ SetValue((int)UspsShipmentFieldIndex.UspsTransactionID, value); }
-		}
-
-		/// <summary> The Memo property of the Entity UspsShipment<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsShipment"."Memo"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 200<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String Memo
-		{
-			get { return (System.String)GetValue((int)UspsShipmentFieldIndex.Memo, true); }
-			set	{ SetValue((int)UspsShipmentFieldIndex.Memo, value); }
 		}
 
 		/// <summary> The OriginalUspsAccountID property of the Entity UspsShipment<br/><br/>

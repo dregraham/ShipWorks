@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
@@ -38,8 +40,12 @@
             this.uspsAccount = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.labelUspsValidation = new System.Windows.Forms.Label();
             this.requireFullAddressValidation = new System.Windows.Forms.CheckBox();
-            this.memo = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
-            this.labelMemo = new System.Windows.Forms.Label();
+            this.memo1 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.labelMemo1 = new System.Windows.Forms.Label();
+            this.memo2 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.memoLabel2 = new System.Windows.Forms.Label();
+            this.memo3 = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
+            this.memoLabel3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -50,6 +56,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).BeginInit();
             this.sectionFrom.ContentPanel.SuspendLayout();
@@ -58,12 +66,12 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Location = new System.Drawing.Point(14, 277);
+            this.insuranceControl.Location = new System.Drawing.Point(21, 326);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 550);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 445);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionRecipient
@@ -74,7 +82,6 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(378, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
@@ -96,20 +103,26 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 579);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 474);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
-
-            this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionShipment
             // 
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.memo);
-            this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 161);
-            this.sectionShipment.Size = new System.Drawing.Size(378, 360);
+            this.sectionShipment.ContentPanel.Controls.Add(this.memo3);
+            this.sectionShipment.ContentPanel.Controls.Add(this.memoLabel3);
+            this.sectionShipment.ContentPanel.Controls.Add(this.memo2);
+            this.sectionShipment.ContentPanel.Controls.Add(this.memoLabel2);
+            this.sectionShipment.ContentPanel.Controls.Add(this.memo1);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
+            this.sectionShipment.Size = new System.Drawing.Size(378, 406);
+            // 
+            // sectionLabelOptions
+            // 
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 503);
+            this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionFrom
             // 
@@ -123,7 +136,7 @@
             this.sectionFrom.ContentPanel.Controls.Add(this.panelTop);
             this.sectionFrom.ExpandedHeight = 541;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 532);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -187,7 +200,7 @@
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(77, 13);
+            this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "USPS";
             // 
@@ -211,7 +224,7 @@
             this.labelUspsValidation.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUspsValidation.Location = new System.Drawing.Point(7, 336);
             this.labelUspsValidation.Name = "labelUspsValidation";
-            this.labelUspsValidation.Size = new System.Drawing.Size(136, 13);
+            this.labelUspsValidation.Size = new System.Drawing.Size(95, 13);
             this.labelUspsValidation.TabIndex = 72;
             this.labelUspsValidation.Text = "USPS Validation";
             // 
@@ -226,24 +239,62 @@
             this.requireFullAddressValidation.Text = "Require full address validation";
             this.requireFullAddressValidation.UseVisualStyleBackColor = false;
             // 
-            // memo
+            // memo1
             // 
-            this.memo.Location = new System.Drawing.Point(90, 241);
-            this.memo.MaxLength = 32767;
-            this.memo.Name = "memo";
-            this.memo.Size = new System.Drawing.Size(210, 21);
-            this.memo.TabIndex = 73;
-            this.memo.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.memo1.Location = new System.Drawing.Point(90, 241);
+            this.memo1.MaxLength = 32767;
+            this.memo1.Name = "memo1";
+            this.memo1.Size = new System.Drawing.Size(210, 21);
+            this.memo1.TabIndex = 73;
+            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
-            // labelMemo
+            // labelMemo1
             // 
-            this.labelMemo.BackColor = System.Drawing.Color.Transparent;
-            this.labelMemo.Location = new System.Drawing.Point(41, 241);
-            this.labelMemo.Name = "labelMemo";
-            this.labelMemo.Size = new System.Drawing.Size(39, 21);
-            this.labelMemo.TabIndex = 74;
-            this.labelMemo.Text = "Memo:";
-            this.labelMemo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.labelMemo1.BackColor = System.Drawing.Color.Transparent;
+            this.labelMemo1.Location = new System.Drawing.Point(32, 241);
+            this.labelMemo1.Name = "labelMemo1";
+            this.labelMemo1.Size = new System.Drawing.Size(52, 21);
+            this.labelMemo1.TabIndex = 74;
+            this.labelMemo1.Text = "Memo 1:";
+            this.labelMemo1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // memo2
+            // 
+            this.memo2.Location = new System.Drawing.Point(90, 268);
+            this.memo2.MaxLength = 32767;
+            this.memo2.Name = "memo2";
+            this.memo2.Size = new System.Drawing.Size(210, 21);
+            this.memo2.TabIndex = 75;
+            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            // 
+            // memoLabel2
+            // 
+            this.memoLabel2.BackColor = System.Drawing.Color.Transparent;
+            this.memoLabel2.Location = new System.Drawing.Point(32, 268);
+            this.memoLabel2.Name = "memoLabel2";
+            this.memoLabel2.Size = new System.Drawing.Size(52, 21);
+            this.memoLabel2.TabIndex = 76;
+            this.memoLabel2.Text = "Memo 2:";
+            this.memoLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // memo3
+            // 
+            this.memo3.Location = new System.Drawing.Point(90, 295);
+            this.memo3.MaxLength = 32767;
+            this.memo3.Name = "memo3";
+            this.memo3.Size = new System.Drawing.Size(210, 21);
+            this.memo3.TabIndex = 77;
+            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            // 
+            // memoLabel3
+            // 
+            this.memoLabel3.BackColor = System.Drawing.Color.Transparent;
+            this.memoLabel3.Location = new System.Drawing.Point(32, 295);
+            this.memoLabel3.Name = "memoLabel3";
+            this.memoLabel3.Size = new System.Drawing.Size(52, 21);
+            this.memoLabel3.TabIndex = 78;
+            this.memoLabel3.Text = "Memo 3:";
+            this.memoLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // Express1UspsServiceControl
             // 
@@ -253,11 +304,12 @@
             this.Controls.Add(this.sectionFrom);
             this.Name = "Express1UspsServiceControl";
             this.Size = new System.Drawing.Size(384, 633);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
+            this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
@@ -266,12 +318,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionReturns)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).EndInit();
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
             this.sectionFrom.ContentPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).EndInit();
@@ -292,7 +344,11 @@
         private ShipWorks.UI.Controls.LinkControl linkManageUspsAccounts;
         private System.Windows.Forms.Label labelUspsValidation;
         private System.Windows.Forms.CheckBox requireFullAddressValidation;
-        private Templates.Tokens.TemplateTokenTextBox memo;
-        private System.Windows.Forms.Label labelMemo;
+        private Templates.Tokens.TemplateTokenTextBox memo1;
+        private System.Windows.Forms.Label labelMemo1;
+        private Templates.Tokens.TemplateTokenTextBox memo3;
+        private System.Windows.Forms.Label memoLabel3;
+        private Templates.Tokens.TemplateTokenTextBox memo2;
+        private System.Windows.Forms.Label memoLabel2;
     }
 }
