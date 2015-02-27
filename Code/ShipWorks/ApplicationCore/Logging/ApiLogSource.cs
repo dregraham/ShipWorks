@@ -110,6 +110,6 @@ namespace ShipWorks.ApplicationCore.Logging
 		LoadedCommerce,
         NoMoreRack,
         StageBloc,
-		
+		Groupon,
     }
 }
