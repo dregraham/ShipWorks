@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using System;
 using ShipWorks.Stores.Management;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
@@ -51,8 +52,8 @@ namespace ShipWorks.Stores.Platforms.Groupon.WizardPages
             {
                 GrouponWebClient client = new GrouponWebClient(store);
                 //Check to see if we have access to Groupon with the new creds
-                //Ask for page 99 because its faster to get an empty response
-                client.GetOrders(1);
+                //Ask for some orders
+                client.GetOrders(DateTime.UtcNow, 1);
             }
             catch (GrouponException ex)
             {

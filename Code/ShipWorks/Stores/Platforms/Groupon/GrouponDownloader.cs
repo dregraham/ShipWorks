@@ -32,9 +32,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
             Progress.Detail = "Downloading New Orders...";
 
             GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
-            
-            int currentPage = 0;
-            int numberOfPages = 0;
+           
+            DateTime start = DateTime.UtcNow.AddDays(-3);
 
             try
             {
@@ -46,30 +45,38 @@ namespace ShipWorks.Stores.Platforms.Groupon
                         return;
                     }
 
-                    currentPage++;
-
-                    //Grab orders 
-                    JToken result = client.GetOrders(currentPage);
-
-                    //Update numberOfPages
-                    numberOfPages = (int)result["meta"]["no_of_pages"];
-
-                    // get JSON result objects into a list
-                    IList<JToken> jsonOrders = result["data"].Children().ToList();
-
-                    //Load orders 
-                    foreach (JToken jsonOrder in jsonOrders)
+                    int currentPage = 1;
+                    int numberOfPages = 1;
+                    do
                     {
-                        // check for cancellation
-                        if (Progress.IsCancelRequested)
+                        //Grab orders 
+                        JToken result = client.GetOrders(start, currentPage);
+
+                        //Update numberOfPages
+                        numberOfPages = (int)result["meta"]["no_of_pages"];
+
+                        // get JSON result objects into a list
+                        IList<JToken> jsonOrders = result["data"].Children().ToList();
+
+                        //Load orders 
+                        foreach (JToken jsonOrder in jsonOrders)
                         {
-                            return;
+                            // check for cancellation
+                            if (Progress.IsCancelRequested)
+                            {
+                                return;
+                            }
+
+                            LoadOrder(jsonOrder);
                         }
 
-                        LoadOrder(jsonOrder);
-                    }
+                        currentPage++;
 
-                } while(currentPage < numberOfPages);
+                    } while (currentPage < numberOfPages);
+
+                    start = start.AddHours(23);
+
+                } while(start < DateTime.UtcNow);
             }
             catch (GrouponException ex)
             {
@@ -89,17 +96,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
             string orderid =  jsonOrder["orderid"].ToString();
             GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponOrderIdentifier(orderid));
 
-            //OrderNumber
-            string orderNumber = orderid.Substring(0,orderid.IndexOf("-"));
-
-            //OrderNumberPostfix
-            string orderNumberPostfix = orderid.Substring(orderid.IndexOf("-"));
+            //Order Item Status
+            string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
             // Nothing to do if its not new - they don't change
-            if (!order.IsNew)
+            if (!order.IsNew || status != "open" )
             {
                 return;
             }
+
+            //OrderNumber
+            string orderNumber = orderid.Substring(0, orderid.IndexOf("-"));
+
+            //OrderNumberPostfix
+            string orderNumberPostfix = orderid.Substring(orderid.IndexOf("-"));
 
             // set the progress detail
             Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);

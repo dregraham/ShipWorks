@@ -32,10 +32,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Dwonload orders from Groupon
         /// </summary>
-        public JToken GetOrders(int page)
+        public JToken GetOrders(DateTime start, int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-            ConfigureGetRequest(submitter, "get_orders", page);
+
+            //Groupon requires the start and end date to be within 24 hours of  
+            //eachother adding 6 hours to keep page count from getting too high 
+            DateTime end = start.AddHours(23);
+
+            ConfigureGetRequest(submitter, start, end, "get_orders", page);
 
             return ProcessRequest(submitter, "GetOrders");
         }
@@ -64,13 +69,15 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Setup a get request 
         /// </summary>
-        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, string operationName, int page)
+        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, DateTime start, DateTime end, string operationName, int page)
         {
             submitter.Verb = HttpVerb.Get;
 
             submitter.Uri = new Uri(GrouponEndpoint + "/" + operationName);
             submitter.Variables.Add("supplier_id", store.SupplierID);
             submitter.Variables.Add("token", store.Token);
+            submitter.Variables.Add("start_datetime", start.ToString("MM/dd/yyyy HH:MM"));
+            submitter.Variables.Add("end_datetime", end.ToString("MM/dd/yyyy HH:MM"));
             submitter.Variables.Add("page", page.ToString());
         }
 
