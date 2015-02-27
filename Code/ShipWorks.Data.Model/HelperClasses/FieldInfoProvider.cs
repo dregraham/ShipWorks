@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (161 + 0));
+			base.InitClass( (164 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -120,6 +120,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitGridColumnFormatEntityInfos();
 			InitGridColumnLayoutEntityInfos();
 			InitGridColumnPositionEntityInfos();
+			InitGrouponOrderEntityInfos();
+			InitGrouponOrderItemEntityInfos();
+			InitGrouponStoreEntityInfos();
 			InitInfopiaOrderItemEntityInfos();
 			InitInfopiaStoreEntityInfos();
 			InitInsurancePolicyEntityInfos();
@@ -1293,6 +1296,29 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Visible", typeof(System.Boolean), false, false, false, false,  (int)GridColumnPositionFieldIndex.Visible, 0, 0, 0);
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Width", typeof(System.Int32), false, false, false, false,  (int)GridColumnPositionFieldIndex.Width, 0, 0, 10);
 			base.AddElementFieldInfo("GridColumnPositionEntity", "Position", typeof(System.Int32), false, false, false, false,  (int)GridColumnPositionFieldIndex.Position, 0, 0, 10);
+		}
+		/// <summary>Inits GrouponOrderEntity's FieldInfo objects</summary>
+		private void InitGrouponOrderEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponOrderEntity", "OrderID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderFieldIndex.OrderID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponOrderEntity", "GrouponOrderID", typeof(System.String), false, false, false, false,  (int)GrouponOrderFieldIndex.GrouponOrderID, 50, 0, 0);
+		}
+		/// <summary>Inits GrouponOrderItemEntity's FieldInfo objects</summary>
+		private void InitGrouponOrderItemEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "OrderItemID", typeof(System.Int64), true, false, false, false,  (int)GrouponOrderItemFieldIndex.OrderItemID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "Permalink", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.Permalink, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "ChannelSKUProvided", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.ChannelSKUProvided, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "FulfillmentLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.FulfillmentLineItemID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "BomSKU", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.BomSKU, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponOrderItemEntity", "GrouponLineItemID", typeof(System.String), false, false, false, false,  (int)GrouponOrderItemFieldIndex.GrouponLineItemID, 255, 0, 0);
+		}
+		/// <summary>Inits GrouponStoreEntity's FieldInfo objects</summary>
+		private void InitGrouponStoreEntityInfos()
+		{
+			base.AddElementFieldInfo("GrouponStoreEntity", "StoreID", typeof(System.Int64), true, false, false, false,  (int)GrouponStoreFieldIndex.StoreID, 0, 0, 19);
+			base.AddElementFieldInfo("GrouponStoreEntity", "SupplierID", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.SupplierID, 255, 0, 0);
+			base.AddElementFieldInfo("GrouponStoreEntity", "Token", typeof(System.String), false, false, false, false,  (int)GrouponStoreFieldIndex.Token, 255, 0, 0);
 		}
 		/// <summary>Inits InfopiaOrderItemEntity's FieldInfo objects</summary>
 		private void InitInfopiaOrderItemEntityInfos()

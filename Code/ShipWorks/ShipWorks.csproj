@@ -2300,6 +2300,31 @@
     <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.Designer.cs">
       <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponCustomer.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponItem.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponOrder.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponTracking.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Actions\GrouponShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.Designer.cs">
+      <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponDownloader.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponException.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponOrderIdentifier.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreType.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponCarrier.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponTemplate.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponWebClient.cs" />
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.Designer.cs">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -2357,6 +2382,7 @@
     <Compile Include="Stores\Platforms\PowersportsSupport\PowersportsSupportStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\StageBloc\StageBlocStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
@@ -7680,6 +7706,12 @@
     <EmbeddedResource Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.resx">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.resx">
+      <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.resx">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Newegg\NeweggDownloadStoreSettingsControl.resx">
       <DependentUpon>NeweggDownloadStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10899,6 +10931,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.3.0.sql" />
@@ -11031,6 +11064,7 @@
     <None Include="Resources\cloudconversion.png" />
     <None Include="Resources\cscart.png" />
     <None Include="Resources\loadedcommerce.png" />
+    <None Include="Resources\groupon.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -11188,6 +11222,7 @@
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
+    <None Include="Resources\stagebloc.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
@@ -11203,6 +11238,7 @@
     <Content Include="Resources\Stores\Icons\woocommerce.png" />
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <None Include="Resources\zenventory.png" />
+    <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -12796,7 +12832,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
