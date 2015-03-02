@@ -190,7 +190,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 new GenericSpreadsheetTargetField("Item.TotalCost",   "Total Cost", typeof(decimal)),
                 new GenericSpreadsheetTargetField("Item.Image",       "Image URL", typeof(string)),
                 new GenericSpreadsheetTargetField("Item.Thumbnail",   "Thumbnail URL", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.UPC",           "UPC", typeof(string))
+                new GenericSpreadsheetTargetField("Item.UPC",           "UPC", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.ISBN",          "ISBN", typeof(string))
             };
         }
     }
