@@ -27,37 +27,65 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Check to see if the template already exists
             if (!templates.Any(t => t.Name == "Groupon Invoice"))
             {
-                // Get all the folders
-                IList<TemplateFolderEntity> folders = TemplateManager.Tree.AllFolders;
 
                 //Template Tree
-                TemplateTree tree = TemplateTree.CreateFrom(folders, templates);
+                TemplateTree tree = TemplateManager.Tree.CreateEditableClone();
 
-                // If there is an invoice folder, use the first one
-                TemplateFolderEntity invoices = folders.FirstOrDefault(f => f.Name == "Invoices");
+                //create new template
+                TemplateEntity template = new TemplateEntity();
 
-                if(invoices == null)
+                //Folder where we will save the template
+                TemplateFolderEntity invoices = GetTemplateFolder(null, tree, "Invoices");
+
+                SetTemplateDefaults(template, tree, invoices);
+
+                try
                 {
-                    log.InfoFormat("Cannot install Groupon Template because no Invoices folder exists");
+                    //save the template
+                    TemplateEditingService.SaveTemplate(template);
                 }
-                else
+                catch (Exception ex)
                 {
-                    //create new template
-                    TemplateEntity template = new TemplateEntity();
-
-                    SetTemplateDefaults(template, tree, invoices);
-
-                    try
-                    {
-                        //save the template
-                        TemplateEditingService.SaveTemplate(template);
-                    }
-                    catch (Exception ex)
-                    {
-                        log.Error("Error saving Groupon Template", ex);
-                    }
-
+                    log.Error("Error saving Groupon Template", ex);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns folder specified or creates one 
+        /// </summary>
+        private static TemplateFolderEntity GetTemplateFolder(TemplateFolderEntity parent, TemplateTree tree, string name)
+        {
+            // Get all the folders
+            IList<TemplateFolderEntity> folders = TemplateManager.Tree.AllFolders;
+
+            // If there is an invoice folder, use the first one
+            TemplateFolderEntity folder = folders.FirstOrDefault(f => f.Name == name);
+
+            //Check to see if the folder exists, if not create one 
+            if (folder != null)
+            {
+                return folder;
+            }
+            else
+            {
+                log.InfoFormat("Creating folder to hold the Groupon Template");
+
+                TemplateFolderEntity newFolder = new TemplateFolderEntity();
+                newFolder.Name = name;
+                newFolder.ParentFolder = parent;
+                newFolder.TemplateTree = tree;
+
+                try
+                {
+                    TemplateEditingService.SaveFolder(newFolder);
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error saving folder", ex);
+                }
+
+                return newFolder; 
             }
         }
 
