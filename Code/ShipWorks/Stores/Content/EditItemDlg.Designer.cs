@@ -42,34 +42,34 @@
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.name = new System.Windows.Forms.TextBox();
-            this.code = new System.Windows.Forms.TextBox();
-            this.quantity = new System.Windows.Forms.TextBox();
             this.edge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.edge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.sku = new System.Windows.Forms.TextBox();
-            this.location = new System.Windows.Forms.TextBox();
-            this.description = new System.Windows.Forms.TextBox();
             this.labelAttributes = new System.Windows.Forms.Label();
             this.attributeGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
             this.gridColumnPrice1 = new Divelements.SandGrid.GridColumn();
             this.gridLinkEdit = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
             this.gridLinkDelete = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
-            this.addAttribute = new ShipWorks.UI.Controls.LinkControl();
-            this.weight = new ShipWorks.UI.Controls.WeightControl();
-            this.cost = new ShipWorks.UI.Controls.MoneyTextBox();
-            this.status = new ShipWorks.UI.Controls.LinkControl();
-            this.price = new ShipWorks.UI.Controls.MoneyTextBox();
-            this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            this.upc = new System.Windows.Forms.TextBox();
-            this.isbn = new System.Windows.Forms.TextBox();
-            this.imageUrl = new System.Windows.Forms.TextBox();
-            this.thumbnailUrl = new System.Windows.Forms.TextBox();
             this.labelUpc = new System.Windows.Forms.Label();
             this.isbnLabel = new System.Windows.Forms.Label();
             this.imageUrlLabel = new System.Windows.Forms.Label();
             this.thumbnailUrlLabel = new System.Windows.Forms.Label();
+            this.imageUrl = new System.Windows.Forms.TextBox();
+            this.thumbnailUrl = new System.Windows.Forms.TextBox();
+            this.isbn = new System.Windows.Forms.TextBox();
+            this.upc = new System.Windows.Forms.TextBox();
+            this.addAttribute = new ShipWorks.UI.Controls.LinkControl();
+            this.description = new System.Windows.Forms.TextBox();
+            this.weight = new ShipWorks.UI.Controls.WeightControl();
+            this.cost = new ShipWorks.UI.Controls.MoneyTextBox();
+            this.location = new System.Windows.Forms.TextBox();
+            this.sku = new System.Windows.Forms.TextBox();
+            this.status = new ShipWorks.UI.Controls.LinkControl();
+            this.price = new ShipWorks.UI.Controls.MoneyTextBox();
+            this.quantity = new System.Windows.Forms.TextBox();
+            this.code = new System.Windows.Forms.TextBox();
+            this.name = new System.Windows.Forms.TextBox();
+            this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
@@ -185,29 +185,6 @@
             this.labelStatus.TabIndex = 11;
             this.labelStatus.Text = "Local Status:";
             // 
-            // name
-            // 
-            this.name.Location = new System.Drawing.Point(88, 6);
-            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemName);
-            this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(207, 21);
-            this.name.TabIndex = 0;
-            // 
-            // code
-            // 
-            this.code.Location = new System.Drawing.Point(88, 33);
-            this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemCode);
-            this.code.Name = "code";
-            this.code.Size = new System.Drawing.Size(129, 21);
-            this.code.TabIndex = 1;
-            // 
-            // quantity
-            // 
-            this.quantity.Location = new System.Drawing.Point(88, 60);
-            this.quantity.Name = "quantity";
-            this.quantity.Size = new System.Drawing.Size(67, 21);
-            this.quantity.TabIndex = 2;
-            // 
             // edge2
             // 
             this.edge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -229,32 +206,6 @@
             this.edge1.Name = "edge1";
             this.edge1.Size = new System.Drawing.Size(367, 1);
             this.edge1.Text = "kryptonBorderEdge1";
-            // 
-            // sku
-            // 
-            this.sku.Location = new System.Drawing.Point(88, 148);
-            this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.sku.Name = "sku";
-            this.sku.Size = new System.Drawing.Size(159, 21);
-            this.sku.TabIndex = 5;
-            // 
-            // location
-            // 
-            this.location.Location = new System.Drawing.Point(88, 229);
-            this.fieldLengthProvider.SetMaxLengthSource(this.location, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
-            this.location.Name = "location";
-            this.location.Size = new System.Drawing.Size(159, 21);
-            this.location.TabIndex = 8;
-            // 
-            // description
-            // 
-            this.description.AcceptsReturn = true;
-            this.description.Location = new System.Drawing.Point(88, 363);
-            this.description.Multiline = true;
-            this.description.Name = "description";
-            this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.description.Size = new System.Drawing.Size(301, 66);
-            this.description.TabIndex = 13;
             // 
             // labelAttributes
             // 
@@ -319,104 +270,6 @@
             this.gridLinkDelete.LinkHotColor = System.Drawing.Color.Blue;
             this.gridLinkDelete.Width = 39;
             // 
-            // addAttribute
-            // 
-            this.addAttribute.AutoSize = true;
-            this.addAttribute.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.addAttribute.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.addAttribute.ForeColor = System.Drawing.Color.Blue;
-            this.addAttribute.Location = new System.Drawing.Point(319, 558);
-            this.addAttribute.Name = "addAttribute";
-            this.addAttribute.Size = new System.Drawing.Size(72, 13);
-            this.addAttribute.TabIndex = 15;
-            this.addAttribute.Text = "Add Attribute";
-            this.addAttribute.Click += new System.EventHandler(this.OnAddAttribute);
-            // 
-            // weight
-            // 
-            this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.weight.Location = new System.Drawing.Point(88, 256);
-            this.weight.Name = "weight";
-            this.weight.RangeMax = 300D;
-            this.weight.RangeMin = 0D;
-            this.weight.Size = new System.Drawing.Size(254, 20);
-            this.weight.TabIndex = 9;
-            this.weight.Weight = 0D;
-            // 
-            // cost
-            // 
-            this.cost.Amount = new decimal(new int[] {
-            0,
-            0,
-            0,
-            131072});
-            this.cost.IgnoreSet = false;
-            this.cost.Location = new System.Drawing.Point(88, 282);
-            this.cost.Name = "cost";
-            this.cost.Size = new System.Drawing.Size(100, 21);
-            this.cost.TabIndex = 10;
-            this.cost.Text = "$0.00";
-            // 
-            // status
-            // 
-            this.status.AutoSize = true;
-            this.status.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.status.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.status.ForeColor = System.Drawing.Color.Blue;
-            this.status.Location = new System.Drawing.Point(85, 119);
-            this.status.Name = "status";
-            this.status.Size = new System.Drawing.Size(38, 13);
-            this.status.TabIndex = 4;
-            this.status.Text = "Status";
-            this.status.Click += new System.EventHandler(this.OnLinkLocalStatus);
-            // 
-            // price
-            // 
-            this.price.Amount = new decimal(new int[] {
-            0,
-            0,
-            0,
-            131072});
-            this.price.IgnoreSet = false;
-            this.price.Location = new System.Drawing.Point(88, 87);
-            this.price.Name = "price";
-            this.price.Size = new System.Drawing.Size(100, 21);
-            this.price.TabIndex = 3;
-            this.price.Text = "$0.00";
-            // 
-            // upc
-            // 
-            this.upc.Location = new System.Drawing.Point(88, 175);
-            this.fieldLengthProvider.SetMaxLengthSource(this.upc, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.upc.Name = "upc";
-            this.upc.Size = new System.Drawing.Size(159, 21);
-            this.upc.TabIndex = 6;
-            // 
-            // isbn
-            // 
-            this.isbn.Location = new System.Drawing.Point(88, 202);
-            this.fieldLengthProvider.SetMaxLengthSource(this.isbn, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.isbn.Name = "isbn";
-            this.isbn.Size = new System.Drawing.Size(159, 21);
-            this.isbn.TabIndex = 7;
-            // 
-            // imageUrl
-            // 
-            this.imageUrl.Location = new System.Drawing.Point(88, 336);
-            this.fieldLengthProvider.SetMaxLengthSource(this.imageUrl, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.imageUrl.Name = "imageUrl";
-            this.imageUrl.Size = new System.Drawing.Size(301, 21);
-            this.imageUrl.TabIndex = 12;
-            // 
-            // thumbnailUrl
-            // 
-            this.thumbnailUrl.Location = new System.Drawing.Point(88, 309);
-            this.fieldLengthProvider.SetMaxLengthSource(this.thumbnailUrl, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.thumbnailUrl.Name = "thumbnailUrl";
-            this.thumbnailUrl.Size = new System.Drawing.Size(301, 21);
-            this.thumbnailUrl.TabIndex = 11;
-            // 
             // labelUpc
             // 
             this.labelUpc.AutoSize = true;
@@ -452,6 +305,151 @@
             this.thumbnailUrlLabel.Size = new System.Drawing.Size(75, 13);
             this.thumbnailUrlLabel.TabIndex = 29;
             this.thumbnailUrlLabel.Text = "Thumbnail Url:";
+            // 
+            // imageUrl
+            // 
+            this.imageUrl.Location = new System.Drawing.Point(88, 336);
+            this.imageUrl.Name = "imageUrl";
+            this.imageUrl.Size = new System.Drawing.Size(301, 21);
+            this.imageUrl.TabIndex = 12;
+            // 
+            // thumbnailUrl
+            // 
+            this.thumbnailUrl.Location = new System.Drawing.Point(88, 309);
+            this.thumbnailUrl.Name = "thumbnailUrl";
+            this.thumbnailUrl.Size = new System.Drawing.Size(301, 21);
+            this.thumbnailUrl.TabIndex = 11;
+            // 
+            // isbn
+            // 
+            this.isbn.Location = new System.Drawing.Point(88, 202);
+            this.fieldLengthProvider.SetMaxLengthSource(this.isbn, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
+            this.isbn.Name = "isbn";
+            this.isbn.Size = new System.Drawing.Size(159, 21);
+            this.isbn.TabIndex = 7;
+            // 
+            // upc
+            // 
+            this.upc.Location = new System.Drawing.Point(88, 175);
+            this.fieldLengthProvider.SetMaxLengthSource(this.upc, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemUpc);
+            this.upc.Name = "upc";
+            this.upc.Size = new System.Drawing.Size(159, 21);
+            this.upc.TabIndex = 6;
+            // 
+            // addAttribute
+            // 
+            this.addAttribute.AutoSize = true;
+            this.addAttribute.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.addAttribute.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.addAttribute.ForeColor = System.Drawing.Color.Blue;
+            this.addAttribute.Location = new System.Drawing.Point(319, 558);
+            this.addAttribute.Name = "addAttribute";
+            this.addAttribute.Size = new System.Drawing.Size(72, 13);
+            this.addAttribute.TabIndex = 15;
+            this.addAttribute.Text = "Add Attribute";
+            this.addAttribute.Click += new System.EventHandler(this.OnAddAttribute);
+            // 
+            // description
+            // 
+            this.description.AcceptsReturn = true;
+            this.description.Location = new System.Drawing.Point(88, 363);
+            this.description.Multiline = true;
+            this.description.Name = "description";
+            this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.description.Size = new System.Drawing.Size(301, 66);
+            this.description.TabIndex = 13;
+            // 
+            // weight
+            // 
+            this.weight.BackColor = System.Drawing.Color.Transparent;
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(88, 256);
+            this.weight.Name = "weight";
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
+            this.weight.Size = new System.Drawing.Size(254, 20);
+            this.weight.TabIndex = 9;
+            this.weight.Weight = 0D;
+            // 
+            // cost
+            // 
+            this.cost.Amount = new decimal(new int[] {
+            0,
+            0,
+            0,
+            131072});
+            this.cost.IgnoreSet = false;
+            this.cost.Location = new System.Drawing.Point(88, 282);
+            this.cost.Name = "cost";
+            this.cost.Size = new System.Drawing.Size(100, 21);
+            this.cost.TabIndex = 10;
+            this.cost.Text = "$0.00";
+            // 
+            // location
+            // 
+            this.location.Location = new System.Drawing.Point(88, 229);
+            this.fieldLengthProvider.SetMaxLengthSource(this.location, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
+            this.location.Name = "location";
+            this.location.Size = new System.Drawing.Size(159, 21);
+            this.location.TabIndex = 8;
+            // 
+            // sku
+            // 
+            this.sku.Location = new System.Drawing.Point(88, 148);
+            this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
+            this.sku.Name = "sku";
+            this.sku.Size = new System.Drawing.Size(159, 21);
+            this.sku.TabIndex = 5;
+            // 
+            // status
+            // 
+            this.status.AutoSize = true;
+            this.status.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.status.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.status.ForeColor = System.Drawing.Color.Blue;
+            this.status.Location = new System.Drawing.Point(85, 119);
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(38, 13);
+            this.status.TabIndex = 4;
+            this.status.Text = "Status";
+            this.status.Click += new System.EventHandler(this.OnLinkLocalStatus);
+            // 
+            // price
+            // 
+            this.price.Amount = new decimal(new int[] {
+            0,
+            0,
+            0,
+            131072});
+            this.price.IgnoreSet = false;
+            this.price.Location = new System.Drawing.Point(88, 87);
+            this.price.Name = "price";
+            this.price.Size = new System.Drawing.Size(100, 21);
+            this.price.TabIndex = 3;
+            this.price.Text = "$0.00";
+            // 
+            // quantity
+            // 
+            this.quantity.Location = new System.Drawing.Point(88, 60);
+            this.quantity.Name = "quantity";
+            this.quantity.Size = new System.Drawing.Size(67, 21);
+            this.quantity.TabIndex = 2;
+            // 
+            // code
+            // 
+            this.code.Location = new System.Drawing.Point(88, 33);
+            this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemCode);
+            this.code.Name = "code";
+            this.code.Size = new System.Drawing.Size(129, 21);
+            this.code.TabIndex = 1;
+            // 
+            // name
+            // 
+            this.name.Location = new System.Drawing.Point(88, 6);
+            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemName);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(207, 21);
+            this.name.TabIndex = 0;
             // 
             // EditItemDlg
             // 
