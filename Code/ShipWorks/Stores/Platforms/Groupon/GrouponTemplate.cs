@@ -27,7 +27,6 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Check to see if the template already exists
             if (!templates.Any(t => t.Name == "Groupon Invoice"))
             {
-
                 //Template Tree
                 TemplateTree tree = TemplateManager.Tree.CreateEditableClone();
 
