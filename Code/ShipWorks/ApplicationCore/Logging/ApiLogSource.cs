@@ -109,6 +109,7 @@ namespace ShipWorks.ApplicationCore.Logging
         PrestaShop,
 		LoadedCommerce,
         NoMoreRack,
-		
+        StageBloc,
+		Groupon,
     }
 }
