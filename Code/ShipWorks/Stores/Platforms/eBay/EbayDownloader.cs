@@ -482,7 +482,23 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Shipping
             OrderChargeEntity shipping = GetCharge(order, "SHIPPING", "Shipping");
-            shipping.Amount = orderType.ShippingServiceSelected.ShippingServiceCost != null ? (decimal) orderType.ShippingServiceSelected.ShippingServiceCost.Value : 0;
+
+            // Only exists for GSP shipments
+            if (orderType.MultiLegShippingDetails != null &&
+                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider != null && 
+                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails != null && 
+                orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost != null)
+            {
+                shipping.Amount = (decimal) orderType.MultiLegShippingDetails.SellerShipmentToLogisticsProvider.ShippingServiceDetails.TotalShippingCost.Value;
+            } 
+            else if (orderType.ShippingServiceSelected.ShippingServiceCost != null)
+            {
+                shipping.Amount = (decimal) orderType.ShippingServiceSelected.ShippingServiceCost.Value;
+            }
+            else
+            {
+                shipping.Amount = 0;
+            }
 
             #endregion
 
