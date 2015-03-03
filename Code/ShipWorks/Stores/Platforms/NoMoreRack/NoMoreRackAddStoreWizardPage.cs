@@ -62,6 +62,8 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                 e.NextPage = this;
                 return;
             }
+
+            NoMoreRackTemplate.InstallNoMoreRackTemplate();
         }
     }
 }
