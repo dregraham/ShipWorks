@@ -17,6 +17,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Model.Linq;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -255,8 +256,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             MergeOrderItemsFromDb(order);
 
             // Make totals adjustments
-            double amount = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
-            BalanceOrderTotal(order, amount);
+            BalanceOrderTotal(order, orderType);
 
             SaveOrder(order, abandonedItems);
         }
@@ -820,8 +820,20 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// Reconciles the ShipWorks order total with what eBay has on record.
         /// Any adjustment are done via an OTHER charge
         /// </summary>
-        private void BalanceOrderTotal(EbayOrderEntity order, double amountPaid)
+        private void BalanceOrderTotal(EbayOrderEntity order, OrderType orderType)
         {
+            double amountPaid = orderType.AmountPaid != null ? orderType.AmountPaid.Value : orderType.Total.Value;
+
+            if (orderType.MonetaryDetails != null &&
+                orderType.MonetaryDetails.Payments != null &&
+                orderType.MonetaryDetails.Payments.Payment != null &&
+                orderType.MonetaryDetails.Payments.Payment.Any(payment => payment.Payee != null &&
+                                                                          payment.Payee.type == UserIdentityCodeType.eBayPartner &&
+                                                                          payment.PaymentAmount != null))
+            {
+                amountPaid -= orderType.MonetaryDetails.Payments.Payment.Where(payment => payment.Payee != null && payment.Payee.type == UserIdentityCodeType.eBayPartner).Sum(payment => payment.PaymentAmount.Value);
+            }
+
             order.OrderTotal = OrderUtility.CalculateTotal(order);
 
             if (order.OrderTotal != Convert.ToDecimal(amountPaid) &&
