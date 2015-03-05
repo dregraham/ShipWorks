@@ -9,23 +9,23 @@ using ShipWorks.Templates;
 using log4net;
 
 
-namespace ShipWorks.Stores.Platforms.Groupon
+namespace ShipWorks.Stores.Platforms.NoMoreRack
 {
-    public static class GrouponTemplate
+    public static class NoMoreRackTemplate
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(GrouponStoreType));
+        static readonly ILog log = LogManager.GetLogger(typeof(NoMoreRackStoreType));
 
         /// <summary>
         /// Install the Groupon Template
         /// </summary>
-        public static void InstallGrouponTemplate()
+        public static void InstallNoMoreRackTemplate()
         {
             // Get all templates
             IList<TemplateEntity> templates = TemplateManager.Tree.AllTemplates;
 
             //Check to see if the template already exists
-            if (!templates.Any(t => t.Name == "Groupon Invoice"))
+            if (!templates.Any(t => t.Name == "NoMoreRack Invoice"))
             {
                 //Template Tree
                 TemplateTree tree = TemplateManager.Tree.CreateEditableClone();
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
             else
             {
-                log.InfoFormat("Creating folder to hold the Groupon Template");
+                log.InfoFormat("Creating folder to hold the NoMoreRack Template");
 
                 TemplateFolderEntity newFolder = new TemplateFolderEntity();
                 newFolder.Name = name;
@@ -84,18 +84,18 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     log.Error("Error saving folder", ex);
                 }
 
-                return newFolder; 
+                return newFolder;
             }
         }
 
         /// <summary>
         /// Sets template default properties 
         /// </summary>
-        private static void SetTemplateDefaults(TemplateEntity template, TemplateTree tree, TemplateFolderEntity parent )
+        private static void SetTemplateDefaults(TemplateEntity template, TemplateTree tree, TemplateFolderEntity parent)
         {
             //set template properties
-            template.Name = "Groupon Invoice";
-            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.Groupon.Template.GrouponPackingSlip.xsl");
+            template.Name = "NoMoreRack Invoice";
+            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.NoMoreRack.Template.NoMoreRackPackingSlip.xsl");
             template.Type = (int)TemplateType.Standard;
             template.Context = (int)TemplateInputContext.Order;
             template.OutputFormat = (int)TemplateOutputFormat.Html;
@@ -121,7 +121,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Reads XSL file into string
         /// </summary>
-        private static string GetXsl(string PathToXsl) 
+        private static string GetXsl(string PathToXsl)
         {
             string xsl = string.Empty;
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(PathToXsl))

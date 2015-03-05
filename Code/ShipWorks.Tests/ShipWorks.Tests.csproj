@@ -150,6 +150,7 @@
     <Compile Include="Core\SecureTextTests.cs" />
     <Compile Include="Core\XPathUtilityTests.cs" />
     <Compile Include="DatabaseManager.cs" />
+    <Compile Include="Editions\EditionManagerTest.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionalityTest.cs" />
     <Compile Include="Email\EmailExceptionTest.cs" />
     <Compile Include="Filters\Content\SqlGeneration\FilterSqlResultTest.cs" />
