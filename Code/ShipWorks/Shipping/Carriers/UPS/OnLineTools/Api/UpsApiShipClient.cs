@@ -776,8 +776,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 xmlWriter.WriteElementString("CN22OtherDescription", otherDescription.Length > 20 ? otherDescription.Substring(0, 20) : otherDescription);
             }
 
-            // Only 3 are allowed
-            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
+            // UPS only allows 1 customs item for MI shipments
+            int maximumAllowedCustomsItems = UpsUtility.IsUpsMiService(serviceType) ? 1 : 3;
+            
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(maximumAllowedCustomsItems))
             {
                 // Start InternationalForms
                 xmlWriter.WriteStartElement("CN22Content");
