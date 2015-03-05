@@ -554,42 +554,38 @@ namespace ShipWorks.Stores.Platforms.OrderMotion
             adapter.Email = XPathUtility.Evaluate(xpath, "Email", "");
             adapter.Phone = CleanPhone(XPathUtility.Evaluate(xpath, "FullPhone", ""));
 
-            //
             // Depending on if its pulling address information from the customer or shipping section, phone and country may take more work.
-            //
+            if (string.IsNullOrWhiteSpace(adapter.Phone))
             {
-                if (string.IsNullOrWhiteSpace(adapter.Phone))
+                adapter.Phone = CleanPhone(XPathUtility.Evaluate(xpath, "PhoneNumber", ""));
+            }
+
+            if (string.IsNullOrWhiteSpace(adapter.CountryCode))
+            {
+                string tld = XPathUtility.Evaluate(xpath, "TLD", "");
+
+                // If we can get a country name from the tld, we know its valid
+                if (Geography.GetCountryName(tld) != tld)
                 {
-                    adapter.Phone = CleanPhone(XPathUtility.Evaluate(xpath, "PhoneNumber", ""));
+                    adapter.CountryCode = tld;
                 }
+            }
 
-                if (string.IsNullOrWhiteSpace(adapter.CountryCode))
+            if (string.IsNullOrWhiteSpace(adapter.CountryCode))
+            {
+                string fullAddress = XPathUtility.Evaluate(xpath, "FullAddress", "");
+                string[] addressParts = fullAddress.Trim().Split(' ', '\r', '\n');
+
+                if (addressParts.Length > 0)
                 {
-                    string tld = XPathUtility.Evaluate(xpath, "TLD", "");
+                    string countryPart = addressParts[addressParts.Length - 1];
 
-                    // If we can get a country name from the tld, we know its valid
-                    if (Geography.GetCountryName(tld) != tld)
+                    if (countryPart == "USA")
                     {
-                        adapter.CountryCode = tld;
+                        countryPart = "US";
                     }
-                }
 
-                if (string.IsNullOrWhiteSpace(adapter.CountryCode))
-                {
-                    string fullAddress = XPathUtility.Evaluate(xpath, "FullAddress", "");
-                    string[] addressParts = fullAddress.Trim().Split(' ', '\r', '\n');
-
-                    if (addressParts.Length > 0)
-                    {
-                        string countryPart = addressParts[addressParts.Length - 1];
-
-                        if (countryPart == "USA")
-                        {
-                            countryPart = "US";
-                        }
-
-                        adapter.CountryCode = Geography.GetCountryCode(countryPart);
-                    }
+                    adapter.CountryCode = Geography.GetCountryCode(countryPart);
                 }
             }
         }

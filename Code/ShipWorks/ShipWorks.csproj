@@ -2383,6 +2383,31 @@
     <Compile Include="Stores\Platforms\ChannelSale\WizardPages\ChannelSaleWizardPage.Designer.cs">
       <DependentUpon>ChannelSaleWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponCustomer.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponItem.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponOrder.cs" />
+    <Compile Include="Stores\Platforms\Groupon\DTO\GrouponTracking.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponOnlineUpdater.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Actions\GrouponShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.Designer.cs">
+      <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\GrouponDownloader.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponException.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponOrderIdentifier.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponStoreType.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponCarrier.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponTemplate.cs" />
+    <Compile Include="Stores\Platforms\Groupon\GrouponWebClient.cs" />
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.Designer.cs">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Jigoshop\JigoshopStoreType.cs" />
     <Compile Include="Stores\Management\ComputerDownloadAllowedComboBox.cs">
       <SubType>Component</SubType>
@@ -2419,6 +2444,7 @@
     <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.Designer.cs">
       <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackTemplate.cs" />
     <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
@@ -2440,6 +2466,7 @@
     <Compile Include="Stores\Platforms\PowersportsSupport\PowersportsSupportStoreType.cs" />
     <Compile Include="Stores\Platforms\Shopperpress\Shopperpress.cs" />
     <Compile Include="Stores\Platforms\Shopp\ShoppStoreType.cs" />
+    <Compile Include="Stores\Platforms\StageBloc\StageBlocStoreType.cs" />
     <Compile Include="Stores\Platforms\SureDone\SureDoneStoreType.cs" />
     <Compile Include="Stores\Platforms\WooCommerce\WooCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\Amazon\AmazonApi.cs" />
@@ -7775,6 +7802,12 @@
     <EmbeddedResource Include="Stores\Platforms\Etsy\WizardPages\EtsyOnlineShipmentUpdateActionControl.resx">
       <DependentUpon>EtsyOnlineShipmentUpdateActionControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\GrouponAccountSettingsControl.resx">
+      <DependentUpon>GrouponAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\Groupon\WizardPages\GrouponAccountPage.resx">
+      <DependentUpon>GrouponAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Newegg\NeweggDownloadStoreSettingsControl.resx">
       <DependentUpon>NeweggDownloadStoreSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -10992,6 +11025,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.1.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.3.0.sql" />
@@ -11127,6 +11161,7 @@
     <None Include="Resources\googleMapsFav16.png" />
     <None Include="Resources\cscart.png" />
     <None Include="Resources\loadedcommerce.png" />
+    <None Include="Resources\groupon.png" />
     <None Include="Resources\globe16.png" />
     <None Include="Resources\information2_16.png" />
     <None Include="Resources\help16.png" />
@@ -11288,6 +11323,7 @@
     <None Include="Resources\squares_circle_green_transparent.gif" />
     <None Include="Resources\splash.png" />
     <None Include="Resources\solidcommerce.png" />
+    <None Include="Resources\stagebloc.png" />
     <Content Include="Resources\Stores\Icons\cart66.png" />
     <Content Include="Resources\Stores\Icons\channelsale.png" />
     <Content Include="Resources\Stores\Icons\jigoshop.png" />
@@ -11304,11 +11340,13 @@
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <None Include="Resources\zenventory.png" />
     <None Include="Resources\streetLight.png" />
+    <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
     <None Include="Resources\viewofstreet.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
     <None Include="Stores\Platforms\XCart\Modules\XCart5\shipworks3.php" />
+    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\Template\NoMoreRackPackingSlip.xsl" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

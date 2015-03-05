@@ -319,7 +319,17 @@ namespace ShipWorks.Stores
         [Description("NoMoreRack")]
         [StoreTypeIdentity("NOMORERACK", "NMR")]
         [StoreTypeIcon("nomorerack")]
-        NoMoreRack = 61
+        NoMoreRack = 61,
+
+        [Description("Groupon")]
+        [StoreTypeIdentity("GROUPON", "GON")]
+        [StoreTypeIcon("groupon")]
+        Groupon = 62,
+		
+		[Description("StageBloc")]
+        [StoreTypeIdentity("STAGEBLOC", "STG")]
+        [StoreTypeIcon("stagebloc")]
+        StageBloc = 63
 
     }
 }

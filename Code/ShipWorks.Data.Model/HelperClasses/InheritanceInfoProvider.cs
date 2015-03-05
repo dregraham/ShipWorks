@@ -85,6 +85,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddEntityInfo("EtsyStoreEntity", "StoreEntity", new EtsyStoreRelations(), new EtsyStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("GenericFileStoreEntity", "StoreEntity", new GenericFileStoreRelations(), new GenericFileStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("GenericModuleStoreEntity", "StoreEntity", new GenericModuleStoreRelations(), new GenericModuleStoreEntityFactory(),  (30-30));
+			base.AddEntityInfo("GrouponOrderEntity", "OrderEntity", new GrouponOrderRelations(), new GrouponOrderEntityFactory(),  (73-73));
+			base.AddEntityInfo("GrouponOrderItemEntity", "OrderItemEntity", new GrouponOrderItemRelations(), new GrouponOrderItemEntityFactory(),  (18-18));
+			base.AddEntityInfo("GrouponStoreEntity", "StoreEntity", new GrouponStoreRelations(), new GrouponStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("InfopiaOrderItemEntity", "OrderItemEntity", new InfopiaOrderItemRelations(), new InfopiaOrderItemEntityFactory(),  (18-18));
 			base.AddEntityInfo("InfopiaStoreEntity", "StoreEntity", new InfopiaStoreRelations(), new InfopiaStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("MagentoOrderEntity", "OrderEntity", new MagentoOrderRelations(), new MagentoOrderEntityFactory(),  (73-73));
