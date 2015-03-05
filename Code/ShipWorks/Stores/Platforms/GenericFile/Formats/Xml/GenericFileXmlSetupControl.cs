@@ -254,7 +254,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Formats.Xml
         /// </summary>
         private void OnLinkSchemaDocumentation(object sender, EventArgs e)
         {
-            WebHelper.OpenUrl("http://www.interapptive.com/shipworks/help", this);
+            WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/4000033910-xslt-stylesheet-generic-file-setup-", this);
         }
     }
 }

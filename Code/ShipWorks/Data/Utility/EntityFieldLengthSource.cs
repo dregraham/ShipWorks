@@ -35,6 +35,8 @@ namespace ShipWorks.Data.Utility
         OrderItemCode,
         OrderItemSku,
         OrderItemLocation,
+        OrderItemIsbn,
+        OrderItemUpc,
         OrderAttributeName,
         OrderChargeType,
         OrderChargeDescription,
