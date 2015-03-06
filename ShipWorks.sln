@@ -33,8 +33,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Tests", "Code\Shi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Tests.Integration.MSTest", "Code\ShipWorks.Tests.Integration.MSTest\ShipWorks.Tests.Integration.MSTest.csproj", "{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ShipWorksLocal", "Database\ShipWorksLocal\ShipWorksLocal.sqlproj", "{451C1097-2A58-47A1-8794-2D50522967A3}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug (x86)|Any CPU = Debug (x86)|Any CPU
@@ -234,29 +232,6 @@ Global
 		{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}.Release|Win32.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Any CPU.Deploy.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug (x86)|Win32.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Any CPU.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Any CPU.Build.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Any CPU.Deploy.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Mixed Platforms.Build.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release (x86)|Win32.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{451C1097-2A58-47A1-8794-2D50522967A3}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

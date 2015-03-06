@@ -208,7 +208,7 @@ namespace ShipWorks.ApplicationCore
         {
             get
             {
-                if (DesignModeDetector.IsDesignerHosted(this))
+                if (DesignModeDetector.IsDesignerHosted())
                 {
                     return null;
                 }

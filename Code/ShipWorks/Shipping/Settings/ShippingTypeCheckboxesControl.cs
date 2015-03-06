@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Settings
             const int left = 3;
 
             // This is called more than once since we may need to add an Express1 entry depending on 
-            // whether we need to show both Express1 for Endicia and Express1 for Stamps, so we need
+            // whether we need to show both Express1 for Endicia and Express1 for USPS, so we need
             // to clear and reload any existing check boxes
             foreach (CheckBox checkBox in Controls.OfType<CheckBox>())
             {

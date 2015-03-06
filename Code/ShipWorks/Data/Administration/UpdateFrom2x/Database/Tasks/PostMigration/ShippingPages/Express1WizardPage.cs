@@ -71,7 +71,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
             // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
             // if they canceled before getting there endicia account# emailed to them.
 
-            // There wasn't an Express1 for Stamps.com in ShipWorks 2x, so we can explicitly call out the Express1 for Endicia 
+            // There wasn't an Express1 for USPS in ShipWorks 2x, so we can explicitly call out the Express1 for Endicia 
             // shipment type here
             using (Form wizard = new Express1EndiciaShipmentType().CreateSetupWizard())
             {

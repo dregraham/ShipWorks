@@ -98,8 +98,8 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
             if (postalNotSetup)
             {
                 enabledShipmentTypes.RemoveAll(s =>
-                    s.ShipmentTypeCode == ShipmentTypeCode.Stamps ||
-                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Stamps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Usps ||
+                    s.ShipmentTypeCode == ShipmentTypeCode.Express1Usps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);

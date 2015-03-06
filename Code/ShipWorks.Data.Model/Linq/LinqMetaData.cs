@@ -457,18 +457,6 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					toReturn = this.ShopSiteStore;
 					break;
-				case ShipWorks.Data.Model.EntityType.StampsAccountEntity:
-					toReturn = this.StampsAccount;
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsProfileEntity:
-					toReturn = this.StampsProfile;
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsScanFormEntity:
-					toReturn = this.StampsScanForm;
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsShipmentEntity:
-					toReturn = this.StampsShipment;
-					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					toReturn = this.StatusPreset;
 					break;
@@ -522,6 +510,18 @@ namespace ShipWorks.Data.Model.Linq
 					break;
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					toReturn = this.UserSettings;
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsAccountEntity:
+					toReturn = this.UspsAccount;
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsProfileEntity:
+					toReturn = this.UspsProfile;
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsScanFormEntity:
+					toReturn = this.UspsScanForm;
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsShipmentEntity:
+					toReturn = this.UspsShipment;
 					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					toReturn = this.VersionSignoff;
@@ -1352,30 +1352,6 @@ namespace ShipWorks.Data.Model.Linq
 			get { return new DataSource2<ShopSiteStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
-		/// <summary>returns the datasource to use in a Linq query when targeting StampsAccountEntity instances in the database.</summary>
-		public DataSource2<StampsAccountEntity> StampsAccount
-		{
-			get { return new DataSource2<StampsAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting StampsProfileEntity instances in the database.</summary>
-		public DataSource2<StampsProfileEntity> StampsProfile
-		{
-			get { return new DataSource2<StampsProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting StampsScanFormEntity instances in the database.</summary>
-		public DataSource2<StampsScanFormEntity> StampsScanForm
-		{
-			get { return new DataSource2<StampsScanFormEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
-		/// <summary>returns the datasource to use in a Linq query when targeting StampsShipmentEntity instances in the database.</summary>
-		public DataSource2<StampsShipmentEntity> StampsShipment
-		{
-			get { return new DataSource2<StampsShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
-		}
-		
 		/// <summary>returns the datasource to use in a Linq query when targeting StatusPresetEntity instances in the database.</summary>
 		public DataSource2<StatusPresetEntity> StatusPreset
 		{
@@ -1482,6 +1458,30 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UserSettingsEntity> UserSettings
 		{
 			get { return new DataSource2<UserSettingsEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UspsAccountEntity instances in the database.</summary>
+		public DataSource2<UspsAccountEntity> UspsAccount
+		{
+			get { return new DataSource2<UspsAccountEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UspsProfileEntity instances in the database.</summary>
+		public DataSource2<UspsProfileEntity> UspsProfile
+		{
+			get { return new DataSource2<UspsProfileEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UspsScanFormEntity instances in the database.</summary>
+		public DataSource2<UspsScanFormEntity> UspsScanForm
+		{
+			get { return new DataSource2<UspsScanFormEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting UspsShipmentEntity instances in the database.</summary>
+		public DataSource2<UspsShipmentEntity> UspsShipment
+		{
+			get { return new DataSource2<UspsShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting VersionSignoffEntity instances in the database.</summary>

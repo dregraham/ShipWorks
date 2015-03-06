@@ -163,7 +163,7 @@ namespace ShipWorks.Shipping.Settings
             ShipmentTypeCode? selected = optionControl.SelectedPage.Tag != null ? (ShipmentTypeCode) optionControl.SelectedPage.Tag : (ShipmentTypeCode?) null;
             
             // Reload the providers panel in case a new entry for Express1 needs to be added (in the case
-            // where ShipWorks now needs to show both Express1 for Endicia and Express1 for Stamps
+            // where ShipWorks now needs to show both Express1 for Endicia and Express1 for USPS
             LoadProvidersPanel();
             LoadShipmentTypePages();
 
@@ -333,9 +333,6 @@ namespace ShipWorks.Shipping.Settings
 
             if (eventArgs.ShipmentTypeCode == ShipmentTypeCode.Usps)
             {
-                // Push the user to the USPS tab in case they came from
-                // the USPS (Stamps.com) tab
-
                 // Clear out the settings map to force a reload (to pick up the new USPSs account)
                 settingsMap.Clear();
                 LoadShipmentTypePages();

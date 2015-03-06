@@ -43,35 +43,6 @@ namespace ShipWorks.Email.Accounts
 
         #endregion
 
-        #region class SmtpProbeResult
-
-        class SmtpProbeResult
-        {
-            public string Host { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public int Port { get; set; }
-            public SmtpSecurity SmtpSecurity { get; set; }
-        }
-
-        #endregion
-
-        #region IncomingProbeResult
-
-        class IncomingProbeResult
-        {
-            public string Host { get; set; }
-            public EmailIncomingServerType HostType { get; set; }
-
-            public string Username { get; set; }
-            public string Password { get; set; }
-
-            public int Port { get; set; }
-            public EmailIncomingSecurityType IncomingSecurity { get; set; }
-        }
-
-        #endregion
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -209,18 +180,7 @@ namespace ShipWorks.Email.Accounts
             progressIncomingMail.Detail = "Done";
             progressIncomingMail.Completed();
 
-            return new EmailSettingsSearchResult(
-                smtpResult.Host,
-                smtpResult.Port,
-                smtpResult.Username,
-                smtpResult.Password,
-                smtpResult.SmtpSecurity,
-                incomingResult.Host,
-                incomingResult.HostType,
-                incomingResult.Port,
-                incomingResult.Username,
-                incomingResult.Password,
-                incomingResult.IncomingSecurity);
+            return new EmailSettingsSearchResult(smtpResult, incomingResult);
         }
 
         /// <summary>

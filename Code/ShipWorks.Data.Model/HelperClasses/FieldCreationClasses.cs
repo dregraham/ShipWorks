@@ -5092,21 +5092,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.ReferenceID);}
 		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp1 field instance</summary>
-		public static EntityField2 RubberStamp1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp1);}
-		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp2 field instance</summary>
-		public static EntityField2 RubberStamp2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp2);}
-		}
-		/// <summary>Creates a new EndiciaProfileEntity.RubberStamp3 field instance</summary>
-		public static EntityField2 RubberStamp3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.RubberStamp3);}
-		}
 		/// <summary>Creates a new EndiciaProfileEntity.ScanBasedReturn field instance</summary>
 		public static EntityField2 ScanBasedReturn
 		{
@@ -5186,21 +5171,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ReferenceID
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.ReferenceID);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp1 field instance</summary>
-		public static EntityField2 RubberStamp1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp1);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp2 field instance</summary>
-		public static EntityField2 RubberStamp2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp2);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.RubberStamp3 field instance</summary>
-		public static EntityField2 RubberStamp3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.RubberStamp3);}
 		}
 		/// <summary>Creates a new EndiciaShipmentEntity.TransactionID field instance</summary>
 		public static EntityField2 TransactionID
@@ -13887,6 +13857,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.EntryFacility);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.Memo1 field instance</summary>
+		public static EntityField2 Memo1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo1);}
+		}
+		/// <summary>Creates a new PostalProfileEntity.Memo2 field instance</summary>
+		public static EntityField2 Memo2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo2);}
+		}
+		/// <summary>Creates a new PostalProfileEntity.Memo3 field instance</summary>
+		public static EntityField2 Memo3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo3);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -13981,6 +13966,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 EntryFacility
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.EntryFacility);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo1 field instance</summary>
+		public static EntityField2 Memo1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo1);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo2 field instance</summary>
+		public static EntityField2 Memo2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo2);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.Memo3 field instance</summary>
+		public static EntityField2 Memo3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo3);}
 		}
 	}
 
@@ -16332,40 +16332,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaInsuranceProvider);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.EndiciaUspsAutomaticExpedited field instance</summary>
-		public static EntityField2 EndiciaUspsAutomaticExpedited
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.EndiciaUspsAutomaticExpeditedAccount field instance</summary>
-		public static EntityField2 EndiciaUspsAutomaticExpeditedAccount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.WorldShipLaunch field instance</summary>
 		public static EntityField2 WorldShipLaunch
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WorldShipLaunch);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpress1 field instance</summary>
-		public static EntityField2 StampsAutomaticExpress1
+		/// <summary>Creates a new ShippingSettingsEntity.UspsAutomaticExpress1 field instance</summary>
+		public static EntityField2 UspsAutomaticExpress1
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsAutomaticExpress1);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsAutomaticExpress1Account field instance</summary>
-		public static EntityField2 StampsAutomaticExpress1Account
+		/// <summary>Creates a new ShippingSettingsEntity.UspsAutomaticExpress1Account field instance</summary>
+		public static EntityField2 UspsAutomaticExpress1Account
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsAutomaticExpress1Account);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsUspsAutomaticExpedited field instance</summary>
-		public static EntityField2 StampsUspsAutomaticExpedited
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited);}
-		}
-		/// <summary>Creates a new ShippingSettingsEntity.StampsUspsAutomaticExpeditedAccount field instance</summary>
-		public static EntityField2 StampsUspsAutomaticExpeditedAccount
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsAutomaticExpress1Account);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsCertify field instance</summary>
 		public static EntityField2 Express1EndiciaCustomsCertify
@@ -16412,10 +16392,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.Express1StampsSingleSource field instance</summary>
-		public static EntityField2 Express1StampsSingleSource
+		/// <summary>Creates a new ShippingSettingsEntity.Express1UspsSingleSource field instance</summary>
+		public static EntityField2 Express1UspsSingleSource
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1StampsSingleSource);}
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1UspsSingleSource);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.UpsMailInnovationsEnabled field instance</summary>
 		public static EntityField2 UpsMailInnovationsEnabled
@@ -17261,256 +17241,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 RequestTimeout
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShopSiteStoreFieldIndex.RequestTimeout);}
-		}
-	}
-
-	/// <summary>Field Creation Class for entity StampsAccountEntity</summary>
-	public partial class StampsAccountFields
-	{
-		/// <summary>Creates a new StampsAccountEntity.StampsAccountID field instance</summary>
-		public static EntityField2 StampsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StampsAccountID);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.RowVersion field instance</summary>
-		public static EntityField2 RowVersion
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.RowVersion);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Username field instance</summary>
-		public static EntityField2 Username
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Username);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Password field instance</summary>
-		public static EntityField2 Password
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Password);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.FirstName field instance</summary>
-		public static EntityField2 FirstName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.FirstName);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.MiddleName field instance</summary>
-		public static EntityField2 MiddleName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MiddleName);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.LastName field instance</summary>
-		public static EntityField2 LastName
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.LastName);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Company field instance</summary>
-		public static EntityField2 Company
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Company);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Street1 field instance</summary>
-		public static EntityField2 Street1
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Street1);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Street2 field instance</summary>
-		public static EntityField2 Street2
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Street2);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Street3 field instance</summary>
-		public static EntityField2 Street3
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Street3);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.City field instance</summary>
-		public static EntityField2 City
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.City);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.StateProvCode field instance</summary>
-		public static EntityField2 StateProvCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StateProvCode);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.PostalCode field instance</summary>
-		public static EntityField2 PostalCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.PostalCode);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.CountryCode field instance</summary>
-		public static EntityField2 CountryCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.CountryCode);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Phone field instance</summary>
-		public static EntityField2 Phone
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Phone);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Email field instance</summary>
-		public static EntityField2 Email
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Email);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.Website field instance</summary>
-		public static EntityField2 Website
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.Website);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.MailingPostalCode field instance</summary>
-		public static EntityField2 MailingPostalCode
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.MailingPostalCode);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.StampsReseller field instance</summary>
-		public static EntityField2 StampsReseller
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.StampsReseller);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.ContractType field instance</summary>
-		public static EntityField2 ContractType
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.ContractType);}
-		}
-		/// <summary>Creates a new StampsAccountEntity.CreatedDate field instance</summary>
-		public static EntityField2 CreatedDate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsAccountFieldIndex.CreatedDate);}
-		}
-	}
-
-	/// <summary>Field Creation Class for entity StampsProfileEntity</summary>
-	public partial class StampsProfileFields
-	{
-		/// <summary>Creates a new StampsProfileEntity.ShippingProfileID field instance</summary>
-		public static EntityField2 ShippingProfileID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.ShippingProfileID);}
-		}
-		/// <summary>Creates a new StampsProfileEntity.StampsAccountID field instance</summary>
-		public static EntityField2 StampsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.StampsAccountID);}
-		}
-		/// <summary>Creates a new StampsProfileEntity.HidePostage field instance</summary>
-		public static EntityField2 HidePostage
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.HidePostage);}
-		}
-		/// <summary>Creates a new StampsProfileEntity.RequireFullAddressValidation field instance</summary>
-		public static EntityField2 RequireFullAddressValidation
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.RequireFullAddressValidation);}
-		}
-		/// <summary>Creates a new StampsProfileEntity.Memo field instance</summary>
-		public static EntityField2 Memo
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.Memo);}
-		}
-		/// <summary>Creates a new StampsProfileEntity.RateShop field instance</summary>
-		public static EntityField2 RateShop
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsProfileFieldIndex.RateShop);}
-		}
-	}
-
-	/// <summary>Field Creation Class for entity StampsScanFormEntity</summary>
-	public partial class StampsScanFormFields
-	{
-		/// <summary>Creates a new StampsScanFormEntity.StampsScanFormID field instance</summary>
-		public static EntityField2 StampsScanFormID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.StampsScanFormID);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.StampsAccountID field instance</summary>
-		public static EntityField2 StampsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.StampsAccountID);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.ScanFormTransactionID field instance</summary>
-		public static EntityField2 ScanFormTransactionID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ScanFormTransactionID);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.ScanFormUrl field instance</summary>
-		public static EntityField2 ScanFormUrl
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ScanFormUrl);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.CreatedDate field instance</summary>
-		public static EntityField2 CreatedDate
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.CreatedDate);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.ScanFormBatchID field instance</summary>
-		public static EntityField2 ScanFormBatchID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.ScanFormBatchID);}
-		}
-		/// <summary>Creates a new StampsScanFormEntity.Description field instance</summary>
-		public static EntityField2 Description
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsScanFormFieldIndex.Description);}
-		}
-	}
-
-	/// <summary>Field Creation Class for entity StampsShipmentEntity</summary>
-	public partial class StampsShipmentFields
-	{
-		/// <summary>Creates a new StampsShipmentEntity.ShipmentID field instance</summary>
-		public static EntityField2 ShipmentID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ShipmentID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.StampsAccountID field instance</summary>
-		public static EntityField2 StampsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.StampsAccountID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.HidePostage field instance</summary>
-		public static EntityField2 HidePostage
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.HidePostage);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.RequireFullAddressValidation field instance</summary>
-		public static EntityField2 RequireFullAddressValidation
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.RequireFullAddressValidation);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.IntegratorTransactionID field instance</summary>
-		public static EntityField2 IntegratorTransactionID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.IntegratorTransactionID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.StampsTransactionID field instance</summary>
-		public static EntityField2 StampsTransactionID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.StampsTransactionID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.Memo field instance</summary>
-		public static EntityField2 Memo
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.Memo);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.OriginalStampsAccountID field instance</summary>
-		public static EntityField2 OriginalStampsAccountID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.OriginalStampsAccountID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.ScanFormBatchID field instance</summary>
-		public static EntityField2 ScanFormBatchID
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.ScanFormBatchID);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.RequestedLabelFormat field instance</summary>
-		public static EntityField2 RequestedLabelFormat
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.RequestedLabelFormat);}
-		}
-		/// <summary>Creates a new StampsShipmentEntity.RateShop field instance</summary>
-		public static EntityField2 RateShop
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(StampsShipmentFieldIndex.RateShop);}
 		}
 	}
 
@@ -19206,6 +18936,246 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 TemplateLastSelected
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.TemplateLastSelected);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>
+	public partial class UspsAccountFields
+	{
+		/// <summary>Creates a new UspsAccountEntity.UspsAccountID field instance</summary>
+		public static EntityField2 UspsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.UspsAccountID);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.RowVersion field instance</summary>
+		public static EntityField2 RowVersion
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.RowVersion);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Username field instance</summary>
+		public static EntityField2 Username
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Username);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Password field instance</summary>
+		public static EntityField2 Password
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Password);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.FirstName field instance</summary>
+		public static EntityField2 FirstName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.FirstName);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.MiddleName field instance</summary>
+		public static EntityField2 MiddleName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.MiddleName);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.LastName field instance</summary>
+		public static EntityField2 LastName
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.LastName);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Company field instance</summary>
+		public static EntityField2 Company
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Company);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Street1 field instance</summary>
+		public static EntityField2 Street1
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Street1);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Street2 field instance</summary>
+		public static EntityField2 Street2
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Street2);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Street3 field instance</summary>
+		public static EntityField2 Street3
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Street3);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.City field instance</summary>
+		public static EntityField2 City
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.City);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.StateProvCode field instance</summary>
+		public static EntityField2 StateProvCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.StateProvCode);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.PostalCode field instance</summary>
+		public static EntityField2 PostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.PostalCode);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.CountryCode field instance</summary>
+		public static EntityField2 CountryCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.CountryCode);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Phone field instance</summary>
+		public static EntityField2 Phone
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Phone);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Email field instance</summary>
+		public static EntityField2 Email
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Email);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.Website field instance</summary>
+		public static EntityField2 Website
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.Website);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.MailingPostalCode field instance</summary>
+		public static EntityField2 MailingPostalCode
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.MailingPostalCode);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.UspsReseller field instance</summary>
+		public static EntityField2 UspsReseller
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.UspsReseller);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.ContractType field instance</summary>
+		public static EntityField2 ContractType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.ContractType);}
+		}
+		/// <summary>Creates a new UspsAccountEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsAccountFieldIndex.CreatedDate);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UspsProfileEntity</summary>
+	public partial class UspsProfileFields
+	{
+		/// <summary>Creates a new UspsProfileEntity.ShippingProfileID field instance</summary>
+		public static EntityField2 ShippingProfileID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.ShippingProfileID);}
+		}
+		/// <summary>Creates a new UspsProfileEntity.UspsAccountID field instance</summary>
+		public static EntityField2 UspsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.UspsAccountID);}
+		}
+		/// <summary>Creates a new UspsProfileEntity.HidePostage field instance</summary>
+		public static EntityField2 HidePostage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.HidePostage);}
+		}
+		/// <summary>Creates a new UspsProfileEntity.RequireFullAddressValidation field instance</summary>
+		public static EntityField2 RequireFullAddressValidation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.RequireFullAddressValidation);}
+		}
+		/// <summary>Creates a new UspsProfileEntity.RateShop field instance</summary>
+		public static EntityField2 RateShop
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsProfileFieldIndex.RateShop);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UspsScanFormEntity</summary>
+	public partial class UspsScanFormFields
+	{
+		/// <summary>Creates a new UspsScanFormEntity.UspsScanFormID field instance</summary>
+		public static EntityField2 UspsScanFormID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.UspsScanFormID);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.UspsAccountID field instance</summary>
+		public static EntityField2 UspsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.UspsAccountID);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.ScanFormTransactionID field instance</summary>
+		public static EntityField2 ScanFormTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.ScanFormTransactionID);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.ScanFormUrl field instance</summary>
+		public static EntityField2 ScanFormUrl
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.ScanFormUrl);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.CreatedDate field instance</summary>
+		public static EntityField2 CreatedDate
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.CreatedDate);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.ScanFormBatchID field instance</summary>
+		public static EntityField2 ScanFormBatchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.ScanFormBatchID);}
+		}
+		/// <summary>Creates a new UspsScanFormEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsScanFormFieldIndex.Description);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity UspsShipmentEntity</summary>
+	public partial class UspsShipmentFields
+	{
+		/// <summary>Creates a new UspsShipmentEntity.ShipmentID field instance</summary>
+		public static EntityField2 ShipmentID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.ShipmentID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.UspsAccountID field instance</summary>
+		public static EntityField2 UspsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.UspsAccountID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.HidePostage field instance</summary>
+		public static EntityField2 HidePostage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.HidePostage);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.RequireFullAddressValidation field instance</summary>
+		public static EntityField2 RequireFullAddressValidation
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.RequireFullAddressValidation);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.IntegratorTransactionID field instance</summary>
+		public static EntityField2 IntegratorTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.IntegratorTransactionID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.UspsTransactionID field instance</summary>
+		public static EntityField2 UspsTransactionID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.UspsTransactionID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.OriginalUspsAccountID field instance</summary>
+		public static EntityField2 OriginalUspsAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.OriginalUspsAccountID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.ScanFormBatchID field instance</summary>
+		public static EntityField2 ScanFormBatchID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.ScanFormBatchID);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.RequestedLabelFormat field instance</summary>
+		public static EntityField2 RequestedLabelFormat
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.RequestedLabelFormat);}
+		}
+		/// <summary>Creates a new UspsShipmentEntity.RateShop field instance</summary>
+		public static EntityField2 RateShop
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UspsShipmentFieldIndex.RateShop);}
 		}
 	}
 

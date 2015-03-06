@@ -35,10 +35,8 @@
         <xsl:variable name="uspsWeb" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (w/o Postage)']/TotalCharges)" />
         <xsl:variable name="uspsEndicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Endicia)']/TotalCharges)" />
         <xsl:variable name="usps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS']/TotalCharges)" />
-        <xsl:variable name="uspsStamps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Stamps.com)']/TotalCharges)" />
         <xsl:variable name="uspsExpress1" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1)']/TotalCharges)" />
         <xsl:variable name="uspsExpress1Endicia" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1 for Endicia)']/TotalCharges)" />
-        <xsl:variable name="uspsExpress1Stamps" select="sum(//Shipment[Status = 'Processed' and ShipmentType='USPS (Express1 for Stamps)']/TotalCharges)" />
         <xsl:variable name="onTrac" select="sum(//Shipment[Status = 'Processed' and ShipmentType='OnTrac']/TotalCharges)" />
         <xsl:variable name="iParcel" select="sum(//Shipment[Status = 'Processed' and ShipmentType='i-parcel']/TotalCharges)" />
         <xsl:variable name="total" select="sum(//Shipment[Status = 'Processed']/TotalCharges)" />
@@ -99,19 +97,7 @@
               $<xsl:value-of select="format-number($uspsExpress1Endicia, '#,##0.00')" />
             </td>
           </tr>
-
-          <tr>
-            <td style="{$rowStyle};">USPS (Express1 for Stamps.com)</td>
-            <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($uspsExpress1Stamps, '#,##0.00')" />
-            </td>
-          </tr>
-          <tr>
-            <td style="{$rowStyle};">USPS (Stamps.com)</td>
-            <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($uspsStamps, '#,##0.00')" />
-            </td>
-          </tr>
+          
           <tr>
             <td style="{$rowStyle};">OnTrac</td>
             <td style="{$rowStyle};" align="right">

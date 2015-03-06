@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Add a stamps.com account for use with shipworks
+        /// Add a USPS account for use with shipworks
         /// </summary>
         private void OnAddAccount(object sender, EventArgs e)
         {

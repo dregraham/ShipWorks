@@ -114,11 +114,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 thisSchedulerFactory.GetScheduler().ListenerManager.AddJobListener(quartzJobListener, matcher);
 
                 // Start the scheduler in a separate thread.
-                Task t = null;
-                new Task(() =>
-                    {
-                        t = quartzSchedulingEngine.RunAsync(cancellationTokenSource.Token);
-                    }).Start();
+                new Task(() => quartzSchedulingEngine.RunAsync(cancellationTokenSource.Token)).Start();
 
                 // Keep checking for complete or cancellation every half second for up to 5 minutes
                 while (!testComplete && count <= 600)
@@ -269,11 +265,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 IMatcher<JobKey> matcher = KeyMatcher<JobKey>.KeyEquals(new JobKey(action.ActionID.ToString()));
                 thisSchedulerFactory.GetScheduler().ListenerManager.AddJobListener(quartzJobListener, matcher);
 
-                Task t = null;
-                new Task(() =>
-                {
-                    t = quartzSchedulingEngine.RunAsync(cancellationTokenSource.Token);
-                }).Start();
+                new Task(() => quartzSchedulingEngine.RunAsync(cancellationTokenSource.Token)).Start();
 
                 // Iterate through each test run
                 foreach (var testTime in TestTimes)

@@ -32,11 +32,11 @@
             this.panelDiscountAccount = new System.Windows.Forms.Panel();
             this.labelExpeditedAccount = new System.Windows.Forms.Label();
             this.expeditedAccounts = new System.Windows.Forms.ComboBox();
-            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
             this.expeditedSignup = new System.Windows.Forms.Button();
             this.labelDiscountedPostage = new System.Windows.Forms.Label();
             this.labelDiscountInfo1 = new System.Windows.Forms.Label();
             this.checkBoxUseExpedited = new System.Windows.Forms.CheckBox();
+            this.expeditedLearnMore = new ShipWorks.UI.Controls.LinkControl();
             this.panelDiscountAccount.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +47,7 @@
             this.panelDiscountAccount.Controls.Add(this.expeditedLearnMore);
             this.panelDiscountAccount.Controls.Add(this.expeditedSignup);
             this.panelDiscountAccount.Enabled = false;
-            this.panelDiscountAccount.Location = new System.Drawing.Point(9, 145);
+            this.panelDiscountAccount.Location = new System.Drawing.Point(12, 162);
             this.panelDiscountAccount.Name = "panelDiscountAccount";
             this.panelDiscountAccount.Size = new System.Drawing.Size(442, 34);
             this.panelDiscountAccount.TabIndex = 11;
@@ -57,9 +57,9 @@
             this.labelExpeditedAccount.AutoSize = true;
             this.labelExpeditedAccount.Location = new System.Drawing.Point(14, 10);
             this.labelExpeditedAccount.Name = "labelExpeditedAccount";
-            this.labelExpeditedAccount.Size = new System.Drawing.Size(110, 13);
+            this.labelExpeditedAccount.Size = new System.Drawing.Size(81, 13);
             this.labelExpeditedAccount.TabIndex = 1;
-            this.labelExpeditedAccount.Text = "Stamps.com account:";
+            this.labelExpeditedAccount.Text = "USPS account:";
             // 
             // expeditedAccounts
             // 
@@ -70,20 +70,6 @@
             this.expeditedAccounts.Size = new System.Drawing.Size(122, 21);
             this.expeditedAccounts.TabIndex = 2;
             this.expeditedAccounts.Visible = false;
-            this.expeditedAccounts.SelectedIndexChanged += new System.EventHandler(this.OnExpeditedAccountsSelectedIndexChanged);
-            // 
-            // expeditedLearnMore
-            // 
-            this.expeditedLearnMore.AutoSize = true;
-            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
-            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
-            this.expeditedLearnMore.Location = new System.Drawing.Point(229, 10);
-            this.expeditedLearnMore.Name = "expeditedLearnMore";
-            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
-            this.expeditedLearnMore.TabIndex = 7;
-            this.expeditedLearnMore.Text = "(Learn more)";
-            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
             // 
             // expeditedSignup
             // 
@@ -109,13 +95,13 @@
             // 
             this.labelDiscountInfo1.Location = new System.Drawing.Point(18, 29);
             this.labelDiscountInfo1.Name = "labelDiscountInfo1";
-            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 87);
+            this.labelDiscountInfo1.Size = new System.Drawing.Size(417, 99);
             this.labelDiscountInfo1.TabIndex = 12;
             this.labelDiscountInfo1.Text = resources.GetString("labelDiscountInfo1.Text");
             // 
             // checkBoxUseExpedited
             // 
-            this.checkBoxUseExpedited.Location = new System.Drawing.Point(24, 117);
+            this.checkBoxUseExpedited.Location = new System.Drawing.Point(21, 123);
             this.checkBoxUseExpedited.Name = "checkBoxUseExpedited";
             this.checkBoxUseExpedited.Size = new System.Drawing.Size(424, 33);
             this.checkBoxUseExpedited.TabIndex = 10;
@@ -124,16 +110,29 @@
             this.checkBoxUseExpedited.UseVisualStyleBackColor = true;
             this.checkBoxUseExpedited.Click += new System.EventHandler(this.OnChangeUseExpedited);
             // 
+            // expeditedLearnMore
+            // 
+            this.expeditedLearnMore.AutoSize = true;
+            this.expeditedLearnMore.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.expeditedLearnMore.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.expeditedLearnMore.ForeColor = System.Drawing.Color.Blue;
+            this.expeditedLearnMore.Location = new System.Drawing.Point(229, 10);
+            this.expeditedLearnMore.Name = "expeditedLearnMore";
+            this.expeditedLearnMore.Size = new System.Drawing.Size(69, 13);
+            this.expeditedLearnMore.TabIndex = 7;
+            this.expeditedLearnMore.Text = "(Learn more)";
+            this.expeditedLearnMore.Click += new System.EventHandler(this.OnExpedited1LearnMore);
+            // 
             // UspsAutomaticDiscountControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxUseExpedited);
             this.Controls.Add(this.panelDiscountAccount);
             this.Controls.Add(this.labelDiscountedPostage);
             this.Controls.Add(this.labelDiscountInfo1);
-            this.Controls.Add(this.checkBoxUseExpedited);
             this.Name = "UspsAutomaticDiscountControl";
-            this.Size = new System.Drawing.Size(454, 187);
+            this.Size = new System.Drawing.Size(454, 217);
             this.panelDiscountAccount.ResumeLayout(false);
             this.panelDiscountAccount.PerformLayout();
             this.ResumeLayout(false);

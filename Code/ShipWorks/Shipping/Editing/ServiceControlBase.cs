@@ -76,7 +76,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Constructor
         /// </summary>
-        private ServiceControlBase()
+        protected ServiceControlBase()
         {
             InitializeComponent();
         }

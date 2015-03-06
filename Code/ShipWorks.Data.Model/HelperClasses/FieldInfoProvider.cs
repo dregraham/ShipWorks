@@ -189,10 +189,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitShopifyOrderItemEntityInfos();
 			InitShopifyStoreEntityInfos();
 			InitShopSiteStoreEntityInfos();
-			InitStampsAccountEntityInfos();
-			InitStampsProfileEntityInfos();
-			InitStampsScanFormEntityInfos();
-			InitStampsShipmentEntityInfos();
 			InitStatusPresetEntityInfos();
 			InitStoreEntityInfos();
 			InitSystemDataEntityInfos();
@@ -211,6 +207,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitUserEntityInfos();
 			InitUserColumnSettingsEntityInfos();
 			InitUserSettingsEntityInfos();
+			InitUspsAccountEntityInfos();
+			InitUspsProfileEntityInfos();
+			InitUspsScanFormEntityInfos();
+			InitUspsShipmentEntityInfos();
 			InitVersionSignoffEntityInfos();
 			InitVolusionStoreEntityInfos();
 			InitWorldShipGoodsEntityInfos();
@@ -801,9 +801,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaProfileEntity", "StealthPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.StealthPostage, 0, 0, 0);
 			base.AddElementFieldInfo("EndiciaProfileEntity", "NoPostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.NoPostage, 0, 0, 0);
 			base.AddElementFieldInfo("EndiciaProfileEntity", "ReferenceID", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.ReferenceID, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp1", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp1, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp2", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp2, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaProfileEntity", "RubberStamp3", typeof(System.String), false, false, false, true,  (int)EndiciaProfileFieldIndex.RubberStamp3, 300, 0, 0);
 			base.AddElementFieldInfo("EndiciaProfileEntity", "ScanBasedReturn", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)EndiciaProfileFieldIndex.ScanBasedReturn, 0, 0, 0);
 		}
 		/// <summary>Inits EndiciaScanFormEntity's FieldInfo objects</summary>
@@ -826,9 +823,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "StealthPostage", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.StealthPostage, 0, 0, 0);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "NoPostage", typeof(System.Boolean), false, false, false, false,  (int)EndiciaShipmentFieldIndex.NoPostage, 0, 0, 0);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "ReferenceID", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.ReferenceID, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaShipmentEntity", "RubberStamp1", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RubberStamp1, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaShipmentEntity", "RubberStamp2", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RubberStamp2, 300, 0, 0);
-			base.AddElementFieldInfo("EndiciaShipmentEntity", "RubberStamp3", typeof(System.String), false, false, false, false,  (int)EndiciaShipmentFieldIndex.RubberStamp3, 300, 0, 0);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "TransactionID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.TransactionID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "RefundFormID", typeof(Nullable<System.Int32>), false, false, false, true,  (int)EndiciaShipmentFieldIndex.RefundFormID, 0, 0, 10);
 			base.AddElementFieldInfo("EndiciaShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)EndiciaShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
@@ -1834,6 +1828,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("PostalProfileEntity", "ExpressSignatureWaiver", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)PostalProfileFieldIndex.ExpressSignatureWaiver, 0, 0, 0);
 			base.AddElementFieldInfo("PostalProfileEntity", "SortType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.SortType, 0, 0, 10);
 			base.AddElementFieldInfo("PostalProfileEntity", "EntryFacility", typeof(Nullable<System.Int32>), false, false, false, true,  (int)PostalProfileFieldIndex.EntryFacility, 0, 0, 10);
+			base.AddElementFieldInfo("PostalProfileEntity", "Memo1", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo1, 300, 0, 0);
+			base.AddElementFieldInfo("PostalProfileEntity", "Memo2", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo2, 300, 0, 0);
+			base.AddElementFieldInfo("PostalProfileEntity", "Memo3", typeof(System.String), false, false, false, true,  (int)PostalProfileFieldIndex.Memo3, 300, 0, 0);
 		}
 		/// <summary>Inits PostalShipmentEntity's FieldInfo objects</summary>
 		private void InitPostalShipmentEntityInfos()
@@ -1856,6 +1853,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("PostalShipmentEntity", "ExpressSignatureWaiver", typeof(System.Boolean), false, false, false, false,  (int)PostalShipmentFieldIndex.ExpressSignatureWaiver, 0, 0, 0);
 			base.AddElementFieldInfo("PostalShipmentEntity", "SortType", typeof(System.Int32), false, false, false, false,  (int)PostalShipmentFieldIndex.SortType, 0, 0, 10);
 			base.AddElementFieldInfo("PostalShipmentEntity", "EntryFacility", typeof(System.Int32), false, false, false, false,  (int)PostalShipmentFieldIndex.EntryFacility, 0, 0, 10);
+			base.AddElementFieldInfo("PostalShipmentEntity", "Memo1", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo1, 300, 0, 0);
+			base.AddElementFieldInfo("PostalShipmentEntity", "Memo2", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo2, 300, 0, 0);
+			base.AddElementFieldInfo("PostalShipmentEntity", "Memo3", typeof(System.String), false, false, false, false,  (int)PostalShipmentFieldIndex.Memo3, 300, 0, 0);
 		}
 		/// <summary>Inits PrintResultEntity's FieldInfo objects</summary>
 		private void InitPrintResultEntityInfos()
@@ -2195,13 +2195,9 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaAutomaticExpress1Account, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, 0, 0, 10);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaUspsAutomaticExpedited", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpedited, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "EndiciaUspsAutomaticExpeditedAccount", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.EndiciaUspsAutomaticExpeditedAccount, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipLaunch", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipLaunch, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsAutomaticExpress1Account, 0, 0, 19);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsUspsAutomaticExpedited", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpedited, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "StampsUspsAutomaticExpeditedAccount", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.StampsUspsAutomaticExpeditedAccount, 0, 0, 19);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "UspsAutomaticExpress1", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsAutomaticExpress1, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "UspsAutomaticExpress1Account", typeof(System.Int64), false, false, false, false,  (int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, 0, 0, 19);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaCustomsCertify", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaCustomsCertify, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaCustomsSigner", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaCustomsSigner, 100, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1EndiciaThermalDocTab", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1EndiciaThermalDocTab, 0, 0, 0);
@@ -2211,7 +2207,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShippingSettingsEntity", "OnTracInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.OnTracInsurancePennyOne, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsuranceProvider", typeof(System.Int32), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsuranceProvider, 0, 0, 10);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "IParcelInsurancePennyOne", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, 0, 0, 0);
-			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1StampsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1StampsSingleSource, 0, 0, 0);
+			base.AddElementFieldInfo("ShippingSettingsEntity", "Express1UspsSingleSource", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.Express1UspsSingleSource, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "UpsMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.UpsMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "WorldShipMailInnovationsEnabled", typeof(System.Boolean), false, false, false, false,  (int)ShippingSettingsFieldIndex.WorldShipMailInnovationsEnabled, 0, 0, 0);
 			base.AddElementFieldInfo("ShippingSettingsEntity", "InternalBestRateExcludedShipmentTypes", typeof(System.String), false, false, false, false,  (int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, 30, 0, 0);
@@ -2261,68 +2257,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequireSSL", typeof(System.Boolean), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequireSSL, 0, 0, 0);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "DownloadPageSize", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.DownloadPageSize, 0, 0, 10);
 			base.AddElementFieldInfo("ShopSiteStoreEntity", "RequestTimeout", typeof(System.Int32), false, false, false, false,  (int)ShopSiteStoreFieldIndex.RequestTimeout, 0, 0, 10);
-		}
-		/// <summary>Inits StampsAccountEntity's FieldInfo objects</summary>
-		private void InitStampsAccountEntityInfos()
-		{
-			base.AddElementFieldInfo("StampsAccountEntity", "StampsAccountID", typeof(System.Int64), true, false, true, false,  (int)StampsAccountFieldIndex.StampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)StampsAccountFieldIndex.RowVersion, 0, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Username, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Password, 100, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.FirstName, 30, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.MiddleName, 30, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.LastName, 30, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Company, 30, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Street1, 60, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Street2", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Street2, 60, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Street3", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Street3, 60, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.City, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.StateProvCode, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.PostalCode, 20, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.CountryCode, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Phone, 25, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Email, 100, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.Website, 50, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)StampsAccountFieldIndex.MailingPostalCode, 20, 0, 0);
-			base.AddElementFieldInfo("StampsAccountEntity", "StampsReseller", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.StampsReseller, 0, 0, 10);
-			base.AddElementFieldInfo("StampsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)StampsAccountFieldIndex.ContractType, 0, 0, 10);
-			base.AddElementFieldInfo("StampsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)StampsAccountFieldIndex.CreatedDate, 0, 0, 0);
-		}
-		/// <summary>Inits StampsProfileEntity's FieldInfo objects</summary>
-		private void InitStampsProfileEntityInfos()
-		{
-			base.AddElementFieldInfo("StampsProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)StampsProfileFieldIndex.ShippingProfileID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsProfileEntity", "StampsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsProfileFieldIndex.StampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsProfileEntity", "HidePostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.HidePostage, 0, 0, 0);
-			base.AddElementFieldInfo("StampsProfileEntity", "RequireFullAddressValidation", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.RequireFullAddressValidation, 0, 0, 0);
-			base.AddElementFieldInfo("StampsProfileEntity", "Memo", typeof(System.String), false, false, false, true,  (int)StampsProfileFieldIndex.Memo, 200, 0, 0);
-			base.AddElementFieldInfo("StampsProfileEntity", "RateShop", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)StampsProfileFieldIndex.RateShop, 0, 0, 0);
-		}
-		/// <summary>Inits StampsScanFormEntity's FieldInfo objects</summary>
-		private void InitStampsScanFormEntityInfos()
-		{
-			base.AddElementFieldInfo("StampsScanFormEntity", "StampsScanFormID", typeof(System.Int64), true, false, true, false,  (int)StampsScanFormFieldIndex.StampsScanFormID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsScanFormEntity", "StampsAccountID", typeof(System.Int64), false, false, false, false,  (int)StampsScanFormFieldIndex.StampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormTransactionID", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.ScanFormTransactionID, 100, 0, 0);
-			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormUrl", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.ScanFormUrl, 2048, 0, 0);
-			base.AddElementFieldInfo("StampsScanFormEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)StampsScanFormFieldIndex.CreatedDate, 0, 0, 0);
-			base.AddElementFieldInfo("StampsScanFormEntity", "ScanFormBatchID", typeof(System.Int64), false, true, false, false,  (int)StampsScanFormFieldIndex.ScanFormBatchID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsScanFormEntity", "Description", typeof(System.String), false, false, false, false,  (int)StampsScanFormFieldIndex.Description, 100, 0, 0);
-		}
-		/// <summary>Inits StampsShipmentEntity's FieldInfo objects</summary>
-		private void InitStampsShipmentEntityInfos()
-		{
-			base.AddElementFieldInfo("StampsShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)StampsShipmentFieldIndex.ShipmentID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsShipmentEntity", "StampsAccountID", typeof(System.Int64), false, false, false, false,  (int)StampsShipmentFieldIndex.StampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsShipmentEntity", "HidePostage", typeof(System.Boolean), false, false, false, false,  (int)StampsShipmentFieldIndex.HidePostage, 0, 0, 0);
-			base.AddElementFieldInfo("StampsShipmentEntity", "RequireFullAddressValidation", typeof(System.Boolean), false, false, false, false,  (int)StampsShipmentFieldIndex.RequireFullAddressValidation, 0, 0, 0);
-			base.AddElementFieldInfo("StampsShipmentEntity", "IntegratorTransactionID", typeof(System.Guid), false, false, false, false,  (int)StampsShipmentFieldIndex.IntegratorTransactionID, 0, 0, 0);
-			base.AddElementFieldInfo("StampsShipmentEntity", "StampsTransactionID", typeof(System.Guid), false, false, false, false,  (int)StampsShipmentFieldIndex.StampsTransactionID, 0, 0, 0);
-			base.AddElementFieldInfo("StampsShipmentEntity", "Memo", typeof(System.String), false, false, false, false,  (int)StampsShipmentFieldIndex.Memo, 200, 0, 0);
-			base.AddElementFieldInfo("StampsShipmentEntity", "OriginalStampsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)StampsShipmentFieldIndex.OriginalStampsAccountID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)StampsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
-			base.AddElementFieldInfo("StampsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)StampsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
-			base.AddElementFieldInfo("StampsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)StampsShipmentFieldIndex.RateShop, 0, 0, 0);
 		}
 		/// <summary>Inits StatusPresetEntity's FieldInfo objects</summary>
 		private void InitStatusPresetEntityInfos()
@@ -2669,6 +2603,66 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "ShippingWeightFormat", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.ShippingWeightFormat, 0, 0, 10);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.TemplateExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
+		}
+		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
+		private void InitUspsAccountEntityInfos()
+		{
+			base.AddElementFieldInfo("UspsAccountEntity", "UspsAccountID", typeof(System.Int64), true, false, true, false,  (int)UspsAccountFieldIndex.UspsAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)UspsAccountFieldIndex.RowVersion, 0, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Username, 50, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Password, 100, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.FirstName, 30, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.MiddleName, 30, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.LastName, 30, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Company", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Company, 30, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Street1", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Street1, 60, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Street2", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Street2, 60, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Street3", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Street3, 60, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "City", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.City, 50, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "StateProvCode", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.StateProvCode, 50, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "PostalCode", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.PostalCode, 20, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "CountryCode", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.CountryCode, 50, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Phone", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Phone, 25, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Email", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Email, 100, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Website", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Website, 50, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "MailingPostalCode", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.MailingPostalCode, 20, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "UspsReseller", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.UspsReseller, 0, 0, 10);
+			base.AddElementFieldInfo("UspsAccountEntity", "ContractType", typeof(System.Int32), false, false, false, false,  (int)UspsAccountFieldIndex.ContractType, 0, 0, 10);
+			base.AddElementFieldInfo("UspsAccountEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsAccountFieldIndex.CreatedDate, 0, 0, 0);
+		}
+		/// <summary>Inits UspsProfileEntity's FieldInfo objects</summary>
+		private void InitUspsProfileEntityInfos()
+		{
+			base.AddElementFieldInfo("UspsProfileEntity", "ShippingProfileID", typeof(System.Int64), true, true, false, false,  (int)UspsProfileFieldIndex.ShippingProfileID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsProfileEntity", "UspsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UspsProfileFieldIndex.UspsAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsProfileEntity", "HidePostage", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.HidePostage, 0, 0, 0);
+			base.AddElementFieldInfo("UspsProfileEntity", "RequireFullAddressValidation", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.RequireFullAddressValidation, 0, 0, 0);
+			base.AddElementFieldInfo("UspsProfileEntity", "RateShop", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UspsProfileFieldIndex.RateShop, 0, 0, 0);
+		}
+		/// <summary>Inits UspsScanFormEntity's FieldInfo objects</summary>
+		private void InitUspsScanFormEntityInfos()
+		{
+			base.AddElementFieldInfo("UspsScanFormEntity", "UspsScanFormID", typeof(System.Int64), true, false, true, false,  (int)UspsScanFormFieldIndex.UspsScanFormID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsScanFormEntity", "UspsAccountID", typeof(System.Int64), false, false, false, false,  (int)UspsScanFormFieldIndex.UspsAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsScanFormEntity", "ScanFormTransactionID", typeof(System.String), false, false, false, false,  (int)UspsScanFormFieldIndex.ScanFormTransactionID, 100, 0, 0);
+			base.AddElementFieldInfo("UspsScanFormEntity", "ScanFormUrl", typeof(System.String), false, false, false, false,  (int)UspsScanFormFieldIndex.ScanFormUrl, 2048, 0, 0);
+			base.AddElementFieldInfo("UspsScanFormEntity", "CreatedDate", typeof(System.DateTime), false, false, false, false,  (int)UspsScanFormFieldIndex.CreatedDate, 0, 0, 0);
+			base.AddElementFieldInfo("UspsScanFormEntity", "ScanFormBatchID", typeof(System.Int64), false, true, false, false,  (int)UspsScanFormFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsScanFormEntity", "Description", typeof(System.String), false, false, false, false,  (int)UspsScanFormFieldIndex.Description, 100, 0, 0);
+		}
+		/// <summary>Inits UspsShipmentEntity's FieldInfo objects</summary>
+		private void InitUspsShipmentEntityInfos()
+		{
+			base.AddElementFieldInfo("UspsShipmentEntity", "ShipmentID", typeof(System.Int64), true, true, false, false,  (int)UspsShipmentFieldIndex.ShipmentID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsShipmentEntity", "UspsAccountID", typeof(System.Int64), false, false, false, false,  (int)UspsShipmentFieldIndex.UspsAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsShipmentEntity", "HidePostage", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.HidePostage, 0, 0, 0);
+			base.AddElementFieldInfo("UspsShipmentEntity", "RequireFullAddressValidation", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.RequireFullAddressValidation, 0, 0, 0);
+			base.AddElementFieldInfo("UspsShipmentEntity", "IntegratorTransactionID", typeof(System.Guid), false, false, false, false,  (int)UspsShipmentFieldIndex.IntegratorTransactionID, 0, 0, 0);
+			base.AddElementFieldInfo("UspsShipmentEntity", "UspsTransactionID", typeof(System.Guid), false, false, false, false,  (int)UspsShipmentFieldIndex.UspsTransactionID, 0, 0, 0);
+			base.AddElementFieldInfo("UspsShipmentEntity", "OriginalUspsAccountID", typeof(Nullable<System.Int64>), false, false, false, true,  (int)UspsShipmentFieldIndex.OriginalUspsAccountID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsShipmentEntity", "ScanFormBatchID", typeof(Nullable<System.Int64>), false, true, false, true,  (int)UspsShipmentFieldIndex.ScanFormBatchID, 0, 0, 19);
+			base.AddElementFieldInfo("UspsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UspsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
+			base.AddElementFieldInfo("UspsShipmentEntity", "RateShop", typeof(System.Boolean), false, false, false, false,  (int)UspsShipmentFieldIndex.RateShop, 0, 0, 0);
 		}
 		/// <summary>Inits VersionSignoffEntity's FieldInfo objects</summary>
 		private void InitVersionSignoffEntityInfos()

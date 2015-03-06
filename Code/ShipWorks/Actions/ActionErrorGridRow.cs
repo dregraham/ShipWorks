@@ -61,7 +61,6 @@ namespace ShipWorks.Actions
                 Color backColor;
                 SandGridUtility.GetGridRowColors(this, context, out foreColor, out backColor);
 
-                int index = 0;
                 foreach (ActionQueueStepEntity step in queue.Steps.ToList())
                 {
                     Rectangle stepBounds = new Rectangle(
@@ -83,8 +82,6 @@ namespace ShipWorks.Actions
 
                     totalHeight += errorHeight;
                     nextTop += DetailViewSettings.SingleRowHeight + errorHeight;
-
-                    index++;
                 }
             }
 

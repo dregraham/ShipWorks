@@ -1,35 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-
-namespace ShipWorks.UI.Controls.Design
+﻿namespace ShipWorks.UI.Controls.Design
 {
     /// <summary>
-    /// Class for detecting if a control - or any of its parent controls - are in DesignMode
+    /// Class for detecting if the application is in DesignMode
     /// </summary>
     public static class DesignModeDetector
     {
         /// <summary>
-        /// Determines if the given control, or any of it's parent controls, are hosted by a designer.
+        /// Determines if we are currently in design mode.
         /// </summary>
-        public static bool IsDesignerHosted(Control control)
+        public static bool IsDesignerHosted()
         {
-            if (control != null)
-            {
-                if (control.Site != null && control.Site.DesignMode)
-                {
-                     return true;
-                }
-
-                if (IsDesignerHosted(control.Parent))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            // We were testing for the DesignMode of the specified control or its parent.  Unfortunately, this
+            // wasn't sufficient because that check is only valid after the constructor and there was an instance
+            // where OnLoad of the WeightControl was getting called in the constructor of the PostalServiceBase
+            // which caused Visual Studio to crash
+            return Program.ExecutionMode == null;
         }
     }
 }

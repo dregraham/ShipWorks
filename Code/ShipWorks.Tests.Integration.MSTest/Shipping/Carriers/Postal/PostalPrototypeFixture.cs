@@ -2,11 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
-using Interapptive.Shared.Enums;
 using Interapptive.Shared.Win32;
 using System.Xml.Linq;
 using log4net;
@@ -15,6 +11,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Templates;
 using ShipWorks.Tests.Integration.MSTest.Utilities;
 using ShipWorks.Users;
@@ -26,9 +23,6 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
 using ShipWorks.Shipping.Settings.Origin;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
@@ -72,7 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
                 DataProvider.InitializeForApplication(executionMode.Object);
                 AuditProcessor.InitializeForApplication();
 
-                StampsAccountManager.InitializeForCurrentSession();
+                UspsAccountManager.InitializeForCurrentSession();
                 ShippingSettings.InitializeForCurrentDatabase();
                 ShippingProfileManager.InitializeForCurrentSession();
                 ShippingDefaultsRuleManager.InitializeForCurrentSession();
@@ -204,7 +198,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
             }
         }
 
-        public abstract bool Ship(StampsResellerType stampsResellerType);
+        public abstract bool Ship(UspsResellerType resellerType);
 
         protected abstract void CleanupLabel();
 

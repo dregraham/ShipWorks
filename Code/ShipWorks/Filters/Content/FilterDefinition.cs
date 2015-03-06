@@ -35,6 +35,7 @@ namespace ShipWorks.Filters.Content
 
             /// <summary>
             /// Constructor
+            /// </summary>
             public ConditionGroupContainerRoot(ConditionEntityTarget entityTarget)
             {
                 this.entityTarget = entityTarget;
@@ -42,6 +43,7 @@ namespace ShipWorks.Filters.Content
 
             /// <summary>
             /// Get the entity target in scope
+            /// </summary>
             public override ConditionEntityTarget GetScopedEntityTarget()
             {
                 return entityTarget;

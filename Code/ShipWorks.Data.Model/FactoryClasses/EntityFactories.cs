@@ -5497,162 +5497,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 
 		#endregion
 	}	
-	/// <summary>Factory to create new, empty StampsAccountEntity objects.</summary>
-	[Serializable]
-	public partial class StampsAccountEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public StampsAccountEntityFactory() : base("StampsAccountEntity", ShipWorks.Data.Model.EntityType.StampsAccountEntity) { }
-
-		/// <summary>Creates a new, empty StampsAccountEntity object.</summary>
-		/// <returns>A new, empty StampsAccountEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new StampsAccountEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsAccount
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new StampsAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new StampsAccountEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsAccountUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<StampsAccountEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
-	/// <summary>Factory to create new, empty StampsProfileEntity objects.</summary>
-	[Serializable]
-	public partial class StampsProfileEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public StampsProfileEntityFactory() : base("StampsProfileEntity", ShipWorks.Data.Model.EntityType.StampsProfileEntity) { }
-
-		/// <summary>Creates a new, empty StampsProfileEntity object.</summary>
-		/// <returns>A new, empty StampsProfileEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new StampsProfileEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsProfile
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new StampsProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new StampsProfileEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsProfileUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<StampsProfileEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
-	/// <summary>Factory to create new, empty StampsScanFormEntity objects.</summary>
-	[Serializable]
-	public partial class StampsScanFormEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public StampsScanFormEntityFactory() : base("StampsScanFormEntity", ShipWorks.Data.Model.EntityType.StampsScanFormEntity) { }
-
-		/// <summary>Creates a new, empty StampsScanFormEntity object.</summary>
-		/// <returns>A new, empty StampsScanFormEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new StampsScanFormEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsScanForm
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new StampsScanFormEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new StampsScanFormEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsScanFormUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<StampsScanFormEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
-	/// <summary>Factory to create new, empty StampsShipmentEntity objects.</summary>
-	[Serializable]
-	public partial class StampsShipmentEntityFactory : EntityFactoryBase2 {
-		/// <summary>CTor</summary>
-		public StampsShipmentEntityFactory() : base("StampsShipmentEntity", ShipWorks.Data.Model.EntityType.StampsShipmentEntity) { }
-
-		/// <summary>Creates a new, empty StampsShipmentEntity object.</summary>
-		/// <returns>A new, empty StampsShipmentEntity object.</returns>
-		public override IEntity2 Create() {
-			IEntity2 toReturn = new StampsShipmentEntity();
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsShipment
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new StampsShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
-		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
-		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
-		public override IEntity2 Create(IEntityFields2 fields) {
-			IEntity2 toReturn = new StampsShipmentEntity(fields);
-			
-			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewStampsShipmentUsingFields
-			// __LLBLGENPRO_USER_CODE_REGION_END
-			return toReturn;
-		}
-		
-		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
-		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
-		public override IEntityCollection2 CreateEntityCollection()
-		{
-			return new EntityCollection<StampsShipmentEntity>(this);
-		}
-		
-
-		#region Included Code
-
-		#endregion
-	}	
 	/// <summary>Factory to create new, empty StatusPresetEntity objects.</summary>
 	[Serializable]
 	public partial class StatusPresetEntityFactory : EntityFactoryBase2 {
@@ -6363,6 +6207,162 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public override IEntityCollection2 CreateEntityCollection()
 		{
 			return new EntityCollection<UserSettingsEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty UspsAccountEntity objects.</summary>
+	[Serializable]
+	public partial class UspsAccountEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public UspsAccountEntityFactory() : base("UspsAccountEntity", ShipWorks.Data.Model.EntityType.UspsAccountEntity) { }
+
+		/// <summary>Creates a new, empty UspsAccountEntity object.</summary>
+		/// <returns>A new, empty UspsAccountEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new UspsAccountEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsAccount
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new UspsAccountEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UspsAccountEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsAccountUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<UspsAccountEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty UspsProfileEntity objects.</summary>
+	[Serializable]
+	public partial class UspsProfileEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public UspsProfileEntityFactory() : base("UspsProfileEntity", ShipWorks.Data.Model.EntityType.UspsProfileEntity) { }
+
+		/// <summary>Creates a new, empty UspsProfileEntity object.</summary>
+		/// <returns>A new, empty UspsProfileEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new UspsProfileEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsProfile
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new UspsProfileEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UspsProfileEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsProfileUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<UspsProfileEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty UspsScanFormEntity objects.</summary>
+	[Serializable]
+	public partial class UspsScanFormEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public UspsScanFormEntityFactory() : base("UspsScanFormEntity", ShipWorks.Data.Model.EntityType.UspsScanFormEntity) { }
+
+		/// <summary>Creates a new, empty UspsScanFormEntity object.</summary>
+		/// <returns>A new, empty UspsScanFormEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new UspsScanFormEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsScanForm
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new UspsScanFormEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UspsScanFormEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsScanFormUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<UspsScanFormEntity>(this);
+		}
+		
+
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty UspsShipmentEntity objects.</summary>
+	[Serializable]
+	public partial class UspsShipmentEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public UspsShipmentEntityFactory() : base("UspsShipmentEntity", ShipWorks.Data.Model.EntityType.UspsShipmentEntity) { }
+
+		/// <summary>Creates a new, empty UspsShipmentEntity object.</summary>
+		/// <returns>A new, empty UspsShipmentEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new UspsShipmentEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsShipment
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new UspsShipmentEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new UspsShipmentEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewUspsShipmentUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<UspsShipmentEntity>(this);
 		}
 		
 
@@ -7189,18 +7189,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.ShopSiteStoreEntity:
 					factoryToUse = new ShopSiteStoreEntityFactory();
 					break;
-				case ShipWorks.Data.Model.EntityType.StampsAccountEntity:
-					factoryToUse = new StampsAccountEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsProfileEntity:
-					factoryToUse = new StampsProfileEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsScanFormEntity:
-					factoryToUse = new StampsScanFormEntityFactory();
-					break;
-				case ShipWorks.Data.Model.EntityType.StampsShipmentEntity:
-					factoryToUse = new StampsShipmentEntityFactory();
-					break;
 				case ShipWorks.Data.Model.EntityType.StatusPresetEntity:
 					factoryToUse = new StatusPresetEntityFactory();
 					break;
@@ -7254,6 +7242,18 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.UserSettingsEntity:
 					factoryToUse = new UserSettingsEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsAccountEntity:
+					factoryToUse = new UspsAccountEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsProfileEntity:
+					factoryToUse = new UspsProfileEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsScanFormEntity:
+					factoryToUse = new UspsScanFormEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.UspsShipmentEntity:
+					factoryToUse = new UspsShipmentEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					factoryToUse = new VersionSignoffEntityFactory();

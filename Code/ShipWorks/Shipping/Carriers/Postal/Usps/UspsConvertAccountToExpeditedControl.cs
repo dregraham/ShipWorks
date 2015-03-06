@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Api;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Registration;
 using Interapptive.Shared.UI;
 using log4net;
-using log4net.Core;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
     /// <summary>
-    /// A UserControl that allows a customer to convert an existing Stamps.com account to an
-    /// USPS (Stamps.com Expedited) account via the Stamps.com API.
+    /// A UserControl that allows a customer to convert an existing USPS account to an Intuiship
+    /// USPS account via the Stamps.com API.
     /// </summary>
     public partial class UspsConvertAccountToExpeditedControl : UserControl
     {
         private readonly ILog log;
-        private StampsAccountEntity accountToConvert;
+        private UspsAccountEntity accountToConvert;
 
         public event EventHandler<UspsAccountConvertedEventArgs> AccountConverted;
         public event EventHandler AccountConverting;
@@ -56,18 +50,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Initializes the account to convert with the specified stamps account.
+        /// Initializes the account to convert with the specified USPS account.
         /// </summary>
-        /// <param name="stampsAccount">The account to be converted.</param>
-        /// <exception cref="StampsException">Only Stamps.com accounts can be converted.</exception>
-        public void Initialize(StampsAccountEntity stampsAccount)
+        /// <param name="uspsAccount">The account to be converted.</param>
+        /// <exception cref="UspsException">Only USPS accounts can be converted.</exception>
+        public void Initialize(UspsAccountEntity uspsAccount)
         {
-            if (stampsAccount.StampsReseller == (int)StampsResellerType.Express1)
+            if (uspsAccount.UspsReseller == (int)UspsResellerType.Express1)
             {
-                throw new StampsException("Express1 accounts cannot be converted.");
+                throw new UspsException("Express1 accounts cannot be converted.");
             }
 
-            accountToConvert = stampsAccount;
+            accountToConvert = uspsAccount;
         }
 
         /// <summary>
@@ -83,16 +77,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     AccountConverting(this, EventArgs.Empty);
                 }
 
-                // Convert the account with the Stamps.com API and update the account entity's 
+                // Convert the account with the USPS API and update the account entity's 
                 // contract type to reflect the conversion, so the Activate discount dialog is 
                 // not displayed again
                 ConvertAccountToExpedited();
 
-                // Set the ContractType to Unknown so that we rely on Stamps to correctly tell us 
+                // Set the ContractType to Unknown so that we rely on USPS to correctly tell us 
                 // the contract type the next time we get rates or process.
-                accountToConvert.ContractType = (int)StampsAccountContractType.Unknown;
+                accountToConvert.ContractType = (int)UspsAccountContractType.Unknown;
 
-                StampsAccountManager.SaveAccount(accountToConvert);
+                UspsAccountManager.SaveAccount(accountToConvert);
 
                 // Notify any listeners
                 if (AccountConverted != null)
@@ -100,10 +94,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     AccountConverted(this, new UspsAccountConvertedEventArgs(accountToConvert));
                 }
             }
-            catch (StampsException exception)
+            catch (UspsException exception)
             {
                 string message = "An error occurred, and ShipWorks was not able to convert your account at this time.";
-                log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);
+                log.Error(string.Format("An error occurred trying to convert the USPS account ({0}) to get discounted postage.", accountToConvert.Username), exception);
 
                 if (exception.Code == 0x005f0301)
                 {
@@ -122,21 +116,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             try
             {
                 // Need to convert the account to get discounted rates via the expedited contract/plan
-                log.InfoFormat("Converting Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username);
+                log.InfoFormat("Converting USPS account ({0}) to get discounted postage.", accountToConvert.Username);
 
-                IRegistrationPromotion promotion = new RegistrationPromotionFactory().CreateRegistrationPromotion();
-                new StampsWebClient((StampsResellerType)accountToConvert.StampsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
+                // ShipWorks3 must be used when converting an account, so always use the Intuiship promotion when converting an account. 
+                IRegistrationPromotion promotion = new UspsIntuishipRegistrationPromotion();
+                new UspsWebClient((UspsResellerType)accountToConvert.UspsReseller).ChangeToExpeditedPlan(accountToConvert, promotion.GetPromoCode()); 
             }
-            catch (StampsApiException exception)
+            catch (UspsApiException exception)
             {
                 if (exception.Code == 0x005f0302)
                 {
                     // The account is already converted, so there's nothing to do here
-                    log.WarnFormat("The Stamps.com account ({0}) has already been converted.", accountToConvert.Username);                    
+                    log.WarnFormat("The USPS account ({0}) has already been converted.", accountToConvert.Username);                    
                 }
                 else
                 {
-                    log.Error(string.Format("An error occurred trying to convert the Stamps.com account ({0}) to get discounted postage.", accountToConvert.Username), exception);
+                    log.Error(string.Format("An error occurred trying to convert the USPS account ({0}) to get discounted postage.", accountToConvert.Username), exception);
                     throw;
                 }
             }
@@ -152,7 +147,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             MessageHelper.ShowInformation(this,
                                           "With IntuiShip you get some of the best postal rates available, saving you significant money on each of your domestic and " +
                                           "international Priority and Express shipments." + Environment.NewLine + Environment.NewLine + "Just add these rates to your " +
-                                          "Stamps.com account and ShipWorks will automatically utilize it for discounted rates from IntuiShip when creating postage labels." +
+                                          "USPS account and ShipWorks will automatically utilize it for discounted rates from IntuiShip when creating postage labels." +
                                           Environment.NewLine + Environment.NewLine + "For more information, please contact us at www.interapptive.com/company/contact.html.");
         }
     }

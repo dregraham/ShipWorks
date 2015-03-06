@@ -300,6 +300,7 @@ namespace ShipWorks.Stores.Platforms.ShopSite
                 XPathUtility.Evaluate(xpath, "Totals/ShippingTotal/Total", 0.0));
         }
 
+        /// <summary>
         /// Load an order charge for the given values for the order
         /// </summary>
         private void LoadCharge(OrderEntity order, string type, string name, double amount)

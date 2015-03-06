@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Stamps;
-using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
@@ -41,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             foreach (RateResult rate in rates)
             {
-                rate.ShipmentType = ShipmentTypeCode.Stamps;
+                rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
             // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results 
@@ -49,12 +46,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(new EndiciaShipmentType(), rates, rates));
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            // Shouldn't have any footnote factories that aren't for stamps
-            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Stamps));
+            // Shouldn't have any footnote factories that aren't for USPS
+            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 
 
@@ -71,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             foreach (RateResult rate in rates)
             {
-                rate.ShipmentType = ShipmentTypeCode.Stamps;
+                rate.ShipmentType = ShipmentTypeCode.Usps;
             }
 
             // Setup our rate group to have footnote factories for shipment types other than the ones in the rate results 
@@ -79,11 +76,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             rateGroup.AddFootnoteFactory(new Express1DiscountedRateFootnoteFactory(new EndiciaShipmentType(), rates, rates));
             rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new EndiciaShipmentType(), settings.Object));
-            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new StampsShipmentType(), settings.Object));
+            rateGroup.AddFootnoteFactory(new Express1PromotionRateFootnoteFactory(new UspsShipmentType(), settings.Object));
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(ShipmentTypeCode.Stamps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
+            Assert.AreEqual(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
         }
     }
 }

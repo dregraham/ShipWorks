@@ -66,7 +66,7 @@ BEGIN
 		AND s.ActualLabelFormat IS NULL
 		AND s.ShipmentType = 9 -- express1
 		
-	-- Stamps
+	-- Usps
 	INSERT INTO #resourceestimate		
 		SELECT r.ObjectReferenceID AS ObjectReferenceID, ObjectID AS ResourceID, 'PNG' as ImageFormat
 		FROM [PostalShipment] p, [Shipment] s, [ObjectReference] r
@@ -76,7 +76,7 @@ BEGIN
 		AND s.ProcessedDate < @deleteOlderThan
 		AND s.Processed = 1
 		AND s.ActualLabelFormat IS NULL
-		AND s.ShipmentType = 3 -- stamps	
+		AND s.ShipmentType = 15 -- usps	
 END
 
 SELECT SUM(DataLength(r.Data) + DataLength(r.Checksum)) from [Resource] r INNER JOIN #resourceestimate e 

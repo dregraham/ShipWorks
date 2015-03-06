@@ -69,6 +69,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile
             }
         }
 
+        /// <summary>
         /// Gets an instances of the store entity.
         /// </summary>
         public override StoreEntity CreateStoreInstance()

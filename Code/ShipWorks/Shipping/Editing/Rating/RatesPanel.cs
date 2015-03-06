@@ -36,6 +36,7 @@ namespace ShipWorks.Shipping.Editing.Rating
     public partial class RatesPanel : UserControl
     {
         private long? selectedShipmentID = null;
+        private bool resetCollapsibleStateRequired;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -44,6 +45,8 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             ConsolidatePostalRates = false;
             InitializeComponent();
+
+            resetCollapsibleStateRequired = true;
 
             // We want to show the configure link for all rates, so we
             // can open the shipping dialog
@@ -61,7 +64,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         }
 
         /// <summary>
-        /// Called when the shipping settings for using Stamps Expedited has changed. We need to refresh the
+        /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -110,23 +113,18 @@ namespace ShipWorks.Shipping.Editing.Rating
         /// </summary>
         public void ChangeShipment(long? shipmentID)
         {
+            // This method can get triggered when the shipment dialog closes but the 
+            // shipment ID did not actually chagne. We only want to reset the collapsible 
+            // state when the shipment ID actually changes.
+            resetCollapsibleStateRequired = selectedShipmentID != shipmentID;
             selectedShipmentID = shipmentID;
 
+            
             // Refresh the rates in the panel; using cached rates is fine here since nothing
             // about the shipment has changed, so don't force a re-fetch
             RefreshRates(false);
         }
-
-
-        /// <summary>
-        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row
-        /// list with up-to-date displayed entity content.
-        /// </summary>
-        public void ReloadRates()
-        {
-            RefreshRates(false);
-        }
-
+        
         /// <summary>
         /// When the size of the rate control changes, we have to update our size to match. This is what makes the auto-scrolling in the containing panel work
         /// </summary>
@@ -315,14 +313,13 @@ namespace ShipWorks.Shipping.Editing.Rating
             ShipmentType shipmentType;
             ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode) shipment.ShipmentType;
 
-            // Only change this to best rate for non-Stamps.com postal types
+            // Only change this to best rate for non-USPS postal types
             if (ConsolidatePostalRates &&
                 PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
                 !PostalUtility.IsPostalSetup() && 
-                shipmentTypeCode != ShipmentTypeCode.Stamps && 
                 shipmentTypeCode != ShipmentTypeCode.Usps &&
                 shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
-                shipmentTypeCode != ShipmentTypeCode.Express1Stamps)
+                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
             {
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter>{new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter()}));
 
@@ -356,6 +353,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             // behavior if it's necessary
             rateControl.ShowAllRates = true;
             rateControl.ShowSingleRate = false;
+
+            if (resetCollapsibleStateRequired)
+            {
+                rateControl.ResetCollapsibleState();
+            }
 
             // Apply any applicable policies to the rate control prior to loading the rates
             ShippingPolicies.Current.Apply((ShipmentTypeCode)rateGroup.Shipment.ShipmentType, rateControl);

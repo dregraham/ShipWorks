@@ -184,7 +184,7 @@ public partial class StoredProcedures
 		                AND Shipment.ProcessedDate < @olderThan	
 		                AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 		
-                -- Endicia, Express1, & Stamps labels
+                -- Endicia, Express1, & USPS labels
                 INSERT INTO #LabelsToCleanUp		
 	                SELECT 
 		                [ObjectReference].ObjectReferenceID AS ObjectReferenceID, 
@@ -200,7 +200,7 @@ public partial class StoredProcedures
 	                WHERE 
 		                [Shipment].ProcessedDate < @olderThan
 		                AND [Shipment].Processed = 1
-		                AND [Shipment].ShipmentType in (2,9,3,4) -- endicia, express1, stamps, w/o postage
+		                AND [Shipment].ShipmentType in (2,9,15,4) -- endicia, express1, USPS, w/o postage
 		                AND [ObjectReference].ObjectID NOT IN (SELECT resourceid FROM #ResourceIDsToIgnore)
 
                 -- find all of the iParcel labels we want to wipe out

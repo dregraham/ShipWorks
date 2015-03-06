@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
             <Feature>
                 <Type>BestRateUpsRestriction</Type>
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -181,7 +181,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -281,7 +281,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ThisShouldNotBeFound>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -313,7 +313,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>AccountRegistration</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -345,7 +345,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>AccountRegistration</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -377,7 +377,7 @@ namespace ShipWorks.Tests.Editions
 	<EndiciaConsolidator status=""1"">Something or other</EndiciaConsolidator>
 	<EndiciaScanBasedReturns status=""1""/>
     <ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>AccountRegistration</Restriction>
 		</ShipmentType>
 		<ShipmentType TypeCode=""6"">
@@ -395,7 +395,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
             Assert.IsTrue(functionality[ShipmentTypeCode.FedEx].Any());
-            Assert.IsTrue(functionality[ShipmentTypeCode.Stamps].Any());
+            Assert.IsTrue(functionality[ShipmentTypeCode.Usps].Any());
         }
 
         [TestMethod]
@@ -403,7 +403,7 @@ namespace ShipWorks.Tests.Editions
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
-            IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.Stamps];
+            IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.Usps];
 
             Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.Disabled));
         }
@@ -548,7 +548,7 @@ namespace ShipWorks.Tests.Editions
         {
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
             string expectedRawXml = @"<ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
              <Feature>
                 <Type>BestRateUpsRestriction</Type>
@@ -577,7 +577,7 @@ namespace ShipWorks.Tests.Editions
         {
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
             string expectedRawXml = @"<ShipmentTypeFunctionality>
-		<ShipmentType TypeCode=""3"">
+		<ShipmentType TypeCode=""15"">
 			<Restriction>Disabled</Restriction>
             <Feature>
                 <Type>BestRateUpsRestriction</Type>
@@ -638,7 +638,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(31, storedStoreId);
             
             Assert.AreEqual(1,storedPolicies.Count);
-            Assert.AreEqual(ShipmentTypeCode.Stamps, storedPolicies.First().Key);
+            Assert.AreEqual(ShipmentTypeCode.Usps, storedPolicies.First().Key);
             Assert.AreEqual(2,storedPolicies.First().Value.Count());
             Assert.IsTrue(
                 CompareXmlToText(
