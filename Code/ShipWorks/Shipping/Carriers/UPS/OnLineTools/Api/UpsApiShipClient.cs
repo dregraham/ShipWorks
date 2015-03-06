@@ -775,13 +775,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // CN22OtherDescription can only be at most 20 characters
                 xmlWriter.WriteElementString("CN22OtherDescription", otherDescription.Length > 20 ? otherDescription.Substring(0, 20) : otherDescription);
             }
-                
-            // Start InternationalForms
-            xmlWriter.WriteStartElement("CN22Content");
 
-            // Only 3 are allowed
-            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(3))
+            // UPS only allows 1 customs item for MI shipments
+            int maximumAllowedCustomsItems = UpsUtility.IsUpsMiService(serviceType) ? 1 : 3;
+            
+            foreach (var shipmentCustomsItem in ups.Shipment.CustomsItems.Take(maximumAllowedCustomsItems))
             {
+                // Start InternationalForms
+                xmlWriter.WriteStartElement("CN22Content");
+
                 xmlWriter.WriteElementString("CN22ContentQuantity", shipmentCustomsItem.Quantity.ToString());
                 xmlWriter.WriteElementString("CN22ContentDescription", shipmentCustomsItem.Description);
 
@@ -818,11 +820,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 // Currently only USD is supported
                 xmlWriter.WriteElementString("CN22ContentCurrencyCode", "USD");
 
+                // Close CN22Content
+                xmlWriter.WriteEndElement();
             }
-
-            // Close CN22Content
-            xmlWriter.WriteEndElement();
-
+            
             // Close CN22Form
             xmlWriter.WriteEndElement();
 
