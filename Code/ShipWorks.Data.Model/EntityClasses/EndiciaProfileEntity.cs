@@ -481,15 +481,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ReferenceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("RubberStamp1", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RubberStamp2", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RubberStamp3", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ScanBasedReturn", fieldHashtable);
 		}
 		#endregion
@@ -652,39 +643,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.ReferenceID, true); }
 			set	{ SetValue((int)EndiciaProfileFieldIndex.ReferenceID, value); }
-		}
-
-		/// <summary> The RubberStamp1 property of the Entity EndiciaProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaProfile"."RubberStamp1"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String RubberStamp1
-		{
-			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.RubberStamp1, true); }
-			set	{ SetValue((int)EndiciaProfileFieldIndex.RubberStamp1, value); }
-		}
-
-		/// <summary> The RubberStamp2 property of the Entity EndiciaProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaProfile"."RubberStamp2"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String RubberStamp2
-		{
-			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.RubberStamp2, true); }
-			set	{ SetValue((int)EndiciaProfileFieldIndex.RubberStamp2, value); }
-		}
-
-		/// <summary> The RubberStamp3 property of the Entity EndiciaProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaProfile"."RubberStamp3"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String RubberStamp3
-		{
-			get { return (System.String)GetValue((int)EndiciaProfileFieldIndex.RubberStamp3, true); }
-			set	{ SetValue((int)EndiciaProfileFieldIndex.RubberStamp3, value); }
 		}
 
 		/// <summary> The ScanBasedReturn property of the Entity EndiciaProfile<br/><br/>

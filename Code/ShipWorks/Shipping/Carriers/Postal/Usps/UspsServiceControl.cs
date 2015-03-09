@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.Design;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 
@@ -15,6 +16,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsServiceControl : PostalServiceControlBase
     {
+        /// <summary>
+        /// Constructor that is needed for the designer to work
+        /// </summary>
+        protected UspsServiceControl()
+        {
+            if (!DesignModeDetector.IsDesignerHosted())
+            {
+                throw new InvalidOperationException("The default constructor for UspsServiceControl should only be used by the VS designer");
+            }
+
+            InitializeComponent();
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -113,7 +127,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     rateShop.ApplyMultiCheck(shipment.Postal.Usps.RateShop);
                     requireFullAddressValidation.ApplyMultiCheck(shipment.Postal.Usps.RequireFullAddressValidation);
                     hidePostage.ApplyMultiCheck(shipment.Postal.Usps.HidePostage);
-                    memo.ApplyMultiText(shipment.Postal.Usps.Memo);
+                    memo1.ApplyMultiText(shipment.Postal.Memo1);
+                    memo2.ApplyMultiText(shipment.Postal.Memo2);
+                    memo3.ApplyMultiText(shipment.Postal.Memo3);
                     LoadAccountValue(scope);
                 }
             }
@@ -166,7 +182,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 uspsAccount.ReadMultiValue(v => shipment.Postal.Usps.UspsAccountID = (long)v == 0 ? shipment.Postal.Usps.UspsAccountID : (long)v);
                 requireFullAddressValidation.ReadMultiCheck(c => shipment.Postal.Usps.RequireFullAddressValidation = c);
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Usps.HidePostage = c);
-                memo.ReadMultiText(t => shipment.Postal.Usps.Memo = t);
+                memo1.ReadMultiText(t => shipment.Postal.Memo1 = t);
+                memo2.ReadMultiText(t => shipment.Postal.Memo2 = t);
+                memo3.ReadMultiText(t => shipment.Postal.Memo3 = t);
             }
 
             ResumeRateCriteriaChangeEvent();

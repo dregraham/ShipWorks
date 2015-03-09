@@ -45,7 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             // Use the repository to see what type of rates we should be using
-            RateRequestType[] rateTypes = new RateRequestType[] { SettingsRepository.UseListRates ? RateRequestType.LIST : RateRequestType.PREFERRED };
+            RateRequestType[] rateTypes = { SettingsRepository.UseListRates ? RateRequestType.LIST : RateRequestType.NONE };
             nativeRequest.RequestedShipment.RateRequestTypes = rateTypes;
         }
 

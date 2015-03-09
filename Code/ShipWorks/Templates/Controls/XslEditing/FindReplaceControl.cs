@@ -49,7 +49,7 @@ namespace ShipWorks.Templates.Controls.XslEditing
             this.syntaxEditor = syntaxEditor;
             this.syntaxEditor.TextChanged += new EventHandler(OnSyntaxEditorTextChanged);
 
-            if (!DesignModeDetector.IsDesignerHosted(this))
+            if (!DesignModeDetector.IsDesignerHosted())
             {
                 formAcceptButton = (Button) ((Form) TopLevelControl).AcceptButton;
             }

@@ -1373,7 +1373,10 @@ CREATE TABLE [dbo].[PostalProfile]
 [CustomsContentDescription] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ExpressSignatureWaiver] [bit] NULL,
 [SortType] [int] NULL,
-[EntryFacility] [int] NULL
+[EntryFacility] [int] NULL,
+[Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1389,9 +1392,6 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [StealthPostage] [bit] NULL,
 [NoPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ScanBasedReturn] [bit] NULL
 )
 GO
@@ -1451,7 +1451,10 @@ CREATE TABLE [dbo].[PostalShipment]
 [InsuranceValue] [money] NOT NULL,
 [ExpressSignatureWaiver] [bit] NOT NULL,
 [SortType] [int] NOT NULL,
-[EntryFacility] [int] NOT NULL
+[EntryFacility] [int] NOT NULL,
+[Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1468,9 +1471,6 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [StealthPostage] [bit] NOT NULL,
 [NoPostage] [bit] NOT NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[RubberStamp3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
 [ScanFormBatchID] [bigint] NULL,
@@ -3098,7 +3098,6 @@ CREATE TABLE [dbo].[UspsProfile]
 [UspsAccountID] [bigint] NULL,
 [HidePostage] [bit] NULL,
 [RequireFullAddressValidation] [bit] NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [RateShop] [bit] NULL
 )
 GO
@@ -3133,7 +3132,6 @@ CREATE TABLE [dbo].[UspsShipment]
 [RequireFullAddressValidation] [bit] NOT NULL,
 [IntegratorTransactionID] [uniqueidentifier] NOT NULL,
 [UspsTransactionID] [uniqueidentifier] NOT NULL,
-[Memo] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OriginalUspsAccountID] [bigint] NULL,
 [ScanFormBatchID] [bigint] NULL,
 [RequestedLabelFormat] [int] NOT NULL,
@@ -5147,6 +5145,59 @@ GO
 PRINT N'Adding foreign keys to [dbo].[YahooProduct]'
 GO
 ALTER TABLE [dbo].[YahooProduct] ADD CONSTRAINT [FK_YahooProduct_YahooStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[YahooStore] ([StoreID]) ON DELETE CASCADE
+GO
+PRINT N'Creating [dbo].[GrouponOrder]'
+GO
+CREATE TABLE [dbo].[GrouponOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[GrouponOrderID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
+GO
+ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [PK_GrouponOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating [dbo].[GrouponOrderItem]'
+GO
+CREATE TABLE [dbo].[GrouponOrderItem]
+(
+[OrderItemID] [bigint] NOT NULL,
+[Permalink] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[ChannelSKUProvided] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[FulfillmentLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[BomSKU] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[GrouponLineItemID] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_GrouponOrderItem] on [dbo].[GrouponOrderItem]'
+GO
+ALTER TABLE [dbo].[GrouponOrderItem] ADD CONSTRAINT [PK_GrouponOrderItem] PRIMARY KEY CLUSTERED  ([OrderItemID])
+GO
+PRINT N'Creating [dbo].[GrouponStore]'
+GO
+CREATE TABLE [dbo].[GrouponStore]
+(
+[StoreID] [bigint] NOT NULL,
+[SupplierID] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[Token] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_GrouponStore] on [dbo].[GrouponStore]'
+GO
+ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [PK_GrouponStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[GrouponOrder]'
+GO
+ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [FK_GrouponOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
+GO
+PRINT N'Adding foreign keys to [dbo].[GrouponOrderItem]'
+GO
+ALTER TABLE [dbo].[GrouponOrderItem] ADD CONSTRAINT [FK_GrouponOrderItem_OrderItem] FOREIGN KEY ([OrderItemID]) REFERENCES [dbo].[OrderItem] ([OrderItemID])
+GO
+PRINT N'Adding foreign keys to [dbo].[GrouponStore]'
+GO
+ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
 PRINT N'Creating extended properties'
 GO

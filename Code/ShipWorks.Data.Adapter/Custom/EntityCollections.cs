@@ -9182,5 +9182,176 @@ namespace ShipWorks.Data.Adapter.Custom
 	}
 	
 	
+	/// <summary>
+	/// Strongly typed collection of GrouponOrderEntity
+	/// </summary>
+	public class GrouponOrderCollection : EntityCollection<GrouponOrderEntity>
+	{
+        /// <summary>
+        /// Gets the count of all GrouponOrderEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all GrouponOrderEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new GrouponOrderEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static GrouponOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static GrouponOrderCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            GrouponOrderCollection collection = new GrouponOrderCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of GrouponOrderItemEntity
+	/// </summary>
+	public class GrouponOrderItemCollection : EntityCollection<GrouponOrderItemEntity>
+	{
+        /// <summary>
+        /// Gets the count of all GrouponOrderItemEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all GrouponOrderItemEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new GrouponOrderItemEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static GrouponOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static GrouponOrderItemCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            GrouponOrderItemCollection collection = new GrouponOrderItemCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of GrouponStoreEntity
+	/// </summary>
+	public class GrouponStoreCollection : EntityCollection<GrouponStoreEntity>
+	{
+        /// <summary>
+        /// Gets the count of all GrouponStoreEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all GrouponStoreEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new GrouponStoreEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static GrouponStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static GrouponStoreCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            GrouponStoreCollection collection = new GrouponStoreCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
 }
 

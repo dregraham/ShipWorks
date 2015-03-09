@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Utility
         {
             foreach (var pair in lengthMap)
             {
-                if (!DesignMode && !DesignModeDetector.IsDesignerHosted(pair.Key))
+                if (!DesignMode && !DesignModeDetector.IsDesignerHosted())
                 {
                     SetControlMaxLength(pair.Key, GetMaxLength(pair.Value));
                 }
@@ -242,6 +242,8 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.OrderItemCode: return OrderItemFields.Code;
                 case EntityFieldLengthSource.OrderItemSku: return OrderItemFields.SKU;
                 case EntityFieldLengthSource.OrderItemLocation: return OrderItemFields.Location;
+                case EntityFieldLengthSource.OrderItemIsbn: return OrderItemFields.ISBN;
+                case EntityFieldLengthSource.OrderItemUpc: return OrderItemFields.UPC;
                 case EntityFieldLengthSource.OrderAttributeName: return OrderItemAttributeFields.Name;
                 case EntityFieldLengthSource.OrderChargeType: return OrderChargeFields.Type;
                 case EntityFieldLengthSource.OrderChargeDescription: return OrderChargeFields.Description;
@@ -317,7 +319,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.EndiciaAccountDescription: return EndiciaAccountFields.Description;
                 case EntityFieldLengthSource.EndiciaCustomsSigner: return ShippingSettingsFields.EndiciaCustomsSigner;
                 case EntityFieldLengthSource.EndiciaReference: return EndiciaShipmentFields.ReferenceID;
-                case EntityFieldLengthSource.EndiciaRubberStamp: return EndiciaShipmentFields.RubberStamp1;
+                case EntityFieldLengthSource.EndiciaRubberStamp: return PostalShipmentFields.Memo1;
                 case EntityFieldLengthSource.EndiciaApiPassword: return EndiciaAccountFields.ApiUserPassword;
                 case EntityFieldLengthSource.EndiciaWebPassword: return EndiciaAccountFields.WebPassword;
 

@@ -121,17 +121,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     {
                         using (CsvReader csvReader = new CsvReader(reader, true))
                         {
-                            bool swFormat = true;
-                            if (csvReader.GetFieldHeaders().Contains("id_shippingmethods_flat", StringComparer.InvariantCultureIgnoreCase))
-                            {
-                                swFormat = false;
-                            }
+                            bool swFormat = 
+                                !csvReader
+                                .GetFieldHeaders()
+                                .Contains("id_shippingmethods_flat", StringComparer.InvariantCultureIgnoreCase);
 
-                            int counter = 0;
                             while (csvReader.ReadNextRecord())
                             {
-                                counter++;
-
                                 string shippingMethodID = "";
                                 string shippingMethodName = "";
                                 if (swFormat)

@@ -89,7 +89,7 @@ namespace ShipWorks.Templates.Controls
 
         public void EndInit()
         {
-            if (!DesignModeDetector.IsDesignerHosted(this) && DataSource == null)
+            if (!DesignModeDetector.IsDesignerHosted() && DataSource == null)
             {
                 LoadTemplateTypes();
             }
