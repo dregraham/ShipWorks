@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Globalization;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
-using Rebex.Net;
 
 namespace ShipWorks.FileTransfer
 {
@@ -21,6 +15,7 @@ namespace ShipWorks.FileTransfer
     public partial class FtpAccountEditorDlg : Form
     {
         FtpAccountEntity ftpAccount;
+        private FtpSecurityType previousSecurityType;
 
         /// <summary>
         /// Constructor
@@ -50,6 +45,7 @@ namespace ShipWorks.FileTransfer
 
             FtpSecurityType security = (FtpSecurityType) ftpAccount.SecurityType;
             securityMethod.SelectedIndex = ftpAccount.SecurityType;
+            previousSecurityType = security;
 
             transferMethod.SelectedIndex = ftpAccount.Passive ? 1 : 0;
             transferMethod.Enabled = security != FtpSecurityType.Sftp;
@@ -62,6 +58,13 @@ namespace ShipWorks.FileTransfer
         {
             FtpSecurityType security = (FtpSecurityType) securityMethod.SelectedIndex;
             transferMethod.Enabled = security != FtpSecurityType.Sftp;
+
+            if (port.Text == FtpUtility.GetDefaultPort(previousSecurityType).ToString(CultureInfo.InvariantCulture))
+            {
+                port.Text = FtpUtility.GetDefaultPort(security).ToString(CultureInfo.InvariantCulture);
+            }
+
+            previousSecurityType = security;
         }
 
         /// <summary>

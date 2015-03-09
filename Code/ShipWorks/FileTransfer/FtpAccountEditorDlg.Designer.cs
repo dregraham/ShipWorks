@@ -53,7 +53,7 @@
             this.ok.Location = new System.Drawing.Point(192, 199);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
-            this.ok.TabIndex = 0;
+            this.ok.TabIndex = 8;
             this.ok.Text = "OK";
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.OnOK);
@@ -65,7 +65,7 @@
             this.cancel.Location = new System.Drawing.Point(273, 199);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
-            this.cancel.TabIndex = 1;
+            this.cancel.TabIndex = 9;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
@@ -74,7 +74,7 @@
             this.password.Location = new System.Drawing.Point(75, 68);
             this.password.Name = "password";
             this.password.Size = new System.Drawing.Size(148, 21);
-            this.password.TabIndex = 13;
+            this.password.TabIndex = 3;
             this.password.UseSystemPasswordChar = true;
             // 
             // labelPassword
@@ -91,7 +91,7 @@
             this.username.Location = new System.Drawing.Point(75, 41);
             this.username.Name = "username";
             this.username.Size = new System.Drawing.Size(148, 21);
-            this.username.TabIndex = 11;
+            this.username.TabIndex = 2;
             // 
             // labelUsername
             // 
@@ -107,7 +107,7 @@
             this.host.Location = new System.Drawing.Point(75, 14);
             this.host.Name = "host";
             this.host.Size = new System.Drawing.Size(244, 21);
-            this.host.TabIndex = 8;
+            this.host.TabIndex = 1;
             // 
             // labelHost
             // 
@@ -132,15 +132,15 @@
             // 
             // port
             // 
-            this.port.Location = new System.Drawing.Point(75, 103);
+            this.port.Location = new System.Drawing.Point(75, 132);
             this.port.Name = "port";
             this.port.Size = new System.Drawing.Size(148, 21);
-            this.port.TabIndex = 19;
+            this.port.TabIndex = 5;
             // 
             // labelPort
             // 
             this.labelPort.AutoSize = true;
-            this.labelPort.Location = new System.Drawing.Point(38, 106);
+            this.labelPort.Location = new System.Drawing.Point(38, 135);
             this.labelPort.Name = "labelPort";
             this.labelPort.Size = new System.Drawing.Size(31, 13);
             this.labelPort.TabIndex = 18;
@@ -155,16 +155,16 @@
             "Implicit (SSL)",
             "Explicit (TLS)",
             "SFTP (SSH)"});
-            this.securityMethod.Location = new System.Drawing.Point(75, 131);
+            this.securityMethod.Location = new System.Drawing.Point(75, 105);
             this.securityMethod.Name = "securityMethod";
             this.securityMethod.Size = new System.Drawing.Size(150, 21);
-            this.securityMethod.TabIndex = 22;
+            this.securityMethod.TabIndex = 4;
             this.securityMethod.SelectedIndexChanged += new System.EventHandler(this.OnChangeSecureConnection);
             // 
             // labelSecurity
             // 
             this.labelSecurity.AutoSize = true;
-            this.labelSecurity.Location = new System.Drawing.Point(19, 133);
+            this.labelSecurity.Location = new System.Drawing.Point(19, 108);
             this.labelSecurity.Name = "labelSecurity";
             this.labelSecurity.Size = new System.Drawing.Size(50, 13);
             this.labelSecurity.TabIndex = 23;
@@ -201,7 +201,7 @@
             this.transferMethod.Location = new System.Drawing.Point(75, 159);
             this.transferMethod.Name = "transferMethod";
             this.transferMethod.Size = new System.Drawing.Size(150, 21);
-            this.transferMethod.TabIndex = 27;
+            this.transferMethod.TabIndex = 6;
             // 
             // testConnection
             // 
@@ -209,7 +209,7 @@
             this.testConnection.Location = new System.Drawing.Point(15, 199);
             this.testConnection.Name = "testConnection";
             this.testConnection.Size = new System.Drawing.Size(111, 23);
-            this.testConnection.TabIndex = 28;
+            this.testConnection.TabIndex = 7;
             this.testConnection.Text = "Test Connection";
             this.testConnection.UseVisualStyleBackColor = true;
             this.testConnection.Click += new System.EventHandler(this.OnTestConnection);

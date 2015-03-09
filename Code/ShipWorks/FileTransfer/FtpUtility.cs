@@ -2,11 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
-//using Rebex.Net;
 using log4net;
 using Interapptive.Shared.Utility;
 
@@ -19,6 +16,23 @@ namespace ShipWorks.FileTransfer
     public static class FtpUtility
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FtpUtility));
+
+        private static readonly Dictionary<FtpSecurityType, int> defaultPorts = 
+            new Dictionary<FtpSecurityType, int>
+            {
+                {FtpSecurityType.Unsecure, 21},
+                {FtpSecurityType.Implicit, 990},
+                {FtpSecurityType.Explicit, 21},
+                {FtpSecurityType.Sftp, 22},
+            };
+
+        /// <summary>
+        /// Gets the default port for the given security type
+        /// </summary>
+        public static int GetDefaultPort(FtpSecurityType securityType)
+        {
+            return defaultPorts[securityType];
+        }
 
         /// <summary>
         /// Creates a new FTP account initialized with default settings
@@ -85,7 +99,7 @@ namespace ShipWorks.FileTransfer
 
             if (portOverride == 0)
             {
-                account.Port = 22;
+                account.Port = GetDefaultPort(FtpSecurityType.Sftp);
             }
 
             account.SecurityType = (int) FtpSecurityType.Sftp;
@@ -114,7 +128,7 @@ namespace ShipWorks.FileTransfer
             // if not overridden, use port 21
             if (portOverride == 0)
             {
-                account.Port = 21;
+                account.Port = GetDefaultPort(FtpSecurityType.Unsecure);
             }
 
             account.SecurityType = (int) FtpSecurityType.Unsecure;
@@ -132,7 +146,7 @@ namespace ShipWorks.FileTransfer
             // if not overridden, use port 990
             if (portOverride == 0)
             {
-                account.Port = 990;
+                account.Port = GetDefaultPort(FtpSecurityType.Implicit);
             }
             account.SecurityType = (int) FtpSecurityType.Implicit;
 
@@ -149,7 +163,7 @@ namespace ShipWorks.FileTransfer
             // if not overridden, use port 21
             if (portOverride == 0)
             {
-                account.Port = 21;
+                account.Port = GetDefaultPort(FtpSecurityType.Explicit);
             }
             account.SecurityType = (int) FtpSecurityType.Explicit;
 
