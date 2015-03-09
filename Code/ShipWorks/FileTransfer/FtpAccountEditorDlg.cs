@@ -49,10 +49,10 @@ namespace ShipWorks.FileTransfer
             port.Text = ftpAccount.Port.ToString();
 
             FtpSecurityType security = (FtpSecurityType) ftpAccount.SecurityType;
-            secureRequired.Checked = (security != FtpSecurityType.Unsecure);
-            securityMethod.SelectedIndex = (security != FtpSecurityType.Implicit) ? 0 : 1;
+            securityMethod.SelectedIndex = ftpAccount.SecurityType;
 
             transferMethod.SelectedIndex = ftpAccount.Passive ? 1 : 0;
+            transferMethod.Enabled = security != FtpSecurityType.Sftp;
         }
 
         /// <summary>
@@ -60,8 +60,8 @@ namespace ShipWorks.FileTransfer
         /// </summary>
         private void OnChangeSecureConnection(object sender, EventArgs e)
         {
-            labelMethod.Enabled = secureRequired.Checked;
-            securityMethod.Enabled = secureRequired.Checked;
+            FtpSecurityType security = (FtpSecurityType) securityMethod.SelectedIndex;
+            transferMethod.Enabled = security != FtpSecurityType.Sftp;
         }
 
         /// <summary>
@@ -94,14 +94,7 @@ namespace ShipWorks.FileTransfer
 
             account.Port = thePort;
 
-            if (secureRequired.Checked)
-            {
-                account.SecurityType = (int) (securityMethod.SelectedIndex == 0 ? FtpSecurityType.Explicit : FtpSecurityType.Implicit);
-            }
-            else
-            {
-                account.SecurityType = (int) FtpSecurityType.Unsecure;
-            }
+            account.SecurityType = securityMethod.SelectedIndex;
 
             account.Passive = transferMethod.SelectedIndex == 1;
 
@@ -114,10 +107,11 @@ namespace ShipWorks.FileTransfer
         private void OnTestConnection(object sender, EventArgs e)
         {
             FtpAccountEntity clone = EntityUtility.CloneEntity(ftpAccount);
-            SaveToAccount(clone);
 
             try
             {
+                SaveToAccount(clone);
+
                 Cursor.Current = Cursors.WaitCursor;
 
                 FtpUtility.TestDataTransfer(clone);
@@ -141,6 +135,9 @@ namespace ShipWorks.FileTransfer
                 {
                     adapter.SaveAndRefetch(ftpAccount);
                 }
+
+                // Tell the ftp account manager to refresh itself.
+                FtpAccountManager.CheckForChangesNeeded();
 
                 DialogResult = DialogResult.OK;
             }
