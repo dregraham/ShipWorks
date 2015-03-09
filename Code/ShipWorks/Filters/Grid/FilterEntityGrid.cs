@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.Data.Grid;
 using System.ComponentModel;
+using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Diagnostics;
 using ShipWorks.Data;
@@ -72,6 +73,7 @@ namespace ShipWorks.Filters.Grid
             InitializeColumns(new FilterGridColumnStrategy());
 
             this.Disposed += new EventHandler(OnDisposed);
+            GridCellLinkClicked += OnFilterEntityGridCellLinkClicked;
 
             RegistryHelper registry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Options");
             autoSelectSingleSearchResult = registry.GetValue("AutoSelectSingleSearch", false);
@@ -317,6 +319,24 @@ namespace ShipWorks.Filters.Grid
                     overrideEmptyText = value;
                     Invalidate();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Handle clicking on a grid cell
+        /// </summary>
+        private void OnFilterEntityGridCellLinkClicked(object sender, GridHyperlinkClickEventArgs e)
+        {
+            GridActionDisplayType displayType = e.Column.DisplayType as GridActionDisplayType;
+            if (displayType == null)
+            {
+                return;
+            }
+
+            Action<object, GridHyperlinkClickEventArgs> action = displayType.ActionData as Action<object, GridHyperlinkClickEventArgs>;
+            if (action != null)
+            {
+                action(sender, e);
             }
         }
 

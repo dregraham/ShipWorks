@@ -35,6 +35,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			toReturn.Add(this.OrderItemEntityUsingOrderID);
 			toReturn.Add(this.OrderPaymentDetailEntityUsingOrderID);
 			toReturn.Add(this.ShipmentEntityUsingOrderID);
+			toReturn.Add(this.ValidatedAddressEntityUsingConsumerID);
 
 			toReturn.Add(this.CustomerEntityUsingCustomerID);
 			toReturn.Add(this.StoreEntityUsingStoreID);
@@ -114,6 +115,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 				relation.AddEntityFieldPair(OrderFields.OrderID, ShipmentFields.OrderID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", true);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ShipmentEntity", false);
+				return relation;
+			}
+		}
+
+		/// <summary>Returns a new IEntityRelation object, between OrderEntity and ValidatedAddressEntity over the 1:n relation they have, using the relation between the fields:
+		/// Order.OrderID - ValidatedAddress.ConsumerID
+		/// </summary>
+		public virtual IEntityRelation ValidatedAddressEntityUsingConsumerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ValidatedAddress" , true);
+				relation.AddEntityFieldPair(OrderFields.OrderID, ValidatedAddressFields.ConsumerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("OrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ValidatedAddressEntity", false);
 				return relation;
 			}
 		}

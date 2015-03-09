@@ -113,6 +113,21 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between AmazonOrderEntity and ValidatedAddressEntity over the 1:n relation they have, using the relation between the fields:
+		/// AmazonOrder.OrderID - ValidatedAddress.ConsumerID
+		/// </summary>
+		public override IEntityRelation ValidatedAddressEntityUsingConsumerID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany, "ValidatedAddress" , true);
+				relation.AddEntityFieldPair(AmazonOrderFields.OrderID, ValidatedAddressFields.ConsumerID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonOrderEntity", true);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ValidatedAddressEntity", false);
+				return relation;
+			}
+		}
+
 
 		/// <summary>Returns a new IEntityRelation object, between AmazonOrderEntity and CustomerEntity over the m:1 relation they have, using the relation between the fields:
 		/// AmazonOrder.CustomerID - Customer.CustomerID

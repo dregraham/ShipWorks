@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -15,7 +16,7 @@ namespace Interapptive.Shared.Data
         Dictionary<string, object> localValues = null;
 
         // If there is an entity loaded which we represent, then this holds that data
-        EntityBase2 entity;
+        IEntity2 entity;
         string fieldPrefix;
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace Interapptive.Shared.Data
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public EntityAdapter(EntityBase2 entity, string fieldPrefix)
+        public EntityAdapter(IEntity2 entity, string fieldPrefix)
         {
             if (entity == null)
             {
@@ -44,6 +45,28 @@ namespace Interapptive.Shared.Data
 
             this.entity = entity;
             this.fieldPrefix = fieldPrefix;
+        }
+
+        /// <summary>
+        /// Get the underlying entity, if there is one
+        /// </summary>
+        public IEntity2 Entity
+        {
+            get
+            {
+                return entity;
+            }
+        }
+
+        /// <summary>
+        /// Get the prefix used for the address
+        /// </summary>
+        public string FieldPrefix
+        {
+            get
+            {
+                return fieldPrefix;
+            }
         }
 
         /// <summary>
@@ -124,6 +147,19 @@ namespace Interapptive.Shared.Data
             {
                 return entity.Fields[fieldPrefix + fieldName] != null;
             }
+        }
+
+        /// <summary>
+        /// Convert the current adapter to another type
+        /// </summary>
+        public T ConvertTo<T>() where T : EntityAdapter, new()
+        {
+            return new T
+            {
+                entity = entity, 
+                fieldPrefix = fieldPrefix, 
+                localValues = localValues
+            };
         }
     }
 }

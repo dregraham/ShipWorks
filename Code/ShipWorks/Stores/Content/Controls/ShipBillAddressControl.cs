@@ -19,6 +19,8 @@ namespace ShipWorks.Stores.Content.Controls
     /// </summary>
     public partial class ShipBillAddressControl : UserControl
     {
+        private bool enableAddressValidation = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -45,6 +47,23 @@ namespace ShipWorks.Stores.Content.Controls
 
                 linkCopyFromBilling.Visible = value != PersonEditStyle.ReadOnly;
                 linkCopyFromShipping.Visible = value != PersonEditStyle.ReadOnly;
+            }
+        }
+
+        /// <summary>
+        /// Enable address validation for the addresses
+        /// </summary>
+        public bool EnableAddressValidation
+        {
+            get
+            {
+                return enableAddressValidation;
+            }
+            set
+            {
+                enableAddressValidation = value;
+                personBilling.EnableValidationControls = enableAddressValidation;
+                personShipping.EnableValidationControls = enableAddressValidation;
             }
         }
 

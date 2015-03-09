@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Shipping.Insurance
+﻿namespace ShipWorks.UI.Controls
 {
-    partial class InsureShipQuestionsControl
+    partial class ResizingRichTextBox
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,8 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InsureShipQuestionsControl));
-            this.questionsTextBox = new ShipWorks.Shipping.Insurance.InsureShipQuestionsControl.DisabledCursorRichTextBox();
+            this.questionsTextBox = new UI.Controls.ResizingRichTextBox.DisabledCursorRichTextBox();
             this.SuspendLayout();
             // 
             // questionsTextBox
@@ -48,9 +47,6 @@
             this.questionsTextBox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.questionsTextBox.Size = new System.Drawing.Size(457, 44);
             this.questionsTextBox.TabIndex = 0;
-            this.questionsTextBox.Text = resources.GetString("questionsTextBox.Text");
-            this.questionsTextBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.OnQuestionsTextBoxMouseMove);
-            this.questionsTextBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.OnQuestionsTextBoxClick);
             // 
             // InsureShipQuestionsControl
             // 

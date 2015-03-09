@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     // USPS has not been excluded from Best Rate, and there aren't any 
                     // USPS accounts, so use the counter rates broker for USPS
-                    broker = new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+                    broker = new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
                 }
             }
 

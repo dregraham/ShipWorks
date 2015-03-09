@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
@@ -180,6 +181,8 @@ namespace ShipWorks.Stores.Management
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
             LoadStoreTypes();
+            
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
 
             isFreemiumMode = FreemiumFreeEdition.IsActive;
 
@@ -192,7 +195,7 @@ namespace ShipWorks.Stores.Management
                 comboStoreType.Items.Clear();
                 comboStoreType.Items.Add(new ImageComboBoxItem(storeType.StoreTypeName, storeType, EnumHelper.GetImage(storeType.TypeCode)));
                 comboStoreType.SelectedIndex = 0;
-
+                
                 // Setup for the configured single store type
                 SetupForStoreType(storeType);
 
@@ -534,7 +537,27 @@ namespace ShipWorks.Stores.Management
             bool downloadSettings = PrepareSettingsInitialDownloadUI(e);
             bool uploadSettings = PrepareSettingsActionUI(e);
 
-            e.Skip = !downloadSettings && !uploadSettings;
+            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
+
+            // Update the location of the autoAddressValidation control based on which upload and download controls are shown
+            if (!uploadSettings && !downloadSettings)
+            {
+                addressValidationSetting.Top = panelDownloadSettings.Top + 12;
+                labelAddressValidationSetting.Top = panelDownloadSettings.Top + 15;
+            }
+            else if (!uploadSettings)
+            {
+                addressValidationSetting.Top = panelDownloadSettings.Bottom + 12;
+                labelAddressValidationSetting.Top = panelDownloadSettings.Bottom + 15;
+            }
+            else
+            {
+                addressValidationSetting.Top = panelUploadSettings.Bottom + 12;
+                labelAddressValidationSetting.Top = panelUploadSettings.Bottom + 15;
+            }
+
+            // We can't skip this screen anymore since all stores will have the option of auto validating addresses
+            e.Skip = false;
             e.RaiseStepEventWhenSkipping = false;
         }
 
@@ -655,6 +678,10 @@ namespace ShipWorks.Stores.Management
             // Let the control initialize itself
             onlineUpdateControl.UpdateForStore(store);
 
+            panelOnlineUpdatePlaceholder.Width = onlineUpdateControl.Width;
+            panelOnlineUpdatePlaceholder.Height = onlineUpdateControl.Height;
+            panelUploadSettings.Height = panelOnlineUpdatePlaceholder.Bottom;
+
             return true;
         }
 
@@ -670,6 +697,9 @@ namespace ShipWorks.Stores.Management
 
             panelEditDownloadRange.Height = panelDateRange.Bottom;
             panelDownloadSettings.Height = panelEditDownloadRange.Bottom;
+
+            addressValidationSetting.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
+            labelAddressValidationSetting.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
         }
 
         /// <summary>
@@ -692,7 +722,9 @@ namespace ShipWorks.Stores.Management
                 return;
             }
 
-            if (!SaveSettingsActions())
+            store.AddressValidationSetting = (int) addressValidationSetting.SelectedValue;
+			
+			if (!SaveSettingsActions())
             {
                 e.NextPage = CurrentPage;
                 return;

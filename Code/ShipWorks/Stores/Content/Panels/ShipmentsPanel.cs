@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using Interapptive.Shared.IO.Text.Sgml;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Model;
@@ -119,6 +120,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             RefreshSelectedShipments();
         }
+
         /// <summary>
         /// The shipment grid has finished loading.  Check to see if there are any shipments, and if there are not, we create one by default.
         /// </summary>
@@ -225,6 +227,7 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
+                ValidatedAddressManager.ValidateShipment(shipment, new AddressValidator());
                 
                 using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }))
                 {
@@ -244,7 +247,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         private void OnGridCellLinkClicked(object sender, GridHyperlinkClickEventArgs e)
         {
-            EntityGridRow row = (EntityGridRow) e.Row;
+            EntityGridRow row = e.Row;
 
             if (row.EntityID == null)
             {
@@ -252,6 +255,15 @@ namespace ShipWorks.Stores.Content.Panels
                 return;
             }
 
+            // If the action data is an event handler, execute it and stop processing
+            var actionMethod = ((GridActionDisplayType) e.Column.DisplayType).ActionData as Action<object, GridHyperlinkClickEventArgs>;
+            if (actionMethod != null)
+            {
+                actionMethod(sender, e);
+                return;
+            }
+
+            // If the action data is not an event handler, just assume it's a GridLinkAction
             long entityID = row.EntityID.Value;
 
             GridLinkAction action = (GridLinkAction) ((GridActionDisplayType) e.Column.DisplayType).ActionData;

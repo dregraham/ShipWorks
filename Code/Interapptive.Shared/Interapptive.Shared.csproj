@@ -98,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyDateAttribute.cs" />
+    <Compile Include="Business\AddressAdapter.cs" />
     <Compile Include="Business\AddressCasing.cs" />
     <Compile Include="Business\Geography.cs" />
     <Compile Include="Business\PersonAdapter.cs" />

@@ -4,6 +4,7 @@ using System.Threading;
 using System.Timers;
 using Interapptive.Shared.UI;
 using ShipWorks.Actions.Scheduling;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Enums;
 using Timer = System.Threading.Timer;
 
@@ -56,6 +57,8 @@ namespace ShipWorks.ApplicationCore.Services
 
             canceller = new CancellationTokenSource();
             Scheduler.RunAsync(canceller.Token);
+
+            AddressValidationQueue.PerformValidation(canceller.Token);
         }
 
         /// <summary>
@@ -94,6 +97,8 @@ namespace ShipWorks.ApplicationCore.Services
             // Rerun it to ensure it loads the current SQL Session configuration
             canceller = new CancellationTokenSource();
             Scheduler.RunAsync(canceller.Token);
+
+            AddressValidationQueue.PerformValidation(canceller.Token);
         }
 
         /// <summary>

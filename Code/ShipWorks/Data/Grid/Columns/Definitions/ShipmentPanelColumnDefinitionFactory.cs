@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Model.HelperClasses;
@@ -34,6 +35,8 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
+            EntityGridAddressSelector addressSelector = new EntityGridAddressSelector("Ship");
+
             return new GridColumnDefinitionCollection
             {
                 new GridColumnDefinition("{ACA5305A-DB99-414e-8705-5E2CF8B00509}",
@@ -123,6 +126,44 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         DefaultWidth = 45,
                         ApplicableTest = (o) => o == null || UserSession.Security.HasPermission(PermissionType.ShipmentsVoidDelete, (long) o)
                     },
+                    
+                new GridColumnDefinition("{5BB01A4C-203C-4602-A1DD-143C8485455F}",
+                    new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
+                    "S: Validation Status", AddressValidationStatusType.Valid,
+                    ShipmentFields.ShipAddressValidationStatus) 
+                    { DefaultWidth = 100 },
+
+                new GridColumnDefinition("{A0015494-C387-44D9-9A1F-466A9341B634}",
+                    new GridActionDisplayType(addressSelector.DisplayValidationSuggestionLabel, 
+                        addressSelector.ShowAddressOptionMenu, addressSelector.IsValidationSuggestionLinkEnabled), 
+                    "S: Validation Suggestions", "2 Suggestions",
+                    new GridColumnFunctionValueProvider(x => x),
+                    new GridColumnSortProvider(ShipmentFields.ShipAddressValidationSuggestionCount, ShipmentFields.ShipAddressValidationStatus))
+                    { DefaultWidth = 120 }, 
+
+                new GridColumnDefinition("{70F17C2C-74AD-4AF3-8E44-1DA5597A92F6}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: Residential status",  ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipResidentialStatus) 
+                    { DefaultWidth = 100 }, 
+
+                new GridColumnDefinition("{3AF5D697-F319-48E5-87B7-500D3186AABE}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: PO Box", ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipPOBox) 
+                    { DefaultWidth = 72 }, 
+
+                new GridColumnDefinition("{2BAFB097-004D-4DE5-9779-F4D86854943E}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: International Territory",  ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipUSTerritory) 
+                    { DefaultWidth = 145 }, 
+
+                new GridColumnDefinition("{8097B252-BB97-412E-9DA4-CC1D8ADC0007}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: Military Address",  ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipMilitaryAddress) 
+                    { DefaultWidth = 115 },
 
                 new GridColumnDefinition("{72E01539-A415-4D49-B08C-B96FA551CCE9}", false,
                     new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Requested Label Format", ThermalLanguage.None,

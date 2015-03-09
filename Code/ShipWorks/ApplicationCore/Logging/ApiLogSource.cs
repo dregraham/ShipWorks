@@ -56,6 +56,9 @@ namespace ShipWorks.ApplicationCore.Logging
         CloudConversion,
 		
         [ApiPrivateLogSource]
+        DialAZip,
+
+        [ApiPrivateLogSource]
         UspsNoPostage,
 
         [ApiPrivateLogSource]

@@ -51,7 +51,7 @@ namespace ShipWorks.Shipping.Insurance
         {
             insuranceViewClaimControl.Visible = false;
             insuranceSubmitClaimControl.Visible = false;
-            messageLabel.Visible = false;
+            messagePanel.Visible = false;
             insureShipQuestionsControl.Visible = false;
 
             if (!IsValid(shipments))
@@ -86,14 +86,14 @@ namespace ShipWorks.Shipping.Insurance
             if (!shipments.Any())
             {
                 messageLabel.Text = "No shipments are selected. Select a single shipment to view insurance information.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false; 
             }
 
             if (shipments.Count > 1)
             {
                 messageLabel.Text = "Multiple shipments are selected. Select a single shipment to view insurance information.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false;
             }
 
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Insurance
             if (!shipment.Processed)
             {
                 messageLabel.Text = "The selected shipment has not been processed.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
 
                 return false;
             }
@@ -110,21 +110,21 @@ namespace ShipWorks.Shipping.Insurance
             if (HasMultiplePackages(shipment))
             {
                 messageLabel.Text = "ShipWorks insurance cannot be used with multi-package shipments.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false;
             }
 
             if (shipment.Voided)
             {
                 messageLabel.Text = "This shipment has been voided and has no insurance claims.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false;
             }
 
             if (!shipment.Insurance)
             {
                 messageLabel.Text = "This shipment has not been insured.";
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 return false;
             }
 
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping.Insurance
             {
                 messageLabel.Text = "This shipment was not insured with ShipWorks insurance. ";
                 AppendPotentialSavingsAmount(shipment);
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
 
                 return false;
             }
@@ -144,8 +144,9 @@ namespace ShipWorks.Shipping.Insurance
             {
                 string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
                 messageLabel.Text = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
-                messageLabel.Visible = true;
+                messagePanel.Visible = true;
                 insureShipQuestionsControl.Visible = true;
+                messagePanel.Height = Height - messagePanel.Top;
                 insuranceViewClaimControl.Visible = false;
                 return false;
             }

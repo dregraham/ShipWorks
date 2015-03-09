@@ -494,7 +494,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             profile.FedEx.FedExAccountID = shipperID;
             profile.OriginID = (int) ShipmentOriginSource.Account;
 
-            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.CommercialIfCompany;
+            profile.FedEx.ResidentialDetermination = (int) ResidentialDeterminationType.FromAddressValidation;
 
             profile.FedEx.Service = (int) FedExServiceType.FedExGround;
             profile.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
@@ -973,8 +973,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get FedEx counter rates
-                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData);
+                    SettingsRepository = new FedExCounterRateAccountRepository(TangoCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData);
                 }
 
                 return GetCachedRates<FedExException>(shipment, GetRatesFromApi);

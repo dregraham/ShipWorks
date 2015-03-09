@@ -56,14 +56,14 @@
             this.markPaid.Text = "Mark the item as \'Paid\' in My eBay";
             this.markPaid.UseVisualStyleBackColor = true;
             // 
-            // EbayOnlineUpdateControl
+            // EbayOnlineUpdateActionControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.markPaid);
             this.Controls.Add(this.markShipped);
-            this.Name = "EbayOnlineUpdateControl";
-            this.Size = new System.Drawing.Size(459, 56);
+            this.Name = "EbayOnlineUpdateActionControl";
+            this.Size = new System.Drawing.Size(459, 44);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -79,7 +79,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
 
             // SSL certificate policy
             ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;
-
             SetAllowedSecurityProtocols();
 
             // Override the default of 30 seconds.  We are seeing a lot of timeout crashes in the alpha that I think are due

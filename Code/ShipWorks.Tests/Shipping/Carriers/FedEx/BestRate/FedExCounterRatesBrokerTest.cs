@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
         private Mock<FedExShipmentType> fedExShipmentType;
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        private Mock<ICounterRatesCredentialStore> credentialStore;
+        private Mock<ICredentialStore> credentialStore;
         private Mock<ICertificateInspector> certificateInspector;
 
         [TestInitialize]
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
-            credentialStore = new Mock<ICounterRatesCredentialStore>();
+            credentialStore = new Mock<ICredentialStore>();
             certificateInspector = new Mock<ICertificateInspector>();
 
             fedExShipmentType = new Mock<FedExShipmentType>();

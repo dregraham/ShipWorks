@@ -13,16 +13,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
     /// </summary>
     public class UpsCounterRateAccountRepository : UpsSettingsRepository, ICarrierAccountRepository<UpsAccountEntity>
     {
-        private readonly ICounterRatesCredentialStore counterRatesCredentialStore;
+        private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<UpsAccountEntity>> lazyAccounts;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="counterRatesCredentialStore"></param>
-        public UpsCounterRateAccountRepository(ICounterRatesCredentialStore counterRatesCredentialStore)
+        /// <param name="credentialStore"></param>
+        public UpsCounterRateAccountRepository(ICredentialStore credentialStore)
         {
-            this.counterRatesCredentialStore = counterRatesCredentialStore;
+            this.credentialStore = credentialStore;
 
             lazyAccounts = new Lazy<List<UpsAccountEntity>>(ConvertTangoCredentialsToUpsAccountEntities);
         }
@@ -82,8 +82,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
                 // This will prevent any other consumers from having to worry about calling ToLower or anything else on a null string.
                 UpsAccountEntity upsAccountEntity = new UpsAccountEntity
                 {
-                    UserID = counterRatesCredentialStore.UpsUserId,
-                    Password = counterRatesCredentialStore.UpsPassword,
+                    UserID = credentialStore.UpsUserId,
+                    Password = credentialStore.UpsPassword,
                     PostalCode = "63102",
                     CountryCode = "US",
                     RateType = (int)UpsRateType.Retail,

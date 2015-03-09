@@ -8,7 +8,7 @@ using ShipWorks.Data.Grid.Columns;
 namespace ShipWorks.Data.Grid
 {
     /// <summary>
-    /// Delegate for event handler fo rthe grid hyplink click event
+    /// Delegate for event handler fo rthe grid hyperlink click event
     /// </summary>
     public delegate void GridHyperlinkClickEventHandler(object sender, GridHyperlinkClickEventArgs e);
 

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// This is designed to be used within ShipWorks
         /// </remarks>
         public UpsCounterRatesBroker()
-            : this(new UpsOltShipmentType(), new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCounterRatesCredentialStore.Instance))
+            : this(new UpsOltShipmentType(), new UpsCounterRateAccountRepository(TangoCredentialStore.Instance), new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance))
         {}
 
 
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
         /// <returns>A RateGroup containing the counter rates for a generic UPS account.</returns>
         public override RateGroup GetBestRates(ShipmentEntity shipment, List<BrokerException> brokerExceptions)
         {
-            string certificateVerificationData = TangoCounterRatesCredentialStore.Instance.UpsCertificateVerificationData;
+            string certificateVerificationData = TangoCredentialStore.Instance.UpsCertificateVerificationData;
             ShipmentType.CertificateInspector = new CertificateInspector(certificateVerificationData);
 
             RateGroup rates = new RateGroup(new List<RateResult>());

@@ -61,6 +61,7 @@ namespace ShipWorks.Stores.Management
             this.labelLicense = new System.Windows.Forms.Label();
             this.labelWelcomeBack = new System.Windows.Forms.Label();
             this.wizardPageSettings = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelAddressValidationSetting = new System.Windows.Forms.Label();
             this.panelSettingsContainer = new System.Windows.Forms.Panel();
             this.panelUploadSettings = new System.Windows.Forms.Panel();
             this.labelShipmentUpdate = new System.Windows.Forms.Label();
@@ -86,6 +87,7 @@ namespace ShipWorks.Stores.Management
             this.pictureBoxDownloadRange = new System.Windows.Forms.PictureBox();
             this.wizardPageAddress = new ShipWorks.UI.Wizard.WizardPage();
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
+            this.addressValidationSetting = new System.Windows.Forms.ComboBox();
             this.mainPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.topPanel.SuspendLayout();
@@ -112,26 +114,24 @@ namespace ShipWorks.Stores.Management
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.next.Location = new System.Drawing.Point(380, 379);
-            this.next.Text = "Finish";
+            this.next.Location = new System.Drawing.Point(380, 572);
             // 
             // cancel
             // 
-            this.cancel.Location = new System.Drawing.Point(461, 379);
+            this.cancel.Location = new System.Drawing.Point(461, 572);
             // 
             // back
             // 
-            this.back.Location = new System.Drawing.Point(299, 379);
+            this.back.Location = new System.Drawing.Point(299, 572);
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageFinished);
-            this.mainPanel.Size = new System.Drawing.Size(548, 307);
+            this.mainPanel.Controls.Add(this.wizardPageSettings);
+            this.mainPanel.Size = new System.Drawing.Size(548, 500);
             // 
             // etchBottom
             // 
-            this.etchBottom.Location = new System.Drawing.Point(0, 369);
+            this.etchBottom.Location = new System.Drawing.Point(0, 562);
             this.etchBottom.Size = new System.Drawing.Size(552, 2);
             // 
             // pictureBox
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageStoreType.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageStoreType.Location = new System.Drawing.Point(0, 0);
             this.wizardPageStoreType.Name = "wizardPageStoreType";
-            this.wizardPageStoreType.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageStoreType.Size = new System.Drawing.Size(548, 500);
             this.wizardPageStoreType.TabIndex = 0;
             this.wizardPageStoreType.Title = "Online Store";
             this.wizardPageStoreType.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextStoreType);
@@ -514,17 +514,28 @@ namespace ShipWorks.Stores.Management
             // 
             // wizardPageSettings
             // 
+            this.wizardPageSettings.Controls.Add(this.addressValidationSetting);
+            this.wizardPageSettings.Controls.Add(this.labelAddressValidationSetting);
             this.wizardPageSettings.Controls.Add(this.panelSettingsContainer);
             this.wizardPageSettings.Description = "Configure how ShipWorks will work with your store.";
             this.wizardPageSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageSettings.Location = new System.Drawing.Point(0, 0);
             this.wizardPageSettings.Name = "wizardPageSettings";
-            this.wizardPageSettings.Size = new System.Drawing.Size(548, 307);
+            this.wizardPageSettings.Size = new System.Drawing.Size(548, 500);
             this.wizardPageSettings.TabIndex = 0;
             this.wizardPageSettings.Title = "Store Setup";
             this.wizardPageSettings.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNextSettings);
             this.wizardPageSettings.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoSettings);
+            // 
+            // labelAddressValidationSetting
+            // 
+            this.labelAddressValidationSetting.AutoSize = true;
+            this.labelAddressValidationSetting.Location = new System.Drawing.Point(27, 321);
+            this.labelAddressValidationSetting.Name = "labelAddressValidationSetting";
+            this.labelAddressValidationSetting.Size = new System.Drawing.Size(136, 13);
+            this.labelAddressValidationSetting.TabIndex = 30;
+            this.labelAddressValidationSetting.Text = "Address Validation Setting:";
             // 
             // panelSettingsContainer
             // 
@@ -780,14 +791,22 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl.Size = new System.Drawing.Size(360, 300);
             this.storeAddressControl.TabIndex = 0;
             // 
+            // addressValidationSetting
+            // 
+            this.addressValidationSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.addressValidationSetting.FormattingEnabled = true;
+            this.addressValidationSetting.Location = new System.Drawing.Point(167, 318);
+            this.addressValidationSetting.Name = "addressValidationSetting";
+            this.addressValidationSetting.Size = new System.Drawing.Size(264, 21);
+            this.addressValidationSetting.TabIndex = 31;
+            // 
             // AddStoreWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(548, 414);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(548, 607);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.MaximumSize = new System.Drawing.Size(564, 452);
+            this.MaximumSize = new System.Drawing.Size(564, 1000);
             this.MinimumSize = new System.Drawing.Size(564, 452);
             this.Name = "AddStoreWizard";
             this.NextVisible = true;
@@ -818,6 +837,7 @@ namespace ShipWorks.Stores.Management
             this.wizardPageAlreadyActive.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLicense)).EndInit();
             this.wizardPageSettings.ResumeLayout(false);
+            this.wizardPageSettings.PerformLayout();
             this.panelSettingsContainer.ResumeLayout(false);
             this.panelUploadSettings.ResumeLayout(false);
             this.panelUploadSettings.PerformLayout();
@@ -898,5 +918,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label7;
         private ComponentFactory.Krypton.Toolkit.KryptonBorderEdge kryptonBorderEdge;
+        private System.Windows.Forms.Label labelAddressValidationSetting;
+        private System.Windows.Forms.ComboBox addressValidationSetting;
     }
 }

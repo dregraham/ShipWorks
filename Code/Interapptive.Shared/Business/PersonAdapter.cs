@@ -24,7 +24,7 @@ namespace Interapptive.Shared.Business
         /// Creates a new instance of the adapter for the entity.  All fields must
         /// be named to standard, with the optional given prefix in front of them.
         /// </summary>
-        public PersonAdapter(EntityBase2 entity, string fieldPrefix) 
+        public PersonAdapter(IEntity2 entity, string fieldPrefix) 
             : base(entity, fieldPrefix)
         {
 
@@ -33,7 +33,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Apply the default values to the fields of the entity
         /// </summary>
-        public static void ApplyDefaults(EntityBase2 entity, string fieldPrefix)
+        public static void ApplyDefaults(IEntity2 entity, string fieldPrefix)
         {
             PersonAdapter adapter = new PersonAdapter(entity, fieldPrefix);
 
@@ -60,12 +60,15 @@ namespace Interapptive.Shared.Business
             adapter.Fax = "";
             adapter.Email = "";
             adapter.Website = "";
+
+            adapter.AddressValidationStatus = 0;
+            adapter.AddressValidationSuggestionCount = 0;
         }
 
         /// <summary>
         /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, EntityBase2 toEntity, string fieldPrefix)
+        public static void Copy(IEntity2 fromEntity, IEntity2 toEntity, string fieldPrefix)
         {
             Copy(fromEntity, fieldPrefix, toEntity, fieldPrefix);
         }
@@ -73,7 +76,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Copy the person\address values from the fromEntity to the given PersonAdapter
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, string fromPrefix, PersonAdapter toAdapter)
+        public static void Copy(IEntity2 fromEntity, string fromPrefix, PersonAdapter toAdapter)
         {
             PersonAdapter fromAdapter = new PersonAdapter(fromEntity, fromPrefix);
 
@@ -83,7 +86,7 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Copy the person\address values from the fromEntity to the corresponding fields of the toEntity.
         /// </summary>
-        public static void Copy(EntityBase2 fromEntity, string fromPrefix, EntityBase2 toEntity, string toPrefix)
+        public static void Copy(IEntity2 fromEntity, string fromPrefix, IEntity2 toEntity, string toPrefix)
         {
             PersonAdapter fromAdapter = new PersonAdapter(fromEntity, fromPrefix);
             PersonAdapter toAdapter = new PersonAdapter(toEntity, toPrefix);
@@ -120,6 +123,43 @@ namespace Interapptive.Shared.Business
             toAdapter.Fax = fromAdapter.Fax;
             toAdapter.Email = fromAdapter.Email;
             toAdapter.Website = fromAdapter.Website;
+
+            toAdapter.AddressValidationStatus = fromAdapter.AddressValidationStatus;
+        }
+
+        /// <summary>
+        /// Copy the person\address values from this adapter to another entity
+        /// </summary>
+        public void CopyTo(IEntity2 entity, string prefix)
+        {
+            Copy(this, new PersonAdapter(entity, prefix));
+        }
+
+        /// <summary>
+        /// Copy the person\address values from this adapter to another
+        /// </summary>
+        /// <param name="destinationAddress"></param>
+        public void CopyTo(PersonAdapter destinationAddress)
+        {
+            Copy(this, destinationAddress);
+        }
+
+        /// <summary>
+        /// Copy the person\address values from this adapter to another
+        /// </summary>
+        /// <param name="destinationAddress"></param>
+        public void CopyTo(AddressAdapter destinationAddress)
+        {
+            destinationAddress.Street1 = Street1;
+            destinationAddress.Street2 = Street2;
+            destinationAddress.Street3 = Street3;
+
+            destinationAddress.City = City;
+            destinationAddress.StateProvCode = StateProvCode;
+            destinationAddress.PostalCode = PostalCode;
+            destinationAddress.CountryCode = CountryCode;
+
+            destinationAddress.AddressValidationStatus = AddressValidationStatus;
         }
 
         /// <summary>
@@ -134,22 +174,23 @@ namespace Interapptive.Shared.Business
             }
 
             return
-                this.OriginID == other.OriginID &&
-                this.FirstName == other.FirstName &&
-                this.MiddleName == other.MiddleName &&
-                this.LastName == other.LastName &&
-                this.Company == other.Company &&
-                this.Street1 == other.Street1 &&
-                this.Street2 == other.Street2 &&
-                this.Street3 == other.Street3 &&
-                this.City == other.City &&
-                this.StateProvCode == other.StateProvCode &&
-                this.PostalCode == other.PostalCode &&
-                this.CountryCode == other.CountryCode &&
-                this.Phone == other.Phone &&
-                this.Fax == other.Fax &&
-                this.Email == other.Email &&
-                this.Website == other.Website;
+                OriginID == other.OriginID &&
+                FirstName == other.FirstName &&
+                MiddleName == other.MiddleName &&
+                LastName == other.LastName &&
+                Company == other.Company &&
+                Street1 == other.Street1 &&
+                Street2 == other.Street2 &&
+                Street3 == other.Street3 &&
+                City == other.City &&
+                StateProvCode == other.StateProvCode &&
+                PostalCode == other.PostalCode &&
+                CountryCode == other.CountryCode &&
+                Phone == other.Phone &&
+                Fax == other.Fax &&
+                Email == other.Email &&
+                Website == other.Website; // &&
+            // AddressValidationStatus == other.AddressValidationStatus;
         }
 
         /// <summary>
@@ -186,8 +227,8 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public override int GetHashCode()
         {
-            return (OriginID.ToString() + FirstName + MiddleName + LastName + Company + Street1 + Street2 + Street3 + City + StateProvCode + PostalCode + CountryCode +
-                Phone + Fax + Email + Website).GetHashCode();
+            return (OriginID + FirstName + MiddleName + LastName + Company + Street1 + Street2 + Street3 + City + StateProvCode + PostalCode + CountryCode +
+                Phone + Fax + Email + Website + AddressValidationStatus).GetHashCode();
         }
 
         /// <summary>
@@ -458,6 +499,60 @@ namespace Interapptive.Shared.Business
         {
             get { return GetField<string>("Website"); }
             set { SetField("Website", value); }
+        }
+
+        /// <summary>
+        /// ValidationStatus - relates to enum ValidationStatusType defined in ShipWorks project.
+        /// </summary>
+        public int AddressValidationStatus
+        {
+            get { return GetField<int>("AddressValidationStatus"); }
+            set { SetField("AddressValidationStatus", value); }
+        }
+
+        /// <summary>
+        /// AddressValidationSuggestionCount - keeps a count of how many suggestions an address has so that it doesn't have to be looked up each time.
+        /// </summary>
+        public int AddressValidationSuggestionCount
+        {
+            get { return GetField<int>("AddressValidationSuggestionCount"); }
+            set { SetField("AddressValidationSuggestionCount", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is residential or commercial
+        /// </summary>
+        public int ResidentialStatus
+        {
+            get { return GetField<int>("ResidentialStatus"); }
+            set { SetField("ResidentialStatus", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a PO Box
+        /// </summary>
+        public int POBox
+        {
+            get { return GetField<int>("POBox"); }
+            set { SetField("POBox", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is an US territory
+        /// </summary>
+        public int USTerritory
+        {
+            get { return GetField<int>("USTerritory"); }
+            set { SetField("USTerritory", value); }
+        }
+
+        /// <summary>
+        /// Whether the address is a military address
+        /// </summary>
+        public int MilitaryAddress
+        {
+            get { return GetField<int>("MilitaryAddress"); }
+            set { SetField("MilitaryAddress", value); }
         }
     }
 }

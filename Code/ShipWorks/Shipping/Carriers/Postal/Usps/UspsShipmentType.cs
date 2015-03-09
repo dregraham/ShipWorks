@@ -637,7 +637,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // No accounts, so use the counter rates broker to allow the user to
             // sign up for the account. We can use the UspsCounterRateAccountRepository 
             // here because the underlying accounts being used are the same.
-            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance));
+            return new UspsCounterRatesBroker(new UspsCounterRateAccountRepository(TangoCredentialStore.Instance));
         }
 
         /// <summary>
@@ -868,8 +868,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 CounterRatesOriginAddressValidator.EnsureValidAddress(shipment);
 
-                AccountRepository = new UspsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
-                CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.UspsCertificateVerificationData);
+                AccountRepository = new UspsCounterRateAccountRepository(TangoCredentialStore.Instance);
+                CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UspsCertificateVerificationData);
 
                 // Fetch the rates now that we're setup to use counter rates
                 return GetCachedRates<UspsException>(shipment, GetRates);

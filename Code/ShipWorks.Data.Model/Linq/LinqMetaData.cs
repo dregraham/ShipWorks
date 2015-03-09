@@ -523,6 +523,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.UspsShipmentEntity:
 					toReturn = this.UspsShipment;
 					break;
+				case ShipWorks.Data.Model.EntityType.ValidatedAddressEntity:
+					toReturn = this.ValidatedAddress;
+					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					toReturn = this.VersionSignoff;
 					break;
@@ -1482,6 +1485,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<UspsShipmentEntity> UspsShipment
 		{
 			get { return new DataSource2<UspsShipmentEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ValidatedAddressEntity instances in the database.</summary>
+		public DataSource2<ValidatedAddressEntity> ValidatedAddress
+		{
+			get { return new DataSource2<ValidatedAddressEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting VersionSignoffEntity instances in the database.</summary>

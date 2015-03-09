@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.panelShipmentUpdate = new System.Windows.Forms.Panel();
             this.shipmentUpdate = new System.Windows.Forms.CheckBox();
             this.panelOrderStatus = new System.Windows.Forms.Panel();
@@ -98,6 +99,7 @@
             this.commentToken.Size = new System.Drawing.Size(237, 21);
             this.commentToken.TabIndex = 2;
             this.commentToken.Text = "{//ServiceUsed} - {//TrackingNumber}";
+            this.commentToken.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // statusUpdate
             // 

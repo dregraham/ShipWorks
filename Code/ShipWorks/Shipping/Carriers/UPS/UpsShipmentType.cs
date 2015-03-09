@@ -366,7 +366,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             profile.Ups.UpsAccountID = shipperID;
             profile.OriginID = (int)ShipmentOriginSource.Account;
-            profile.Ups.ResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            profile.Ups.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
 
             profile.Ups.DeliveryConfirmation = (int)UpsDeliveryConfirmationType.None;
             profile.Ups.ReferenceNumber = "Order {//Order/Number}";
@@ -835,9 +835,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                     // We need to swap out the SettingsRepository and certificate inspector 
                     // to get UPS counter rates
-                    SettingsRepository = new UpsCounterRateSettingsRepository(TangoCounterRatesCredentialStore.Instance);
-                    CertificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.UpsCertificateVerificationData);
-                    AccountRepository = new UpsCounterRateAccountRepository(TangoCounterRatesCredentialStore.Instance);
+                    SettingsRepository = new UpsCounterRateSettingsRepository(TangoCredentialStore.Instance);
+                    CertificateInspector = new CertificateInspector(TangoCredentialStore.Instance.UpsCertificateVerificationData);
+                    AccountRepository = new UpsCounterRateAccountRepository(TangoCredentialStore.Instance);
                 }
 
                 return GetCachedRates<UpsException>(shipment, GetRatesFromApi);

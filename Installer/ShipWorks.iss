@@ -184,27 +184,27 @@ begin
 	then begin
 		newAppID := GetGuid('');
 	end;
-	
+
 	try
 	    appPath := ExpandConstant('{app}');
 
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks\Instances' , appPath, instanceID)
-		then begin	
+		then begin
 			Result := instanceID;
 		end
 		else
-		begin		
+		begin
 			Result := newAppID;
 		end;
-		
+
     except
-    
+
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'Software\Interapptive\ShipWorks', 'LastInstalledInstanceID', instanceID)
 		then begin
 			Result := instanceID;
 		end
 		else
-		begin			
+		begin
 			Result := newAppID;
 		end;
     end;
@@ -243,7 +243,7 @@ var
 begin
 
 	TargetExe := ExpandConstant('{app}') + '\ShipWorks.exe';
-	if (FileExists(TargetExe)) 
+	if (FileExists(TargetExe))
     then begin
 
 	    if (GetVersionNumbers(TargetExe, VersionMS, VersionLS))
@@ -269,7 +269,7 @@ begin
         end;
 	end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -281,12 +281,12 @@ end;
 function CommonAppDataExists(): Boolean;
 begin
 
-	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive')) 
+	if (DirExists(ExpandConstant('{commonappdata}') + '\Interapptive'))
     then begin
         Result := true;
     end
 	else
-	begin			
+	begin
 		Result := false;
 	end;
 
@@ -410,12 +410,12 @@ begin
 			Exec(ExpandConstant(ExpandConstant('{app}') + '\ShipWorks.exe'), '/s=scheduler /stop', '', SW_SHOW, ewWaitUntilTerminated, serviceWasStopped)
 		end;
 
-        if IsTaskSelected('desktopicon') 
+        if IsTaskSelected('desktopicon')
         then begin
             // We now call it just ShipWorks instead of ShipWorks 3
             DeleteFile(ExpandConstant('{userdesktop}\ShipWorks 3.lnk'));
-        end;    
-  
+        end;
+
   end;
 
 end;

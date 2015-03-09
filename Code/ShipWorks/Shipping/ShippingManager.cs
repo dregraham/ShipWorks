@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web.Configuration;
 using System.Windows.Forms;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
@@ -218,6 +219,15 @@ namespace ShipWorks.Shipping
 
             // Initialize the to address
             PersonAdapter.Copy(order, shipment, "Ship");
+            AddressAdapter.Copy(order, shipment, "Ship");
+
+            shipment.ShipAddressValidationError = order.ShipAddressValidationError;
+            shipment.ShipAddressValidationStatus = order.ShipAddressValidationStatus;
+            shipment.ShipAddressValidationSuggestionCount = order.ShipAddressValidationSuggestionCount;
+            shipment.ShipResidentialStatus = (int) ValidationDetailStatusType.Unknown;
+            shipment.ShipPOBox = (int) ValidationDetailStatusType.Unknown;
+            shipment.ShipUSTerritory = (int) ValidationDetailStatusType.Unknown;
+            shipment.ShipMilitaryAddress = (int) ValidationDetailStatusType.Unknown;
 
             shipment.OriginOriginID = (int)ShipmentOriginSource.Store;
 
@@ -246,6 +256,8 @@ namespace ShipWorks.Shipping
 
                 // Go ahead and create customs if needed
                 CustomsManager.LoadCustomsItems(shipment, false);
+
+                ValidatedAddressManager.CopyValidatedAddresses(adapter, order.OrderID, "Ship", shipment.ShipmentID, "Ship");
 
                 adapter.Commit();
             }
@@ -528,6 +540,8 @@ namespace ShipWorks.Shipping
                 using (SqlAdapter adapter = new SqlAdapter(true))
                 {
                     adapter.DeleteEntity(shipment);
+
+                    ValidatedAddressManager.DeleteExistingAddresses(adapter, shipmentID, "Ship");
 
                     adapter.Commit();
                 }

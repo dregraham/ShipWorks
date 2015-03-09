@@ -5,7 +5,7 @@
     [Status]              SMALLINT       NOT NULL,
     [InitialCalculation]  NVARCHAR (MAX) NOT NULL,
     [UpdateCalculation]   NVARCHAR (MAX) NOT NULL,
-    [ColumnMask]          VARBINARY (75) NOT NULL,
+    [ColumnMask]          VARBINARY (100) NOT NULL,
     [JoinMask]            INT            NOT NULL,
     [Cost]                INT            NOT NULL,
     [Count]               INT            NOT NULL,
