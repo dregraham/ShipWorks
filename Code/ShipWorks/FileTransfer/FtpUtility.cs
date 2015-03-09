@@ -1,14 +1,18 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using Rebex.Net;
+//using Rebex.Net;
 using log4net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.FileTransfer
 {
+
     /// <summary>
     /// FTP utility functions
     /// </summary>
@@ -110,6 +114,26 @@ namespace ShipWorks.FileTransfer
                 }
             }
 
+            // Sftp
+            log.Info("Testing SFTP...");
+
+            if (portOverride == 0)
+            {
+                account.Port = 22;
+            }
+
+            account.SecurityType = (int) FtpSecurityType.Sftp;
+
+            try
+            {
+                TestDataTransfer(account);
+                return account;
+            }
+            catch (FileTransferException ex)
+            {
+                log.Warn(ex.Message);
+            }
+            
             // We've tried everything we can, but couldn't connect.  Throw
             throw new FileTransferException("ShipWorks was unable to connect to the FTP site with the information provided.");
         }
@@ -164,13 +188,13 @@ namespace ShipWorks.FileTransfer
                 throw new ArgumentNullException("account");
             }
 
-            using (Ftp ftp = LogonToFtp(account))
+            using (IFtp ftp = LogonToFtp(account))
             {
                 try
                 {
                     ftp.GetList();
                 }
-                catch (FtpException ex)
+                catch (NetworkSessionException ex)
                 {
                     log.Warn("Failed in call to GetList", ex);
 
@@ -189,16 +213,20 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Logon to the already connected FTP connection, with the credentials in teh given acount.
         /// </summary>
-        private static void InternalLogon(Ftp ftp, FtpAccountEntity account)
+        private static void InternalLogon(IFtp ftp, FtpAccountEntity account)
         {
             try
             {
                 ftp.Login(account.Username, SecureText.Decrypt(account.Password, account.Username));
                 
                 // Apply settings
-                ftp.Passive = account.Passive;
+                Ftp typedFtp = ftp as Ftp;
+                if (typedFtp != null)
+                {
+                    typedFtp.Passive = account.Passive;   
+                }
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new FileTransferException("ShipWorks could not login with the given username and password.\n\nDetail: " + ex.Message, ex);
             }
@@ -207,24 +235,15 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
         /// </summary>
-        private static Ftp OpenConnection(FtpAccountEntity account)
+        private static IFtp OpenConnection(FtpAccountEntity account)
         {
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             try
             {
-                Ftp ftp = new Ftp();
-                ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
-                ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
-
-                return ftp;
+                return account.SecurityType == (int) FtpSecurityType.Sftp ? 
+                    OpenSftpConnection(account) : 
+                    OpenFtpConnection(account);
             }
-            catch (FtpException ex)
-            {
-                throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
-            }
-            catch (TlsException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
             }
@@ -236,11 +255,38 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
+        /// Attempt to open the given SFTP connection, throws FileTransferException if not succesful
+        /// </summary>
+        private static IFtp OpenSftpConnection(FtpAccountEntity account)
+        {
+            Sftp ftp = new Sftp();
+            ftp.Timeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Connect(account.Host, account.Port);
+
+            return ftp;
+        }
+
+        /// <summary>
+        /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
+        /// </summary>
+        private static IFtp OpenFtpConnection(FtpAccountEntity account)
+        {
+            TlsParameters tls = new TlsParameters();
+            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
+
+            Ftp ftp = new Ftp();
+            ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+
+            return ftp;
+        }
+
+        /// <summary>
         /// Connect an login to the given FTP account
         /// </summary>
-        public static Ftp LogonToFtp(FtpAccountEntity account)
+        public static IFtp LogonToFtp(FtpAccountEntity account)
         {
-            Ftp ftp = OpenConnection(account);
+            IFtp ftp = OpenConnection(account);
 
             InternalLogon(ftp, account);
 
