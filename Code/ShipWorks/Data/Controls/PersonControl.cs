@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
-using System.Text;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
-using Interapptive.Shared;
-using System.Diagnostics;
-using ShipWorks.Data;
 using Interapptive.Shared.Utility;
 using System.Linq;
+using ShipWorks.Stores;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Utility;
 using Interapptive.Shared.Business;
@@ -55,6 +57,15 @@ namespace ShipWorks.Data.Controls
 
         // Maps a control to the label that labels it on the form
         Dictionary<Control, Label> labelMap;
+
+        AddressSelector addressSelector;
+        bool isLoadingEntities;
+        bool shouldSaveAddressSuggestions = false;
+
+        AddressAdapter lastValidatedAddress;
+        string AddressPrefix;
+        List<ValidatedAddressEntity> validatedAddresses = new List<ValidatedAddressEntity>();
+        StoreEntity store;
 
         class ControlFieldMap
         {
@@ -126,13 +137,46 @@ namespace ShipWorks.Data.Controls
         {
             InitializeComponent();
 
-            country.TextChanged += this.OnComboBoxTextChanged;
+            country.SelectedValueChanged += this.OnComboBoxTextChanged;
             state.TextChanged += this.OnComboBoxTextChanged;
 
             state.TextChanged += this.OnDestinationChanged;
 
             InitializeFieldMappings();
+
+            EnableValidationControls = false;
         }
+
+        /// <summary>
+        /// Address selector used by the validator
+        /// </summary>
+        public AddressSelector AddressSelector {
+            get
+            {
+                return addressSelector;
+            }
+            set
+            {
+                if (addressSelector != null)
+                {
+                    addressSelector.AddressSelecting -= OnAddressSelectorAddressSelecting;
+                    addressSelector.AddressSelected -= OnAddressSelectorAddressSelected;
+                }
+
+                addressSelector = value;
+
+                if (addressSelector != null)
+                {
+                    addressSelector.AddressSelecting += OnAddressSelectorAddressSelecting;
+                    addressSelector.AddressSelected += OnAddressSelectorAddressSelected;   
+                }
+            }
+        }
+
+        /// <summary>
+        /// Should validation controls be displayed at all for this instance
+        /// </summary>
+        public bool EnableValidationControls { get; set; }
 
         /// <summary>
         /// Initialization
@@ -142,6 +186,7 @@ namespace ShipWorks.Data.Controls
             EnsureCountryInitialized();
 
             UpdateAvailableFieldsUI();
+            UpdateValidationUI();
         }
 
         /// <summary>
@@ -188,7 +233,7 @@ namespace ShipWorks.Data.Controls
                     new ControlFieldMap(labelName, PersonFields.Name | PersonFields.Company),
                     new ControlFieldMap(fullName, PersonFields.Name),
                     new ControlFieldMap(company, PersonFields.Company),
-                    new ControlFieldMap(labelAddress, PersonFields.Street | PersonFields.City | PersonFields.Street | PersonFields.Postal | PersonFields.Country | PersonFields.Residential),
+                    new ControlFieldMap(addressLabelPanel, PersonFields.Street | PersonFields.City | PersonFields.Street | PersonFields.Postal | PersonFields.Country | PersonFields.Residential),
                     new ControlFieldMap(street, PersonFields.Street),
                     new ControlFieldMap(city, PersonFields.City),
                     new ControlFieldMap(state, PersonFields.State),
@@ -505,6 +550,8 @@ namespace ShipWorks.Data.Controls
             phone.Text = "";
             fax.Text = "";
             website.Text = "";
+
+            addressValidationPanel.Visible = false;
         }
 
         /// <summary>
@@ -531,27 +578,32 @@ namespace ShipWorks.Data.Controls
                 return;
             }
 
+            isLoadingEntities = true;
+
+            if (loadedPeople.Count == 1 && EnableValidationControls)
+            {
+                AddressAdapter loadedAddress = loadedPeople.Single().ConvertTo<AddressAdapter>();
+                lastValidatedAddress = new AddressAdapter();
+                loadedAddress.CopyTo(lastValidatedAddress);
+                loadedAddress.CopyValidationDataTo(lastValidatedAddress);
+
+                AddressPrefix = loadedAddress.FieldPrefix;
+
+                validatedAddresses = new List<ValidatedAddressEntity>();
+                AddressSelector = new AddressSelector(AddressPrefix);
+
+                store = StoreManager.GetRelatedStore(EntityUtility.GetEntityId(loadedPeople.Single().Entity));
+            }
+
             using (MultiValueScope scope = new MultiValueScope())
             {
                 // Go through each additional person, and see if there are any conflicts
-                foreach (PersonAdapter person in loadedPeople)
-                {
-                    fullName.ApplyMultiText(new PersonName(person).FullName);
-                    company.ApplyMultiText(person.Company);
-
-                    street.ApplyMultiText(StreetEditor.CombinLines(person.Street1, person.Street2, person.Street3));
-
-                    city.ApplyMultiText(person.City);
-                    state.ApplyMultiText(Geography.GetStateProvName(person.StateProvCode, person.CountryCode));
-                    postalCode.ApplyMultiText(person.PostalCode);
-                    country.ApplyMultiValue(Geography.GetCountryName(person.CountryCode));
-
-                    email.ApplyMultiText(person.Email);
-                    phone.ApplyMultiText(person.Phone);
-                    fax.ApplyMultiText(person.Fax);
-                    website.ApplyMultiText(person.Website);
-                }
+                loadedPeople.ForEach(PopulateControls);
             }
+
+            UpdateValidationUI();
+
+            isLoadingEntities = false;
         }
 
         /// <summary>
@@ -582,82 +634,120 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         public void SaveToEntities(IEnumerable<PersonAdapter> list)
         {
+            int listCount = list.Count();
+
             foreach (PersonAdapter person in list)
             {
-                fullName.ReadMultiText(value =>
+                AddressAdapter originalAddress = new AddressAdapter();
+                person.ConvertTo<AddressAdapter>().CopyTo(originalAddress);
+
+                PopulatePersonFromUI(person);
+
+                AddressAdapter newAddress = person.ConvertTo<AddressAdapter>();
+
+                if (originalAddress != newAddress)
                 {
-                    PersonName name = PersonName.Parse(value);
-
-                    int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
-                    if (name.First.Length > maxFirst)
+                    if (ValidatedAddressManager.EnsureAddressCanBeValidated(newAddress))
                     {
-                        name.Middle = name.First.Substring(maxFirst) + name.Middle;
-                        name.First = name.First.Substring(0, maxFirst);
+                        newAddress.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
                     }
 
-                    int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
-                    if (name.Middle.Length > maxMiddle)
-                    {
-                        name.Last = name.Middle.Substring(maxMiddle) + name.Last;
-                        name.Middle = name.Middle.Substring(0, maxMiddle);
-                    }
+                    newAddress.AddressValidationSuggestionCount = 0;
+                    newAddress.AddressValidationError = string.Empty;
+                }
 
-                    int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
-                    if (name.Last.Length > maxLast)
-                    {
-                        name.Last = name.Last.Substring(0, maxLast);
-                    }                 
-
-                    person.FirstName = name.First;
-                    person.MiddleName = name.Middle;
-                    person.LastName = name.LastWithSuffix;
-                    person.UnparsedName = name.UnparsedName;
-                    person.NameParseStatus = name.ParseStatus;
-                });
-                company.ReadMultiText(value => person.Company = value);
-
-                street.ReadMultiText(value =>
+                if (listCount == 1 && lastValidatedAddress != null)
                 {
-                    int maxStreet1 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet1);
-                    int maxStreet2 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet2);
-                    int maxStreet3 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet3);
+                    AddressAdapter personAddress = person.ConvertTo<AddressAdapter>();
+                    lastValidatedAddress.CopyTo(personAddress);
+                    lastValidatedAddress.CopyValidationDataTo(personAddress);
+                }
 
-                    string line1 = street.Line1;
-                    string line2 = street.Line2;
-                    string line3 = street.Line3;
-
-                    if (line1.Length > maxStreet1)
-                    {
-                        line2 = line1.Substring(maxStreet1) + " " + line2;
-                        line1 = line1.Substring(0, maxStreet1);
-                    }
-
-                    if (line2.Length > maxStreet2)
-                    {
-                        line3 = line2.Substring(maxStreet2) + " " + line3;
-                        line2 = line2.Substring(0, maxStreet2);
-                    }
-
-                    if (line3.Length > maxStreet3)
-                    {
-                        line3 = line3.Substring(0, maxStreet3);
-                    }
-
-                    person.Street1 = line1;
-                    person.Street2 = line2;
-                    person.Street3 = line3;
-                });
-
-                city.ReadMultiText(value => person.City = value);
-                state.ReadMultiText(value => person.StateProvCode = Geography.GetStateProvCode(value));
-                postalCode.ReadMultiText(value => person.PostalCode = value);
-                country.ReadMultiText(value => person.CountryCode = Geography.GetCountryCode(country.Text));
-
-                email.ReadMultiText(value => person.Email = value);
-                phone.ReadMultiText(value => person.Phone = value);
-                fax.ReadMultiText(value => person.Fax = value);
-                website.ReadMultiText(value => person.Website = value);
+                if (shouldSaveAddressSuggestions && EnableValidationControls)
+                {
+                    ValidatedAddressScope.StoreAddresses(EntityUtility.GetEntityId(person.Entity), validatedAddresses, person.FieldPrefix);   
+                }
             }
+        }
+
+        /// <summary>
+        /// Populate the person from the values in the UI
+        /// </summary>
+        private void PopulatePersonFromUI(PersonAdapter person)
+        {
+            fullName.ReadMultiText(value =>
+            {
+                PersonName name = PersonName.Parse(value);
+
+                int maxFirst = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonFirst);
+                if (name.First.Length > maxFirst)
+                {
+                    name.Middle = name.First.Substring(maxFirst) + name.Middle;
+                    name.First = name.First.Substring(0, maxFirst);
+                }
+
+                int maxMiddle = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonMiddle);
+                if (name.Middle.Length > maxMiddle)
+                {
+                    name.Last = name.Middle.Substring(maxMiddle) + name.Last;
+                    name.Middle = name.Middle.Substring(0, maxMiddle);
+                }
+
+                int maxLast = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonLast);
+                if (name.Last.Length > maxLast)
+                {
+                    name.Last = name.Last.Substring(0, maxLast);
+                }
+
+                person.FirstName = name.First;
+                person.MiddleName = name.Middle;
+                person.LastName = name.LastWithSuffix;
+                person.UnparsedName = name.UnparsedName;
+                person.NameParseStatus = name.ParseStatus;
+            });
+            company.ReadMultiText(value => person.Company = value);
+
+            street.ReadMultiText(value =>
+            {
+                int maxStreet1 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet1);
+                int maxStreet2 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet2);
+                int maxStreet3 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet3);
+
+                string line1 = street.Line1;
+                string line2 = street.Line2;
+                string line3 = street.Line3;
+
+                if (line1.Length > maxStreet1)
+                {
+                    line2 = line1.Substring(maxStreet1) + " " + line2;
+                    line1 = line1.Substring(0, maxStreet1);
+                }
+
+                if (line2.Length > maxStreet2)
+                {
+                    line3 = line2.Substring(maxStreet2) + " " + line3;
+                    line2 = line2.Substring(0, maxStreet2);
+                }
+
+                if (line3.Length > maxStreet3)
+                {
+                    line3 = line3.Substring(0, maxStreet3);
+                }
+
+                person.Street1 = line1;
+                person.Street2 = line2;
+                person.Street3 = line3;
+            });
+
+            city.ReadMultiText(value => person.City = value);
+            state.ReadMultiText(value => person.StateProvCode = Geography.GetStateProvCode(value));
+            postalCode.ReadMultiText(value => person.PostalCode = value);
+            country.ReadMultiText(value => person.CountryCode = Geography.GetCountryCode(country.Text));
+
+            email.ReadMultiText(value => person.Email = value);
+            phone.ReadMultiText(value => person.Phone = value);
+            fax.ReadMultiText(value => person.Fax = value);
+            website.ReadMultiText(value => person.Website = value);
         }
 
         /// <summary>
@@ -681,6 +771,24 @@ namespace ShipWorks.Data.Controls
             phone.Text = other.phone.Text;
             fax.Text = other.fax.Text;
             website.Text = other.website.Text;
+
+            lastValidatedAddress = other.lastValidatedAddress;
+            validatedAddresses = other.LoadValidatedAddresses().Select(EntityUtility.CloneEntity).ToList();
+
+            validatedAddresses.ForEach(x =>
+            {
+                x.AddressPrefix = AddressPrefix;
+                x.IsNew = true;
+
+                foreach (EntityField2 field in x.Fields)
+                {
+                    field.IsChanged = true;
+                }
+            });
+
+            shouldSaveAddressSuggestions = true;
+            
+            UpdateValidationUI();
         }
 
         /// <summary>
@@ -857,6 +965,48 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private void OnValueChanged(object sender, EventArgs e)
         {
+            if (!isLoadingEntities &&
+                (sender == street || sender == country || sender == postalCode || sender == state || sender == city))
+            {
+                ForceContentChanged();
+            }
+            else
+            {
+                if (ContentChanged != null)
+                {
+                    ContentChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Reset the validation details of all addresses
+        /// </summary>
+        public void ForceContentChanged()
+        {
+            if (loadedPeople == null)
+            {
+                return;
+            }
+
+            PersonAdapter person = new PersonAdapter();
+            PopulatePersonFromUI(person);
+
+            lastValidatedAddress = new AddressAdapter();
+            person.CopyTo(lastValidatedAddress);
+            lastValidatedAddress.AddressValidationError = string.Empty;
+            lastValidatedAddress.AddressValidationSuggestionCount = 0;
+            
+            if (ValidatedAddressManager.EnsureAddressCanBeValidated(lastValidatedAddress))
+            {
+                lastValidatedAddress.AddressValidationStatus = (int) AddressValidationStatusType.NotChecked;
+            }
+
+            validatedAddresses.Clear();
+            shouldSaveAddressSuggestions = true;
+
+            UpdateValidationUI();
+
             if (ContentChanged != null)
             {
                 ContentChanged(this, EventArgs.Empty);
@@ -872,6 +1022,224 @@ namespace ShipWorks.Data.Controls
             {
                 DestinationChanged(this, EventArgs.Empty);
             }
+        }
+
+        /// <summary>
+        /// The address validation suggestions link has been clicked
+        /// </summary>
+        private void OnAddressValidationSuggestionLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            if (loadedPeople.Count != 1 || AddressSelector == null)
+            {
+                return;
+            }
+
+            AddressSelector.ShowAddressOptionMenu(sender as Control, CreateClonedAddress(), new Point(0, 0), LoadValidatedAddresses);
+        }
+
+        /// <summary>
+        /// Create a function that will get a list of validated addresses
+        /// </summary>
+        private List<ValidatedAddressEntity> LoadValidatedAddresses()
+        {
+            if (validatedAddresses.Any())
+            {
+                return validatedAddresses;
+            }
+
+            using (SqlAdapter sqlAdapter = new SqlAdapter())
+            {
+                return ValidatedAddressManager.GetSuggestedAddresses(sqlAdapter, EntityUtility.GetEntityId(loadedPeople.Single().Entity), AddressPrefix);
+            }
+        }
+
+        /// <summary>
+        /// The user is selecting a validated address
+        /// </summary>
+        private void OnAddressSelectorAddressSelecting(object sender, EventArgs e)
+        {
+            isLoadingEntities = true;
+        }
+
+        /// <summary>
+        /// The user has selected a validated address
+        /// </summary>
+        private void OnAddressSelectorAddressSelected(object sender, AddressSelectedEventArgs e)
+        {
+            using (new MultiValueScope())
+            {
+                PopulateAddressControls(e.SelectedAddress);    
+            }
+
+            isLoadingEntities = false;
+
+            int addressValidationSuggestionCount = lastValidatedAddress.AddressValidationSuggestionCount;
+            lastValidatedAddress = e.SelectedAddress;
+            lastValidatedAddress.AddressValidationSuggestionCount = addressValidationSuggestionCount;
+
+            UpdateValidationUI();
+
+            OnValueChanged(this, new EventArgs());
+        }
+
+        /// <summary>
+        /// Update the validation details from the loaded entities
+        /// </summary>
+        private void UpdateValidationUI()
+        {
+
+            if (!EnableValidationControls || (loadedPeople != null && loadedPeople.Count > 1))
+            {
+                addressValidationPanel.Visible = false;
+            }
+            else
+            {
+                if (store.AddressValidationSetting == (int) AddressValidationStoreSettingType.ValidationDisabled)
+                {
+                    addressValidationPanel.Visible = false;
+                }
+                else
+                {
+                    UpdateValidationUIDetails(CreateClonedAddress());
+                }
+            }
+        }
+
+        /// <summary>
+        /// Update the validation UI for the specified address
+        /// </summary>
+        /// <param name="dummyAddress"></param>
+        private void UpdateValidationUIDetails(AddressAdapter dummyAddress)
+        {
+            dummyAddress.CountryCode = CountryCode;
+            dummyAddress.StateProvCode = state.MultiValued ? null : Geography.GetStateProvCode(state.Text);
+
+            addressValidationStatusIcon.Image = EnumHelper.GetImage((AddressValidationStatusType) dummyAddress.AddressValidationStatus);
+            addressValidationStatusText.Text = EnumHelper.GetDescription((AddressValidationStatusType)dummyAddress.AddressValidationStatus);
+           
+            addressValidationSuggestionLink.Text = AddressSelector.DisplayValidationSuggestionLabel(dummyAddress);
+            addressValidationSuggestionLink.Enabled = AddressSelector.IsValidationSuggestionLinkEnabled(dummyAddress);
+
+            addressValidationPanel.Visible = true;
+
+            validateAddress.Visible = AddressValidator.ShouldValidateAddress(dummyAddress);
+
+            addressValidationSuggestionLink.Left = validateAddress.Visible ?
+                validateAddress.Left - addressValidationSuggestionLink.Width - 6 : 
+                validateAddress.Right - addressValidationSuggestionLink.Width;
+
+            addressValidationStatusText.Width = addressValidationSuggestionLink.Left -
+                                                addressValidationStatusText.Left;
+        }
+
+        /// <summary>
+        /// Address validation link was clicked
+        /// </summary>
+        private void OnValidateAddressLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            AddressAdapter clonedAddress = CreateClonedAddress();
+
+            // Set up background executer to do the actual validation
+            BackgroundExecutor<AddressAdapter> executor = new BackgroundExecutor<AddressAdapter>(this, "Validating Addresses", "ShipWorks is validating the addresses.", "Address {0} of {1}", true);
+            executor.ExecuteCompleted += OnAddressValidated;
+            executor.ExecuteAsync(ValidateAddress, new List<AddressAdapter> { clonedAddress }, clonedAddress); // Execute the code for each shipment
+        }
+
+        /// <summary>
+        /// Validate the specified address
+        /// </summary>
+        private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
+        {
+            AddressValidator validator = new AddressValidator();
+            validator.Validate(address, true, (addressEntity, entities) =>
+            {
+                shouldSaveAddressSuggestions = true;
+
+                validatedAddresses.Clear();
+
+                if (addressEntity != null)
+                {
+                    validatedAddresses.Add(addressEntity);    
+                }
+
+                if (entities != null)
+                {
+                    validatedAddresses.AddRange(entities);   
+                }
+            });
+        }
+
+        /// <summary>
+        /// Load the validated address into the UI
+        /// </summary>
+        private void OnAddressValidated(object sender, BackgroundExecutorCompletedEventArgs<AddressAdapter> args)
+        {
+            lastValidatedAddress = args.UserState as AddressAdapter;
+            
+            isLoadingEntities = true;
+
+            using (new MultiValueScope())
+            {
+                PopulateAddressControls(lastValidatedAddress);
+            }
+
+            isLoadingEntities = false;
+            UpdateValidationUIDetails(lastValidatedAddress);
+
+            OnValueChanged(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Populate the controls with the given person adapter
+        /// </summary>
+        /// <param name="person"></param>
+        private void PopulateControls(PersonAdapter person)
+        {
+            fullName.ApplyMultiText(new PersonName(person).FullName);
+            company.ApplyMultiText(person.Company);
+
+            PopulateAddressControls(person.ConvertTo<AddressAdapter>());
+
+            email.ApplyMultiText(person.Email);
+            phone.ApplyMultiText(person.Phone);
+            fax.ApplyMultiText(person.Fax);
+            website.ApplyMultiText(person.Website);
+        }
+
+        /// <summary>
+        /// Populate the address specific controls with the specified address adapter
+        /// </summary>
+        /// <param name="address"></param>
+        private void PopulateAddressControls(AddressAdapter address)
+        {
+            street.ApplyMultiText(StreetEditor.CombinLines(address.Street1, address.Street2, address.Street3));
+
+            city.ApplyMultiText(address.City);
+            state.ApplyMultiText(Geography.GetStateProvName(address.StateProvCode, address.CountryCode));
+            postalCode.ApplyMultiText(address.PostalCode);
+            country.ApplyMultiValue(Geography.GetCountryName(address.CountryCode));
+        }
+
+        /// <summary>
+        /// Create a cloned address from the values in the UI and the previously loaded address
+        /// </summary>
+        private AddressAdapter CreateClonedAddress()
+        {
+            PersonAdapter dummyPerson = new PersonAdapter();
+            PopulatePersonFromUI(dummyPerson);
+
+            AddressAdapter clonedAddress = dummyPerson.ConvertTo<AddressAdapter>();
+            AddressAdapter.CopyValidationData(lastValidatedAddress ?? loadedPeople.Single().ConvertTo<AddressAdapter>(), clonedAddress);
+            return clonedAddress;
+        }
+
+        /// <summary>
+        /// Called when [size changed].
+        /// </summary>
+        private void OnSizeChanged(object sender, EventArgs e)
+        {
+            addressValidationStatusText.Width = addressValidationSuggestionLink.Left -
+                        addressValidationStatusText.Left;
         }
     }
 }

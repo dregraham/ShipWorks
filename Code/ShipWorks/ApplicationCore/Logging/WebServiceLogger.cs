@@ -5,6 +5,7 @@
 
 using System.Xml;
 using System.Web.Services.Protocols;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using Interapptive.Shared.Net;
 
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -26,6 +28,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -59,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -84,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -144,6 +155,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -153,6 +165,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -186,7 +207,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -211,7 +232,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -271,6 +292,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -280,6 +302,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -313,7 +344,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -338,7 +369,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -398,6 +429,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -407,6 +439,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -440,7 +481,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -465,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -525,6 +566,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -534,6 +576,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -567,7 +618,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -592,7 +643,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -652,6 +703,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -661,6 +713,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -694,7 +755,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -719,7 +780,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -779,6 +840,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -788,6 +850,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -821,7 +892,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -846,7 +917,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -906,6 +977,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -915,6 +987,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -948,7 +1029,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -973,7 +1054,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1033,6 +1114,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1042,6 +1124,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1075,7 +1166,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1100,7 +1191,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1160,6 +1251,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1169,6 +1261,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1202,7 +1303,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1227,7 +1328,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1287,6 +1388,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1296,6 +1398,15 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1329,7 +1440,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1354,7 +1465,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1414,6 +1525,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1423,6 +1535,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1456,7 +1577,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1481,7 +1602,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1541,6 +1662,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1550,6 +1672,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1583,7 +1714,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1608,7 +1739,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1668,6 +1799,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1677,6 +1809,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1710,7 +1851,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1735,7 +1876,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1795,6 +1936,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1804,6 +1946,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1837,7 +1988,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1862,7 +2013,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -1922,6 +2073,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -1931,6 +2083,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -1964,7 +2125,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -1989,7 +2150,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2049,6 +2210,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2058,6 +2220,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2091,7 +2262,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2116,7 +2287,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2176,6 +2347,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2185,6 +2357,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2218,7 +2399,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2243,7 +2424,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2303,6 +2484,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2312,6 +2494,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2345,7 +2536,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2370,7 +2561,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2430,6 +2621,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2439,6 +2631,15 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2472,7 +2673,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2497,7 +2698,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2557,6 +2758,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2566,6 +2768,15 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2599,7 +2810,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2624,7 +2835,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2684,6 +2895,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2693,6 +2905,15 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2726,7 +2947,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2751,7 +2972,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2811,6 +3032,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2820,6 +3042,15 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2853,7 +3084,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -2878,7 +3109,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -2938,6 +3169,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -2947,6 +3179,15 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -2980,7 +3221,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3005,7 +3246,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3065,6 +3306,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3074,6 +3316,15 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3107,7 +3358,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3132,7 +3383,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3192,6 +3443,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3201,6 +3453,15 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3234,7 +3495,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3259,7 +3520,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3319,6 +3580,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3328,6 +3590,15 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3361,7 +3632,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3386,7 +3657,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3446,6 +3717,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3455,6 +3727,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3488,7 +3769,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3513,7 +3794,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3573,6 +3854,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3582,6 +3864,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3615,7 +3906,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3640,7 +3931,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3700,6 +3991,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3709,6 +4001,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3742,7 +4043,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3767,7 +4068,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3827,6 +4128,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3836,6 +4138,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3869,7 +4180,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -3894,7 +4205,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }
@@ -3954,6 +4265,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
+		bool onlyLogOnMagicKeys = false;
 
         /// <summary>
         /// Constructor
@@ -3963,6 +4275,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
         {
             this.logEntry = logEntry;
         }
+
+		/// <summary>
+        /// Only log error result.
+        /// </summary>
+		public bool OnlyLogOnMagicKeys 
+		{
+			get { return onlyLogOnMagicKeys; }
+			set { onlyLogOnMagicKeys = value; }
+		}
 
         /// <summary>
         /// Provides access to the raw soap XML sent and recieved
@@ -3996,7 +4317,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
         protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
         {
             // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null)
+            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogRequest(rawSoap.RequestXml);
             }
@@ -4021,7 +4342,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
             rawSoap.ReadIncomingMessage(message);
 
             // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null)
+            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
             {
                 logEntry.LogResponse(rawSoap.ResponseXml);
             }

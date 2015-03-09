@@ -22,6 +22,7 @@
     [AutoDownload]           BIT            NOT NULL,
     [AutoDownloadMinutes]    INT            NOT NULL,
     [AutoDownloadOnlyAway]   BIT            NOT NULL,
+	[AddressValidationSetting]  INT			NOT NULL,
     [ComputerDownloadPolicy] NVARCHAR (MAX) NOT NULL,
     [DefaultEmailAccountID]  BIGINT         NOT NULL,
     [ManualOrderPrefix]      NVARCHAR (10)  NOT NULL,
@@ -42,8 +43,3 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_StoreName]
 
 
 GO
-CREATE TRIGGER [dbo].[StoreLabelTrigger]
-    ON [dbo].[Store]
-    AFTER INSERT, DELETE, UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[StoreLabelTrigger]
-

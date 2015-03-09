@@ -1127,6 +1127,12 @@
     <Compile Include=".\RelationClasses\InsurancePolicyRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>
+    <Compile Include=".\EntityClasses\ValidatedAddressEntity.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
+    <Compile Include=".\RelationClasses\ValidatedAddressRelations.cs">
+      <GeneratedBy>LLBLGen Pro</GeneratedBy>
+    </Compile>
     <Compile Include=".\RelationClasses\EbayCombinedOrderRelationRelations.cs">
       <GeneratedBy>LLBLGen Pro</GeneratedBy>
     </Compile>

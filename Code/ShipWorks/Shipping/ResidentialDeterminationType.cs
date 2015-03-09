@@ -36,6 +36,12 @@ namespace ShipWorks.Shipping
         /// by all carriers.
         /// </summary>
         [Description("FedEx address lookup")]
-        FedExAddressLookup = 3
+        FedExAddressLookup = 3,
+
+        /// <summary>
+        /// Use the status retrieved from address validation
+        /// </summary>
+        [Description("From Address Validation")]
+        FromAddressValidation = 4
     }
 }

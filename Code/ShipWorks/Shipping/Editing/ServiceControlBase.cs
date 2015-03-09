@@ -8,6 +8,12 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Adapter.Custom;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Data.Model.RelationClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data;
@@ -95,6 +101,8 @@ namespace ShipWorks.Shipping.Editing
             RateControl.ShowAllRates = true;
             RateControl.ShowSingleRate = false;
             RateControl.ActionLinkVisible = false;
+
+            personControl.EnableValidationControls = true;
         }
 
         /// <summary>
@@ -613,6 +621,9 @@ namespace ShipWorks.Shipping.Editing
             }
         }
 
+		/// <summary>
+		/// Show the knowledge base article for thermal settings
+		/// </summary>
         private void OnHelpClick(object sender, EventArgs e)
         {
             WebHelper.OpenUrl("http://support.shipworks.com/solution/articles/140916-what-printer-should-i", this);

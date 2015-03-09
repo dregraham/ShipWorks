@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -262,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Creates an eBay-specific order instance
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new EbayOrderEntity()
             {
@@ -1145,6 +1146,14 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             return requiresCustoms;
+        }
+
+        /// <summary>
+        /// Gets the default validation setting.
+        /// </summary>
+        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        {
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }

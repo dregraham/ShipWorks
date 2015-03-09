@@ -22,10 +22,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCounterRatesBroker"/> class using
-        /// the <see cref="TangoCounterRatesCredentialStore"/> as the underlying credential store.
+        /// the <see cref="TangoCredentialStore"/> as the underlying credential store.
         /// </summary>
         public FedExCounterRatesBroker()
-            : this(TangoCounterRatesCredentialStore.Instance, new CertificateInspector(TangoCounterRatesCredentialStore.Instance.FedExCertificateVerificationData))
+            : this(TangoCredentialStore.Instance, new CertificateInspector(TangoCredentialStore.Instance.FedExCertificateVerificationData))
         { }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         /// <param name="credentialStore">The credential store.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
-        public FedExCounterRatesBroker(ICounterRatesCredentialStore credentialStore, ICertificateInspector certificateInspector)
+        public FedExCounterRatesBroker(ICredentialStore credentialStore, ICertificateInspector certificateInspector)
             : this(new FedExShipmentType(), new FedExCounterRateAccountRepository(credentialStore), new FedExCounterRateAccountRepository(credentialStore), certificateInspector)
         { }
 

@@ -71,6 +71,15 @@ namespace ShipWorks.Data
         /// </summary>
         public static event EventHandler EntityChangeDetected;
 
+        /// <summary>
+        /// Raised when order entities are detected as being dirty and are removed from cache.  Can be called from any thread.
+        /// </summary>
+        public static event EventHandler OrderEntityChangeDetected;
+
+        /// <summary>
+        /// Raised when shipment entities are detected as being dirty and are removed from cache. Can be called from any thread.
+        /// </summary>
+        public static event EventHandler ShipmentEntityChangeDetected;
 
         /// <summary>
         /// Do one-time application level initialization
@@ -327,12 +336,12 @@ namespace ShipWorks.Data
             {
                 Program.MainForm.BeginInvoke((System.Windows.Forms.MethodInvoker) delegate
                     {
-                        RaiseEntityChangeDetected();
+                        RaiseEntityChangeDetected(e);
                     });
             }
             else
             {
-                RaiseEntityChangeDetected();
+                RaiseEntityChangeDetected(e);
             }
         }
 
@@ -348,13 +357,43 @@ namespace ShipWorks.Data
         /// <summary>
         /// Raise the EntityChangeDetected event
         /// </summary>
-        private static void RaiseEntityChangeDetected()
+        private static void RaiseEntityChangeDetected(EntityCacheChangeMonitoredChangedEventArgs e)
         {
             EventHandler handler = EntityChangeDetected;
             if (handler != null)
             {
                 handler(null, EventArgs.Empty);
             }
+            
+            // Only raise the order specific entity change event if it's subscribed to 
+            // and if any of the changes are for order entities
+            EventHandler orderHandler = OrderEntityChangeDetected;
+            if (orderHandler != null)
+            {
+                if (DidEntityTypeChanged(EntityType.OrderEntity, e))
+                {
+                    orderHandler(null, EventArgs.Empty);
+                }
+            }
+
+            // Only raise the shipment specific entity change event if it's subscribed to 
+            // and if any of the cahnges are for shipment entities
+            EventHandler shipmentHandler = ShipmentEntityChangeDetected;
+            if (shipmentHandler != null && DidEntityTypeChanged(EntityType.ShipmentEntity, e))
+            {
+                shipmentHandler(null, EventArgs.Empty);
+            }
         }
+
+        /// <summary>
+        /// Detect if the entity type specified changed.
+        /// </summary>
+        private static bool DidEntityTypeChanged(EntityType entityType, EntityCacheChangeMonitoredChangedEventArgs args)
+        {
+            return args.Inserted.Any(x => x == entityType) ||
+                   args.Updated.Any(x => x == entityType) ||
+                   args.Deleted.Any(x => x == entityType);
+        }
+
     }
 }

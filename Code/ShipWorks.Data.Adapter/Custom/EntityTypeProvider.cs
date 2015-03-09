@@ -181,6 +181,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ShipSenseKnowledgebaseEntity": return EntityType.ShipSenseKnowledgebaseEntity;
 				case "InsurancePolicyEntity": return EntityType.InsurancePolicyEntity;
 				case "EbayCombinedOrderRelationEntity": return EntityType.EbayCombinedOrderRelationEntity;
+				case "ValidatedAddressEntity": return EntityType.ValidatedAddressEntity;
 				case "GrouponOrderEntity": return EntityType.GrouponOrderEntity;
 				case "GrouponOrderItemEntity": return EntityType.GrouponOrderItemEntity;
 				case "GrouponStoreEntity": return EntityType.GrouponStoreEntity;

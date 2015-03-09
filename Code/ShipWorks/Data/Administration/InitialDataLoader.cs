@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores;
 using ShipWorks.Filters;
@@ -77,13 +80,17 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Shipped", CreateDefinitionShipped()), ordersNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Not Shipped", CreateDefinitionNotShipped()), ordersNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Shipped", CreateDefinitionShipped()), ordersNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Shipped", CreateDefinitionNotShipped()), ordersNode, 1);
 
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
+
+            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0);
         }
 
         /// <summary>
@@ -91,9 +98,9 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateCustomerFilters(FilterNodeEntity customersNode)
         {
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
         }
 
         /// <summary>
@@ -358,40 +365,6 @@ namespace ShipWorks.Data.Administration
             }
         }
 
-        /// <summary>
-        /// Create a FilterEntity object of the given name from the specified definition
-        /// </summary>
-        public static FilterEntity CreateFilterEntity(string name, FilterDefinition definition)
-        {
-            if (definition == null)
-            {
-                throw new ArgumentNullException("definition");
-            }
-
-            FilterEntity filter = new FilterEntity();
-            filter.Name = name;
-            filter.FilterTarget = (int) definition.FilterTarget;
-            filter.IsFolder = false;
-            filter.Definition = definition.GetXml();
-            filter.State = (int)FilterState.Enabled;
-
-            return filter;
-        }
-
-        /// <summary>
-        /// Create a FilterEntity object of the given name with no definition that represents a folder
-        /// </summary>
-        public static FilterEntity CreateFilterFolderEntity(string name, FilterTarget target)
-        {
-            FilterEntity folder = new FilterEntity();
-            folder.Name = name;
-            folder.FilterTarget = (int) target;
-            folder.IsFolder = true;
-            folder.Definition = null;
-            folder.State = (int)FilterState.Enabled;
-
-            return folder;
-        }
 
         /// <summary>
         /// Create the set of builtin template folders
@@ -418,6 +391,5 @@ namespace ShipWorks.Data.Administration
                 adapter.SaveEntity(snippets);
             }
         }
-
     }
 }

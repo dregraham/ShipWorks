@@ -5,12 +5,18 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Web.Configuration;
 using System.Windows.Forms;
+using Interapptive.Shared.Business;
+using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using log4net;
 using Interapptive.Shared.UI;
 using ShipWorks.Data;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Stores.Content
 {
@@ -22,15 +28,24 @@ namespace ShipWorks.Stores.Content
         static readonly ILog log = LogManager.GetLogger(typeof(ShipBillAddressEditorDlg));
 
         EntityBase2 entity;
+        private readonly bool enableAddressValidation;
+        private ValidatedAddressScope validatedAddressScope;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipBillAddressEditorDlg(EntityBase2 entity)
+        public ShipBillAddressEditorDlg(EntityBase2 entity) : this(entity, false)
+        {}
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipBillAddressEditorDlg(EntityBase2 entity, bool enableShipAddressValidation)
         {
             InitializeComponent();
 
             this.entity = entity;
+            this.enableAddressValidation = enableShipAddressValidation;
         }
 
         /// <summary>
@@ -38,6 +53,8 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            validatedAddressScope = new ValidatedAddressScope();
+            shipBillControl.EnableAddressValidation = enableAddressValidation;
             shipBillControl.LoadEntity(entity);
         }
 
@@ -46,13 +63,23 @@ namespace ShipWorks.Stores.Content
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            // Save the current address so we can check if it's changed later
+            AddressAdapter previousShippingAddress = new AddressAdapter();
+            AddressAdapter.Copy(entity, "Ship", previousShippingAddress);
+
             shipBillControl.SavePendingChanges();
 
             try
             {
-                using (SqlAdapter adpater = new SqlAdapter())
+                using (SqlAdapter adapter = new SqlAdapter())
                 {
-                    adpater.SaveAndRefetch(entity);
+                    adapter.SaveAndRefetch(entity);
+
+                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Ship");
+                    validatedAddressScope.FlushAddressesToDatabase(adapter, EntityUtility.GetEntityId(entity), "Bill");
+                    
+                    // Propagate address changes to shipments after we've saved all the order details
+                    ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, EntityUtility.GetEntityId(entity), previousShippingAddress, new AddressAdapter(entity, "Ship"));
                 }
             }
             catch (ORMConcurrencyException ex)
@@ -65,6 +92,14 @@ namespace ShipWorks.Stores.Content
             }
 
             DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// The form has closed
+        /// </summary>
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            validatedAddressScope.Dispose();
         }
     }
 }

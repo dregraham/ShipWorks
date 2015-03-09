@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping.Carriers
     /// An interface for the credentials needed for accessing counter rates that allows 
     /// for the abstracting the underlying storage container.
     /// </summary>
-    public interface ICounterRatesCredentialStore
+    public interface ICredentialStore
     {
         /// <summary>
         /// Gets the FedEx account number used for obtaining counter rates.

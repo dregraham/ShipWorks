@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using log4net;
 using ShipWorks.UI.Wizard;
@@ -182,7 +183,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// <summary>
         /// Create the custom Amazon entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             AmazonOrderEntity order = new AmazonOrderEntity();
 
@@ -433,6 +434,14 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             return amazonStore.DomainName;
+        }
+
+        /// <summary>
+        /// Gets the default validation setting.
+        /// </summary>
+        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        {
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }

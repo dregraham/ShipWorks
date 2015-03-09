@@ -136,7 +136,7 @@ namespace ShipWorks.Stores
 
             foreach (StoreType storeType in uniqueStoreTypes)
             {
-                OrderEntity order = storeType.CreateOrderInstance();
+                OrderEntity order = storeType.CreateOrder();
                 if (order.GetType() != typeof(OrderEntity))
                 {
                     if (!orderTables.Contains(order.LLBLGenProEntityName))
