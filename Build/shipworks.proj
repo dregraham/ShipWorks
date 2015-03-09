@@ -304,7 +304,10 @@
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.SyntaxEditor.Addons.Web.Net20, Version=4.0.283.0, Culture=neutral, PublicKeyToken=21a821480e210563" />
     <ObfuscationExcludedAssemblies Include="ActiproSoftware.Shared.Net20, Version=1.0.103.0, Culture=neutral, PublicKeyToken=36ff2196ab5654b9" />
     <ObfuscationExcludedAssemblies Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
-    <ObfuscationExcludedAssemblies Include="Rebex.Net.Ftp, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
+    <ObfuscationExcludedAssemblies Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.Imap, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.Pop3, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />
     <ObfuscationExcludedAssemblies Include="Rebex.Net.ProxySocket, Version=2.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d" />

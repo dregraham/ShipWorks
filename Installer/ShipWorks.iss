@@ -104,7 +104,10 @@ Source: {#AppArtifacts}\ActiproSoftware.SyntaxEditor.Net20.dll; DestDir: {app}; 
 Source: {#AppArtifacts}\ActiproSoftware.SyntaxEditor.Addons.Web.Net20.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\ActiproSoftware.Shared.Net20.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Rebex.Mail.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
-Source: {#AppArtifacts}\Rebex.Net.Ftp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Rebex.Ftp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Rebex.Common.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Rebex.Networking.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Rebex.Sftp.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Rebex.Net.Imap.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Rebex.Net.Pop3.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Rebex.Net.ProxySocket.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
