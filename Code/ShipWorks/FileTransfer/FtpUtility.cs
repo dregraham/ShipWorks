@@ -63,55 +63,21 @@ namespace ShipWorks.FileTransfer
             }
 
             // Excplicit
+            if (CheckFtpSecurityExplicit(portOverride, account))
             {
-                log.InfoFormat("Testing Explicit FTP security...");
-
-                // if not overridden, use port 21
-                if (portOverride == 0)
-                {
-                    account.Port = 21;
-                }
-                account.SecurityType = (int) FtpSecurityType.Explicit;
-
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
             // Implicit
+            if (CheckFtpSecurityImplicit(portOverride, account))
             {
-                log.InfoFormat("Testing Implicit FTP security...");
-
-                // if not overridden, use port 990
-                if (portOverride == 0)
-                {
-                    account.Port = 990;
-                }
-                account.SecurityType = (int) FtpSecurityType.Implicit;
-                                                
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
             // Unsecure
+            if (CheckFtpSecurityUnsecure(portOverride, account))
             {
-                log.InfoFormat("Testing unsecure FTP security...");
-
-                // if not overridden, use port 21
-                if (portOverride == 0)
-                {
-                    account.Port = 21;
-                }
-
-                account.SecurityType = (int) FtpSecurityType.Unsecure;
-                    
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
             // Sftp
@@ -136,6 +102,58 @@ namespace ShipWorks.FileTransfer
             
             // We've tried everything we can, but couldn't connect.  Throw
             throw new FileTransferException("ShipWorks was unable to connect to the FTP site with the information provided.");
+        }
+
+        /// <summary>
+        /// Check ftp security as unsecure
+        /// </summary>
+        private static bool CheckFtpSecurityUnsecure(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing unsecure FTP security...");
+
+            // if not overridden, use port 21
+            if (portOverride == 0)
+            {
+                account.Port = 21;
+            }
+
+            account.SecurityType = (int) FtpSecurityType.Unsecure;
+
+            return TestPassiveActiveModes(account);
+        }
+
+        /// <summary>
+        /// Check ftp security as implicit
+        /// </summary>
+        private static bool CheckFtpSecurityImplicit(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing Implicit FTP security...");
+
+            // if not overridden, use port 990
+            if (portOverride == 0)
+            {
+                account.Port = 990;
+            }
+            account.SecurityType = (int) FtpSecurityType.Implicit;
+
+            return TestPassiveActiveModes(account);
+        }
+
+        /// <summary>
+        /// Check ftp security as explicit
+        /// </summary>
+        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing Explicit FTP security...");
+
+            // if not overridden, use port 21
+            if (portOverride == 0)
+            {
+                account.Port = 21;
+            }
+            account.SecurityType = (int) FtpSecurityType.Explicit;
+
+            return TestPassiveActiveModes(account);
         }
 
         /// <summary>
