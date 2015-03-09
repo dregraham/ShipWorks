@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
            
-            DateTime start = DateTime.UtcNow.AddDays(-3);
+            DateTime start = DateTime.UtcNow.AddDays(-7);
 
             try
             {
@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
             // Nothing to do if its not new - they don't change
-            if (!order.IsNew || status != "open" )
+            if (!order.IsNew || status != "open")
             {
                 return;
             }
@@ -159,6 +159,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
             item.SKU = grouponItem.Sku;
+            item.Code = grouponItem.FulfillmentLineitemId;
             item.Name = grouponItem.Name;
             item.Weight = GetWeight(grouponItem.Weight, itemWeightUnit);
             item.UnitPrice = grouponItem.UnitPrice;
@@ -183,7 +184,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             PersonName name = PersonName.Parse(customer.Name);
             shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
             shipAdapter.FirstName = name.First;
-            shipAdapter.MiddleName = name.First;
+            shipAdapter.MiddleName = name.Middle;
             shipAdapter.LastName = name.Last;
             shipAdapter.Street1 = customer.Address1;
             shipAdapter.Street2 = customer.Address2;
