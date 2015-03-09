@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content.Panels;
-using ShipWorks.UI;
 using System.Globalization;
 using ShipWorks.Data.Connection;
 using ShipWorks.Templates.Tokens;
@@ -51,7 +47,7 @@ namespace ShipWorks.Stores.Content
             this.storeID = storeID;
             this.dataMode = dataMode;
 
-            Text = item.IsNew ? "Add Order Item" : "Edit Order Item";
+            base.Text = item.IsNew ? "Add Order Item" : "Edit Order Item";
         }
 
         /// <summary>
@@ -66,15 +62,19 @@ namespace ShipWorks.Stores.Content
             UpdateStatusDisplay(item.LocalStatus);
 
             sku.Text = item.SKU;
+            upc.Text = item.UPC;
+            isbn.Text = item.ISBN;
             location.Text = item.Location;
             weight.Weight = item.Weight;
             cost.Amount = item.UnitCost;
             description.Text = item.Description;
+            thumbnailUrl.Text = item.Thumbnail;
+            imageUrl.Text = item.Image;
 
             LoadAttributes();
 
-            gridLinkEdit.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnEditAttribute);
-            gridLinkDelete.ButtonClicked += new EventHandler<GridRowColumnEventArgs>(OnDeleteAttribute);
+            gridLinkEdit.ButtonClicked += OnEditAttribute;
+            gridLinkDelete.ButtonClicked += OnDeleteAttribute;
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Content
 
             if (dataMode == PanelDataMode.LocalPending)
             {
-                attributes = item.OrderItemAttributes.Select(a => EntityUtility.CloneEntity(a));
+                attributes = item.OrderItemAttributes.Select(EntityUtility.CloneEntity);
             }
             else if (!item.IsNew)
             {
@@ -104,7 +104,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Create and return a new grid row for the given attribute
         /// </summary>
-        private GridRow CreateGridRow(OrderItemAttributeEntity attribute)
+        private static GridRow CreateGridRow(OrderItemAttributeEntity attribute)
         {
             GridRow row = new GridRow(new GridCell[]
                     {
@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Content
         /// <summary>
         /// Update the display state of the given grid row based on the attribute
         /// </summary>
-        private void UpdateGridRow(GridRow row)
+        private static void UpdateGridRow(GridRow row)
         {
             OrderItemAttributeEntity attribute = (OrderItemAttributeEntity) row.Tag;
 
@@ -283,10 +283,15 @@ namespace ShipWorks.Stores.Content
             item.LocalStatus = status.Tag.ToString();
 
             item.SKU = sku.Text;
+            item.ISBN = isbn.Text;
+            item.UPC = upc.Text;
+
             item.Location = location.Text;
             item.Weight = weight.Weight;
             item.UnitCost = cost.Amount;
             item.Description = description.Text;
+            item.Thumbnail = thumbnailUrl.Text;
+            item.Image = imageUrl.Text;
 
             try
             {
