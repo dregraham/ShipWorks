@@ -160,6 +160,10 @@ PRINT N'Dropping foreign keys from [dbo].[ChannelAdvisorStore]'
 GO
 ALTER TABLE [dbo].[ChannelAdvisorStore] DROP CONSTRAINT [FK_ChannelAdvisorStore_Store]
 GO
+PRINT N'Dropping foreign keys from [dbo].[GrouponStore]'
+GO
+ALTER TABLE [dbo].[GrouponStore] DROP CONSTRAINT [FK_GrouponStore_Store]
+GO
 PRINT N'Dropping foreign keys from [dbo].[Download]'
 GO
 ALTER TABLE [dbo].[Download] DROP CONSTRAINT [FK_Download_Store]
@@ -264,6 +268,10 @@ GO
 PRINT N'Dropping foreign keys from [dbo].[EtsyOrder]'
 GO
 ALTER TABLE [dbo].[EtsyOrder] DROP CONSTRAINT [FK_EtsyOrder_Order]
+GO
+PRINT N'Dropping foreign keys from [dbo].[GrouponOrder]'
+GO
+ALTER TABLE [dbo].[GrouponOrder] DROP CONSTRAINT [FK_GrouponOrder_Order]
 GO
 PRINT N'Dropping foreign keys from [dbo].[MagentoOrder]'
 GO
@@ -1085,6 +1093,10 @@ PRINT N'Adding foreign keys to [dbo].[GenericModuleStore]'
 GO
 ALTER TABLE [dbo].[GenericModuleStore] ADD CONSTRAINT [FK_GenericModuleStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+PRINT N'Adding foreign keys to [dbo].[GrouponStore]'
+GO
+ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
 PRINT N'Adding foreign keys to [dbo].[InfopiaStore]'
 GO
 ALTER TABLE [dbo].[InfopiaStore] ADD CONSTRAINT [FK_InfopiaStore_InfopiaStore] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
@@ -1167,6 +1179,10 @@ GO
 ALTER TABLE [dbo].[EbayOrder] ADD CONSTRAINT [FK_EbayOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 PRINT N'Adding foreign keys to [dbo].[EtsyOrder]'
+GO
+PRINT N'Adding foreign keys to [dbo].[GrouponOrder]'
+GO
+ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [FK_GrouponOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
 ALTER TABLE [dbo].[EtsyOrder] ADD CONSTRAINT [FK_EtsyOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
