@@ -114,6 +114,8 @@ namespace ShipWorks.Shipping.Settings
                 settings.ActivatedTypes = activated.ToArray();
             }
 
+            SetDefaultProviderIfNecessary(settings, shipmentTypeCode);
+
             // Make sure its marked as configured
             if (!configured.Contains((int) shipmentTypeCode))
             {
@@ -123,6 +125,17 @@ namespace ShipWorks.Shipping.Settings
 
             // Save the changes, if any
             ShippingSettings.Save(settings);
+        }
+
+        /// <summary>
+        /// Set the default provider to the specified value if necessary
+        /// </summary>
+        private static void SetDefaultProviderIfNecessary(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeCode)
+        {
+            if (!settings.ConfiguredTypes.Any() && settings.DefaultType == (int) ShipmentTypeCode.None)
+            {
+                settings.DefaultType = (int) shipmentTypeCode;
+            }
         }
 
         /// <summary>
