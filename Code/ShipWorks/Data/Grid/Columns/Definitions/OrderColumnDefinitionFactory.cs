@@ -372,13 +372,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "S: Website", "www.interapptive.com",
                         OrderFields.ShipWebsite),
 
-                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}", 
+                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}",  true,
                         new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
                         "S: Validation Status", AddressValidationStatusType.Valid,
                         OrderFields.ShipAddressValidationStatus) 
                         { DefaultWidth = 100 },
 
-                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}",
+                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
                         new GridActionDisplayType(shippingAddressSelector.DisplayValidationSuggestionLabel, 
                             shippingAddressSelector.ShowAddressOptionMenu, shippingAddressSelector.IsValidationSuggestionLinkEnabled), 
                         "S: Validation Suggestions", "2 Suggestions",
@@ -386,7 +386,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridColumnSortProvider(OrderFields.ShipAddressValidationSuggestionCount, OrderFields.ShipAddressValidationStatus))
                         { DefaultWidth = 120 }, 
 
-                    new GridColumnDefinition("{70DDFF53-64AB-406F-A48A-F91A7FEBC402}",
+                    new GridColumnDefinition("{70DDFF53-64AB-406F-A48A-F91A7FEBC402}", 
                         new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
                         "S: Residential Status", ValidationDetailStatusType.Yes,
                         OrderFields.ShipResidentialStatus) 
