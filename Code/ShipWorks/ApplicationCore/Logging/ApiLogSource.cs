@@ -114,5 +114,7 @@ namespace ShipWorks.ApplicationCore.Logging
         NoMoreRack,
         StageBloc,
 		Groupon,
+        RevolutionParts,
+        InstaStore,
     }
 }

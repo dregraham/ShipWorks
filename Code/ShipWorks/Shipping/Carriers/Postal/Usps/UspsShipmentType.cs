@@ -475,7 +475,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private void ProcessShipmentWithRates(ShipmentEntity shipment)
         {
             IUspsWebClient client = CreateWebClient();
-            List<UspsAccountEntity> accounts = GetRates(shipment).Rates
+            IEnumerable<UspsAccountEntity> accounts = GetRates(shipment).Rates
                     .OrderBy(x => x.Amount)
                     .Select(x => x.OriginalTag as UspsPostalRateSelection)
                     .Where(x => x.IsRateFor(shipment))
@@ -487,7 +487,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 throw new UspsException("Could not get rates for the specified service type");
             }
 
-            foreach (UspsAccountEntity account in accounts)
+            foreach (UspsAccountEntity account in accounts.ToList())
             {
                 try
                 {
