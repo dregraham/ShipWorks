@@ -124,5 +124,53 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Commercial ePacket")]
         [ApiValue("CommercialePacket")]
         CommercialePacket = 204,
+
+        [Description("Asendia IPA")]
+        AsendiaIPA = 210,
+
+        [Description("Asendia ISAL")]
+        AsendiaISAL = 211,
+
+        [Description("Asendia ePacket")]
+        AsendiaePacket = 212,
+
+        [Description("Asendia Generic")]
+        AsendiaGeneric = 213,
+
+        [Description("DHL Packet IPA")]
+        DHLPacketIPA = 214,
+
+        [Description("DHL Packet ISAL")]
+        DHLPacketISAL = 215,
+
+        [Description("Globegistics IPA")]
+        GlobegisticsIPA = 216,
+
+        [Description("Globegistics ISAL")]
+        GlobegisticsISAL = 217,
+
+        [Description("Globegistics ePacket")]
+        GlobegisticsePacket = 218,
+
+        [Description("Globegistics Generic")]
+        GlobegisticsGeneric = 219,
+
+        [Description("International Bonded Couriers IPA")]
+        InternationalBondedCouriersIPA = 220,
+
+        [Description("International Bonded Couriers ISAL")]
+        InternationalBondedCouriersISAL = 221,
+
+        [Description("International Bonded Couriers ePacket")]
+        InternationalBondedCouriersePacket = 222,
+
+        [Description("RRD IPA")]
+        RRDIPA = 223,
+
+        [Description("RRD ISAL")]
+        RRDISAL = 224,
+
+        [Description("RRD EPS (ePacket Service)")]
+        RRDEPSePacketService = 225,
     }
 }

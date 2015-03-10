@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
@@ -12,6 +14,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public static class UspsUtility
     {
+        private static readonly Dictionary<ServiceType, PostalServiceType> uspsServiceTypeTranslation = new Dictionary<ServiceType, PostalServiceType>
+        {
+            {ServiceType.USFC, PostalServiceType.FirstClass},
+            {ServiceType.USPM, PostalServiceType.PriorityMail},
+            {ServiceType.USXM, PostalServiceType.ExpressMail},
+            {ServiceType.USMM, PostalServiceType.MediaMail},
+            {ServiceType.USBP, PostalServiceType.BoundPrintedMatter},
+            {ServiceType.USLM, PostalServiceType.LibraryMail},
+            {ServiceType.USPS, PostalServiceType.ParcelSelect},
+            {ServiceType.USEMI, PostalServiceType.InternationalExpress},
+            {ServiceType.USPMI, PostalServiceType.InternationalPriority},
+            {ServiceType.USFCI, PostalServiceType.InternationalFirst},
+            {ServiceType.USCM, PostalServiceType.CriticalMail},
+            {ServiceType.ASIPA, PostalServiceType.AsendiaIPA},
+            {ServiceType.ASISAL, PostalServiceType.AsendiaISAL},
+            {ServiceType.ASEPKT, PostalServiceType.AsendiaePacket},
+            {ServiceType.ASGNRC, PostalServiceType.AsendiaGeneric},
+            {ServiceType.DHLPIPA, PostalServiceType.DHLPacketIPA},
+            {ServiceType.DHLPISAL, PostalServiceType.DHLPacketISAL},
+            {ServiceType.GGIPA, PostalServiceType.GlobegisticsIPA},
+            {ServiceType.GGISAL, PostalServiceType.GlobegisticsISAL},
+            {ServiceType.GGEPKT, PostalServiceType.GlobegisticsePacket},
+            {ServiceType.GGGNRC, PostalServiceType.GlobegisticsGeneric},
+            {ServiceType.IBCIPA, PostalServiceType.InternationalBondedCouriersIPA},
+            {ServiceType.IBCISAL, PostalServiceType.InternationalBondedCouriersISAL},
+            {ServiceType.IBCEPKT, PostalServiceType.InternationalBondedCouriersePacket},
+            {ServiceType.RRDIPA, PostalServiceType.RRDIPA},
+            {ServiceType.RRDISAL, PostalServiceType.RRDISAL},
+            {ServiceType.RRDEPKT, PostalServiceType.RRDEPSePacketService},
+        };
+
         /// <summary>
         /// Get the API value for the given packaging type
         /// </summary>
@@ -51,23 +84,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static PostalServiceType GetPostalServiceType(ServiceType uspsServiceType)
         {
-            switch (uspsServiceType)
+            if (uspsServiceTypeTranslation.ContainsKey(uspsServiceType))
             {
-                case ServiceType.USFC: return PostalServiceType.FirstClass;
-                case ServiceType.USPM: return PostalServiceType.PriorityMail;
-                case ServiceType.USXM: return PostalServiceType.ExpressMail;
-                case ServiceType.USMM: return PostalServiceType.MediaMail;
-                case ServiceType.USBP: return PostalServiceType.BoundPrintedMatter;
-                case ServiceType.USLM: return PostalServiceType.LibraryMail;
-                case ServiceType.USPS: return PostalServiceType.ParcelSelect;
-                case ServiceType.USEMI: return PostalServiceType.InternationalExpress;
-                case ServiceType.USPMI: return PostalServiceType.InternationalPriority;
-                case ServiceType.USFCI: return PostalServiceType.InternationalFirst;
-                case ServiceType.USCM: return PostalServiceType.CriticalMail;
-
-                default:
-                    throw new InvalidOperationException(string.Format("Invalid USPS service type {0}", uspsServiceType));
+                return uspsServiceTypeTranslation[uspsServiceType];
             }
+
+            throw new InvalidOperationException(string.Format("Invalid USPS service type {0}", uspsServiceType));
         }
 
         /// <summary>
@@ -75,24 +97,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static ServiceType GetApiServiceType(PostalServiceType postalServiceType)
         {
-            switch (postalServiceType)
+            ServiceType? serviceType = uspsServiceTypeTranslation
+                .Where(pair => pair.Value == postalServiceType)
+                .Select(pair => (ServiceType?)pair.Key)
+                .FirstOrDefault();
+
+            if (serviceType.HasValue)
             {
-                case PostalServiceType.FirstClass: return ServiceType.USFC;
-                case PostalServiceType.PriorityMail: return ServiceType.USPM;
-                case PostalServiceType.ExpressMail: return ServiceType.USXM;
-                case PostalServiceType.MediaMail: return ServiceType.USMM;
-                case PostalServiceType.BoundPrintedMatter: return ServiceType.USBP;
-                case PostalServiceType.LibraryMail: return ServiceType.USLM;
-                case PostalServiceType.ParcelSelect: return ServiceType.USPS;
-                case PostalServiceType.InternationalExpress: return ServiceType.USEMI;
-                case PostalServiceType.InternationalPriority: return ServiceType.USPMI;
-                case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
-                case PostalServiceType.CriticalMail: return ServiceType.USCM;
-
-
-                default:
-                    throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
+                return serviceType.Value;
             }
+
+            throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
         }
 
         /// <summary>
