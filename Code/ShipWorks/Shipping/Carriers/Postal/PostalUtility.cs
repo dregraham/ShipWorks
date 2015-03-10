@@ -20,12 +20,61 @@ namespace ShipWorks.Shipping.Carriers.Postal
     public static class PostalUtility
     {
         /// <summary>
+        /// Lookup of what service types are associated with which edition features
+        /// </summary>
+        private static readonly Dictionary<EditionFeature, List<PostalServiceType>> consolidatorServiceTypes = 
+            new Dictionary<EditionFeature, List<PostalServiceType>>
+        {
+            {
+                EditionFeature.StampsAscendiaConsolidator, new List<PostalServiceType>
+                {
+                    PostalServiceType.AsendiaGeneric, 
+                    PostalServiceType.AsendiaIPA, 
+                    PostalServiceType.AsendiaISAL, 
+                    PostalServiceType.AsendiaePacket
+                }
+            },
+            {
+                EditionFeature.StampsDhlConsolidator, new List<PostalServiceType>
+                {
+                    PostalServiceType.DHLPacketIPA,
+                    PostalServiceType.DHLPacketISAL
+                }
+            },
+            {
+                EditionFeature.StampsGlobegisticsConsolidator, new List<PostalServiceType>
+                {
+                    PostalServiceType.GlobegisticsIPA,
+                    PostalServiceType.GlobegisticsISAL,
+                    PostalServiceType.GlobegisticsePacket,
+                    PostalServiceType.GlobegisticsGeneric
+                }
+            },
+            {
+                EditionFeature.StampsIbcConsolidator, new List<PostalServiceType>
+                {
+                    PostalServiceType.InternationalBondedCouriersIPA,
+                    PostalServiceType.InternationalBondedCouriersISAL,
+                    PostalServiceType.InternationalBondedCouriersePacket
+                }
+            },
+            {
+                EditionFeature.StampsRrDonnelleyConsolidator, new List<PostalServiceType>
+                {
+                    PostalServiceType.RRDIPA,
+                    PostalServiceType.RRDISAL,
+                    PostalServiceType.RRDEPSePacketService
+                }
+            },
+        };
+
+        /// <summary>
         /// This is a list of ranges used for military addresses
         /// http://pe.usps.gov/text/LabelingLists/L002.htm
         /// </summary>
         private static readonly List<string> militaryPostalCodePrefixes = Enumerable
             .Range(90, 9)
-            .Concat(new[] {340})
+            .Concat(new[] { 340 })
             .Concat(Enumerable.Range(962, 5))
             .Select(x => x.ToString("000")).ToList();
 
@@ -121,7 +170,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
+            if ((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
                (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
@@ -178,7 +227,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         {
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            if((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
+            if ((shipmentType == ShipmentTypeCode.Express1Endicia && !settings.Express1EndiciaSingleSource) ||
                (shipmentType == ShipmentTypeCode.Express1Usps && !settings.Express1UspsSingleSource))
             {
                 return new List<PostalServiceType>
@@ -211,6 +260,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                         services.Add(PostalServiceType.ConsolidatorIsal);
                         services.Add(PostalServiceType.CommercialePacket);
                     }
+                }
+
+                if (shipmentType == ShipmentTypeCode.Usps)
+                {
+                    // Get a list of any consolidators that should be available to customers
+                    IEnumerable<PostalServiceType> accesibleConsolidatorTypes = consolidatorServiceTypes
+                        .Where(x => EditionManager.ActiveRestrictions.CheckRestriction(x.Key).Level == EditionRestrictionLevel.None)
+                        .SelectMany(x => x.Value)
+                        .ToList();
+
+                    services.AddRange(accesibleConsolidatorTypes);
                 }
 
                 return services;
@@ -325,7 +385,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 // As per Stamps.com, envelopes under 16 oz do not require customs.
                 // https://stamps.custhelp.com/app/answers/detail/a_id/406/related/1
-                if ((PostalPackagingType)shipment.Postal.PackagingType == PostalPackagingType.Envelope && 
+                if ((PostalPackagingType)shipment.Postal.PackagingType == PostalPackagingType.Envelope &&
                     shipment.TotalWeight < 1)
                 {
                     return PostalCustomsForm.None;
@@ -335,13 +395,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
             }
-            
+
             if (IsDomesticCountry(shipment.ShipCountryCode))
             {
                 return PostalCustomsForm.None;
             }
-            
-            return (shipment.CustomsValue >= 400)  ?
+
+            return (shipment.CustomsValue >= 400) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
         }
@@ -420,7 +480,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             return eligibleCountryCodes.Contains(countryCode);
         }
-        
+
         /// <summary>
         /// Helper method to get postal service description.
         /// </summary>
@@ -434,8 +494,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public static bool IsEntryFacilityRequired(PostalServiceType serviceType)
         {
-            return 
-                serviceType == PostalServiceType.ParcelSelect || 
+            return
+                serviceType == PostalServiceType.ParcelSelect ||
                 ShipmentTypeManager.IsEndiciaDhl(serviceType);
         }
 
@@ -449,7 +509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             if (rateSelection != null)
             {
-                SetServiceDetails(baseRate, rateSelection.ServiceType, string.Empty);    
+                SetServiceDetails(baseRate, rateSelection.ServiceType, string.Empty);
             }
         }
 
