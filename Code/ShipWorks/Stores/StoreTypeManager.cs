@@ -140,6 +140,8 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.NoMoreRack: return new Platforms.NoMoreRack.NoMoreRackStoreType(store);
                 case StoreTypeCode.StageBloc: return new Platforms.StageBloc.StageBlocStoreType(store);
 				case StoreTypeCode.Groupon: return new Platforms.Groupon.GrouponStoreType(store);
+                case StoreTypeCode.RevolutionParts: return new Platforms.RevolutionParts.RevolutionPartsStoreType(store);
+                case StoreTypeCode.InstaStore: return new Platforms.InstaStore.InstaStoreStoreType(store);
 				
             }
 

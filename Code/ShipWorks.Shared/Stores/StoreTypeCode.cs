@@ -329,7 +329,16 @@ namespace ShipWorks.Stores
 		[Description("StageBloc")]
         [StoreTypeIdentity("STAGEBLOC", "STG")]
         [StoreTypeIcon("stagebloc")]
-        StageBloc = 63
+        StageBloc = 63,
 
+        [Description("RevolutionParts")]
+        [StoreTypeIdentity("REVOLUTIONPARTS", "REV")]
+        [StoreTypeIcon("revolutionparts")]
+        RevolutionParts = 64,
+
+        [Description("InstaStore")]
+        [StoreTypeIdentity("INSTASTORE", "IST")]
+        [StoreTypeIcon("instastore")]
+        InstaStore = 65
     }
 }
