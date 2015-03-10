@@ -67,5 +67,3 @@
     CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED ([ShippingSettingsID] ASC)
 );
 
-
-

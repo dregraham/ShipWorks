@@ -35,6 +35,8 @@ namespace ShipWorks.Data.Utility
         OrderItemCode,
         OrderItemSku,
         OrderItemLocation,
+        OrderItemIsbn,
+        OrderItemUpc,
         OrderAttributeName,
         OrderChargeType,
         OrderChargeDescription,
@@ -107,8 +109,8 @@ namespace ShipWorks.Data.Utility
 
         PostalCustomsDescription,
 
-        StampsUsername,
-        StampsPassword,
+        UspsUsername,
+        UspsPassword,
 
         EndiciaAccountDescription,
 

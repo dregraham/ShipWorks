@@ -905,8 +905,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static Condition CreateCustomerNameCondition(XElement v2Condition, FilterTarget target)
         {
-            BillShipAddressCondition firstNameCondition = ReadBillShipAddressCondition(v2Condition, new CustomerFirstNameCondition());
-            BillShipAddressCondition lastNameCondition = ReadBillShipAddressCondition(v2Condition, new CustomerLastNameCondition());
+            BillShipAddressStringCondition firstNameCondition = ReadBillShipAddressCondition(v2Condition, new CustomerFirstNameCondition());
+            BillShipAddressStringCondition lastNameCondition = ReadBillShipAddressCondition(v2Condition, new CustomerLastNameCondition());
 
             CombinedResultCondition combined = new CombinedResultCondition();
             combined.Container.FirstGroup.Conditions.Add(firstNameCondition);
@@ -929,8 +929,8 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static Condition CreateOrderNameCondition(XElement v2Condition, FilterTarget target)
         {
-            BillShipAddressCondition firstNameCondition = ReadBillShipAddressCondition(v2Condition, new OrderFirstNameCondition());
-            BillShipAddressCondition lastNameCondition = ReadBillShipAddressCondition(v2Condition, new OrderLastNameCondition());
+            BillShipAddressStringCondition firstNameCondition = ReadBillShipAddressCondition(v2Condition, new OrderFirstNameCondition());
+            BillShipAddressStringCondition lastNameCondition = ReadBillShipAddressCondition(v2Condition, new OrderLastNameCondition());
 
             CombinedResultCondition combined = new CombinedResultCondition();
             combined.Container.FirstGroup.Conditions.Add(firstNameCondition);
@@ -953,9 +953,9 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// </summary>
         private static Condition CreateOrderAddressCondition(XElement v2Condition, FilterTarget target)
         {
-            BillShipAddressCondition street1Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet1Condition());
-            BillShipAddressCondition street2Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet2Condition());
-            BillShipAddressCondition street3Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet3Condition());
+            BillShipAddressStringCondition street1Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet1Condition());
+            BillShipAddressStringCondition street2Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet2Condition());
+            BillShipAddressStringCondition street3Condition = ReadBillShipAddressCondition(v2Condition, new OrderAddressStreet3Condition());
 
             CombinedResultCondition combined = new CombinedResultCondition();
             combined.Container.FirstGroup.Conditions.Add(street1Condition);
@@ -1126,7 +1126,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.LegacyCode
         /// <summary>
         /// Read the values from the given v2 condition into the v3 version
         /// </summary>
-        private static BillShipAddressCondition ReadBillShipAddressCondition(XElement v2Condition, BillShipAddressCondition condition)
+        private static BillShipAddressStringCondition ReadBillShipAddressCondition(XElement v2Condition, BillShipAddressStringCondition condition)
         {
             condition.AddressOperator = ParseV2AddressType((string) v2Condition.Element("AddressType"));
 

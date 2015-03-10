@@ -2,7 +2,6 @@
 using System.Linq;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.BestRate
@@ -19,9 +18,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
         {
             List<IBestRateShippingBroker> filteredBrokers = brokers.ToList();
 
-            // Get the first Stamps broker, or if none exist, the first Stamps.com based broker
-            WebToolsCounterRatesBroker webToolsBroker = filteredBrokers.OfType<UspsCounterRatesBroker>().FirstOrDefault() ??
-                                                        (WebToolsCounterRatesBroker)filteredBrokers.OfType<StampsCounterRatesBroker>().FirstOrDefault();
+            // Get the first Usps broker
+            WebToolsCounterRatesBroker webToolsBroker = filteredBrokers.OfType<UspsCounterRatesBroker>().FirstOrDefault();
 
             return filteredBrokers.Where(x => !(x is WebToolsCounterRatesBroker) || x == webToolsBroker).ToList();
         }

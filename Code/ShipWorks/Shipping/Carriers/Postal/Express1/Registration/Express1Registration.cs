@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
-using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
-using ShipWorks.Shipping.Carriers.Postal.Stamps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
 {
@@ -134,7 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
             get
             {
                 // Defer to the password encryption strategy since this can vary by
-                // the underlying Express1 carrier (Endicia or Stamps.com)
+                // the underlying Express1 carrier (Endicia or Usps)
                 return passwordEncryptionStrategy.EncryptPassword(this);
             }
         }
@@ -145,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.Registration
         public void AddExistingAccount()
         {
             // Check for any validation errors and ensure that the credentials we 
-            // have are for a valid Express1/Stamps account
+            // have are for a valid Express1/Usps account
             ValidationErrors = registrationValidator.ValidatePersonalInfo(this);
 
             if (ValidationErrors.Any())

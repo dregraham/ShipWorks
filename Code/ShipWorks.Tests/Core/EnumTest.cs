@@ -65,12 +65,13 @@ namespace ShipWorks.Tests.Core
                 "NetworkSolutions.WebServices".ToUpperInvariant(),
                 "Endicia.WebServices".ToUpperInvariant(),
                 "Express1.WebServices".ToUpperInvariant(),
-                "Stamps.WebServices".ToUpperInvariant(),
+                "Usps.WebServices".ToUpperInvariant(),
                 "Amazon.WebServices".ToUpperInvariant(),
                 "AmeriCommerce.WebServices".ToUpperInvariant(),
                 "ChannelAdvisor.WebServices".ToUpperInvariant(),
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
+                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant()
             };
 
         /// <summary>

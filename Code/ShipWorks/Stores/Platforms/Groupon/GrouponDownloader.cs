@@ -33,7 +33,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
             GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
            
-            DateTime start = DateTime.UtcNow.AddDays(-3);
+            DateTime start = DateTime.UtcNow.AddDays(-7);
 
             try
             {
@@ -159,7 +159,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
             item.SKU = grouponItem.Sku;
-            item.Code = grouponItem.GrouponLineitemId;
+            item.Code = grouponItem.FulfillmentLineitemId;
             item.Name = grouponItem.Name;
             item.Weight = GetWeight(grouponItem.Weight, itemWeightUnit);
             item.UnitPrice = grouponItem.UnitPrice;

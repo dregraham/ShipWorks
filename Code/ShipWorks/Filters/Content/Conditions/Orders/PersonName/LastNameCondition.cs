@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.PersonName
     /// Condition that compares against the order's last name
     /// </summary>
     [ConditionElement("Last Name", "Order.Name.Last")]
-    public class OrderLastNameCondition : BillShipAddressCondition
+    public class OrderLastNameCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

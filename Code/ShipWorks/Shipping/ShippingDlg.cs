@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -42,6 +43,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
 using ShipWorks.Shipping.Policies;
+
 
 namespace ShipWorks.Shipping
 {
@@ -88,6 +90,7 @@ namespace ShipWorks.Shipping
         private ShipmentEntity clonedShipmentEntityForRates;
         
         private RateSelectedEventArgs preSelectedRateEventArgs;
+        private ValidatedAddressScope validatedAddressScope;
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
@@ -162,7 +165,7 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Called when the shipping settings for using Stamps Expedited has changed. We need to refresh the
+        /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data displayed to accurately reflect the new shimpent type (USPS).
         /// </summary>
         /// <param name="sender">The sender.</param>
@@ -195,6 +198,8 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
+            validatedAddressScope = new ValidatedAddressScope();
+
             labelInternal.Visible = InterapptiveOnly.IsInterapptiveUser;
             unprocess.Visible = InterapptiveOnly.IsInterapptiveUser;
 
@@ -1136,6 +1141,9 @@ namespace ShipWorks.Shipping
             // Shipping rate changes will also affect insurance rates
             UpdateInsuranceDisplay();
 
+            // Update the grid so that changes to the destination appear immediately (especially validation status)
+            shipmentControl.RefreshAndResort();
+
             GetRates();
         }
 
@@ -1477,6 +1485,12 @@ namespace ShipWorks.Shipping
                     }
 
                     ShippingManager.SaveShipment(shipment);
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    {
+                        validatedAddressScope.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
+                        sqlAdapter.Commit();
+                    }
                 }
                 catch (ObjectDeletedException ex)
                 {
@@ -2590,6 +2604,8 @@ namespace ShipWorks.Shipping
             }
 
             processingErrors.Clear();
+
+            validatedAddressScope.Dispose();
         }
 
         /// <summary>
@@ -2631,6 +2647,11 @@ namespace ShipWorks.Shipping
                 if (components != null)
                 {
                     components.Dispose();
+                }
+
+                if (validatedAddressScope != null)
+                {
+                    validatedAddressScope.Dispose();
                 }
             }
 

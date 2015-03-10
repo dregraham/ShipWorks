@@ -6,10 +6,13 @@ using ShipWorks.Shipping.Editing.Rating;
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
 {
     /// <summary>
-    /// A RateFootnoteControl for promoting the USPS (Stamps.com Expedited) shipping provider.
+    /// A RateFootnoteControl for promoting the USPS shipping provider.
     /// </summary>
     public partial class UspsRatePromotionFootnote : RateFootnoteControl
     {
+        private readonly ShipmentEntity shipment;
+        private readonly bool showSingleAccountDialog;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsRatePromotionFootnote" /> class.
         /// </summary>
@@ -19,9 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         /// is displayed.</param>
         public UspsRatePromotionFootnote(ShipmentEntity shipment, bool showSingleAccountDialog)
         {
+            this.shipment = shipment;
+            this.showSingleAccountDialog = showSingleAccountDialog;
             InitializeComponent();
-            Shipment = shipment;
-            ShowSingleAccountDialog = showSingleAccountDialog;
         }
 
         /// <summary>
@@ -33,43 +36,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion
         }
 
         /// <summary>
-        /// Gets the shipment.
-        /// </summary>
-        public ShipmentEntity Shipment { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to [show single account dialog] when 
-        /// the activate link is clicked. 
-        /// </summary>
-        public bool ShowSingleAccountDialog { get; private set; }
-
-        /// <summary>
-        /// Link to activate the USPS (Stamps.com Expedited) discount
+        /// Link to activate the USPS discount
         /// </summary>
         private void OnActivateDiscount(object sender, EventArgs e)
         {
-            if (ShowSingleAccountDialog)
+            int originalShipmentTypeCode = shipment.ShipmentType;
+
+            using (UspsActivateDiscountDlg dlg = GetDiscountDialog())
             {
-                using (SingleAccountMarketingDlg dlg = new SingleAccountMarketingDlg())
+                dlg.Initialize(shipment);
+
+                // If they clicked ok and it didn't cause the shipment type to change, refresh rates.
+                if (dlg.ShowDialog(this) == DialogResult.OK && originalShipmentTypeCode == shipment.ShipmentType)
                 {
-                    dlg.Initialize(Shipment);
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        RaiseRateCriteriaChanged();
-                    }
+                    RaiseRateCriteriaChanged();
                 }
             }
-            else
-            {
-                using (UspsActivateDiscountDlg dlg = new UspsActivateDiscountDlg())
-                {
-                    dlg.Initialize(Shipment);
-                    if (dlg.ShowDialog(this) == DialogResult.OK)
-                    {
-                        RaiseRateCriteriaChanged();
-                    }
-                }
-            }
+        }
+
+        /// <summary>
+        /// Gets the appropriate discount dialog based on ShowSingleAccountDialog.
+        /// </summary>
+        private UspsActivateDiscountDlg GetDiscountDialog()
+        {
+            return showSingleAccountDialog ? new SingleAccountMarketingDlg() : new UspsActivateDiscountDlg();
         }
     }
 }

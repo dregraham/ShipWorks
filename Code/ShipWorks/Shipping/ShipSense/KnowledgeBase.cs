@@ -271,7 +271,6 @@ namespace ShipWorks.Shipping.ShipSense
             {
                 ActionProcedures.ShipmentShipSenseProcedure(hashKey, shipmentXml.ToString(), adapter);
             }
-
         }
 
         /// <summary>

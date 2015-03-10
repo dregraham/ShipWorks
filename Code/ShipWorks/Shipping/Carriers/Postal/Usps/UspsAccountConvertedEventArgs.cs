@@ -9,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Initializes a new instance of the <see cref="UspsAccountConvertedEventArgs"/> class.
         /// </summary>
         /// <param name="account">The account.</param>
-        public UspsAccountConvertedEventArgs(StampsAccountEntity account)
+        public UspsAccountConvertedEventArgs(UspsAccountEntity account)
         {
             Account = account;
         }
@@ -17,6 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Gets the account that was converted.
         /// </summary>
-        public StampsAccountEntity Account { get; private set; }
+        public UspsAccountEntity Account { get; private set; }
     }
 }

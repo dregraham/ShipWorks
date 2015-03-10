@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             ShipmentTypeCode.PostalWebTools,
             ShipmentTypeCode.Endicia,
             ShipmentTypeCode.Express1Endicia,
-            ShipmentTypeCode.Express1Stamps
+            ShipmentTypeCode.Express1Usps
         };
 
         private bool isDirty;

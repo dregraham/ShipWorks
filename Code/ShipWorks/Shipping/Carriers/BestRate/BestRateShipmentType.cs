@@ -517,7 +517,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate
         /// <param name="shipment">The shipment.</param>
         /// <param name="originalRateGroups">The original rate groups.</param>
         /// <param name="filteredRates">The filtered rates.</param>
-        /// <param name="counterRate">The counter rate.</param>
         /// <param name="counterRatesProcessing">The counter rates processing.</param>
         /// <returns></returns>
         /// <exception cref="ShippingException">ShipWorks could not find any rates.</exception>

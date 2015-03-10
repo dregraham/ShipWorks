@@ -13,16 +13,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
     /// </summary>
     public class FedExCounterRateAccountRepository : FedExSettingsRepository, ICarrierAccountRepository<FedExAccountEntity>
     {
-        private readonly ICounterRatesCredentialStore counterRatesCredentialStore;
+        private readonly ICredentialStore credentialStore;
         private readonly Lazy<List<FedExAccountEntity>> lazyAccounts;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="counterRatesCredentialStore">Credential store that contains FedEx counter rate credentials.</param>
-        public FedExCounterRateAccountRepository(ICounterRatesCredentialStore counterRatesCredentialStore)
+        /// <param name="credentialStore">Credential store that contains FedEx counter rate credentials.</param>
+        public FedExCounterRateAccountRepository(ICredentialStore credentialStore)
         {
-            this.counterRatesCredentialStore = counterRatesCredentialStore;
+            this.credentialStore = credentialStore;
             lazyAccounts = new Lazy<List<FedExAccountEntity>>(ConvertTangoCredentialsToFedExAccountEntities);
         }
 
@@ -48,8 +48,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
             {
                 FedExAccountEntity fedExAccountEntity = new FedExAccountEntity
                 {
-                    AccountNumber = counterRatesCredentialStore.FedExAccountNumber,
-                    MeterNumber = counterRatesCredentialStore.FedExMeterNumber,
+                    AccountNumber = credentialStore.FedExAccountNumber,
+                    MeterNumber = credentialStore.FedExMeterNumber,
                     PostalCode = "63102",
                     CountryCode = "US",
                     SmartPostHubList = string.Empty,
@@ -94,8 +94,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         public override ShippingSettingsEntity GetShippingSettings()
         {
             ShippingSettingsEntity settings = base.GetShippingSettings();
-            settings.FedExUsername = counterRatesCredentialStore.FedExUsername;
-            settings.FedExPassword = counterRatesCredentialStore.FedExPassword;
+            settings.FedExUsername = credentialStore.FedExUsername;
+            settings.FedExPassword = credentialStore.FedExPassword;
             return settings;
         }
 

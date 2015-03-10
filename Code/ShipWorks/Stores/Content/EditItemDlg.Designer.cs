@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer2 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
+            Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             this.ok = new System.Windows.Forms.Button();
             this.cancel = new System.Windows.Forms.Button();
             this.labelName = new System.Windows.Forms.Label();
@@ -42,48 +42,56 @@
             this.labelDescription = new System.Windows.Forms.Label();
             this.labelWeight = new System.Windows.Forms.Label();
             this.labelStatus = new System.Windows.Forms.Label();
-            this.name = new System.Windows.Forms.TextBox();
-            this.code = new System.Windows.Forms.TextBox();
-            this.quantity = new System.Windows.Forms.TextBox();
             this.edge2 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
             this.edge1 = new ComponentFactory.Krypton.Toolkit.KryptonBorderEdge();
-            this.sku = new System.Windows.Forms.TextBox();
-            this.location = new System.Windows.Forms.TextBox();
-            this.description = new System.Windows.Forms.TextBox();
             this.labelAttributes = new System.Windows.Forms.Label();
             this.attributeGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
             this.gridColumnPrice1 = new Divelements.SandGrid.GridColumn();
             this.gridLinkEdit = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
             this.gridLinkDelete = new Divelements.SandGrid.Specialized.GridHyperlinkColumn();
+            this.labelUpc = new System.Windows.Forms.Label();
+            this.isbnLabel = new System.Windows.Forms.Label();
+            this.imageUrlLabel = new System.Windows.Forms.Label();
+            this.thumbnailUrlLabel = new System.Windows.Forms.Label();
+            this.imageUrl = new System.Windows.Forms.TextBox();
+            this.thumbnailUrl = new System.Windows.Forms.TextBox();
+            this.isbn = new System.Windows.Forms.TextBox();
+            this.upc = new System.Windows.Forms.TextBox();
             this.addAttribute = new ShipWorks.UI.Controls.LinkControl();
+            this.description = new System.Windows.Forms.TextBox();
             this.weight = new ShipWorks.UI.Controls.WeightControl();
             this.cost = new ShipWorks.UI.Controls.MoneyTextBox();
+            this.location = new System.Windows.Forms.TextBox();
+            this.sku = new System.Windows.Forms.TextBox();
             this.status = new ShipWorks.UI.Controls.LinkControl();
             this.price = new ShipWorks.UI.Controls.MoneyTextBox();
+            this.quantity = new System.Windows.Forms.TextBox();
+            this.code = new System.Windows.Forms.TextBox();
+            this.name = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(235, 483);
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Location = new System.Drawing.Point(235, 588);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
-            this.ok.TabIndex = 12;
+            this.ok.TabIndex = 16;
             this.ok.Text = "OK";
             this.ok.UseVisualStyleBackColor = true;
             this.ok.Click += new System.EventHandler(this.OnOK);
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(316, 483);
+            this.cancel.Location = new System.Drawing.Point(316, 588);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
-            this.cancel.TabIndex = 13;
+            this.cancel.TabIndex = 17;
             this.cancel.Text = "Cancel";
             this.cancel.UseVisualStyleBackColor = true;
             // 
@@ -135,7 +143,7 @@
             // labelLocation
             // 
             this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(30, 178);
+            this.labelLocation.Location = new System.Drawing.Point(30, 232);
             this.labelLocation.Name = "labelLocation";
             this.labelLocation.Size = new System.Drawing.Size(51, 13);
             this.labelLocation.TabIndex = 7;
@@ -144,7 +152,7 @@
             // labelCost
             // 
             this.labelCost.AutoSize = true;
-            this.labelCost.Location = new System.Drawing.Point(26, 231);
+            this.labelCost.Location = new System.Drawing.Point(26, 285);
             this.labelCost.Name = "labelCost";
             this.labelCost.Size = new System.Drawing.Size(55, 13);
             this.labelCost.TabIndex = 8;
@@ -153,7 +161,7 @@
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(17, 258);
+            this.labelDescription.Location = new System.Drawing.Point(18, 366);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 9;
@@ -162,7 +170,7 @@
             // labelWeight
             // 
             this.labelWeight.AutoSize = true;
-            this.labelWeight.Location = new System.Drawing.Point(36, 206);
+            this.labelWeight.Location = new System.Drawing.Point(36, 260);
             this.labelWeight.Name = "labelWeight";
             this.labelWeight.Size = new System.Drawing.Size(45, 13);
             this.labelWeight.TabIndex = 10;
@@ -177,83 +185,32 @@
             this.labelStatus.TabIndex = 11;
             this.labelStatus.Text = "Local Status:";
             // 
-            // name
-            // 
-            this.name.Location = new System.Drawing.Point(88, 6);
-            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemName);
-            this.name.Name = "name";
-            this.name.Size = new System.Drawing.Size(207, 21);
-            this.name.TabIndex = 0;
-            // 
-            // code
-            // 
-            this.code.Location = new System.Drawing.Point(88, 33);
-            this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemCode);
-            this.code.Name = "code";
-            this.code.Size = new System.Drawing.Size(129, 21);
-            this.code.TabIndex = 1;
-            // 
-            // quantity
-            // 
-            this.quantity.Location = new System.Drawing.Point(88, 60);
-            this.quantity.Name = "quantity";
-            this.quantity.Size = new System.Drawing.Size(67, 21);
-            this.quantity.TabIndex = 2;
-            // 
             // edge2
             // 
-            this.edge2.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.edge2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.edge2.AutoSize = false;
             this.edge2.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
-            this.edge2.Location = new System.Drawing.Point(19, 329);
+            this.edge2.Location = new System.Drawing.Point(20, 437);
             this.edge2.Name = "edge2";
             this.edge2.Size = new System.Drawing.Size(367, 1);
-            this.edge2.TabIndex = 17;
             this.edge2.Text = "kryptonBorderEdge1";
             // 
             // edge1
             // 
-            this.edge1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.edge1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.edge1.AutoSize = false;
             this.edge1.BorderStyle = ComponentFactory.Krypton.Toolkit.PaletteBorderStyle.GridDataCellSheet;
             this.edge1.Location = new System.Drawing.Point(19, 140);
             this.edge1.Name = "edge1";
             this.edge1.Size = new System.Drawing.Size(367, 1);
-            this.edge1.TabIndex = 17;
             this.edge1.Text = "kryptonBorderEdge1";
-            // 
-            // sku
-            // 
-            this.sku.Location = new System.Drawing.Point(88, 148);
-            this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
-            this.sku.Name = "sku";
-            this.sku.Size = new System.Drawing.Size(159, 21);
-            this.sku.TabIndex = 5;
-            // 
-            // location
-            // 
-            this.location.Location = new System.Drawing.Point(88, 175);
-            this.fieldLengthProvider.SetMaxLengthSource(this.location, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
-            this.location.Name = "location";
-            this.location.Size = new System.Drawing.Size(159, 21);
-            this.location.TabIndex = 6;
-            // 
-            // description
-            // 
-            this.description.AcceptsReturn = true;
-            this.description.Location = new System.Drawing.Point(87, 255);
-            this.description.Multiline = true;
-            this.description.Name = "description";
-            this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.description.Size = new System.Drawing.Size(301, 66);
-            this.description.TabIndex = 9;
             // 
             // labelAttributes
             // 
             this.labelAttributes.AutoSize = true;
-            this.labelAttributes.Location = new System.Drawing.Point(17, 335);
+            this.labelAttributes.Location = new System.Drawing.Point(23, 447);
             this.labelAttributes.Name = "labelAttributes";
             this.labelAttributes.Size = new System.Drawing.Size(59, 13);
             this.labelAttributes.TabIndex = 23;
@@ -269,11 +226,11 @@
             this.gridLinkEdit,
             this.gridLinkDelete});
             this.attributeGrid.EnableSearching = false;
-            this.attributeGrid.Location = new System.Drawing.Point(88, 336);
+            this.attributeGrid.Location = new System.Drawing.Point(89, 444);
             this.attributeGrid.Name = "attributeGrid";
-            this.attributeGrid.Renderer = windowsXPRenderer2;
+            this.attributeGrid.Renderer = windowsXPRenderer1;
             this.attributeGrid.Size = new System.Drawing.Size(300, 111);
-            this.attributeGrid.TabIndex = 10;
+            this.attributeGrid.TabIndex = 14;
             this.attributeGrid.RowActivated += new Divelements.SandGrid.GridRowEventHandler(this.OnRowActivated);
             // 
             // gridColumnDescription
@@ -313,30 +270,106 @@
             this.gridLinkDelete.LinkHotColor = System.Drawing.Color.Blue;
             this.gridLinkDelete.Width = 39;
             // 
+            // labelUpc
+            // 
+            this.labelUpc.AutoSize = true;
+            this.labelUpc.Location = new System.Drawing.Point(50, 178);
+            this.labelUpc.Name = "labelUpc";
+            this.labelUpc.Size = new System.Drawing.Size(31, 13);
+            this.labelUpc.TabIndex = 25;
+            this.labelUpc.Text = "UPC:";
+            // 
+            // isbnLabel
+            // 
+            this.isbnLabel.AutoSize = true;
+            this.isbnLabel.Location = new System.Drawing.Point(47, 205);
+            this.isbnLabel.Name = "isbnLabel";
+            this.isbnLabel.Size = new System.Drawing.Size(34, 13);
+            this.isbnLabel.TabIndex = 27;
+            this.isbnLabel.Text = "ISBN:";
+            // 
+            // imageUrlLabel
+            // 
+            this.imageUrlLabel.AutoSize = true;
+            this.imageUrlLabel.Location = new System.Drawing.Point(24, 339);
+            this.imageUrlLabel.Name = "imageUrlLabel";
+            this.imageUrlLabel.Size = new System.Drawing.Size(57, 13);
+            this.imageUrlLabel.TabIndex = 31;
+            this.imageUrlLabel.Text = "Image Url:";
+            // 
+            // thumbnailUrlLabel
+            // 
+            this.thumbnailUrlLabel.AutoSize = true;
+            this.thumbnailUrlLabel.Location = new System.Drawing.Point(6, 312);
+            this.thumbnailUrlLabel.Name = "thumbnailUrlLabel";
+            this.thumbnailUrlLabel.Size = new System.Drawing.Size(75, 13);
+            this.thumbnailUrlLabel.TabIndex = 29;
+            this.thumbnailUrlLabel.Text = "Thumbnail Url:";
+            // 
+            // imageUrl
+            // 
+            this.imageUrl.Location = new System.Drawing.Point(88, 336);
+            this.imageUrl.Name = "imageUrl";
+            this.imageUrl.Size = new System.Drawing.Size(301, 21);
+            this.imageUrl.TabIndex = 12;
+            // 
+            // thumbnailUrl
+            // 
+            this.thumbnailUrl.Location = new System.Drawing.Point(88, 309);
+            this.thumbnailUrl.Name = "thumbnailUrl";
+            this.thumbnailUrl.Size = new System.Drawing.Size(301, 21);
+            this.thumbnailUrl.TabIndex = 11;
+            // 
+            // isbn
+            // 
+            this.isbn.Location = new System.Drawing.Point(88, 202);
+            this.fieldLengthProvider.SetMaxLengthSource(this.isbn, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemIsbn);
+            this.isbn.Name = "isbn";
+            this.isbn.Size = new System.Drawing.Size(159, 21);
+            this.isbn.TabIndex = 7;
+            // 
+            // upc
+            // 
+            this.upc.Location = new System.Drawing.Point(88, 175);
+            this.fieldLengthProvider.SetMaxLengthSource(this.upc, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemUpc);
+            this.upc.Name = "upc";
+            this.upc.Size = new System.Drawing.Size(159, 21);
+            this.upc.TabIndex = 6;
+            // 
             // addAttribute
             // 
             this.addAttribute.AutoSize = true;
             this.addAttribute.Cursor = System.Windows.Forms.Cursors.Hand;
             this.addAttribute.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.addAttribute.ForeColor = System.Drawing.Color.Blue;
-            this.addAttribute.Location = new System.Drawing.Point(318, 450);
+            this.addAttribute.Location = new System.Drawing.Point(319, 558);
             this.addAttribute.Name = "addAttribute";
             this.addAttribute.Size = new System.Drawing.Size(72, 13);
-            this.addAttribute.TabIndex = 11;
+            this.addAttribute.TabIndex = 15;
             this.addAttribute.Text = "Add Attribute";
             this.addAttribute.Click += new System.EventHandler(this.OnAddAttribute);
+            // 
+            // description
+            // 
+            this.description.AcceptsReturn = true;
+            this.description.Location = new System.Drawing.Point(88, 363);
+            this.description.Multiline = true;
+            this.description.Name = "description";
+            this.description.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.description.Size = new System.Drawing.Size(301, 66);
+            this.description.TabIndex = 13;
             // 
             // weight
             // 
             this.weight.BackColor = System.Drawing.Color.Transparent;
-            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.weight.Location = new System.Drawing.Point(88, 202);
+            this.weight.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.weight.Location = new System.Drawing.Point(88, 256);
             this.weight.Name = "weight";
-            this.weight.RangeMax = 300;
-            this.weight.RangeMin = 0;
+            this.weight.RangeMax = 300D;
+            this.weight.RangeMin = 0D;
             this.weight.Size = new System.Drawing.Size(254, 20);
-            this.weight.TabIndex = 7;
-            this.weight.Weight = 0;
+            this.weight.TabIndex = 9;
+            this.weight.Weight = 0D;
             // 
             // cost
             // 
@@ -345,11 +378,28 @@
             0,
             0,
             131072});
-            this.cost.Location = new System.Drawing.Point(88, 228);
+            this.cost.IgnoreSet = false;
+            this.cost.Location = new System.Drawing.Point(88, 282);
             this.cost.Name = "cost";
             this.cost.Size = new System.Drawing.Size(100, 21);
-            this.cost.TabIndex = 8;
+            this.cost.TabIndex = 10;
             this.cost.Text = "$0.00";
+            // 
+            // location
+            // 
+            this.location.Location = new System.Drawing.Point(88, 229);
+            this.fieldLengthProvider.SetMaxLengthSource(this.location, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemLocation);
+            this.location.Name = "location";
+            this.location.Size = new System.Drawing.Size(159, 21);
+            this.location.TabIndex = 8;
+            // 
+            // sku
+            // 
+            this.sku.Location = new System.Drawing.Point(88, 148);
+            this.fieldLengthProvider.SetMaxLengthSource(this.sku, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemSku);
+            this.sku.Name = "sku";
+            this.sku.Size = new System.Drawing.Size(159, 21);
+            this.sku.TabIndex = 5;
             // 
             // status
             // 
@@ -371,11 +421,35 @@
             0,
             0,
             131072});
+            this.price.IgnoreSet = false;
             this.price.Location = new System.Drawing.Point(88, 87);
             this.price.Name = "price";
             this.price.Size = new System.Drawing.Size(100, 21);
             this.price.TabIndex = 3;
             this.price.Text = "$0.00";
+            // 
+            // quantity
+            // 
+            this.quantity.Location = new System.Drawing.Point(88, 60);
+            this.quantity.Name = "quantity";
+            this.quantity.Size = new System.Drawing.Size(67, 21);
+            this.quantity.TabIndex = 2;
+            // 
+            // code
+            // 
+            this.code.Location = new System.Drawing.Point(88, 33);
+            this.fieldLengthProvider.SetMaxLengthSource(this.code, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemCode);
+            this.code.Name = "code";
+            this.code.Size = new System.Drawing.Size(129, 21);
+            this.code.TabIndex = 1;
+            // 
+            // name
+            // 
+            this.name.Location = new System.Drawing.Point(88, 6);
+            this.fieldLengthProvider.SetMaxLengthSource(this.name, ShipWorks.Data.Utility.EntityFieldLengthSource.OrderItemName);
+            this.name.Name = "name";
+            this.name.Size = new System.Drawing.Size(207, 21);
+            this.name.TabIndex = 0;
             // 
             // EditItemDlg
             // 
@@ -383,7 +457,15 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(403, 518);
+            this.ClientSize = new System.Drawing.Size(403, 623);
+            this.Controls.Add(this.imageUrl);
+            this.Controls.Add(this.imageUrlLabel);
+            this.Controls.Add(this.thumbnailUrl);
+            this.Controls.Add(this.thumbnailUrlLabel);
+            this.Controls.Add(this.isbn);
+            this.Controls.Add(this.isbnLabel);
+            this.Controls.Add(this.upc);
+            this.Controls.Add(this.labelUpc);
             this.Controls.Add(this.addAttribute);
             this.Controls.Add(this.attributeGrid);
             this.Controls.Add(this.labelAttributes);
@@ -411,7 +493,7 @@
             this.Controls.Add(this.labelName);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -421,7 +503,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Item";
             this.Load += new System.EventHandler(this.OnLoad);
-            ((System.ComponentModel.ISupportInitialize) (this.fieldLengthProvider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -461,5 +543,13 @@
         private ShipWorks.UI.Controls.LinkControl addAttribute;
         private Divelements.SandGrid.GridColumn gridColumnPrice1;
         private ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
+        private System.Windows.Forms.TextBox upc;
+        private System.Windows.Forms.Label labelUpc;
+        private System.Windows.Forms.TextBox isbn;
+        private System.Windows.Forms.Label isbnLabel;
+        private System.Windows.Forms.TextBox imageUrl;
+        private System.Windows.Forms.Label imageUrlLabel;
+        private System.Windows.Forms.TextBox thumbnailUrl;
+        private System.Windows.Forms.Label thumbnailUrlLabel;
     }
 }

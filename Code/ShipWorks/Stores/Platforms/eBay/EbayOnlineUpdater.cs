@@ -5,6 +5,7 @@ using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
 using System.Data.Common;
@@ -294,24 +295,29 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         trackingNumber = shipment.TrackingNumber;
 
                         WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+                        {
+                            // Try to use the alternate tracking number for MI if it's set
+                            if (!string.IsNullOrEmpty(track))
                             {
-                                if (track.Length > 0)
-                                {
-                                    trackingNumber = track;
+                                trackingNumber = track;
+                            }
 
-                                    // From eBay web service info:
-                                    // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations. 
-                                    // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
-                                    useUpsMailInnovationsCarrierType = true;
-                                }
-                                else
-                                {
-                                    // Mail Innovations but without a USPS tracking number will just get uploaded
-                                    // as an Other shipment.  Tracking will be whatever the user entered in the Reference 1 field
-                                    // in the SW WorldShip window.
-                                    carrierType = ShippingCarrierCodeType.Other;
-                                }
-                            });
+                            // International MI seems to use the normal UPS tracking number, so we'll just use that
+                            if (!string.IsNullOrEmpty(trackingNumber))
+                            {
+                                // From eBay web service info:
+                                // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations. 
+                                // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
+                                useUpsMailInnovationsCarrierType = true;
+                            }
+                            else
+                            {
+                                // Mail Innovations but without a USPS tracking number will just get uploaded
+                                // as an Other shipment.  Tracking will be whatever the user entered in the Reference 1 field
+                                // in the SW WorldShip window.
+                                carrierType = ShippingCarrierCodeType.Other;
+                            }
+                        });
 
                         // can only upload tracking details if it's a supported carrier
                         if (carrierType == ShippingCarrierCodeType.CustomCode)
@@ -389,11 +395,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
-
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.Endicia:
 
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
@@ -424,8 +428,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     break;
 
                 case ShipmentTypeCode.Other:
-                    carrierType = ShippingCarrierCodeType.Other;
-                    break;
+                    CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
+
+                    return description.IsUPS ? ShippingCarrierCodeType.UPS :
+                        description.IsFedEx ? ShippingCarrierCodeType.FedEx :
+                        description.IsUSPS ? ShippingCarrierCodeType.USPS :
+                        description.IsDHL ? ShippingCarrierCodeType.DHL :
+                        ShippingCarrierCodeType.Other;
             }
 
             return carrierType;

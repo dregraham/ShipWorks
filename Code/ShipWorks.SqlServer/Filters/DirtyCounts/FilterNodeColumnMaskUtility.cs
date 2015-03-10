@@ -22,11 +22,11 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         {
             tableBitCount = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitCount[(int) FilterNodeColumnMaskTable.Customer] = 35;
-            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 59;
+            tableBitCount[(int) FilterNodeColumnMaskTable.Order] = 73;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderItem] = 19;
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderCharge] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.Note] = 8;
-            tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 66;
+            tableBitCount[(int) FilterNodeColumnMaskTable.Shipment] = 73;
             tableBitCount[(int) FilterNodeColumnMaskTable.PrintResult] = 23;
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutbound] = 21;
             tableBitCount[(int) FilterNodeColumnMaskTable.EmailOutboundRelation] = 4;
@@ -41,7 +41,7 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.OrderMotionOrder] = 4;
             tableBitCount[(int) FilterNodeColumnMaskTable.PayPalOrder] = 5;
             tableBitCount[(int) FilterNodeColumnMaskTable.ProStoresOrder] = 4;
-            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 18;
+            tableBitCount[(int) FilterNodeColumnMaskTable.PostalShipment] = 21;
             tableBitCount[(int) FilterNodeColumnMaskTable.UpsShipment] = 51;
             tableBitCount[(int) FilterNodeColumnMaskTable.FedExShipment] = 149;
             tableBitCount[(int) FilterNodeColumnMaskTable.CommerceInterfaceOrder] = 2;

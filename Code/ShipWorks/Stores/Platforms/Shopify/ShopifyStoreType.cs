@@ -114,7 +114,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <summary>
         /// Create the custom Shopify entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             ShopifyOrderEntity order = new ShopifyOrderEntity();
             return order;

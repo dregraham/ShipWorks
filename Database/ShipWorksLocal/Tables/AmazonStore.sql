@@ -20,5 +20,3 @@
     CONSTRAINT [FK_AmazonStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 );
 
-
-

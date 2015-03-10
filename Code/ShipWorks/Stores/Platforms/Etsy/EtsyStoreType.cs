@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// Creates a new Etsy Order
         /// </summary>
         /// <returns></returns>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             EtsyOrderEntity order = new EtsyOrderEntity();
 

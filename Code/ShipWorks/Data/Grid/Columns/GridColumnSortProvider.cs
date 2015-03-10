@@ -12,7 +12,7 @@ namespace ShipWorks.Data.Grid.Columns
     /// </summary>
     public class GridColumnSortProvider
     {
-        EntityField2 sortField;
+        List<EntityField2> sortFields;
 
         // Function that is used to calculate the sort value
         Func<EntityBase2, object> sortValueFunction;
@@ -25,7 +25,15 @@ namespace ShipWorks.Data.Grid.Columns
         /// </summary>
         public GridColumnSortProvider(EntityField2 sortField)
         {
-            this.sortField = sortField;
+            this.sortFields = new List<EntityField2> { sortField };
+        }
+
+        /// <summary>
+        /// Constructor that provides fields that are used to obtain the underlying sort value
+        /// </summary>
+        public GridColumnSortProvider(params EntityField2 [] sortField)
+        {
+            this.sortFields = sortField.ToList();
         }
 
         /// <summary>
@@ -34,14 +42,15 @@ namespace ShipWorks.Data.Grid.Columns
         public GridColumnSortProvider(Func<EntityBase2, object> sortValueFunction)
         {
             this.sortValueFunction = sortValueFunction;
+            sortFields = new List<EntityField2>();
         }
 
         /// <summary>
         /// The field that is used to sort on.  Can be null if a sorting function is used instead.
         /// </summary>
-        public EntityField2 SortField
+        public List<EntityField2> SortFields
         {
-            get { return sortField; }
+            get { return sortFields; }
         }
 
         /// <summary>
@@ -73,12 +82,12 @@ namespace ShipWorks.Data.Grid.Columns
                 return sortValueFunction(entity);
             }
 
-            if ((object) sortField == null)
+            if (!sortFields.Any())
             {
                 throw new InvalidOperationException("Cannot determine local sort value since sort field is null.");
             }
 
-            return EntityUtility.GetFieldValue(entity, sortField);
+            return EntityUtility.GetFieldValue(entity, sortFields.First());
         }
 
         /// <summary>
@@ -94,20 +103,21 @@ namespace ShipWorks.Data.Grid.Columns
         /// </summary>
         public virtual List<SortClause> GetDatabaseSortClauses(SortOperator direction)
         {
-            if ((object) sortField == null)
+            if (!sortFields.Any())
             {
                 throw new InvalidOperationException("Cannot create sort clauses since SortField is null.");
             }
 
-            SortClause sortClause = new SortClause(sortField, null, direction);
-
-            // To get sorting based on expressions to work, this has to be set.  I figured this out with Reflector on LLBLGen's code.  Not sure why, but it is.
-            if (sortField.ExpressionToApply != null)
+            return sortFields.Select(x =>
             {
-                sortClause.EmitAliasForExpressionAggregateField = false;
-            }
+                SortClause sortClause = new SortClause(x, null, direction);
+                if (x.ExpressionToApply != null)
+                {
+                    sortClause.EmitAliasForExpressionAggregateField = false;
+                }
 
-            return new List<SortClause> { sortClause };
+                return sortClause;
+            }).ToList();
         }
     }
 }

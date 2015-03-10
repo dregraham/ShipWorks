@@ -292,7 +292,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             onTrac.DimsAddWeight = true;
 
             onTrac.PackagingType = (int)OnTracPackagingType.Package;
-            onTrac.ResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
+            onTrac.ResidentialDetermination = (int)ResidentialDeterminationType.FromAddressValidation;
 
             onTrac.Reference1 = string.Empty;
             onTrac.Reference2 = string.Empty;

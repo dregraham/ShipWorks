@@ -278,7 +278,7 @@ namespace ShipWorks.Templates.Tokens
         /// </summary>
         private void UpdateTokenSuggestionsMenu()
         {
-            if (DesignModeDetector.IsDesignerHosted(this))
+            if (DesignModeDetector.IsDesignerHosted())
             {
                 return;
             }

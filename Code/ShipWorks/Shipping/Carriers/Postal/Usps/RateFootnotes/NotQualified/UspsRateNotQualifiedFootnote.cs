@@ -3,7 +3,7 @@
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.NotQualified
 {
     /// <summary>
-    /// UserControl for letting the user know their current packaging options didn't qualify for a USPS (Stamps.com Expedited) rate
+    /// UserControl for letting the user know their current packaging options didn't qualify for a USPS rate
     /// </summary>
     public partial class UspsRateNotQualifiedFootnote : RateFootnoteControl
     {

@@ -45,6 +45,7 @@ namespace ShipWorks.Stores.Platforms.ProStores.WizardPages
                 labelOldVersion.Visible = true;
             }
 
+            Height = labelOldVersion.Visible ? labelOldVersion.Bottom + 4 : shipmentUpdate.Bottom;
         }
 
         /// <summary>

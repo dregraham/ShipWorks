@@ -3255,12 +3255,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of StampsAccountEntity
+	/// Strongly typed collection of UspsAccountEntity
 	/// </summary>
-	public class StampsAccountCollection : EntityCollection<StampsAccountEntity>
+	public class UspsAccountCollection : EntityCollection<UspsAccountEntity>
 	{
         /// <summary>
-        /// Gets the count of all StampsAccountEntity rows
+        /// Gets the count of all UspsAccountEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -3268,7 +3268,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all StampsAccountEntity rows filtered by the given predicate
+        /// Gets the count of all UspsAccountEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -3279,13 +3279,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new StampsAccountEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new UspsAccountEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static StampsAccountCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static UspsAccountCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -3293,9 +3293,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static StampsAccountCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static UspsAccountCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            StampsAccountCollection collection = new StampsAccountCollection();
+            UspsAccountCollection collection = new UspsAccountCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -3540,12 +3540,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of StampsShipmentEntity
+	/// Strongly typed collection of UspsShipmentEntity
 	/// </summary>
-	public class StampsShipmentCollection : EntityCollection<StampsShipmentEntity>
+	public class UspsShipmentCollection : EntityCollection<UspsShipmentEntity>
 	{
         /// <summary>
-        /// Gets the count of all StampsShipmentEntity rows
+        /// Gets the count of all UspsShipmentEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -3553,7 +3553,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all StampsShipmentEntity rows filtered by the given predicate
+        /// Gets the count of all UspsShipmentEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -3564,13 +3564,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new StampsShipmentEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new UspsShipmentEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static StampsShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static UspsShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -3578,9 +3578,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static StampsShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static UspsShipmentCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            StampsShipmentCollection collection = new StampsShipmentCollection();
+            UspsShipmentCollection collection = new UspsShipmentCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -3882,12 +3882,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of StampsProfileEntity
+	/// Strongly typed collection of UspsProfileEntity
 	/// </summary>
-	public class StampsProfileCollection : EntityCollection<StampsProfileEntity>
+	public class UspsProfileCollection : EntityCollection<UspsProfileEntity>
 	{
         /// <summary>
-        /// Gets the count of all StampsProfileEntity rows
+        /// Gets the count of all UspsProfileEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -3895,7 +3895,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all StampsProfileEntity rows filtered by the given predicate
+        /// Gets the count of all UspsProfileEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -3906,13 +3906,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new StampsProfileEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new UspsProfileEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static StampsProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static UspsProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -3920,9 +3920,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static StampsProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static UspsProfileCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            StampsProfileCollection collection = new StampsProfileCollection();
+            UspsProfileCollection collection = new UspsProfileCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -8328,12 +8328,12 @@ namespace ShipWorks.Data.Adapter.Custom
 	
 	
 	/// <summary>
-	/// Strongly typed collection of StampsScanFormEntity
+	/// Strongly typed collection of UspsScanFormEntity
 	/// </summary>
-	public class StampsScanFormCollection : EntityCollection<StampsScanFormEntity>
+	public class UspsScanFormCollection : EntityCollection<UspsScanFormEntity>
 	{
         /// <summary>
-        /// Gets the count of all StampsScanFormEntity rows
+        /// Gets the count of all UspsScanFormEntity rows
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter)
         {
@@ -8341,7 +8341,7 @@ namespace ShipWorks.Data.Adapter.Custom
         }
 
         /// <summary>
-        /// Gets the count of all StampsScanFormEntity rows filtered by the given predicate
+        /// Gets the count of all UspsScanFormEntity rows filtered by the given predicate
         /// </summary>
         public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
         {
@@ -8352,13 +8352,13 @@ namespace ShipWorks.Data.Adapter.Custom
                 bucket = new RelationPredicateBucket(filter);
             }
 
-            return adapter.GetDbCount(new StampsScanFormEntityFactory().CreateFields(), bucket);
+            return adapter.GetDbCount(new UspsScanFormEntityFactory().CreateFields(), bucket);
         }
 		
         /// <summary>
         /// Fetch a new collection object that matches the specified filter.
         /// </summary>
-        public static StampsScanFormCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        public static UspsScanFormCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
         {
 			return Fetch(adapter, filter, null);
         }
@@ -8366,9 +8366,9 @@ namespace ShipWorks.Data.Adapter.Custom
 		/// <summary>
         /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
         /// </summary>
-        public static StampsScanFormCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        public static UspsScanFormCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
-            StampsScanFormCollection collection = new StampsScanFormCollection();
+            UspsScanFormCollection collection = new UspsScanFormCollection();
 
             RelationPredicateBucket bucket = null;
 
@@ -9167,6 +9167,63 @@ namespace ShipWorks.Data.Adapter.Custom
         public static EbayCombinedOrderRelationCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
         {
             EbayCombinedOrderRelationCollection collection = new EbayCombinedOrderRelationCollection();
+
+            RelationPredicateBucket bucket = null;
+
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            adapter.FetchEntityCollection(collection, bucket, prefetchPath);
+
+            return collection;
+        }
+	}
+	
+	
+	/// <summary>
+	/// Strongly typed collection of ValidatedAddressEntity
+	/// </summary>
+	public class ValidatedAddressCollection : EntityCollection<ValidatedAddressEntity>
+	{
+        /// <summary>
+        /// Gets the count of all ValidatedAddressEntity rows
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter)
+        {
+            return GetCount(adapter, null);
+        }
+
+        /// <summary>
+        /// Gets the count of all ValidatedAddressEntity rows filtered by the given predicate
+        /// </summary>
+        public static int GetCount(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+            RelationPredicateBucket bucket = null;
+            
+            if (filter != null)
+            {
+                bucket = new RelationPredicateBucket(filter);
+            }
+
+            return adapter.GetDbCount(new ValidatedAddressEntityFactory().CreateFields(), bucket);
+        }
+		
+        /// <summary>
+        /// Fetch a new collection object that matches the specified filter.
+        /// </summary>
+        public static ValidatedAddressCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter)
+        {
+			return Fetch(adapter, filter, null);
+        }
+        
+		/// <summary>
+        /// Fetch a new collection object that matches the specified filter and uses the given prefetch.
+        /// </summary>
+        public static ValidatedAddressCollection Fetch(DataAccessAdapterBase adapter, IPredicate filter, IPrefetchPath2 prefetchPath)
+        {
+            ValidatedAddressCollection collection = new ValidatedAddressCollection();
 
             RelationPredicateBucket bucket = null;
 

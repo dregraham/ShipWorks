@@ -174,7 +174,7 @@ namespace ShipWorks.Filters.Search
         /// </summary>
         private static Condition CreateAddressCondition(Type type, BillShipAddressOperator addressOperator, StringOperator stringOperator, string targetValue)
         {
-            BillShipAddressCondition condition = (BillShipAddressCondition) Activator.CreateInstance(type);
+            BillShipAddressStringCondition condition = (BillShipAddressStringCondition) Activator.CreateInstance(type);
 
             condition.AddressOperator = addressOperator;
             condition.Operator = stringOperator;

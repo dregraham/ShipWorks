@@ -8,7 +8,7 @@ namespace ShipWorks.Filters.Content.Conditions
     /// <summary>
     /// Base for conditions dealing with countries
     /// </summary>
-    public abstract class BillShipCountryCondition : BillShipAddressCondition
+    public abstract class BillShipCountryCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Create the state condition editor

@@ -13,11 +13,3 @@
 );
 
 
-
-
-GO
-CREATE TRIGGER [dbo].[FilterDirtyChannelAdvisorOrderItem]
-    ON [dbo].[ChannelAdvisorOrderItem]
-    AFTER UPDATE
-    AS  EXTERNAL NAME [ShipWorks.SqlServer].[Triggers].[FilterDirtyChannelAdvisorOrderItem]
-

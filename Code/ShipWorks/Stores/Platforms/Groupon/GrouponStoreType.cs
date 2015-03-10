@@ -164,7 +164,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// <summary>
         /// Create the Groupon order entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new GrouponOrderEntity { GrouponOrderID = string.Empty};
         }

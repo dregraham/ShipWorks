@@ -41,7 +41,8 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
             GenericOnlineStatusSupport statusSupport = (GenericOnlineStatusSupport) generic.ModuleOnlineStatusSupport;
 
             // See if its available
-            if (statusSupport == GenericOnlineStatusSupport.StatusOnly || statusSupport == GenericOnlineStatusSupport.StatusWithComment)
+            if (statusSupport == GenericOnlineStatusSupport.StatusOnly ||
+                statusSupport == GenericOnlineStatusSupport.StatusWithComment)
             {
                 panelOrderStatus.Visible = true;
 
@@ -98,6 +99,14 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
                     statusUpdate.Checked = false;
                 }
 
+                if (!commentToken.Visible)
+                {
+                    Height = panelOrderStatus.Top + commentToken.Top;
+                }
+                else
+                {
+                    Height = panelOrderStatus.Bottom;
+                }
                 // If there were any statuses to chose from, set the combo data source and selected index.
                 if (hasStatuses)
                 {
@@ -108,6 +117,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule.WizardPages
             else
             {
                 panelOrderStatus.Visible = false;
+                Height = panelOrderStatus.Top + comboStatus.Top;
             }
         }
 

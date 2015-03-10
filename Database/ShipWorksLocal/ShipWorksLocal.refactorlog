@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="0c74f1f2-5daf-4a3c-94d6-07ea7e9a1e58" ChangeDateTime="03/28/2014 20:50:05">
+    <Property Name="ElementName" Value="[dbo].[ValidatedAddress].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ValidatedAddress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ValidatedAddressID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4ed1e7a8-6e41-4a51-864b-f9934613b641" ChangeDateTime="03/28/2014 20:56:39">
+    <Property Name="ElementName" Value="[dbo].[ValidatedAddress].[OrderID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ValidatedAddress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ConsumerID" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5a268481-3a79-4e4e-b7cf-d190c55d8f7d" ChangeDateTime="04/11/2014 13:53:12">
+    <Property Name="ElementName" Value="[dbo].[Store].[AutoAddressValidation]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Store]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="AddressValidationSetting" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c95c3ab0-ff3e-487e-a29d-cebaf160fb6d" ChangeDateTime="05/16/2014 14:58:32">
+    <Property Name="ElementName" Value="[dbo].[ValidatedAddress].[InternationalTerritory]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ValidatedAddress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="USTerritory" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e0c39848-5f14-4871-a471-3679e6bc61f4" ChangeDateTime="05/21/2014 21:59:15">
+    <Property Name="ElementName" Value="[dbo].[ShipSenseKnowledgebase].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ShipSenseKnowledgebase]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Hash" />
+  </Operation>
+</Operations>

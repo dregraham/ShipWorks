@@ -18,10 +18,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             string carrierCode = string.Empty;
             switch (((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
-                case ShipmentTypeCode.Express1Stamps:
+                case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
@@ -45,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     break;
 
                 case ShipmentTypeCode.FedEx:
-                    carrierCode = "FedEX";
+                    carrierCode = "FedEx";
                     break;
 
                 case ShipmentTypeCode.UpsOnLineTools:

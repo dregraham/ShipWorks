@@ -44,6 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<RateResult> sortedConsolidatedRates = consolidatedRates
                 .OrderBy(GetServiceType)
                 .ThenBy(r => r.Selectable)
+                .ThenBy(rate => ((PostalRateSelection)rate.Tag).ConfirmationType)
                 .ToList();
 
             RateGroup consolidatedRateGroup = new RateGroup(sortedConsolidatedRates);

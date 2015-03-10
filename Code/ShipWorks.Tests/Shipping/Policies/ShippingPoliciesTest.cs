@@ -15,8 +15,8 @@ namespace ShipWorks.Tests.Shipping.Policies
         private Mock<IShippingPolicy> bestRateApplicablePolicy1;
         private Mock<IShippingPolicy> bestRateApplicablePolicy2;
         private Mock<IShippingPolicy> bestRateNonApplicablePolicy;
-        private Mock<IShippingPolicy> stampsApplicablePolicy;
-        private Mock<IShippingPolicy> stampsNonApplicablePolicy;
+        private Mock<IShippingPolicy> uspsApplicablePolicy;
+        private Mock<IShippingPolicy> uspsNonApplicablePolicy;
         private MockRepository mockRepository;
         private Mock<IShippingPolicyFactory> policyFactoryMock;
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 </DummyRoot>
 ";
 
-        private const string stampsFeatureXml = @"
+        private const string uspsFeatureXml = @"
 <DummyRoot>
     <Feature>
         <Type>Bar</Type>
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 </DummyRoot>
 ";
 
-        private const string stampsFeature2Xml = @"
+        private const string uspsFeature2Xml = @"
 <DummyRoot>
     <Feature>
         <Type>Bar</Type>
@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         private readonly Dictionary<ShipmentTypeCode, IEnumerable<XElement>> features = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
                 {ShipmentTypeCode.BestRate, LoadElements(bestRateFeatureXml)},
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeatureXml)}
+                {ShipmentTypeCode.Usps, LoadElements(uspsFeatureXml)}
             };
 
         [TestInitialize]
@@ -82,8 +82,8 @@ namespace ShipWorks.Tests.Shipping.Policies
             bestRateApplicablePolicy1 = CreatePolicyMock(mockRepository, true);
             bestRateApplicablePolicy2 = CreatePolicyMock(mockRepository, true);
             bestRateNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
-            stampsApplicablePolicy = CreatePolicyMock(mockRepository, true);
-            stampsNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
+            uspsApplicablePolicy = CreatePolicyMock(mockRepository, true);
+            uspsNonApplicablePolicy = CreatePolicyMock(mockRepository, false);
 
             // Make sure we're starting with a fresh cache each time
             ShippingPolicies.ClearCache();
@@ -92,8 +92,8 @@ namespace ShipWorks.Tests.Shipping.Policies
             {
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy1),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy1),
-                CreatePolicyAssociation(ShipmentTypeCode.Stamps, stampsNonApplicablePolicy),
-                CreatePolicyAssociation(ShipmentTypeCode.Stamps, stampsApplicablePolicy),
+                CreatePolicyAssociation(ShipmentTypeCode.Usps, uspsNonApplicablePolicy),
+                CreatePolicyAssociation(ShipmentTypeCode.Usps, uspsApplicablePolicy),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateNonApplicablePolicy),
                 CreatePolicyAssociation(ShipmentTypeCode.BestRate, bestRateApplicablePolicy2)
             });
@@ -127,8 +127,8 @@ namespace ShipWorks.Tests.Shipping.Policies
             policies.Apply(ShipmentTypeCode.BestRate, testObject);
 
             bestRateNonApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
-            stampsApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
-            stampsNonApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
+            uspsApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
+            uspsNonApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
         }
 
         [TestMethod]
@@ -197,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
 
             ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
@@ -220,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
 
             ShippingPolicies.Load(0, extraFeatures, policyFactoryMock.Object);
@@ -238,7 +238,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             var extraFeatures = new Dictionary<ShipmentTypeCode, IEnumerable<XElement>>
             {
-                {ShipmentTypeCode.Stamps, LoadElements(stampsFeature2Xml)}
+                {ShipmentTypeCode.Usps, LoadElements(uspsFeature2Xml)}
             };
             ShippingPolicies.Load(2, extraFeatures, policyFactoryMock.Object);
 

@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         public void Create_CreatesNullShippingPolicy_WhenShipmentTypeIsNotBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
-            IShippingPolicy policy = factory.Create(ShipmentTypeCode.Stamps, "RateResultCount");
+            IShippingPolicy policy = factory.Create(ShipmentTypeCode.Usps, "RateResultCount");
 
             Assert.IsInstanceOfType(policy, typeof(NonRestrictedRateCountShippingPolicy));
         }

@@ -38,7 +38,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 	{
 		#region Class Member Declarations
 		private EntityCollection<ShipmentCustomsItemEntity> _customsItems;
-
+		private EntityCollection<ValidatedAddressEntity> _validatedAddress;
+		private EntityCollection<OrderEntity> _orderCollectionViaValidatedAddress;
 
 
 		private OrderEntity _order;
@@ -72,7 +73,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			/// <summary>Member name CustomsItems</summary>
 			public static readonly string CustomsItems = "CustomsItems";
-
+			/// <summary>Member name ValidatedAddress</summary>
+			public static readonly string ValidatedAddress = "ValidatedAddress";
+			/// <summary>Member name OrderCollectionViaValidatedAddress</summary>
+			public static readonly string OrderCollectionViaValidatedAddress = "OrderCollectionViaValidatedAddress";
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name FedEx</summary>
@@ -148,7 +152,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				_customsItems = (EntityCollection<ShipmentCustomsItemEntity>)info.GetValue("_customsItems", typeof(EntityCollection<ShipmentCustomsItemEntity>));
-
+				_validatedAddress = (EntityCollection<ValidatedAddressEntity>)info.GetValue("_validatedAddress", typeof(EntityCollection<ValidatedAddressEntity>));
+				_orderCollectionViaValidatedAddress = (EntityCollection<OrderEntity>)info.GetValue("_orderCollectionViaValidatedAddress", typeof(EntityCollection<OrderEntity>));
 
 
 				_order = (OrderEntity)info.GetValue("_order", typeof(OrderEntity));
@@ -259,7 +264,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)entity);
 					break;
-
+				case "ValidatedAddress":
+					this.ValidatedAddress.Add((ValidatedAddressEntity)entity);
+					break;
+				case "OrderCollectionViaValidatedAddress":
+					this.OrderCollectionViaValidatedAddress.IsReadOnly = false;
+					this.OrderCollectionViaValidatedAddress.Add((OrderEntity)entity);
+					this.OrderCollectionViaValidatedAddress.IsReadOnly = true;
+					break;
 				case "BestRate":
 					this.BestRate = (BestRateShipmentEntity)entity;
 					break;
@@ -315,7 +327,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					toReturn.Add(ShipmentEntity.Relations.ShipmentCustomsItemEntityUsingShipmentID);
 					break;
-
+				case "ValidatedAddress":
+					toReturn.Add(ShipmentEntity.Relations.ValidatedAddressEntityUsingConsumerID);
+					break;
+				case "OrderCollectionViaValidatedAddress":
+					toReturn.Add(ShipmentEntity.Relations.ValidatedAddressEntityUsingConsumerID, "ShipmentEntity__", "ValidatedAddress_", JoinHint.None);
+					toReturn.Add(ValidatedAddressEntity.Relations.OrderEntityUsingConsumerID, "ValidatedAddress_", string.Empty, JoinHint.None);
+					break;
 				case "BestRate":
 					toReturn.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
 					break;
@@ -397,6 +415,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "CustomsItems":
 					this.CustomsItems.Add((ShipmentCustomsItemEntity)relatedEntity);
 					break;
+				case "ValidatedAddress":
+					this.ValidatedAddress.Add((ValidatedAddressEntity)relatedEntity);
+					break;
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
 					break;
@@ -444,6 +465,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 				case "CustomsItems":
 					base.PerformRelatedEntityRemoval(this.CustomsItems, relatedEntity, signalRelatedEntityManyToOne);
+					break;
+				case "ValidatedAddress":
+					base.PerformRelatedEntityRemoval(this.ValidatedAddress, relatedEntity, signalRelatedEntityManyToOne);
 					break;
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
@@ -561,6 +585,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 			toReturn.Add(this.CustomsItems);
+			toReturn.Add(this.ValidatedAddress);
 
 			return toReturn;
 		}
@@ -576,7 +601,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			if (SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 				info.AddValue("_customsItems", ((_customsItems!=null) && (_customsItems.Count>0) && !this.MarkedForDeletion)?_customsItems:null);
-
+				info.AddValue("_validatedAddress", ((_validatedAddress!=null) && (_validatedAddress.Count>0) && !this.MarkedForDeletion)?_validatedAddress:null);
+				info.AddValue("_orderCollectionViaValidatedAddress", ((_orderCollectionViaValidatedAddress!=null) && (_orderCollectionViaValidatedAddress.Count>0) && !this.MarkedForDeletion)?_orderCollectionViaValidatedAddress:null);
 
 
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
@@ -634,6 +660,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			return bucket;
 		}
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'ValidatedAddress' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoValidatedAddress()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ValidatedAddressFields.ConsumerID, null, ComparisonOperator.Equal, this.ShipmentID));
+			return bucket;
+		}
+
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entities of type 'Order' to this entity. Use DataAccessAdapter.FetchEntityCollection() to fetch these related entities.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoOrderCollectionViaValidatedAddress()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.Relations.AddRange(GetRelationsForFieldOfType("OrderCollectionViaValidatedAddress"));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(ShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID, "ShipmentEntity__"));
+			return bucket;
+		}
 
 
 
@@ -757,7 +803,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.AddToMemberEntityCollectionsQueue(collectionsQueue);
 			collectionsQueue.Enqueue(this._customsItems);
-
+			collectionsQueue.Enqueue(this._validatedAddress);
+			collectionsQueue.Enqueue(this._orderCollectionViaValidatedAddress);
 		}
 		
 		/// <summary>Gets the member collections queue from the queue (base first)</summary>
@@ -766,7 +813,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.GetFromMemberEntityCollectionsQueue(collectionsQueue);
 			this._customsItems = (EntityCollection<ShipmentCustomsItemEntity>) collectionsQueue.Dequeue();
-
+			this._validatedAddress = (EntityCollection<ValidatedAddressEntity>) collectionsQueue.Dequeue();
+			this._orderCollectionViaValidatedAddress = (EntityCollection<OrderEntity>) collectionsQueue.Dequeue();
 		}
 		
 		/// <summary>Determines whether the entity has populated member collections</summary>
@@ -777,7 +825,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				return true;
 			}
-
+			if (this._validatedAddress != null)
+			{
+				return true;
+			}
+			if (this._orderCollectionViaValidatedAddress != null)
+			{
+				return true;
+			}
 			return base.HasPopulatedMemberEntityCollections();
 		}
 		
@@ -788,7 +843,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			base.CreateMemberEntityCollectionsQueue(collectionsQueue, requiredQueue);
 			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ShipmentCustomsItemEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ShipmentCustomsItemEntityFactory))) : null);
-
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<ValidatedAddressEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ValidatedAddressEntityFactory))) : null);
+			collectionsQueue.Enqueue(requiredQueue.Dequeue() ? new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))) : null);
 		}
 #endif
 		/// <summary>
@@ -804,7 +860,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 			toReturn.Add("CustomsItems", _customsItems);
-
+			toReturn.Add("ValidatedAddress", _validatedAddress);
+			toReturn.Add("OrderCollectionViaValidatedAddress", _orderCollectionViaValidatedAddress);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("InsurancePolicy", _insurancePolicy);
@@ -823,7 +880,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_customsItems.ActiveContext = base.ActiveContext;
 			}
-
+			if(_validatedAddress!=null)
+			{
+				_validatedAddress.ActiveContext = base.ActiveContext;
+			}
+			if(_orderCollectionViaValidatedAddress!=null)
+			{
+				_orderCollectionViaValidatedAddress.ActiveContext = base.ActiveContext;
+			}
 
 
 			if(_order!=null)
@@ -871,7 +935,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 			_customsItems = null;
-
+			_validatedAddress = null;
+			_orderCollectionViaValidatedAddress = null;
 
 
 			_order = null;
@@ -1002,6 +1067,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipEmail", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipAddressValidationSuggestionCount", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipAddressValidationStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipAddressValidationError", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipResidentialStatus", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipPOBox", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipUSTerritory", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ShipMilitaryAddress", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ResidentialDetermination", fieldHashtable);
@@ -1445,7 +1531,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 					(IEntityRelation)GetRelationsForField("CustomsItems")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ShipmentCustomsItemEntity, 0, null, null, null, null, "CustomsItems", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
 			}
 		}
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'ValidatedAddress' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathValidatedAddress
+		{
+			get
+			{
+				return new PrefetchPathElement2( new EntityCollection<ValidatedAddressEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ValidatedAddressEntityFactory))),
+					(IEntityRelation)GetRelationsForField("ValidatedAddress")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.ValidatedAddressEntity, 0, null, null, null, null, "ValidatedAddress", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToMany);
+			}
+		}
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Order' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathOrderCollectionViaValidatedAddress
+		{
+			get
+			{
+				IEntityRelation intermediateRelation = ShipmentEntity.Relations.ValidatedAddressEntityUsingConsumerID;
+				intermediateRelation.SetAliases(string.Empty, "ValidatedAddress_");
+				return new PrefetchPathElement2(new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory))), intermediateRelation,
+					(int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.OrderEntity, 0, null, null, GetRelationsForField("OrderCollectionViaValidatedAddress"), null, "OrderCollectionViaValidatedAddress", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToMany);
+			}
+		}
 
 
 
@@ -1957,6 +2067,83 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShipmentFieldIndex.ShipEmail, value); }
 		}
 
+		/// <summary> The ShipAddressValidationSuggestionCount property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationSuggestionCount"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipAddressValidationSuggestionCount
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipAddressValidationSuggestionCount, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationSuggestionCount, value); }
+		}
+
+		/// <summary> The ShipAddressValidationStatus property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipAddressValidationStatus
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipAddressValidationStatus, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationStatus, value); }
+		}
+
+		/// <summary> The ShipAddressValidationError property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipAddressValidationError"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String ShipAddressValidationError
+		{
+			get { return (System.String)GetValue((int)ShipmentFieldIndex.ShipAddressValidationError, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipAddressValidationError, value); }
+		}
+
+		/// <summary> The ShipResidentialStatus property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipResidentialStatus"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipResidentialStatus
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipResidentialStatus, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipResidentialStatus, value); }
+		}
+
+		/// <summary> The ShipPOBox property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipPOBox"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipPOBox
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipPOBox, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipPOBox, value); }
+		}
+
+		/// <summary> The ShipUSTerritory property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipUSTerritory"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipUSTerritory
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipUSTerritory, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipUSTerritory, value); }
+		}
+
+		/// <summary> The ShipMilitaryAddress property of the Entity Shipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "Shipment"."ShipMilitaryAddress"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 ShipMilitaryAddress
+		{
+			get { return (System.Int32)GetValue((int)ShipmentFieldIndex.ShipMilitaryAddress, true); }
+			set	{ SetValue((int)ShipmentFieldIndex.ShipMilitaryAddress, value); }
+		}
+
 		/// <summary> The ResidentialDetermination property of the Entity Shipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "Shipment"."ResidentialDetermination"<br/>
@@ -2325,6 +2512,37 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
+		/// <summary> Gets the EntityCollection with the related entities of type 'ValidatedAddressEntity' which are related to this entity via a relation of type '1:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(ValidatedAddressEntity))]
+		public virtual EntityCollection<ValidatedAddressEntity> ValidatedAddress
+		{
+			get
+			{
+				if(_validatedAddress==null)
+				{
+					_validatedAddress = new EntityCollection<ValidatedAddressEntity>(EntityFactoryCache2.GetEntityFactory(typeof(ValidatedAddressEntityFactory)));
+					_validatedAddress.SetContainingEntityInfo(this, "Shipment");
+				}
+				return _validatedAddress;
+			}
+		}
+
+		/// <summary> Gets the EntityCollection with the related entities of type 'OrderEntity' which are related to this entity via a relation of type 'm:n'.
+		/// If the EntityCollection hasn't been fetched yet, the collection returned will be empty.</summary>
+		[TypeContainedAttribute(typeof(OrderEntity))]
+		public virtual EntityCollection<OrderEntity> OrderCollectionViaValidatedAddress
+		{
+			get
+			{
+				if(_orderCollectionViaValidatedAddress==null)
+				{
+					_orderCollectionViaValidatedAddress = new EntityCollection<OrderEntity>(EntityFactoryCache2.GetEntityFactory(typeof(OrderEntityFactory)));
+					_orderCollectionViaValidatedAddress.IsReadOnly=true;
+				}
+				return _orderCollectionViaValidatedAddress;
+			}
+		}
 
 
 

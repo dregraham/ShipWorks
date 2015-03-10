@@ -23,8 +23,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
 
         List<RateGroup> rateResults;
-        StampsAccountEntity account1;
-        StampsAccountEntity account2;
+        UspsAccountEntity account1;
+        UspsAccountEntity account2;
 
         UspsRateGroupConsolidator testObject;
 
@@ -44,14 +44,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             
             uspsShipmentType = new UspsShipmentType();
 
-            account1 = new StampsAccountEntity()
+            account1 = new UspsAccountEntity()
             {
-                StampsAccountID = 1
+                UspsAccountID = 1
             };
 
-            account2 = new StampsAccountEntity()
+            account2 = new UspsAccountEntity()
             {
-                StampsAccountID = 2
+                UspsAccountID = 2
             };
 
             rateGroup1 = new RateGroup(new List<RateResult>()
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult resultToTest = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.MediaMail, PostalConfirmationType.Delivery);
 
-            List<StampsAccountEntity> accounts = GetTag(resultToTest).Accounts;
+            List<UspsAccountEntity> accounts = GetTag(resultToTest).Accounts;
 
             Assert.AreEqual(2, accounts.Count);
             Assert.IsTrue(accounts.Contains(account1));
@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult includedRate = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.Signature);
 
-            List<StampsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
+            List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.AreEqual(account1, includedAccounts.Single(a => true));
             Assert.AreEqual(10, includedRate.Amount);
@@ -170,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             RateResult includedRate = FindByServiceAndConfirmationResult(consolidatedRates.Rates, PostalServiceType.FirstClass, PostalConfirmationType.Delivery);
 
-            List<StampsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
+            List<UspsAccountEntity> includedAccounts = GetTag(includedRate).Accounts;
 
             Assert.AreEqual(account2, includedAccounts.Single(a => true));
             Assert.AreEqual(19, includedRate.Amount);

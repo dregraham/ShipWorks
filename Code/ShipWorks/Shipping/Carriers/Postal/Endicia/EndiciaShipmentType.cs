@@ -139,7 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com shipments
+        /// Create the UserControl used to handle Endicia shipments
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Create the UserControl used to handle Stamps.com profiles
+        /// Create the UserControl used to handle Endicia profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
@@ -157,7 +157,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
         
         /// <summary>
-        /// Create the settings control for stamps.com
+        /// Create the settings control for Endicia
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
@@ -237,9 +237,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             endicia.StealthPostage = true;
             endicia.NoPostage = false;
             endicia.ReferenceID = "{//Order/Number}";
-            endicia.RubberStamp1 = "";
-            endicia.RubberStamp2 = "";
-            endicia.RubberStamp3 = "";
             endicia.ScanBasedReturn = false;
         }
 
@@ -260,9 +257,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.NoPostage, endiciaShipment, EndiciaShipmentFields.NoPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp1, endiciaShipment, EndiciaShipmentFields.RubberStamp1);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp2, endiciaShipment, EndiciaShipmentFields.RubberStamp2);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.RubberStamp3, endiciaShipment, EndiciaShipmentFields.RubberStamp3);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
             }
         }
@@ -561,13 +555,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }).ToList());
 
                     // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
-                    // Express1 with Endicia and can show promotion for USPS (Stamps.com Expedited) shipping. So when discount rate
-                    // messaging is restricted on Endicia, we want to show the Stamps.com promo
+                    // Express1 with Endicia and can show promotion for USPS shipping. So when discount rate
+                    // messaging is restricted on Endicia, we want to show the Usps promo
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Always show the USPS (Stamps.com Expedited) promotion when Express 1 is restricted - show the
-                        // single account dialog if Endicia has Express1 accounts and is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        // Always show the USPS promotion when Express 1 is restricted - show the
+                        // single account dialog if Endicia has Express1 accounts and is not using USPS
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
                         finalGroup.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
@@ -575,13 +569,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
                 else
                 {
-                    // Express1 wasn't used, so we want to promote USPS (Stamps.com expedited)
+                    // Express1 wasn't used, so we want to promote USPS
                     RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
 
                     if (IsRateDiscountMessagingRestricted)
                     {
-                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS (Stamps.com Expedited)
-                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any() && !settings.EndiciaUspsAutomaticExpedited;
+                        // Show the single account dialog if there are Express1 accounts and customer is not using USPS 
+                        bool showSingleAccountDialog = EndiciaAccountManager.Express1Accounts.Any();
                         finalEndiciaOnlyRates.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, showSingleAccountDialog));
                     }
 
@@ -595,7 +589,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 RateGroup express1Group = BuildExpress1RateGroup(endiciaRates, ShipmentTypeCode.Express1Endicia, ShipmentTypeCode.Express1Endicia);
                 if (IsRateDiscountMessagingRestricted)
                 {
-                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS (Stamps.com Expedited)
+                    // (Express1) rate discount messaging is restricted, so we're allowed to add the USPS 
                     // poromo footnote to show single account marketing dialog
                     express1Group.AddFootnoteFactory(new UspsRatePromotionFootnoteFactory(this, shipment, true));
                 }

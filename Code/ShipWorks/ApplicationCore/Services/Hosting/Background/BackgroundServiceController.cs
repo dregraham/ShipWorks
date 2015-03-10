@@ -7,6 +7,7 @@ using System.Threading;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 using log4net;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.ApplicationCore.Services.Hosting.Background
 {

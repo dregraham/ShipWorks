@@ -260,10 +260,6 @@ namespace ShipWorks.UI.Controls.Html.Core
         public const int DISPID_EVPROP_ONERRORUPDATE = (DISPID_EVENTS + 38);
         public const int DISPID_EVMETH_ONERRORUPDATE = STDDISPID_XOBJ_ERRORUPDATE;
         public const int DISPID_EVPROP_ONBEFOREUNLOAD = (DISPID_EVENTS + 39);
-        // <summary>
-        /// 
-        /// </summary>
-        //public const int  DISPID_EVMETH_ONBEFOREUNLOAD  = DISPID_ONBEFOREUNLOAD;
         public const int DISPID_EVPROP_ONDATASETCHANGED = (DISPID_EVENTS + 40);
         public const int DISPID_EVMETH_ONDATASETCHANGED = STDDISPID_XOBJ_ONDATASETCHANGED;
         public const int DISPID_EVPROP_ONDATAAVAILABLE = (DISPID_EVENTS + 41);

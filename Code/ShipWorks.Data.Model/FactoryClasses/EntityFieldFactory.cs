@@ -1082,38 +1082,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ShopSiteStoreEntity", (int)fieldIndex));
 		}
 
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the StampsAccountEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(StampsAccountFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("StampsAccountEntity", (int)fieldIndex));
-		}
-
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the StampsProfileEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(StampsProfileFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("StampsProfileEntity", (int)fieldIndex));
-		}
-
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the StampsScanFormEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(StampsScanFormFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("StampsScanFormEntity", (int)fieldIndex));
-		}
-
-		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the StampsShipmentEntity. Which EntityField is created is specified by fieldIndex</summary>
-		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
-		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
-		public static IEntityField2 Create(StampsShipmentFieldIndex fieldIndex)
-		{
-			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("StampsShipmentEntity", (int)fieldIndex));
-		}
-
 		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the StatusPresetEntity. Which EntityField is created is specified by fieldIndex</summary>
 		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
 		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
@@ -1256,6 +1224,46 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		public static IEntityField2 Create(UserSettingsFieldIndex fieldIndex)
 		{
 			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("UserSettingsEntity", (int)fieldIndex));
+		}
+
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the UspsAccountEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(UspsAccountFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("UspsAccountEntity", (int)fieldIndex));
+		}
+
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the UspsProfileEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(UspsProfileFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("UspsProfileEntity", (int)fieldIndex));
+		}
+
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the UspsScanFormEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(UspsScanFormFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("UspsScanFormEntity", (int)fieldIndex));
+		}
+
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the UspsShipmentEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(UspsShipmentFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("UspsShipmentEntity", (int)fieldIndex));
+		}
+
+		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the ValidatedAddressEntity. Which EntityField is created is specified by fieldIndex</summary>
+		/// <param name="fieldIndex">The field which IEntityField2 instance should be created</param>
+		/// <returns>The IEntityField2 instance for the field specified in fieldIndex</returns>
+		public static IEntityField2 Create(ValidatedAddressFieldIndex fieldIndex)
+		{
+			return new EntityField2(FieldInfoProviderSingleton.GetInstance().GetFieldInfo("ValidatedAddressEntity", (int)fieldIndex));
 		}
 
 		/// <summary> Creates a new IEntityField2 instance for usage in the EntityFields object for the VersionSignoffEntity. Which EntityField is created is specified by fieldIndex</summary>

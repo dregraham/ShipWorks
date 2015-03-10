@@ -77,7 +77,7 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.AuditEntity] = 48;
             entitySeedValues[EntityType.ShippingOriginEntity] = 50;
             entitySeedValues[EntityType.ShipmentCustomsItemEntity] = 51;
-            entitySeedValues[EntityType.StampsAccountEntity] = 52;
+            entitySeedValues[EntityType.UspsAccountEntity] = 52;
             entitySeedValues[EntityType.FedExAccountEntity] = 55;
             entitySeedValues[EntityType.UpsAccountEntity] = 56;
             entitySeedValues[EntityType.FedExPackageEntity] = 61;
@@ -755,6 +755,22 @@ namespace ShipWorks.Data
                         MarkAsNew(e2);
                     }
                 });
+        }
+
+        /// <summary>
+        /// Gets the id of the entity as a long
+        /// </summary>
+        public static long GetEntityId(IEntity2 entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            List<IEntityField2> primaryKeyNotParent = entity.PrimaryKeyFields.Where(f => f.ActualContainingObjectName == f.ContainingObjectName).ToList();
+            Debug.Assert(primaryKeyNotParent.Count() == 1, "GetEntityId cannot be used with entities that have compound primary keys");
+
+            return (long)primaryKeyNotParent.Single().CurrentValue;
         }
     }
 }

@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 
 
 
-				relation.AddEntityFieldPair(PostalShipmentFields.ShipmentID, StampsShipmentFields.ShipmentID);
+				relation.AddEntityFieldPair(PostalShipmentFields.ShipmentID, UspsShipmentFields.ShipmentID);
 
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("PostalShipmentEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsShipmentEntity", true);
@@ -66,7 +66,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			get
 			{
 				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "ScanFormBatch", false);
-				relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, StampsShipmentFields.ScanFormBatchID);
+                relation.AddEntityFieldPair(ScanFormBatchFields.ScanFormBatchID, UspsShipmentFields.ScanFormBatchID);
 				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("ScanFormBatchEntity", false);
 				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("StampsShipmentEntity", true);
 				return relation;

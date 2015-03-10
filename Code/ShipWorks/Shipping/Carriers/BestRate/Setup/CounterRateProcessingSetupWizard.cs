@@ -218,7 +218,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                 ShipmentTypeCode.PostalWebTools,
                 ShipmentTypeCode.Endicia,
                 ShipmentTypeCode.Express1Endicia,
-                ShipmentTypeCode.Express1Stamps
+                ShipmentTypeCode.Express1Usps
             };
 
             setupExistingProvider.Items.Add("Choose...");
@@ -240,9 +240,8 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 
             switch (initialShipmentType.ShipmentTypeCode)
             {
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.Usps:
-                    description = "USPS partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
+                    description = "ShipWorks partners with Stamps.com to enable printing USPS shipping labels directly from your printer. To continue, you’ll need " +
                                   "an account with Stamps.com.";
                     break;
 
@@ -385,7 +384,6 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
                     setupShipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode.Usps);
                     break;
                 case ShipmentTypeCode.Usps:
-                case ShipmentTypeCode.Stamps:
                 case ShipmentTypeCode.FedEx:
                     setupShipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
                     break;

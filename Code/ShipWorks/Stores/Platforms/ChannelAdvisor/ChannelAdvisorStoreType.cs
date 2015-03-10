@@ -86,7 +86,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Create the CA order entity
         /// </summary>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             ChannelAdvisorOrderEntity entity = new ChannelAdvisorOrderEntity();
 

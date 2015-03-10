@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
@@ -56,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// Create the PayPal specific order entity
         /// </summary>
         /// <returns></returns>
-        public override OrderEntity CreateOrderInstance()
+        protected override OrderEntity CreateOrderInstance()
         {
             return new PayPalOrderEntity();
         }
@@ -141,6 +142,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
             {
                 return new InitialDownloadPolicy(InitialDownloadRestrictionType.DaysBack);
             }
+        }
+
+        /// <summary>
+        /// Gets the default validation setting.
+        /// </summary>
+        protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
+        {
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }

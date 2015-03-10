@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 		private EndiciaShipmentEntity _endicia;
 		private ShipmentEntity _shipment;
-		private StampsShipmentEntity _stamps;
+		private UspsShipmentEntity _usps;
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
@@ -62,8 +62,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string Endicia = "Endicia";
 			/// <summary>Member name Shipment</summary>
 			public static readonly string Shipment = "Shipment";
-			/// <summary>Member name Stamps</summary>
-			public static readonly string Stamps = "Stamps";
+			/// <summary>Member name Usps</summary>
+			public static readonly string Usps = "Usps";
 		}
 		#endregion
 		
@@ -135,10 +135,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					_shipment.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
-				_stamps = (StampsShipmentEntity)info.GetValue("_stamps", typeof(StampsShipmentEntity));
-				if(_stamps!=null)
+				_usps = (UspsShipmentEntity)info.GetValue("_usps", typeof(UspsShipmentEntity));
+				if(_usps!=null)
 				{
-					_stamps.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_usps.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
@@ -188,8 +188,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Shipment":
 					this.Shipment = (ShipmentEntity)entity;
 					break;
-				case "Stamps":
-					this.Stamps = (StampsShipmentEntity)entity;
+				case "Usps":
+					this.Usps = (UspsShipmentEntity)entity;
 					break;
 				default:
 					break;
@@ -221,8 +221,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Shipment":
 					toReturn.Add(PostalShipmentEntity.Relations.ShipmentEntityUsingShipmentID);
 					break;
-				case "Stamps":
-					toReturn.Add(PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID);
+				case "Usps":
+					toReturn.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 					break;
 				default:
 
@@ -269,8 +269,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Shipment":
 					SetupSyncShipment(relatedEntity);
 					break;
-				case "Stamps":
-					SetupSyncStamps(relatedEntity);
+				case "Usps":
+					SetupSyncUsps(relatedEntity);
 					break;
 				default:
 					break;
@@ -294,8 +294,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "Shipment":
 					DesetupSyncShipment(false, true);
 					break;
-				case "Stamps":
-					DesetupSyncStamps(false, true);
+				case "Usps":
+					DesetupSyncUsps(false, true);
 					break;
 				default:
 					break;
@@ -314,9 +314,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if(_stamps!=null)
+			if(_usps!=null)
 			{
-				toReturn.Add(_stamps);
+				toReturn.Add(_usps);
 			}
 
 			return toReturn;
@@ -366,7 +366,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 				info.AddValue("_endicia", (!this.MarkedForDeletion?_endicia:null));
 				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
-				info.AddValue("_stamps", (!this.MarkedForDeletion?_stamps:null));
+				info.AddValue("_usps", (!this.MarkedForDeletion?_usps:null));
 			}
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
@@ -425,12 +425,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'StampsShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// the related entity of type 'UspsShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoStamps()
+		public virtual IRelationPredicateBucket GetRelationInfoUsps()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(StampsShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(UspsShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
 			return bucket;
 		}
 	
@@ -505,7 +505,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			toReturn.Add("Endicia", _endicia);
 			toReturn.Add("Shipment", _shipment);
-			toReturn.Add("Stamps", _stamps);
+			toReturn.Add("Usps", _usps);
 			return toReturn;
 		}
 		
@@ -523,9 +523,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				_shipment.ActiveContext = base.ActiveContext;
 			}
-			if(_stamps!=null)
+			if(_usps!=null)
 			{
-				_stamps.ActiveContext = base.ActiveContext;
+				_usps.ActiveContext = base.ActiveContext;
 			}
 		}
 
@@ -538,7 +538,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 			_endicia = null;
 			_shipment = null;
-			_stamps = null;
+			_usps = null;
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
@@ -608,6 +608,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("EntryFacility", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo1", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo2", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Memo3", fieldHashtable);
 		}
 		#endregion
 
@@ -678,31 +687,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-		/// <summary> Removes the sync logic for member _stamps</summary>
+		/// <summary> Removes the sync logic for member _usps</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncStamps(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncUsps(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _stamps, new PropertyChangedEventHandler( OnStampsPropertyChanged ), "Stamps", PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID, false, signalRelatedEntity, "PostalShipment", false, new int[] { (int)PostalShipmentFieldIndex.ShipmentID } );
-			_stamps = null;
+			base.PerformDesetupSyncRelatedEntity( _usps, new PropertyChangedEventHandler( OnUspsPropertyChanged ), "Usps", PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID, false, signalRelatedEntity, "PostalShipment", false, new int[] { (int)PostalShipmentFieldIndex.ShipmentID } );
+			_usps = null;
 		}
 		
-		/// <summary> setups the sync logic for member _stamps</summary>
+		/// <summary> setups the sync logic for member _usps</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncStamps(IEntity2 relatedEntity)
+		private void SetupSyncUsps(IEntity2 relatedEntity)
 		{
-			if(_stamps!=relatedEntity)
+			if(_usps!=relatedEntity)
 			{
-				DesetupSyncStamps(true, true);
-				_stamps = (StampsShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _stamps, new PropertyChangedEventHandler( OnStampsPropertyChanged ), "Stamps", PostalShipmentEntity.Relations.StampsShipmentEntityUsingShipmentID, false, new string[] {  } );
+				DesetupSyncUsps(true, true);
+				_usps = (UspsShipmentEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _usps, new PropertyChangedEventHandler( OnUspsPropertyChanged ), "Usps", PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID, false, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnStampsPropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnUspsPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -770,15 +779,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'StampsShipment' 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'UspsShipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathStamps
+		public static IPrefetchPathElement2 PrefetchPathUsps
 		{
 			get
 			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(StampsShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("Stamps")[0], (int)ShipWorks.Data.Model.EntityType.PostalShipmentEntity, (int)ShipWorks.Data.Model.EntityType.StampsShipmentEntity, 0, null, null, null, null, "Stamps", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(UspsShipmentEntityFactory))),
+					(IEntityRelation)GetRelationsForField("Usps")[0], (int)ShipWorks.Data.Model.EntityType.PostalShipmentEntity, (int)ShipWorks.Data.Model.EntityType.UspsShipmentEntity, 0, null, null, null, null, "Usps", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -1004,6 +1013,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)PostalShipmentFieldIndex.EntryFacility, value); }
 		}
 
+		/// <summary> The Memo1 property of the Entity PostalShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalShipment"."Memo1"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Memo1
+		{
+			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo1, true); }
+			set	{ SetValue((int)PostalShipmentFieldIndex.Memo1, value); }
+		}
+
+		/// <summary> The Memo2 property of the Entity PostalShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalShipment"."Memo2"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Memo2
+		{
+			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo2, true); }
+			set	{ SetValue((int)PostalShipmentFieldIndex.Memo2, value); }
+		}
+
+		/// <summary> The Memo3 property of the Entity PostalShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "PostalShipment"."Memo3"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 300<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Memo3
+		{
+			get { return (System.String)GetValue((int)PostalShipmentFieldIndex.Memo3, true); }
+			set	{ SetValue((int)PostalShipmentFieldIndex.Memo3, value); }
+		}
+
 
 
 
@@ -1093,20 +1135,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 		}
 
-		/// <summary> Gets / sets related entity of type 'StampsShipmentEntity' which has to be set using a fetch action earlier. If no related entity
+		/// <summary> Gets / sets related entity of type 'UspsShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
 		[Browsable(false)]
-		public virtual StampsShipmentEntity Stamps
+		public virtual UspsShipmentEntity Usps
 		{
 			get
 			{
-				return _stamps;
+				return _usps;
 			}
 			set
 			{
 				if(base.IsDeserializing)
 				{
-					SetupSyncStamps(value);
+					SetupSyncUsps(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
 						value.SetRelatedEntity(this, "PostalShipment");
@@ -1116,20 +1158,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_stamps !=null);
-						DesetupSyncStamps(true, true);
+						bool raisePropertyChanged = (_usps !=null);
+						DesetupSyncUsps(true, true);
 						if(raisePropertyChanged)
 						{
-							OnPropertyChanged("Stamps");
+							OnPropertyChanged("Usps");
 						}
 					}
 					else
 					{
-						if(_stamps!=value)
+						if(_usps!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
 							relatedEntity.SetRelatedEntity(this, "PostalShipment");
-							SetupSyncStamps(relatedEntity);
+							SetupSyncUsps(relatedEntity);
 						}
 					}
 				}
