@@ -494,6 +494,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.UspsShipmentEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "UspsShipmentEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.ValidatedAddressEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ValidatedAddressEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.VersionSignoffEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "VersionSignoffEntity");
 					break;

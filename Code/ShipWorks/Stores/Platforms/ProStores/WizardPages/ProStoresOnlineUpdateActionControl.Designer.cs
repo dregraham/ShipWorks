@@ -53,7 +53,7 @@
             this.labelOldVersion.Size = new System.Drawing.Size(410, 13);
             this.labelOldVersion.TabIndex = 8;
             this.labelOldVersion.Text = "(You are using an older version of ProStores that does not support status updates" +
-                ".)";
+    ".)";
             // 
             // ProStoresOnlineUpdateActionControl
             // 
@@ -62,7 +62,7 @@
             this.Controls.Add(this.labelOldVersion);
             this.Controls.Add(this.shipmentUpdate);
             this.Name = "ProStoresOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(459, 53);
+            this.Size = new System.Drawing.Size(459, 43);
             this.ResumeLayout(false);
             this.PerformLayout();
 

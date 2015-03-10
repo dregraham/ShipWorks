@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.Address
     /// Condition that compares against the Street3 of an order.
     /// </summary>
     [ConditionElement("Street3", "Order.Address.Street3")]
-    public class OrderAddressStreet3Condition : BillShipAddressCondition
+    public class OrderAddressStreet3Condition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

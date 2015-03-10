@@ -10,13 +10,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
     /// </summary>
     public class UspsCounterRateAccountRepository : ICarrierAccountRepository<UspsAccountEntity>
     {
-        private readonly ICounterRatesCredentialStore credentialStore;
+        private readonly ICredentialStore credentialStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsCounterRateAccountRepository"/> class.
         /// </summary>
         /// <param name="credentialStore">The credential store.</param>
-        public UspsCounterRateAccountRepository(ICounterRatesCredentialStore credentialStore)
+        public UspsCounterRateAccountRepository(ICredentialStore credentialStore)
         {
             this.credentialStore = credentialStore;
         }

@@ -290,6 +290,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -320,6 +334,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -468,6 +496,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -573,6 +603,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -856,6 +888,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -1000,6 +1034,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -1089,6 +1125,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1119,6 +1169,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1291,6 +1355,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -1382,6 +1448,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1412,6 +1492,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1515,6 +1609,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1545,6 +1653,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -1891,6 +2013,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -1921,6 +2057,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -2137,6 +2287,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -2531,6 +2683,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -2561,6 +2727,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -2652,6 +2832,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3523,6 +3705,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3632,6 +3816,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -3822,6 +4008,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -3852,6 +4052,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4000,6 +4214,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4130,6 +4346,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4458,6 +4676,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -4488,6 +4720,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4577,6 +4823,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4706,6 +4954,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -4736,6 +4998,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -4831,6 +5107,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -4943,6 +5221,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5078,6 +5358,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5108,6 +5402,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5197,6 +5505,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5290,6 +5600,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5320,6 +5644,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -5474,6 +5812,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -5779,6 +6119,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -5809,6 +6163,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6003,6 +6371,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6033,6 +6415,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6126,6 +6522,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6272,6 +6670,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6302,6 +6714,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6397,6 +6823,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6678,6 +7106,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -6708,6 +7150,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -6801,6 +7257,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -6981,6 +7439,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -7011,6 +7483,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -7167,6 +7653,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -7359,6 +7847,20 @@ namespace ShipWorks.Data.Model
 		ShipPhone,
 		///<summary>ShipEmail. </summary>
 		ShipEmail,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>ResidentialDetermination. </summary>
 		ResidentialDetermination,
 		///<summary>ResidentialResult. </summary>
@@ -7807,6 +8309,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -7837,6 +8353,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -7983,6 +8513,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8062,6 +8594,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8168,6 +8702,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -8460,6 +8996,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -9066,6 +9604,47 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ValidatedAddress.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ValidatedAddressFieldIndex:int
+	{
+		///<summary>ValidatedAddressID. </summary>
+		ValidatedAddressID,
+		///<summary>ConsumerID. </summary>
+		ConsumerID,
+		///<summary>AddressPrefix. </summary>
+		AddressPrefix,
+		///<summary>IsOriginal. </summary>
+		IsOriginal,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>ResidentialStatus. </summary>
+		ResidentialStatus,
+		///<summary>POBox. </summary>
+		POBox,
+		///<summary>USTerritory. </summary>
+		USTerritory,
+		///<summary>MilitaryAddress. </summary>
+		MilitaryAddress,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: VersionSignoff.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -9136,6 +9715,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -9557,6 +10138,20 @@ namespace ShipWorks.Data.Model
 		BillEmail,
 		///<summary>BillWebsite. </summary>
 		BillWebsite,
+		///<summary>BillAddressValidationSuggestionCount. </summary>
+		BillAddressValidationSuggestionCount,
+		///<summary>BillAddressValidationStatus. </summary>
+		BillAddressValidationStatus,
+		///<summary>BillAddressValidationError. </summary>
+		BillAddressValidationError,
+		///<summary>BillResidentialStatus. </summary>
+		BillResidentialStatus,
+		///<summary>BillPOBox. </summary>
+		BillPOBox,
+		///<summary>BillUSTerritory. </summary>
+		BillUSTerritory,
+		///<summary>BillMilitaryAddress. </summary>
+		BillMilitaryAddress,
 		///<summary>ShipFirstName. </summary>
 		ShipFirstName,
 		///<summary>ShipMiddleName. </summary>
@@ -9587,6 +10182,20 @@ namespace ShipWorks.Data.Model
 		ShipEmail,
 		///<summary>ShipWebsite. </summary>
 		ShipWebsite,
+		///<summary>ShipAddressValidationSuggestionCount. </summary>
+		ShipAddressValidationSuggestionCount,
+		///<summary>ShipAddressValidationStatus. </summary>
+		ShipAddressValidationStatus,
+		///<summary>ShipAddressValidationError. </summary>
+		ShipAddressValidationError,
+		///<summary>ShipResidentialStatus. </summary>
+		ShipResidentialStatus,
+		///<summary>ShipPOBox. </summary>
+		ShipPOBox,
+		///<summary>ShipUSTerritory. </summary>
+		ShipUSTerritory,
+		///<summary>ShipMilitaryAddress. </summary>
+		ShipMilitaryAddress,
 		///<summary>RollupItemCount. </summary>
 		RollupItemCount,
 		///<summary>RollupItemName. </summary>
@@ -9744,6 +10353,8 @@ namespace ShipWorks.Data.Model
 		AutoDownloadMinutes,
 		///<summary>AutoDownloadOnlyAway. </summary>
 		AutoDownloadOnlyAway,
+		///<summary>AddressValidationSetting. </summary>
+		AddressValidationSetting,
 		///<summary>ComputerDownloadPolicy. </summary>
 		ComputerDownloadPolicy,
 		///<summary>DefaultEmailAccountID. </summary>
@@ -10084,6 +10695,8 @@ namespace ShipWorks.Data.Model
 		UspsScanFormEntity,
 		///<summary>UspsShipment</summary>
 		UspsShipmentEntity,
+		///<summary>ValidatedAddress</summary>
+		ValidatedAddressEntity,
 		///<summary>VersionSignoff</summary>
 		VersionSignoffEntity,
 		///<summary>VolusionStore</summary>

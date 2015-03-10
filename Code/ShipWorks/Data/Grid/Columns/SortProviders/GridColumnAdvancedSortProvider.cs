@@ -49,7 +49,7 @@ namespace ShipWorks.Data.Grid.Columns.SortProviders
         /// </summary>
         public override List<SortClause> GetDatabaseSortClauses(SortOperator direction)
         {
-            return new List<SortClause> { new SortClause(SortField, null, direction) };
+            return SortFields.Select(x => new SortClause(x, null, direction) ).ToList();
         }
     }
 }

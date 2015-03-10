@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Customers.Address
     /// Condition that compares against the city portion of an address.
     /// </summary>
     [ConditionElement("City", "Customer.Address.City")] 
-    public class CustomerAddressCityCondition : BillShipAddressCondition
+    public class CustomerAddressCityCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

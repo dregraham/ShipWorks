@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
@@ -75,6 +76,16 @@ namespace ShipWorks.Stores
             store.ManualOrderPostfix = "-M";
 
             store.DefaultEmailAccountID = -1;
+
+            store.AddressValidationSetting = (int)GetDefaultValidationSetting();
+        }
+
+        /// <summary>
+        /// Gets the default validation setting.
+        /// </summary>
+        protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
+        {
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
 
         /// <summary>
@@ -114,10 +125,32 @@ namespace ShipWorks.Stores
         /// </summary>
         public abstract StoreEntity CreateStoreInstance();
 
+        public OrderEntity CreateOrder()
+        {
+            OrderEntity newOrder = CreateOrderInstance();
+
+            newOrder.ShipAddressValidationError = string.Empty;
+            newOrder.ShipResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipPOBox = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipUSTerritory = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            newOrder.ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.ShipAddressValidationSuggestionCount = 0;
+            newOrder.BillAddressValidationError = string.Empty;
+            newOrder.BillResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillPOBox = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillUSTerritory = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillMilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            newOrder.BillAddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+            newOrder.BillAddressValidationSuggestionCount = 0;
+
+            return newOrder;
+        }
+
         /// <summary>
         /// Creates a store-specific instance of an OrderEntity
         /// </summary>
-        public virtual OrderEntity CreateOrderInstance()
+        protected virtual OrderEntity CreateOrderInstance()
         {
             return new OrderEntity();
         }

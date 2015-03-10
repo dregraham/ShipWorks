@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.shipmentUpdate = new System.Windows.Forms.CheckBox();
             this.labelComments = new System.Windows.Forms.Label();
             this.commentToken = new ShipWorks.Templates.Tokens.TemplateTokenTextBox();
@@ -64,6 +65,7 @@
             this.commentToken.Name = "commentToken";
             this.commentToken.Size = new System.Drawing.Size(279, 21);
             this.commentToken.TabIndex = 4;
+            this.commentToken.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelEmail
             // 
@@ -94,7 +96,7 @@
             this.Controls.Add(this.labelComments);
             this.Controls.Add(this.shipmentUpdate);
             this.Name = "MagentoOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(459, 87);
+            this.Size = new System.Drawing.Size(459, 80);
             this.ResumeLayout(false);
             this.PerformLayout();
 

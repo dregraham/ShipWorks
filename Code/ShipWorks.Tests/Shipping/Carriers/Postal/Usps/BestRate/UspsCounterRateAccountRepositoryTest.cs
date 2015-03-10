@@ -12,11 +12,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
     {
         private UspsCounterRateAccountRepository testObject;
 
-        private readonly Mock<ICounterRatesCredentialStore> credentialStore;
+        private readonly Mock<ICredentialStore> credentialStore;
 
         public UspsCounterRateAccountRepositoryTest()
         {
-            credentialStore = new Mock<ICounterRatesCredentialStore>();
+            credentialStore = new Mock<ICredentialStore>();
             credentialStore.Setup(s => s.UspsUsername).Returns("UspsUser");
             credentialStore.Setup(s => s.UspsPassword).Returns("sampsPassword");
 

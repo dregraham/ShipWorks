@@ -129,6 +129,11 @@
           <Condition identifier="Order.Address.StateProvince" displayAs="State\Province" />
           <Condition identifier="Order.Address.PostalCode" displayAs="Postal Code" />
           <Condition identifier="Order.Address.Country" displayAs="Country" />
+          <Condition identifier="Order.Address.ValidationStatus" displayAs="Validation Status" />
+          <Condition identifier="Order.Address.ResidentialStatus" displayAs="Residential Status" />
+          <Condition identifier="Order.Address.POBox" displayAs="PO Box" />
+          <Condition identifier="Order.Address.USTerritory" displayAs="US Territory" />
+          <Condition identifier="Order.Address.MilitaryAddress" displayAs="Military Address" />
         </Group>
         <Condition identifier="Order.CompanyName" displayAs="Company" />
         <Condition identifier="Order.EmailAddress" displayAs="Email" />
@@ -279,6 +284,11 @@
           <Condition identifier="Shipment.ShipTo.StateProvince" displayAs="State\Province"/>
           <Condition identifier="Shipment.ShipTo.PostalCode" displayAs="Postal Code"/>
           <Condition identifier="Shipment.ShipTo.Country" displayAs="Country"/>
+          <Condition identifier="Shipment.ShipTo.AddressValidationStatus" displayAs="Validation Status" />
+          <Condition identifier="Shipment.ShipTo.ResidentialStatus" displayAs="Residential Status" />
+          <Condition identifier="Shipment.ShipTo.POBox" displayAs="PO Box" />
+          <Condition identifier="Shipment.ShipTo.USTerritory" displayAs="US Territory" />
+          <Condition identifier="Shipment.ShipTo.MilitaryAddress" displayAs="Military Address" />
         </Group>
         <Condition identifier="Shipment.ShipTo.Company" displayAs="Company"/>
         <Condition identifier="Shipment.ShipTo.EmailAddress"  displayAs="Email Address"/>

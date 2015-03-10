@@ -89,7 +89,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Utilities
             shipment.ShipSenseChangeSets = "<ChangeSets/>";
             shipment.OnlineShipmentID = string.Empty;
             shipment.RequestedLabelFormat = (int) ThermalLanguage.None;
-
+            shipment.ShipAddressValidationError = "";
+            shipment.ShipAddressValidationStatus = 0;
+            shipment.ShipAddressValidationSuggestionCount = 0;
+            shipment.ShipMilitaryAddress = 0;
+            shipment.ShipPOBox = 0;
+            shipment.ShipResidentialStatus = 0;
+            shipment.ShipUSTerritory = 0;
+            
             List<EntityBase2> orderItems = new List<EntityBase2>();
             for (int i = 0; i < numberOfItems; i++)
             {

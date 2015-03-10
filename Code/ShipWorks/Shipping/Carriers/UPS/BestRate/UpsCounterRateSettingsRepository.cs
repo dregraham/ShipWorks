@@ -6,15 +6,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 {
     public class UpsCounterRateSettingsRepository : UpsSettingsRepository
     {
-        private readonly TangoCounterRatesCredentialStore tangoCounterRatesCredentialStore;
+        private readonly TangoCredentialStore tangoCredentialStore;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UpsCounterRateSettingsRepository"/> class.
         /// </summary>
-        /// <param name="tangoCounterRatesCredentialStore">The tango counter rates credential store.</param>
-        public UpsCounterRateSettingsRepository(TangoCounterRatesCredentialStore tangoCounterRatesCredentialStore)
+        /// <param name="tangoCredentialStore">The tango counter rates credential store.</param>
+        public UpsCounterRateSettingsRepository(TangoCredentialStore tangoCredentialStore)
         {
-            this.tangoCounterRatesCredentialStore = tangoCounterRatesCredentialStore;
+            this.tangoCredentialStore = tangoCredentialStore;
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.BestRate
 
             try
             {
-                shippingSettingsEntity.UpsAccessKey = tangoCounterRatesCredentialStore.UpsAccessKey;
+                shippingSettingsEntity.UpsAccessKey = tangoCredentialStore.UpsAccessKey;
             }
             catch (MissingCounterRatesCredentialException)
             {

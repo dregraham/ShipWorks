@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using log4net;
@@ -38,7 +39,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 
             AddElement("OnlineStatusCode", () => Order.OnlineStatusCode, If(() => Order.OnlineStatusCode != null));
             AddElement("OnlineCustomerID", () => Order.OnlineCustomerID, If(() => Order.OnlineCustomerID != null));
-
+            
             AddElement("IsManual", () => Order.IsManual);
             AddElement("RequestedShipping", () => Order.RequestedShipping);
             AddElement("Total", () => Order.OrderTotal);

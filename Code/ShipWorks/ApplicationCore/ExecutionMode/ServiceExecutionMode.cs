@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Interapptive.Shared.Data;
 using log4net;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Services;
 using ShipWorks.ApplicationCore.Services.Hosting;
 using ShipWorks.Data.Connection;
@@ -178,9 +179,14 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedFilterCounts", FilterContentManager.DeleteAbandonedFilterCounts, "doing maintenance", TimeSpan.FromHours(2));
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedQuickFilters", QuickFilterHelper.DeleteAbandonedFilters, "doing maintenance", TimeSpan.FromHours(2));
             IdleWatcher.RegisterDatabaseDependentWork("CleanupAbandonedResources", DataResourceManager.DeleteAbandonedResourceData, "cleaning up resources", TimeSpan.FromHours(2));
+            IdleWatcher.RegisterDatabaseDependentWork("ValidatePendingAddresses", AddressValidationQueue.PerformValidation, "validating addresses", TimeSpan.FromMinutes(2));
 
             // Start idle processing
             IdleWatcher.Initialize();
+
+            // Listen for entity changes so we know when to validate orders
+            DataProvider.OrderEntityChangeDetected += AddressValidationQueue.OnOrderEntityChangeDetected;
+            DataProvider.ShipmentEntityChangeDetected += AddressValidationQueue.OnShipmentEntityChangeDetected;
         }
 
         /// <summary>
@@ -234,7 +240,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
         /// </summary>
         /// <param name="serviceName">Name of the service.</param>
         /// <returns>A ShipWorksServiceBase object.</returns>
-        /// <exception cref="ExecutionModeConfigurationException"></exception>
         static ShipWorksServiceBase GetServiceForName(string serviceName)
         {
             try

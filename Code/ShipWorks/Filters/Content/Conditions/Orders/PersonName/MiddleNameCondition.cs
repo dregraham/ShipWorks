@@ -10,7 +10,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders.PersonName
     /// Condition that compares against the order's middle name
     /// </summary>
     [ConditionElement("Middle Name", "Order.Name.Middle")]
-    public class OrderMiddleNameCondition : BillShipAddressCondition
+    public class OrderMiddleNameCondition : BillShipAddressStringCondition
     {
         /// <summary>
         /// Generate the sql

@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net
         /// <returns></returns>
         private bool IsTrustedCertificate()
         {
-            ICertificateInspector certificateInspector = new CertificateInspector(TangoCounterRatesCredentialStore.Instance.InsureShipCertificateVerificationData);
+            ICertificateInspector certificateInspector = new CertificateInspector(TangoCredentialStore.Instance.InsureShipCertificateVerificationData);
             CertificateRequest request = new CertificateRequest(Settings.CertificateUrl, certificateInspector);
 
             return request.Submit() == CertificateSecurityLevel.Trusted;

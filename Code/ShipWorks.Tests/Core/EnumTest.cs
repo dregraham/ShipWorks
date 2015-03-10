@@ -71,6 +71,7 @@ namespace ShipWorks.Tests.Core
                 "ChannelAdvisor.WebServices".ToUpperInvariant(),
                 "MarketplaceAdvisor.WebServices".ToUpperInvariant(),
                 "PayPal.WebServices".ToUpperInvariant(),
+                "ShipWorks.Stores.Content.Panels.MapPanelType".ToUpperInvariant()
             };
 
         /// <summary>

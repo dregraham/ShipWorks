@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using log4net;
 using System.Reflection;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Data;
 using ShipWorks.Common.Threading;
@@ -231,6 +232,13 @@ namespace ShipWorks.Data.Administration
                                     cmd.ExecuteNonQuery();
                                 });
                             }
+                            
+                            // If we were upgrading from this version, add AddressValidation filters.
+                            if (installed < new Version(3, 12, 0, 0))
+                            {
+                                AddressValidationDatabaseUpgrade addressValidationDatabaseUpgrade = new AddressValidationDatabaseUpgrade();
+                                ExistingConnectionScope.ExecuteWithAdapter(addressValidationDatabaseUpgrade.Upgrade);
+                            }
 
                             // This was needed for databases created before Beta6.  Any ALTER DATABASE statements must happen outside of transaction, so we had to put this here (and do it everytime, even if not needed)
                             SqlUtility.SetChangeTrackingRetention(ExistingConnectionScope.ScopedConnection, 1);
@@ -239,7 +247,7 @@ namespace ShipWorks.Data.Administration
                             // database upgrade can take time and cause a timeout.
                             if (singleUserScope != null)
                             {
-                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);   
+                                SingleUserModeScope.RestoreMultiUserMode(ExistingConnectionScope.ScopedConnection);
                             }
                         }
                     }
