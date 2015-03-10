@@ -539,21 +539,18 @@ namespace ShipWorks.Stores.Management
 
             addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
 
-            // Update the location of the autoAddressValidation control based on which upload and download controls are shown
+            // Update the location of the address validation panel control based on which upload and download controls are shown
             if (!uploadSettings && !downloadSettings)
             {
-                addressValidationSetting.Top = panelDownloadSettings.Top + 12;
-                labelAddressValidationSetting.Top = panelDownloadSettings.Top + 15;
+                panelAddressValidation.Top = panelDownloadSettings.Bottom + 7;
             }
             else if (!uploadSettings)
             {
-                addressValidationSetting.Top = panelDownloadSettings.Bottom + 12;
-                labelAddressValidationSetting.Top = panelDownloadSettings.Bottom + 15;
+                panelAddressValidation.Top = panelDownloadSettings.Bottom + 7;
             }
             else
             {
-                addressValidationSetting.Top = panelUploadSettings.Bottom + 12;
-                labelAddressValidationSetting.Top = panelUploadSettings.Bottom + 15;
+                panelAddressValidation.Top = panelUploadSettings.Bottom + 7;
             }
 
             // We can't skip this screen anymore since all stores will have the option of auto validating addresses
@@ -698,8 +695,7 @@ namespace ShipWorks.Stores.Management
             panelEditDownloadRange.Height = panelDateRange.Bottom;
             panelDownloadSettings.Height = panelEditDownloadRange.Bottom;
 
-            addressValidationSetting.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
-            labelAddressValidationSetting.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
+            panelAddressValidation.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
         }
 
         /// <summary>
