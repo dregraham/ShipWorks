@@ -132,6 +132,13 @@
     <Compile Include="Actions\Tasks\TaskValidationErrorTest.cs" />
     <Compile Include="Actions\Triggers\ActionTriggerFactoryTest.cs" />
     <Compile Include="Actions\Triggers\ScheduledTriggerTest.cs" />
+    <Compile Include="AddressValidation\AddressValidationResultTest.cs" />
+    <Compile Include="AddressValidation\AddressValidatorTest.cs" />
+    <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicateTest.cs" />
+    <Compile Include="AddressValidation\Predicates\FakePredicateExpression.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicateTest.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicateTest.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressManagerTest.cs" />
     <Compile Include="ApplicationCore\Crashes\CrashSubmitterTest.cs" />
     <Compile Include="ApplicationCore\Dashboard\Content\DashboardServiceStoppedItemTest.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionModeFactoryTest.cs" />
@@ -185,6 +192,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\CounterRatesInvalidStoreAddressFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
     <Compile Include="Interapptive.Shared\Net\CertificateInspectorTest.cs" />
+    <Compile Include="Shipping\Carriers\CarrierDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExBestRateBrokerTest.cs" />
@@ -366,7 +374,6 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsExpress1RateConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsRateGroupConsolidatorTest.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentTypeTest.cs" />
-    <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStoreTests.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateBrokerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsWorldShipBrokerFilterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\InvoiceRegistration\Api\Request\Manipulators\UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest.cs" />

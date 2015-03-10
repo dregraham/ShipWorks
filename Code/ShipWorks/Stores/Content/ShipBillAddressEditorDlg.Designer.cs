@@ -15,6 +15,7 @@
         {
             if (disposing && (components != null))
             {
+                validatedAddressScope.Dispose();
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -35,7 +36,7 @@
             // 
             // ok
             // 
-            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ok.Location = new System.Drawing.Point(410, 445);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
@@ -46,7 +47,7 @@
             // 
             // cancel
             // 
-            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancel.Location = new System.Drawing.Point(491, 445);
             this.cancel.Name = "cancel";
@@ -57,10 +58,11 @@
             // 
             // shipBillControl
             // 
-            this.shipBillControl.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.shipBillControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.shipBillControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.shipBillControl.EnableAddressValidation = false;
+            this.shipBillControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shipBillControl.Location = new System.Drawing.Point(11, 11);
             this.shipBillControl.Name = "shipBillControl";
             this.shipBillControl.Size = new System.Drawing.Size(555, 428);
@@ -76,7 +78,7 @@
             this.Controls.Add(this.shipBillControl);
             this.Controls.Add(this.cancel);
             this.Controls.Add(this.ok);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -85,6 +87,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Edit Address";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);
 

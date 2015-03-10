@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
@@ -148,7 +149,37 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                 new GridColumnDefinition("{73C217FA-A2A8-4585-AAA3-8A6E688E07E3}", 
                     new GridTextDisplayType(), "S: Email", "john.smith@interapptive.com",
-                    ShipmentFields.ShipEmail),
+                    ShipmentFields.ShipEmail), 
+
+                new GridColumnDefinition("{BD8A5B41-F9D8-4C56-B0B0-2F0BBA8CAC4B}",
+                    new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
+                    "S: Validation Status", AddressValidationStatusType.Valid,
+                    ShipmentFields.ShipAddressValidationStatus) 
+                    { DefaultWidth = 100 },
+
+                new GridColumnDefinition("{0791736A-46BC-40D9-A0C2-31432C1D64C4}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: Residential status", ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipResidentialStatus) 
+                    { DefaultWidth = 100 }, 
+
+                new GridColumnDefinition("{B857D3D6-32AC-43E2-B133-EA06CBBCFD5B}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: PO Box", ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipPOBox) 
+                    { DefaultWidth = 72 }, 
+
+                new GridColumnDefinition("{679D1C53-0826-4827-8CF0-9E153F51398B}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: International Territory", ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipUSTerritory) 
+                    { DefaultWidth = 145 }, 
+
+                new GridColumnDefinition("{68565201-49E4-45BB-80C2-E2D8343253F9}",
+                    new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                    "S: Military Address", ValidationDetailStatusType.Yes,
+                    ShipmentFields.ShipMilitaryAddress) 
+                    { DefaultWidth = 115 },
 
                 new GridColumnDefinition("{04A69989-DC89-4B0A-AA72-7D9797A5E6B1}", false,
                     new GridEnumDisplayType<ThermalLanguage>(EnumSortMethod.Description), "Requested Label Format", ThermalLanguage.None,

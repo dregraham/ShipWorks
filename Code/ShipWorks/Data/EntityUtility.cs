@@ -756,5 +756,21 @@ namespace ShipWorks.Data
                     }
                 });
         }
+
+        /// <summary>
+        /// Gets the id of the entity as a long
+        /// </summary>
+        public static long GetEntityId(IEntity2 entity)
+        {
+            if (entity == null)
+            {
+                throw new ArgumentNullException("entity");
+            }
+
+            List<IEntityField2> primaryKeyNotParent = entity.PrimaryKeyFields.Where(f => f.ActualContainingObjectName == f.ContainingObjectName).ToList();
+            Debug.Assert(primaryKeyNotParent.Count() == 1, "GetEntityId cannot be used with entities that have compound primary keys");
+
+            return (long)primaryKeyNotParent.Single().CurrentValue;
+        }
     }
 }

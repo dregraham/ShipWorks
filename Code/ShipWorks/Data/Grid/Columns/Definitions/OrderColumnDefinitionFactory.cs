@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Grid.Columns.DisplayTypes;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.Data.Grid.Columns.ValueProviders;
@@ -12,6 +14,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.PayPal;
@@ -37,6 +40,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
         /// </summary>
         public static GridColumnDefinitionCollection CreateDefinitions()
         {
+            EntityGridAddressSelector shippingAddressSelector = new EntityGridAddressSelector("Ship");
+            EntityGridAddressSelector billingAddressSelector = new EntityGridAddressSelector("Bill");
+
             GridColumnDefinitionCollection definitions = new GridColumnDefinitionCollection
                 {
                     new GridColumnDefinition("{13E940CA-945B-4c23-83F5-50F758AD4456}", true, 
@@ -366,6 +372,44 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "S: Website", "www.interapptive.com",
                         OrderFields.ShipWebsite),
 
+                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}",  true,
+                        new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
+                        "S: Validation Status", AddressValidationStatusType.Valid,
+                        OrderFields.ShipAddressValidationStatus) 
+                        { DefaultWidth = 100 },
+
+                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
+                        new GridActionDisplayType(shippingAddressSelector.DisplayValidationSuggestionLabel, 
+                            shippingAddressSelector.ShowAddressOptionMenu, shippingAddressSelector.IsValidationSuggestionLinkEnabled), 
+                        "S: Validation Suggestions", "2 Suggestions",
+                        new GridColumnFunctionValueProvider(x => x),
+                        new GridColumnSortProvider(OrderFields.ShipAddressValidationSuggestionCount, OrderFields.ShipAddressValidationStatus))
+                        { DefaultWidth = 120 }, 
+
+                    new GridColumnDefinition("{70DDFF53-64AB-406F-A48A-F91A7FEBC402}", 
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "S: Residential Status", ValidationDetailStatusType.Yes,
+                        OrderFields.ShipResidentialStatus) 
+                        { DefaultWidth = 100 }, 
+
+                    new GridColumnDefinition("{B548B1DC-CFF1-4679-B4C4-10B86FA17DE5}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "S: PO Box", ValidationDetailStatusType.Yes,
+                        OrderFields.ShipPOBox) 
+                        { DefaultWidth = 72 }, 
+
+                    new GridColumnDefinition("{13598E92-9602-4D48-9E9E-1F7BB2E49FA3}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "S: US Territory", ValidationDetailStatusType.Yes,
+                        OrderFields.ShipUSTerritory) 
+                        { DefaultWidth = 145 }, 
+
+                    new GridColumnDefinition("{FB979A60-0C09-4AE9-8383-338745D9C075}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "S: Military Address",  ValidationDetailStatusType.Yes,
+                        OrderFields.ShipMilitaryAddress) 
+                        { DefaultWidth = 115 }, 
+
                     new GridColumnDefinition("{BCC268B7-FE0C-4244-8BEA-E07ADABB90F7}",
                         new GridTextDisplayType(), "B: First Name", "John",
                         OrderFields.BillFirstName),
@@ -425,7 +469,45 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
                     new GridColumnDefinition("{E6BCD158-F666-403c-B589-B8D4F5260161}",
                         new GridTextDisplayType(), "B: Website", "www.interapptive.com",
-                        OrderFields.BillWebsite),
+                        OrderFields.BillWebsite), 
+
+                    new GridColumnDefinition("{EF6A55D6-2F5C-4CF5-93B5-38D4A98DF4BA}",
+                        new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
+                        "B: Validation Status", AddressValidationStatusType.Valid,
+                        OrderFields.BillAddressValidationStatus) 
+                        { DefaultWidth = 100 },
+
+                    new GridColumnDefinition("{0DF6411F-884E-49D2-A8AC-7452EF2DC506}",
+                        new GridActionDisplayType(billingAddressSelector.DisplayValidationSuggestionLabel, 
+                            billingAddressSelector.ShowAddressOptionMenu, billingAddressSelector.IsValidationSuggestionLinkEnabled), 
+                        "B: Validation Suggestions", "2 Suggestions",
+                        new GridColumnFunctionValueProvider(x => x),
+                        new GridColumnSortProvider(OrderFields.BillAddressValidationSuggestionCount, OrderFields.BillAddressValidationStatus))
+                        { DefaultWidth = 120 }, 
+
+                    new GridColumnDefinition("{8FC356A6-3682-4B93-9046-DE3D3947AC69}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "B: Residential Status", ValidationDetailStatusType.Yes,
+                        OrderFields.BillResidentialStatus) 
+                        { DefaultWidth = 100 }, 
+
+                    new GridColumnDefinition("{AD6DCADA-4B68-4BB9-BF06-277BFD28EFE3}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "B: PO Box", ValidationDetailStatusType.Yes,
+                        OrderFields.BillPOBox) 
+                        { DefaultWidth = 72 }, 
+
+                    new GridColumnDefinition("{A791FFD5-D49B-41C6-A66B-94B6222AB8B8}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "B: US Territory", ValidationDetailStatusType.Yes,
+                        OrderFields.BillUSTerritory) 
+                        { DefaultWidth = 145 }, 
+
+                    new GridColumnDefinition("{7DDB96D8-1675-4C34-8F37-EA29D6F3E853}",
+                        new GridEnumDisplayType<ValidationDetailStatusType>(EnumSortMethod.Description),
+                        "B: Military Address",  ValidationDetailStatusType.Yes,
+                        OrderFields.BillMilitaryAddress) 
+                        { DefaultWidth = 115 },
 
                     new GridColumnDefinition("{6CB7D102-B286-426d-80E7-82C7F6C81150}", true,
                         new GridEnumDisplayType<PayPalAddressStatus>(EnumSortMethod.Value), "Address Status", PayPalAddressStatus.Confirmed,

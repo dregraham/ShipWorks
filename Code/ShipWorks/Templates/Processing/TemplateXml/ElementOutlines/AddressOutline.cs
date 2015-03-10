@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
 {
@@ -55,6 +57,12 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             AddElement("Fax", () => person.Fax);
             AddElement("Email", () => person.Email);
             AddElement("Website", () => person.Website);
+
+            AddElement("AddressValidationStatus", () => ((AddressValidationStatusType)person.AddressValidationStatus).ToString());
+            AddElement("ResidentialStatus", () => ((ValidationDetailStatusType)person.ResidentialStatus).ToString());
+            AddElement("POBox", () => ((ValidationDetailStatusType)person.POBox).ToString());
+            AddElement("USTerritory", () => ((ValidationDetailStatusType)person.USTerritory).ToString());
+            AddElement("MilitaryAddress", () => ((ValidationDetailStatusType)person.MilitaryAddress).ToString());
         }
 
         /// <summary>

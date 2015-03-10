@@ -1,10 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web.UI.WebControls.WebParts;
+using Microsoft.Web.Services3.Addressing;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Options;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.Linq;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.ShipSense;
+using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Actions;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.UI;
 using ShipWorks.Stores.Content;
@@ -45,8 +50,8 @@ namespace ShipWorks.Stores.Communication
 
         int quantitySaved = 0;
         int quantityNew = 0;
-        private PersonAdapter originalShippingAddress;
-        private PersonAdapter originalBillingAddress;
+        private AddressAdapter originalShippingAddress;
+        private AddressAdapter originalBillingAddress;
 
         /// <summary>
         /// Constructor
@@ -81,6 +86,18 @@ namespace ShipWorks.Stores.Communication
             get
             {
                 return storeType;
+            }
+        }
+
+        /// <summary>
+        /// Gets the address validation setting.
+        /// </summary>
+        private AddressValidationStoreSettingType addressValidationSetting
+        {
+            get
+            {
+                AddressValidationStoreSettingType storeSetting = ((AddressValidationStoreSettingType)store.AddressValidationSetting);
+                return storeSetting;
             }
         }
 
@@ -283,11 +300,11 @@ namespace ShipWorks.Stores.Communication
             {
                 log.InfoFormat("Found existing {0}", orderIdentifier);
 
-                originalShippingAddress = new PersonAdapter();
-                PersonAdapter.Copy(order, "Ship", originalShippingAddress);
+                originalShippingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Ship", originalShippingAddress);
 
-                originalBillingAddress = new PersonAdapter();
-                PersonAdapter.Copy(order, "Bill", originalBillingAddress);
+                originalBillingAddress = new AddressAdapter();
+                AddressAdapter.Copy(order, "Bill", originalBillingAddress);
 
                 return order;
             }
@@ -296,7 +313,7 @@ namespace ShipWorks.Stores.Communication
                 log.InfoFormat("{0} not found, creating", orderIdentifier);
 
                 // Create a new order
-                order = storeType.CreateOrderInstance();
+                order = storeType.CreateOrder();
 
                 // Its for this store
                 order.StoreID = store.StoreID;
@@ -333,7 +350,7 @@ namespace ShipWorks.Stores.Communication
                 RelationPredicateBucket bucket = new RelationPredicateBucket(OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false);
 
                 // We use a prototype approach to determine what to search for
-                OrderEntity prototype = storeType.CreateOrderInstance();
+                OrderEntity prototype = storeType.CreateOrder();
                 prototype.IsNew = false;
                 prototype.RollbackChanges();
                 orderIdentifier.ApplyTo(prototype);
@@ -462,9 +479,6 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        /// <param name="order">The order.</param>
-        /// <exception cref="System.ArgumentNullException">order</exception>
-        /// <exception cref="DownloadException">ShipWorks was unable to find the customer in the time allotted.  Please try downloading again.</exception>
         protected void SaveDownloadedOrder(OrderEntity order)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -597,41 +611,29 @@ namespace ShipWorks.Stores.Communication
                     OrderUtility.PopulateOrderDetails(order, adapter);
                     OrderUtility.UpdateShipSenseHashKey(order);
                     adapter.SaveAndRefetch(order);
+					
 					// Update unprocessed shipment addresses if the order address has changed
                     if (!order.IsNew)
                     {
-                        PersonAdapter newShippingAddress = new PersonAdapter(order, "Ship");
+                        AddressAdapter newShippingAddress = new AddressAdapter(order, "Ship");
                         bool shippingAddressChanged = originalShippingAddress != newShippingAddress;
-
                         if (shippingAddressChanged)
                         {
-                            IPredicateExpression relationFilter = new PredicateExpression();
-                            relationFilter.Add(ShipmentFields.OrderID == order.OrderID);
-                            relationFilter.AddWithAnd(ShipmentFields.Processed == false);
+                            SetAddressValidationStatus(order, "Ship", adapter);
+                            adapter.SaveAndRefetch(order);
 
-                            RelationPredicateBucket relationPredicateBucket = new RelationPredicateBucket();
-                            relationPredicateBucket.PredicateExpression.Add(relationFilter);
-
-                            using (EntityCollection<ShipmentEntity> shipments = new EntityCollection<ShipmentEntity>())
-                            {
-                                SqlAdapter.Default.FetchEntityCollection(shipments, relationPredicateBucket);
-
-                                foreach (ShipmentEntity shipment in shipments)
-                                {
-                                    PersonAdapter shipmentAddress = new PersonAdapter(shipment, "Ship");
-                                    if (originalShippingAddress == shipmentAddress)
-                                    {
-                                        PersonAdapter.Copy(newShippingAddress, shipmentAddress);
-                                    }
-
-                                    adapter.SaveEntity(shipment);
-                                }
-                            }
+                            ValidatedAddressManager.PropagateAddressChangesToShipments(adapter, order.OrderID, originalShippingAddress, newShippingAddress);
                         }
 
                         // Update the customer's addresses if necessary
-                        PersonAdapter newBillingAddress = new PersonAdapter(order, "Bill");
+                        AddressAdapter newBillingAddress = new AddressAdapter(order, "Bill");
                         bool billingAddressChanged = originalBillingAddress != newBillingAddress;
+
+                        if (billingAddressChanged)
+                        {
+                            SetAddressValidationStatus(order, "Bill", adapter);
+                            adapter.SaveAndRefetch(order);
+                        }
 
                         // Don't even bother loading the customer if the addresses haven't changed, or if we shouldn't copy
                         if ((billingAddressChanged && config.CustomerUpdateModifiedBilling != (int) ModifiedOrderCustomerUpdateBehavior.NeverCopy)
@@ -647,7 +649,13 @@ namespace ShipWorks.Stores.Communication
                             }
                         }
                     }
-
+                    else
+                    {
+                        SetAddressValidationStatus(order, "Ship", adapter);
+                        SetAddressValidationStatus(order, "Bill", adapter);
+                        adapter.SaveAndRefetch(order);
+                    }
+                    
                     log.InfoFormat("{0} is {1} new", orderIdentifier, alreadyDownloaded ? "not " : "");
 
                     // Log this download
@@ -671,9 +679,39 @@ namespace ShipWorks.Stores.Communication
         }
 
         /// <summary>
+        /// Sets the address validation status on the order, depending on the store settings
+        /// </summary>
+        private void SetAddressValidationStatus(OrderEntity order, string prefix, SqlAdapter adapter)
+        {
+            AddressAdapter address = new AddressAdapter(order, prefix);
+
+            address.POBox = (int)ValidationDetailStatusType.Unknown;
+            address.MilitaryAddress = (int)ValidationDetailStatusType.Unknown;
+            address.USTerritory = (int)ValidationDetailStatusType.Unknown;
+            address.ResidentialStatus = (int)ValidationDetailStatusType.Unknown;
+            address.AddressValidationSuggestionCount = 0;
+            address.AddressValidationError = string.Empty;
+
+            ValidatedAddressManager.DeleteExistingAddresses(adapter, order.OrderID, prefix);
+
+            if (ValidatedAddressManager.EnsureAddressCanBeValidated(address))
+            {
+                if ((addressValidationSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                     addressValidationSetting == AddressValidationStoreSettingType.ValidateAndNotify) &&
+                    prefix == "Ship")
+                {
+                    address.AddressValidationStatus = (int)AddressValidationStatusType.Pending;
+                }
+                else
+                {
+                    address.AddressValidationStatus = (int)AddressValidationStatusType.NotChecked;
+                }
+            }
+        }
+        /// <summary>
         /// Update's the customer's address from an order, if it's necessary
         /// </summary>
-        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, PersonAdapter originalAddress, string prefix)
+        private static void UpdateCustomerAddressIfNecessary(bool shouldUpdate, ModifiedOrderCustomerUpdateBehavior behavior, OrderEntity order, CustomerEntity existingCustomer, AddressAdapter originalAddress, string prefix)
         {
             if (!shouldUpdate || IsAddressEmpty(order, prefix))
             {

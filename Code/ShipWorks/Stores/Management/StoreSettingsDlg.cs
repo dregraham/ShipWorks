@@ -5,8 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.UI;
 using ShipWorks.Data;
 using ShipWorks.UI.Controls;
@@ -47,6 +52,7 @@ namespace ShipWorks.Stores.Management
 
         // the control for store-specific settings
         StoreSettingsControlBase storeSettingsControl;
+        private bool resetPendingValidations;
 
         public enum Section
         {
@@ -215,6 +221,8 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void LoadSettingsTab()
         {
+            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
+
             manualOrderSettingsControl = storeType.CreateManualOrderSettingsControl();
             manualOrderSettingsControl.Location = new Point(23, sectionTitleManualOrders.Bottom + 8);
             manualOrderSettingsControl.Width = optionPageSettings.Width - manualOrderSettingsControl.Location.X - 10;
@@ -240,6 +248,9 @@ namespace ShipWorks.Stores.Management
             {
                 panelStoreStatus.Top = manualOrderSettingsControl.Bottom + 8;
             }
+
+            panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
+            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
 
             // Download on\off
             comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
@@ -276,6 +287,17 @@ namespace ShipWorks.Stores.Management
             {
                 result = storeSettingsControl.SaveToEntity(store);
             }
+
+            // Check whether we should reset any pending address validations
+            AddressValidationStoreSettingType currentSetting = (AddressValidationStoreSettingType)store.AddressValidationSetting;
+            AddressValidationStoreSettingType newSetting = (AddressValidationStoreSettingType)addressValidationSetting.SelectedValue;
+
+            resetPendingValidations = (currentSetting == AddressValidationStoreSettingType.ValidateAndApply ||
+                                       currentSetting == AddressValidationStoreSettingType.ValidateAndNotify)
+                                      && (newSetting == AddressValidationStoreSettingType.ManualValidationOnly ||
+                                          newSetting == AddressValidationStoreSettingType.ValidationDisabled);
+            
+            store.AddressValidationSetting = (int)addressValidationSetting.SelectedValue;
 
             return result;
         }
@@ -443,6 +465,26 @@ namespace ShipWorks.Stores.Management
                     StoreManager.SaveStore(store, adapter);
 
                     adapter.Commit();
+                }
+
+                // If the user has just disabled address validation, we should mark any pending orders
+                // as not checked.  This is being done in its own transaction so that it doesn't affect
+                // saving the changes to the store if the update fails.
+                if (resetPendingValidations)
+                {
+                    using (SqlAdapter adapter = new SqlAdapter())
+                    {
+                        OrderEntity orderUpdate = new OrderEntity
+                        {
+                            ShipAddressValidationStatus = (int)AddressValidationStatusType.NotChecked
+                        };
+
+                        var pendingOrderBucket = new RelationPredicateBucket();
+                        pendingOrderBucket.PredicateExpression.Add(OrderFields.StoreID == store.StoreID);
+                        pendingOrderBucket.PredicateExpression.AddWithAnd(OrderFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Pending);
+
+                        adapter.UpdateEntitiesDirectly(orderUpdate, pendingOrderBucket);
+                    }
                 }
 
                 // Have to make sure our in-memory list of presets stays current.  The in-memory Stores list does not get updated at this point - 

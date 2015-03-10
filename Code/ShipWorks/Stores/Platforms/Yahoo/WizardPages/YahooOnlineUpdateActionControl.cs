@@ -40,6 +40,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo.WizardPages
             {
                 statusUpdate.Checked = false;
             }
+
+            Height = labelDisabled.Visible ? labelDisabled.Bottom + 4 : statusUpdate.Bottom;
         }
 
         /// <summary>

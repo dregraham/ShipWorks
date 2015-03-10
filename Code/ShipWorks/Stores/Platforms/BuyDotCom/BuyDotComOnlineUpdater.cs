@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using log4net;
@@ -202,36 +203,16 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         private static BuyDotComTrackingType GetOtherTrackingType(ShipmentEntity shipment)
         {
             // Try to parse the Other Carrier into a Buy.com carrier.  Buy.com doesn't like us to just send Other as the carrier.
-            BuyDotComTrackingType buyDotComTrackingType = BuyDotComTrackingType.Other;
 
-            if (shipment.Other == null)
-            {
-                OtherShipmentType otherShipmentType = new OtherShipmentType();
-                otherShipmentType.LoadShipmentData(shipment, false);
-            }
+                    // Get the carrier name based on the free text the user entered
+                    CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
-            // Get the carrier name based on the free text the user entered
-            string carrierName = ShippingManager.GetCarrierName(shipment.Other.Carrier);
-
-            // See if the parsed free text maps to any Buy.com carrier
-            if (carrierName.IndexOf(EnumHelper.GetDescription(BuyDotComTrackingType.Ups), 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                buyDotComTrackingType = BuyDotComTrackingType.Ups;
-            }
-            else if (carrierName.IndexOf(EnumHelper.GetDescription(BuyDotComTrackingType.FedEx), 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                buyDotComTrackingType = BuyDotComTrackingType.FedEx;
-            }
-            else if (carrierName.IndexOf(EnumHelper.GetDescription(BuyDotComTrackingType.Usps), 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                buyDotComTrackingType = BuyDotComTrackingType.Usps;
-            }
-            else if (carrierName.IndexOf(EnumHelper.GetDescription(BuyDotComTrackingType.DHLGlobalMail), 0, StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                buyDotComTrackingType = BuyDotComTrackingType.DHLGlobalMail;
-            }
-
-            return buyDotComTrackingType;
+                    // See if the parsed free text maps to any Buy.com carrier
+                    return description.IsUPS ? BuyDotComTrackingType.Ups : 
+                        description.IsFedEx ? BuyDotComTrackingType.FedEx : 
+                        description.IsUSPS ? BuyDotComTrackingType.Usps : 
+                        description.IsDHL ? BuyDotComTrackingType.DHLGlobalMail : 
+                        BuyDotComTrackingType.Other;
         }
 
         /// <summary>

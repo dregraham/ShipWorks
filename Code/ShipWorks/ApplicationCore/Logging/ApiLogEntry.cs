@@ -5,6 +5,7 @@ using System.Threading;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using System.Diagnostics;
 using log4net;
@@ -231,6 +232,18 @@ namespace ShipWorks.ApplicationCore.Logging
             }
 
             WriteLog(result.ToString(), ApiLogCategory.Response);
+        }
+
+        /// <summary>
+        /// Logs the response.
+        /// </summary>
+        internal void LogResponse(XPathDocument xPathDocument)
+        {
+            XmlDocument doc = new XmlDocument();
+
+            doc.Load(xPathDocument.CreateNavigator().ReadSubtree());
+
+            LogResponse(doc);
         }
 
         /// <summary>

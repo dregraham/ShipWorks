@@ -346,7 +346,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
                 return false;
             }
 
-            EbayOrderEntity newOrder = StoreTypeManager.GetType(store).CreateOrderInstance() as EbayOrderEntity;
+            EbayOrderEntity newOrder = StoreTypeManager.GetType(store).CreateOrder() as EbayOrderEntity;
             CopyOrderFields(primaryOrder, newOrder);
 
             // reset the rollup count

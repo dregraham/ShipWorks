@@ -852,17 +852,17 @@ ALTER TABLE [dbo].[ShippingSettings]
 	ALTER COLUMN [ShipSenseEndShipmentID] [bigint] NOT NULL
 GO
 
-PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
+PRINT N'Creating [dbo].[ShipSenseKnowledgebase]'
 GO
-CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
+CREATE TABLE [dbo].[ShipSenseKnowledgebase]
 (
 [Hash] [nvarchar] (64) COLLATE SQL_Latin1_General_CP1_CS_AS NOT NULL,
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
-PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnowledgeBase]'
+PRINT N'Creating primary key [PK_ShipSenseKnowledgebase] on [dbo].[ShipSenseKnowledgebase]'
 GO
-ALTER TABLE [dbo].[ShipSenseKnowledgeBase] ADD CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED  ([Hash])
+ALTER TABLE [dbo].[ShipSenseKnowledgebase] ADD CONSTRAINT [PK_ShipSenseKnowledgebase] PRIMARY KEY CLUSTERED  ([Hash])
 GO
 
 

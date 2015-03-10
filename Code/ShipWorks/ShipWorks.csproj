@@ -391,9 +391,13 @@
     <Compile Include="Actions\Tasks\ActionTaskEditor.Designer.cs">
       <DependentUpon>ActionTaskEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Actions\Tasks\Common\Enums\RunCommandCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\Enums\WebRequestCardinality.cs" />
     <Compile Include="Actions\Tasks\Common\RebuildTableIndexTask.cs" />
+    <Compile Include="Actions\Tasks\Common\ValidateAddressTask.cs" />
     <Compile Include="Actions\Tasks\Common\WebRequestTask.cs" />
     <Compile Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.cs">
       <SubType>UserControl</SubType>
@@ -489,6 +493,33 @@
     <Compile Include="Actions\UI\StoreCheckBoxPanel.Designer.cs">
       <DependentUpon>StoreCheckBoxPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddressValidation\AdapterAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\AddressSelectedEventArgs.cs" />
+    <Compile Include="AddressValidation\AddressSelector.cs" />
+    <Compile Include="AddressValidation\AddressValidationException.cs" />
+    <Compile Include="AddressValidation\Predicates\AddressSuggestionsForConsumerPredicate.cs" />
+    <Compile Include="AddressValidation\AddressValidationQueue.cs" />
+    <Compile Include="AddressValidation\AddressValidationResult.cs" />
+    <Compile Include="AddressValidation\AddressValidationStatusType.cs" />
+    <Compile Include="AddressValidation\AddressValidationStoreSettingType.cs" />
+    <Compile Include="AddressValidation\AddressValidationWebClientValidateAddressResult.cs" />
+    <Compile Include="AddressValidation\ContextAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\IAddressValidationDataAccess.cs" />
+    <Compile Include="AddressValidation\IAddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\AddressValidator.cs" />
+    <Compile Include="AddressValidation\EntityGridAddressSelector.cs" />
+    <Compile Include="AddressValidation\Predicates\ILimitResultRows.cs" />
+    <Compile Include="AddressValidation\Predicates\IPredicateProvider.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsWithShipValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
+    <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
+    <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
+    <Compile Include="AddressValidation\ValidatedShipAddressBase.cs" />
+    <Compile Include="AddressValidation\ValidationDetailStatusType.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressManager.cs" />
+    <Compile Include="AddressValidation\ValidatedAddressScope.cs" />
     <Compile Include="AnalysisSuppressions.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RedeployAssembliesCommandLineOption.cs" />
     <Compile Include="ApplicationCore\CommandLineOptions\RegenerateAllFiltersCommandLineOption.cs" />
@@ -616,6 +647,9 @@
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceRegistrar.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
+    <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
+    <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\IndexMonitor.cs" />
     <Compile Include="Data\Administration\Indexing\TableIndex.cs" />
@@ -624,7 +658,6 @@
       <DependentUpon>ListSeparatorFormatRequiredDlg.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
     <Compile Include="Data\Connection\ExistingConnectionScope.cs" />
     <Compile Include="Data\Controls\AutofillPersonControl.cs">
       <SubType>UserControl</SubType>
@@ -635,6 +668,7 @@
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridActualLabelFormatDisplayType.cs" />
     <Compile Include="Data\Grid\Columns\SortProviders\GridActualLabelFormatSortProvider.cs" />
     <Compile Include="Data\Grid\Columns\DisplayTypes\GridProviderDisplayType.cs" />
+    <Compile Include="Filters\Content\Conditions\BillShipAddressConditionUtility.cs" />
     <Compile Include="Editions\Brown\BrownCtp2014Edition.cs" />
     <Compile Include="Editions\ShipmentTypeFunctionality.cs" />
     <Compile Include="Editions\ShipmentTypeRestrictionType.cs" />
@@ -642,6 +676,16 @@
     <Compile Include="Email\Accounts\SmtpProbeResult.cs" />
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\OrderAddressValidationStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\USTerritoryCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\MilitaryAddressCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\POBoxCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Orders\Address\ResidentialStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\ShipmentAddressValidationStatusCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\USTerritoryCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\MilitaryAddressCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\POBoxCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\Shipments\ShipTo\Address\ResidentialStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\OrderShipSenseStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\RequestedLabelFormatCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ShipmentInsuranceClaimCondition.cs" />
@@ -649,11 +693,39 @@
     <Compile Include="Filters\Content\Conditions\Shipments\VoidedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Shipments\ProcessedUserCondition.cs" />
     <Compile Include="Filters\Content\Conditions\UserCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.Designer.cs">
+      <DependentUpon>AddressValidationStatusValueEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressEnumValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressEnumValueEditor.Designer.cs">
+      <DependentUpon>BillShipAddressEnumValueEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.Designer.cs">
       <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressStringValueEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressStringValueEditor.Designer.cs">
+      <DependentUpon>BillShipAddressStringValueEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressValidationStatusEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressValidationStatusEditor.Designer.cs">
+      <DependentUpon>BillShipAddressValidationStatusEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Filters\Content\Editors\ValueEditors\IBillShipAddressCondition.cs" />
+    <Compile Include="Filters\Content\Editors\ValueEditors\UI\AddressValidationStatusPopup.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Filters\Controls\FilterControlDisplayManager.cs" />
     <Compile Include="Filters\Controls\DisabledFilterFont.cs" />
@@ -707,6 +779,7 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\IRateGroupFilter.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceLevelFilter.cs" />
     <Compile Include="Shipping\Carriers\CarrierAccountRepositoryBase.cs" />
+    <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
@@ -721,7 +794,7 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\ICounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
@@ -776,6 +849,7 @@
     <Compile Include="Shipping\Carriers\Postal\PostalPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Contracts\UspsAccountContractType.cs" />
+    <Compile Include="Shipping\Carriers\Postal\Usps\UspsAddressValidationResults.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsInsufficientFundsException.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsResellerType.cs" />
@@ -853,7 +927,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\UspsShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\BestRate\WebToolsCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\Postal\WebTools\WebToolsShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\TangoCounterRatesCredentialStore.cs" />
+    <Compile Include="Shipping\Carriers\TangoCredentialStore.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsBestRateRestrictionBrokerFilter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRatesBroker.cs" />
@@ -940,8 +1014,11 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.Designer.cs">
-      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
+    <Compile Include="UI\Controls\ResizingRichTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Controls\ResizingRichTextBox.Designer.cs">
+      <DependentUpon>ResizingRichTextBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Insurance\InsureShip\InsuredWith.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipCarrierCode.cs" />
@@ -2280,6 +2357,13 @@
     <Compile Include="Stores\Communication\Throttling\RequestThrottledException.cs" />
     <Compile Include="Stores\ComputerDownloadAllowed.cs" />
     <Compile Include="Stores\ComputerDownloadPolicy.cs" />
+    <Compile Include="Stores\Content\Panels\MapPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Content\Panels\MapPanel.Designer.cs">
+      <DependentUpon>MapPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Content\Panels\MapPanelType.cs" />
     <Compile Include="Stores\Management\OnlineUpdateActionCreateException.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66LiteStoreType.cs" />
     <Compile Include="Stores\Platforms\Cart66\Cart66ProStoreType.cs" />
@@ -6228,6 +6312,9 @@
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\BackupDatabaseTaskEditor.resx">
       <DependentUpon>BackupDatabaseTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Actions\Tasks\Common\Editors\ValidateAddressTaskEditor.resx">
+      <DependentUpon>ValidateAddressTaskEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Actions\Tasks\Common\Editors\WebRequestTaskEditor.resx">
       <DependentUpon>WebRequestTaskEditor.cs</DependentUpon>
     </EmbeddedResource>
@@ -6469,12 +6556,6 @@
     <Compile Include="Filters\Content\Conditions\ConditionJoinType.cs" />
     <Compile Include="Filters\Content\ConditionEntityTarget.cs" />
     <Compile Include="Filters\Content\Editors\ConditionTypeChangedEvent.cs" />
-    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressValueEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Filters\Content\Editors\ValueEditors\BillShipAddressValueEditor.Designer.cs">
-      <DependentUpon>BillShipAddressValueEditor.cs</DependentUpon>
-    </Compile>
     <Compile Include="Filters\Content\Editors\ValueEditors\StringValueEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -6490,7 +6571,7 @@
       <DependentUpon>ConditionChooser.cs</DependentUpon>
     </Compile>
     <Compile Include="Filters\Content\FilterConditionException.cs" />
-    <Compile Include="Filters\Content\Conditions\BillShipAddressCondition.cs" />
+    <Compile Include="Filters\Content\Conditions\BillShipAddressStringCondition.cs" />
     <Compile Include="Filters\Content\Conditions\BillShipAddressOperator.cs" />
     <Compile Include="Filters\Content\Conditions\BillShipCountryCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Customers\CompanyCondition.cs" />
@@ -7279,8 +7360,23 @@
     <EmbeddedResource Include="FileTransfer\FtpFolderBrowserDlg.resx">
       <DependentUpon>FtpFolderBrowserDlg.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\AddressValidationStatusValueEditor.resx">
+      <DependentUpon>AddressValidationStatusValueEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\BillShipAddressEnumValueEditor.resx">
+      <DependentUpon>BillShipAddressEnumValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\ClaimFiledValueEditor.resx">
       <DependentUpon>ClaimFiledValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\BillShipAddressStringValueEditor.resx">
+      <DependentUpon>BillShipAddressStringValueEditor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\BillShipAddressValidationStatusEditor.resx">
+      <DependentUpon>BillShipAddressValidationStatusEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\CountryValueEditor.resx">
@@ -7581,8 +7677,8 @@
     <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Insurance\InsureShipQuestionsControl.resx">
-      <DependentUpon>InsureShipQuestionsControl.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Controls\ResizingRichTextBox.resx">
+      <DependentUpon>ResizingRichTextBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ScanForms\ScanFormSuccessDlg.resx">
       <DependentUpon>ScanFormSuccessDlg.cs</DependentUpon>
@@ -7593,9 +7689,6 @@
     <EmbeddedResource Include="Shipping\Settings\ShippingSetupWizard.resx">
       <DependentUpon>ShippingSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseConfirmationDlg.resx">
-      <DependentUpon>ShipSenseConfirmationDlg.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseHashConfigurationControl.resx">
       <DependentUpon>ShipSenseHashConfigurationControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -7604,6 +7697,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\ShipSense\Settings\ShipSenseUniquenessSettingsDlg.resx">
       <DependentUpon>ShipSenseUniquenessSettingsDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Content\Panels\MapPanel.resx">
+      <DependentUpon>MapPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Content\Panels\MultiSelectPanelBase.resx">
       <DependentUpon>MultiSelectPanelBase.cs</DependentUpon>
@@ -7933,7 +8029,6 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
-    <None Include="Data\Administration\Scripts\Update\ShipWorksVersions.json" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -9525,10 +9620,6 @@
       <SubType>Designer</SubType>
       <DependentUpon>ConditionChooser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\BillShipAddressValueEditor.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>BillShipAddressValueEditor.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Filters\Content\Editors\ValueEditors\DateValueEditor.resx">
       <DependentUpon>DateValueEditor.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -10899,6 +10990,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.9\3.9.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.5.sql" />
@@ -10922,6 +11014,8 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.6.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.3.7.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.4.3.sql" />
@@ -10936,6 +11030,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.2.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -11060,12 +11155,18 @@
     <None Include="Resources\EndiciaLogo.png" />
     <None Include="Resources\clock_warning.png" />
     <None Include="Resources\funnel_warning.png" />
+    <None Include="Resources\GoogleMapsFav.png" />
     <None Include="Resources\livesite.png" />
     <None Include="Resources\fortune3.png" />
     <None Include="Resources\cloudconversion.png" />
+    <None Include="Resources\googleMapsFav16.png" />
     <None Include="Resources\cscart.png" />
     <None Include="Resources\loadedcommerce.png" />
     <None Include="Resources\groupon.png" />
+    <None Include="Resources\globe16.png" />
+    <None Include="Resources\information2_16.png" />
+    <None Include="Resources\help16.png" />
+    <None Include="Resources\earth16.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -11239,7 +11340,9 @@
     <Content Include="Resources\Stores\Icons\woocommerce.png" />
     <Content Include="Resources\Stores\Icons\wpecommerce.png" />
     <None Include="Resources\zenventory.png" />
+    <None Include="Resources\streetLight.png" />
     <EmbeddedResource Include="Stores\Platforms\Groupon\Template\GrouponPackingSlip.xsl" />
+    <None Include="Resources\viewofstreet.png" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\api.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
@@ -12834,7 +12937,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+      <UserProperties DebugDemeanorObfuscationEnabled="False" DebugDemeanorKeyFile="" DebugDemeanorKeyContainer="" DebugDemeanorConfigFile="" DebugDemeanorPrefix="" DebugDemeanorVerbose="True" DebugDemeanorEncryptStrings="False" DebugOverloadOnStatic="False" DebugDemeanorNoTypes="False" DebugDemeanorNoFields="False" DebugDemeanorNoMethods="False" DebugDemeanorNoProperties="False" DebugDemeanorNoEvents="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoResources="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoLogo="False" DebugDemeanorNames="Alpha" DebugDemeanorFlow="None" DebugDemeanorRootAssemblyFileName="" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorEnableReport="False" DebugDemeanorReportName="" DebugDemeanorExcludeCount="0" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorInsitu="False" DebugDemeanorApplication="False" DebugDemeanorForceParameters="False" DebugDemeanorNoParameters="False" DebugDemeanorOut="Demeanor" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAllSatelliteAssemblies="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

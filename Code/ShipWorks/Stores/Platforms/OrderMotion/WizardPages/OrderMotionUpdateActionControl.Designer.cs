@@ -47,7 +47,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.createTask);
             this.Name = "OrderMotionOnlineUpdateActionControl";
-            this.Size = new System.Drawing.Size(324, 26);
+            this.Size = new System.Drawing.Size(324, 23);
             this.ResumeLayout(false);
             this.PerformLayout();
 

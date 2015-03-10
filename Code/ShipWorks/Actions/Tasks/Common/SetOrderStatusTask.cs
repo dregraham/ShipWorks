@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Tokens;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Actions.Tasks.Common.Editors;
 
 namespace ShipWorks.Actions.Tasks.Common

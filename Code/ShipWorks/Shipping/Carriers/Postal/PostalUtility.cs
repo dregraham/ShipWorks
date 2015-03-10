@@ -74,11 +74,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 // Of course US
                 countryCode == "US" ||
 
-                // American Samoa
-                countryCode == "AS" ||
-
                 // District of Columbia
                 countryCode == "DC" ||
+
+                IsUSInternationalTerritory(countryCode);
+        }
+
+        /// <summary>
+        /// Indicates if the given foreign country code is a US international territory
+        /// </summary>
+        public static bool IsUSInternationalTerritory(string countryCode)
+        {
+            return
+
+                // American Samoa
+                countryCode == "AS" ||
 
                 // Federated States of Micronesia
                 countryCode == "FM" ||

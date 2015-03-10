@@ -265,6 +265,7 @@ namespace ShipWorks.Tests.Integration.MSTest
                 IMatcher<JobKey> matcher = KeyMatcher<JobKey>.KeyEquals(new JobKey(action.ActionID.ToString()));
                 thisSchedulerFactory.GetScheduler().ListenerManager.AddJobListener(quartzJobListener, matcher);
 
+
                 new Task(() => quartzSchedulingEngine.RunAsync(cancellationTokenSource.Token)).Start();
 
                 // Iterate through each test run

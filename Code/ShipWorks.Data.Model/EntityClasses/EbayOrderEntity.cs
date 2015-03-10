@@ -70,10 +70,14 @@ namespace ShipWorks.Data.Model.EntityClasses
 			/// <summary>Member name OrderPaymentDetails</summary>
 			public static readonly string OrderPaymentDetails = "OrderPaymentDetails";
 
+			/// <summary>Member name ValidatedAddress</summary>
+			public static readonly string ValidatedAddress = "ValidatedAddress";
 
 
 			/// <summary>Member name EbayStoreCollectionViaEbayCombinedOrderRelation</summary>
 			public static readonly string EbayStoreCollectionViaEbayCombinedOrderRelation = "EbayStoreCollectionViaEbayCombinedOrderRelation";
+			/// <summary>Member name ShipmentCollectionViaValidatedAddress</summary>
+			public static readonly string ShipmentCollectionViaValidatedAddress = "ShipmentCollectionViaValidatedAddress";
 
 
 

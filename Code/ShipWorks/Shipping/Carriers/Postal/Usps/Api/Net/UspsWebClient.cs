@@ -7,12 +7,14 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using log4net;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
@@ -401,7 +403,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
-        /// Internal CleanseAddress implementation intended to be warpped by the exception wrapper
+        /// Internal CleanseAddress implementation intended to be warpped by the auth wrapper
         /// </summary>
         private Address CleanseAddressInternal(PersonAdapter person, UspsAccountEntity account, bool requireFullMatch)
         {
@@ -411,38 +413,89 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 return address;
             }
 
-            address = CreateAddress(person);
+            UspsAddressValidationResults results = ValidateAddress(person, account);
 
-            bool addressMatch;
-            bool cityStateZipOK;
-            ResidentialDeliveryIndicatorType residentialIndicator;
-            bool? isPoBox;
-            bool isPoBoxSpecified;
-            Address[] candidates;
-            StatusCodes statusCodes;
-            RateV15[] rates;
-            string fromZipCode = account.PostalCode;
-
-            using (SwsimV40 webService = CreateWebService("CleanseAddress"))
+            if (!results.IsSuccessfulMatch)
             {
-                webService.CleanseAddress(GetCredentials(account), ref address, fromZipCode, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes, out rates);
-
-                if (!addressMatch)
+                if (!results.IsCityStateZipOk)
                 {
-                    if (!cityStateZipOK)
-                    {
-                        throw new UspsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
-                    }
-                    else if (requireFullMatch)
-                    {
-                        throw new UspsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
-                    }
+                    throw new UspsException(string.Format("The address for '{0}' is not a valid address.", new PersonName(person).FullName));
+                }
+
+                if (requireFullMatch)
+                {
+                    throw new UspsException(string.Format("The city, state, and postal code for '{0}' is valid, but the full address is not.", new PersonName(person).FullName));
                 }
             }
 
-            cleansedAddressMap[person] = address;
+            cleansedAddressMap[person] = results.MatchedAddress;
 
-            return address;
+            return results.MatchedAddress;
+        }
+
+        /// <summary>
+        /// Validates the address of the given person
+        /// </summary>
+        public UspsAddressValidationResults ValidateAddress(PersonAdapter person)
+        {
+            return ValidateAddress(person, null);
+        }
+
+        /// <summary>
+        /// Validates the address of the given person using the specified stamps account
+        /// </summary>
+        private UspsAddressValidationResults ValidateAddress(PersonAdapter person, UspsAccountEntity account)
+        {
+            Address address = CreateAddress(person);
+
+            address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
+            address.Country = CountryCodeCleanser.CleanseCountryCode(person.CountryCode);
+
+            using (SwsimV40 webService = CreateWebService("CleanseAddress"))
+            {
+                bool addressMatch;
+                bool cityStateZipOk;
+                ResidentialDeliveryIndicatorType residentialIndicator;
+                bool? isPoBox;
+                bool isPoBoxSpecified;
+                Address[] candidates;
+                StatusCodes statusCodes;
+                RateV15[] rates;
+
+                webService.OnlyLogOnMagicKeys = true;
+
+                try
+                {
+                    webService.CleanseAddress(
+                        GetCredentials(account, true), 
+                        ref address, 
+                        address.ZIPCode, 
+                        out addressMatch, 
+                        out cityStateZipOk, 
+                        out residentialIndicator, 
+                        out isPoBox, 
+                        out isPoBoxSpecified, 
+                        out candidates, 
+                        out statusCodes, 
+                        out rates);
+                }
+                catch (Exception ex)
+                {
+                    log.Error(ex);
+
+                    throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+                }
+
+                return new UspsAddressValidationResults
+                {
+                    IsSuccessfulMatch = addressMatch,
+                    IsCityStateZipOk = cityStateZipOk,
+                    ResidentialIndicator = residentialIndicator,
+                    IsPoBox = isPoBox,
+                    MatchedAddress = address,
+                    Candidates = candidates.ToList()
+                };
+            }
         }
 
         /// <summary>
@@ -1185,11 +1238,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static Credentials GetCredentials(UspsAccountEntity account)
         {
+            return GetCredentials(account, false);
+        }
+
+        /// <summary>
+        /// Get the Credentials for the given account
+        /// </summary>
+        private static Credentials GetCredentials(UspsAccountEntity account, bool emptyCredentialsIfAccountNull)
+        {
+            if (account == null && !emptyCredentialsIfAccountNull)
+            {
+                throw new ArgumentNullException("account");
+            }
+
             return new Credentials
             {
                 IntegrationID = integrationID,
-                Username = account.Username,
-                Password = SecureText.Decrypt(account.Password, account.Username)
+                Username = account==null ? "" : account.Username,
+                Password = account==null ? "" : SecureText.Decrypt(account.Password, account.Username)
             };
         }
     }
