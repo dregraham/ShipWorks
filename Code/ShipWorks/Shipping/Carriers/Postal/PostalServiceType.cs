@@ -61,47 +61,47 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Critical Mail")]
         CriticalMail = 14,
 
-        [Description("DHL GM SM Parcel Expedited")]
+        [Description("DHL SM Parcel Expedited")]
         [ApiValue("DHLGMSMPARCELSEXPEDITED")]
         DhlParcelExpedited = 100,
 
-        [Description("DHL GM SM Parcel Ground")]
+        [Description("DHL SM Parcel Ground")]
         [ApiValue("DHLGMSMPARCELSGROUND")]
         DhlParcelStandard = 101,
 
-        [Description("DHL GM SM Parcel Plus Expedited")]
+        [Description("DHL SM Parcel Plus Expedited")]
         [ApiValue("DHLGMSMPARCELPLUSEXPEDITED")]
         DhlParcelPlusExpedited = 102,
 
-        [Description("DHL GM SM Parcel Plus Ground")]
+        [Description("DHL SM Parcel Plus Ground")]
         [ApiValue("DHLGMSMPARCELPLUSGROUND")]
         DhlParcelPlusStandard = 103,
 
-        [Description("DHL GM SM BPM Expedited")]
+        [Description("DHL SM BPM Expedited")]
         [ApiValue("DHLGMSMBPMEXPEDITED")]
         DhlBpmExpedited = 104,
 
-        [Description("DHL GM SM BPM Ground")]
+        [Description("DHL SM BPM Ground")]
         [ApiValue("DHLGMSMBPMGROUND")]
         DhlBpmStandard = 105,
 
-        [Description("DHL GM SM Catalog Expedited")]
+        [Description("DHL SM Catalog Expedited")]
         [ApiValue("DHLGMSMCATALOGBPMEXPEDITED")]
         DhlCatalogExpedited = 106,
 
-        [Description("DHL GM SM Catalog Ground")]
+        [Description("DHL SM Catalog Ground")]
         [ApiValue("DHLGMSMCATALOGBPMGROUND")]
         DhlCatalogStandard = 107,
 
-        [Description("DHL GM SM Media Mail Ground")]
+        [Description("DHL SM Media Mail Ground")]
         [ApiValue("DHLGMSMMEDIAMAILGROUND")]
         DhlMediaMailStandard = 108,
 
-        [Description("DHL GM SM Marketing Ground")]
+        [Description("DHL SM Marketing Ground")]
         [ApiValue("DHLGMSMMarketingParcelGround")]
         DhlMarketingStandard = 109,
 
-        [Description("DHL GM SM Marketing Expedited")]
+        [Description("DHL SM Marketing Expedited")]
         [ApiValue("DHLGMSMMarketingParcelExpedited")]
         DhlMarketingExpedited = 110,
 
