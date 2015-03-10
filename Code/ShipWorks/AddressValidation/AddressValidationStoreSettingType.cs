@@ -16,10 +16,10 @@ namespace ShipWorks.AddressValidation
         [Description("Notify me of suggestions")] 
         ValidateAndNotify = 1,
 
-        [Description("Manual Validation Only")] 
+        [Description("Manual validation only")] 
         ManualValidationOnly = 2,
 
-        [Description("Validation Disabled")] 
+        [Description("Disabled")] 
         ValidationDisabled = 3
     }
 }
