@@ -125,14 +125,29 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia consolidation is allowed
             bool endiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
-
+            
             // Check if Endicia scan based payment returns is allowed
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
+            // Check if Stamps Ascendia consolidation is allowed
+            AddStampsConsolidatorSharedOptions(xpath, edition);
+
             edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xpath);
 
             return edition;
+        }
+
+        /// <summary>
+        /// Check if Stamps Ascendia consolidation is allowed
+        /// </summary>
+        private static void AddStampsConsolidatorSharedOptions(XPathNavigator xpath, Edition edition)
+        {
+            edition.SharedOptions.StampsAscendiaEnabled = XPathUtility.Evaluate(xpath, "//StampsAscendiaEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsDhlEnabled = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsGlobegisticsEnabled = XPathUtility.Evaluate(xpath, "//StampsGlobegisticsEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsIbcEnabled = XPathUtility.Evaluate(xpath, "//StampsIbcEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsRrDonnelleyEnabled = XPathUtility.Evaluate(xpath, "//StampsRrDonnelleyEnabled/@status", 0) == 1;
         }
 
         /// <summary>

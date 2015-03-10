@@ -136,7 +136,10 @@ namespace ShipWorks.Editions
             {
                 AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
             }
-            
+
+            // Adds any Stamps consolidator restrictions, if required
+            AddStampsConsolidatorRestrictions();
+
             // Load the shipment type functionality into the restriction set
             foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
             {
@@ -187,6 +190,42 @@ namespace ShipWorks.Editions
             restrictionsFinalized = true;
 
             return restrictions;
+        }
+
+        /// <summary>
+        /// Adds any Stamps consolidator restrictions, if required
+        /// </summary>
+        private void AddStampsConsolidatorRestrictions()
+        {
+            // Ascendia
+            if (!sharedOptions.StampsAscendiaEnabled)
+            {
+                AddRestriction(EditionFeature.StampsAscendiaConsolidator, EditionRestrictionLevel.Hidden);
+            }
+
+            // DHL
+            if (!sharedOptions.StampsDhlEnabled)
+            {
+                AddRestriction(EditionFeature.StampsDhlConsolidator, EditionRestrictionLevel.Hidden);
+            }
+
+            // Globegistics
+            if (!sharedOptions.StampsGlobegisticsEnabled)
+            {
+                AddRestriction(EditionFeature.StampsGlobegisticsConsolidator, EditionRestrictionLevel.Hidden);
+            }
+
+            // IBC
+            if (!sharedOptions.StampsIbcEnabled)
+            {
+                AddRestriction(EditionFeature.StampsIbcConsolidator, EditionRestrictionLevel.Hidden);
+            }
+
+            // RR Donnelley
+            if (!sharedOptions.StampsRrDonnelleyEnabled)
+            {
+                AddRestriction(EditionFeature.StampsRrDonnelleyConsolidator, EditionRestrictionLevel.Hidden);
+            }
         }
 
         /// <summary>
