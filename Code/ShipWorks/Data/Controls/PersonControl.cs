@@ -1042,7 +1042,7 @@ namespace ShipWorks.Data.Controls
         /// </summary>
         private List<ValidatedAddressEntity> LoadValidatedAddresses()
         {
-            if (validatedAddresses.Any())
+            if (validatedAddresses != null && validatedAddresses.Any())
             {
                 return validatedAddresses;
             }
