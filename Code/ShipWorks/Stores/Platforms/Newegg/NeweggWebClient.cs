@@ -23,6 +23,7 @@ using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -257,15 +258,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             package.ShipDateInPacificStandardTime = ConvertUtcToPacificStandardTime(shipmentEntity.ShipDate);
             package.ShipCarrier = GetCarrierCode(shipmentEntity);
 
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipmentEntity, (track, service) =>
-            {
-                if (track.Length > 0)
-                {
-                    package.ShipCarrier = "UPS MI";
-                }
-            });
-
             package.ShipService = GetShipService(shipmentEntity);
 
             package.ShipFromAddress1 = shipmentEntity.OriginStreet1;
@@ -328,6 +320,16 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierCode = "UPS";
+
+                    // Adjust tracking details per Mail Innovations and others
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+                    {
+                        if (shipmentEntity.Ups.UspsTrackingNumber.Length > 0)
+                        {
+                            carrierCode = "UPS MI";
+                        }
+                    }
+
                     break;
 
                 case ShipmentTypeCode.OnTrac:

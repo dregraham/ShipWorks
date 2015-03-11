@@ -8,6 +8,7 @@ using ShipWorks.Tests.Stores.Newegg.Mocked;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 
 namespace ShipWorks.Tests.Stores.Newegg
@@ -25,6 +26,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         private NeweggOrderItemEntity itemEntity;
         private NeweggOrderEntity orderEntity;
         private FedExShipmentEntity fedExEntity;
+        private UpsShipmentEntity upsEntity;
         private ShipmentEntity shipmentEntity;
         private PostalShipmentEntity postalShipmentEntity;
         private EndiciaShipmentEntity endiciaShipmentEntity;
@@ -41,6 +43,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             orderEntity = new NeweggOrderEntity { OrderNumber = 123456 };
             itemEntity = new NeweggOrderItemEntity { Order = orderEntity, SellerPartNumber = "9876ZYXW" };
             fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
+            upsEntity = new UpsShipmentEntity { Service = (int) UpsServiceType.UpsGround, UspsTrackingNumber = "mi tracking #" };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int)ShipmentTypeCode.FedEx, FedEx = fedExEntity};
             uspsShipmentEntity = new UspsShipmentEntity();
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass};
@@ -133,6 +136,35 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(otherShipmentEntity.Carrier, carrierCode);
         }
 
+        [TestMethod]
+        public void GetCarrierCode_ReturnsUps_WhenUpsAndGround_Test()
+        {
+            shipmentEntity.Ups = upsEntity;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsOnLineTools);
+
+            Assert.AreEqual("UPS", carrierCode);
+
+            carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsWorldShip);
+
+            Assert.AreEqual("UPS", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsUpsMi_WhenUpsAndUpsMiService_Test()
+        {
+            upsEntity.Service = (int) UpsServiceType.UpsMailInnovationsFirstClass;
+            shipmentEntity.Ups = upsEntity;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsOnLineTools);
+
+            Assert.AreEqual("UPS MI", carrierCode);
+
+            carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsWorldShip);
+
+            Assert.AreEqual("UPS MI", carrierCode);
+        }
+
         private string RunCarrierCodeTest(ShipmentTypeCode shipmentTypeCode)
         {
             testObject = new NeweggWebClient(store, requestFactory);
@@ -145,7 +177,8 @@ namespace ShipWorks.Tests.Stores.Newegg
                 ShipmentType = (int)shipmentTypeCode,
                 Postal = postalShipmentEntity,
                 Other = otherShipmentEntity,
-                FedEx = fedExEntity
+                FedEx = fedExEntity,
+                Ups = upsEntity
             };
 
             string carrierCode = NeweggWebClient.GetCarrierCode(shipmentEntity);
