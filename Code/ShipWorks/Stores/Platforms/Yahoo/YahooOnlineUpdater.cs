@@ -246,14 +246,13 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                     {
                         return "Dhl";
                     }
-                    else if (ShipmentTypeManager.IsConsolidator(service))
+                    
+                    if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "Consolidator";
                     }
-                    else
-                    {
-                        return "Usps";
-                    }
+                    
+                    return "Usps";
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:

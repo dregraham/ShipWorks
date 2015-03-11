@@ -251,7 +251,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     {
                         return "DHL";
                     }
-                    else if (ShipmentTypeManager.IsConsolidator(service))
+                    
+                    if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "OTHER";
                     }

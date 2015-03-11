@@ -129,9 +129,9 @@ namespace ShipWorks.Shipping.ScanForms
 
                             PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
 
-                            // Not a consolidator and not Endicia DHL
+                            // Don't include consolidator or Dhl shipment when creating a scan form
                             if (!ShipmentTypeManager.IsConsolidator(postalServiceType) &&
-                                !(shipment.ShipmentType == (int) ShipmentTypeCode.Endicia && ShipmentTypeManager.IsEndiciaDhl(postalServiceType)))
+                                !ShipmentTypeManager.IsDhl(postalServiceType))
                             {
                                 shipments.Add(shipment);                                
                             }

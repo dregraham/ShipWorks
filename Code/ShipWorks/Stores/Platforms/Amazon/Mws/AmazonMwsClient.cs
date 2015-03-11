@@ -570,32 +570,29 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
             }
-            else
+            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
             {
-                if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
-                {
-                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+                PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsDhl(service))
-                    {
-                        // The DHL carrier for Endicia/Stamps is:
-                        carrier = "DHL Global Mail";
-                    }
-                    else if (ShipmentTypeManager.IsConsolidator(service))
-                    {
-                        carrier = "Consolidator";
-                    }
-                    else
-                    {
-                        // Use the default carrier for other Endicia types
-                        carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
-                    }
+                // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
+                if (ShipmentTypeManager.IsDhl(service))
+                {
+                    // The DHL carrier for Endicia/Stamps is:
+                    carrier = "DHL Global Mail";
+                }
+                else if (ShipmentTypeManager.IsConsolidator(service))
+                {
+                    carrier = "Consolidator";
                 }
                 else
                 {
+                    // Use the default carrier for other Endicia types
                     carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
                 }
+            }
+            else
+            {
+                carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
             }
 
             return carrier;
