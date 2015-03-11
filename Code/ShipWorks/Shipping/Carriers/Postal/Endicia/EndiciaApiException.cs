@@ -65,11 +65,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     {
                         if (ShipmentTypeManager.IsEndiciaDhl(postalService))
                         {
-                            return "Your Endicia account has not been enabled to use the selected DHL servce.";
+                            return "Your Endicia account has not been enabled to use the selected DHL service.";
                         }
                         else if (ShipmentTypeManager.IsConsolidator(postalService))
                         {
-                            return "Your Endicia account has not been enabled to use the selected servce.";
+                            return "Your Endicia account has not been enabled to use the selected service.";
                         }
                     }
 

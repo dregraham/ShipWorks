@@ -168,10 +168,10 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             {
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return BuyDotComTrackingType.Usps;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     return GetEndiciaTrackingType(shipment);
 
@@ -225,7 +225,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
             // The shipment is an Endicia shipment, check to see if it's DHL
-            if (ShipmentTypeManager.IsEndiciaDhl(service))
+            if (ShipmentTypeManager.IsDhl(service))
             {
                 // The DHL carrier for Endicia is:
                 return BuyDotComTrackingType.DHLGlobalMail;

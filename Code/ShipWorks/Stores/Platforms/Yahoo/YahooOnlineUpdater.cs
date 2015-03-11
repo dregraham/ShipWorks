@@ -238,10 +238,11 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
             switch (type)
             {
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
                         return "Dhl";
                     }
@@ -256,7 +257,6 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "Usps";
 

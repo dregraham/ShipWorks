@@ -89,6 +89,7 @@ namespace ShipWorks.Editions
 
                 case EditionFeature.EndiciaInsurance:
                 case EditionFeature.EndiciaDhl:
+                case EditionFeature.StampsDhl:
                 case EditionFeature.UpsSurePost:
                 case EditionFeature.EndiciaConsolidator:
                 case EditionFeature.EndiciaScanBasedReturns:

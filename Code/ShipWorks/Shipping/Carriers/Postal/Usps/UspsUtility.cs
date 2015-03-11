@@ -43,6 +43,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.RRDIPA, PostalServiceType.RrdIpa},
             {ServiceType.RRDISAL, PostalServiceType.RrdIsal},
             {ServiceType.RRDEPKT, PostalServiceType.RrdEpsePacketService},
+			{ServiceType.DHLPG, PostalServiceType.DhlParcelStandard},
+            {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusExpedited},
+            {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusStandard},
+            {ServiceType.DHLBPME, PostalServiceType.DhlBpmExpedited},
+            {ServiceType.DHLBPMG, PostalServiceType.DhlBpmStandard},
+            {ServiceType.DHLMPE, PostalServiceType.DhlMarketingExpedited},
+            {ServiceType.DHLMPG, PostalServiceType.DhlMarketingStandard},
         };
 
         /// <summary>

@@ -107,6 +107,12 @@ namespace ShipWorks.Editions
         /// </summary>
         public virtual IEnumerable<EditionRestriction> GetRestrictions()
         {
+            // Stamps DHL
+            if (!sharedOptions.StampsDhlEnabled)
+            {
+                AddRestriction(EditionFeature.StampsDhl, EditionRestrictionLevel.Hidden);
+            }
+
             // Endicia DHL
             if (!sharedOptions.EndiciaDhlEnabled)
             {
@@ -204,7 +210,7 @@ namespace ShipWorks.Editions
             }
 
             // DHL
-            if (!sharedOptions.StampsDhlEnabled)
+            if (!sharedOptions.StampsDhlConsolidatorEnabled)
             {
                 AddRestriction(EditionFeature.StampsDhlConsolidator, EditionRestrictionLevel.Hidden);
             }

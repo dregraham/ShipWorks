@@ -572,18 +572,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             }
             else
             {
-                if (shipment.ShipmentType != (int) ShipmentTypeCode.Endicia)
-                {
-                    carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
-                }
-                else
+                if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
                 {
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
-                        // The DHL carrier for Endicia is:
+                        // The DHL carrier for Endicia/Stamps is:
                         carrier = "DHL Global Mail";
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
@@ -595,6 +591,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         // Use the default carrier for other Endicia types
                         carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
                     }
+                }
+                else
+                {
+                    carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
                 }
             }
 

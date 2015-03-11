@@ -349,7 +349,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                         return "CONSOLIDATOR";
                     }
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
+                    if (ShipmentTypeManager.IsDhl(postalServiceType))
                     {
                         return "Global Mail";
                     }
@@ -382,16 +382,16 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 case ShipmentTypeCode.UpsWorldShip:
                     return "UPS";
 
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "USPS";
-                
+
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
                         return "DHL";
                     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -24,6 +25,8 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         private Mock<IScanFormCarrierAccount> carrierAccount;
         private Mock<IScanFormGateway> gateway;
 
+        private List<ShipmentEntity> oneShipment; 
+
         
         private Mock<IWin32Window> window;
 
@@ -47,6 +50,18 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             carrierAccount.Setup(a => a.GetPrinter()).Returns(formPrinter.Object);
             carrierAccount.Setup(a => a.GetGateway()).Returns(gateway.Object);
             carrierAccount.Setup(a => a.Save(It.IsAny<ScanFormBatch>())).Returns(10001);
+
+            oneShipment = new List<ShipmentEntity>
+            {
+                new ShipmentEntity()
+                {
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
+                    Postal = new PostalShipmentEntity()
+                    {
+                        Service = (int)PostalServiceType.ExpressMail
+                    }
+                }
+            };
 
             window = new Mock<IWin32Window>();
 
@@ -76,25 +91,15 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         [TestMethod]
         public void Create_DelegatesCreationToGateway_Test()
         {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>
-                {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
-                };
+            testObject.Create(oneShipment);
 
-            testObject.Create(shipments);
-
-            gateway.Verify(x => x.CreateScanForms(testObject, shipments));
+            gateway.Verify(x => x.CreateScanForms(testObject, oneShipment));
         }
 
         [TestMethod]
         public void Create_AssignsShipmentCount_Test()
         {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>
-                {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
-                };
-
-            testObject.Create(shipments);
+            testObject.Create(oneShipment);
 
             Assert.AreEqual(1, testObject.ShipmentCount);
         }
@@ -102,12 +107,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         [TestMethod]
         public void Create_DelegatesSaveToCarrierAccount_Test()
         {
-            List<ShipmentEntity> shipments = new List<ShipmentEntity>
-                {
-                    new ShipmentEntity { ShipmentType = (int) ShipmentTypeCode.Usps }
-                };
-
-            testObject.Create(shipments);
+            testObject.Create(oneShipment);
 
             carrierAccount.Verify(x => x.Save(testObject));
         }
@@ -341,9 +341,44 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
 
             // Call the create method, so the shipment count will be initialized
-            testObject.Create(new List<ShipmentEntity> { new ShipmentEntity()});
+            testObject.Create(oneShipment);
             
             batchShipmentRepository.Verify(r => r.GetShipmentCount(testObject), Times.Never());
+        }
+
+        [TestMethod]
+        public void ShipmentCount_ProcessDhlInSeperateBatch_WhenDhlAndNonDhlShipmentsPresent_Test()
+        {
+            List<ShipmentEntity> shipmentsToBatch = new List<ShipmentEntity>
+            {
+                new ShipmentEntity()
+                {
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
+                    Postal = new PostalShipmentEntity()
+                    {
+                        Service = (int)PostalServiceType.ExpressMail
+                    }
+                },
+                new ShipmentEntity()
+                {
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
+                    Postal = new PostalShipmentEntity()
+                    {
+                        Service = (int)PostalServiceType.DhlParcelPlusExpedited
+                    }
+                },
+                new ShipmentEntity()
+                {
+                    ShipmentType = (int)ShipmentTypeCode.Usps,
+                    Postal = new PostalShipmentEntity()
+                    {
+                        Service = (int)PostalServiceType.DhlParcelPlusStandard
+                    }
+                }
+            };
+            testObject.Create(shipmentsToBatch);
+
+            gateway.Verify(m => m.CreateScanForms(It.IsAny<ScanFormBatch>(), It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Exactly(2));
         }
     }
 }

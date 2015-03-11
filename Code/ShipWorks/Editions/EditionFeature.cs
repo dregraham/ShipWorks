@@ -162,6 +162,12 @@ namespace ShipWorks.Editions
         ShippingAccountConversion,
 
         /// <summary>
+        /// Controls if DHL is enabled for Stamps users
+        /// </summary>
+        [Description("Your ShipWorks account does not support shipping with DHL through Stamps.")]
+        StampsDhl,
+		
+        /// <summary>
         /// Stamps Ascendia consolidator
         /// </summary>
         [Description("Your ShipWorks account does not support using Ascendia as a consolidator through Stamps.")]
@@ -189,6 +195,6 @@ namespace ShipWorks.Editions
         /// Stamps RrDonnelley consolidator
         /// </summary>
         [Description("Your ShipWorks account does not support using RR Donnelley as a consolidator through Stamps.")]
-        StampsRrDonnelleyConsolidator
+        StampsRrDonnelleyConsolidator,
     }
 }

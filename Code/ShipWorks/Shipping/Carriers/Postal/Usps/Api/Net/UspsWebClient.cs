@@ -605,7 +605,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     );
             }
 
-
             if (scanFormUrl.Contains(" "))
             {
                 // According to the docs, there is a chance that there could be multiple URLs; the first
@@ -661,7 +660,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             catch (UspsApiException ex)
             {
-                if (ex.Message.ToUpperInvariant().Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                string errorMessageUpper = ex.Message.ToUpperInvariant();
+
+                if (errorMessageUpper.Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
                 {
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for USPS is being used to compare rates
@@ -673,11 +674,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     throw new UspsException(message, ex);
                 }
 
-                if (ex.Code == 5636353 || 
-                    ex.Message.ToUpperInvariant().Contains("INSUFFICIENT FUNDS") || ex.Message.ToUpperInvariant().Contains("not enough postage".ToUpperInvariant()) ||
-                    ex.Message.ToUpperInvariant().Contains("Insufficient Postage".ToUpperInvariant()))
+                if (ex.Code == 5636353 ||
+                    errorMessageUpper.Contains("INSUFFICIENT FUNDS") || errorMessageUpper.Contains("not enough postage".ToUpperInvariant()) ||
+                    errorMessageUpper.Contains("Insufficient Postage".ToUpperInvariant()))
                 {
                     throw new UspsInsufficientFundsException(account, ex.Message);
+                }
+
+                if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
+                {
+                    throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");                    
                 }
 
                 // This isn't an exception we can handle, so just throw the original exception

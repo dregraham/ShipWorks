@@ -33,6 +33,11 @@ namespace ShipWorks.Editions
         public bool EndiciaScanBasedReturnEnabled { get; set; }
 
         /// <summary>
+        /// Indicates if DHL is enabled and allowed for the edition
+        /// </summary>
+        public bool StampsDhlEnabled { get; set; }
+
+        /// <summary>
         /// Indicates whether Stamps Ascendia consolidator is enabled for the customer's account
         /// </summary>
         public bool StampsAscendiaEnabled { get; set; }
@@ -40,7 +45,7 @@ namespace ShipWorks.Editions
         /// <summary>
         /// Indicates whether Stamps DHL consolidator is enabled for the customer's account
         /// </summary>
-        public bool StampsDhlEnabled { get; set; }
+        public bool StampsDhlConsolidatorEnabled { get; set; }
 
         /// <summary>
         /// Indicates whether Stamps Globegistics consolidator is enabled for the customer's account

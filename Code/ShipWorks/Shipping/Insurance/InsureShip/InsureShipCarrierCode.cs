@@ -46,9 +46,10 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     }
                     break;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType postalServiceType = (PostalServiceType)shipment.Postal.Service;
-                    if (ShipmentTypeManager.IsConsolidator(postalServiceType) || ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
+                    if (ShipmentTypeManager.IsConsolidator(postalServiceType) || ShipmentTypeManager.IsDhl(postalServiceType))
                     {
                         carrierCode = "DHL-GLOBAL";
                     }
@@ -58,7 +59,6 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     }
                     break;
 
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:

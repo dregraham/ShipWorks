@@ -395,17 +395,16 @@ namespace ShipWorks.Stores.Platforms.Ebay
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
-
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    // The shipment is an Endicia/Usps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
-                        // The DHL carrier for Endicia is:
+                        // The DHL carrier for Endicia/Usps is:
                         carrierType = ShippingCarrierCodeType.DHL;
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
@@ -414,10 +413,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     }
                     else
                     {
-                        // Use the default carrier for other Endicia types
+                        // Use the default carrier for other Endicia/Usps types
                         carrierType = ShippingCarrierCodeType.USPS;
                     }
                     break;
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierType = ShippingCarrierCodeType.UPS;

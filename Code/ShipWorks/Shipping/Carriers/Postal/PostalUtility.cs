@@ -216,6 +216,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     }
                 }
 
+                if (shipmentType == ShipmentTypeCode.Usps)
+                {
+                    // If not restricted from Stamps DHL, add them in
+                    if (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsDhl).Level == EditionRestrictionLevel.None)
+                    {
+                        services.AddRange(EnumHelper.GetEnumList<PostalServiceType>(service => ShipmentTypeManager.IsStampsDhl(service)).Select(entry => entry.Value));
+                    }
+                }
+
                 return services;
             }
         }
