@@ -32,7 +32,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                         // The DHL carrier for Endicia is:
                         carrierCode = "DHL";
                     }
-                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
                     {
                         carrierCode = "Consolidator";
                     }

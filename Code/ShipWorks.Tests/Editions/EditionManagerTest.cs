@@ -44,6 +44,9 @@ namespace ShipWorks.Tests.Editions
         [TestInitialize]
         public void Initialize()
         {
+            // Make sure we're starting with a fresh cache each time
+            ShippingPolicies.ClearCache();
+
             enabledStore1 = new StoreEntity() { Enabled = true };
             enabledStore2 = new StoreEntity() { Enabled = true };
 

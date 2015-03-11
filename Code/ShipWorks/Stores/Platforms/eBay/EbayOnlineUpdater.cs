@@ -408,7 +408,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         // The DHL carrier for Endicia is:
                         carrierType = ShippingCarrierCodeType.DHL;
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    else if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         carrierType = ShippingCarrierCodeType.Other;
                     }

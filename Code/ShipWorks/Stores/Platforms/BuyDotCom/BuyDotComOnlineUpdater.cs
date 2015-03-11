@@ -230,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 // The DHL carrier for Endicia is:
                 return BuyDotComTrackingType.DHLGlobalMail;
             }
-            else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+            else if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return BuyDotComTrackingType.Other;
             }

@@ -128,7 +128,7 @@ namespace ShipWorks.Shipping.ScanForms
                             ShippingManager.EnsureShipmentLoaded(shipment);
 
                             PostalServiceType postalServiceType = (PostalServiceType) shipment.Postal.Service;
-                            if (!ShipmentTypeManager.IsEndiciaConsolidator(postalServiceType) &&
+                            if (!ShipmentTypeManager.IsConsolidator(postalServiceType) &&
                                 !ShipmentTypeManager.IsEndiciaDhl(postalServiceType))
                             {
                                 shipments.Add(shipment);                                

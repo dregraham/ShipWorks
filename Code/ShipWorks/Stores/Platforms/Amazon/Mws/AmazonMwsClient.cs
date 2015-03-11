@@ -586,7 +586,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                         // The DHL carrier for Endicia is:
                         carrier = "DHL Global Mail";
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    else if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         carrier = "Consolidator";
                     }

@@ -22,30 +22,30 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Lookup of what service types are associated with which edition features
         /// </summary>
-        private static readonly Dictionary<EditionFeature, List<PostalServiceType>> consolidatorServiceTypes = 
+        private static readonly Dictionary<EditionFeature, List<PostalServiceType>> uspsConsolidatorServiceTypes = 
             new Dictionary<EditionFeature, List<PostalServiceType>>
         {
             {
                 EditionFeature.StampsAscendiaConsolidator, new List<PostalServiceType>
                 {
                     PostalServiceType.AsendiaGeneric, 
-                    PostalServiceType.AsendiaIPA, 
-                    PostalServiceType.AsendiaISAL, 
+                    PostalServiceType.AsendiaIpa, 
+                    PostalServiceType.AsendiaIsal, 
                     PostalServiceType.AsendiaePacket
                 }
             },
             {
                 EditionFeature.StampsDhlConsolidator, new List<PostalServiceType>
                 {
-                    PostalServiceType.DHLPacketIPA,
-                    PostalServiceType.DHLPacketISAL
+                    PostalServiceType.DhlPacketIpa,
+                    PostalServiceType.DhlPacketIsal
                 }
             },
             {
                 EditionFeature.StampsGlobegisticsConsolidator, new List<PostalServiceType>
                 {
-                    PostalServiceType.GlobegisticsIPA,
-                    PostalServiceType.GlobegisticsISAL,
+                    PostalServiceType.GlobegisticsIpa,
+                    PostalServiceType.GlobegisticsIsal,
                     PostalServiceType.GlobegisticsePacket,
                     PostalServiceType.GlobegisticsGeneric
                 }
@@ -53,17 +53,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 EditionFeature.StampsIbcConsolidator, new List<PostalServiceType>
                 {
-                    PostalServiceType.InternationalBondedCouriersIPA,
-                    PostalServiceType.InternationalBondedCouriersISAL,
+                    PostalServiceType.InternationalBondedCouriersIpa,
+                    PostalServiceType.InternationalBondedCouriersIsal,
                     PostalServiceType.InternationalBondedCouriersePacket
                 }
             },
             {
                 EditionFeature.StampsRrDonnelleyConsolidator, new List<PostalServiceType>
                 {
-                    PostalServiceType.RRDIPA,
-                    PostalServiceType.RRDISAL,
-                    PostalServiceType.RRDEPSePacketService
+                    PostalServiceType.RrdIpa,
+                    PostalServiceType.RrdIsal,
+                    PostalServiceType.RrdEpsePacketService
                 }
             },
         };
@@ -265,7 +265,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 if (shipmentType == ShipmentTypeCode.Usps)
                 {
                     // Get a list of any consolidators that should be available to customers
-                    IEnumerable<PostalServiceType> accesibleConsolidatorTypes = consolidatorServiceTypes
+                    IEnumerable<PostalServiceType> accesibleConsolidatorTypes = uspsConsolidatorServiceTypes
                         .Where(x => EditionManager.ActiveRestrictions.CheckRestriction(x.Key).Level == EditionRestrictionLevel.None)
                         .SelectMany(x => x.Value)
                         .ToList();
@@ -601,6 +601,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     return new Express1UspsShipmentType();
                 default:
                     throw new ArgumentException(string.Format("{0} has no associated Shipment Type.", EnumHelper.GetDescription(uspsResellerType)), "uspsResellerType");
+            }
+        }
+
+        /// <summary>
+        /// Gets a list of postal service types that are for Usps consolidators
+        /// </summary>
+        public static IEnumerable<PostalServiceType> UspsConsolidatorTypes
+        {
+            get
+            {
+                return uspsConsolidatorServiceTypes.SelectMany(x => x.Value);   
             }
         }
     }

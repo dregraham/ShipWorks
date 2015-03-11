@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 
@@ -126,10 +122,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
         CommercialePacket = 204,
 
         [Description("Asendia IPA")]
-        AsendiaIPA = 210,
+        AsendiaIpa = 210,
 
         [Description("Asendia ISAL")]
-        AsendiaISAL = 211,
+        AsendiaIsal = 211,
 
         [Description("Asendia ePacket")]
         AsendiaePacket = 212,
@@ -138,16 +134,16 @@ namespace ShipWorks.Shipping.Carriers.Postal
         AsendiaGeneric = 213,
 
         [Description("DHL Packet IPA")]
-        DHLPacketIPA = 214,
+        DhlPacketIpa = 214,
 
         [Description("DHL Packet ISAL")]
-        DHLPacketISAL = 215,
+        DhlPacketIsal = 215,
 
         [Description("Globegistics IPA")]
-        GlobegisticsIPA = 216,
+        GlobegisticsIpa = 216,
 
         [Description("Globegistics ISAL")]
-        GlobegisticsISAL = 217,
+        GlobegisticsIsal = 217,
 
         [Description("Globegistics ePacket")]
         GlobegisticsePacket = 218,
@@ -156,21 +152,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         GlobegisticsGeneric = 219,
 
         [Description("International Bonded Couriers IPA")]
-        InternationalBondedCouriersIPA = 220,
+        InternationalBondedCouriersIpa = 220,
 
         [Description("International Bonded Couriers ISAL")]
-        InternationalBondedCouriersISAL = 221,
+        InternationalBondedCouriersIsal = 221,
 
         [Description("International Bonded Couriers ePacket")]
         InternationalBondedCouriersePacket = 222,
 
         [Description("RRD IPA")]
-        RRDIPA = 223,
+        RrdIpa = 223,
 
         [Description("RRD ISAL")]
-        RRDISAL = 224,
+        RrdIsal = 224,
 
         [Description("RRD EPS (ePacket Service)")]
-        RRDEPSePacketService = 225,
+        RrdEpsePacketService = 225,
     }
 }

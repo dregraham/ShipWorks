@@ -344,7 +344,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                             return "PRIORITY";
                     }
 
-                    if (ShipmentTypeManager.IsEndiciaConsolidator(postalServiceType))
+                    if (ShipmentTypeManager.IsConsolidator(postalServiceType))
                     {
                         return "CONSOLIDATOR";
                     }
@@ -395,7 +395,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         return "DHL";
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    else if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "Consolidator";
                     }

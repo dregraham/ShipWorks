@@ -252,7 +252,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)
         /// </summary>
-        public static bool IsEndiciaConsolidator(PostalServiceType service)
+        public static bool IsConsolidator(PostalServiceType service)
         {
             switch (service)
             {
@@ -264,7 +264,7 @@ namespace ShipWorks.Shipping
                     return true;
             }
 
-            return false;
+            return PostalUtility.UspsConsolidatorTypes.Contains(service);
         }
 
    }

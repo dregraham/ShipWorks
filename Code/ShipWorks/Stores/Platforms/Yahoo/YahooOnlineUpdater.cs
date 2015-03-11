@@ -245,7 +245,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
                     {
                         return "Dhl";
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    else if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "Consolidator";
                     }

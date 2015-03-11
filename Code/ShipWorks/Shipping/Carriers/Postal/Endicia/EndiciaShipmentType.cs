@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             string carrier;
             PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-            if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+            if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return "Consolidator";
             }
@@ -858,7 +858,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
             }
 
-            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsEndiciaConsolidator(serviceType))
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))
             {
                 return EnumHelper.GetApiValue(serviceType);
             }
