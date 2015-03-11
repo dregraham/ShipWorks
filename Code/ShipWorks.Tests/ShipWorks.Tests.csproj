@@ -465,6 +465,7 @@
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
+    <Compile Include="Stores\Volusion\VolusionWebClientTest.cs" />
     <Compile Include="Stores\Yahoo\YahooOnlineUpdaterTest.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
