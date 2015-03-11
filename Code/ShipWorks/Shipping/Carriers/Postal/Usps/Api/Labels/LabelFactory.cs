@@ -98,6 +98,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // b\c we get only 2 urls (instead of 4).  the 2nd is a duplicate of the first in the cases ive seen, and we dont need it
                     labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
                 }
+                else if (UspsUtility.IsAsendiaServiceType(serviceType))
+                {
+                    // No cropping needed
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
+                }
                 else
                 {
                     // typical situation not including continuation pages

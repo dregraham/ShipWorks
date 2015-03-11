@@ -153,5 +153,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return memo;
         }
 
+        /// <summary>
+        /// Determines whether the specified service type is an Asendia service type.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if [is Asendia service type]; otherwise, <c>false</c>.</returns>
+        public static bool IsAsendiaServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.AsendiaIsal || serviceType == PostalServiceType.AsendiaIpa || serviceType == PostalServiceType.AsendiaGeneric || serviceType == PostalServiceType.AsendiaePacket;
+        }
+
     }
 }
