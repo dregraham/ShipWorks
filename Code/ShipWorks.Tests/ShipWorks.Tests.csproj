@@ -438,6 +438,7 @@
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
+    <Compile Include="Stores\Etsy\EtsyOnlineUpdaterTest.cs" />
     <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
     <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />

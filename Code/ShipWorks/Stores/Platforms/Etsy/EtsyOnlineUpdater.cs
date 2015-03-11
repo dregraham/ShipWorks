@@ -219,6 +219,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             
             try
             {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
                 webClient.UploadShipmentDetails(etsyStore.EtsyShopID, order.OrderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
             }
             catch (EtsyException ex)
@@ -254,10 +256,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        private static string GetEtsyCarrierCode(ShipmentEntity shipment)
+        public static string GetEtsyCarrierCode(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
-
             ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
 
             switch (type)
