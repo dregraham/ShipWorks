@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Tests.Stores.Newegg.Mocked;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping;
 
 namespace ShipWorks.Tests.Stores.Newegg
@@ -25,6 +26,10 @@ namespace ShipWorks.Tests.Stores.Newegg
         private NeweggOrderEntity orderEntity;
         private FedExShipmentEntity fedExEntity;
         private ShipmentEntity shipmentEntity;
+        private PostalShipmentEntity postalShipmentEntity;
+        private EndiciaShipmentEntity endiciaShipmentEntity;
+        private UspsShipmentEntity uspsShipmentEntity;
+        private OtherShipmentEntity otherShipmentEntity;
 
 
         [TestInitialize]
@@ -32,12 +37,15 @@ namespace ShipWorks.Tests.Stores.Newegg
         {
             this.requestFactory = new ShipWorks.Tests.Stores.Newegg.Mocked.Success.MockRequestFactory();
             this.store = new NeweggStoreEntity();
-
             
             orderEntity = new NeweggOrderEntity { OrderNumber = 123456 };
             itemEntity = new NeweggOrderItemEntity { Order = orderEntity, SellerPartNumber = "9876ZYXW" };
             fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int)ShipmentTypeCode.FedEx, FedEx = fedExEntity};
+            uspsShipmentEntity = new UspsShipmentEntity();
+            postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass};
+            otherShipmentEntity = new OtherShipmentEntity { Carrier = "Some other carrier", Service = "Fast Ground"};
+            endiciaShipmentEntity = new EndiciaShipmentEntity();
             
             testObject = new NeweggWebClient(store, requestFactory);
         }
@@ -62,5 +70,87 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsFalse(testObject.AreCredentialsValid());
         }
 
+        [TestMethod]
+        public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
+        {
+            postalShipmentEntity.Endicia = endiciaShipmentEntity;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelStandard;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
+
+            Assert.AreEqual("DHL", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
+        {
+            postalShipmentEntity.Usps = uspsShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Usps);
+
+            Assert.AreEqual("DHL", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
+        {
+            postalShipmentEntity.Endicia = endiciaShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
+
+            Assert.AreEqual("USPS", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
+        {
+            postalShipmentEntity.Endicia = endiciaShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
+
+            Assert.AreEqual("Consolidator", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClass_Test()
+        {
+            postalShipmentEntity.Usps = uspsShipmentEntity;
+            postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
+
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Usps);
+
+            Assert.AreEqual("USPS", carrierCode);
+        }
+
+        [TestMethod]
+        public void GetCarrierCode_ReturnsSpecifiedCarrier_WhenOtherShipmentType_Test()
+        {
+            string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Other);
+
+            Assert.AreEqual(otherShipmentEntity.Carrier, carrierCode);
+        }
+
+        private string RunCarrierCodeTest(ShipmentTypeCode shipmentTypeCode)
+        {
+            testObject = new NeweggWebClient(store, requestFactory);
+
+            shipmentEntity = new ShipmentEntity
+            {
+                Order = orderEntity,
+                TrackingNumber = "ABCD1234",
+                ShipDate = DateTime.UtcNow,
+                ShipmentType = (int)shipmentTypeCode,
+                Postal = postalShipmentEntity,
+                Other = otherShipmentEntity,
+                FedEx = fedExEntity
+            };
+
+            string carrierCode = NeweggWebClient.GetCarrierCode(shipmentEntity);
+
+            return carrierCode;
+        }
     }
 }
