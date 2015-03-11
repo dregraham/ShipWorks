@@ -154,14 +154,58 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Determines whether the specified service type is for one of the international consolidators supported by USPS.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if the service is an international consolidator service type; otherwise, <c>false</c>.</returns>
+        public static bool IsInternationalConsolidatorServiceType(PostalServiceType serviceType)
+        {
+            return IsAsendiaServiceType(serviceType) || 
+                IsGlobegisticsServiceType(serviceType) || 
+                IsInternationalBondedCouriersServiceType(serviceType) || 
+                IsRrDonnellyServiceType(serviceType);
+        }
+
+        /// <summary>
         /// Determines whether the specified service type is an Asendia service type.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
-        /// <returns><c>true</c> if [is Asendia service type]; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the service is an Asendia service type; otherwise, <c>false</c>.</returns>
         public static bool IsAsendiaServiceType(PostalServiceType serviceType)
         {
             return serviceType == PostalServiceType.AsendiaIsal || serviceType == PostalServiceType.AsendiaIpa || serviceType == PostalServiceType.AsendiaGeneric || serviceType == PostalServiceType.AsendiaePacket;
         }
+
+        /// <summary>
+        /// Determines whether the specified service type is a Globegistics service type.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if the serivce is a Globegistics service type; otherwise, <c>false</c>.</returns>
+        public static bool IsGlobegisticsServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.GlobegisticsGeneric || serviceType == PostalServiceType.GlobegisticsIpa || serviceType == PostalServiceType.GlobegisticsIsal|| serviceType == PostalServiceType.GlobegisticsePacket;
+        }
+
+        /// <summary>
+        /// Determines whether the specified service type is a InternationalBondedCouriers service type.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if the serivce is a InternationalBondedCouriers service type; otherwise, <c>false</c>.</returns>
+        public static bool IsInternationalBondedCouriersServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.InternationalBondedCouriersIpa || serviceType == PostalServiceType.InternationalBondedCouriersIsal || serviceType == PostalServiceType.InternationalBondedCouriersePacket;
+        }
+
+        /// <summary>
+        /// Determines whether the specified service type is a Globegistics service type.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if the serivce is a Globegistics service type; otherwise, <c>false</c>.</returns>
+        public static bool IsRrDonnellyServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.RrdIpa || serviceType == PostalServiceType.RrdIsal || serviceType == PostalServiceType.GlobegisticsIsal || serviceType == PostalServiceType.RrdEpsePacketService;
+        }
+
 
     }
 }
