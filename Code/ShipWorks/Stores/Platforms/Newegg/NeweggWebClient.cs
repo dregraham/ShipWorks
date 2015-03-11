@@ -291,7 +291,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns></returns>
-        private static string GetCarrierCode(ShipmentEntity shipmentEntity)
+        public static string GetCarrierCode(ShipmentEntity shipmentEntity)
         {
             string carrierCode = string.Empty;
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
@@ -339,7 +339,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     break;
 
                 case ShipmentTypeCode.Other:
-                    ShippingManager.EnsureShipmentLoaded(shipmentEntity);
                     carrierCode = shipmentEntity.Other.Carrier;
                     break;
 
