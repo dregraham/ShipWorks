@@ -75,8 +75,22 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 // any breaking changes between the web client and API for scan forms
                 List<UspsShipmentEntity> shipments = new List<UspsShipmentEntity>
                 {
-                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() },
-                    new UspsShipmentEntity { UspsTransactionID = Guid.NewGuid() }
+                    new UspsShipmentEntity
+                    {
+                        UspsTransactionID = Guid.NewGuid(), 
+                        PostalShipment = new PostalShipmentEntity
+                        {
+                            Service = (int) PostalServiceType.PriorityMail
+                        }
+                    },
+                    new UspsShipmentEntity
+                    {
+                        UspsTransactionID = Guid.NewGuid(), 
+                        PostalShipment = new PostalShipmentEntity
+                        {
+                            Service = (int) PostalServiceType.PriorityMail
+                        }
+                    }
                 };
 
                 testObject.CreateScanForm(shipments, account);

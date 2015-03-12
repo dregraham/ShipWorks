@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// translates local shipment code to buy.com "TrackingType"
         /// </summary>
-        private BuyDotComTrackingType GetTrackingType(ShipmentEntity shipment)
+        public BuyDotComTrackingType GetTrackingType(ShipmentEntity shipment)
         {
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 

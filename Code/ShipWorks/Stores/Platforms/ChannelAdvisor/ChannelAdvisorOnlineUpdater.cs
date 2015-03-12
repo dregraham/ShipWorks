@@ -124,7 +124,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the codes required for uploading shipment details to ChannelAdvisor
         /// </summary>
-        private void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
+        private static void GetShipmentUploadValues(ShipmentEntity shipment, out string carrierCode, out string serviceClass, out string trackingNumber)
         {
             string tempTracking = shipment.TrackingNumber;
             string tempCarrierCode = GetCarrierCode(shipment);
@@ -152,7 +152,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
-        private string GetShipmentClassCode(ShipmentEntity shipment)
+        public static string GetShipmentClassCode(ShipmentEntity shipment)
         {
             if (!shipment.Processed)
             {
@@ -160,7 +160,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             }
 
             // not going through ShippingManager.GetServiceDescription because we need to not include any prefixes like "USPS"
-            ShippingManager.EnsureShipmentLoaded(shipment);
             ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
 
             // If Other, just take the user-entered value
@@ -366,7 +365,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// <summary>
         /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.
         /// </summary>
-        private string GetCarrierCode(ShipmentEntity shipment)
+        public static string GetCarrierCode(ShipmentEntity shipment)
         {
             if (!shipment.Processed)
             {
@@ -411,7 +410,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     return "i-Parcel";
 
                 case ShipmentTypeCode.Other:
-                        ShippingManager.EnsureShipmentLoaded(shipment);
                         return shipment.Other.Carrier;
 
                 default:

@@ -434,9 +434,13 @@
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
+    <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
+    <Compile Include="Stores\eBay\EbayOnlineUpdaterTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\PolicyTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\EligibilityRuleTest.cs" />
     <Compile Include="Stores\eBay\Shipping\GlobalShippingProgram\Rules\SelectedShippingMethodRuleTest.cs" />
+    <Compile Include="Stores\Etsy\EtsyOnlineUpdaterTest.cs" />
     <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
     <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
@@ -463,6 +467,8 @@
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />
+    <Compile Include="Stores\Volusion\VolusionWebClientTest.cs" />
+    <Compile Include="Stores\Yahoo\YahooOnlineUpdaterTest.cs" />
     <Compile Include="Templates\Processing\XmlTreeGeneration.cs" />
     <Compile Include="Templates\Processing\XPathTreeGeneration.cs" />
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
@@ -571,7 +577,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
-    <Folder Include="Stores\BuyDotcom\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExSingleMatch.cer" />

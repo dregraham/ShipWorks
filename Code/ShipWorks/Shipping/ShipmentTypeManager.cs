@@ -240,16 +240,16 @@ namespace ShipWorks.Shipping
         {
             switch (postalService)
             {
-                case PostalServiceType.DhlParcelStandard:
+                case PostalServiceType.DhlParcelGround:
                 case PostalServiceType.DhlParcelExpedited:
-                case PostalServiceType.DhlParcelPlusStandard:
+                case PostalServiceType.DhlParcelPlusGround:
                 case PostalServiceType.DhlParcelPlusExpedited:
-                case PostalServiceType.DhlBpmStandard:
+                case PostalServiceType.DhlBpmGround:
                 case PostalServiceType.DhlBpmExpedited:
-                case PostalServiceType.DhlCatalogStandard:
+                case PostalServiceType.DhlCatalogGround:
                 case PostalServiceType.DhlCatalogExpedited:
-                case PostalServiceType.DhlMediaMailStandard:
-                case PostalServiceType.DhlMarketingStandard:
+                case PostalServiceType.DhlMediaMailGround:
+                case PostalServiceType.DhlMarketingGround:
                 case PostalServiceType.DhlMarketingExpedited:
                     return true;
             }
@@ -265,13 +265,13 @@ namespace ShipWorks.Shipping
             switch (postalService)
             {
                 case PostalServiceType.DhlParcelExpedited:
-                case PostalServiceType.DhlParcelStandard:
+                case PostalServiceType.DhlParcelGround:
                 case PostalServiceType.DhlParcelPlusExpedited:
-                case PostalServiceType.DhlParcelPlusStandard:
+                case PostalServiceType.DhlParcelPlusGround:
                 case PostalServiceType.DhlBpmExpedited:
-                case PostalServiceType.DhlBpmStandard:
+                case PostalServiceType.DhlBpmGround:
                 case PostalServiceType.DhlMarketingExpedited:
-                case PostalServiceType.DhlMarketingStandard:
+                case PostalServiceType.DhlMarketingGround:
                     return true;
             }
 

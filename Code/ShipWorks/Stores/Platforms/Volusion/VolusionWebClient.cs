@@ -146,14 +146,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 // Interapptive: OK. Do you know if I send a mail innovations tracking number with UPS as the carrier, 
                 // will the user get a tracking link to ups.com's tracking page?
                 // Veronica M: Yes.
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+                if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                {
+                    if (shipment.Ups.UspsTrackingNumber.Length > 0)
                     {
-                        if (track.Length > 0)
-                        {
-                            gateway = "UPS";
-                            trackingNumber = track;
-                        }
-                    });
+                        trackingNumber = shipment.Ups.UspsTrackingNumber;
+                    }
+                }
 
                 Uri uri = GetStoreApiEndpoint();
 
@@ -227,7 +226,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Gets the Shipping Gateway (carrier) required by Volusion
         /// </summary>
-        private string GetVolusionGateway(ShipmentEntity shipment)
+        public static string GetVolusionGateway(ShipmentEntity shipment)
         {
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {

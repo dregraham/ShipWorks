@@ -63,7 +63,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("DHL SM Parcel Ground")]
         [ApiValue("DHLGMSMPARCELSGROUND")]
-        DhlParcelStandard = 101,
+        DhlParcelGround = 101,
 
         [Description("DHL SM Parcel Plus Expedited")]
         [ApiValue("DHLGMSMPARCELPLUSEXPEDITED")]
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("DHL SM Parcel Plus Ground")]
         [ApiValue("DHLGMSMPARCELPLUSGROUND")]
-        DhlParcelPlusStandard = 103,
+        DhlParcelPlusGround = 103,
 
         [Description("DHL SM BPM Expedited")]
         [ApiValue("DHLGMSMBPMEXPEDITED")]
@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("DHL SM BPM Ground")]
         [ApiValue("DHLGMSMBPMGROUND")]
-        DhlBpmStandard = 105,
+        DhlBpmGround = 105,
 
         [Description("DHL SM Catalog Expedited")]
         [ApiValue("DHLGMSMCATALOGBPMEXPEDITED")]
@@ -87,15 +87,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("DHL SM Catalog Ground")]
         [ApiValue("DHLGMSMCATALOGBPMGROUND")]
-        DhlCatalogStandard = 107,
+        DhlCatalogGround = 107,
 
         [Description("DHL SM Media Mail Ground")]
         [ApiValue("DHLGMSMMEDIAMAILGROUND")]
-        DhlMediaMailStandard = 108,
+        DhlMediaMailGround = 108,
 
         [Description("DHL SM Marketing Ground")]
         [ApiValue("DHLGMSMMarketingParcelGround")]
-        DhlMarketingStandard = 109,
+        DhlMarketingGround = 109,
 
         [Description("DHL SM Marketing Expedited")]
         [ApiValue("DHLGMSMMarketingParcelExpedited")]

@@ -563,7 +563,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <param name="shipment">The shipment for which to get the carrier name.</param>
         /// <param name="shipmentTypeCode">The shipment type code for this shipment.</param>
         /// <returns>The carrier name of the shipment type, unless it is of type Other, then the Other.Carrier is returned.</returns>
-        private static string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
+        public static string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
         {
             string carrier;
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)

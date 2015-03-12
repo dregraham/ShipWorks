@@ -210,20 +210,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Gets the shipment values to upload to Yahoo!
         /// </summary>
-        private void GetShipmentUploadValues(ShipmentEntity shipment, out string shipperString, out string trackingNumber)
+        private static void GetShipmentUploadValues(ShipmentEntity shipment, out string shipperString, out string trackingNumber)
         {
             string tempTrackingNumber = shipment.TrackingNumber;
             string tempShipperString = GetShipperString(shipment);
 
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+            if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+            {
+                if (shipment.Ups.UspsTrackingNumber.Length > 0)
                 {
-                    if (track.Length > 0)
-                    {
-                        tempShipperString = "Usps";
-                        tempTrackingNumber = track;
-                    }
-                });
+                    tempTrackingNumber = shipment.Ups.UspsTrackingNumber;
+                }
+            }
 
             shipperString = tempShipperString;
             trackingNumber = tempTrackingNumber;
@@ -232,7 +230,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Get the string to use as the shipper for the yahoo update
         /// </summary>
-        private string GetShipperString(ShipmentEntity shipment)
+        public static string GetShipperString(ShipmentEntity shipment)
         {
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
@@ -261,6 +259,14 @@ namespace ShipWorks.Stores.Platforms.Yahoo
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                    {
+                        if (shipment.Ups.UspsTrackingNumber.Length > 0)
+                        {
+                            return "Usps";
+                        }
+                    }
+
                     return "Ups";
 
                 case ShipmentTypeCode.FedEx:
