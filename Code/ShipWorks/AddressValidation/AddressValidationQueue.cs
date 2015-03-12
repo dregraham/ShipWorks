@@ -76,6 +76,11 @@ namespace ShipWorks.AddressValidation
 
             using (SqlConnection connection = SqlSession.Current.OpenConnection())
             {
+                if (!StoreManager.DoAnyStoresHaveAutomaticValidationEnabled())
+                {
+                    return;
+                }
+
                 log.InfoFormat("Acquiring Lock - {0}", SqlAppLockName);
                 // Just quit if we can't get a lock because some other computer is validating
                 if (!SqlAppLockUtility.AcquireLock(connection, SqlAppLockName))

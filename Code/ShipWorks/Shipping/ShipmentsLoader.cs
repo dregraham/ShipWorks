@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping
             MethodInvoker<ProgressItem, int> validationInvoker = ValidateShipmentsInternal;
             MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
 
-            bool shouldValidate = StoreManager.GetAllStores().Any(ValidatedAddressManager.ShouldAutoValidate);
+            bool shouldValidate = StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
 
             invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
             {

@@ -462,6 +462,11 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static bool ShouldAutoValidate(StoreEntity store)
         {
+            if (store == null)
+            {
+                return false;
+            }
+
             AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
             return setting == AddressValidationStoreSettingType.ValidateAndApply ||
                    setting == AddressValidationStoreSettingType.ValidateAndNotify;
