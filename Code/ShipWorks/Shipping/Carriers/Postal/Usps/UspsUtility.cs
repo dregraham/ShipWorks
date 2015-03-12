@@ -91,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalServiceType.DhlParcelExpedited: return ServiceType.DHLPE;
                 case PostalServiceType.DhlParcelStandard: return ServiceType.DHLPG;
                 case PostalServiceType.DhlParcelPlusExpedited: return ServiceType.DHLPPE;
-                case PostalServiceType.DhlParcelPlusStandard: return ServiceType.DHLPPE;
+                case PostalServiceType.DhlParcelPlusStandard: return ServiceType.DHLPPG;
                 case PostalServiceType.DhlBpmExpedited: return ServiceType.DHLBPME;
                 case PostalServiceType.DhlBpmStandard: return ServiceType.DHLBPMG;
                 case PostalServiceType.DhlMarketingExpedited: return ServiceType.DHLMPE;
