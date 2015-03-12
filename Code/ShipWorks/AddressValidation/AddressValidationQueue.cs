@@ -6,20 +6,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.LinqSupportClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Predicates;
-using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.Linq;
 using ShipWorks.Data.Utility;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Tracking;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
 using log4net;
-using ShipWorks.Stores.Content.Panels;
 
 namespace ShipWorks.AddressValidation
 {
@@ -164,24 +159,6 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void ValidateAddressEntities(IEntity2 entityToValidate)
         {
-            long entityId = EntityUtility.GetEntityId(entityToValidate);
-            var entityType = EntityUtility.GetEntityType(entityId);
-
-            string rowVersion = "none";
-            ShipmentEntity shipment = entityToValidate as ShipmentEntity;
-            if (shipment != null)
-            {
-                rowVersion = shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y);
-            }
-
-            OrderEntity order = entityToValidate as OrderEntity;
-            if (order != null)
-            {
-                rowVersion = order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y);
-            }
-
-            log.InfoFormat("Validating {0} {1} ({2})", entityType, entityId, rowVersion);
-
             try
             {
                 AddressAdapter originalEntityAddress = new AddressAdapter();
@@ -203,31 +180,19 @@ namespace ShipWorks.AddressValidation
                                 sqlAdapter.Commit();
                             }
                         });
-
-
-                    log.InfoFormat("After validation, we have shipment {0} ({1}) [{4}] and order {2} ({3}) [{5}]",
-                        shipment!= null ? shipment.ShipmentID : 0, 
-                        shipment != null ? shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y) : "",
-                        order != null ? order.OrderID : 0, 
-                        order != null ? order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y) : "",
-                        shipment != null ? shipment.ShipAddressValidationStatus : -1, 
-                        order != null ? order.ShipAddressValidationStatus : -1);
                 }
             }
-            catch (ObjectDeletedException ex)
+            catch (ObjectDeletedException)
             {
                 // object has been deleted, no more need to validate.
-                log.Warn(string.Format("Error validating {1} {0}", entityId, entityType), ex);
             }
-            catch (SqlForeignKeyException ex)
+            catch (SqlForeignKeyException)
             {
                 // object has been deleted, no more need to validate.
-                log.Warn(string.Format("Error validating {1} {0}", entityId, entityType), ex);
             }
-            catch (ORMConcurrencyException ex)
+            catch (ORMConcurrencyException)
             {
                 // Don't worry about this...  The next pass through will grab this order again
-                log.Warn(string.Format("Error validating {1} {0}", entityId, entityType), ex);
             }
         }
         

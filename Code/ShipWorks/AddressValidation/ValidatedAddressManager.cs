@@ -17,8 +17,6 @@ namespace ShipWorks.AddressValidation
     /// </summary>
     public static class ValidatedAddressManager
     {
-        static readonly ILog log = LogManager.GetLogger(typeof(ValidatedAddressManager));
-
         /// <summary>
         /// Propagates the address changes to shipments.
         /// </summary>
@@ -283,7 +281,9 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         public static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator)
         {
-            ValidateShipment(shipment, validator, true);
+            // 3 retries is an arbitrary decision, but it should cover the case where we get a concurrency exception
+            // validating the order and then the shipment, since the background process validates each at different times
+            ValidateShipment(shipment, validator, 3);
         }
 
         /// <summary>
@@ -291,8 +291,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         /// <param name="shipment">Shipment to validate</param>
         /// <param name="validator">Address validator to use</param>
-        /// <param name="retryOnConcurrencyException">Should the validation be retried if there is a concurrency exception</param>
-        private static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator, bool retryOnConcurrencyException)
+        /// <param name="retryCount">How many times should validation be retried</param>
+        private static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator, int retryCount)
         {
             AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");
 
@@ -325,12 +325,6 @@ namespace ShipWorks.AddressValidation
                 if (orderAdapter == shipmentAdapter && 
                     orderAdapter.AddressValidationStatus == shipmentAdapter.AddressValidationStatus)
                 {
-
-                    log.InfoFormat("Validating shipment {0} ({1}) [{4}] through order {2} ({3}) [{5}]",
-                        shipment.ShipmentID, shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                        order.OrderID, order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                            shipment.ShipAddressValidationStatus, order.ShipAddressValidationStatus);
-
                     // Since the order and shipment addresses match, validate the order and let propagation take care of updating the shipment
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
@@ -358,18 +352,10 @@ namespace ShipWorks.AddressValidation
                         // had their addresses modified by propagation.
                         sqlAdapter.FetchEntity(shipment);
                         shipment.Order = order;
-
-                        log.InfoFormat("After validation, we have shipment {0} ({1}) [{4}] and order {2} ({3}) [{5}]",
-                            shipment.ShipmentID, shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                            order.OrderID, order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                            shipment.ShipAddressValidationStatus, order.ShipAddressValidationStatus);
                     }
                 }
                 else if (!shipment.Processed)
                 {
-                    log.InfoFormat("Validating shipment {0} ({1})",
-                        shipment.ShipmentID, shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y));
-
                     // Since the addresses don't match, just validate the shipment
                     validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
@@ -382,33 +368,24 @@ namespace ShipWorks.AddressValidation
                                 SaveValidatedShipmentAddress(sqlAdapter, shippingAddress);
 
                                 sqlAdapter.Commit();
-
-                                log.InfoFormat("After validation, we have shipment {0} ({1}) and order {2} ({3})",
-                                    shipment.ShipmentID, shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                                    order.OrderID, order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y));
                             }
                         }
                     });
                 }
             }
-            catch (ORMConcurrencyException ex)
+            catch (ORMConcurrencyException)
             {
-                var failedEntityId = EntityUtility.GetEntityId(ex.EntityWhichFailed as IEntity2);
-
-                log.Warn(string.Format("Error validating {0} ({1})", shipment.ShipmentID, failedEntityId), ex);
-                RetryValidation(shipment, order, validator, retryOnConcurrencyException);
+                RetryValidation(shipment, order, validator, retryCount);
             }
-            catch (SqlDeadlockException ex)
+            catch (SqlDeadlockException)
             {
-                log.Warn(string.Format("Error validating {0}", shipment.ShipmentID), ex);
-                RetryValidation(shipment, order, validator, retryOnConcurrencyException);
+                RetryValidation(shipment, order, validator, retryCount);
             }
             catch (SqlException ex)
             {
-                log.Warn(string.Format("Error validating {0}", shipment.ShipmentID), ex);
                 if (ex.Message.Contains("deadlock"))
                 {
-                    RetryValidation(shipment, order, validator, retryOnConcurrencyException);   
+                    RetryValidation(shipment, order, validator, retryCount);   
                 }
             }
         }
@@ -457,9 +434,9 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Attempt to retry validation if necessary
         /// </summary>
-        private static void RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, bool retryOnConcurrencyException)
+        private static void RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, int retryCount)
         {
-            if (!retryOnConcurrencyException)
+            if (retryCount == 0)
             {
                 return;
             }
@@ -472,15 +449,12 @@ namespace ShipWorks.AddressValidation
 
                 if (order != null)
                 {
+                    // Remove the order from the caceh so that when we retry the validation, we force a reload
                     DataProvider.RemoveEntity(order.OrderID);
                 }
-
-                log.InfoFormat("Reloaded shipment {0} ({1}) and order {2} ({3})", 
-                    shipment.ShipmentID, shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y),
-                    order.OrderID, order.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y));
             }
 
-            ValidateShipment(shipment, validator, false);
+            ValidateShipment(shipment, validator, retryCount - 1);
         }
 
         /// <summary>

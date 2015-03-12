@@ -2308,10 +2308,6 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    log.WarnFormat("Concurrency exception processing shipment {0} ({2}). Failed entity {1}",
-                        shipment.ShipmentID, EntityUtility.GetEntityId(ex.EntityWhichFailed as IEntity2), 
-                        shipment.RowVersion.Select(x => x.ToString("X2")).Aggregate((x, y) => x + y));
-
                     errorMessage = "Another user had recently made changes, so the shipment was not processed.";
                     processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
                 }
