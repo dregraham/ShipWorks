@@ -460,7 +460,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Gets whether the specified store is set up for auto-validation
         /// </summary>
-        private static bool ShouldAutoValidate(StoreEntity store)
+        public static bool ShouldAutoValidate(StoreEntity store)
         {
             AddressValidationStoreSettingType setting = (AddressValidationStoreSettingType) store.AddressValidationSetting;
             return setting == AddressValidationStoreSettingType.ValidateAndApply ||
