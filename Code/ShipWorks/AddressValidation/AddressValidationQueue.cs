@@ -6,19 +6,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using SD.LLBLGen.Pro.LinqSupportClasses;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.Linq;
 using ShipWorks.Data.Utility;
-using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Tracking;
 using ShipWorks.SqlServer.Common.Data;
 using ShipWorks.Stores;
 using log4net;
-using ShipWorks.Stores.Content.Panels;
 
 namespace ShipWorks.AddressValidation
 {
