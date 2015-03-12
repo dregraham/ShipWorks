@@ -170,6 +170,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             string trackingNumber;
             string shipperString;
 
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             GetShipmentUploadValues(shipment, out shipperString, out trackingNumber);
 
             using (MemoryStream stream = new MemoryStream())
@@ -215,7 +217,7 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             string tempTrackingNumber = shipment.TrackingNumber;
             string tempShipperString = GetShipperString(shipment);
 
-            if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+            if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) && UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
             {
                 if (shipment.Ups.UspsTrackingNumber.Length > 0)
                 {
