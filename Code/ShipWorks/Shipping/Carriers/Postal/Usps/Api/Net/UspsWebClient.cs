@@ -578,12 +578,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// identify results from USPS</returns>
         private XDocument CreateScanFormInternal(IEnumerable<UspsShipmentEntity> shipments, UspsAccountEntity uspsAccountEntity)
         {
-            List<Guid> uspsTransactions = shipments.Select(s => s.UspsTransactionID).ToList();
+            IEnumerable<UspsShipmentEntity> uspsShipmentEntities = shipments as IList<UspsShipmentEntity> ?? shipments.ToList();
+
+            List<Guid> uspsTransactions = uspsShipmentEntities.Select(s => s.UspsTransactionID).ToList();
             PersonAdapter person = new PersonAdapter(uspsAccountEntity, string.Empty);
+            Carrier carrier = GetScanFormCarrier(uspsShipmentEntities.ToList());
 
             string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
-            Carrier carrier = new Carrier();
 
             using (SwsimV40 webService = CreateWebService("ScanForm"))
             {
@@ -613,6 +615,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             XDocument response = XDocument.Parse(responseXml);
 
             return response;
+        }
+
+        /// <summary>
+        /// A helper method to determine which carrier a SCAN form is being generated for: USPS or DHL.
+        /// </summary>
+        /// <param name="shipments">The list of shipments going to be used to create the SCAN form.</param>
+        /// <returns>Carrier.Usps if all shipments are USPS services; Carrier.DHL if all shipments are DHL services.</returns>
+        /// <exception cref="UspsException">The Stamps.com API does not support creating a SCAN form containing a mixture of USPS and DHL shipments.</exception>
+        private static Carrier GetScanFormCarrier(List<UspsShipmentEntity> shipments)
+        {
+            if (shipments.All(s => ShipmentTypeManager.IsDhl((PostalServiceType) s.PostalShipment.Service)))
+            {
+                return Carrier.Dhl;
+            }
+
+            if (shipments.All(s => !ShipmentTypeManager.IsDhl((PostalServiceType) s.PostalShipment.Service)))
+            {
+                return Carrier.Usps;
+            }
+
+            throw new UspsException("The Stamps.com API does not support creating a SCAN form containing a mixture of USPS and DHL shipments.");
         }
 
         /// <summary>

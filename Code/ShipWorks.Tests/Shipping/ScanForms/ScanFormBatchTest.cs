@@ -113,6 +113,62 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [TestMethod]
+        public void Create_SeparatesPostalAndDhlShipments_WhenSendingToGateway_Test()
+        {
+            ShipmentEntity firstDhlShipment = new ShipmentEntity()
+            {
+                OriginPostalCode = "63102",
+                Postal = new PostalShipmentEntity
+                {
+                    Service = (int) PostalServiceType.DhlBpmStandard
+                }
+            };
+
+            ShipmentEntity secondDhlShipment = new ShipmentEntity()
+            {
+                OriginPostalCode = "63102",
+                Postal = new PostalShipmentEntity
+                {
+                    Service = (int)PostalServiceType.DhlCatalogStandard
+                }
+            };
+
+            ShipmentEntity firstPostalShipment = new ShipmentEntity()
+            {
+                OriginPostalCode = "63102",
+                Postal = new PostalShipmentEntity
+                {
+                    Service = (int)PostalServiceType.PriorityMail
+                }
+            };
+
+            ShipmentEntity secondPostalShipment = new ShipmentEntity()
+            {
+                OriginPostalCode = "63102",
+                Postal = new PostalShipmentEntity
+                {
+                    Service = (int)PostalServiceType.FirstClass
+                }
+            };
+
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>
+            {
+                firstDhlShipment,
+                firstPostalShipment,
+                secondPostalShipment,
+                secondDhlShipment
+            };
+
+            testObject.Create(shipments);
+
+            gateway.Verify(g => g.CreateScanForms(testObject, It.IsAny<IEnumerable<ShipmentEntity>>()), Times.Exactly(2));
+
+            // Verify the two calls made to the gateway separated the Postal and DHL services
+            gateway.Verify(g => g.CreateScanForms(testObject, It.Is<IEnumerable<ShipmentEntity>>(batch => batch.All(s => s.Postal.Service == (int)PostalServiceType.FirstClass || s.Postal.Service == (int)PostalServiceType.PriorityMail))), Times.Once());
+            gateway.Verify(g => g.CreateScanForms(testObject, It.Is<IEnumerable<ShipmentEntity>>(batch => batch.All(s => s.Postal.Service == (int)PostalServiceType.DhlBpmStandard || s.Postal.Service == (int)PostalServiceType.DhlCatalogStandard))), Times.Once());
+        }
+
+        [TestMethod]
         public void CreateScanForm_InstantiatesScanForm_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
