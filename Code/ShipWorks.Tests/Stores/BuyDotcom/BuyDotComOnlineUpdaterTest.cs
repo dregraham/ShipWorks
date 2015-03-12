@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             shipmentEntity.Postal = postalShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -78,7 +78,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             shipmentEntity.Postal = postalShipmentEntity;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;

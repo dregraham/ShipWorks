@@ -77,7 +77,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
-            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
 
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Usps);
 

@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         [TestMethod]
         public void GetEtsyCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             shipmentEntity.Postal = postalShipmentEntity;
 
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         [TestMethod]
         public void GetEtsyCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             shipmentEntity.Postal = postalShipmentEntity;
 

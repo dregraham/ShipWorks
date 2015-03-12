@@ -70,7 +70,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         public void GetCarrierName_ReturnsDhlGlobalMail_WhenEndiciaAndDhl_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         public void GetCarrierName_ReturnsDhlGlobalMail_WhenUspsAndDhl_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 

@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
         [TestMethod]
         public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
             shipmentEntity.Postal = postalShipmentEntity;
 
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Stores.Yahoo
         [TestMethod]
         public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             shipmentEntity.Postal = postalShipmentEntity;
 

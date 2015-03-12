@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int) PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity);
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetShipmentClassCode(shipmentEntity);
 
@@ -157,7 +157,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity);
 
@@ -169,7 +169,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
 
-            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelStandard;
+            postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
 
             string code = ChannelAdvisorOnlineUpdater.GetCarrierCode(shipmentEntity);
 

@@ -120,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 OriginPostalCode = "63102",
                 Postal = new PostalShipmentEntity
                 {
-                    Service = (int) PostalServiceType.DhlBpmStandard
+                    Service = (int) PostalServiceType.DhlBpmGround
                 }
             };
 
@@ -129,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 OriginPostalCode = "63102",
                 Postal = new PostalShipmentEntity
                 {
-                    Service = (int)PostalServiceType.DhlCatalogStandard
+                    Service = (int)PostalServiceType.DhlCatalogGround
                 }
             };
 
@@ -165,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             // Verify the two calls made to the gateway separated the Postal and DHL services
             gateway.Verify(g => g.CreateScanForms(testObject, It.Is<IEnumerable<ShipmentEntity>>(batch => batch.All(s => s.Postal.Service == (int)PostalServiceType.FirstClass || s.Postal.Service == (int)PostalServiceType.PriorityMail))), Times.Once());
-            gateway.Verify(g => g.CreateScanForms(testObject, It.Is<IEnumerable<ShipmentEntity>>(batch => batch.All(s => s.Postal.Service == (int)PostalServiceType.DhlBpmStandard || s.Postal.Service == (int)PostalServiceType.DhlCatalogStandard))), Times.Once());
+            gateway.Verify(g => g.CreateScanForms(testObject, It.Is<IEnumerable<ShipmentEntity>>(batch => batch.All(s => s.Postal.Service == (int)PostalServiceType.DhlBpmGround || s.Postal.Service == (int)PostalServiceType.DhlCatalogGround))), Times.Once());
         }
 
         [TestMethod]
@@ -428,7 +428,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                     ShipmentType = (int)ShipmentTypeCode.Usps,
                     Postal = new PostalShipmentEntity()
                     {
-                        Service = (int)PostalServiceType.DhlParcelPlusStandard
+                        Service = (int)PostalServiceType.DhlParcelPlusGround
                     }
                 }
             };

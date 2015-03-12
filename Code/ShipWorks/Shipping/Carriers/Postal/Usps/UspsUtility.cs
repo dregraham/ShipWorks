@@ -88,14 +88,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalServiceType.InternationalPriority: return ServiceType.USPMI;
                 case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
                 case PostalServiceType.CriticalMail: return ServiceType.USCM;
+
                 case PostalServiceType.DhlParcelExpedited: return ServiceType.DHLPE;
-                case PostalServiceType.DhlParcelStandard: return ServiceType.DHLPG;
+                case PostalServiceType.DhlParcelGround: return ServiceType.DHLPG;
+
                 case PostalServiceType.DhlParcelPlusExpedited: return ServiceType.DHLPPE;
-                case PostalServiceType.DhlParcelPlusStandard: return ServiceType.DHLPPG;
+                case PostalServiceType.DhlParcelPlusGround: return ServiceType.DHLPPG;
+
                 case PostalServiceType.DhlBpmExpedited: return ServiceType.DHLBPME;
-                case PostalServiceType.DhlBpmStandard: return ServiceType.DHLBPMG;
+                case PostalServiceType.DhlBpmGround: return ServiceType.DHLBPMG;
+
                 case PostalServiceType.DhlMarketingExpedited: return ServiceType.DHLMPE;
-                case PostalServiceType.DhlMarketingStandard:return ServiceType.DHLMPG;
+                case PostalServiceType.DhlMarketingGround:return ServiceType.DHLMPG;
 
                 default:
                     throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
