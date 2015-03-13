@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
     public class UspsWebClient : IUspsWebClient
     {
         // This value came from USPS (the "standard" account value is 88)
-        private const int ExpeditedPlanID = 236;
+        private const int ExpeditedPlanID = 0;
 
         // These lengths come from the error that USPS's API gives us when we send data that is too long
         private const int MaxCustomsContentDescriptionLength = 20;
