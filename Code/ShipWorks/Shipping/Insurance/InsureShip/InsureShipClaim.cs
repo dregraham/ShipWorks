@@ -140,8 +140,12 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             else
             {
                 log.InfoFormat("Shipment {0} is not eligible for submitting a claim.", shipment.ShipmentID);
-                throw new InsureShipException(
-                    string.Format("A claim cannot be submitted for this shipment. At least {0} days must have passed since the ship date in order to submit a claim.", settings.ClaimSubmissionWaitingPeriod.TotalDays));
+
+                DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + settings.ClaimSubmissionWaitingPeriod;
+                string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
+                messageFormat = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
+
+                throw new InsureShipException(messageFormat);
             }
         }
 
