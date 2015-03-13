@@ -156,13 +156,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Common, Version=2.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Common.dll</HintPath>
+      <Aliases>rebex2015</Aliases>
+    </Reference>
+    <Reference Include="Rebex.Ftp, Version=4.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Ftp.dll</HintPath>
+      <Aliases>rebex2015</Aliases>
+    </Reference>
     <Reference Include="Rebex.Mail, Version=1.0.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
-    </Reference>
-    <Reference Include="Rebex.Net.Ftp, Version=3.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Components\Rebex.Net.Ftp.dll</HintPath>
     </Reference>
     <Reference Include="Rebex.Net.Imap">
       <HintPath>..\..\Components\Rebex.Net.Imap.dll</HintPath>
@@ -183,9 +189,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Net.Smtp.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Networking, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Networking.dll</HintPath>
+      <Aliases>rebex2015</Aliases>
+    </Reference>
     <Reference Include="Rebex.Security, Version=1.5.3127.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Rebex.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Sftp, Version=3.0.5512.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Sftp.dll</HintPath>
+      <Aliases>rebex2015</Aliases>
     </Reference>
     <Reference Include="RestSharp">
       <HintPath>..\..\Components\RestSharp.dll</HintPath>
@@ -675,6 +691,7 @@
     <Compile Include="Email\Accounts\IncomingProbeResult.cs" />
     <Compile Include="Email\Accounts\SmtpProbeResult.cs" />
     <Compile Include="Email\EmailExceptionErrorNumber.cs" />
+    <Compile Include="FileTransfer\FtpExtensions.cs" />
     <Compile Include="Filters\Content\Conditions\MoneyCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\OrderAddressValidationStatusCondition.cs" />
     <Compile Include="Filters\Content\Conditions\Orders\Address\USTerritoryCondition.cs" />

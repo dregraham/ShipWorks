@@ -1,20 +1,38 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
-using Rebex.Net;
 using log4net;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.FileTransfer
 {
+
     /// <summary>
     /// FTP utility functions
     /// </summary>
     public static class FtpUtility
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FtpUtility));
+
+        private static readonly Dictionary<FtpSecurityType, int> defaultPorts = 
+            new Dictionary<FtpSecurityType, int>
+            {
+                {FtpSecurityType.Unsecure, 21},
+                {FtpSecurityType.Implicit, 990},
+                {FtpSecurityType.Explicit, 21},
+                {FtpSecurityType.Sftp, 22},
+            };
+
+        /// <summary>
+        /// Gets the default port for the given security type
+        /// </summary>
+        public static int GetDefaultPort(FtpSecurityType securityType)
+        {
+            return defaultPorts[securityType];
+        }
 
         /// <summary>
         /// Creates a new FTP account initialized with default settings
@@ -59,59 +77,97 @@ namespace ShipWorks.FileTransfer
             }
 
             // Excplicit
+            if (CheckFtpSecurityExplicit(portOverride, account))
             {
-                log.InfoFormat("Testing Explicit FTP security...");
-
-                // if not overridden, use port 21
-                if (portOverride == 0)
-                {
-                    account.Port = 21;
-                }
-                account.SecurityType = (int) FtpSecurityType.Explicit;
-
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
             // Implicit
+            if (CheckFtpSecurityImplicit(portOverride, account))
             {
-                log.InfoFormat("Testing Implicit FTP security...");
-
-                // if not overridden, use port 990
-                if (portOverride == 0)
-                {
-                    account.Port = 990;
-                }
-                account.SecurityType = (int) FtpSecurityType.Implicit;
-                                                
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
             // Unsecure
+            if (CheckFtpSecurityUnsecure(portOverride, account))
             {
-                log.InfoFormat("Testing unsecure FTP security...");
-
-                // if not overridden, use port 21
-                if (portOverride == 0)
-                {
-                    account.Port = 21;
-                }
-
-                account.SecurityType = (int) FtpSecurityType.Unsecure;
-                    
-                if (TestPassiveActiveModes(account))
-                {
-                    return account;
-                }
+                return account;
             }
 
+            // Sftp
+            log.Info("Testing SFTP...");
+
+            if (portOverride == 0)
+            {
+                account.Port = GetDefaultPort(FtpSecurityType.Sftp);
+            }
+
+            account.SecurityType = (int) FtpSecurityType.Sftp;
+
+            try
+            {
+                TestDataTransfer(account);
+                return account;
+            }
+            catch (FileTransferException ex)
+            {
+                log.Warn(ex.Message);
+            }
+            
             // We've tried everything we can, but couldn't connect.  Throw
             throw new FileTransferException("ShipWorks was unable to connect to the FTP site with the information provided.");
+        }
+
+        /// <summary>
+        /// Check ftp security as unsecure
+        /// </summary>
+        private static bool CheckFtpSecurityUnsecure(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing unsecure FTP security...");
+
+            // if not overridden, use port 21
+            if (portOverride == 0)
+            {
+                account.Port = GetDefaultPort(FtpSecurityType.Unsecure);
+            }
+
+            account.SecurityType = (int) FtpSecurityType.Unsecure;
+
+            return TestPassiveActiveModes(account);
+        }
+
+        /// <summary>
+        /// Check ftp security as implicit
+        /// </summary>
+        private static bool CheckFtpSecurityImplicit(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing Implicit FTP security...");
+
+            // if not overridden, use port 990
+            if (portOverride == 0)
+            {
+                account.Port = GetDefaultPort(FtpSecurityType.Implicit);
+            }
+            account.SecurityType = (int) FtpSecurityType.Implicit;
+
+            return TestPassiveActiveModes(account);
+        }
+
+        /// <summary>
+        /// Check ftp security as explicit
+        /// </summary>
+        private static bool CheckFtpSecurityExplicit(int portOverride, FtpAccountEntity account)
+        {
+            log.InfoFormat("Testing Explicit FTP security...");
+
+            // if not overridden, use port 21
+            if (portOverride == 0)
+            {
+                account.Port = GetDefaultPort(FtpSecurityType.Explicit);
+            }
+            account.SecurityType = (int) FtpSecurityType.Explicit;
+
+            return TestPassiveActiveModes(account);
         }
 
         /// <summary>
@@ -164,13 +220,13 @@ namespace ShipWorks.FileTransfer
                 throw new ArgumentNullException("account");
             }
 
-            using (Ftp ftp = LogonToFtp(account))
+            using (IFtp ftp = LogonToFtp(account))
             {
                 try
                 {
                     ftp.GetList();
                 }
-                catch (FtpException ex)
+                catch (NetworkSessionException ex)
                 {
                     log.Warn("Failed in call to GetList", ex);
 
@@ -189,16 +245,20 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Logon to the already connected FTP connection, with the credentials in teh given acount.
         /// </summary>
-        private static void InternalLogon(Ftp ftp, FtpAccountEntity account)
+        private static void InternalLogon(IFtp ftp, FtpAccountEntity account)
         {
             try
             {
                 ftp.Login(account.Username, SecureText.Decrypt(account.Password, account.Username));
                 
                 // Apply settings
-                ftp.Passive = account.Passive;
+                Ftp typedFtp = ftp as Ftp;
+                if (typedFtp != null)
+                {
+                    typedFtp.Passive = account.Passive;   
+                }
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new FileTransferException("ShipWorks could not login with the given username and password.\n\nDetail: " + ex.Message, ex);
             }
@@ -207,24 +267,15 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
         /// </summary>
-        private static Ftp OpenConnection(FtpAccountEntity account)
+        private static IFtp OpenConnection(FtpAccountEntity account)
         {
-            TlsParameters tls = new TlsParameters();
-            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
-
             try
             {
-                Ftp ftp = new Ftp();
-                ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
-                ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
-
-                return ftp;
+                return account.SecurityType == (int) FtpSecurityType.Sftp ? 
+                    OpenSftpConnection(account) : 
+                    OpenFtpConnection(account);
             }
-            catch (FtpException ex)
-            {
-                throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
-            }
-            catch (TlsException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new FileTransferException("ShipWorks could not connect to the FTP host specified.\n\nDetail: " + ex.Message, ex);
             }
@@ -236,11 +287,38 @@ namespace ShipWorks.FileTransfer
         }
 
         /// <summary>
+        /// Attempt to open the given SFTP connection, throws FileTransferException if not succesful
+        /// </summary>
+        private static IFtp OpenSftpConnection(FtpAccountEntity account)
+        {
+            Sftp ftp = new Sftp();
+            ftp.Timeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Connect(account.Host, account.Port);
+
+            return ftp;
+        }
+
+        /// <summary>
+        /// Attempt to open the given FTP connection, throws FileTransferException if not succesful
+        /// </summary>
+        private static IFtp OpenFtpConnection(FtpAccountEntity account)
+        {
+            TlsParameters tls = new TlsParameters();
+            tls.CertificateVerifier = CertificateVerifier.AcceptAll;
+
+            Ftp ftp = new Ftp();
+            ftp.Timeout = (int) TimeSpan.FromSeconds(10).TotalMilliseconds;
+            ftp.Connect(account.Host, account.Port, tls, (FtpSecurity) account.SecurityType);
+
+            return ftp;
+        }
+
+        /// <summary>
         /// Connect an login to the given FTP account
         /// </summary>
-        public static Ftp LogonToFtp(FtpAccountEntity account)
+        public static IFtp LogonToFtp(FtpAccountEntity account)
         {
-            Ftp ftp = OpenConnection(account);
+            IFtp ftp = OpenConnection(account);
 
             InternalLogon(ftp, account);
 

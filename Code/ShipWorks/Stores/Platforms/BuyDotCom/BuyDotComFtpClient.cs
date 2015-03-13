@@ -1,11 +1,13 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ShipWorks.Stores.Communication;
+using rebex2015::Rebex.IO;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.FileTransfer;
-using Rebex.Net;
+using rebex2015::Rebex.Net;
 using System.IO;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.BuyDotCom.Fulfillment;
@@ -21,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
     {
         static readonly ILog log = LogManager.GetLogger(typeof(BuyDotComFtpClient));
 
-        Ftp ftp;
+        IFtp ftp;
 
         /// <summary>
         /// Constructor
@@ -52,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             {
                 ftp.ChangeDirectory("/Orders");
 
-                FtpList list = ftp.GetList();
+                FileSystemItemCollection list = ftp.GetList();
 
                 return list
                     .Where(item =>
@@ -61,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     .Select(item => item.Name)
                     .ToList();
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new BuyDotComException("ShipWorks could not get the list of file names to download:\n\n" + ex.Message, ex);
             }
@@ -94,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     }
                 }
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new BuyDotComException("ShipWorks could not download orders from Buy.com:\n\n" + ex.Message, ex);
             }
@@ -110,7 +112,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                 ftp.Rename(string.Format("/Orders/{0}", fileName),
                     string.Format("/Orders/Archive/{0}", fileName));
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new BuyDotComException("ShipWorks could not archive an order:\n\n" + ex.Message, ex);
             }
@@ -151,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
                     ftp.PutFile(stream, string.Format("shipworks_{0:yyyy-MM-dd_hh-mm-ss-tt}.txt", DateTime.Now));
                 }
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new BuyDotComException("ShipWorks could not upload the fulfillment to Buy.com:\n\n" + ex.Message, ex);
             }
