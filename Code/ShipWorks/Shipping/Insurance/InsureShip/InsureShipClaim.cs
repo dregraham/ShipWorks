@@ -96,8 +96,8 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// <param name="items">The items.</param>
         /// <param name="damageAmount">The damage amount.</param>
         public void Submit(InsureShipClaimType claimType, string items, string description, decimal damageAmount, string billingEmailAddress)
-        {   
-            if (IsShipmentEligibleToSubmitClaim())
+        {
+            if (IsShipmentEligibleToSubmitClaim(claimType))
             {
                 shipment.InsurancePolicy.ClaimType = (int) claimType;
                 shipment.InsurancePolicy.ItemName = items;
@@ -149,7 +149,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
         /// Determines whether a shipment is eligible for a claim to be submitted.
         /// </summary>
         /// <returns></returns>
-        private bool IsShipmentEligibleToSubmitClaim()
+        private bool IsShipmentEligibleToSubmitClaim(InsureShipClaimType claimType)
         {
             if (shipment.InsurancePolicy.ClaimID.HasValue)
             {
@@ -162,7 +162,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             if (shipment.Processed)
             {
                 DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + settings.ClaimSubmissionWaitingPeriod;
-                if (DateTime.Now > allowedSubmitClaimDate)
+                if (claimType == InsureShipClaimType.Damage || DateTime.Now > allowedSubmitClaimDate)
                 {
                     // The appropriate amount of time has passed since the shipment was shipped
                     log.InfoFormat("Shipment {0} is eligible for submitting a claim to InsureShip.", shipment.ShipmentID);
