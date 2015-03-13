@@ -765,11 +765,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string mac_Unused;
             string postageHash;
             byte[][] imageData;
-
-            // If we're using Express1, we don't want to use the SampleOnly flag since this will not
-            // create shipments and cause subsequent calls (like SCAN form creation) to fail
-            bool isSampleOnly = UseTestServer && account.UspsReseller != (int)UspsResellerType.Express1;
-
+            
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
                 // Envelopes don't support thermal
@@ -786,7 +782,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         fromAddress,
                         toAddress,
                         null,
-                        isSampleOnly ? CreateIndiciumModeV1.Sample : CreateIndiciumModeV1.Normal,
+                        CreateIndiciumModeV1.Normal,
                         ImageType.Png,
                         0, // cost code ID
                         false, // do not hide the facing identification mark (FIM) 
@@ -810,7 +806,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         toAddress,
                         null,
                         customs,
-                        isSampleOnly,
+                        false,
                         thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
                         EltronPrinterDPIType.Default,
                         UspsUtility.BuildMemoField(shipment.Postal), // Memo
