@@ -78,7 +78,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 {
                     CreateOrderGroup(),
                     CreateAddressGroup(),
-                    CreateItemsGroup(),
+                    CreateItemsGroup()
                 };
         }
 
@@ -175,24 +175,26 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         {
             return new List<GenericSpreadsheetTargetField>
             {
-                new GenericSpreadsheetTargetField("Item.Name",        "Name", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Code",        "Code", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.SKU",         "SKU",  typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Quantity",    "Quantity", typeof(float)),
-                new GenericSpreadsheetTargetField("Item.UnitPrice",   "Unit Price", typeof(decimal)),
-                new GenericSpreadsheetTargetField("Item.TotalPrice",  "Total Price", typeof(decimal)),
-                new GenericSpreadsheetTargetField("Item.UnitWeight",  "Unit Weight", typeof(float)),
-                new GenericSpreadsheetTargetField("Item.TotalWeight", "Total Weight", typeof(float)),
-                new GenericSpreadsheetTargetField("Item.Status",      "Status", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Description", "Description", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Location",    "Location", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.UnitCost",    "Unit Cost", typeof(decimal)),
-                new GenericSpreadsheetTargetField("Item.TotalCost",   "Total Cost", typeof(decimal)),
-                new GenericSpreadsheetTargetField("Item.Image",       "Image URL", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.Thumbnail",   "Thumbnail URL", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.UPC",           "UPC", typeof(string)),
-                new GenericSpreadsheetTargetField("Item.ISBN",          "ISBN", typeof(string))
+                new GenericSpreadsheetTargetField("Item.Name",                  "Name", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Code",                  "Code", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.SKU",                   "SKU",  typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Quantity",              "Quantity", typeof(float)),
+                new GenericSpreadsheetTargetField("Item.UnitPrice",             "Unit Price", typeof(decimal)),
+                new GenericSpreadsheetTargetField("Item.TotalPrice",            "Total Price", typeof(decimal)),
+                new GenericSpreadsheetTargetField("Item.UnitWeight",            "Unit Weight", typeof(float)),
+                new GenericSpreadsheetTargetField("Item.TotalWeight",           "Total Weight", typeof(float)),
+                new GenericSpreadsheetTargetField("Item.Status",                "Status", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Description",           "Description", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Location",              "Location", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.UnitCost",              "Unit Cost", typeof(decimal)),
+                new GenericSpreadsheetTargetField("Item.TotalCost",             "Total Cost", typeof(decimal)),
+                new GenericSpreadsheetTargetField("Item.Image",                 "Image URL", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Thumbnail",             "Thumbnail URL", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.UPC",                   "UPC", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.ISBN",                  "ISBN", typeof(string)),
+                new GenericSpreadsheetTargetField("Item.Attribute.Name",        "Attribute Name", typeof(string))
             };
         }
+
     }
 }
