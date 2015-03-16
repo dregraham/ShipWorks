@@ -162,5 +162,14 @@ namespace ShipWorks.Shipping.Profiles
 
             return (profileCount != 0);
         }
+
+        /// <summary>
+        /// Get the default profile for the given shipment type
+        /// </summary>
+        public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
+        {
+            return Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
+        }
     }
 }

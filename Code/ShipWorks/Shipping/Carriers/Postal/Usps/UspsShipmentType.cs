@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -888,6 +889,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 AccountRepository = originalAccountRepository;
                 CertificateInspector = originalCertificateInspector;
             }
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
     }
 }

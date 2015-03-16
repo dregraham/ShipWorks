@@ -1141,5 +1141,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 shipment.IParcel.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.IParcelShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new IParcelShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
     }
 }

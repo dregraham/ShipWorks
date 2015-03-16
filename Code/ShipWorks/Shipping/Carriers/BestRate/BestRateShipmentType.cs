@@ -737,5 +737,15 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 shipment.BestRate.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.BestRateShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new BestRateShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
     }
 }
