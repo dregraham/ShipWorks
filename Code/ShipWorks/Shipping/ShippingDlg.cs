@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -58,6 +60,16 @@ namespace ShipWorks.Shipping
         // The singleton list of the current set of shipping errors.
         private static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
 
+        /// <summary>
+        /// Messages that should be used when trying to save a shipment
+        /// </summary>
+        readonly static Dictionary<Type, string> exceptionMessages = new Dictionary<Type, string>
+        {
+            { typeof(ORMConcurrencyException), "Another user had recently made changes, so the shipment was not processed." },
+            { typeof(ObjectDeletedException), "The shipment has been deleted." },
+            { typeof(SqlForeignKeyException), "The shipment has been deleted." },
+        };
+
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
         private bool loadingSelectedShipments = false;
@@ -97,6 +109,8 @@ namespace ShipWorks.Shipping
         private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
+        private readonly MessengerToken configuringCarrierToken;
+        private readonly MessengerToken carrierConfiguredToken;
 
         /// <summary>
         /// Constructor
@@ -162,6 +176,45 @@ namespace ShipWorks.Shipping
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+            configuringCarrierToken = Messenger.Current.Handle<ConfiguringCarrierMessage>(this, OnConfiguringCarrier);
+            carrierConfiguredToken = Messenger.Current.Handle<CarrierConfiguredMessage>(this, OnCarrierConfigured);
+        }
+
+        /// <summary>
+        /// A carrier is about to be configured
+        /// </summary>
+        private void OnConfiguringCarrier(ConfiguringCarrierMessage message)
+        {
+            // Save all loaded shipments in preparation for possibly changing the requested label type
+            // This will cause any shipments that have been changed elsewhere to be noted
+            IEnumerable<ShipmentEntity> shipments = shipmentControl.AllRows.Select(x => x.Shipment);
+            Dictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(shipments, true);
+
+            foreach (KeyValuePair<ShipmentEntity, Exception> error in errors)
+            {
+                SetShipmentErrorMessage(error.Key.ShipmentID, error.Value);
+            }
+        }
+
+        /// <summary>
+        /// A carrier has just been configured
+        /// </summary>
+        /// <param name="message"></param>
+        private void OnCarrierConfigured(CarrierConfiguredMessage message)
+        {
+
+        }
+
+        /// <summary>
+        /// Set an error on the processing errors collection
+        /// </summary>
+        private static void SetShipmentErrorMessage(long shipmentID, Exception exception)
+        {
+            string errorMessage;
+            if (exceptionMessages.TryGetValue(exception.GetType(), out errorMessage))
+            {
+                processingErrors[shipmentID] = new ShippingException(errorMessage, exception);
+            }
         }
 
         /// <summary>
@@ -2308,18 +2361,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = "Another user had recently made changes, so the shipment was not processed.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex);
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex);
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex);
                 }
                 catch (ShippingException ex)
                 {
@@ -2644,6 +2694,9 @@ namespace ShipWorks.Shipping
         {
             if (disposing)
             {
+                Messenger.Current.Remove(configuringCarrierToken);
+                Messenger.Current.Remove(carrierConfiguredToken);
+
                 if (components != null)
                 {
                     components.Dispose();
