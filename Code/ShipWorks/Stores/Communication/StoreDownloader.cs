@@ -461,12 +461,14 @@ namespace ShipWorks.Stores.Communication
                     relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
                     relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int)NoteSource.Downloaded));
 
-                    EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>();
-                    int matchingNotes = SqlAdapter.Default.GetDbCount(notes, relationPredicateBucket);
-
-                    if (matchingNotes > 0)
+                    using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
                     {
-                        return null;
+                        int matchingNotes = SqlAdapter.Default.GetDbCount(notes, relationPredicateBucket);
+
+                        if (matchingNotes > 0)
+                        {
+                            return null;
+                        }
                     }
                 }
             }
