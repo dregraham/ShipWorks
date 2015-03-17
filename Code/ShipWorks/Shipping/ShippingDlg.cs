@@ -2230,7 +2230,6 @@ namespace ShipWorks.Shipping
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
-
             List<string> orderHashes = new List<string>();
             IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = FetchShipmentsFromShipmentControl();
 
@@ -2242,11 +2241,15 @@ namespace ShipWorks.Shipping
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;
+
+                carrierConfigurationShipmentRefresher.ProcessingShipments(shipments);
             };
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += (sender, e) =>
             {
+                carrierConfigurationShipmentRefresher.FinishProcessing();
+
                 // Apply any changes made during processing to the grid
                 ApplyShipmentsToGridRows(shipments);
 
@@ -2448,6 +2451,9 @@ namespace ShipWorks.Shipping
                             if (result == DialogResult.OK)
                             {
                                 ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                                // Make sure we've got the latest data for the shipment since the requested label format may have changed
+                                ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
 
                                 ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
                                 ServiceControl.SaveToShipments();

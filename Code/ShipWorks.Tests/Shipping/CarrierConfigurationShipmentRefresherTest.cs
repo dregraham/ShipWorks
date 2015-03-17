@@ -8,6 +8,7 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -27,6 +28,7 @@ namespace ShipWorks.Tests.Shipping
         ShipmentEntity shipment3;
 
         private List<ShipmentEntity> shipments;
+        private ShipmentEntity processingShipment;
 
         [TestInitialize]
         public void Initialize()
@@ -37,9 +39,9 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock = mockRepository.Create<IShippingManager>();
             shippingProfileManagerMock = mockRepository.Create<IShippingProfileManager>();
 
-            shipment1 = new ShipmentEntity { ShipmentID = 1 };
-            shipment2 = new ShipmentEntity { ShipmentID = 2 };
-            shipment3 = new ShipmentEntity { ShipmentID = 3 }; 
+            shipment1 = new ShipmentEntity { ShipmentID = 1, ShipmentType = (int)ShipmentTypeCode.Usps };
+            shipment2 = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.Usps };
+            shipment3 = new ShipmentEntity { ShipmentID = 3, ShipmentType = (int)ShipmentTypeCode.Usps };
             
             shipments = new List<ShipmentEntity>
             {
@@ -150,6 +152,20 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [TestMethod]
+        public void HandleConfiguringCarrier_DoesNotSaveShipments_WhenProcessing()
+        {
+            TestMessenger messenger = new TestMessenger();
+            CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
+
+            refresher.ProcessingShipments(new List<ShipmentEntity> {new ShipmentEntity {ShipmentID = 2}});
+
+            messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
+
+            List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
+            shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
+        }
+
+        [TestMethod]
         public void HandleCarrierConfigured_GetShipmentsFromControl()
         {
             TestMessenger messenger = new TestMessenger();
@@ -251,6 +267,62 @@ namespace ShipWorks.Tests.Shipping
 
             Assert.AreEqual(0, shipment2.RequestedLabelFormat);
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
+        }
+
+        [TestMethod]
+        public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentIsDifferentType()
+        {
+            shipment2.ShipmentType = (int) ShipmentTypeCode.FedEx;
+
+            TestMessenger messenger = new TestMessenger();
+            CreateRefresher(messenger);
+
+            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
+
+            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
+        }
+
+        [TestMethod]
+        public void HandleCarrierConfigured_DoesNotModifyShipment_WhenProcessing()
+        {
+            TestMessenger messenger = new TestMessenger();
+
+            CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
+            refresher.ProcessingShipments(new List<ShipmentEntity> { new ShipmentEntity { ShipmentID = 2 } });
+
+            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
+
+            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
+        }
+
+        [TestMethod]
+        public void HandleCarrierConfigured_ModifiesProcessingShipments_WhenProcessing()
+        {
+            TestMessenger messenger = new TestMessenger();
+
+            CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
+            processingShipment = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.Usps };
+            refresher.ProcessingShipments(new List<ShipmentEntity> { processingShipment });
+
+            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
+
+            Assert.AreEqual(1, processingShipment.RequestedLabelFormat);
+        }
+
+        [TestMethod]
+        public void HandleCarrierConfigured_DoesNotModifyShipment_WhenProcessingOtherShipmentType()
+        {
+            TestMessenger messenger = new TestMessenger();
+
+            CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
+            processingShipment = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int) ShipmentTypeCode.FedEx };
+            refresher.ProcessingShipments(new List<ShipmentEntity> { processingShipment });
+
+            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
+
+            Assert.AreEqual(0, processingShipment.RequestedLabelFormat);
         }
 
         [TestMethod]
