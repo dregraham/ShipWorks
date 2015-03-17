@@ -231,9 +231,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private void AlwaysFixAddressesSelected(Control owner, ValidatedAddressEntity validatedAddress, AddressAdapter entityAdapter)
         {
-            DialogResult isSureResult = MessageHelper.ShowQuestion(owner, "Are you sure you want to always fix addresses for all stores?\r\n\r\n" +
-                                                                          "Clicking \"OK\" impacts orders that are downloaded going forward.\r\n" +
-                                                                          "Existing orders will continue to require manual modifications to the address.");
+            DialogResult isSureResult = MessageHelper.ShowQuestion(owner, "Are you sure you want to always fix addresses for all stores?");
             if (isSureResult != DialogResult.OK)
             {
                 return;
