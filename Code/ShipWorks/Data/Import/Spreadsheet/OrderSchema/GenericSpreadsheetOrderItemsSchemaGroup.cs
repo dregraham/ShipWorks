@@ -53,19 +53,21 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                         display = itemNumber + display;
                     }
 
-                    fields.Add(new GenericSpreadsheetTargetField(string.Format("{0}.{1}", baseField.Identifier, (i + 1)), display, baseField.DataType));
+                    GenericSpreadsheetTargetField field = new GenericSpreadsheetTargetField(string.Format("{0}.{1}", baseField.Identifier, (i + 1)), display, baseField.DataType);
+                    fields.Add(field);
                 }
-            }
 
-            // Attributes - treat these differently since they are just an add-on to the items and really aren't mapped to 
-            // a column on the order item itself. 
-            // TODO: Maybe go back and remove the attribute from the target field group entirely
-            for (int i = 0; i < settings.AttributeCountPerLine; i++)
-            {
-                fields.Add(new GenericSpreadsheetTargetField(
-                    string.Format("{0}.{1}", "Item.Attribute.Name", (i + 1)),       // Item.Attribute.Name.1
-                    string.Format("Attribute {0}", (i + 1)),                        // Attribute 1
-                    typeof (string)));
+                // Attributes - treat these differently since they are just an add-on to the items and really aren't mapped to 
+                // a column on the order item itself. 
+                for (int attributeIndex = 0; attributeIndex < settings.AttributeCountPerLine; attributeIndex++)
+                {
+                    GenericSpreadsheetTargetField attributeField = new GenericSpreadsheetTargetField(
+                        string.Format("Item.{0}.Attribute.Name.{1}", (i + 1), (attributeIndex + 1)),    // Item.1.Attribute.Name.1
+                        string.Format("Item {0} Attribute {1}", (i + 1), (attributeIndex + 1)),         // Item 1 Attribute 1
+                        typeof (string));
+                    
+                    fields.Add(attributeField);
+                }
             }
 
             return fields;
