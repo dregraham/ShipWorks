@@ -110,6 +110,7 @@ namespace ShipWorks.Shipping
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
         private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
+        private MessengerToken uspsAccountConvertedToken;
 
         /// <summary>
         /// Constructor
@@ -174,7 +175,7 @@ namespace ShipWorks.Shipping
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
 
             carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
                 new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
@@ -217,9 +218,7 @@ namespace ShipWorks.Shipping
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data displayed to accurately reflect the new shimpent type (USPS).
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
-        private void OnStampsUspsAutomaticExpeditedChanged(object sender, ShippingSettingsEventArgs eventArgs)
+        private void OnStampsUspsAutomaticExpeditedChanged(UspsAutomaticExpeditedChangedMessage message)
         {
             List<ShipmentEntity> selectedShipments = shipmentControl.SelectedShipments.ToList();
 
@@ -2709,9 +2708,10 @@ namespace ShipWorks.Shipping
                 {
                     validatedAddressScope.Dispose();
                 }
+
+                Messenger.Current.Remove(uspsAccountConvertedToken);
             }
 
-            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged -= OnStampsUspsAutomaticExpeditedChanged;
             base.Dispose(disposing);
         }
     }

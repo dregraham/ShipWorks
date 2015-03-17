@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web;
 using System.Windows.Forms;
-using ShipWorks.Data.Model;
-using ShipWorks.Filters;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Data;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
@@ -16,12 +12,9 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Editing.Rating
@@ -35,8 +28,9 @@ namespace ShipWorks.Shipping.Editing.Rating
     /// </summary>
     public partial class RatesPanel : UserControl
     {
-        private long? selectedShipmentID = null;
+        private long? selectedShipmentID;
         private bool resetCollapsibleStateRequired;
+        private readonly MessengerToken uspsAccountConvertedToken;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="RatesPanel"/> class.
@@ -60,25 +54,25 @@ namespace ShipWorks.Shipping.Editing.Rating
 
             rateControl.Initialize(new FootnoteParameters(() => RefreshRates(false), GetStoreForCurrentShipment));
 
-            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="shippingSettingsEventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
-        private void OnStampsUspsAutomaticExpeditedChanged(object sender, ShippingSettingsEventArgs shippingSettingsEventArgs)
+        private void OnStampsUspsAutomaticExpeditedChanged(UspsAutomaticExpeditedChangedMessage message)
         {
-            if (selectedShipmentID.HasValue)
+            if (!selectedShipmentID.HasValue)
             {
-                // Refresh the shipment data and then the rates
-                ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
-                ShippingManager.RefreshShipment(shipment);
-                
-                FetchRates(shipment, false);
+                return;
             }
+
+            // Refresh the shipment data and then the rates
+            ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
+            ShippingManager.RefreshShipment(shipment);
+                
+            FetchRates(shipment, false);
         }
 
         /// <summary>

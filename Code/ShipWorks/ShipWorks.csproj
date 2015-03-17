@@ -1021,6 +1021,7 @@
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Platforms\InstaStore\InstaStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
@@ -1074,8 +1075,7 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\ShippingSettingsEventDispatcher.cs" />
-    <Compile Include="Shipping\Settings\ShippingSettingsEventArgs.cs" />
+    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

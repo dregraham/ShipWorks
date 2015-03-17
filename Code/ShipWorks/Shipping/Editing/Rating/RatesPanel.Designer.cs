@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Editing.Rating
+﻿using Interapptive.Shared.Messaging;
+
+namespace ShipWorks.Shipping.Editing.Rating
 {
     partial class RatesPanel
     {
@@ -15,6 +17,7 @@
         {
             if (disposing && (components != null))
             {
+                Messenger.Current.Remove(uspsAccountConvertedToken);
                 components.Dispose();
             }
 
