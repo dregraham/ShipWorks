@@ -52,7 +52,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Window from which all shipments are created
     /// </summary>
-    partial class ShippingDlg : Form
+    partial class ShippingDlg : Form, IShippingDialogInteraction
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         readonly static Dictionary<Type, string> exceptionMessages = new Dictionary<Type, string>
         {
-            { typeof(ORMConcurrencyException), "Another user had recently made changes, so the shipment was not processed." },
+            { typeof(ORMConcurrencyException), "Another user had recently made changes, so the shipment was not {0}." },
             { typeof(ObjectDeletedException), "The shipment has been deleted." },
             { typeof(SqlForeignKeyException), "The shipment has been deleted." },
         };
@@ -109,8 +109,7 @@ namespace ShipWorks.Shipping
         private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
-        private readonly MessengerToken configuringCarrierToken;
-        private readonly MessengerToken carrierConfiguredToken;
+        private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
 
         /// <summary>
         /// Constructor
@@ -176,44 +175,41 @@ namespace ShipWorks.Shipping
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
             ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
-            configuringCarrierToken = Messenger.Current.Handle<ConfiguringCarrierMessage>(this, OnConfiguringCarrier);
-            carrierConfiguredToken = Messenger.Current.Handle<CarrierConfiguredMessage>(this, OnCarrierConfigured);
+
+            carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
+                new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
         }
 
         /// <summary>
-        /// A carrier is about to be configured
+        /// Gets all the shipments currently listed in the shipment control
         /// </summary>
-        private void OnConfiguringCarrier(ConfiguringCarrierMessage message)
+        public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl()
         {
-            // Save all loaded shipments in preparation for possibly changing the requested label type
-            // This will cause any shipments that have been changed elsewhere to be noted
-            IEnumerable<ShipmentEntity> shipments = shipmentControl.AllRows.Select(x => x.Shipment);
-            Dictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(shipments, true);
-
-            foreach (KeyValuePair<ShipmentEntity, Exception> error in errors)
-            {
-                SetShipmentErrorMessage(error.Key.ShipmentID, error.Value);
-            }
+            return shipmentControl.AllRows.Select(x => x.Shipment);
         }
 
         /// <summary>
-        /// A carrier has just been configured
+        /// Is there currently an error for the specified shipment id?
         /// </summary>
-        /// <param name="message"></param>
-        private void OnCarrierConfigured(CarrierConfiguredMessage message)
+        public bool ShipmentHasError(long shipmentId)
         {
-
+            return ProcessingErrors.ContainsKey(shipmentId);
         }
 
         /// <summary>
         /// Set an error on the processing errors collection
         /// </summary>
-        private static void SetShipmentErrorMessage(long shipmentID, Exception exception)
+        public void SetShipmentErrorMessage(long shipmentID, Exception exception, string actionName)
         {
+            if (exception == null)
+            {
+                return;
+            }
+
             string errorMessage;
             if (exceptionMessages.TryGetValue(exception.GetType(), out errorMessage))
             {
-                processingErrors[shipmentID] = new ShippingException(errorMessage, exception);
+                processingErrors[shipmentID] = new ShippingException(string.Format(errorMessage, actionName), exception);
             }
         }
 
@@ -596,7 +592,7 @@ namespace ShipWorks.Shipping
                                                                                    .Where(s => s.Fields[ShipmentFields.ShipStateProvCode.FieldIndex].IsChanged || s.Fields[ShipmentFields.ShipCountryCode.FieldIndex].IsChanged).ToList();
 
             // We need to show the user if anything went wrong while doing that
-            Dictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
+            IDictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
 
             // When the destination address is changed we save the affected shipments to the database right away to ensure that any concurrency errors that could
             // occur while generating customs items are caught right away.  This is why we do the Load here - if the customs items already exist, then this will do
@@ -1513,12 +1509,14 @@ namespace ShipWorks.Shipping
         /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, the offending shipments are returned.  The rest are
         /// still saved.
         /// </summary>
-        private Dictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
-            if (shipments.Any())
+            if (shipments == null || !shipments.Any())
             {
-                Cursor.Current = Cursors.WaitCursor;
+                return new Dictionary<ShipmentEntity, Exception>();
             }
+
+            Cursor.Current = Cursors.WaitCursor;
 
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
 
@@ -2116,18 +2114,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = "Another user had recently made changes, so the shipment was not voided.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ShippingException ex)
                 {
@@ -2177,7 +2172,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnProcessAll(object sender, EventArgs e)
         {
-            Process(shipmentControl.AllRows.Select(r => r.Shipment));
+            Process(FetchShipmentsFromShipmentControl());
         }
 
         /// <summary>
@@ -2226,7 +2221,7 @@ namespace ShipWorks.Shipping
                 false);
 
             List<string> newErrors = new List<string>();
-            Dictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
+            IDictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
 
             // Special cases - I didn't think we needed to abstract these.  If it gets out of hand we should refactor.
             bool worldshipExported = false;
@@ -2237,7 +2232,7 @@ namespace ShipWorks.Shipping
 
 
             List<string> orderHashes = new List<string>();
-            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = shipmentControl.AllRows.Select(r => r.Shipment);
+            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = FetchShipmentsFromShipmentControl();
 
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
@@ -2341,7 +2336,7 @@ namespace ShipWorks.Shipping
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
                     // Process it       
-                    if (shipment.ShipmentType == (int)ShipmentTypeCode.BestRate)
+                    if (shipment.ShipmentType == (int) ShipmentTypeCode.BestRate)
                     {
                         // Process the shipment with the counter rates processing method for best rate
                         ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, BestRateCounterRatesProcessing, selectedRate);
@@ -2361,15 +2356,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex);
+                    SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ShippingException ex)
                 {
@@ -2646,7 +2641,7 @@ namespace ShipWorks.Shipping
             SaveChangesToUIDisplayedShipments();
 
             // Save them to the database
-            if (SaveShipmentsToDatabase(shipmentControl.AllRows.Select(r => r.Shipment), false).Count > 0)
+            if (SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false).Count > 0)
             {
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
@@ -2694,8 +2689,10 @@ namespace ShipWorks.Shipping
         {
             if (disposing)
             {
-                Messenger.Current.Remove(configuringCarrierToken);
-                Messenger.Current.Remove(carrierConfiguredToken);
+                if (carrierConfigurationShipmentRefresher != null)
+                {
+                    carrierConfigurationShipmentRefresher.Dispose();    
+                }
 
                 if (components != null)
                 {
