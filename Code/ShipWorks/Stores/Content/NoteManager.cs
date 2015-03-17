@@ -179,11 +179,10 @@ namespace ShipWorks.Stores.Content
             // For orders, add in the related customer
             if (entityType == EntityType.OrderEntity)
             {
-                List<long> customerKeys = DataProvider.GetRelatedKeys(entityID, EntityType.CustomerEntity);
-                if (customerKeys.Count == 1)
-                {
-                    bucket.PredicateExpression.AddWithOr(NoteFields.ObjectID == customerKeys[0]);
-                }
+                FieldCompareSetPredicate predicate = new FieldCompareSetPredicate(
+                    NoteFields.ObjectID, null, OrderFields.CustomerID, null, SetOperator.In, OrderFields.OrderID == entityID);
+
+                bucket.PredicateExpression.AddWithOr(predicate);
             }
 
             // For customers, add in the related orders
