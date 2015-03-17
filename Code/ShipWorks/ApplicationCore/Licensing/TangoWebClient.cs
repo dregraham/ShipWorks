@@ -218,8 +218,8 @@ namespace ShipWorks.ApplicationCore.Licensing
             AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "Express1StampsPassword", "/CounterRateCredentials/Express1[@provider='Stamps']/Password", results, results["Express1StampsUsername"]);
 
             // USPS fields - password needs to be encrypted
-            AddCounterRateDictionaryEntry(responseXmlDocument, "UspsUsername", "/CounterRateCredentials/Stamps/Username", results);
-            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["UspsUsername"]);
+            AddCounterRateDictionaryEntry(responseXmlDocument, "StampsUsername", "/CounterRateCredentials/Stamps/Username", results);
+            AddEncryptedCounterRateDictionaryEntry(responseXmlDocument, "StampsPassword", "/CounterRateCredentials/Stamps/Password", results, results["StampsUsername"]);
 
             return results;
         }
