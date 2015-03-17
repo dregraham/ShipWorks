@@ -460,6 +460,9 @@ namespace ShipWorks.Shipping
 
                     shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
 
+                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    shipmentType.UpdateTotalWeight(shipment);
+
                     // Update the status of the shipment and record the changes that were applied to the shipment's packages
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
                     XElement changeSets = XElement.Parse(shipment.ShipSenseChangeSets);
