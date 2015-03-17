@@ -2394,7 +2394,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED  ([NoteI
 GO
 PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID])
+CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID]) INCLUDE ([Edited])
 GO
 ALTER TABLE [dbo].[Note] ENABLE CHANGE_TRACKING
 GO
