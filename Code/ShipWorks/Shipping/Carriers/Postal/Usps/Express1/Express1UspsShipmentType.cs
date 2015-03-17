@@ -181,28 +181,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
 
         /// <summary>
-        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
-        /// actually processing the shipment. In most cases this is checking to see if an account exists
-        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
-        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="counterRatesProcessing"></param>
-        /// <param name="selectedRate"></param>
-        /// <returns>
-        /// The updates shipment (or shipments) that is ready to be processed. A null value may
-        /// be returned to indicate that processing should be halted completely.
-        /// </returns>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, System.Func<CounterRatesProcessingArgs, System.Windows.Forms.DialogResult> counterRatesProcessing, RateResult selectedRate)
-        {
-            // We want to perform the processing of the base ShipmentType and not that of the USPS shipment type
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
-            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
-
-            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
-        }
-
-        /// <summary>
         /// Processes a shipment.
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
