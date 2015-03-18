@@ -136,6 +136,12 @@ namespace ShipWorks.Editions
             {
                 AddRestriction(EditionFeature.EndiciaScanBasedReturns, EditionRestrictionLevel.Hidden);
             }
+
+            // Endicia Insurance
+            if (!sharedOptions.StampsInsuranceEnabled)
+            {
+                AddRestriction(EditionFeature.StampsInsurance, EditionRestrictionLevel.Hidden);
+            }
             
             // Load the shipment type functionality into the restriction set
             foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))

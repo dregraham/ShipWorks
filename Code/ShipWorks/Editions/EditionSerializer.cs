@@ -102,8 +102,8 @@ namespace ShipWorks.Editions
                 bool dhlEnabled = (bool) xOptions.Element("EndiciaDhl");
                 edition.SharedOptions.EndiciaDhlEnabled = dhlEnabled;
 
-                bool insuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
-                edition.SharedOptions.EndiciaInsuranceEnabled = insuranceEnabled;
+                bool endiciaInsuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
+                edition.SharedOptions.EndiciaInsuranceEnabled = endiciaInsuranceEnabled;
                 
                 bool upsSurePostEnabled = xOptions.Descendants("UpsSurePost").Any() && (bool) xOptions.Element("UpsSurePost");
                 edition.SharedOptions.UpsSurePostEnabled = upsSurePostEnabled;
@@ -113,6 +113,9 @@ namespace ShipWorks.Editions
 
                 bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool)xOptions.Element("EndiciaScanBasedReturns");
                 edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
+
+                bool stampsInsuranceEnabled = (bool)xOptions.Element("StampsInsurance");
+                edition.SharedOptions.StampsInsuranceEnabled = stampsInsuranceEnabled;
             }
         }
         
@@ -173,7 +176,8 @@ namespace ShipWorks.Editions
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
-                new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled)));
+                new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled),
+                new XElement("StampsInsurance", edition.SharedOptions.StampsInsuranceEnabled)));
 
             if (edition.ShipmentTypeFunctionality != null)
             {
