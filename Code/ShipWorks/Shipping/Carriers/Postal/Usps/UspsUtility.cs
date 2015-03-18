@@ -145,5 +145,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     ShippingSettings.Fetch().UspsInsuranceProvider == (int)InsuranceProvider.Carrier;
             }
         }
+
+        /// <summary>
+        /// Gets the display name of Stamps.com insurance
+        /// </summary>
+        public static string StampsInsuranceDisplayName 
+        {
+            get
+            {
+                return "Stamps.com Insurance";
+            } 
+        }
     }
 }

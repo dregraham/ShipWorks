@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             if (UspsUtility.IsStampsInsuranceActive)
             {
-                insuranceControl.UseInsuranceBoxLabel = "Stamps.com Insurance";
+                insuranceControl.UseInsuranceBoxLabel = UspsUtility.StampsInsuranceDisplayName;
             }
 
             LoadUspsAccounts();
