@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Interapptive.Shared.Messaging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
-using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -163,6 +160,17 @@ namespace ShipWorks.Tests.Shipping
 
             List<ShipmentEntity> expectedShipments = new List<ShipmentEntity> { shipment1, shipment3 };
             shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
+        }
+
+        [TestMethod]
+        public void HandleCarrierConfigured_DelegatesToShippingManager_ToUpdateExistingShipmentsInDatabase()
+        {
+            TestMessenger messenger = new TestMessenger();
+            CreateRefresher(messenger);
+
+            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
+
+            shippingManagerMock.Verify(x => x.UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode.Usps));
         }
 
         [TestMethod]

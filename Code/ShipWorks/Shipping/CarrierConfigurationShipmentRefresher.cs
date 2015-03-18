@@ -61,6 +61,8 @@ namespace ShipWorks.Shipping
         /// <param name="message"></param>
         private void OnCarrierConfigured(CarrierConfiguredMessage message)
         {
+            shippingManager.UpdateLabelFormatOfUnprocessedShipments(message.ShipmentTypeCode);
+
             IEnumerable<ShipmentEntity> shipmentsToRefresh = shippingDialog.FetchShipmentsFromShipmentControl()
                 .Except(shipmentsProcessing, x => x.ShipmentID)
                 .Where(s => !s.Processed && !shippingDialog.ShipmentHasError(s.ShipmentID));

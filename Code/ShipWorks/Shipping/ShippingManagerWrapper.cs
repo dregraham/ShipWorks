@@ -15,5 +15,13 @@ namespace ShipWorks.Shipping
         {
             ShippingManager.RefreshShipment(shipment);
         }
+
+        /// <summary>
+        /// Update the label format of any unprocessed shipment with the given shipment type code
+        /// </summary>
+        public void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShippingManager.UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+        }
     }
 }

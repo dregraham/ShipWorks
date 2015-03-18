@@ -12,5 +12,10 @@ namespace ShipWorks.Shipping
         /// If the shipment has been deleted, an ObjectDeletedException is thrown.
         /// </summary>
         void RefreshShipment(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Update the label format of any unprocessed shipment with the given shipment type code
+        /// </summary>
+        void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode);
     }
 }

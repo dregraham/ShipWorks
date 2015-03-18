@@ -122,7 +122,6 @@ namespace ShipWorks.Shipping.Settings
 
             if (!isConfigured)
             {
-                ShippingManager.UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
                 Messenger.Current.Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));   
             }
         }
