@@ -136,15 +136,9 @@ namespace ShipWorks.Shipping
         {
             InitializeComponent();
 
-            if (shipments == null)
-            {
-                throw new ArgumentNullException("shipments");
-            }
-            
-            // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
-            windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+            MethodConditions.EnsureArgumentIsNotNull(shipments, "shipments");
+
+            ManageWindowPositioning();
 
             getRatesTimer.Tick += OnGetRatesTimerTick;
             getRatesTimer.Interval = getRatesDebounceTime;
@@ -179,6 +173,16 @@ namespace ShipWorks.Shipping
 
             carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
                 new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
+        }
+
+        /// <summary>
+        /// Register controls with the window state saver
+        /// </summary>
+        private void ManageWindowPositioning()
+        {
+            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
+            windowSaver.ManageSplitter(splitContainer, "Splitter");
+            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
         }
 
         /// <summary>
@@ -685,104 +689,28 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            // Turn off selection processing
-            shipmentControl.SelectionChanged -= this.OnChangeSelectedShipments;
+            resortWhenDone = resortWhenDone ||
+                             DeselectRowsIfCanceled(e.Canceled, resortWhenDone) ||
+                             deleted.Any();
 
-            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.  There could be selected and not loaded rows for rows
-            // that had been deleted too, but those will get wiped out when we do the RefreshAndRestor.
-            if (e.Canceled)
-            {
-                List<ShipmentGridRow> notLoaded = shipmentControl.SelectedRows.Where(r => !loadedShipmentEntities.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
+            // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
+            bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed) &&
+                loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
+            
+            bool enableShippingAddress = ShouldEnableShippingAddress(enableEditing);
 
-                if (notLoaded.Count > 0)
-                {
-                    resortWhenDone = true;
-
-                    // Unselected all the rows we ended up not loading
-                    foreach (ShipmentGridRow row in notLoaded)
-                    {
-                        row.Selected = false;
-                    }
-                }
-            }
-
-            // We'll need to resort and refresh if some got deleted or not loaded
-            if (deleted.Count > 0)
-            {
-                resortWhenDone = true;
-            }
-
-            // Turn selection processing back on
-            shipmentControl.SelectionChanged += OnChangeSelectedShipments;
-
-            ShipmentType shipmentType = null;
-
-            bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed);
-
-            // To have editing enabled, its also necessary to have permissions for all of them
-            if (enableEditing)
-            {
-                enableEditing = loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
-            }
-
-            bool enableShippingAddress = enableEditing;
-
-            if (enableEditing && loadedShipmentEntities.Count > 0)
-            {
-                // Check with the store to see if the shipping address should be editable
-                OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
-                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
-
-                enableShippingAddress = loadedShipmentEntities.All(s => storeType.IsShippingAddressEditable(s));
-            }
-
-            comboShipmentType.SelectedIndexChanged -= this.OnChangeShipmentType;
-
-            // See if anything is selected
-            if (loadedShipmentEntities.Count == 0)
-            {
-                comboShipmentType.Enabled = false;
-                comboShipmentType.SelectedIndex = -1;
-            }
-            else
-            {
-                shipmentType = GetShipmentType(loadedShipmentEntities);
-
-                // Update the shipment type combo
-                comboShipmentType.Enabled = enableEditing;
-
-                if (shipmentType != null)
-                {
-                    // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
-                    if (!enabledTypes.Any(p => p.Value == shipmentType.ShipmentTypeCode))
-                    {
-                        enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
-                        SortShipmentTypes(enabledTypes);
-                        comboShipmentType.DataSource = enabledTypes.ToList();
-                    }
-
-                    comboShipmentType.SelectedValue = shipmentType.ShipmentTypeCode;
-                }
-                else
-                {
-                    comboShipmentType.MultiValued = true;
-                }
-            }
-
-            comboShipmentType.SelectedIndexChanged += this.OnChangeShipmentType;
+            ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
+            
+            UpdateComboShipmentType(shipmentType, enableEditing);
 
             // Update our list of shipments that are displayed in the UI
             uiDisplayedShipments = loadedShipmentEntities.ToList();
 
             // Some of the shipment data is "dynamic".  Like the origin address, if it pulled from the Store Address,
             // and the store address has since changed, we want to update to reflect that.
-            foreach (ShipmentEntity shipment in loadedShipmentEntities)
+            foreach (ShipmentEntity shipment in loadedShipmentEntities.Where(x => !x.Processed))
             {
-                if (!shipment.Processed)
-                {
-                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                }
+                ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
             }
 
             // Load the service control with the UI displayed shipments
@@ -797,20 +725,13 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
-            // Show the setup control if setup is required.  Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
-            if (shipmentType != null)
-            {
-                ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
-                setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
-
-                serviceControlArea.Controls.Add(setupControl);
-            }
+            ShowSetupControlIfNecessary(shipmentType);
 
             // Update the processing \ settings buttons
             UpdateSelectionDependentUI();
             shipmentControl.UpdateSelectionDependentUI();
 
-            if (deleted.Count > 0)
+            if (deleted.Any())
             {
                 MessageHelper.ShowInformation(this, "Some of the shipments you selected were deleted by another user and have been removed from the list.");
             }
@@ -838,7 +759,112 @@ namespace ShipWorks.Shipping
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
         }
-        
+
+        /// <summary>
+        /// Deselect rows if processing is canceled
+        /// </summary>
+        private bool DeselectRowsIfCanceled(bool canceled, bool resortWhenDone)
+        {
+            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.  
+            // There could be selected and not loaded rows for rows that had been deleted too, but those will get 
+            // wiped out when we do the RefreshAndRestore.
+            if (!canceled)
+            {
+                return resortWhenDone;
+            }
+
+            List<ShipmentGridRow> notLoaded = shipmentControl.SelectedRows
+                .Where(r => loadedShipmentEntities.All(s => s.ShipmentID != r.Shipment.ShipmentID))
+                .ToList();
+
+            // Disable handling shipment selection while we are de selecting rows
+            shipmentControl.SelectionChanged -= OnChangeSelectedShipments;
+
+            // Unselected all the rows we ended up not loading
+            foreach (ShipmentGridRow row in notLoaded)
+            {
+                row.Selected = false;
+            }
+
+            shipmentControl.SelectionChanged += OnChangeSelectedShipments;
+
+            return notLoaded.Any();
+        }
+
+        /// <summary>
+        /// Show the setup control if necessary
+        /// </summary>
+        private void ShowSetupControlIfNecessary(ShipmentType shipmentType)
+        {
+            // Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
+            if (shipmentType == null)
+            {
+                return;
+            }
+
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            setupControl.SetupComplete += OnShipmentTypeSetupComplete;
+
+            serviceControlArea.Controls.Add(setupControl);
+        }
+
+        /// <summary>
+        /// Update the data and selection of the ComboShipmentType control
+        /// </summary>
+        private void UpdateComboShipmentType(ShipmentType shipmentType, bool enableEditing)
+        {
+            comboShipmentType.SelectedIndexChanged -= OnChangeShipmentType;
+
+            // See if anything is selected
+            if (loadedShipmentEntities.Count == 0)
+            {
+                comboShipmentType.Enabled = false;
+                comboShipmentType.SelectedIndex = -1;
+            }
+            else
+            {
+                // Update the shipment type combo
+                comboShipmentType.Enabled = enableEditing;
+
+                if (shipmentType != null)
+                {
+                    // If the selected type is one that's not currently enabled, add it back in so it can be selected
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
+                    if (enabledTypes.All(p => p.Value != shipmentType.ShipmentTypeCode))
+                    {
+                        enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
+                        SortShipmentTypes(enabledTypes);
+                        comboShipmentType.DataSource = enabledTypes.ToList();
+                    }
+
+                    comboShipmentType.SelectedValue = shipmentType.ShipmentTypeCode;
+                }
+                else
+                {
+                    comboShipmentType.MultiValued = true;
+                }
+            }
+
+            comboShipmentType.SelectedIndexChanged += OnChangeShipmentType;
+        }
+
+        /// <summary>
+        /// Should the shipping address be editable
+        /// </summary>
+        private bool ShouldEnableShippingAddress(bool enableEditing)
+        {
+            if (!enableEditing || loadedShipmentEntities.Count <= 0)
+            {
+                return enableEditing;
+            }
+
+            // Check with the store to see if the shipping address should be editable
+            OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
+            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
+
+            return loadedShipmentEntities.All(storeType.IsShippingAddressEditable);
+        }
+
         /// <summary>
         /// Apply the given shipments to their associated rows in the grid.  This is used after cloned shipments were altered somehow in the background thread
         /// and the changes need to be propagated to the UI.
