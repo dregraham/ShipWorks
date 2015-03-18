@@ -92,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
                 case PostalServiceType.CriticalMail: return ServiceType.USCM;
 
-
                 default:
                     throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
             }
