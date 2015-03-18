@@ -1,8 +1,11 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -131,5 +134,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return memo;
         }
 
+        /// <summary>
+        /// Indicates if Stamps insurance is allowed, turned on, and activated
+        /// </summary>
+        public static bool IsStampsInsuranceActive
+        {
+            get
+            {
+                return
+                    EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsInsurance).Level == EditionRestrictionLevel.None &&
+                    ShippingSettings.Fetch().UspsInsuranceProvider == (int)InsuranceProvider.Carrier;
+            }
+        }
     }
 }
