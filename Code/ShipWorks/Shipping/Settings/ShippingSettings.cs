@@ -191,6 +191,7 @@ namespace ShipWorks.Shipping.Settings
 
             settings.UspsAutomaticExpress1 = false;
             settings.UspsAutomaticExpress1Account = 0;
+            settings.UspsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

@@ -520,6 +520,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("UspsAutomaticExpress1Account", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("UspsInsuranceProvider", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Express1EndiciaCustomsCertify", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -954,6 +957,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsAutomaticExpress1Account, value); }
+		}
+
+		/// <summary> The UspsInsuranceProvider property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsInsuranceProvider"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 UspsInsuranceProvider
+		{
+			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UspsInsuranceProvider, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsInsuranceProvider, value); }
 		}
 
 		/// <summary> The Express1EndiciaCustomsCertify property of the Entity ShippingSettings<br/><br/>
