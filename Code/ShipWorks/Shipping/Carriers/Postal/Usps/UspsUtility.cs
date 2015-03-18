@@ -163,7 +163,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return IsAsendiaServiceType(serviceType) || 
                 IsGlobegisticsServiceType(serviceType) || 
                 IsInternationalBondedCouriersServiceType(serviceType) || 
-                IsRrDonnellyServiceType(serviceType);
+                IsRrDonnellyServiceType(serviceType) ||
+                IsInternationalDhlServiceType(serviceType);
         }
 
         /// <summary>
@@ -206,6 +207,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return serviceType == PostalServiceType.RrdIpa || serviceType == PostalServiceType.RrdIsal || serviceType == PostalServiceType.GlobegisticsIsal || serviceType == PostalServiceType.RrdEpsePacketService;
         }
 
-
+        /// <summary>
+        /// Determines whether the specified service type is a DHL international service type.
+        /// </summary>
+        /// <param name="serviceType">Type of the service.</param>
+        /// <returns><c>true</c> if the serivce is a DHL international service type; otherwise, <c>false</c>.</returns>
+        public static bool IsInternationalDhlServiceType(PostalServiceType serviceType)
+        {
+            return serviceType == PostalServiceType.DhlPacketIpa || serviceType == PostalServiceType.DhlPacketIsal;
+        }
     }
 }
