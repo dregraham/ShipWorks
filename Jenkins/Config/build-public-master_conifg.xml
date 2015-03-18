@@ -33,14 +33,8 @@
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>H/10 * * * * </spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>c:\jenkins-builds\master</customWorkspace>
+  <customWorkspace>c:\jenkins-builds\master-public</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>rake build:public_installer[4.0.0]</command>
