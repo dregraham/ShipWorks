@@ -27,6 +27,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Sets an error message for the specified shipment id
         /// </summary>
-        void SetShipmentErrorMessage(long shipmentId, Exception exception, string action);
+        string SetShipmentErrorMessage(long shipmentId, Exception exception, string action);
     }
 }

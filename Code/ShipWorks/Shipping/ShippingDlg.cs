@@ -46,6 +46,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
 using ShipWorks.Shipping.Policies;
+using Timer = System.Windows.Forms.Timer;
 
 
 namespace ShipWorks.Shipping
@@ -141,11 +142,8 @@ namespace ShipWorks.Shipping
 
             ManageWindowPositioning();
 
-            getRatesTimer.Tick += OnGetRatesTimerTick;
-            getRatesTimer.Interval = getRatesDebounceTime;
-
-            shipSenseChangedTimer.Tick += OnShipSenseChangedTimerTick;
-            shipSenseChangedTimer.Interval = shipSenseChangedDebounceTime;
+            SetupTimer(getRatesTimer, OnGetRatesTimerTick, getRatesDebounceTime);
+            SetupTimer(shipSenseChangedTimer, OnShipSenseChangedTimerTick, shipSenseChangedDebounceTime);
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
@@ -177,6 +175,15 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Set up a timer with the given tick handler and interval
+        /// </summary>
+        private static void SetupTimer(Timer timer, EventHandler tickHandler, int interval)
+        {
+            timer.Tick += tickHandler;
+            timer.Interval = interval;
+        }
+
+        /// <summary>
         /// Register controls with the window state saver
         /// </summary>
         private void ManageWindowPositioning()
@@ -205,18 +212,21 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Set an error on the processing errors collection
         /// </summary>
-        public void SetShipmentErrorMessage(long shipmentID, Exception exception, string actionName)
+        public string SetShipmentErrorMessage(long shipmentID, Exception exception, string actionName)
         {
             if (exception == null)
             {
-                return;
+                return null;
             }
 
             string errorMessage;
             if (exceptionMessages.TryGetValue(exception.GetType(), out errorMessage))
             {
-                processingErrors[shipmentID] = new ShippingException(string.Format(errorMessage, actionName), exception);
+                errorMessage = string.Format(errorMessage, actionName);
+                processingErrors[shipmentID] = new ShippingException(errorMessage, exception);
             }
+
+            return errorMessage;
         }
 
         /// <summary>
@@ -993,23 +1003,16 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
-            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
-            if (newServiceControl != null)
-            {
-                newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
-                newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
-                newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
-                newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-                newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
-                newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
-                newServiceControl.ClearRatesAction = ClearRates;
-                rateControl.RateSelected += newServiceControl.OnRateSelected;
-                rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+            AddNewServiceControl(newServiceControl);
 
-                newServiceControl.Dock = DockStyle.Fill;
-                serviceControlArea.Controls.Add(newServiceControl);
-            }
+            RemoveExistingServiceControl(oldServiceControl, reduceFlash);
+        }
 
+        /// <summary>
+        /// Remove existing service control from the dialog if it's not null
+        /// </summary>
+        private void RemoveExistingServiceControl(ServiceControlBase oldServiceControl, Control reduceFlash)
+        {
             // Finally, remove the old service control, or the blank panel we created
             if (oldServiceControl != null)
             {
@@ -1029,6 +1032,31 @@ namespace ShipWorks.Shipping
             {
                 reduceFlash.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Add the new service control to the dialog, if it's not null
+        /// </summary>
+        private void AddNewServiceControl(ServiceControlBase newServiceControl)
+        {
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (newServiceControl == null)
+            {
+                return;
+            }
+
+            newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
+            newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+            newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+            newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+            newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
+            newServiceControl.ClearRatesAction = ClearRates;
+            rateControl.RateSelected += newServiceControl.OnRateSelected;
+            rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+
+            newServiceControl.Dock = DockStyle.Fill;
+            serviceControlArea.Controls.Add(newServiceControl);
         }
 
         /// <summary>
@@ -2172,15 +2200,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ShippingException ex)
                 {
@@ -2316,40 +2344,7 @@ namespace ShipWorks.Shipping
                 shipmentControl.RefreshAndResort();
                 shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
 
-                // If any accounts were out of funds we show that instead of the errors
-                if (outOfFundsException != null)
-                {
-                    DialogResult answer = MessageHelper.ShowQuestion(this,
-                        string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
-                        "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
-
-                    if (answer == DialogResult.OK)
-                    {
-                        using (Form dlg = outOfFundsException.CreatePostageDialog())
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
-                }
-                else
-                {
-                    if (newErrors.Count > 0)
-                    {
-                        string message = "Some errors occurred during processing.\n\n";
-
-                        foreach (string error in newErrors.Take(3))
-                        {
-                            message += error + "\n\n";
-                        }
-
-                        if (newErrors.Count > 3)
-                        {
-                            message += "See the shipment list for all errors.";
-                        }
-
-                        MessageHelper.ShowError(this, message);
-                    }
-                }
+                HandleProcessingException(outOfFundsException, newErrors);
 
                 // See if we are supposed to open WorldShip
                 if (worldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
@@ -2396,18 +2391,11 @@ namespace ShipWorks.Shipping
 
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                    // Process it       
-                    if (shipment.ShipmentType == (int) ShipmentTypeCode.BestRate)
-                    {
-                        // Process the shipment with the counter rates processing method for best rate
-                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, BestRateCounterRatesProcessing, selectedRate);
-                    }
-                    else
-                    {
-                        // This is a shipment for a "real" shipping provider, so use the callback that will
-                        // launch the wizard for a specific shipment type.
-                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing, selectedRate);
-                    }
+                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ? 
+                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing : 
+                        CounterRatesProcessing;
+
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2417,15 +2405,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ShippingException ex)
                 {
@@ -2459,6 +2447,47 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             }, shipments, rateControl.SelectedRate); // Each shipment to execute the code for
+        }
+
+        /// <summary>
+        /// Handle an exception raised during processing, if possible
+        /// </summary>
+        private void HandleProcessingException(IInsufficientFunds outOfFundsException, List<string> newErrors)
+        {
+            // If any accounts were out of funds we show that instead of the errors
+            if (outOfFundsException != null)
+            {
+                DialogResult answer = MessageHelper.ShowQuestion(this,
+                    string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
+                                  "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
+
+                if (answer == DialogResult.OK)
+                {
+                    using (Form dlg = outOfFundsException.CreatePostageDialog())
+                    {
+                        dlg.ShowDialog(this);
+                    }
+                }
+            }
+            else
+            {
+                if (newErrors.Count > 0)
+                {
+                    string message = "Some errors occurred during processing.\n\n";
+
+                    foreach (string error in newErrors.Take(3))
+                    {
+                        message += error + "\n\n";
+                    }
+
+                    if (newErrors.Count > 3)
+                    {
+                        message += "See the shipment list for all errors.";
+                    }
+
+                    MessageHelper.ShowError(this, message);
+                }
+            }
         }
 
         /// <summary>
