@@ -114,7 +114,7 @@ namespace ShipWorks.Editions
                 bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool)xOptions.Element("EndiciaScanBasedReturns");
                 edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
-                bool stampsInsuranceEnabled = (bool)xOptions.Element("StampsInsurance");
+                bool stampsInsuranceEnabled = xOptions.Descendants("StampsInsurance").Any() && (bool)xOptions.Element("StampsInsurance");
                 edition.SharedOptions.StampsInsuranceEnabled = stampsInsuranceEnabled;
             }
         }
