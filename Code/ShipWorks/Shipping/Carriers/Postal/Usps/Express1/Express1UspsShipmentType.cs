@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
+using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 {
@@ -128,6 +129,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new Express1UspsProfileControl();
+        }
+
+        /// <summary>
+        /// Update the dyamic data of the shipment
+        /// </summary>
+        /// <param name="shipment"></param>
+        public override void UpdateDynamicShipmentData(ShipmentEntity shipment)
+        {
+            base.UpdateDynamicShipmentData(shipment);
+            shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
         }
 
         /// <summary>
