@@ -47,10 +47,13 @@
       <testResultsFile>TestResults/integration-results.trx</testResultsFile>
     </hudson.plugins.mstest.MSTestPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
+      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+	<hudson.plugins.growl.GrowlPublisher plugin="growl@1.1">
+      <IP>10.1.10.121,10.1.10.109</IP>
+    </hudson.plugins.growl.GrowlPublisher>
   </publishers>
   <buildWrappers/>
 </project>
