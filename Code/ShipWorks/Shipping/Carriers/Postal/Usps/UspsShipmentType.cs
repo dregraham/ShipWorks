@@ -25,6 +25,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -581,6 +582,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;
             }
+
+            shipment.InsuranceProvider = (int)(UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);
         }
 
         /// <summary>
