@@ -459,6 +459,7 @@ namespace ShipWorks.Shipping
                     }
 
                     shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
+                    UpdateTotalWeight(shipment);
 
                     // Update the status of the shipment and record the changes that were applied to the shipment's packages
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;

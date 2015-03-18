@@ -542,7 +542,7 @@ namespace ShipWorks.Stores.Management
             // Update the location of the address validation panel control based on which upload and download controls are shown
             if (!uploadSettings && !downloadSettings)
             {
-                panelAddressValidation.Top = panelDownloadSettings.Bottom + 7;
+                panelAddressValidation.Top = panelDownloadSettings.Top;
             }
             else if (!uploadSettings)
             {
