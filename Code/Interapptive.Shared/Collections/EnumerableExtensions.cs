@@ -136,5 +136,21 @@ namespace Interapptive.Shared.Collections
         {
             return source.Except(other, new GenericPropertyEqualityComparer<T, TProp>(propertyAccessor));
         }
+
+        /// <summary>
+        /// Are there no items in the collection
+        /// </summary>
+        public static bool None<T>(this IEnumerable<T> source)
+        {
+            return !source.Any();
+        }
+
+        /// <summary>
+        /// Are there no items in the collection that match the given predicate
+        /// </summary>
+        public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return !source.Any(predicate);
+        }
     }
 }

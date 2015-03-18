@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -947,37 +948,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
-            ServiceControlBase newServiceControl = null;
-
-            if (shipments.Any())
-            {
-                // If its null, its multi select
-                if (shipmentType == null)
-                {
-                    newServiceControl = new MultiSelectServiceControl(rateControl);
-                }
-                else
-                {
-                    newServiceControl = shipmentType.CreateServiceControl(rateControl);
-                }
-
-                if (newServiceControl != null)
-                {
-                    // If the type we need didn't change, then don't change it
-                    if (!forceRecreateServiceControl && ServiceControl != null &&
-                        ServiceControl.GetType() == newServiceControl.GetType() &&
-                        ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
-                    {
-                        // Get rid of the one we just created and use the old one
-                        newServiceControl.Dispose();
-                        newServiceControl = ServiceControl;
-                    }
-                    else
-                    {
-                        newServiceControl.Initialize();
-                    }
-                }
-            }
+            ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
             forceRecreateServiceControl = false;
 
@@ -987,67 +958,111 @@ namespace ShipWorks.Shipping
                 newServiceControl.LoadShipments(shipments, enableEditing, enableShippingAddress);
             }
 
-            // See if the service control has changed
-            if (ServiceControl != newServiceControl)
-            {
-                ServiceControlBase oldServiceControl = ServiceControl;
-                Control reduceFlash = null;
-
-                // If there was not an old service control, create a blank panel that will cover our new service control
-                // while it's controls are being positioned
-                if (oldServiceControl == null)
-                {
-                    reduceFlash = new Panel();
-                    reduceFlash.Dock = DockStyle.Fill;
-                    serviceControlArea.Controls.Add(reduceFlash);
-                }
-
-                // If there was a setup control, remove it
-                ClearPreviousSetupControl();
-
-                // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
-                if (newServiceControl != null)
-                {
-                    newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
-                    newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
-                    newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
-                    newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-                    newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
-                    newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
-                    newServiceControl.ClearRatesAction = ClearRates;
-                    rateControl.RateSelected += newServiceControl.OnRateSelected;
-                    rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
-
-                    newServiceControl.Dock = DockStyle.Fill;
-                    serviceControlArea.Controls.Add(newServiceControl);
-                }
-
-                // Finally, remove the old service control, or the blank panel we created
-                if (oldServiceControl != null)
-                {
-                    oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
-                    oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-                    oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-                    oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                    oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-                    oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-                    oldServiceControl.ClearRatesAction = x => { };
-                    rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                    rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
-
-                    oldServiceControl.Dispose();
-                }
-                else
-                {
-                    reduceFlash.Dispose();
-                }
-            }
+            ReplaceServiceControlIfChanged(newServiceControl);
 
             // Update the custom's control
             LoadCustomsControl(shipments, shipmentType, enableEditing);
 
             // Update the provider in the shipment grid
             shipmentControl.Refresh();
+        }
+
+        /// <summary>
+        /// Wire up new service control if it has changed
+        /// </summary>
+        private void ReplaceServiceControlIfChanged(ServiceControlBase newServiceControl)
+        {
+            // See if the service control has changed
+            if (ServiceControl == newServiceControl)
+            {
+                return;
+            }
+
+            ServiceControlBase oldServiceControl = ServiceControl;
+            Control reduceFlash = null;
+
+            // If there was not an old service control, create a blank panel that will cover our new service control
+            // while it's controls are being positioned
+            if (oldServiceControl == null)
+            {
+                reduceFlash = new Panel();
+                reduceFlash.Dock = DockStyle.Fill;
+                serviceControlArea.Controls.Add(reduceFlash);
+            }
+
+            // If there was a setup control, remove it
+            ClearPreviousSetupControl();
+
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (newServiceControl != null)
+            {
+                newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
+                newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+                newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+                newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+                newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+                newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
+                newServiceControl.ClearRatesAction = ClearRates;
+                rateControl.RateSelected += newServiceControl.OnRateSelected;
+                rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+
+                newServiceControl.Dock = DockStyle.Fill;
+                serviceControlArea.Controls.Add(newServiceControl);
+            }
+
+            // Finally, remove the old service control, or the blank panel we created
+            if (oldServiceControl != null)
+            {
+                oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
+                oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+                oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+                oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+                oldServiceControl.ClearRatesAction = x => { };
+                rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+                rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
+
+                oldServiceControl.Dispose();
+            }
+            else
+            {
+                reduceFlash.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Get a service control for the list of shipments and the given shipment type
+        /// </summary>
+        private ServiceControlBase GetServiceControlForShipments(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType)
+        {
+            if (shipments.None())
+            {
+                return null;
+            }
+
+            ServiceControlBase newServiceControl = shipmentType == null ? 
+                new MultiSelectServiceControl(rateControl) : 
+                shipmentType.CreateServiceControl(rateControl);
+
+            if (newServiceControl == null)
+            {
+                return null;
+            }
+
+            // If the type we need didn't change, then don't change it
+            if (!forceRecreateServiceControl && 
+                ServiceControl != null &&
+                ServiceControl.GetType() == newServiceControl.GetType() &&
+                ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
+            {
+                // Get rid of the one we just created and use the old one
+                newServiceControl.Dispose();
+                return ServiceControl;
+            }
+            
+            newServiceControl.Initialize();
+            return newServiceControl;
         }
 
         /// <summary>
@@ -1845,9 +1860,8 @@ namespace ShipWorks.Shipping
             // Executes right after things finish - but still on the background thread
             executor.ExecuteCompleting += (object s, EventArgs args) =>
                 {
-                    foreach (KeyValuePair<TemplateEntity, List<long>> pair in delayedPrints)
+                    foreach (PrintJob printJob in delayedPrints.Select(pair => PrintJob.Create(pair.Key, pair.Value)))
                     {
-                        PrintJob printJob = PrintJob.Create(pair.Key, pair.Value);
                         printJob.Print();
                     }
                 };
@@ -1855,81 +1869,100 @@ namespace ShipWorks.Shipping
             // Executes after everything is totally done, and is on the UI thread
             executor.ExecuteCompleted += (object s, BackgroundExecutorCompletedEventArgs<ShipmentEntity> args) =>
             {
-                if (args.ErrorException != null)
+                if (args.ErrorException == null)
                 {
-                    if (args.ErrorException is PrintingException)
+                    return;
+                }
+                
+                if (args.ErrorException is PrintingException)
+                {
+                    if (!(args.ErrorException is PrintingNoTemplateOutputException))
                     {
-                        if (!(args.ErrorException is PrintingNoTemplateOutputException))
-                        {
-                            MessageHelper.ShowError(this, args.ErrorException.Message);
-                        }
+                        MessageHelper.ShowError(this, args.ErrorException.Message);
                     }
-                    else
-                    {
-                        throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
-                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
                 }
             };
 
-            executor.ExecuteAsync(
-                // What to do for each shipment
-                (ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
+            executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
                     List<TemplateEntity> templates = ShipmentPrintHelper.DetermineTemplatesToPrint(shipment);
 
                     // Print with each template
                     foreach (TemplateEntity template in templates)
                     {
-                        // If it's standard or thermal we can print it right away
-                        if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
-                        {
-                            PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
-                            printJob.Print();
-                        }
-                        else
-                        {
-                            // Get the list of keys that have been delayed so far for this template
-                            List<long> delayedKeys;
-                            if (!delayedPrints.TryGetValue(template, out delayedKeys))
-                            {
-                                delayedKeys = new List<long>();
-                                delayedPrints[template] = delayedKeys;
-                            }
-
-                            // Add this as a delayed key
-                            delayedKeys.Add(shipment.ShipmentID);
-
-                            // It must be a label template
-                            if (template.Type == (int) TemplateType.Label)
-                            {
-                                LabelSheetEntity labelSheet = LabelSheetManager.GetLabelSheet(template.LabelSheetID);
-                                if (labelSheet != null)
-                                {
-                                    int cells = labelSheet.Rows * labelSheet.Columns;
-
-                                    // To know how many cell's we'll use, we have to translate
-                                    int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
-
-                                    // If we have enough to fill a sheet, print now
-                                    if (inputs % cells == 0)
-                                    {
-                                        PrintJob printJob = PrintJob.Create(template, delayedKeys);
-                                        printJob.Print();
-
-                                        delayedPrints.Remove(template);
-                                    }
-                                }
-                                else
-                                {
-                                    delayedPrints.Remove(template);
-                                }
-                            }
-                        }
+                        PrintTemplate(template, shipment, delayedPrints);
                     }
                 },
                 // Each shipment to print.  Send in a cloned collection so changes on other threads don't affect it.
                 EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase && s.Processed && !s.Voided))
                 );
+        }
+
+        /// <summary>
+        /// Print a given template
+        /// </summary>
+        private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment, Dictionary<TemplateEntity, List<long>> delayedPrints)
+        {
+            // If it's standard or thermal we can print it right away
+            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
+            {
+                PrintJob printJob = PrintJob.Create(template, new List<long> {shipment.ShipmentID});
+                printJob.Print();
+            }
+            else
+            {
+                // Get the list of keys that have been delayed so far for this template
+                List<long> delayedKeys;
+                if (!delayedPrints.TryGetValue(template, out delayedKeys))
+                {
+                    delayedKeys = new List<long>();
+                    delayedPrints[template] = delayedKeys;
+                }
+
+                // Add this as a delayed key
+                delayedKeys.Add(shipment.ShipmentID);
+
+                PrintLabelTemplate(template, delayedKeys, delayedPrints);
+            }
+        }
+
+        /// <summary>
+        /// Print a label template
+        /// </summary>
+        private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys, IDictionary<TemplateEntity, List<long>> delayedPrints)
+        {
+            // It must be a label template
+            if (template.Type != (int) TemplateType.Label)
+            {
+                return;
+            }
+
+            LabelSheetEntity labelSheet = LabelSheetManager.GetLabelSheet(template.LabelSheetID);
+
+            if (labelSheet != null)
+            {
+                int cells = labelSheet.Rows*labelSheet.Columns;
+
+                // To know how many cell's we'll use, we have to translate
+                int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
+
+                // If we have enough to fill a sheet, print now
+                if (inputs % cells == 0)
+                {
+                    PrintJob printJob = PrintJob.Create(template, delayedKeys);
+                    printJob.Print();
+
+                    delayedPrints.Remove(template);
+                }
+            }
+            else
+            {
+                delayedPrints.Remove(template);
+            }
         }
 
         /// <summary>
