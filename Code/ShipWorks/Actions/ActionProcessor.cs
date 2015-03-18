@@ -225,7 +225,7 @@ namespace ShipWorks.Actions
                     long lastQueueID = 0;
 
                     // Fetch all queued actions
-                    List<long> queueList = gateway.GetNextQueuePage(lastQueueID);
+                    List<long> queueList = GetNextQueuePage(lastQueueID);
 
                     // This loop is for a single context to keep going while queues are still found to process
                     while (queueList.Count > 0)
@@ -266,7 +266,7 @@ namespace ShipWorks.Actions
                         }
 
                         // Get the next page
-                        queueList = gateway.GetNextQueuePage(lastQueueID);
+                        queueList = GetNextQueuePage(lastQueueID);
 
                         // If there aren't any more, but we have some postponed, then wait for more actions to come in.  For instance,
                         // to wait for more labels to be processed to fill in a label sheet
@@ -280,7 +280,7 @@ namespace ShipWorks.Actions
                             while (timer.Elapsed < maxWait && queueList.Count == 0)
                             {
                                 Thread.Sleep(TimeSpan.FromSeconds(2));
-                                queueList = gateway.GetNextQueuePage(lastQueueID);
+                                queueList = GetNextQueuePage(lastQueueID);
                             }
                         }
                     }
@@ -288,6 +288,23 @@ namespace ShipWorks.Actions
                   // If there are still postponed steps in the context, we have to force them to complete with what they can now
                 } while (FlushPostponedQueues(context));
             }
+        }
+
+        /// <summary>
+        /// Gets the next page of action queues to process.
+        /// This is done withing a SqlAdapterRetry.
+        /// </summary>
+        private List<long> GetNextQueuePage(long lastQueueID)
+        {
+            List<long> page = new List<long>();
+
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionProcessor.GetNextQueuePage");
+            sqlAdapterRetry.ExecuteWithRetry(() =>
+            {
+                page = gateway.GetNextQueuePage(lastQueueID);
+            });
+
+            return page;
         }
 
         /// <summary>
