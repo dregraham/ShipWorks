@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.BestRate
         /// </summary>
         public override InsuranceProvider GetInsuranceProvider(ShippingSettingsEntity settings)
         {
-            return InsuranceProvider.ShipWorks;
+            return (InsuranceProvider)settings.UspsInsuranceProvider;
         }
 
         /// <summary>
