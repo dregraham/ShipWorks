@@ -134,7 +134,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(26, 140);
+            this.label1.Location = new System.Drawing.Point(22, 140);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(64, 13);
             this.label1.TabIndex = 25;
@@ -178,7 +178,7 @@
             // 
             this.itemNameLabel.AutoSize = true;
             this.itemNameLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.itemNameLabel.Location = new System.Drawing.Point(26, 86);
+            this.itemNameLabel.Location = new System.Drawing.Point(23, 86);
             this.itemNameLabel.Name = "itemNameLabel";
             this.itemNameLabel.Size = new System.Drawing.Size(63, 13);
             this.itemNameLabel.TabIndex = 23;
@@ -198,7 +198,7 @@
             // 
             this.claimTypeLabel.AutoSize = true;
             this.claimTypeLabel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.claimTypeLabel.Location = new System.Drawing.Point(25, 34);
+            this.claimTypeLabel.Location = new System.Drawing.Point(23, 34);
             this.claimTypeLabel.Name = "claimTypeLabel";
             this.claimTypeLabel.Size = new System.Drawing.Size(63, 13);
             this.claimTypeLabel.TabIndex = 19;

@@ -171,7 +171,7 @@
             // labelSubmissionDate
             // 
             this.labelSubmissionDate.AutoSize = true;
-            this.labelSubmissionDate.Location = new System.Drawing.Point(11, 35);
+            this.labelSubmissionDate.Location = new System.Drawing.Point(10, 35);
             this.labelSubmissionDate.Name = "labelSubmissionDate";
             this.labelSubmissionDate.Size = new System.Drawing.Size(76, 13);
             this.labelSubmissionDate.TabIndex = 29;
@@ -223,7 +223,7 @@
             // itemNameLabel
             // 
             this.itemNameLabel.AutoSize = true;
-            this.itemNameLabel.Location = new System.Drawing.Point(24, 135);
+            this.itemNameLabel.Location = new System.Drawing.Point(23, 135);
             this.itemNameLabel.Name = "itemNameLabel";
             this.itemNameLabel.Size = new System.Drawing.Size(63, 13);
             this.itemNameLabel.TabIndex = 24;
@@ -232,7 +232,7 @@
             // damageValueLabel
             // 
             this.damageValueLabel.AutoSize = true;
-            this.damageValueLabel.Location = new System.Drawing.Point(11, 110);
+            this.damageValueLabel.Location = new System.Drawing.Point(7, 110);
             this.damageValueLabel.Name = "damageValueLabel";
             this.damageValueLabel.Size = new System.Drawing.Size(79, 13);
             this.damageValueLabel.TabIndex = 23;
