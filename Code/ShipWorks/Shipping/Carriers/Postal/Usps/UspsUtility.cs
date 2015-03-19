@@ -140,9 +140,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             get
             {
-                return
-                    EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsInsurance).Level == EditionRestrictionLevel.None &&
-                    ShippingSettings.Fetch().UspsInsuranceProvider == (int)InsuranceProvider.Carrier;
+                return IsStampsInsuranceAllowed && ShippingSettings.Fetch().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if Stamps.com insurance is allowed
+        /// </summary>
+        public static bool IsStampsInsuranceAllowed
+        {
+            get
+            {
+                return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsInsurance).Level == EditionRestrictionLevel.None;
             }
         }
 

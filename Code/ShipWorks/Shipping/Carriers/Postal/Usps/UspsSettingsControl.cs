@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -52,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 panelBottom.Top = optionsControl.Bottom;
             }
+
+            panelInsurance.Top = panelBottom.Bottom;
         }
 
         /// <summary>
@@ -63,6 +67,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             string reseller = UspsAccountManager.GetResellerName(uspsResellerType);
             labelAccountType.Text = String.Format("{0} Accounts", reseller);
+
+            ShippingSettingsEntity settings = ShippingSettings.Fetch();
+
+            if (uspsResellerType == UspsResellerType.None)
+            {
+                // Showing the insurance control is dependent on if its allowed in tango
+                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.UspsInsuranceProvider;
+
+                // Specify the provider name here so we can use a constant
+                insuranceProviderChooser.CarrierProviderName = UspsUtility.StampsInsuranceDisplayName;
+                panelInsurance.Visible = UspsUtility.IsStampsInsuranceAllowed;
+            }
+            else
+            {
+                // Doesn't make sense to show Stamps.com insurance choosing to Express1
+                panelInsurance.Visible = false;
+            }
         }
 
         /// <summary>
@@ -128,6 +149,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             else
             {
                 express1Settings.SaveSettings(settings);
+            }
+
+            if (uspsResellerType == UspsResellerType.None)
+            {
+                settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
             }
         }
 
