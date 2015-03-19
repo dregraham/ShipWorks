@@ -163,17 +163,6 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [TestMethod]
-        public void HandleCarrierConfigured_DelegatesToShippingManager_ToUpdateExistingShipmentsInDatabase()
-        {
-            TestMessenger messenger = new TestMessenger();
-            CreateRefresher(messenger);
-
-            messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
-
-            shippingManagerMock.Verify(x => x.UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode.Usps));
-        }
-
-        [TestMethod]
         public void HandleCarrierConfigured_GetShipmentsFromControl()
         {
             TestMessenger messenger = new TestMessenger();
