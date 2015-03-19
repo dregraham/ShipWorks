@@ -158,7 +158,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
-            double itemWeight = (grouponItem.Weight == "") ? 0 : Convert.ToDouble(grouponItem.Weight);
+            double itemWeight = (String.IsNullOrWhiteSpace(grouponItem.Weight)) ? 0 : Convert.ToDouble(grouponItem.Weight);
 
             item.SKU = grouponItem.Sku;
             item.Code = grouponItem.FulfillmentLineitemId;
