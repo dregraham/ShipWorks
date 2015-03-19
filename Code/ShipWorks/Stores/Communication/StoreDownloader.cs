@@ -29,6 +29,7 @@ using ShipWorks.Templates.Tokens;
 using ShipWorks.Data.Model;
 using ShipWorks.Actions;
 using Interapptive.Shared.Business;
+using ShipWorks.Data.Caching;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.Users.Audit;
 
@@ -445,22 +446,30 @@ namespace ShipWorks.Stores.Communication
             // If we need to ignore adding any notes that are dupes of ones that exist...
             if (ignoreDuplicateText)
             {
-                List<NoteEntity> notesToCheck = new List<NoteEntity>();
-
-                // Check any notes already attached to the order, new or not
-                notesToCheck.AddRange(order.Notes);
+                // First see if any of the current (newly downloaded) notes match this note
+                if (order.Notes.Any(n =>
+                    string.Compare(n.Text, noteText, true) == 0
+                    && n.Source == (int)NoteSource.Downloaded))
+                {
+                    return null;
+                }
 
                 // If the order isn't new, check the ones in the database too
                 if (!order.IsNew)
                 {
-                    notesToCheck.AddRange(DataProvider.GetRelatedEntities(order.OrderID, EntityType.NoteEntity).Select(n => (NoteEntity) n));
-                }
+                    IRelationPredicateBucket relationPredicateBucket = order.GetRelationInfoNotes();
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Text, null, ComparisonOperator.Equal, noteText));
+                    relationPredicateBucket.PredicateExpression.AddWithAnd(new FieldCompareValuePredicate(NoteFields.Source, null, ComparisonOperator.Equal, (int)NoteSource.Downloaded));
 
-                if (notesToCheck.Any(n =>
-                    string.Compare(n.Text, noteText, true) == 0
-                    && n.Source == (int) NoteSource.Downloaded))
-                {
-                    return null;
+                    using (EntityCollection<NoteEntity> notes = new EntityCollection<NoteEntity>())
+                    {
+                        int matchingNotes = SqlAdapter.Default.GetDbCount(notes, relationPredicateBucket);
+
+                        if (matchingNotes > 0)
+                        {
+                            return null;
+                        }
+                    }
                 }
             }
 
