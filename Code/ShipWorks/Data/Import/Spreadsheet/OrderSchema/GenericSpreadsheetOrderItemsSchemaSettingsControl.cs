@@ -32,6 +32,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
             multiItemStrategy.SelectedValue = settings.MultiItemStrategy;
             comboSingleLineCount.SelectedIndex = settings.SingleLineCount - 1;
+            comboAttributeCount.SelectedIndex = settings.AttributeCountPerLine;
 
             // The downloading code supports more than one, but for now the UI only suppots one
             comboUniqueColumn.SelectedColumnName = settings.MultiLineKeyColumns.Count == 0 ? map.SourceSchema.Columns[0].Name : settings.MultiLineKeyColumns[0];
@@ -40,8 +41,9 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             UpdateUI();
 
             // Start listening for changes
-            multiItemStrategy.SelectedIndexChanged += new EventHandler(OnSettingsChanged);
-            comboSingleLineCount.SelectedIndexChanged += new EventHandler(OnSettingsChanged);
+            multiItemStrategy.SelectedIndexChanged += OnSettingsChanged;
+            comboSingleLineCount.SelectedIndexChanged += OnSettingsChanged;
+            comboAttributeCount.SelectedIndexChanged += OnSettingsChanged;
         }
 
         /// <summary>
@@ -53,15 +55,17 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             {
                 panelSingleLine.Visible = true;
                 panelMultiLine.Visible = false;
+                panelAttributes.Top = panelSingleLine.Bottom;
 
-                this.Height = panelSingleLine.Bottom;
+                this.Height = panelAttributes.Bottom;
             }
             else
             {
                 panelMultiLine.Visible = true;
                 panelSingleLine.Visible = false;
+                panelAttributes.Top = panelMultiLine.Bottom;
 
-                this.Height = panelMultiLine.Bottom;
+                this.Height = panelAttributes.Bottom;
             }
         }
 
@@ -84,6 +88,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
             settings.MultiItemStrategy = (GenericSpreadsheetOrderMultipleItemStrategy) multiItemStrategy.SelectedValue;
             settings.SingleLineCount = comboSingleLineCount.SelectedIndex + 1;
+            settings.AttributeCountPerLine = comboAttributeCount.SelectedIndex;
 
             // Only makes sense to validate if its for the relevant strategy
             if (validate)

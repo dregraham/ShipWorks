@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
-using System.Xml.XPath;
-using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
-using ShipWorks.Stores.Communication;
-using Interapptive.Shared.IO.Text.Csv;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Import.Spreadsheet;
-using ShipWorks.Data.Import.Spreadsheet.Types.Csv;
 
 namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 {
@@ -28,6 +21,9 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
         // The factory used to create new order element instances as needed
         IOrderElementFactory factory;
+
+        // The settings used to load order data
+        private GenericSpreadsheetOrderMapSettings settings;
 
         /// <summary>
         /// Load the data from the given CsvReader, positioned on an order row, into the given OrderEntity.
@@ -52,6 +48,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             this.order = order;
             this.csv = csv;
             this.factory = factory;
+
+            settings = (GenericSpreadsheetOrderMapSettings) csv.Map.TargetSettings;
 
             DateTime? orderDate = csv.ReadField("Order.DateTime", (DateTime?) null, null, csv.Map.DateSettings.DateTimeFormat, false);
 
@@ -166,8 +164,6 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         /// </summary>
         private void LoadItems()
         {
-            GenericSpreadsheetOrderMapSettings settings = (GenericSpreadsheetOrderMapSettings) csv.Map.TargetSettings;
-
             // All items are seperate columns on a single line
             if (settings.MultiItemStrategy == GenericSpreadsheetOrderMultipleItemStrategy.SingleLine)
             {
@@ -289,6 +285,8 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                 item.UPC = csv.ReadField("Item.UPC", "");
                 item.ISBN = csv.ReadField("Item.ISBN", "");
 
+                LoadAttributes(item, csv, factory);
+
                 // Allow derive classes to load\change their own specific item data
                 LoadExtraOrderItemData(item, csv, factory);
             }
@@ -320,6 +318,44 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         {
 
         }
+
+        /// <summary>
+        /// Loads attributes for the specified order item.
+        /// </summary>
+        private void LoadAttributes(OrderItemEntity item, GenericSpreadsheetReader csv, IOrderElementFactory factory)
+        {
+            string originalSuffix = csv.FieldIdentifierSuffix;
+
+            try
+            {
+                // Purposely start at 1 since there is no Item.Attribute.0
+                for (int attributeIndex = 1; attributeIndex <= settings.AttributeCountPerLine; attributeIndex++)
+                {
+                    // Change the identifier suffix to grab attributes and find the appropriate mapping in order to
+                    // use the name of the column as the attribute's name
+                    csv.FieldIdentifierSuffix = string.Format(".{0}", attributeIndex);
+                    GenericSpreadsheetFieldMapping mapping = csv.Map.Mappings.FirstOrDefault(m => m.TargetField.Identifier == string.Format("Item{0}.Attribute.Name.{1}", originalSuffix, attributeIndex));
+
+                    if (mapping != null)
+                    {
+                        // Create the attribute even if the description is blank. That way customers won't have any question
+                        // about whether ShipWorks is pulling in attributes correctly (and support won't have to dig up the 
+                        // spreadsheet to walk them through the process).
+                        OrderItemAttributeEntity attribute = factory.CreateItemAttribute(item);
+                    
+                        attribute.Name = mapping.SourceColumnName;
+                        attribute.Description = csv.ReadField(string.Format("Item{0}.Attribute.Name", originalSuffix), string.Empty);
+                        attribute.UnitPrice = 0m;                        
+                    }
+                }   
+            }
+            finally
+            {
+                // Upstream callers may be expecting the original value
+                csv.FieldIdentifierSuffix = originalSuffix;
+            }
+        }
+
 
         /// <summary>
         /// Loads notes from the module xml

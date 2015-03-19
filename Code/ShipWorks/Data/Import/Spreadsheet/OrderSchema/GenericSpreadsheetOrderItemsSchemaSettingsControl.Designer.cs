@@ -38,8 +38,13 @@
             this.infotipMinimizeRibbon = new ShipWorks.UI.Controls.InfoTip();
             this.comboUniqueColumn = new ShipWorks.Data.Import.Spreadsheet.Editing.GenericSpreadsheetSourceColumnComboBox();
             this.labelUniqueColumn = new System.Windows.Forms.Label();
+            this.panelAttributes = new System.Windows.Forms.Panel();
+            this.labelAttributes2 = new System.Windows.Forms.Label();
+            this.comboAttributeCount = new System.Windows.Forms.ComboBox();
+            this.labelAttributes1 = new System.Windows.Forms.Label();
             this.panelSingleLine.SuspendLayout();
             this.panelMultiLine.SuspendLayout();
+            this.panelAttributes.SuspendLayout();
             this.SuspendLayout();
             // 
             // labelSingleLine2
@@ -109,7 +114,7 @@
             // labelMultipleItems
             // 
             this.labelMultipleItems.AutoSize = true;
-            this.labelMultipleItems.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.labelMultipleItems.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelMultipleItems.Location = new System.Drawing.Point(1, 5);
             this.labelMultipleItems.Name = "labelMultipleItems";
             this.labelMultipleItems.Size = new System.Drawing.Size(89, 13);
@@ -131,7 +136,7 @@
             this.panelMultiLine.Controls.Add(this.infotipMinimizeRibbon);
             this.panelMultiLine.Controls.Add(this.comboUniqueColumn);
             this.panelMultiLine.Controls.Add(this.labelUniqueColumn);
-            this.panelMultiLine.Location = new System.Drawing.Point(15, 86);
+            this.panelMultiLine.Location = new System.Drawing.Point(15, 85);
             this.panelMultiLine.Name = "panelMultiLine";
             this.panelMultiLine.Size = new System.Drawing.Size(469, 52);
             this.panelMultiLine.TabIndex = 13;
@@ -140,8 +145,8 @@
             // infotipMinimizeRibbon
             // 
             this.infotipMinimizeRibbon.Caption = "Each repeating line that represents an item of the same order must have the same " +
-                "value in this column.\r\n\r\nThis is the \'primary key\' of the order, and mostly comm" +
-                "only the Order Number.";
+    "value in this column.\r\n\r\nThis is the \'primary key\' of the order, and mostly comm" +
+    "only the Order Number.";
             this.infotipMinimizeRibbon.Location = new System.Drawing.Point(241, 25);
             this.infotipMinimizeRibbon.Name = "infotipMinimizeRibbon";
             this.infotipMinimizeRibbon.Size = new System.Drawing.Size(12, 12);
@@ -150,7 +155,6 @@
             // 
             // comboUniqueColumn
             // 
-            this.comboUniqueColumn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboUniqueColumn.FormattingEnabled = true;
             this.comboUniqueColumn.Location = new System.Drawing.Point(23, 21);
             this.comboUniqueColumn.Name = "comboUniqueColumn";
@@ -166,20 +170,87 @@
             this.labelUniqueColumn.TabIndex = 0;
             this.labelUniqueColumn.Text = "Column that uniquely identifies each order:";
             // 
-            // GenericFileCsvItemsSettingsControl
+            // panelAttributes
+            // 
+            this.panelAttributes.Controls.Add(this.labelAttributes2);
+            this.panelAttributes.Controls.Add(this.comboAttributeCount);
+            this.panelAttributes.Controls.Add(this.labelAttributes1);
+            this.panelAttributes.Location = new System.Drawing.Point(15, 143);
+            this.panelAttributes.Name = "panelAttributes";
+            this.panelAttributes.Size = new System.Drawing.Size(469, 34);
+            this.panelAttributes.TabIndex = 14;
+            // 
+            // labelAttributes2
+            // 
+            this.labelAttributes2.AutoSize = true;
+            this.labelAttributes2.Location = new System.Drawing.Point(235, 5);
+            this.labelAttributes2.Name = "labelAttributes2";
+            this.labelAttributes2.Size = new System.Drawing.Size(96, 13);
+            this.labelAttributes2.TabIndex = 12;
+            this.labelAttributes2.Text = "attributes per item";
+            // 
+            // comboAttributeCount
+            // 
+            this.comboAttributeCount.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboAttributeCount.FormattingEnabled = true;
+            this.comboAttributeCount.Items.AddRange(new object[] {
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25"});
+            this.comboAttributeCount.Location = new System.Drawing.Point(178, 2);
+            this.comboAttributeCount.Name = "comboAttributeCount";
+            this.comboAttributeCount.Size = new System.Drawing.Size(53, 21);
+            this.comboAttributeCount.TabIndex = 11;
+            // 
+            // labelAttributes1
+            // 
+            this.labelAttributes1.AutoSize = true;
+            this.labelAttributes1.Location = new System.Drawing.Point(3, 5);
+            this.labelAttributes1.Name = "labelAttributes1";
+            this.labelAttributes1.Size = new System.Drawing.Size(175, 13);
+            this.labelAttributes1.TabIndex = 10;
+            this.labelAttributes1.Text = "There are source columns for up to";
+            // 
+            // GenericSpreadsheetOrderItemsSchemaSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelAttributes);
             this.Controls.Add(this.panelMultiLine);
             this.Controls.Add(this.panelSingleLine);
             this.Controls.Add(this.multiItemStrategy);
             this.Controls.Add(this.labelMultipleItems);
-            this.Name = "GenericFileCsvItemsSettingsControl";
-            this.Size = new System.Drawing.Size(539, 157);
+            this.Name = "GenericSpreadsheetOrderItemsSchemaSettingsControl";
+            this.Size = new System.Drawing.Size(539, 210);
             this.panelSingleLine.ResumeLayout(false);
             this.panelSingleLine.PerformLayout();
             this.panelMultiLine.ResumeLayout(false);
             this.panelMultiLine.PerformLayout();
+            this.panelAttributes.ResumeLayout(false);
+            this.panelAttributes.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,5 +268,9 @@
         private System.Windows.Forms.Label labelUniqueColumn;
         private Data.Import.Spreadsheet.Editing.GenericSpreadsheetSourceColumnComboBox comboUniqueColumn;
         private UI.Controls.InfoTip infotipMinimizeRibbon;
+        private System.Windows.Forms.Panel panelAttributes;
+        private System.Windows.Forms.Label labelAttributes2;
+        private System.Windows.Forms.ComboBox comboAttributeCount;
+        private System.Windows.Forms.Label labelAttributes1;
     }
 }
