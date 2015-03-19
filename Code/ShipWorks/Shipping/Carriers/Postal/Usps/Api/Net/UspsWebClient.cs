@@ -1044,7 +1044,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Add insurance if using SDC insurance
             if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
             {
-                addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAINS, Amount = shipment.Postal.InsuranceValue });
+                rate.InsuredValue = shipment.Postal.InsuranceValue;
+                addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAINS });
             }
 
             if (addOns.Count > 0)
