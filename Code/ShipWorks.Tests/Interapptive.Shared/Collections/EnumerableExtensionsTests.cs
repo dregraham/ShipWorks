@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 
 namespace ShipWorks.Tests.Interapptive.Shared.Collections
@@ -153,6 +154,43 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             List<char> list = new List<char> { 'a', 'b' };
             string result = list.Combine(", ");
             Assert.AreEqual("a, b", result);
+        }
+
+        [TestMethod]
+        public void Except_ReturnsElementsThatDoNotMatch_BasedOnProperty()
+        {
+            List<string> list = new List<string> {"foo", "bar", "baz"};
+            List<string> result = list.Except(new List<string> {"hat"}, x => x[1]).ToList();
+            Assert.AreEqual(1, result.Count);
+            Assert.AreEqual("foo", result[0]);
+        }
+
+        [TestMethod]
+        public void None_WithEmptyCollection_ReturnsTrue()
+        {
+            bool result = new List<string>().None();
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void None_WithSingleItem_ReturnsFalse()
+        {
+            bool result = Enumerable.Range(0, 1).None();
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void None_WithPredicateThatReturnsEmptyResults_ReturnsTrue()
+        {
+            bool result = Enumerable.Range(0, 100).None(x => x == 1000);
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void None_WithPredicateThatReturnsOneResult_ReturnsFalse()
+        {
+            bool result = Enumerable.Range(0, 100).None(x => x == 20);
+            Assert.IsFalse(result);
         }
     }
 }

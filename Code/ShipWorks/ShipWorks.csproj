@@ -756,6 +756,8 @@
     <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
     <Compile Include="Shipping\BilledType.cs" />
+    <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
+    <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -964,6 +966,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1031,6 +1034,12 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShippingDialogInteraction.cs" />
+    <Compile Include="Shipping\IShippingManager.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Platforms\InstaStore\InstaStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -1083,8 +1092,7 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\ShippingSettingsEventDispatcher.cs" />
-    <Compile Include="Shipping\Settings\ShippingSettingsEventArgs.cs" />
+    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>

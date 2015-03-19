@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters.Management;
@@ -27,6 +28,7 @@ namespace ShipWorks.Shipping.Settings
         // switching between service types.
         ShipmentTypeSettingsControl.Page settingsTabPage = ShipmentTypeSettingsControl.Page.Settings;
         private bool usedDisabledGeneralShipRule;
+        private MessengerToken uspsAccountCreatedToken;
 
         /// <summary>
         /// Constructor
@@ -37,7 +39,7 @@ namespace ShipWorks.Shipping.Settings
 
             WindowStateSaver.Manage(this);
 
-            ShippingSettingsEventDispatcher.UspsAccountCreated += OnUspsAccountCreated;
+            uspsAccountCreatedToken = Messenger.Current.Handle<UspsAccountCreatedMessage>(this, OnUspsAccountCreated);
         }
 
         /// <summary>
@@ -328,24 +330,25 @@ namespace ShipWorks.Shipping.Settings
         /// sure the option pages and exluded shipment types are updated to reflect any changes since
         /// shipment types could be exluded.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
-        private void OnUspsAccountCreated(object sender, ShippingSettingsEventArgs eventArgs)
+        /// <param name="message">The <see cref="UspsAccountCreatedMessage"/> instance containing the event data.</param>
+        private void OnUspsAccountCreated(UspsAccountCreatedMessage message)
         {
+            if (message.ShipmentTypeCode != ShipmentTypeCode.Usps)
+            {
+                return;
+            }
+
             // Make sure the active providers reflect any shipment types that may have been disabled.
             LoadProvidersPanel();
 
-            if (eventArgs.ShipmentTypeCode == ShipmentTypeCode.Usps)
-            {
-                // Clear out the settings map to force a reload (to pick up the new USPSs account)
-                settingsMap.Clear();
-                LoadShipmentTypePages();
+            // Clear out the settings map to force a reload (to pick up the new USPSs account)
+            settingsMap.Clear();
+            LoadShipmentTypePages();
 
-                OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>().FirstOrDefault(p => p.Tag != null && (ShipmentTypeCode)p.Tag == ShipmentTypeCode.Usps);
-                if (pageToSelect != null)
-                {
-                    optionControl.SelectedPage = pageToSelect;
-                }
+            OptionPage pageToSelect = optionControl.OptionPages.OfType<OptionPage>().FirstOrDefault(p => p.Tag != null && (ShipmentTypeCode)p.Tag == ShipmentTypeCode.Usps);
+            if (pageToSelect != null)
+            {
+                optionControl.SelectedPage = pageToSelect;
             }
         }
 
@@ -421,7 +424,7 @@ namespace ShipWorks.Shipping.Settings
                     components.Dispose();
                 }
 
-                ShippingSettingsEventDispatcher.UspsAccountCreated -= OnUspsAccountCreated;
+                Messenger.Current.Remove(uspsAccountCreatedToken);
 
                 // Dispose all the controls we created
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)
