@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿extern alias rebex2015;
+
 using System.IO;
-using Rebex.Net;
+using rebex2015::Rebex.Net;
 
 namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 {
@@ -12,14 +10,14 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
     /// </summary>
     public class GenericFileFtpInstance : GenericFileInstance
     {
-        Ftp ftp;
+        IFtp ftp;
         string ftpPath;
         string ftpFile;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public GenericFileFtpInstance(Ftp ftp, string ftpPath, string ftpFile)
+        public GenericFileFtpInstance(IFtp ftp, string ftpPath, string ftpFile)
         {
             this.ftp = ftp;
             this.ftpPath = ftpPath;
@@ -57,7 +55,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 
                 return stream;
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new GenericFileLoadException("Could not read from the import folder: " + ex.Message, ex);
             }

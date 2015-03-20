@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -43,6 +46,7 @@ using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using log4net;
 using ShipWorks.Shipping.Policies;
+using Timer = System.Windows.Forms.Timer;
 
 
 namespace ShipWorks.Shipping
@@ -50,13 +54,23 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Window from which all shipments are created
     /// </summary>
-    partial class ShippingDlg : Form
+    partial class ShippingDlg : Form, IShippingDialogInteraction
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
 
         // The singleton list of the current set of shipping errors.
         private static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
+
+        /// <summary>
+        /// Messages that should be used when trying to save a shipment
+        /// </summary>
+        readonly static Dictionary<Type, string> exceptionMessages = new Dictionary<Type, string>
+        {
+            { typeof(ORMConcurrencyException), "Another user had recently made changes, so the shipment was not {0}." },
+            { typeof(ObjectDeletedException), "The shipment has been deleted." },
+            { typeof(SqlForeignKeyException), "The shipment has been deleted." },
+        };
 
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
@@ -97,6 +111,8 @@ namespace ShipWorks.Shipping
         private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
+        private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
+        private MessengerToken uspsAccountConvertedToken;
 
         /// <summary>
         /// Constructor
@@ -122,21 +138,12 @@ namespace ShipWorks.Shipping
         {
             InitializeComponent();
 
-            if (shipments == null)
-            {
-                throw new ArgumentNullException("shipments");
-            }
-            
-            // Manage the window positioning
-            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
-            windowSaver.ManageSplitter(splitContainer, "Splitter");
-            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+            MethodConditions.EnsureArgumentIsNotNull(shipments, "shipments");
 
-            getRatesTimer.Tick += OnGetRatesTimerTick;
-            getRatesTimer.Interval = getRatesDebounceTime;
+            ManageWindowPositioning();
 
-            shipSenseChangedTimer.Tick += OnShipSenseChangedTimerTick;
-            shipSenseChangedTimer.Interval = shipSenseChangedDebounceTime;
+            SetupTimer(getRatesTimer, OnGetRatesTimerTick, getRatesDebounceTime);
+            SetupTimer(shipSenseChangedTimer, OnShipSenseChangedTimerTick, shipSenseChangedDebounceTime);
 
             // Load all the shipments into the grid
             shipmentControl.AddShipments(shipments);
@@ -161,16 +168,72 @@ namespace ShipWorks.Shipping
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged += OnStampsUspsAutomaticExpeditedChanged;
+            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+
+            carrierConfigurationShipmentRefresher = new CarrierConfigurationShipmentRefresher(Messenger.Current, this, 
+                new ShippingProfileManagerWrapper(), new ShippingManagerWrapper());
+        }
+
+        /// <summary>
+        /// Set up a timer with the given tick handler and interval
+        /// </summary>
+        private static void SetupTimer(Timer timer, EventHandler tickHandler, int interval)
+        {
+            timer.Tick += tickHandler;
+            timer.Interval = interval;
+        }
+
+        /// <summary>
+        /// Register controls with the window state saver
+        /// </summary>
+        private void ManageWindowPositioning()
+        {
+            WindowStateSaver windowSaver = new WindowStateSaver(this, WindowStateSaverOptions.Size | WindowStateSaverOptions.InitialMaximize);
+            windowSaver.ManageSplitter(splitContainer, "Splitter");
+            windowSaver.ManageSplitter(ratesSplitContainer, "RateSplitter");
+        }
+
+        /// <summary>
+        /// Gets all the shipments currently listed in the shipment control
+        /// </summary>
+        public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl()
+        {
+            return shipmentControl.AllRows.Select(x => x.Shipment);
+        }
+
+        /// <summary>
+        /// Is there currently an error for the specified shipment id?
+        /// </summary>
+        public bool ShipmentHasError(long shipmentId)
+        {
+            return ProcessingErrors.ContainsKey(shipmentId);
+        }
+
+        /// <summary>
+        /// Set an error on the processing errors collection
+        /// </summary>
+        public string SetShipmentErrorMessage(long shipmentID, Exception exception, string actionName)
+        {
+            if (exception == null)
+            {
+                return null;
+            }
+
+            string errorMessage;
+            if (exceptionMessages.TryGetValue(exception.GetType(), out errorMessage))
+            {
+                errorMessage = string.Format(errorMessage, actionName);
+                processingErrors[shipmentID] = new ShippingException(errorMessage, exception);
+            }
+
+            return errorMessage;
         }
 
         /// <summary>
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
         /// shipment data displayed to accurately reflect the new shimpent type (USPS).
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="eventArgs">The <see cref="ShippingSettingsEventArgs"/> instance containing the event data.</param>
-        private void OnStampsUspsAutomaticExpeditedChanged(object sender, ShippingSettingsEventArgs eventArgs)
+        private void OnStampsUspsAutomaticExpeditedChanged(UspsAutomaticExpeditedChangedMessage message)
         {
             List<ShipmentEntity> selectedShipments = shipmentControl.SelectedShipments.ToList();
 
@@ -543,7 +606,7 @@ namespace ShipWorks.Shipping
                                                                                    .Where(s => s.Fields[ShipmentFields.ShipStateProvCode.FieldIndex].IsChanged || s.Fields[ShipmentFields.ShipCountryCode.FieldIndex].IsChanged).ToList();
 
             // We need to show the user if anything went wrong while doing that
-            Dictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
+            IDictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
 
             // When the destination address is changed we save the affected shipments to the database right away to ensure that any concurrency errors that could
             // occur while generating customs items are caught right away.  This is why we do the Load here - if the customs items already exist, then this will do
@@ -637,104 +700,28 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            // Turn off selection processing
-            shipmentControl.SelectionChanged -= this.OnChangeSelectedShipments;
+            resortWhenDone = resortWhenDone ||
+                             DeselectRowsIfCanceled(e.Canceled, resortWhenDone) ||
+                             deleted.Any();
 
-            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.  There could be selected and not loaded rows for rows
-            // that had been deleted too, but those will get wiped out when we do the RefreshAndRestor.
-            if (e.Canceled)
-            {
-                List<ShipmentGridRow> notLoaded = shipmentControl.SelectedRows.Where(r => !loadedShipmentEntities.Any(s => s.ShipmentID == r.Shipment.ShipmentID)).ToList();
+            // To have editing enabled, it's necessary for shipments to be unprocessed and to have permissions for all of them
+            bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed) &&
+                loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
+            
+            bool enableShippingAddress = ShouldEnableShippingAddress(enableEditing);
 
-                if (notLoaded.Count > 0)
-                {
-                    resortWhenDone = true;
-
-                    // Unselected all the rows we ended up not loading
-                    foreach (ShipmentGridRow row in notLoaded)
-                    {
-                        row.Selected = false;
-                    }
-                }
-            }
-
-            // We'll need to resort and refresh if some got deleted or not loaded
-            if (deleted.Count > 0)
-            {
-                resortWhenDone = true;
-            }
-
-            // Turn selection processing back on
-            shipmentControl.SelectionChanged += OnChangeSelectedShipments;
-
-            ShipmentType shipmentType = null;
-
-            bool enableEditing = !loadedShipmentEntities.Any(s => s.Processed);
-
-            // To have editing enabled, its also necessary to have permissions for all of them
-            if (enableEditing)
-            {
-                enableEditing = loadedShipmentEntities.All(s => UserSession.Security.HasPermission(PermissionType.ShipmentsCreateEditProcess, s.OrderID));
-            }
-
-            bool enableShippingAddress = enableEditing;
-
-            if (enableEditing && loadedShipmentEntities.Count > 0)
-            {
-                // Check with the store to see if the shipping address should be editable
-                OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
-                StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
-
-                enableShippingAddress = loadedShipmentEntities.All(s => storeType.IsShippingAddressEditable(s));
-            }
-
-            comboShipmentType.SelectedIndexChanged -= this.OnChangeShipmentType;
-
-            // See if anything is selected
-            if (loadedShipmentEntities.Count == 0)
-            {
-                comboShipmentType.Enabled = false;
-                comboShipmentType.SelectedIndex = -1;
-            }
-            else
-            {
-                shipmentType = GetShipmentType(loadedShipmentEntities);
-
-                // Update the shipment type combo
-                comboShipmentType.Enabled = enableEditing;
-
-                if (shipmentType != null)
-                {
-                    // If the selected type is one that's not currently enabled, add it back in so it can be selected
-                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
-                    if (!enabledTypes.Any(p => p.Value == shipmentType.ShipmentTypeCode))
-                    {
-                        enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
-                        SortShipmentTypes(enabledTypes);
-                        comboShipmentType.DataSource = enabledTypes.ToList();
-                    }
-
-                    comboShipmentType.SelectedValue = shipmentType.ShipmentTypeCode;
-                }
-                else
-                {
-                    comboShipmentType.MultiValued = true;
-                }
-            }
-
-            comboShipmentType.SelectedIndexChanged += this.OnChangeShipmentType;
+            ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
+            
+            UpdateComboShipmentType(shipmentType, enableEditing);
 
             // Update our list of shipments that are displayed in the UI
             uiDisplayedShipments = loadedShipmentEntities.ToList();
 
             // Some of the shipment data is "dynamic".  Like the origin address, if it pulled from the Store Address,
             // and the store address has since changed, we want to update to reflect that.
-            foreach (ShipmentEntity shipment in loadedShipmentEntities)
+            foreach (ShipmentEntity shipment in loadedShipmentEntities.Where(x => !x.Processed))
             {
-                if (!shipment.Processed)
-                {
-                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                }
+                ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
             }
 
             // Load the service control with the UI displayed shipments
@@ -749,20 +736,13 @@ namespace ShipWorks.Shipping
             // If there was a setup control, remove it
             ClearPreviousSetupControl();
 
-            // Show the setup control if setup is required.  Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
-            if (shipmentType != null)
-            {
-                ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
-                setupControl.SetupComplete += new EventHandler(OnShipmentTypeSetupComplete);
-
-                serviceControlArea.Controls.Add(setupControl);
-            }
+            ShowSetupControlIfNecessary(shipmentType);
 
             // Update the processing \ settings buttons
             UpdateSelectionDependentUI();
             shipmentControl.UpdateSelectionDependentUI();
 
-            if (deleted.Count > 0)
+            if (deleted.Any())
             {
                 MessageHelper.ShowInformation(this, "Some of the shipments you selected were deleted by another user and have been removed from the list.");
             }
@@ -790,7 +770,112 @@ namespace ShipWorks.Shipping
 
             shipSenseSynchronizer.Add(loadedShipmentEntities);
         }
-        
+
+        /// <summary>
+        /// Deselect rows if processing is canceled
+        /// </summary>
+        private bool DeselectRowsIfCanceled(bool canceled, bool resortWhenDone)
+        {
+            // If we canceled rate a list of all rows that are selected that weren't loaded and un-select them.  
+            // There could be selected and not loaded rows for rows that had been deleted too, but those will get 
+            // wiped out when we do the RefreshAndRestore.
+            if (!canceled)
+            {
+                return resortWhenDone;
+            }
+
+            List<ShipmentGridRow> notLoaded = shipmentControl.SelectedRows
+                .Where(r => loadedShipmentEntities.All(s => s.ShipmentID != r.Shipment.ShipmentID))
+                .ToList();
+
+            // Disable handling shipment selection while we are de selecting rows
+            shipmentControl.SelectionChanged -= OnChangeSelectedShipments;
+
+            // Unselected all the rows we ended up not loading
+            foreach (ShipmentGridRow row in notLoaded)
+            {
+                row.Selected = false;
+            }
+
+            shipmentControl.SelectionChanged += OnChangeSelectedShipments;
+
+            return notLoaded.Any();
+        }
+
+        /// <summary>
+        /// Show the setup control if necessary
+        /// </summary>
+        private void ShowSetupControlIfNecessary(ShipmentType shipmentType)
+        {
+            // Don't go by the current value in ShippingManager.IsShipmentTypeSetup - go by the value we used when loading.
+            if (shipmentType == null)
+            {
+                return;
+            }
+
+            ShipmentTypeSetupControl setupControl = new ShipmentTypeSetupControl(shipmentType);
+            setupControl.SetupComplete += OnShipmentTypeSetupComplete;
+
+            serviceControlArea.Controls.Add(setupControl);
+        }
+
+        /// <summary>
+        /// Update the data and selection of the ComboShipmentType control
+        /// </summary>
+        private void UpdateComboShipmentType(ShipmentType shipmentType, bool enableEditing)
+        {
+            comboShipmentType.SelectedIndexChanged -= OnChangeShipmentType;
+
+            // See if anything is selected
+            if (loadedShipmentEntities.Count == 0)
+            {
+                comboShipmentType.Enabled = false;
+                comboShipmentType.SelectedIndex = -1;
+            }
+            else
+            {
+                // Update the shipment type combo
+                comboShipmentType.Enabled = enableEditing;
+
+                if (shipmentType != null)
+                {
+                    // If the selected type is one that's not currently enabled, add it back in so it can be selected
+                    List<KeyValuePair<string, ShipmentTypeCode>> enabledTypes = (List<KeyValuePair<string, ShipmentTypeCode>>) comboShipmentType.DataSource;
+                    if (enabledTypes.All(p => p.Value != shipmentType.ShipmentTypeCode))
+                    {
+                        enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentType.ShipmentTypeName, shipmentType.ShipmentTypeCode));
+                        SortShipmentTypes(enabledTypes);
+                        comboShipmentType.DataSource = enabledTypes.ToList();
+                    }
+
+                    comboShipmentType.SelectedValue = shipmentType.ShipmentTypeCode;
+                }
+                else
+                {
+                    comboShipmentType.MultiValued = true;
+                }
+            }
+
+            comboShipmentType.SelectedIndexChanged += OnChangeShipmentType;
+        }
+
+        /// <summary>
+        /// Should the shipping address be editable
+        /// </summary>
+        private bool ShouldEnableShippingAddress(bool enableEditing)
+        {
+            if (!enableEditing || loadedShipmentEntities.Count <= 0)
+            {
+                return enableEditing;
+            }
+
+            // Check with the store to see if the shipping address should be editable
+            OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
+            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
+
+            return loadedShipmentEntities.All(storeType.IsShippingAddressEditable);
+        }
+
         /// <summary>
         /// Apply the given shipments to their associated rows in the grid.  This is used after cloned shipments were altered somehow in the background thread
         /// and the changes need to be propagated to the UI.
@@ -873,37 +958,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void LoadServiceControl(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType, bool enableEditing, bool enableShippingAddress)
         {
-            ServiceControlBase newServiceControl = null;
-
-            if (shipments.Any())
-            {
-                // If its null, its multi select
-                if (shipmentType == null)
-                {
-                    newServiceControl = new MultiSelectServiceControl(rateControl);
-                }
-                else
-                {
-                    newServiceControl = shipmentType.CreateServiceControl(rateControl);
-                }
-
-                if (newServiceControl != null)
-                {
-                    // If the type we need didn't change, then don't change it
-                    if (!forceRecreateServiceControl && ServiceControl != null &&
-                        ServiceControl.GetType() == newServiceControl.GetType() &&
-                        ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
-                    {
-                        // Get rid of the one we just created and use the old one
-                        newServiceControl.Dispose();
-                        newServiceControl = ServiceControl;
-                    }
-                    else
-                    {
-                        newServiceControl.Initialize();
-                    }
-                }
-            }
+            ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
             forceRecreateServiceControl = false;
 
@@ -913,67 +968,129 @@ namespace ShipWorks.Shipping
                 newServiceControl.LoadShipments(shipments, enableEditing, enableShippingAddress);
             }
 
-            // See if the service control has changed
-            if (ServiceControl != newServiceControl)
-            {
-                ServiceControlBase oldServiceControl = ServiceControl;
-                Control reduceFlash = null;
-
-                // If there was not an old service control, create a blank panel that will cover our new service control
-                // while it's controls are being positioned
-                if (oldServiceControl == null)
-                {
-                    reduceFlash = new Panel();
-                    reduceFlash.Dock = DockStyle.Fill;
-                    serviceControlArea.Controls.Add(reduceFlash);
-                }
-
-                // If there was a setup control, remove it
-                ClearPreviousSetupControl();
-
-                // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
-                if (newServiceControl != null)
-                {
-                    newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
-                    newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
-                    newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
-                    newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
-                    newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
-                    newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
-                    newServiceControl.ClearRatesAction = ClearRates;
-                    rateControl.RateSelected += newServiceControl.OnRateSelected;
-                    rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
-
-                    newServiceControl.Dock = DockStyle.Fill;
-                    serviceControlArea.Controls.Add(newServiceControl);
-                }
-
-                // Finally, remove the old service control, or the blank panel we created
-                if (oldServiceControl != null)
-                {
-                    oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
-                    oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
-                    oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
-                    oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
-                    oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
-                    oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
-                    oldServiceControl.ClearRatesAction = x => { };
-                    rateControl.RateSelected -= oldServiceControl.OnRateSelected;
-                    rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
-
-                    oldServiceControl.Dispose();
-                }
-                else
-                {
-                    reduceFlash.Dispose();
-                }
-            }
+            ReplaceServiceControlIfChanged(newServiceControl);
 
             // Update the custom's control
             LoadCustomsControl(shipments, shipmentType, enableEditing);
 
             // Update the provider in the shipment grid
             shipmentControl.Refresh();
+        }
+
+        /// <summary>
+        /// Wire up new service control if it has changed
+        /// </summary>
+        private void ReplaceServiceControlIfChanged(ServiceControlBase newServiceControl)
+        {
+            // See if the service control has changed
+            if (ServiceControl == newServiceControl)
+            {
+                return;
+            }
+
+            ServiceControlBase oldServiceControl = ServiceControl;
+            Control reduceFlash = null;
+
+            // If there was not an old service control, create a blank panel that will cover our new service control
+            // while it's controls are being positioned
+            if (oldServiceControl == null)
+            {
+                reduceFlash = new Panel();
+                reduceFlash.Dock = DockStyle.Fill;
+                serviceControlArea.Controls.Add(reduceFlash);
+            }
+
+            // If there was a setup control, remove it
+            ClearPreviousSetupControl();
+
+            AddNewServiceControl(newServiceControl);
+
+            RemoveExistingServiceControl(oldServiceControl, reduceFlash);
+        }
+
+        /// <summary>
+        /// Remove existing service control from the dialog if it's not null
+        /// </summary>
+        private void RemoveExistingServiceControl(ServiceControlBase oldServiceControl, Control reduceFlash)
+        {
+            // Finally, remove the old service control, or the blank panel we created
+            if (oldServiceControl != null)
+            {
+                oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
+                oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
+                oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
+                oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
+                oldServiceControl.ShipmentsAdded -= OnServiceControlShipmentsAdded;
+                oldServiceControl.ShipmentTypeChanged -= OnShipmentTypeChanged;
+                oldServiceControl.ClearRatesAction = x => { };
+                rateControl.RateSelected -= oldServiceControl.OnRateSelected;
+                rateControl.ActionLinkClicked -= oldServiceControl.OnConfigureRateClick;
+
+                oldServiceControl.Dispose();
+            }
+            else
+            {
+                reduceFlash.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Add the new service control to the dialog, if it's not null
+        /// </summary>
+        private void AddNewServiceControl(ServiceControlBase newServiceControl)
+        {
+            // If there is a new service control, add it to our controls under either the old one, or the blank panel we created.
+            if (newServiceControl == null)
+            {
+                return;
+            }
+
+            newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
+            newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
+            newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
+            newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
+            newServiceControl.ShipmentsAdded += OnServiceControlShipmentsAdded;
+            newServiceControl.ShipmentTypeChanged += OnShipmentTypeChanged;
+            newServiceControl.ClearRatesAction = ClearRates;
+            rateControl.RateSelected += newServiceControl.OnRateSelected;
+            rateControl.ActionLinkClicked += newServiceControl.OnConfigureRateClick;
+
+            newServiceControl.Dock = DockStyle.Fill;
+            serviceControlArea.Controls.Add(newServiceControl);
+        }
+
+        /// <summary>
+        /// Get a service control for the list of shipments and the given shipment type
+        /// </summary>
+        private ServiceControlBase GetServiceControlForShipments(IEnumerable<ShipmentEntity> shipments, ShipmentType shipmentType)
+        {
+            if (shipments.None())
+            {
+                return null;
+            }
+
+            ServiceControlBase newServiceControl = shipmentType == null ? 
+                new MultiSelectServiceControl(rateControl) : 
+                shipmentType.CreateServiceControl(rateControl);
+
+            if (newServiceControl == null)
+            {
+                return null;
+            }
+
+            // If the type we need didn't change, then don't change it
+            if (!forceRecreateServiceControl && 
+                ServiceControl != null &&
+                ServiceControl.GetType() == newServiceControl.GetType() &&
+                ServiceControl.ShipmentTypeCode == newServiceControl.ShipmentTypeCode)
+            {
+                // Get rid of the one we just created and use the old one
+                newServiceControl.Dispose();
+                return ServiceControl;
+            }
+            
+            newServiceControl.Initialize();
+            return newServiceControl;
         }
 
         /// <summary>
@@ -1460,12 +1577,14 @@ namespace ShipWorks.Shipping
         /// Persist each dirty shipment in the list to the database.  If any concurrency errors occur, the offending shipments are returned.  The rest are
         /// still saved.
         /// </summary>
-        private Dictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
-            if (shipments.Any())
+            if (shipments == null || !shipments.Any())
             {
-                Cursor.Current = Cursors.WaitCursor;
+                return new Dictionary<ShipmentEntity, Exception>();
             }
+
+            Cursor.Current = Cursors.WaitCursor;
 
             Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
 
@@ -1769,9 +1888,8 @@ namespace ShipWorks.Shipping
             // Executes right after things finish - but still on the background thread
             executor.ExecuteCompleting += (object s, EventArgs args) =>
                 {
-                    foreach (KeyValuePair<TemplateEntity, List<long>> pair in delayedPrints)
+                    foreach (PrintJob printJob in delayedPrints.Select(pair => PrintJob.Create(pair.Key, pair.Value)))
                     {
-                        PrintJob printJob = PrintJob.Create(pair.Key, pair.Value);
                         printJob.Print();
                     }
                 };
@@ -1779,81 +1897,100 @@ namespace ShipWorks.Shipping
             // Executes after everything is totally done, and is on the UI thread
             executor.ExecuteCompleted += (object s, BackgroundExecutorCompletedEventArgs<ShipmentEntity> args) =>
             {
-                if (args.ErrorException != null)
+                if (args.ErrorException == null)
                 {
-                    if (args.ErrorException is PrintingException)
+                    return;
+                }
+                
+                if (args.ErrorException is PrintingException)
+                {
+                    if (!(args.ErrorException is PrintingNoTemplateOutputException))
                     {
-                        if (!(args.ErrorException is PrintingNoTemplateOutputException))
-                        {
-                            MessageHelper.ShowError(this, args.ErrorException.Message);
-                        }
+                        MessageHelper.ShowError(this, args.ErrorException.Message);
                     }
-                    else
-                    {
-                        throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
-                    }
+                }
+                else
+                {
+                    throw new InvalidOperationException(args.ErrorException.Message, args.ErrorException);
                 }
             };
 
-            executor.ExecuteAsync(
-                // What to do for each shipment
-                (ShipmentEntity shipment, object state, BackgroundIssueAdder<ShipmentEntity> issueAdder) =>
+            executor.ExecuteAsync((shipment, state, issueAdder) =>
                 {
                     List<TemplateEntity> templates = ShipmentPrintHelper.DetermineTemplatesToPrint(shipment);
 
                     // Print with each template
                     foreach (TemplateEntity template in templates)
                     {
-                        // If it's standard or thermal we can print it right away
-                        if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
-                        {
-                            PrintJob printJob = PrintJob.Create(template, new List<long> { shipment.ShipmentID });
-                            printJob.Print();
-                        }
-                        else
-                        {
-                            // Get the list of keys that have been delayed so far for this template
-                            List<long> delayedKeys;
-                            if (!delayedPrints.TryGetValue(template, out delayedKeys))
-                            {
-                                delayedKeys = new List<long>();
-                                delayedPrints[template] = delayedKeys;
-                            }
-
-                            // Add this as a delayed key
-                            delayedKeys.Add(shipment.ShipmentID);
-
-                            // It must be a label template
-                            if (template.Type == (int) TemplateType.Label)
-                            {
-                                LabelSheetEntity labelSheet = LabelSheetManager.GetLabelSheet(template.LabelSheetID);
-                                if (labelSheet != null)
-                                {
-                                    int cells = labelSheet.Rows * labelSheet.Columns;
-
-                                    // To know how many cell's we'll use, we have to translate
-                                    int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
-
-                                    // If we have enough to fill a sheet, print now
-                                    if (inputs % cells == 0)
-                                    {
-                                        PrintJob printJob = PrintJob.Create(template, delayedKeys);
-                                        printJob.Print();
-
-                                        delayedPrints.Remove(template);
-                                    }
-                                }
-                                else
-                                {
-                                    delayedPrints.Remove(template);
-                                }
-                            }
-                        }
+                        PrintTemplate(template, shipment, delayedPrints);
                     }
                 },
                 // Each shipment to print.  Send in a cloned collection so changes on other threads don't affect it.
                 EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => !s.DeletedFromDatabase && s.Processed && !s.Voided))
                 );
+        }
+
+        /// <summary>
+        /// Print a given template
+        /// </summary>
+        private static void PrintTemplate(TemplateEntity template, ShipmentEntity shipment, Dictionary<TemplateEntity, List<long>> delayedPrints)
+        {
+            // If it's standard or thermal we can print it right away
+            if (template.Type == (int) TemplateType.Standard || template.Type == (int) TemplateType.Thermal)
+            {
+                PrintJob printJob = PrintJob.Create(template, new List<long> {shipment.ShipmentID});
+                printJob.Print();
+            }
+            else
+            {
+                // Get the list of keys that have been delayed so far for this template
+                List<long> delayedKeys;
+                if (!delayedPrints.TryGetValue(template, out delayedKeys))
+                {
+                    delayedKeys = new List<long>();
+                    delayedPrints[template] = delayedKeys;
+                }
+
+                // Add this as a delayed key
+                delayedKeys.Add(shipment.ShipmentID);
+
+                PrintLabelTemplate(template, delayedKeys, delayedPrints);
+            }
+        }
+
+        /// <summary>
+        /// Print a label template
+        /// </summary>
+        private static void PrintLabelTemplate(TemplateEntity template, List<long> delayedKeys, IDictionary<TemplateEntity, List<long>> delayedPrints)
+        {
+            // It must be a label template
+            if (template.Type != (int) TemplateType.Label)
+            {
+                return;
+            }
+
+            LabelSheetEntity labelSheet = LabelSheetManager.GetLabelSheet(template.LabelSheetID);
+
+            if (labelSheet != null)
+            {
+                int cells = labelSheet.Rows*labelSheet.Columns;
+
+                // To know how many cell's we'll use, we have to translate
+                int inputs = TemplateContextTranslator.Translate(delayedKeys, template).Count;
+
+                // If we have enough to fill a sheet, print now
+                if (inputs % cells == 0)
+                {
+                    PrintJob printJob = PrintJob.Create(template, delayedKeys);
+                    printJob.Print();
+
+                    delayedPrints.Remove(template);
+                }
+            }
+            else
+            {
+                delayedPrints.Remove(template);
+            }
         }
 
         /// <summary>
@@ -2063,18 +2200,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = "Another user had recently made changes, so the shipment was not voided.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ShippingException ex)
                 {
@@ -2124,7 +2258,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnProcessAll(object sender, EventArgs e)
         {
-            Process(shipmentControl.AllRows.Select(r => r.Shipment));
+            Process(FetchShipmentsFromShipmentControl());
         }
 
         /// <summary>
@@ -2173,7 +2307,7 @@ namespace ShipWorks.Shipping
                 false);
 
             List<string> newErrors = new List<string>();
-            Dictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
+            IDictionary<ShipmentEntity, Exception> concurrencyErrors = new Dictionary<ShipmentEntity, Exception>();
 
             // Special cases - I didn't think we needed to abstract these.  If it gets out of hand we should refactor.
             bool worldshipExported = false;
@@ -2182,9 +2316,8 @@ namespace ShipWorks.Shipping
             // Maps storeID's to license exceptions, so we only have to check a store once per processing batch
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
-
             List<string> orderHashes = new List<string>();
-            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = shipmentControl.AllRows.Select(r => r.Shipment);
+            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = FetchShipmentsFromShipmentControl();
 
             // What to do before it gets started (but is on the background thread)
             executor.ExecuteStarting += (object s, EventArgs args) =>
@@ -2194,11 +2327,15 @@ namespace ShipWorks.Shipping
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;
+
+                carrierConfigurationShipmentRefresher.ProcessingShipments(shipments);
             };
 
             // Code to execute once background load is complete
             executor.ExecuteCompleted += (sender, e) =>
             {
+                carrierConfigurationShipmentRefresher.FinishProcessing();
+
                 // Apply any changes made during processing to the grid
                 ApplyShipmentsToGridRows(shipments);
 
@@ -2207,40 +2344,7 @@ namespace ShipWorks.Shipping
                 shipmentControl.RefreshAndResort();
                 shipmentControl.SelectionChanged += this.OnChangeSelectedShipments;
 
-                // If any accounts were out of funds we show that instead of the errors
-                if (outOfFundsException != null)
-                {
-                    DialogResult answer = MessageHelper.ShowQuestion(this,
-                        string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
-                        "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
-
-                    if (answer == DialogResult.OK)
-                    {
-                        using (Form dlg = outOfFundsException.CreatePostageDialog())
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
-                }
-                else
-                {
-                    if (newErrors.Count > 0)
-                    {
-                        string message = "Some errors occurred during processing.\n\n";
-
-                        foreach (string error in newErrors.Take(3))
-                        {
-                            message += error + "\n\n";
-                        }
-
-                        if (newErrors.Count > 3)
-                        {
-                            message += "See the shipment list for all errors.";
-                        }
-
-                        MessageHelper.ShowError(this, message);
-                    }
-                }
+                HandleProcessingException(outOfFundsException, newErrors);
 
                 // See if we are supposed to open WorldShip
                 if (worldshipExported && ShippingSettings.Fetch().WorldShipLaunch)
@@ -2287,18 +2391,11 @@ namespace ShipWorks.Shipping
 
                     orderHashes.Add(shipment.Order.ShipSenseHashKey);
 
-                    // Process it       
-                    if (shipment.ShipmentType == (int)ShipmentTypeCode.BestRate)
-                    {
-                        // Process the shipment with the counter rates processing method for best rate
-                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, BestRateCounterRatesProcessing, selectedRate);
-                    }
-                    else
-                    {
-                        // This is a shipment for a "real" shipping provider, so use the callback that will
-                        // launch the wizard for a specific shipment type.
-                        ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, CounterRatesProcessing, selectedRate);
-                    }
+                    Func<CounterRatesProcessingArgs, DialogResult> ratesProcessing = shipment.ShipmentType == (int) ShipmentTypeCode.BestRate ? 
+                        (Func<CounterRatesProcessingArgs, DialogResult>) BestRateCounterRatesProcessing : 
+                        CounterRatesProcessing;
+
+                    ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate);
 
                     // Clear any previous errors
                     processingErrors.Remove(shipmentID);
@@ -2308,18 +2405,15 @@ namespace ShipWorks.Shipping
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = "Another user had recently made changes, so the shipment was not processed.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = "The shipment has been deleted.";
-                    processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ShippingException ex)
                 {
@@ -2353,6 +2447,47 @@ namespace ShipWorks.Shipping
                     newErrors.Add("Order " + shipment.Order.OrderNumberComplete + ": " + errorMessage);
                 }
             }, shipments, rateControl.SelectedRate); // Each shipment to execute the code for
+        }
+
+        /// <summary>
+        /// Handle an exception raised during processing, if possible
+        /// </summary>
+        private void HandleProcessingException(IInsufficientFunds outOfFundsException, List<string> newErrors)
+        {
+            // If any accounts were out of funds we show that instead of the errors
+            if (outOfFundsException != null)
+            {
+                DialogResult answer = MessageHelper.ShowQuestion(this,
+                    string.Format("You do not have sufficient funds in {0} account {1} to continue shipping.\n\n" +
+                                  "Would you like to purchase more now?", outOfFundsException.Provider, outOfFundsException.AccountIdentifier));
+
+                if (answer == DialogResult.OK)
+                {
+                    using (Form dlg = outOfFundsException.CreatePostageDialog())
+                    {
+                        dlg.ShowDialog(this);
+                    }
+                }
+            }
+            else
+            {
+                if (newErrors.Count > 0)
+                {
+                    string message = "Some errors occurred during processing.\n\n";
+
+                    foreach (string error in newErrors.Take(3))
+                    {
+                        message += error + "\n\n";
+                    }
+
+                    if (newErrors.Count > 3)
+                    {
+                        message += "See the shipment list for all errors.";
+                    }
+
+                    MessageHelper.ShowError(this, message);
+                }
+            }
         }
 
         /// <summary>
@@ -2403,6 +2538,9 @@ namespace ShipWorks.Shipping
                             if (result == DialogResult.OK)
                             {
                                 ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+
+                                // Make sure we've got the latest data for the shipment since the requested label format may have changed
+                                ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
 
                                 ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
                                 ServiceControl.SaveToShipments();
@@ -2596,7 +2734,7 @@ namespace ShipWorks.Shipping
             SaveChangesToUIDisplayedShipments();
 
             // Save them to the database
-            if (SaveShipmentsToDatabase(shipmentControl.AllRows.Select(r => r.Shipment), false).Count > 0)
+            if (SaveShipmentsToDatabase(FetchShipmentsFromShipmentControl(), false).Count > 0)
             {
                 MessageHelper.ShowWarning(this,
                                           "Some of the shipments you edited had already been edited or deleted by other users.\n\n" +
@@ -2644,6 +2782,11 @@ namespace ShipWorks.Shipping
         {
             if (disposing)
             {
+                if (carrierConfigurationShipmentRefresher != null)
+                {
+                    carrierConfigurationShipmentRefresher.Dispose();    
+                }
+
                 if (components != null)
                 {
                     components.Dispose();
@@ -2653,9 +2796,10 @@ namespace ShipWorks.Shipping
                 {
                     validatedAddressScope.Dispose();
                 }
+
+                Messenger.Current.Remove(uspsAccountConvertedToken);
             }
 
-            ShippingSettingsEventDispatcher.StampsUspsAutomaticExpeditedChanged -= OnStampsUspsAutomaticExpeditedChanged;
             base.Dispose(disposing);
         }
     }

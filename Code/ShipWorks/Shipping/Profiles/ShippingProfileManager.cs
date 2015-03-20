@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Interapptive.Shared.UI;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -161,6 +160,15 @@ namespace ShipWorks.Shipping.Profiles
                 ShippingProfileFields.Name == profile.Name);
 
             return (profileCount != 0);
+        }
+
+        /// <summary>
+        /// Get the default profile for the given shipment type
+        /// </summary>
+        public static ShippingProfileEntity GetDefaultProfile(ShipmentTypeCode shipmentTypeCode)
+        {
+            return Profiles.FirstOrDefault(p =>
+                p.ShipmentType == (int) shipmentTypeCode && p.ShipmentTypePrimary);
         }
     }
 }

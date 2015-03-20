@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 using ShipWorks.Shipping.ShipSense.Packaging;
@@ -156,6 +158,16 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.UpsShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new UpsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
 
         /// <summary>

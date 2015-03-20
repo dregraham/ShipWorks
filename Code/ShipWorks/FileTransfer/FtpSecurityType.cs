@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ShipWorks.FileTransfer
+﻿namespace ShipWorks.FileTransfer
 {
     /// <summary>
     /// Security types for FTP connection
@@ -23,6 +18,11 @@ namespace ShipWorks.FileTransfer
         /// <summary>
         /// Explicitly secure connection, typically port 21
         /// </summary>
-        Explicit = 2
+        Explicit = 2,
+
+        /// <summary>
+        /// SFTP Security, typically port 22
+        /// </summary>
+        Sftp = 3
     }
 }

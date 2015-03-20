@@ -1,9 +1,11 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using Rebex;
-using Rebex.Net;
+using rebex2015::Rebex;
+using rebex2015::Rebex.Net;
 using ShipWorks.Actions.Tasks.Common.Editors;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
@@ -16,6 +18,8 @@ using log4net;
 
 namespace ShipWorks.Actions.Tasks.Common
 {
+    extern alias rebex2015;
+
     /// <summary>
     /// Task for ftping a chosen template
     /// </summary>
@@ -118,13 +122,12 @@ namespace ShipWorks.Actions.Tasks.Common
             try
             {
                 FtpAccountEntity ftpAccountEntity = FtpAccountManager.GetAccount(FtpAccountID.Value);
-                Ftp ftp = FtpUtility.LogonToFtp(ftpAccountEntity);
+                IFtp ftp = FtpUtility.LogonToFtp(ftpAccountEntity);
 
                 ftp.LogWriter = GetFtpLogWriter();
-
                 ftp.PutFiles(string.Format("{0}\\*", rootTempFileName), "/", FtpBatchTransferOptions.Recursive, FtpActionOnExistingFiles.OverwriteAll);
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 log.Error("Error transferring File", ex);
                 throw new ActionTaskRunException(String.Format("Error uploading file. Ftp returned error: {0}", ex.Message));

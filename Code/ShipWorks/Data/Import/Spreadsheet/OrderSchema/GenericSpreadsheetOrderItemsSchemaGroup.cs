@@ -39,12 +39,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             GenericSpreadsheetOrderMapSettings settings = (GenericSpreadsheetOrderMapSettings) _settings;
 
             int fieldSets = (settings.MultiItemStrategy == GenericSpreadsheetOrderMultipleItemStrategy.SingleLine) ? settings.SingleLineCount : 1;
-
             List<GenericSpreadsheetTargetField> fields = new List<GenericSpreadsheetTargetField>();
 
             for (int i = 0; i < fieldSets; i++)
             {
-                foreach (GenericSpreadsheetTargetField baseField in baseFields)
+                foreach (GenericSpreadsheetTargetField baseField in baseFields.Where(f => f.Identifier != "Item.Attribute.Name"))
                 {
                     string display = baseField.DisplayName;
 
@@ -54,7 +53,20 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                         display = itemNumber + display;
                     }
 
-                    fields.Add(new GenericSpreadsheetTargetField(string.Format("{0}.{1}", baseField.Identifier, (i + 1)), display, baseField.DataType));
+                    GenericSpreadsheetTargetField field = new GenericSpreadsheetTargetField(string.Format("{0}.{1}", baseField.Identifier, (i + 1)), display, baseField.DataType);
+                    fields.Add(field);
+                }
+
+                // Attributes - treat these differently since they are just an add-on to the items and really aren't mapped to 
+                // a column on the order item itself. 
+                for (int attributeIndex = 0; attributeIndex < settings.AttributeCountPerLine; attributeIndex++)
+                {
+                    GenericSpreadsheetTargetField attributeField = new GenericSpreadsheetTargetField(
+                        string.Format("Item.{0}.Attribute.Name.{1}", (i + 1), (attributeIndex + 1)),    // Item.1.Attribute.Name.1
+                        string.Format("Item {0} Attribute {1}", (i + 1), (attributeIndex + 1)),         // Item 1 Attribute 1
+                        typeof (string));
+                    
+                    fields.Add(attributeField);
                 }
             }
 

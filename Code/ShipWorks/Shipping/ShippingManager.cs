@@ -1425,5 +1425,52 @@ namespace ShipWorks.Shipping
                 .Select(parcelIndex => shipmentType.GetParcelDetail(shipment, parcelIndex).Insurance)
                 .Any(choice => choice.Insured && choice.InsuranceProvider == InsuranceProvider.ShipWorks && choice.InsuranceValue > 0);
         }
+
+        /// <summary>
+        /// Update the label format of any unprocessed shipment with the given shipment type code
+        /// </summary>
+        public static void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShippingProfileEntity defaultProfile = ShippingProfileManager.GetDefaultProfile(shipmentTypeCode);
+
+            if (!defaultProfile.RequestedLabelFormat.HasValue)
+            {
+                // We don't need to do anything if the default profile is somehow null
+                return;
+            }
+
+            RelationPredicateBucket bucket = GetUnprocessedShipmentsOfTypeBucket(shipmentTypeCode);
+            RelationPredicateBucket carrierSpecificUpdateBucket = CreateUnprocessedShipmentsBucket();
+
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                int newLabelFormat = defaultProfile.RequestedLabelFormat.Value;
+
+                adapter.UpdateEntitiesDirectly(new ShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+                ShipmentTypeManager.GetType(shipmentTypeCode).UpdateLabelFormatOfUnprocessedShipments(adapter, newLabelFormat, carrierSpecificUpdateBucket);
+
+                adapter.Commit();
+            }
+        }
+
+        /// <summary>
+        /// Create a predicate bucket for unprocessed shipments
+        /// </summary>
+        private static RelationPredicateBucket CreateUnprocessedShipmentsBucket()
+        {
+            RelationPredicateBucket carrierSpecificUpdateBucket = new RelationPredicateBucket();
+            carrierSpecificUpdateBucket.PredicateExpression.Add(ShipmentFields.Processed == false);
+            return carrierSpecificUpdateBucket;
+        }
+
+        /// <summary>
+        /// Create a predicate bucket for unprocessed shipments of the given shipment type
+        /// </summary>
+        private static RelationPredicateBucket GetUnprocessedShipmentsOfTypeBucket(ShipmentTypeCode shipmentTypeCode)
+        {
+            RelationPredicateBucket bucket = CreateUnprocessedShipmentsBucket();
+            bucket.PredicateExpression.AddWithAnd(ShipmentFields.ShipmentType == (int) shipmentTypeCode);
+            return bucket;
+        }
     }
 }

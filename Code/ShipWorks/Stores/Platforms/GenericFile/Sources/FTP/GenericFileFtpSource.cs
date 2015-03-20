@@ -1,12 +1,13 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using rebex2015::Rebex.IO;
+using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.IO;
 using log4net;
-using System.Text.RegularExpressions;
-using Rebex.Net;
 using ShipWorks.FileTransfer;
 using Interapptive.Shared.Utility;
 
@@ -22,7 +23,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
         GenericFileStoreEntity store;
 
         // The current/active FTP connection
-        Ftp ftp = null;
+        IFtp ftp = null;
         List<string> fileList = null;
 
         /// <summary>
@@ -78,12 +79,12 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
                 ftp = FtpUtility.LogonToFtp(FtpAccountManager.GetAccount(store.FtpAccountID.Value));
                 ftp.ChangeDirectory(store.FtpFolder);
 
-                List<FtpItem> fileItems = ftp.GetList().Where(item => item.IsFile).ToList();
+                List<FileSystemItem> fileItems = ftp.GetList().Where(item => item.IsFile).ToList();
 
                 // We have to make sure they are sorted in ascending UniqueID order. Not sure if they always will be or not, but our download algorithm depends on it,
                 // so we do it.
                 fileList = fileItems
-                    .OrderBy(i => i.Modified)
+                    .OrderBy(i => i.LastWriteTime)
                     .Select(i => i.Name)
                     .ToList();
 
@@ -93,7 +94,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
             {
                 throw new GenericFileLoadException("There was an error logging in to the FTP server:\n\n" + ex.Message, ex);
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new GenericFileLoadException("There was an error reading files from the FTP server:\n\n" + ex.Message, ex);
             }
@@ -136,10 +137,6 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 
                 // Looped through them all - none of the subjects must have matched the rules
                 return null;
-            }
-            catch (ImapException ex)
-            {
-                throw new GenericFileLoadException("There was an error reading email from the IMAP server:\n\n" + ex.Message, ex);
             }
             catch (ArgumentException ex)
             {
@@ -206,7 +203,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
 
                 ftp.Rename(file.Path + "/" + file.Name, targetFolder + "/" + newName);
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
             }
@@ -223,7 +220,7 @@ namespace ShipWorks.Stores.Platforms.GenericFile.Sources.FTP
             {
                 ftp.DeleteFile(file.Path + "/" + file.Name);
             }
-            catch (FtpException ex)
+            catch (NetworkSessionException ex)
             {
                 throw new GenericFileStoreException(string.Format("Could not move the file '{0}' after {1}.\n\nError: {2}", file.Name, uiDetail, ex.Message), ex);
             }
