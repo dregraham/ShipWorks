@@ -137,19 +137,8 @@ namespace ShipWorks.Shipping.Insurance
                 return false;
             }
 
-            InsureShipSettings insureShipSettings = new InsureShipSettings();
-            DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + insureShipSettings.ClaimSubmissionWaitingPeriod;
-
-            if (DateTime.Now < allowedSubmitClaimDate)
-            {
-                string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
-                messageLabel.Text = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
-                messagePanel.Visible = true;
-                insureShipQuestionsControl.Visible = true;
-                messagePanel.Height = Height - messagePanel.Top;
-                insuranceViewClaimControl.Visible = false;
-                return false;
-            }
+            insureShipQuestionsControl.Visible = false;
+            insuranceViewClaimControl.Visible = true;
 
             ShipmentTypeDataService.LoadInsuranceData(shipment);
 
