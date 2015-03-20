@@ -812,7 +812,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             shipment.TrackingNumber = tracking;
-            shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
+            shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Where(a => a.AddOnType != AddOnTypeV6.SCAINS).Sum(a => a.Amount) : 0);
             shipment.Postal.Usps.UspsTransactionID = uspsGuid;
             shipment.BilledWeight = rate.EffectiveWeightInOunces / 16D;
 
