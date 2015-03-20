@@ -226,22 +226,30 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Indicates if the shipment type code supports DHL
+        /// </summary>
+        public static bool ShipmentTypeCodeSupportsDhl(ShipmentTypeCode shipmentTypeCode)
+        {
+            return shipmentTypeCode == ShipmentTypeCode.Endicia || shipmentTypeCode == ShipmentTypeCode.Usps;
+        }
+
+        /// <summary>
         /// Indicates if the given service represents a DHL service provided through Endicia
         /// </summary>
         public static bool IsEndiciaDhl(PostalServiceType postalService)
         {
             switch (postalService)
             {
-                case PostalServiceType.DhlParcelStandard:
+                case PostalServiceType.DhlParcelGround:
                 case PostalServiceType.DhlParcelExpedited:
-                case PostalServiceType.DhlParcelPlusStandard:
+                case PostalServiceType.DhlParcelPlusGround:
                 case PostalServiceType.DhlParcelPlusExpedited:
-                case PostalServiceType.DhlBpmStandard:
+                case PostalServiceType.DhlBpmGround:
                 case PostalServiceType.DhlBpmExpedited:
-                case PostalServiceType.DhlCatalogStandard:
+                case PostalServiceType.DhlCatalogGround:
                 case PostalServiceType.DhlCatalogExpedited:
-                case PostalServiceType.DhlMediaMailStandard:
-                case PostalServiceType.DhlMarketingStandard:
+                case PostalServiceType.DhlMediaMailGround:
+                case PostalServiceType.DhlMarketingGround:
                 case PostalServiceType.DhlMarketingExpedited:
                     return true;
             }
@@ -250,9 +258,38 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Determines whether [is stamps DHL] [the specified postal service].
+        /// </summary>
+        public static bool IsStampsDhl(PostalServiceType postalService)
+        {
+            switch (postalService)
+            {
+                case PostalServiceType.DhlParcelExpedited:
+                case PostalServiceType.DhlParcelGround:
+                case PostalServiceType.DhlParcelPlusExpedited:
+                case PostalServiceType.DhlParcelPlusGround:
+                case PostalServiceType.DhlBpmExpedited:
+                case PostalServiceType.DhlBpmGround:
+                case PostalServiceType.DhlMarketingExpedited:
+                case PostalServiceType.DhlMarketingGround:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Determines whether [is stamps DHL] or [is endicia DHL] [the specified postal service].
+        /// </summary>
+        public static bool IsDhl(PostalServiceType postalService)
+        {
+            return  IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
+        }
+
+        /// <summary>
         /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)
         /// </summary>
-        public static bool IsEndiciaConsolidator(PostalServiceType service)
+        public static bool IsConsolidator(PostalServiceType service)
         {
             switch (service)
             {
@@ -264,7 +301,7 @@ namespace ShipWorks.Shipping
                     return true;
             }
 
-            return false;
+            return PostalUtility.UspsConsolidatorTypes.Contains(service);
         }
 
    }

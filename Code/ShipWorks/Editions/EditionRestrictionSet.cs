@@ -89,9 +89,15 @@ namespace ShipWorks.Editions
 
                 case EditionFeature.EndiciaInsurance:
                 case EditionFeature.EndiciaDhl:
+                case EditionFeature.StampsDhl:
                 case EditionFeature.UpsSurePost:
                 case EditionFeature.EndiciaConsolidator:
                 case EditionFeature.EndiciaScanBasedReturns:
+                case EditionFeature.StampsAscendiaConsolidator:
+                case EditionFeature.StampsDhlConsolidator:
+                case EditionFeature.StampsGlobegisticsConsolidator:
+                case EditionFeature.StampsIbcConsolidator:
+                case EditionFeature.StampsRrDonnelleyConsolidator:
                 case EditionFeature.StampsInsurance:
                     return CheckNonExistanceRestriction(feature);
             }

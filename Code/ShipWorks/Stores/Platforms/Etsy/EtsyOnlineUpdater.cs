@@ -219,6 +219,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
             
             try
             {
+                ShippingManager.EnsureShipmentLoaded(shipment);
+
                 webClient.UploadShipmentDetails(etsyStore.EtsyShopID, order.OrderNumber, shipment.TrackingNumber, GetEtsyCarrierCode(shipment));
             }
             catch (EtsyException ex)
@@ -254,10 +256,8 @@ namespace ShipWorks.Stores.Platforms.Etsy
         /// <param name="shipment">The shipment.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        private static string GetEtsyCarrierCode(ShipmentEntity shipment)
+        public static string GetEtsyCarrierCode(ShipmentEntity shipment)
         {
-            ShippingManager.EnsureShipmentLoaded(shipment);
-
             ShipmentTypeCode type = (ShipmentTypeCode)shipment.ShipmentType;
 
             switch (type)
@@ -265,10 +265,11 @@ namespace ShipWorks.Stores.Platforms.Etsy
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     return "ups";
-                case ShipmentTypeCode.Endicia:
 
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl((PostalServiceType)shipment.Postal.Service))
+                case ShipmentTypeCode.Usps:
+                case ShipmentTypeCode.Endicia:
+                    // The shipment is an Endicia or Usps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl((PostalServiceType)shipment.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
                         return "dhl";
@@ -277,7 +278,6 @@ namespace ShipWorks.Stores.Platforms.Etsy
                     // Use the default carrier for other Endicia types
                     return "usps";
 
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:

@@ -99,8 +99,11 @@ namespace ShipWorks.Editions
 
             if (xOptions != null)
             {
-                bool dhlEnabled = (bool) xOptions.Element("EndiciaDhl");
-                edition.SharedOptions.EndiciaDhlEnabled = dhlEnabled;
+                bool stampsDhlEnabled = xOptions.Descendants("StampsDhl").Any() && (bool)xOptions.Element("StampsDhl");
+                edition.SharedOptions.StampsDhlEnabled = stampsDhlEnabled;
+
+                bool endiciaDhlEnabled = (bool) xOptions.Element("EndiciaDhl");
+                edition.SharedOptions.EndiciaDhlEnabled = endiciaDhlEnabled;
 
                 bool endiciaInsuranceEnabled = (bool) xOptions.Element("EndiciaInsurance");
                 edition.SharedOptions.EndiciaInsuranceEnabled = endiciaInsuranceEnabled;
@@ -114,11 +117,36 @@ namespace ShipWorks.Editions
                 bool endiciaScanBasedReturns = xOptions.Descendants("EndiciaScanBasedReturns").Any() && (bool)xOptions.Element("EndiciaScanBasedReturns");
                 edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
+                ApplyStampsConsolidatorSharedOptions(edition, xOptions);
+
                 bool stampsInsuranceEnabled = xOptions.Descendants("StampsInsurance").Any() && (bool)xOptions.Element("StampsInsurance");
                 edition.SharedOptions.StampsInsuranceEnabled = stampsInsuranceEnabled;
             }
         }
-        
+
+        /// <summary>
+        /// Apply Stamps consolidator shared options
+        /// </summary>
+        /// <param name="edition"></param>
+        /// <param name="xOptions"></param>
+        private static void ApplyStampsConsolidatorSharedOptions(Edition edition, XElement xOptions)
+        {
+            bool consolidator = xOptions.Descendants("StampsAscendiaEnabled").Any() && (bool)xOptions.Element("StampsAscendiaEnabled");
+            edition.SharedOptions.StampsAscendiaEnabled = consolidator;
+
+            consolidator = xOptions.Descendants("StampsDhlConsolidatorEnabled").Any() && (bool)xOptions.Element("StampsDhlConsolidatorEnabled");
+            edition.SharedOptions.StampsDhlConsolidatorEnabled = consolidator;
+
+            consolidator = xOptions.Descendants("StampsGlobegisticsEnabled").Any() && (bool)xOptions.Element("StampsGlobegisticsEnabled");
+            edition.SharedOptions.StampsGlobegisticsEnabled = consolidator;
+
+            consolidator = xOptions.Descendants("StampsIbcEnabled").Any() && (bool)xOptions.Element("StampsIbcEnabled");
+            edition.SharedOptions.StampsIbcEnabled = consolidator;
+
+            consolidator = xOptions.Descendants("StampsRrDonnelleyEnabled").Any() && (bool)xOptions.Element("StampsRrDonnelleyEnabled");
+            edition.SharedOptions.StampsRrDonnelleyEnabled = consolidator;
+        }
+
         /// <summary>
         /// Get a type string to use to serialize the given edition
         /// </summary>
@@ -172,12 +200,18 @@ namespace ShipWorks.Editions
             }
 
             elements.Add(new XElement("SharedOptions",
+                new XElement("StampsDhl", edition.SharedOptions.StampsDhlEnabled),
                 new XElement("EndiciaDhl", edition.SharedOptions.EndiciaDhlEnabled),
                 new XElement("EndiciaInsurance", edition.SharedOptions.EndiciaInsuranceEnabled),
                 new XElement("UpsSurePost", edition.SharedOptions.UpsSurePostEnabled),
                 new XElement("EndiciaConsolidator", edition.SharedOptions.EndiciaConsolidatorEnabled),
                 new XElement("EndiciaScanBasedReturns", edition.SharedOptions.EndiciaScanBasedReturnEnabled),
-                new XElement("StampsInsurance", edition.SharedOptions.StampsInsuranceEnabled)));
+                new XElement("StampsAscendiaEnabled", edition.SharedOptions.StampsAscendiaEnabled),
+                new XElement("StampsDhlConsolidatorEnabled", edition.SharedOptions.StampsDhlConsolidatorEnabled),
+                new XElement("StampsGlobegisticsEnabled", edition.SharedOptions.StampsGlobegisticsEnabled),
+                new XElement("StampsInsurance", edition.SharedOptions.StampsInsuranceEnabled),
+                new XElement("StampsIbcEnabled", edition.SharedOptions.StampsIbcEnabled),
+                new XElement("StampsRrDonnelleyEnabled", edition.SharedOptions.StampsRrDonnelleyEnabled)));
 
             if (edition.ShipmentTypeFunctionality != null)
             {

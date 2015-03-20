@@ -563,39 +563,36 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <param name="shipment">The shipment for which to get the carrier name.</param>
         /// <param name="shipmentTypeCode">The shipment type code for this shipment.</param>
         /// <returns>The carrier name of the shipment type, unless it is of type Other, then the Other.Carrier is returned.</returns>
-        private static string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
+        public static string GetCarrierName(ShipmentEntity shipment, ShipmentTypeCode shipmentTypeCode)
         {
             string carrier;
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Other)
             {
                 carrier = ShippingManager.GetOtherCarrierDescription(shipment).Name;
             }
-            else
+            else if (ShipmentTypeManager.ShipmentTypeCodeSupportsDhl((ShipmentTypeCode)shipment.ShipmentType))
             {
-                if (shipment.ShipmentType != (int) ShipmentTypeCode.Endicia)
+                PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
+
+                // The shipment is an Endicia or Stamps shipment, check to see if it's DHL
+                if (ShipmentTypeManager.IsDhl(service))
                 {
-                    carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
+                    // The DHL carrier for Endicia/Stamps is:
+                    carrier = "DHL Global Mail";
+                }
+                else if (ShipmentTypeManager.IsConsolidator(service))
+                {
+                    carrier = "Consolidator";
                 }
                 else
                 {
-                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
-
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
-                    {
-                        // The DHL carrier for Endicia is:
-                        carrier = "DHL Global Mail";
-                    }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
-                    {
-                        carrier = "Consolidator";
-                    }
-                    else
-                    {
-                        // Use the default carrier for other Endicia types
-                        carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
-                    }
+                    // Use the default carrier for other Endicia types
+                    carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
                 }
+            }
+            else
+            {
+                carrier = ShippingManager.GetCarrierName(shipmentTypeCode);
             }
 
             return carrier;

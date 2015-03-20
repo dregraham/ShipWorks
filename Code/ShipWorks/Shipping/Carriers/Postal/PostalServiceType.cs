@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
+﻿using System.Reflection;
 using System.ComponentModel;
 using Interapptive.Shared.Utility;
 
@@ -61,47 +57,47 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Critical Mail")]
         CriticalMail = 14,
 
-        [Description("DHL GM SM Parcel Expedited")]
+        [Description("DHL SM Parcel Expedited")]
         [ApiValue("DHLGMSMPARCELSEXPEDITED")]
         DhlParcelExpedited = 100,
 
-        [Description("DHL GM SM Parcel Ground")]
+        [Description("DHL SM Parcel Ground")]
         [ApiValue("DHLGMSMPARCELSGROUND")]
-        DhlParcelStandard = 101,
+        DhlParcelGround = 101,
 
-        [Description("DHL GM SM Parcel Plus Expedited")]
+        [Description("DHL SM Parcel Plus Expedited")]
         [ApiValue("DHLGMSMPARCELPLUSEXPEDITED")]
         DhlParcelPlusExpedited = 102,
 
-        [Description("DHL GM SM Parcel Plus Ground")]
+        [Description("DHL SM Parcel Plus Ground")]
         [ApiValue("DHLGMSMPARCELPLUSGROUND")]
-        DhlParcelPlusStandard = 103,
+        DhlParcelPlusGround = 103,
 
-        [Description("DHL GM SM BPM Expedited")]
+        [Description("DHL SM BPM Expedited")]
         [ApiValue("DHLGMSMBPMEXPEDITED")]
         DhlBpmExpedited = 104,
 
-        [Description("DHL GM SM BPM Ground")]
+        [Description("DHL SM BPM Ground")]
         [ApiValue("DHLGMSMBPMGROUND")]
-        DhlBpmStandard = 105,
+        DhlBpmGround = 105,
 
-        [Description("DHL GM SM Catalog Expedited")]
+        [Description("DHL SM Catalog Expedited")]
         [ApiValue("DHLGMSMCATALOGBPMEXPEDITED")]
         DhlCatalogExpedited = 106,
 
-        [Description("DHL GM SM Catalog Ground")]
+        [Description("DHL SM Catalog Ground")]
         [ApiValue("DHLGMSMCATALOGBPMGROUND")]
-        DhlCatalogStandard = 107,
+        DhlCatalogGround = 107,
 
-        [Description("DHL GM SM Media Mail Ground")]
+        [Description("DHL SM Media Mail Ground")]
         [ApiValue("DHLGMSMMEDIAMAILGROUND")]
-        DhlMediaMailStandard = 108,
+        DhlMediaMailGround = 108,
 
-        [Description("DHL GM SM Marketing Ground")]
+        [Description("DHL SM Marketing Ground")]
         [ApiValue("DHLGMSMMarketingParcelGround")]
-        DhlMarketingStandard = 109,
+        DhlMarketingGround = 109,
 
-        [Description("DHL GM SM Marketing Expedited")]
+        [Description("DHL SM Marketing Expedited")]
         [ApiValue("DHLGMSMMarketingParcelExpedited")]
         DhlMarketingExpedited = 110,
 
@@ -124,5 +120,53 @@ namespace ShipWorks.Shipping.Carriers.Postal
         [Description("Commercial ePacket")]
         [ApiValue("CommercialePacket")]
         CommercialePacket = 204,
+
+        [Description("Asendia IPA")]
+        AsendiaIpa = 210,
+
+        [Description("Asendia ISAL")]
+        AsendiaIsal = 211,
+
+        [Description("Asendia ePacket")]
+        AsendiaePacket = 212,
+
+        [Description("Asendia Generic")]
+        AsendiaGeneric = 213,
+
+        [Description("DHL Packet IPA")]
+        DhlPacketIpa = 214,
+
+        [Description("DHL Packet ISAL")]
+        DhlPacketIsal = 215,
+
+        [Description("Globegistics IPA")]
+        GlobegisticsIpa = 216,
+
+        [Description("Globegistics ISAL")]
+        GlobegisticsIsal = 217,
+
+        [Description("Globegistics ePacket")]
+        GlobegisticsePacket = 218,
+
+        [Description("Globegistics Generic")]
+        GlobegisticsGeneric = 219,
+
+        [Description("International Bonded Couriers IPA")]
+        InternationalBondedCouriersIpa = 220,
+
+        [Description("International Bonded Couriers ISAL")]
+        InternationalBondedCouriersIsal = 221,
+
+        [Description("International Bonded Couriers ePacket")]
+        InternationalBondedCouriersePacket = 222,
+
+        [Description("RRD IPA")]
+        RrdIpa = 223,
+
+        [Description("RRD ISAL")]
+        RrdIsal = 224,
+
+        [Description("RRD EPS (ePacket Service)")]
+        RrdEpsePacketService = 225,
     }
 }

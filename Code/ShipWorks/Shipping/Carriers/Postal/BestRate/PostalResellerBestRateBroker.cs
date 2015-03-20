@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                    serviceType == PostalServiceType.LibraryMail ||
                    serviceType == PostalServiceType.BoundPrintedMatter ||
                    serviceType == PostalServiceType.DhlBpmExpedited ||
-                   serviceType == PostalServiceType.DhlBpmStandard;
+                   serviceType == PostalServiceType.DhlBpmGround;
         }
 
         /// <summary>
