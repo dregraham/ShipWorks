@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
@@ -811,7 +812,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             shipment.TrackingNumber = tracking;
-            shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Sum(a => a.Amount) : 0);
+            shipment.ShipmentCost = rate.Amount + (rate.AddOns != null ? rate.AddOns.Where(a => a.AddOnType != AddOnTypeV6.SCAINS).Sum(a => a.Amount) : 0);
             shipment.Postal.Usps.UspsTransactionID = uspsGuid;
             shipment.BilledWeight = rate.EffectiveWeightInOunces / 16D;
 
@@ -1038,6 +1039,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
             {
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAHP });
+            }
+
+            // Add insurance if using SDC insurance
+            if (shipment.Insurance && shipment.InsuranceProvider == (int) InsuranceProvider.Carrier)
+            {
+                rate.InsuredValue = shipment.Postal.InsuranceValue;
+                addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAINS });
             }
 
             if (addOns.Count > 0)

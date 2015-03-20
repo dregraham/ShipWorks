@@ -159,6 +159,12 @@ namespace ShipWorks.Editions
         /// out to these customers and converted their accounts, this can be removed.
         /// </summary>
         [Description("Converting an account using the selected carrier is disabled.")]
-        ShippingAccountConversion
+        ShippingAccountConversion,
+
+        /// <summary>
+        /// Constrols if using Stamps insurance is enabled for Usps users
+        /// </summary>
+        [Description("Your ShipWorks account does not support using Stamps insurance.")]
+        StampsInsurance,
     }
 }

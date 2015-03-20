@@ -1,8 +1,11 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
@@ -89,7 +92,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 case PostalServiceType.InternationalFirst: return ServiceType.USFCI;
                 case PostalServiceType.CriticalMail: return ServiceType.USCM;
 
-
                 default:
                     throw new ShippingException(string.Format("USPS does not support {0}.", EnumHelper.GetDescription(postalServiceType)));
             }
@@ -131,5 +133,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             return memo;
         }
 
+        /// <summary>
+        /// Indicates if Stamps insurance is allowed, turned on, and activated
+        /// </summary>
+        public static bool IsStampsInsuranceActive
+        {
+            get
+            {
+                return IsStampsInsuranceAllowed && ShippingSettings.Fetch().UspsInsuranceProvider == (int) InsuranceProvider.Carrier;
+            }
+        }
+
+        /// <summary>
+        /// Indicates if Stamps.com insurance is allowed
+        /// </summary>
+        public static bool IsStampsInsuranceAllowed
+        {
+            get
+            {
+                return EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.StampsInsurance).Level == EditionRestrictionLevel.None;
+            }
+        }
+
+        /// <summary>
+        /// Gets the display name of Stamps.com insurance
+        /// </summary>
+        public static string StampsInsuranceDisplayName 
+        {
+            get
+            {
+                return "Stamps.com Insurance";
+            } 
+        }
     }
 }

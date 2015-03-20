@@ -130,6 +130,10 @@ namespace ShipWorks.ApplicationCore.Licensing
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
+            // Check if Stamps insurance is allowed
+            bool stampsInsurance = XPathUtility.Evaluate(xpath, "//StampsInsuranceEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsInsuranceEnabled = stampsInsurance;
+
             edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xpath);
 
             return edition;

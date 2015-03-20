@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.UI.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
@@ -53,6 +54,7 @@ namespace ShipWorks.Shipping.Insurance
             bool allOnTrac = true;
             bool allEndicia = true;
             bool alliParcel = true;
+            bool allUsps = true;
 
             bool isMultiPackage = false;
             
@@ -86,6 +88,11 @@ namespace ShipWorks.Shipping.Insurance
                     if (choice.Shipment.ShipmentType != (int) ShipmentTypeCode.Endicia)
                     {
                         allEndicia = false;
+                    }
+
+                    if (choice.Shipment.ShipmentType != (int)ShipmentTypeCode.Usps)
+                    {
+                        allUsps = false;
                     }
 
                     if (insuranceProvider == null)
@@ -135,6 +142,11 @@ namespace ShipWorks.Shipping.Insurance
                     {
                         useInsurance.Text = "Endicia Insurance";
                         labelValue.Text = "Insured value:";
+                    }
+                    else if (allUsps)
+                    {
+                        useInsurance.Text = UspsUtility.StampsInsuranceDisplayName;
+                        labelValue.Text = "Insured value";
                     }
                 }
             }

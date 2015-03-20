@@ -483,9 +483,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         }
 
         [TestMethod]
-        public void GetInsuranceProvider_ReturnsShipWorks_Test()
+        public void GetInsuranceProvider_ReturnsShipWorks_WhenUsingShipWorksInsurance_Test()
         {
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity()));
+            ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int)InsuranceProvider.ShipWorks };
+
+            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(shippingSettings));
+        }
+
+        [TestMethod]
+        public void GetInsuranceProvider_ReturnsCarrier_WhenUsingCarrierInsurance_Test()
+        {
+            ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int) InsuranceProvider.Carrier };
+
+            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(shippingSettings));
         }
 
         [TestMethod]

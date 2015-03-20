@@ -31,5 +31,10 @@ namespace ShipWorks.Editions
         /// Indicates whether scan based payment returns support is enabled for the customer's endicia account
         /// </summary>
         public bool EndiciaScanBasedReturnEnabled { get; set; }
+
+        /// <summary>
+        /// Indicates if insurance is enabled and allowed for the edition
+        /// </summary>
+        public bool StampsInsuranceEnabled { get; set; }
     }
 }
