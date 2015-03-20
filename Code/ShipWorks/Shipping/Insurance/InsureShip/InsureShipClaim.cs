@@ -142,7 +142,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 log.InfoFormat("Shipment {0} is not eligible for submitting a claim.", shipment.ShipmentID);
 
                 DateTime allowedSubmitClaimDate = shipment.ShipDate.Date + settings.ClaimSubmissionWaitingPeriod;
-                string messageFormat = "Congrats - You've just processed a shipment! Because it may still be in transit, you may submit a claim on or after {0}.";
+                string messageFormat = "The shipment may still be in transit. You may submit a \"Lost\" or \"Stolen\" claim on or after {0}.";
                 messageFormat = string.Format(messageFormat, allowedSubmitClaimDate.ToString("MMMM dd, yyyy"));
 
                 throw new InsureShipException(messageFormat);
