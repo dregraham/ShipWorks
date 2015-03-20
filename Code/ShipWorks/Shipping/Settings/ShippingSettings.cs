@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data;
@@ -83,17 +84,10 @@ namespace ShipWorks.Shipping.Settings
             CheckForChangesNeeded();
             ShippingSettingsEntity settings = Fetch();
 
-            List<int> activated = new List<int>(settings.ActivatedTypes);
-
-            // If its configured, its activated
-            if (!activated.Contains((int) shipmentTypeCode))
-            {
-                activated.Add((int) shipmentTypeCode);
-                settings.ActivatedTypes = activated.ToArray();
-            }
+            Activate(shipmentTypeCode, settings);
 
             // Save the changes, if any
-            ShippingSettings.Save(settings);
+            Save(settings);
         }
 
         /// <summary>
@@ -105,6 +99,39 @@ namespace ShipWorks.Shipping.Settings
             ShippingSettingsEntity settings = Fetch();
 
             List<int> configured = new List<int>(settings.ConfiguredTypes);
+
+            bool isConfigured = configured.Contains((int) shipmentTypeCode);
+
+            if (!isConfigured)
+            {
+                Messenger.Current.Send(new ConfiguringCarrierMessage(settings, shipmentTypeCode));
+            }
+
+            Activate(shipmentTypeCode, settings);
+            SetDefaultProviderIfNecessary(settings, shipmentTypeCode);
+
+            // Make sure its marked as configured
+            if (!isConfigured)
+            {
+                configured.Add((int) shipmentTypeCode);
+                settings.ConfiguredTypes = configured.ToArray();
+            }
+
+            // Save the changes, if any
+            Save(settings);
+
+            if (!isConfigured)
+            {
+                new ShippingManagerWrapper().UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+                Messenger.Current.Send(new CarrierConfiguredMessage(settings, shipmentTypeCode));   
+            }
+        }
+
+        /// <summary>
+        /// Activate the shipmentTypeCode, if necessary
+        /// </summary>
+        private static void Activate(ShipmentTypeCode shipmentTypeCode, ShippingSettingsEntity settings)
+        {
             List<int> activated = new List<int>(settings.ActivatedTypes);
 
             // If its configured, its activated
@@ -113,16 +140,17 @@ namespace ShipWorks.Shipping.Settings
                 activated.Add((int) shipmentTypeCode);
                 settings.ActivatedTypes = activated.ToArray();
             }
+        }
 
-            // Make sure its marked as configured
-            if (!configured.Contains((int) shipmentTypeCode))
+        /// <summary>
+        /// Set the default provider to the specified value if necessary
+        /// </summary>
+        private static void SetDefaultProviderIfNecessary(ShippingSettingsEntity settings, ShipmentTypeCode shipmentTypeCode)
+        {
+            if (!settings.ConfiguredTypes.Any() && settings.DefaultType == (int) ShipmentTypeCode.None)
             {
-                configured.Add((int) shipmentTypeCode);
-                settings.ConfiguredTypes = configured.ToArray();
+                settings.DefaultType = (int) shipmentTypeCode;
             }
-
-            // Save the changes, if any
-            ShippingSettings.Save(settings);
         }
 
         /// <summary>
@@ -178,6 +206,7 @@ namespace ShipWorks.Shipping.Settings
 
             settings.UspsAutomaticExpress1 = false;
             settings.UspsAutomaticExpress1Account = 0;
+            settings.UspsInsuranceProvider = (int) InsuranceProvider.ShipWorks;
 
             settings.OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks;
             settings.OnTracInsurancePennyOne = false;

@@ -114,9 +114,10 @@ namespace ShipWorks.UI.Controls
         {
             get
             {
-                double? parsedWeight = ParseWeight(textBox.Text);
-
-                return parsedWeight.HasValue ? parsedWeight.Value : currentWeight;
+                // Always return the currrent weight rather than the parsed weight since 
+                // the current weight will be the most precise (i.e. it is not impacted 
+                // by rounding for display purposes).
+                return currentWeight;
             }
             set
             {

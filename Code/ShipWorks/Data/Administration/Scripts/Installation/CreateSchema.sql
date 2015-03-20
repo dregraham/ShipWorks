@@ -2394,7 +2394,7 @@ ALTER TABLE [dbo].[Note] ADD CONSTRAINT [PK_Note] PRIMARY KEY CLUSTERED  ([NoteI
 GO
 PRINT N'Creating index [IX_OrderNote_ObjectID] on [dbo].[Note]'
 GO
-CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID])
+CREATE NONCLUSTERED INDEX [IX_OrderNote_ObjectID] ON [dbo].[Note] ([ObjectID]) INCLUDE ([Edited])
 GO
 ALTER TABLE [dbo].[Note] ENABLE CHANGE_TRACKING
 GO
@@ -4521,6 +4521,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipLaunch] [bit] NOT NULL,
 [UspsAutomaticExpress1] [bit] NOT NULL,
 [UspsAutomaticExpress1Account] [bigint] NOT NULL,
+[UspsInsuranceProvider] [int] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,

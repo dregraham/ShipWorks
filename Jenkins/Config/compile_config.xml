@@ -71,10 +71,13 @@ rake setup:registry[$KEY] &quot;setup:sqlSession[$KEY,ShipWorks_SeedData]&quot;<
       <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
+      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
+	<hudson.plugins.growl.GrowlPublisher plugin="growl@1.1">
+      <IP>10.1.10.121,10.1.10.109</IP>
+    </hudson.plugins.growl.GrowlPublisher>
     <hudson.tasks.BuildTrigger>
       <childProjects>@@FEATURE_NAME@@-code-analysis,@@FEATURE_NAME@@-units,@@FEATURE_NAME@@-ndepend</childProjects>
       <threshold>

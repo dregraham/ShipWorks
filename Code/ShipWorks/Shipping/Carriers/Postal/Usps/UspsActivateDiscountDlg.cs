@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
@@ -58,9 +59,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 convertToExpeditedControl.Visible = true;
 
                 convertToExpeditedControl.Top = signUpForExpeditedControl.Top;
-                Height = convertToExpeditedControl.Bottom + 60;
-                close.Top = Height - 60;
-                close.Left = Right - close.Width - 22;
+                Height = convertToExpeditedControl.Bottom + 85;
+                close.Top = convertToExpeditedControl.Bottom + 20;
+                close.Left = convertToExpeditedControl.Right - close.Width - 22;
 
                 convertToExpeditedControl.AccountConverted += OnAccountConverted;
                 convertToExpeditedControl.AccountConverting += OnAccountConverting;
@@ -114,54 +115,55 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
-            if (requiresSignup && signUpForExpeditedControl.UseExpedited)
+            if (!requiresSignup || !signUpForExpeditedControl.UseExpedited)
             {
-                // Make sure the settings are valid before trying to save them
-                if (signUpForExpeditedControl.UseExpedited && signUpForExpeditedControl.ExpeditedAccountID <= 0)
-                {
-                    MessageHelper.ShowMessage(this, "Please select or create a USPS account.");
-                    e.Cancel = true;
-                    return;
-                }
-
-                ShippingManager.RefreshShipment(shipment);
-
-                // Only way we should require a signup is not already using a USPS account for 
-                // this shipment, so we need to change the shipment type to USPS
-                // in order to take advantage of the new rates (since USPS API doesn't match 
-                // with Endicia API and shipment configurations differ).
-                shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
-                ShippingManager.SaveShipment(shipment);
-
-                // Now that the shipment has been updated, we need to broadcast that the shipping 
-                // settings have been changed, so any listeners have a chance to react
-                ShippingSettingsEventDispatcher.DispatchUspsAutomaticExpeditedChanged(this, new ShippingSettingsEventArgs((ShipmentTypeCode)shipment.ShipmentType));
-            
-
-                // We also need to exclude Endicia and Express1 from the list of active providers since
-                // the customer agreed to use USPS 
-                ExcludeShipmentType(ShipmentTypeCode.Endicia);
-                ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
-                ExcludeShipmentType(ShipmentTypeCode.Express1Usps);
-
-                // Be sure the USPS shipment type is not included in the excluded list
-                List<int> excludedTypes = settings.ExcludedTypes.ToList();
-                excludedTypes.Remove((int)ShipmentTypeCode.Usps);
-                settings.ExcludedTypes = excludedTypes.ToArray();
-                
-                ShippingSettings.Save(settings);
-
-                // Need to update any rules to swap out Endicia and Express1 with USPS 
-                // now that those types are not longer active
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Usps);
-                UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Usps);
-
-                RateCache.Instance.Clear();
-
-                DialogResult = signUpForExpeditedControl.UseExpedited ? DialogResult.OK : DialogResult.Cancel;
+                return;
             }
+            
+            // Make sure the settings are valid before trying to save them
+            if (signUpForExpeditedControl.UseExpedited && signUpForExpeditedControl.ExpeditedAccountID <= 0)
+            {
+                MessageHelper.ShowMessage(this, "Please select or create a USPS account.");
+                e.Cancel = true;
+                return;
+            }
+
+            ShippingManager.RefreshShipment(shipment);
+
+            // Only way we should require a signup is not already using a USPS account for 
+            // this shipment, so we need to change the shipment type to USPS
+            // in order to take advantage of the new rates (since USPS API doesn't match 
+            // with Endicia API and shipment configurations differ).
+            shipment.ShipmentType = (int) ShipmentTypeCode.Usps;
+            ShippingManager.SaveShipment(shipment);
+
+            // Now that the shipment has been updated, we need to broadcast that the shipping 
+            // settings have been changed, so any listeners have a chance to react
+            Messenger.Current.Send(new UspsAutomaticExpeditedChangedMessage(this, (ShipmentTypeCode)shipment.ShipmentType));
+
+            // We also need to exclude Endicia and Express1 from the list of active providers since
+            // the customer agreed to use USPS 
+            ExcludeShipmentType(ShipmentTypeCode.Endicia);
+            ExcludeShipmentType(ShipmentTypeCode.Express1Endicia);
+            ExcludeShipmentType(ShipmentTypeCode.Express1Usps);
+
+            // Be sure the USPS shipment type is not included in the excluded list
+            List<int> excludedTypes = settings.ExcludedTypes.ToList();
+            excludedTypes.Remove((int)ShipmentTypeCode.Usps);
+            settings.ExcludedTypes = excludedTypes.ToArray();
+                
+            ShippingSettings.Save(settings);
+
+            // Need to update any rules to swap out Endicia and Express1 with USPS 
+            // now that those types are not longer active
+            UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Endicia);
+            UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Endicia);
+            UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Express1Usps);
+            UseUspsInDefaultShippingRulesFor(ShipmentTypeCode.Usps);
+
+            RateCache.Instance.Clear();
+
+            DialogResult = signUpForExpeditedControl.UseExpedited ? DialogResult.OK : DialogResult.Cancel;
         }
 
         /// <summary>

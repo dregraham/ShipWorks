@@ -459,6 +459,7 @@ namespace ShipWorks.Shipping
                     }
 
                     shipment.ContentWeight = packageAdapters.Sum(a => a.Weight);
+                    UpdateTotalWeight(shipment);
 
                     // Update the status of the shipment and record the changes that were applied to the shipment's packages
                     shipment.ShipSenseStatus = (int)ShipSenseStatus.Applied;
@@ -550,8 +551,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         private ShippingProfileEntity GetDefaultProfile()
         {
-            return ShippingProfileManager.Profiles.FirstOrDefault(p =>
-                p.ShipmentType == (int)ShipmentTypeCode && p.ShipmentTypePrimary);
+            return ShippingProfileManager.GetDefaultProfile(ShipmentTypeCode);
         }
 
         /// <summary>
@@ -1162,6 +1162,14 @@ namespace ShipWorks.Shipping
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public virtual void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            // Default will have nothing to update
         }
     }
 }

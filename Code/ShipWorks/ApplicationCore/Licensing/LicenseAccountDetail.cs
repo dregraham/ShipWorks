@@ -111,6 +111,10 @@ namespace ShipWorks.ApplicationCore.Licensing
         {
             Edition edition = InstantiateEdition(xpath);
 
+            // Now see if there are Stamps special stuff set. We do this at the end, basically ignorning them if any other editions are active.
+            bool stampsDhl = XPathUtility.Evaluate(xpath, "//StampsDhlEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsDhlEnabled = stampsDhl;
+
             // Now see if there are endicia special stuff set. We do this at the end, basically ignorning them if any other editions are active.
             bool endiciaDhl = XPathUtility.Evaluate(xpath, "//EndiciaDhlEnabled/@status", 0) == 1;
             edition.SharedOptions.EndiciaDhlEnabled = endiciaDhl;
@@ -125,14 +129,33 @@ namespace ShipWorks.ApplicationCore.Licensing
             // Check if Endicia consolidation is allowed
             bool endiciaConsolidator = XPathUtility.Evaluate(xpath, "//EndiciaConsolidator/@status", 0) == 1;
             edition.SharedOptions.EndiciaConsolidatorEnabled = endiciaConsolidator;
-
+            
             // Check if Endicia scan based payment returns is allowed
             bool endiciaScanBasedReturns = XPathUtility.Evaluate(xpath, "//EndiciaScanBasedReturns/@status", 0) == 1;
             edition.SharedOptions.EndiciaScanBasedReturnEnabled = endiciaScanBasedReturns;
 
+            // Check if Stamps insurance is allowed
+            bool stampsInsurance = XPathUtility.Evaluate(xpath, "//StampsInsuranceEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsInsuranceEnabled = stampsInsurance;
+
+            // Add Stamps consolidators if Stamps consolidation is allowed
+            AddStampsConsolidatorSharedOptions(xpath, edition);
+
             edition.ShipmentTypeFunctionality = ShipmentTypeFunctionality.Deserialize(store.StoreID, xpath);
 
             return edition;
+        }
+
+        /// <summary>
+        /// Check if Stamps Ascendia consolidation is allowed
+        /// </summary>
+        private static void AddStampsConsolidatorSharedOptions(XPathNavigator xpath, Edition edition)
+        {
+            edition.SharedOptions.StampsAscendiaEnabled = XPathUtility.Evaluate(xpath, "//StampsAscendiaEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsDhlConsolidatorEnabled = XPathUtility.Evaluate(xpath, "//StampsDhlConsolidatorEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsGlobegisticsEnabled = XPathUtility.Evaluate(xpath, "//StampsGlobegisticsEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsIbcEnabled = XPathUtility.Evaluate(xpath, "//StampsIbcEnabled/@status", 0) == 1;
+            edition.SharedOptions.StampsRrDonnelleyEnabled = XPathUtility.Evaluate(xpath, "//StampsRrDonnelleyEnabled/@status", 0) == 1;
         }
 
         /// <summary>

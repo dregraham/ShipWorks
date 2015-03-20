@@ -15,6 +15,7 @@ using ShipWorks.Data.Connection;
 using log4net;
 using ShipWorks.Data.Model;
 using ShipWorks.Data;
+using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
 using ShipWorks.Shipping.Editing;
@@ -97,10 +98,6 @@ namespace ShipWorks.Shipping
             ProgressItem workProgress = new ProgressItem("Load Shipments");
             progressProvider.ProgressItems.Add(workProgress);
 
-            // Validate Shipment Progress Item
-            ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
-            progressProvider.ProgressItems.Add(validationProgress);
-
             // Progress Dialog
             ProgressDlg progressDlg = new ProgressDlg(progressProvider);
             progressDlg.Title = "Load Shipments";
@@ -110,17 +107,36 @@ namespace ShipWorks.Shipping
             MethodInvoker<ProgressItem, int> validationInvoker = ValidateShipmentsInternal;
             MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
 
+            bool shouldValidate = StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
+
             invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
             {
                 finishedLoadingShipments = true;
+
+                if (!shouldValidate)
+                {
+                    FinishLoadingShipments(progressDlg);
+                }
             }, null);
 
-            validationInvoker.BeginInvoke(validationProgress, count, ar2 =>
+            if (shouldValidate)
             {
-                owner.Invoke((Action)(progressDlg.CloseForced));
+                // Validate Shipment Progress Item
+                ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
+                progressProvider.ProgressItems.Add(validationProgress);
 
-                OnLoadShipmentsCompleted();
-            }, null);
+                validationInvoker.BeginInvoke(validationProgress, count, ar2 => FinishLoadingShipments(progressDlg), null);   
+            }
+        }
+
+        /// <summary>
+        /// Finish the loading process
+        /// </summary>
+        private void FinishLoadingShipments(ProgressDlg progressDlg)
+        {
+            owner.Invoke((Action)(progressDlg.CloseForced));
+
+            OnLoadShipmentsCompleted();
         }
 
         /// <summary>

@@ -20,15 +20,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
 
         // If items on multiple lines, what fields define the "uniqueness" of the repeating lines
         List<string> multiLineKeyColumns = new List<string>();
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public GenericSpreadsheetOrderMapSettings()
-        {
-
-        }
-
+        
         /// <summary>
         /// Strategy for reading in multiple line items
         /// </summary>
@@ -56,6 +48,11 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
         }
 
         /// <summary>
+        /// Gets or sets how many attributes appear on a line.
+        /// </summary>
+        public int AttributeCountPerLine { get; set; }
+
+        /// <summary>
         /// Save the settings to the given element as the parent
         /// </summary>
         public override void SaveTo(XElement xElement)
@@ -63,11 +60,12 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             xElement.Add(
                 new XElement("Strategy", (int) multiItemStrategy),
                 new XElement("Single",
-                    new XElement("Count", singleLineCount)),
+                    new XElement("Count", singleLineCount)),                
                 new XElement("Multiple",
                     new XElement("KeyColumns",
                         multiLineKeyColumns.Select(column =>
-                            new XElement("Column", column))))
+                            new XElement("Column", column)))),
+                new XElement("AttributeCount", AttributeCountPerLine)
             );
         }
 
@@ -84,6 +82,10 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
             multiItemStrategy = (GenericSpreadsheetOrderMultipleItemStrategy) (int) xElement.Element("Strategy");
             singleLineCount = (int) xElement.XPathSelectElement("Single/Count");
             multiLineKeyColumns = xElement.XPathSelectElements("Multiple/KeyColumns/Column").Select(x => x.Value).ToList();
+
+            // the attribute node may not be there if the map was created on a version that did not support loading attributes
+            XElement attributeNode = xElement.Element("AttributeCount");
+            AttributeCountPerLine = attributeNode == null ? 0 : int.Parse(attributeNode.Value);
         }
     }
 }

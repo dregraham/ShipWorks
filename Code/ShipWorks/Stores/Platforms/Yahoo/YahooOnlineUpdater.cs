@@ -170,6 +170,8 @@ namespace ShipWorks.Stores.Platforms.Yahoo
             string trackingNumber;
             string shipperString;
 
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
             GetShipmentUploadValues(shipment, out shipperString, out trackingNumber);
 
             using (MemoryStream stream = new MemoryStream())
@@ -210,20 +212,18 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Gets the shipment values to upload to Yahoo!
         /// </summary>
-        private void GetShipmentUploadValues(ShipmentEntity shipment, out string shipperString, out string trackingNumber)
+        private static void GetShipmentUploadValues(ShipmentEntity shipment, out string shipperString, out string trackingNumber)
         {
             string tempTrackingNumber = shipment.TrackingNumber;
             string tempShipperString = GetShipperString(shipment);
 
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
+            if (ShipmentTypeManager.IsUps((ShipmentTypeCode)shipment.ShipmentType) && UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+            {
+                if (shipment.Ups.UspsTrackingNumber.Length > 0)
                 {
-                    if (track.Length > 0)
-                    {
-                        tempShipperString = "Usps";
-                        tempTrackingNumber = track;
-                    }
-                });
+                    tempTrackingNumber = shipment.Ups.UspsTrackingNumber;
+                }
+            }
 
             shipperString = tempShipperString;
             trackingNumber = tempTrackingNumber;
@@ -232,36 +232,43 @@ namespace ShipWorks.Stores.Platforms.Yahoo
         /// <summary>
         /// Get the string to use as the shipper for the yahoo update
         /// </summary>
-        private string GetShipperString(ShipmentEntity shipment)
+        public static string GetShipperString(ShipmentEntity shipment)
         {
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
             switch (type)
             {
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
                         return "Dhl";
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    
+                    if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         return "Consolidator";
                     }
-                    else
-                    {
-                        return "Usps";
-                    }
+                    
+                    return "Usps";
 
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return "Usps";
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipment.Ups.Service))
+                    {
+                        if (shipment.Ups.UspsTrackingNumber.Length > 0)
+                        {
+                            return "Usps";
+                        }
+                    }
+
                     return "Ups";
 
                 case ShipmentTypeCode.FedEx:

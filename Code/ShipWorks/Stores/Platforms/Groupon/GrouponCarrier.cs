@@ -18,21 +18,21 @@ namespace ShipWorks.Stores.Platforms.Groupon
             string carrierCode = string.Empty;
             switch (((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaDhl((PostalServiceType)shipmentEntity.Postal.Service))
+                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
                         carrierCode = "DHL";
                     }
-                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
                     {
                         carrierCode = "Consolidator";
                     }

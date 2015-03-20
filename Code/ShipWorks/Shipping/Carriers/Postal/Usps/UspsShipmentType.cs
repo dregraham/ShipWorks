@@ -12,6 +12,7 @@ using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -25,6 +26,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
@@ -405,28 +407,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
-        /// Allows the shipment type to run any pre-processing work that may need to be performed prior to
-        /// actually processing the shipment. In most cases this is checking to see if an account exists
-        /// and will call the counterRatesProcessing callback provided when trying to process a shipment
-        /// without any accounts for this shipment type in ShipWorks, otherwise the shipment is unchanged.
-        /// </summary>
-        /// <param name="shipment"></param>
-        /// <param name="counterRatesProcessing"></param>
-        /// <param name="selectedRate"></param>
-        /// <returns>
-        /// The updates shipment (or shipments) that is ready to be processed. A null value may
-        /// be returned to indicate that processing should be halted completely.
-        /// </returns>
-        public override List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
-        {
-            // We want to perform the processing of the base ShipmentType and not that of the USPS shipment type
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
-            ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
-
-            return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
-        }
-
-        /// <summary>
         /// Process the shipment. Overridden here, so overhead of Express1 can be removed.
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
@@ -581,6 +561,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 shipment.RequestedLabelFormat = shipment.Postal.Usps.RequestedLabelFormat;
             }
+
+            shipment.InsuranceProvider = (int)(UspsUtility.IsStampsInsuranceActive ? InsuranceProvider.Carrier : InsuranceProvider.ShipWorks);
         }
 
         /// <summary>
@@ -888,6 +870,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 AccountRepository = originalAccountRepository;
                 CertificateInspector = originalCertificateInspector;
             }
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
     }
 }

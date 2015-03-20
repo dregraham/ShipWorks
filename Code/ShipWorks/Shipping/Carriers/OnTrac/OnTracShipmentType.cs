@@ -603,5 +603,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 shipment.OnTrac.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.OnTracShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new OnTracShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
     }
 }

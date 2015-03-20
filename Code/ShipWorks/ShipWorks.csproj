@@ -756,6 +756,8 @@
     <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
     <Compile Include="Shipping\BilledType.cs" />
+    <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
+    <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -964,6 +966,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1031,6 +1034,12 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Shipping\IShippingDialogInteraction.cs" />
+    <Compile Include="Shipping\IShippingManager.cs" />
+    <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
+    <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
+    <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Platforms\InstaStore\InstaStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
@@ -1083,8 +1092,7 @@
     <Compile Include="Shipping\Settings\ShipmentTypeSetupWizardForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\ShippingSettingsEventDispatcher.cs" />
-    <Compile Include="Shipping\Settings\ShippingSettingsEventArgs.cs" />
+    <Compile Include="Shipping\Settings\UspsAccountCreatedMessage.cs" />
     <Compile Include="Shipping\Settings\ShippingSetupWizard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -8795,10 +8803,16 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV15.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\RateV16.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ResidentialDeliveryIndicatorType1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV2.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV4.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StatusCodes1.datasource">
@@ -8807,10 +8821,10 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StoreShippingMethodOption1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv40.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices.v29\TrackingEvent1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv43.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\TrackingEvent1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -11049,7 +11063,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.2.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.11\3.11.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -12750,10 +12766,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_Postal_Stamps_WebServices_swsim_v1</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl">
+    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv43.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv40.wsdl</UpdateFromURL>
+      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv43.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

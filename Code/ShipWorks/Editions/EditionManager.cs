@@ -101,35 +101,47 @@ namespace ShipWorks.Editions
             }
 
             // Now that we have the full list of restrictions, remove any registration restrictions if needed.
-            restrictions = RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia,  restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, storeEntities);
 
             // If there weren't any accounts for Endicia and registration was restricted, we disable the shipment type too.  So remove that restriction 
             // if needed.
-            restrictions = RemoveShipmentTypeRegistrationIfNeeded(EditionFeature.ShipmentType, ShipmentTypeCode.Endicia, restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.ShipmentType, ShipmentTypeCode.Endicia, restrictions, storeEntities);
+
+            // Remove any Stamps consolidator restrictions if needed
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, storeEntities);
+            restrictions = RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, storeEntities);
 
             ActiveRestrictions = new EditionRestrictionSet(restrictions);
         }
 
         /// <summary>
-        /// If the only shipment type registration restrictions are for trial stores, and no restrictions for non-trial stores exist,
-        /// the user should be able to add the shipping account.
+        /// If the only feature restrictions are for trial stores, and no restrictions for non-trial stores exist,
+        /// the user should be able to use the feature.
         /// 
         /// This will return an modified list of restrictions if only trial restrictions exist. 
         /// </summary>
-        public static List<EditionRestriction> RemoveShipmentTypeRegistrationIfNeeded(EditionFeature editionFeature, ShipmentTypeCode shipmentTypeCode, List<EditionRestriction> restrictions, List<StoreEntity> stores)
+        public static List<EditionRestriction> RemoveRestrictionIfNeeded(EditionFeature editionFeature, object restrictionData, List<EditionRestriction> restrictions, List<StoreEntity> stores)
         {
-            // Get the shipment type registration restrictions
-            List<EditionRestriction> allRegistrationRestrictions = restrictions
-                .Where(r => r.Feature == editionFeature && (ShipmentTypeCode)r.Data == shipmentTypeCode).ToList();
+            // Get the feature restrictions
+            List<EditionRestriction> allFeatureRestrictions = restrictions
+                .Where(r => r.Feature == editionFeature).ToList();
 
-            List<StoreEntity> restrictedStores = allRegistrationRestrictions.Select(r => r.Edition.Store).ToList();
+            if (restrictionData != null)
+            {
+                allFeatureRestrictions = allFeatureRestrictions.Where(r => object.Equals(r.Data, restrictionData)).ToList();
+            }
+
+            List<StoreEntity> restrictedStores = allFeatureRestrictions.Select(r => r.Edition.Store).ToList();
 
             // Only check for enabled stores, as they are the only ones with up to date restrictions.
-            // If there are any stores left over that don't have restrictions, then we should allow registration, so
+            // If there are any stores left over that don't have restrictions, then we should allow the feature, so
             // remove the restictions from the list.
             if (stores.Where(s => s.Enabled).Except(restrictedStores).Any())
             {
-                restrictions = restrictions.Except(allRegistrationRestrictions).ToList();
+                restrictions = restrictions.Except(allFeatureRestrictions).ToList();
             }
 
             return restrictions;

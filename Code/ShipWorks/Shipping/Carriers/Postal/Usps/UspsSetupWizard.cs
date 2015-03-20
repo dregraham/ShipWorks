@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
@@ -555,7 +556,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 ExcludeOtherPostalProviders();
 
-                ShippingSettingsEventDispatcher.DispatchUspsAccountCreated(this, new ShippingSettingsEventArgs(ShipmentTypeCode.Usps));
+                Messenger.Current.Send(new UspsAccountCreatedMessage(this, ShipmentTypeCode.Usps));
             }
         }
 

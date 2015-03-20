@@ -8187,6 +8187,8 @@ namespace ShipWorks.Data.Model
 		UspsAutomaticExpress1,
 		///<summary>UspsAutomaticExpress1Account. </summary>
 		UspsAutomaticExpress1Account,
+		///<summary>UspsInsuranceProvider. </summary>
+		UspsInsuranceProvider,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>

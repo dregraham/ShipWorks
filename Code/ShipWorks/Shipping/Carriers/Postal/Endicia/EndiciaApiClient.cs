@@ -450,7 +450,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             // DHL, or any Consolidator
-            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsEndiciaConsolidator(serviceType))
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))
             {
                 // Per documentation, IncludePostage MUST be false
                 request.IncludePostage = "FALSE";

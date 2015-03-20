@@ -250,8 +250,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             order.OrderItems.Clear();
             order.OrderItems.AddRange(items.OfType<EbayOrderItemEntity>().Cast<OrderItemEntity>());
 
-            bool useUpsMailInnovationsCarrierType = false;
-
             EbayWebClient webClient = new EbayWebClient(EbayToken.FromStore(store));
 
             // update each item
@@ -265,7 +263,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
                 
                 string trackingNumber = string.Empty;
-                ShippingCarrierCodeType carrierType = ShippingCarrierCodeType.CustomCode;
+                string carrierCode = ShippingCarrierCodeType.CustomCode.ToString();
 
                 if (shipped.HasValue && shipped.Value)
                 {
@@ -289,38 +287,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             continue;
                         }
 
-                        carrierType = GetShippingCarrier(shipment);
-
-                        // tracking number to upload
-                        trackingNumber = shipment.TrackingNumber;
-
-                        WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
-                        {
-                            // Try to use the alternate tracking number for MI if it's set
-                            if (!string.IsNullOrEmpty(track))
-                            {
-                                trackingNumber = track;
-                            }
-
-                            // International MI seems to use the normal UPS tracking number, so we'll just use that
-                            if (!string.IsNullOrEmpty(trackingNumber))
-                            {
-                                // From eBay web service info:
-                                // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations. 
-                                // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
-                                useUpsMailInnovationsCarrierType = true;
-                            }
-                            else
-                            {
-                                // Mail Innovations but without a USPS tracking number will just get uploaded
-                                // as an Other shipment.  Tracking will be whatever the user entered in the Reference 1 field
-                                // in the SW WorldShip window.
-                                carrierType = ShippingCarrierCodeType.Other;
-                            }
-                        });
+                        // Determine the carrier code and tracking info
+                        GetShippingCarrierAndTracking(shipment, out carrierCode, out trackingNumber);
 
                         // can only upload tracking details if it's a supported carrier
-                        if (carrierType == ShippingCarrierCodeType.CustomCode)
+                        if (carrierCode.Equals(ShippingCarrierCodeType.CustomCode.ToString(), StringComparison.OrdinalIgnoreCase))
                         {
                             // We can't upload tracking details because this isn't a supported carrier, so create a
                             // note with the tracking number instead
@@ -330,14 +301,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
                             webClient.AddUserNote(ebayItem.EbayItemID, ebayItem.EbayTransactionID, notesText);
                         }
                     }
-                }
-
-                string shippingCarrierUsed = useUpsMailInnovationsCarrierType ? "UPS-MI" : carrierType.ToString();
-
-                // If we are DHL, we need to switch to DHL Global Mail as the carrier (DHL goes to DHL.de for some reason)
-                if (carrierType == ShippingCarrierCodeType.DHL)
-                {
-                    shippingCarrierUsed = "DHL Global Mail";
                 }
 
                 // set paid value
@@ -355,7 +318,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // log that we're about to make the request and send the request
                 log.InfoFormat("Preparing to update eBay order status for order id {0}.", orderID);
 
-                webClient.CompleteSale(ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, shippingCarrierUsed);
+                webClient.CompleteSale(ebayItem.EbayItemID, ebayItem.EbayTransactionID, paid, shipped, trackingNumber, carrierCode);
 
                 // update the shipped flag
                 if (shipped.HasValue)
@@ -380,47 +343,74 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 unitOfWork.AddForSave(order);
             }
         }
-        
+
         /// <summary>
-        /// A helper method to obtain the shipping carrier from the shipment
+        /// A helper method to obtain the shipping carrier and tracking info from the shipment
         /// </summary>
-        /// <param name="shipment">The shipment.</param>
-        /// <returns>A ShippingCarrierCodeType object.</returns>
-        private static ShippingCarrierCodeType GetShippingCarrier(ShipmentEntity shipment)
+        public static void GetShippingCarrierAndTracking(ShipmentEntity shipment, out string carrierCode, out string trackingNumber)
         {
             // default the type to Other
             ShippingCarrierCodeType carrierType = ShippingCarrierCodeType.CustomCode;
+            bool useUpsMailInnovationsCarrierType = false;
+
+            trackingNumber = shipment.TrackingNumber;
 
             // Is it a USPS shipment?
             switch ((ShipmentTypeCode)shipment.ShipmentType)
             {
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
+                    PostalServiceType service = (PostalServiceType)shipment.Postal.Service;
 
-                    PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
-
-                    // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (ShipmentTypeManager.IsEndiciaDhl(service))
+                    // The shipment is an Endicia/Usps shipment, check to see if it's DHL
+                    if (ShipmentTypeManager.IsDhl(service))
                     {
-                        // The DHL carrier for Endicia is:
+                        // The DHL carrier for Endicia/Usps is:
                         carrierType = ShippingCarrierCodeType.DHL;
                     }
-                    else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+                    else if (ShipmentTypeManager.IsConsolidator(service))
                     {
                         carrierType = ShippingCarrierCodeType.Other;
                     }
                     else
                     {
-                        // Use the default carrier for other Endicia types
+                        // Use the default carrier for other Endicia/Usps types
                         carrierType = ShippingCarrierCodeType.USPS;
                     }
                     break;
+
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierType = ShippingCarrierCodeType.UPS;
+
+                    if (UpsUtility.IsUpsMiService((UpsServiceType) shipment.Ups.Service))
+                    {
+                        // Try to use the alternate tracking number for MI if it's set
+                        if (!string.IsNullOrEmpty(shipment.Ups.UspsTrackingNumber))
+                        {
+                            trackingNumber = shipment.Ups.UspsTrackingNumber;
+                        }
+
+                        // International MI seems to use the normal UPS tracking number, so we'll just use that
+                        if (!string.IsNullOrEmpty(trackingNumber))
+                        {
+                            // From eBay web service info:
+                            // For those using UPS Mail Innovations, supply the value UPS-MI for UPS Mail Innnovations. 
+                            // Buyers will subsequently be sent to the UPS Mail Innovations website for tracking.
+                            useUpsMailInnovationsCarrierType = true;
+                        }
+                        else
+                        {
+                            // Mail Innovations but without a USPS tracking number will just get uploaded
+                            // as an Other shipment.  Tracking will be whatever the user entered in the Reference 1 field
+                            // in the SW WorldShip window.
+                            carrierType = ShippingCarrierCodeType.Other;
+                        }
+                    }
+
                     break;
 
                 case ShipmentTypeCode.FedEx:
@@ -430,14 +420,26 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 case ShipmentTypeCode.Other:
                     CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
-                    return description.IsUPS ? ShippingCarrierCodeType.UPS :
+                    carrierType = description.IsUPS ? ShippingCarrierCodeType.UPS :
                         description.IsFedEx ? ShippingCarrierCodeType.FedEx :
                         description.IsUSPS ? ShippingCarrierCodeType.USPS :
                         description.IsDHL ? ShippingCarrierCodeType.DHL :
                         ShippingCarrierCodeType.Other;
+                    
+                    break;
             }
 
-            return carrierType;
+            carrierCode = carrierType.ToString();
+
+            // Now check for any specialty cases.
+            if (useUpsMailInnovationsCarrierType)
+            {
+                carrierCode = "UPS-MI";
+            }
+            else if (carrierType == ShippingCarrierCodeType.DHL)
+            {
+                carrierCode = "DHL Global Mail";
+            }
         }
     }
 }

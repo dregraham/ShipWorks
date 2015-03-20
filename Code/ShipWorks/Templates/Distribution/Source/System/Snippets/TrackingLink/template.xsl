@@ -26,15 +26,15 @@
         </a>
       </xsl:when>
 
-      <xsl:when test="starts-with(ServiceUsed, 'USPS') or contains(ServiceUsed, 'SmartPost') or contains(ServiceUsed, 'DHL GM SM')">
+      <xsl:when test="starts-with(ServiceUsed, 'USPS') or contains(ServiceUsed, 'SmartPost') or contains(ServiceUsed, 'DHL SM')">
 
-        <xsl:if test="contains(ServiceUsed, 'DHL GM SM')">
+        <xsl:if test="contains(ServiceUsed, 'DHL SM')">
           <a href="http://webtrack.dhlglobalmail.com/?mobile=&amp;trackingnumber={TrackingNumber}">
             <xsl:value-of select="TrackingNumber"/>
           </a>
         </xsl:if>
 
-        <xsl:if test="not(contains(ServiceUsed, 'DHL GM SM'))">
+        <xsl:if test="not(contains(ServiceUsed, 'DHL SM'))">
           <a href="https://tools.usps.com/go/TrackConfirmAction.action?tLabels={TrackingNumber}">
             <xsl:value-of select="TrackingNumber"/>
           </a>

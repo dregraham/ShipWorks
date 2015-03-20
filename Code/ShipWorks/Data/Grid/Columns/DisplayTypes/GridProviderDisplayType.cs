@@ -97,8 +97,10 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 
             if (postalNotSetup)
             {
+                // Exclude all other USPS-based providers except the USPS shipment type code
+                // when no postal accounts exist in the system (i.e. prefer USPS shipment type
+                // over the others in this case)
                 enabledShipmentTypes.RemoveAll(s =>
-                    s.ShipmentTypeCode == ShipmentTypeCode.Usps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Express1Usps ||
                     s.ShipmentTypeCode == ShipmentTypeCode.PostalWebTools ||
                     s.ShipmentTypeCode == ShipmentTypeCode.Endicia ||

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -220,6 +221,13 @@ namespace ShipWorks.Stores
             return null;
         }
 
+        /// <summary>
+        /// Do any stores have address validation enabled
+        /// </summary>
+        public static bool DoAnyStoresHaveAutomaticValidationEnabled()
+        {
+            return GetEnabledStores().Any(ValidatedAddressManager.ShouldAutoValidate);
+        }
 
         /// <summary>
         /// A little more effecient way to get the store by checking to see if the order is in cache first.  Will return zero if not found.

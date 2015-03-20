@@ -40,6 +40,8 @@ namespace ShipWorks.Stores.Management
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
             this.panelAddressValidation = new System.Windows.Forms.Panel();
+            this.addressValidationSetting = new System.Windows.Forms.ComboBox();
+            this.labelAddressValidationSetting = new System.Windows.Forms.Label();
             this.sectionAddressValidation = new ShipWorks.UI.Controls.SectionTitle();
             this.labelAllowDownload = new System.Windows.Forms.Label();
             this.comboAllowDownload = new ShipWorks.Stores.Management.ComputerDownloadAllowedComboBox();
@@ -71,8 +73,6 @@ namespace ShipWorks.Stores.Management
             this.labelStatus = new System.Windows.Forms.Label();
             this.licenseKey = new System.Windows.Forms.TextBox();
             this.changeLicense = new System.Windows.Forms.Button();
-            this.addressValidationSetting = new System.Windows.Forms.ComboBox();
-            this.labelAddressValidationSetting = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.imageStore)).BeginInit();
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
@@ -216,6 +216,24 @@ namespace ShipWorks.Stores.Management
             this.panelAddressValidation.Name = "panelAddressValidation";
             this.panelAddressValidation.Size = new System.Drawing.Size(564, 64);
             this.panelAddressValidation.TabIndex = 33;
+            // 
+            // addressValidationSetting
+            // 
+            this.addressValidationSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.addressValidationSetting.FormattingEnabled = true;
+            this.addressValidationSetting.Location = new System.Drawing.Point(261, 28);
+            this.addressValidationSetting.Name = "addressValidationSetting";
+            this.addressValidationSetting.Size = new System.Drawing.Size(158, 21);
+            this.addressValidationSetting.TabIndex = 33;
+            // 
+            // labelAddressValidationSetting
+            // 
+            this.labelAddressValidationSetting.AutoSize = true;
+            this.labelAddressValidationSetting.Location = new System.Drawing.Point(20, 31);
+            this.labelAddressValidationSetting.Name = "labelAddressValidationSetting";
+            this.labelAddressValidationSetting.Size = new System.Drawing.Size(235, 13);
+            this.labelAddressValidationSetting.TabIndex = 32;
+            this.labelAddressValidationSetting.Text = "Tell us how you want to use address validation:";
             // 
             // sectionAddressValidation
             // 
@@ -544,24 +562,6 @@ namespace ShipWorks.Stores.Management
             this.changeLicense.TabIndex = 13;
             this.changeLicense.Text = "Change Activation...";
             this.changeLicense.Click += new System.EventHandler(this.OnChangeLicense);
-            // 
-            // addressValidationSetting
-            // 
-            this.addressValidationSetting.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.addressValidationSetting.FormattingEnabled = true;
-            this.addressValidationSetting.Location = new System.Drawing.Point(162, 28);
-            this.addressValidationSetting.Name = "addressValidationSetting";
-            this.addressValidationSetting.Size = new System.Drawing.Size(264, 21);
-            this.addressValidationSetting.TabIndex = 33;
-            // 
-            // labelAddressValidationSetting
-            // 
-            this.labelAddressValidationSetting.AutoSize = true;
-            this.labelAddressValidationSetting.Location = new System.Drawing.Point(20, 31);
-            this.labelAddressValidationSetting.Name = "labelAddressValidationSetting";
-            this.labelAddressValidationSetting.Size = new System.Drawing.Size(136, 13);
-            this.labelAddressValidationSetting.TabIndex = 32;
-            this.labelAddressValidationSetting.Text = "Address Validation Setting:";
             // 
             // StoreSettingsDlg
             // 
