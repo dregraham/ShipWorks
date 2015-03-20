@@ -395,7 +395,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.DateAdvance = (int) Math.Max(0, ((TimeSpan) (shipment.ShipDate.Date - DateTime.Now.Date)).TotalDays);
 
             // Weight
-            request.WeightOz = Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero);
+            request.WeightOz = CalculateWeight(shipment);
 
             // Dims
             if (packagingType == PostalPackagingType.Package)
@@ -852,7 +852,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
-            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : BestRateScope.IsActive ? 14 : .1;
+            request.WeightOz = shipment.TotalWeight > 0 ? CalculateWeight(shipment) : BestRateScope.IsActive ? 14 : .1;
 
             bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
 
@@ -1116,6 +1116,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
+        /// Calculates the weight to use when sending a rating and label request to Endicia. The Endicia API only supports
+        /// ounces weights to one decimal place, so we need to round up to the next tenth of an ounce if the weight calls
+        /// for more than one decimal place being sent (i.e. this will always round up to the next tenth of an ounce unless 
+        /// the total weight is divisible by 0.1). For example, 3.11 would result in 3.2 being returned; 3.1 would result 
+        /// in 3.1 being returned.
+        /// </summary>
+        /// <param name="shipment">The shipment.</param>
+        /// <returns>System.Double.</returns>
+        private static double CalculateWeight(ShipmentEntity shipment)
+        {
+            return Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces + .04, 1, MidpointRounding.AwayFromZero);
+        }
+
+        /// <summary>
         /// Get postal rates for the given shipment for all possible mail classes and rates.
         /// </summary>
         public List<RateResult> GetRatesSlow(ShipmentEntity shipment, EndiciaShipmentType endiciaShipmentType)
@@ -1312,7 +1326,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
-            request.WeightOz = shipment.TotalWeight > 0 ? Math.Round(new WeightValue(shipment.TotalWeight).TotalOunces, 1, MidpointRounding.AwayFromZero) : BestRateScope.IsActive ? 14 : .1;
+            request.WeightOz = shipment.TotalWeight > 0 ? CalculateWeight(shipment) : BestRateScope.IsActive ? 14 : .1;
 
             // Service and packaging
             request.MailClass = endiciaShipmentType.GetMailClassCode(serviceType, packagingType);
