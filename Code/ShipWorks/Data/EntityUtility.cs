@@ -770,7 +770,14 @@ namespace ShipWorks.Data
             List<IEntityField2> primaryKeyNotParent = entity.PrimaryKeyFields.Where(f => f.ActualContainingObjectName == f.ContainingObjectName).ToList();
             Debug.Assert(primaryKeyNotParent.Count() == 1, "GetEntityId cannot be used with entities that have compound primary keys");
 
-            return (long)primaryKeyNotParent.Single().CurrentValue;
+            object keyValue = primaryKeyNotParent.Single().CurrentValue;
+
+            if ( keyValue is long)
+            {
+                return (long) keyValue;
+            }
+
+            return 0;
         }
     }
 }
