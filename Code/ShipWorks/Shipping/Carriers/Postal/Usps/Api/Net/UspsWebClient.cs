@@ -1032,8 +1032,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
-            // For domestic, add in Delivery\Signature confirmation
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
+            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) && !ShipmentTypeManager.IsDhl(serviceType))
             {
                 PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
 
