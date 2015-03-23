@@ -299,6 +299,12 @@ namespace ShipWorks.ApplicationCore.Services
 
                     return hasChanged;
                 }
+                catch (ConnectionLostException ex)
+                {
+                    log.Error("Connection to ShipWorks Database was lost.", ex);
+
+                    return hasChanged;
+                }
             }
         }
 
