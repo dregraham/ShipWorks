@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
 
         [JsonProperty("sku")]
         public string Sku { get; set; }
- 
+
         [JsonProperty("status")]
         public string Status { get; set; }
 
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
         public string Name { get; set; }
 
         [JsonProperty("weight")]
-        public double Weight { get; set; }
+        public string Weight { get; set; }
 
         [JsonProperty("gg_account_number")]
         public string GrouponAccountNumber { get; set; }
@@ -56,7 +56,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
         public string FulfillmentLineitemId { get; set; }
 
         [JsonProperty("unit_price")]
-        public decimal UnitPrice { get; set; }
+        public string UnitPrice { get; set; }
 
         [JsonProperty("bom_sku")]
         public string BomSku { get; set; }
@@ -71,9 +71,6 @@ namespace ShipWorks.Stores.Platforms.Groupon.DTO
         public string GiftMessage { get; set; }
 
         [JsonProperty("quantity")]
-        public int Quantity { get; set; }
-
-
-
+        public string Quantity { get; set; }
     }
 }
