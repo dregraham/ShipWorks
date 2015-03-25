@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
@@ -469,17 +470,27 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 try
                 {
                     webService.CleanseAddress(
-                        GetCredentials(account, true), 
-                        ref address, 
-                        address.ZIPCode, 
-                        out addressMatch, 
-                        out cityStateZipOk, 
-                        out residentialIndicator, 
-                        out isPoBox, 
-                        out isPoBoxSpecified, 
-                        out candidates, 
-                        out statusCodes, 
+                        GetCredentials(account, true),
+                        ref address,
+                        address.ZIPCode,
+                        out addressMatch,
+                        out cityStateZipOk,
+                        out residentialIndicator,
+                        out isPoBox,
+                        out isPoBoxSpecified,
+                        out candidates,
+                        out statusCodes,
                         out rates);
+                }
+                catch (SoapException ex)
+                {
+                    log.Error(ex);
+
+                    // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
+                    string message = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
+                    message = Regex.Replace(message, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
+
+                    throw new AddressValidationException(message, ex);
                 }
                 catch (Exception ex)
                 {

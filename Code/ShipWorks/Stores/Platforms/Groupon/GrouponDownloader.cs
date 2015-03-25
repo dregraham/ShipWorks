@@ -32,12 +32,12 @@ namespace ShipWorks.Stores.Platforms.Groupon
             Progress.Detail = "Downloading New Orders...";
 
             GrouponWebClient client = new GrouponWebClient((GrouponStoreEntity)Store);
-           
+
             DateTime start = DateTime.UtcNow.AddDays(-7);
 
             try
             {
-                do 
+                do
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                     start = start.AddHours(23);
 
-                } while(start < DateTime.UtcNow);
+                } while (start < DateTime.UtcNow);
             }
             catch (GrouponException ex)
             {
@@ -93,7 +93,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         private void LoadOrder(JToken jsonOrder)
         {
-            string orderid =  jsonOrder["orderid"].ToString();
+            string orderid = jsonOrder["orderid"].ToString();
             GrouponOrderEntity order = (GrouponOrderEntity)InstantiateOrder(new GrouponOrderIdentifier(orderid));
 
             //Order Item Status
@@ -158,12 +158,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
         {
             GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
 
+            double itemWeight = (String.IsNullOrWhiteSpace(grouponItem.Weight)) ? 0 : Convert.ToDouble(grouponItem.Weight);
+
             item.SKU = grouponItem.Sku;
             item.Code = grouponItem.FulfillmentLineitemId;
             item.Name = grouponItem.Name;
-            item.Weight = GetWeight(grouponItem.Weight, itemWeightUnit);
-            item.UnitPrice = grouponItem.UnitPrice;
-            item.Quantity = grouponItem.Quantity;
+            item.Weight = GetWeight(itemWeight, itemWeightUnit);
+            item.UnitPrice = Convert.ToDecimal(grouponItem.UnitPrice);
+            item.Quantity = Convert.ToInt16(grouponItem.Quantity);
 
             //Groupon fields
             item.Permalink = grouponItem.Permalink;

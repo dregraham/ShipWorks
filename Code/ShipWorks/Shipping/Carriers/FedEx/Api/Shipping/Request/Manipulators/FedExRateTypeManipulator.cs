@@ -45,8 +45,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
             // Use the repository to see what type of rates we should be using
-            RateRequestType[] rateTypes = { SettingsRepository.UseListRates ? RateRequestType.LIST : RateRequestType.NONE };
-            nativeRequest.RequestedShipment.RateRequestTypes = rateTypes;
+            if (SettingsRepository.UseListRates)
+            {
+                // Don't send NONE as the rate type because even though that works for rates and the 
+                // documentation suggests that NONE should return account rates, it actually returns
+                // no rates while processing.  Not sending a value results in rates being returned.
+                nativeRequest.RequestedShipment.RateRequestTypes = new [] { RateRequestType.LIST };   
+            }
         }
 
         /// <summary>

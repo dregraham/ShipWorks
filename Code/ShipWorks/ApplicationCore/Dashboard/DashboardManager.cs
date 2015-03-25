@@ -623,7 +623,10 @@ namespace ShipWorks.ApplicationCore.Dashboard
         /// </summary>
         public static void CheckForActionChanges()
         {
-            int errors = ActionQueueCollection.GetCount(SqlAdapter.Default, ActionQueueFields.Status == (int) ActionQueueStatus.Error);
+            int errors = 0;
+            
+            SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "ActionQueueCollection.GetCount");
+            sqlAdapterRetry.ExecuteWithRetry(() => errors = ActionQueueCollection.GetCount(SqlAdapter.Default, ActionQueueFields.Status == (int) ActionQueueStatus.Error));
 
             // See if we already have the error displayed for actions
             DashboardActionErrorItem actionItem = dashboardItems.OfType<DashboardActionErrorItem>().SingleOrDefault();

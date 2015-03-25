@@ -101,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
-        public void Manipulate_AddsAccountRate_WhenUseListRatesIsFalse_Test()
+        public void Manipulate_DoesNotAddRateRequestTypes_WhenUseListRatesIsFalse_Test()
         {
             // Setup gthe the repository to return false
             settingsRepository.Setup(r => r.UseListRates).Returns(false);
@@ -111,8 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // extract the rates from the manipulated request and test for the rate type
             RateRequestType[] rateTypes = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
 
-            Assert.AreEqual(1, rateTypes.Length);
-            Assert.AreEqual(RateRequestType.NONE, rateTypes[0]);
+            Assert.IsNull(rateTypes);
         }
     }
 }

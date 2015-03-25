@@ -8,6 +8,8 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -390,7 +392,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             TimeSpan accountCreatedTimespan = DateTime.UtcNow - uspsAccount.CreatedDate;
 
             if (contractType == UspsAccountContractType.Commercial &&
-                accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo &&
+                (InterapptiveOnly.MagicKeysDown || accountCreatedTimespan.TotalDays >= MinNumberOfDaysBeforeShowingUspsPromo) &&
                 !accountConversionRestricted)
             {
                 // Show the promotional footer for discounted rates 
@@ -425,6 +427,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
             }
             catch (UspsException ex)
+            {
+                throw new ShippingException(ex.Message, ex);
+            }
+            catch (AddressValidationException ex)
             {
                 throw new ShippingException(ex.Message, ex);
             }
