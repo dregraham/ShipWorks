@@ -470,16 +470,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 try
                 {
                     webService.CleanseAddress(
-                        GetCredentials(account, true),
-                        ref address,
-                        address.ZIPCode,
-                        out addressMatch,
-                        out cityStateZipOk,
-                        out residentialIndicator,
-                        out isPoBox,
-                        out isPoBoxSpecified,
-                        out candidates,
-                        out statusCodes,
+                        GetCredentials(account, true), 
+                        ref address, 
+                        address.ZIPCode, 
+                        out addressMatch, 
+                        out cityStateZipOk, 
+                        out residentialIndicator, 
+                        out isPoBox, 
+                        out isPoBoxSpecified, 
+                        out candidates, 
+                        out statusCodes, 
                         out rates);
                 }
                 catch (SoapException ex)
@@ -753,8 +753,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             CustomsV3 customs = CreateCustoms(shipment);
             Usps.WebServices.PostageBalance postageBalance;
 
+
+            // Per stamps - only send state for domestic - send province for Intl
+            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            {
+                toAddress.Province = shipment.ShipStateProvCode;
+                toAddress.State = string.Empty;
+            }
+
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
-            rate.ToState = toAddress.State;
+            rate.ToState = toAddress.State;    
             rate.ToZIPCode = toAddress.ZIPCode;
 
             ThermalLanguage? thermalType = GetThermalLanguage(shipment);
@@ -1060,11 +1068,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 }
             }
 
-            // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
+                // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
-            {
-                addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
-            }
+                {
+                    addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
+                }
 
             // For express, apply the signature waiver if necessary
             if (serviceType == PostalServiceType.ExpressMail)
