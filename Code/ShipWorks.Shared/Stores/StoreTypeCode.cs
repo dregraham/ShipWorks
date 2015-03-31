@@ -339,6 +339,16 @@ namespace ShipWorks.Stores
         [Description("InstaStore")]
         [StoreTypeIdentity("INSTASTORE", "IST")]
         [StoreTypeIcon("instastore")]
-        InstaStore = 65
+        InstaStore = 65,
+
+        [Description("OrderBot")]
+        [StoreTypeIdentity("ORDERBOT", "ODB")]
+        [StoreTypeIcon("orderbot")]
+        OrderBot = 66,
+
+        [Description("OpenSky")]
+        [StoreTypeIdentity("OPENSKY", "SKY")]
+        [StoreTypeIcon("opensky")]
+        OpenSky = 67
     }
 }

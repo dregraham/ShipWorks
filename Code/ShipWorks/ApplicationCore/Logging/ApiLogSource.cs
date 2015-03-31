@@ -116,5 +116,7 @@ namespace ShipWorks.ApplicationCore.Logging
 		Groupon,
         RevolutionParts,
         InstaStore,
+        OrderBot,
+        OpenSky,
     }
 }

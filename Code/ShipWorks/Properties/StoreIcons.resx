@@ -307,4 +307,10 @@
   <data name="revolutionparts" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\revolutionparts.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="opensky" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\opensky.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="orderbot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\orderbot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
