@@ -13,8 +13,8 @@ namespace ShipWorks.Data.Administration.Retry
     /// </summary>
     public class SqlAdapterRetry<TException> where TException : Exception
     {
-        // Logger
-        private static readonly ILog log = LogManager.GetLogger(typeof(SqlAdapterRetry<TException>));
+        // Logger - Using the string parameter version so that we don't get the TException.ToString() in the log file
+        private static readonly ILog log = LogManager.GetLogger("SqlAdapterRetry<TException>");
 
         private readonly object lockObject = new object();
         private readonly int retries = 5;

@@ -1283,5 +1283,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 shipment.FedEx.RequestedLabelFormat = (int)requestedLabelFormat;
             }
         }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.FedExShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new FedExShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
     }
 }

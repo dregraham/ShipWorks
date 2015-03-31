@@ -23,6 +23,7 @@ using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -257,15 +258,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
             package.ShipDateInPacificStandardTime = ConvertUtcToPacificStandardTime(shipmentEntity.ShipDate);
             package.ShipCarrier = GetCarrierCode(shipmentEntity);
 
-            // Adjust tracking details per Mail Innovations and others
-            WorldShipUtility.DetermineAlternateTracking(shipmentEntity, (track, service) =>
-            {
-                if (track.Length > 0)
-                {
-                    package.ShipCarrier = "UPS MI";
-                }
-            });
-
             package.ShipService = GetShipService(shipmentEntity);
 
             package.ShipFromAddress1 = shipmentEntity.OriginStreet1;
@@ -291,26 +283,26 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns></returns>
-        private static string GetCarrierCode(ShipmentEntity shipmentEntity)
+        public static string GetCarrierCode(ShipmentEntity shipmentEntity)
         {
             string carrierCode = string.Empty;
             switch(((ShipmentTypeCode)shipmentEntity.ShipmentType))
             {
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     carrierCode = "USPS";
                     break;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     // The shipment is an Endicia shipment, check to see if it's DHL
-                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaDhl((PostalServiceType)shipmentEntity.Postal.Service))
+                    if (shipmentEntity.Postal != null && ShipmentTypeManager.IsDhl((PostalServiceType)shipmentEntity.Postal.Service))
                     {
                         // The DHL carrier for Endicia is:
                         carrierCode = "DHL";
                     }
-                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsEndiciaConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
+                    else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
                     {
                         carrierCode = "Consolidator";
                     }
@@ -328,6 +320,16 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
                     carrierCode = "UPS";
+
+                    // Adjust tracking details per Mail Innovations and others
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+                    {
+                        if (shipmentEntity.Ups.UspsTrackingNumber.Length > 0)
+                        {
+                            carrierCode = "UPS MI";
+                        }
+                    }
+
                     break;
 
                 case ShipmentTypeCode.OnTrac:
@@ -339,7 +341,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     break;
 
                 case ShipmentTypeCode.Other:
-                    ShippingManager.EnsureShipmentLoaded(shipmentEntity);
                     carrierCode = shipmentEntity.Other.Carrier;
                     break;
 

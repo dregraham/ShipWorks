@@ -71,7 +71,7 @@
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 445);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 474);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionRecipient
@@ -82,6 +82,7 @@
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(378, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
@@ -103,7 +104,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 474);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 503);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionShipment
@@ -117,11 +118,12 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.memoLabel2);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo1);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(378, 406);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 503);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 532);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionFrom
@@ -136,7 +138,7 @@
             this.sectionFrom.ContentPanel.Controls.Add(this.panelTop);
             this.sectionFrom.ExpandedHeight = 541;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 532);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -304,12 +306,12 @@
             this.Controls.Add(this.sectionFrom);
             this.Name = "Express1UspsServiceControl";
             this.Size = new System.Drawing.Size(384, 633);
-            this.Controls.SetChildIndex(this.sectionFrom, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
             this.Controls.SetChildIndex(this.sectionShipment, 0);
             this.Controls.SetChildIndex(this.sectionRecipient, 0);
+            this.Controls.SetChildIndex(this.sectionFrom, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();

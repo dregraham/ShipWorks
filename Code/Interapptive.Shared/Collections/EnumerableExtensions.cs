@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Collections
 {
@@ -125,6 +127,30 @@ namespace Interapptive.Shared.Collections
         public static string Combine(this IEnumerable<char> source, string separator)
         {
             return Combine(source.Select(x => x.ToString(CultureInfo.InvariantCulture)), separator);
+        }
+
+        /// <summary>
+        /// Excludes the other collection from the source, using the specified property for comparison
+        /// </summary>
+        public static IEnumerable<T> Except<T, TProp>(this IEnumerable<T> source, IEnumerable<T> other, Func<T, TProp> propertyAccessor) where T : class
+        {
+            return source.Except(other, new GenericPropertyEqualityComparer<T, TProp>(propertyAccessor));
+        }
+
+        /// <summary>
+        /// Are there no items in the collection
+        /// </summary>
+        public static bool None<T>(this IEnumerable<T> source)
+        {
+            return !source.Any();
+        }
+
+        /// <summary>
+        /// Are there no items in the collection that match the given predicate
+        /// </summary>
+        public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            return !source.Any(predicate);
         }
     }
 }

@@ -130,6 +130,15 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
 
+            testObject.Submit(InsureShipClaimType.Missing, "item 1", "desc", 1.00M, "email@shipworks.com");
+        }
+
+        [TestMethod]
+        public void Submit_DoesNotThrowInsureShipException_WhenShipDateDoesNotExceedWaitPeriod_Test()
+        {
+            // Set the ship date to be a day short of the wait period
+            shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
+
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
         }
 
@@ -141,12 +150,29 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             try
             {
-                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+                testObject.Submit(InsureShipClaimType.Lost, "item 1", "desc", 1.00M, "email@shipworks.com");
             }
             catch (InsureShipException)
             { }
 
             log.Verify(l => l.InfoFormat("A claim cannot be submitted for shipment {0}. It hasn't been {1} days since the ship date.", shipment.ShipmentID, settings.Object.ClaimSubmissionWaitingPeriod.TotalDays), Times.Once());
+        }
+
+        [TestMethod]
+        public void Submit_LogsSuccessMessage_WhenClaimTypeIsDamageAndShipDateDoesNotExceedWaitPeriod_Test()
+        {
+            // Set the ship date to be a day short of the wait period
+            shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
+
+            try
+            {
+                testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+            }
+            catch (InsureShipException)
+            { }
+
+            log.Verify(l => l.InfoFormat("Response code from InsureShip for claim submission on shipment {0} was {1} successful (response code {2}).",
+                                   shipment.ShipmentID, string.Empty, EnumHelper.GetApiValue(InsureShipResponseCode.Success)), Times.Once());
         }
 
         [TestMethod]

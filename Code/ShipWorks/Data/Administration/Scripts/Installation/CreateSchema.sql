@@ -4521,6 +4521,7 @@ CREATE TABLE [dbo].[ShippingSettings]
 [WorldShipLaunch] [bit] NOT NULL,
 [UspsAutomaticExpress1] [bit] NOT NULL,
 [UspsAutomaticExpress1Account] [bigint] NOT NULL,
+[UspsInsuranceProvider] [int] NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,

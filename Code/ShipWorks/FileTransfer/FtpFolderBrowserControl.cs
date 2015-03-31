@@ -1,12 +1,11 @@
-﻿using System;
+﻿extern alias rebex2015;
+
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Rebex.Net;
+using rebex2015::Rebex.IO;
+using rebex2015::Rebex.Net;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Threading.Tasks;
 using Divelements.SandGrid;
@@ -21,7 +20,7 @@ namespace ShipWorks.FileTransfer
     public partial class FtpFolderBrowserControl : UserControl
     {
         const string rootName = "<home>";
-        Ftp ftp;
+        IFtp ftp;
 
         class FtpFolderNode
         {
@@ -232,7 +231,7 @@ namespace ShipWorks.FileTransfer
                     FtpFolderNode node = (FtpFolderNode) e.Row.Tag;
                     CreateGridRows(GetFolderList(node.Path), e.Row.NestedRows);
                 }
-                catch (FtpException ex)
+                catch (NetworkSessionException ex)
                 {
                     MessageHelper.ShowError(this, "ShipWorks could not retrieve the list of child folders:\n\n" + ex.Message);
                 }
@@ -270,7 +269,7 @@ namespace ShipWorks.FileTransfer
             ftp.ChangeDirectory(path);
 
             // Enumerate through each directory
-            foreach (FtpItem item in ftp.GetList())
+            foreach (FileSystemItem item in ftp.GetList())
             {
                 if (item.IsDirectory)
                 {

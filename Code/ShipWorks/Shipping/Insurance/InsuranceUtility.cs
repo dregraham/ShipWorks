@@ -20,6 +20,7 @@ using log4net;
 using Interapptive.Shared.Net;
 using System.Drawing;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
+using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Shipping.Insurance
 {
@@ -409,7 +410,6 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
-                case ShipmentTypeCode.Usps:
                     {
                         cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
                     }
@@ -426,6 +426,12 @@ namespace ShipWorks.Shipping.Insurance
                         {
                             cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
                         }
+                    }
+                    break;
+
+                case ShipmentTypeCode.Usps:
+                    {
+                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? null : CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
 

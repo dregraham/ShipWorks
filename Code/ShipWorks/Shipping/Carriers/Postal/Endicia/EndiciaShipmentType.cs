@@ -5,6 +5,7 @@ using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
@@ -108,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             string carrier;
             PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
-            if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+            if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return "Consolidator";
             }
@@ -858,7 +859,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
             }
 
-            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsEndiciaConsolidator(serviceType))
+            if (ShipmentTypeManager.IsEndiciaDhl(serviceType) || ShipmentTypeManager.IsConsolidator(serviceType))
             {
                 return EnumHelper.GetApiValue(serviceType);
             }
@@ -936,6 +937,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 shipment.Postal.Endicia.RequestedLabelFormat = (int)requestedLabelFormat;                
             }
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
+            bucket.Relations.Add(PostalShipmentEntity.Relations.EndiciaShipmentEntityUsingShipmentID);
+
+            adapter.UpdateEntitiesDirectly(new EndiciaShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
     }
 }

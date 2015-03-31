@@ -17602,6 +17602,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsAutomaticExpress1Account);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.UspsInsuranceProvider field instance</summary>
+		public static EntityField2 UspsInsuranceProvider
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsInsuranceProvider);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsCertify field instance</summary>
 		public static EntityField2 Express1EndiciaCustomsCertify
 		{

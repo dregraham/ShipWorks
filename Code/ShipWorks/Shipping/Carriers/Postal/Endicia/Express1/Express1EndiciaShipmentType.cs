@@ -4,6 +4,8 @@ using System.Reflection;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using System.Windows.Forms;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Registration;
@@ -192,6 +194,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         public override bool SupportsCounterRates
         {
             get { return false; }
+        }
+
+        /// <summary>
+        /// Update the label format of carrier specific unprocessed shipments
+        /// </summary>
+        public override void UpdateLabelFormatOfUnprocessedShipments(SqlAdapter adapter, int newLabelFormat, RelationPredicateBucket bucket)
+        {
+            // Don't update Express1 entries because they could overwrite Endicia records
         }
     }
 }

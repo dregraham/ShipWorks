@@ -27,6 +27,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             base.LoadProfile(profile);
 
+            if (UspsUtility.IsStampsInsuranceActive)
+            {
+                insuranceControl.UseInsuranceBoxLabel = UspsUtility.StampsInsuranceDisplayName;
+            }
+
             LoadUspsAccounts();
 
             UspsProfileEntity uspsProfile = profile.Postal.Usps;

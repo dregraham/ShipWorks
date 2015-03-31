@@ -147,12 +147,12 @@ namespace ShipWorks.Shipping.ScanForms
 
                 // Process SCAN forms in batches to try and avoid connection timeouts.
                 IEnumerable<IEntity2> scanFormEntities = shipments
-                    .GroupBy(s => s.OriginPostalCode)
-                    .SelectMany(shipmentsByZip => 
+                    .GroupBy(s => string.Format("{0},{1}", s.OriginPostalCode, ShipmentTypeManager.IsDhl((PostalServiceType)s.Postal.Service)))
+                    .SelectMany(shipmentsByZip =>
                         shipmentsByZip
-                        .SplitIntoChunksOf(1000)
-                        .SelectMany(shipmentChunk => 
-                            carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk)))
+                            .SplitIntoChunksOf(1000)
+                            .SelectMany(shipmentChunk =>
+                                carrierAccount.GetGateway().CreateScanForms(this, shipmentChunk)))
                     .ToList();
 
                 if (!scanFormEntities.Any())

@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
                    serviceType == PostalServiceType.LibraryMail ||
                    serviceType == PostalServiceType.BoundPrintedMatter ||
                    serviceType == PostalServiceType.DhlBpmExpedited ||
-                   serviceType == PostalServiceType.DhlBpmStandard;
+                   serviceType == PostalServiceType.DhlBpmGround;
         }
 
         /// <summary>
@@ -148,6 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
             currentShipment.Postal.DimsAddWeight = originalShipment.BestRate.DimsAddWeight;
             currentShipment.Postal.PackagingType = (int)PostalPackagingType.Package;
             currentShipment.Postal.Service = (int)PostalServiceType.PriorityMail;
+            currentShipment.Postal.InsuranceValue = originalShipment.BestRate.InsuranceValue;            
 
             UpdateChildAccountId(currentShipment.Postal, account);
         }

@@ -154,7 +154,7 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <summary>
         /// translates local shipment code to buy.com "TrackingType"
         /// </summary>
-        private BuyDotComTrackingType GetTrackingType(ShipmentEntity shipment)
+        public BuyDotComTrackingType GetTrackingType(ShipmentEntity shipment)
         {
             ShipmentTypeCode type = (ShipmentTypeCode) shipment.ShipmentType;
 
@@ -168,10 +168,10 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             {
                 case ShipmentTypeCode.Express1Endicia:
                 case ShipmentTypeCode.Express1Usps:
-                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     return BuyDotComTrackingType.Usps;
 
+                case ShipmentTypeCode.Usps:
                 case ShipmentTypeCode.Endicia:
                     return GetEndiciaTrackingType(shipment);
 
@@ -202,17 +202,15 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// <returns>The BuyDotComTrackingType value.</returns>
         private static BuyDotComTrackingType GetOtherTrackingType(ShipmentEntity shipment)
         {
-            // Try to parse the Other Carrier into a Buy.com carrier.  Buy.com doesn't like us to just send Other as the carrier.
+            // Get the carrier name based on the free text the user entered
+            CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
 
-                    // Get the carrier name based on the free text the user entered
-                    CarrierDescription description = ShippingManager.GetOtherCarrierDescription(shipment);
-
-                    // See if the parsed free text maps to any Buy.com carrier
-                    return description.IsUPS ? BuyDotComTrackingType.Ups : 
-                        description.IsFedEx ? BuyDotComTrackingType.FedEx : 
-                        description.IsUSPS ? BuyDotComTrackingType.Usps : 
-                        description.IsDHL ? BuyDotComTrackingType.DHLGlobalMail : 
-                        BuyDotComTrackingType.Other;
+            // See if the parsed free text maps to any Buy.com carrier
+            return description.IsUPS ? BuyDotComTrackingType.Ups : 
+                description.IsFedEx ? BuyDotComTrackingType.FedEx : 
+                description.IsUSPS ? BuyDotComTrackingType.Usps : 
+                description.IsDHL ? BuyDotComTrackingType.DHLGlobalMail : 
+                BuyDotComTrackingType.Other;
         }
 
         /// <summary>
@@ -225,20 +223,19 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
             PostalServiceType service = (PostalServiceType) shipment.Postal.Service;
 
             // The shipment is an Endicia shipment, check to see if it's DHL
-            if (ShipmentTypeManager.IsEndiciaDhl(service))
+            if (ShipmentTypeManager.IsDhl(service))
             {
                 // The DHL carrier for Endicia is:
                 return BuyDotComTrackingType.DHLGlobalMail;
             }
-            else if (ShipmentTypeManager.IsEndiciaConsolidator(service))
+            
+            if (ShipmentTypeManager.IsConsolidator(service))
             {
                 return BuyDotComTrackingType.Other;
             }
-            else
-            {
-                // Use the default carrier for other Endicia types
-                return BuyDotComTrackingType.Usps;
-            }
+            
+            // Use the default carrier for other Endicia types
+            return BuyDotComTrackingType.Usps;
         }
     }
 }

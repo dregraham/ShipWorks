@@ -6,6 +6,9 @@
     /// <remarks>Right now this is just a marker interface</remarks>
     public interface IShipWorksMessage
     {
+        /// <summary>
+        /// Source of the message
+        /// </summary>
         object Sender { get; }
     }
 }
