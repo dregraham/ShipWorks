@@ -72,11 +72,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                         currentPage++;
 
-                    } while (currentPage < numberOfPages);
+                    } while (currentPage <= numberOfPages);
 
                     start = start.AddHours(23);
 
-                } while (start < DateTime.UtcNow);
+                } while (start <= DateTime.UtcNow);
             }
             catch (GrouponException ex)
             {
