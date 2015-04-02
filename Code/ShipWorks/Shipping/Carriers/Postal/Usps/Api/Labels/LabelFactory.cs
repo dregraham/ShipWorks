@@ -80,82 +80,95 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     }
                 }
             }
-            // International services require some trickdickery
             else
             {
-                if (shipment.ActualLabelFormat != null)
-                {
-                    // If the labels are thermal, just save them all, marking the first as the primary
-                    for (int i = 0; i < labelUrls.Count; i++)
-                    {
-                        string labelName = i == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", i);
-                        labels.Add(CreateLabel(shipment, labelName, labelUrls[i], CroppingStyles.None));
-                    }
-                }
-                else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
-                {
-                    // As of v42 of the API, only single label is provided for shipments going to Canada
-                    if (serviceType == PostalServiceType.InternationalFirst)
-                    {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
-                    }
-                    else
-                    {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
-                    }
-                }
-                else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
-                {
-                    // First-class labels are always a single label. International priority flat rate can be the same size as a first-class.  We can tell when this happens
-                    // b\c we get only 2 urls (instead of 4).  the 2nd is a duplicate of the first in the cases ive seen, and we dont need it
-                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
-                }
-                else if (UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
-                {
-                    // No cropping needed
-                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
-                }
-                else
-                {
-                    // typical situation not including continuation pages
-                    if (labelUrls.Count < 4)
-                    {
-                        // The first 2 images represent 4 labels that need cropped out. The 3rd url will be the instructions, that we don't need
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.PrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.ContinuationCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.PrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.ContinuationCrop));
-                    }
-                    else
-                    {
-                        // there are Continuation forms to deal with.  We are going to assume there's a single continuation page
-                        // last URL is for instructions that aren't needed
-
-                        // primary + continuation
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.PrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.ContinuationCrop));
-
-                        // secondary + continuation
-                        labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.PrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.ContinuationCrop));
-
-                        // tertiary (Dispatch Note)
-                        labels.Add(CreateLabel(shipment, "LabelPart5", labelUrls[2], CroppingStyles.PrimaryCrop));
-
-                        // create a blank png so that the sender's copy and continuation page are separate from the Dispatch Note
-                        if (shipment.ActualLabelFormat == null)
-                        {
-                            labels.Add(CreateBlankLabel(shipment, "LabelPartBlank", CroppingStyles.PrimaryCrop));
-                        }
-
-                        // Sender's Copy + continuation
-                        labels.Add(CreateLabel(shipment, "LabelPart6", labelUrls[3], CroppingStyles.PrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart7", labelUrls[3], CroppingStyles.ContinuationCrop));
-                    }
-                }
+                // International services require some trickdickery
+                CreateInternationalLabels(shipment, labelUrls, labels, serviceType);
             }
 
             return labels;
+        }
+
+        /// <summary>
+        /// Creates international labels using the label URLs provided and various cropping techniques based on the 
+        /// shipment and service type.
+        /// </summary>
+        private void CreateInternationalLabels(ShipmentEntity shipment, List<string> labelUrls, List<Label> labels, PostalServiceType serviceType)
+        {
+            if (shipment.ActualLabelFormat != null)
+            {
+                // If the labels are thermal, just save them all, marking the first as the primary
+                for (int i = 0; i < labelUrls.Count; i++)
+                {
+                    string labelName = i == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", i);
+                    labels.Add(CreateLabel(shipment, labelName, labelUrls[i], CroppingStyles.None));
+                }
+            }
+            else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
+            {
+                // As of v42 of the API, only single label is provided for shipments going to Canada
+                labels.Add(CreatePostalLabelToCanada(shipment, labelUrls, serviceType));
+            }
+            else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
+            {
+                // First-class labels are always a single label. International priority flat rate can be the same size as a first-class.  We can tell when this happens
+                // b\c we get only 2 urls (instead of 4).  the 2nd is a duplicate of the first in the cases ive seen, and we dont need it
+                labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
+            }
+            else if (UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
+            {
+                // No cropping needed
+                labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
+            }
+            else
+            {
+                // typical situation not including continuation pages
+                if (labelUrls.Count < 4)
+                {
+                    // The first 2 images represent 4 labels that need cropped out. The 3rd url will be the instructions, that we don't need
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.PrimaryCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.ContinuationCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.PrimaryCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.ContinuationCrop));
+                }
+                else
+                {
+                    // there are Continuation forms to deal with.  We are going to assume there's a single continuation page
+                    // last URL is for instructions that aren't needed
+
+                    // primary + continuation
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.PrimaryCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.ContinuationCrop));
+
+                    // secondary + continuation
+                    labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.PrimaryCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.ContinuationCrop));
+
+                    // tertiary (Dispatch Note)
+                    labels.Add(CreateLabel(shipment, "LabelPart5", labelUrls[2], CroppingStyles.PrimaryCrop));
+
+                    // create a blank png so that the sender's copy and continuation page are separate from the Dispatch Note
+                    if (shipment.ActualLabelFormat == null)
+                    {
+                        labels.Add(CreateBlankLabel(shipment, "LabelPartBlank", CroppingStyles.PrimaryCrop));
+                    }
+
+                    // Sender's Copy + continuation
+                    labels.Add(CreateLabel(shipment, "LabelPart6", labelUrls[3], CroppingStyles.PrimaryCrop));
+                    labels.Add(CreateLabel(shipment, "LabelPart7", labelUrls[3], CroppingStyles.ContinuationCrop));
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the postal label for shipments going to Canada.
+        /// </summary>
+        private Label CreatePostalLabelToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
+        {
+            // Use the single international cropping style for International First service, so the shipping
+            // instructions are excluded from the label.
+            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst ? CroppingStyles.SingleInternationalCrop : CroppingStyles.None;
+            return CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle);
         }
 
         /// <summary>
