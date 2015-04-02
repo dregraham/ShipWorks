@@ -16,6 +16,7 @@ using ShipWorks.Filters.Controls;
 using ShipWorks.Templates.Controls;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Printing;
+using log4net;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -24,6 +25,8 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public partial class ShipmentTypeSettingsControl : UserControl, IPrintWithTemplates
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShipmentTypeSettingsControl));
+
         ShipmentType shipmentType;
 
         /// <summary>
@@ -163,9 +166,13 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public void SaveSettings(ShippingSettingsEntity settings)
         {
+            log.InfoFormat("Preparing to save settings to defaults, printing, and automation for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
+
             defaultsControl.SaveSettings();
             printOutputControl.SaveSettings();
             automationControl.SaveSettings();
+
+            log.InfoFormat("Default, printing, and automation settings saved for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
 
             SettingsControlBase settingsControl = GeneralSettingsControl;
             if (settingsControl != null)
