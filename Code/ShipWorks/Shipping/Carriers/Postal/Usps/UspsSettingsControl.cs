@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -13,6 +14,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsSettingsControl : SettingsControlBase
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(UspsSettingsControl));
+
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
         readonly ShipmentTypeCode shipmentTypeCode;
@@ -131,8 +134,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private static bool ShouldHideExpress1Controls()
         {
-            return !UspsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
-                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted; 
+            log.Info("Checking whether to show Express1");
+            
+            bool shouldHide = !UspsAccountManager.GetAccounts(UspsResellerType.Express1).Any() ||
+                    ShipmentTypeManager.GetType(ShipmentTypeCode.Express1Usps).IsShipmentTypeRestricted;
+            
+            log.InfoFormat("{0} Express1 controls", shouldHide ? "Hiding" : "Showing");
+
+            return shouldHide;
         }
 
         /// <summary>
@@ -140,14 +149,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
+            if (optionsControl == null)
+            {
+                throw new NullReferenceException("The USPS options control was null when trying to save USPS shipping settings.");
+            }
+
+            log.Info("Saving settings to UspsOptionsControl");
             optionsControl.SaveSettings(settings);
 
             if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
+                log.Info("Preparing to save Express1 options");
                 express1Options.SaveSettings(settings);
             }
             else
             {
+                log.Info("Preparing to save Express1 settings");
                 express1Settings.SaveSettings(settings);
             }
 

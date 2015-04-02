@@ -12,7 +12,9 @@ using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Processing;
 using ShipWorks.UI.Controls;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using ShipWorks.Templates.Printing;
+using log4net;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -21,6 +23,8 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     public partial class ShippingSettingsDlg : Form
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(ShippingSettingsDlg));
+
         // So we only load the settings for each type once, no matter how many times its enabled\disabled
         Dictionary<ShipmentTypeCode, ShipmentTypeSettingsControl> settingsMap = new Dictionary<ShipmentTypeCode, ShipmentTypeSettingsControl>();
 
@@ -126,6 +130,7 @@ namespace ShipWorks.Shipping.Settings
                         settingsControl.BackColor = Color.Transparent;
                         settingsControl.Dock = DockStyle.Fill;
 
+                        log.InfoFormat("Adding settings control for {0}.", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
                         settingsMap[shipmentType.ShipmentTypeCode] = settingsControl;
                     }
 
@@ -311,11 +316,14 @@ namespace ShipWorks.Shipping.Settings
                          : ShipmentBlankPhoneOption.SpecifiedPhone);
                 settings.BlankPhoneNumber = blankPhone.Text;
 
+                log.Info("Saving provider rules");
                 providerRulesControl.SaveSettings(settings);
+                log.Info("Provider rules saved");
 
                 // Save all the settings
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)
                 {
+                    
                     settingsControl.SaveSettings(settings);
                 }
 

@@ -1,5 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Profiles;
@@ -11,6 +13,8 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class RequestedLabelFormatOptionControl : UserControl
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(RequestedLabelFormatOptionControl));
+
         private ShipmentType shipmentType;
 
         /// <summary>
@@ -60,6 +64,8 @@ namespace ShipWorks.Shipping.Editing
             {
                 return;
             }
+
+            log.InfoFormat("Saving requested label format for {0}", EnumHelper.GetDescription(shipmentType.ShipmentTypeCode));
 
             ShippingProfileEntity profile = shipmentType.GetPrimaryProfile();
             requestedLabelFormat.SaveToEntity(profile);

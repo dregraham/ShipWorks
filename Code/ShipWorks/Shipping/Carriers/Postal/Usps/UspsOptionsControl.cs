@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using log4net;
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -7,6 +8,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     /// </summary>
     public partial class UspsOptionsControl : PostalOptionsControlBase
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(UspsOptionsControl));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,6 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override void SaveSettings(ShippingSettingsEntity settings)
         {
+            log.Info("Preparing to save requested label format to RequestedLabelFormatOptionControl.");
             requestedLabelFormat.SaveDefaultProfile();
         }
     }
