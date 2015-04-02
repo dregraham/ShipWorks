@@ -92,9 +92,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                         labels.Add(CreateLabel(shipment, labelName, labelUrls[i], CroppingStyles.None));
                     }
                 }
+                else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
+                {
+                    // As of v42 of the API, only single label is provided for shipments going to Canada
+                    if (serviceType == PostalServiceType.InternationalFirst)
+                    {
+                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
+                    }
+                    else
+                    {
+                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
+                    }
+                }
                 else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
                 {
-                    // First-class labels are always a single label. Internatioanl priority flat rate can be the same size as a first-class.  We can tell when this happens
+                    // First-class labels are always a single label. International priority flat rate can be the same size as a first-class.  We can tell when this happens
                     // b\c we get only 2 urls (instead of 4).  the 2nd is a duplicate of the first in the cases ive seen, and we dont need it
                     labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.SingleInternationalCrop));
                 }
