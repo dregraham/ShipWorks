@@ -2,7 +2,9 @@
 using ShipWorks.Data.Model.EntityClasses;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.Postal;
-
+using ShipWorks.Shipping.Carriers.UPS;
+using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {
@@ -34,7 +36,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     }
                     else if (shipmentEntity.Postal != null && ShipmentTypeManager.IsConsolidator((PostalServiceType)shipmentEntity.Postal.Service))
                     {
-                        carrierCode = "Consolidator";
+                        carrierCode = "USPS";
                     }
                     else
                     {
@@ -49,11 +51,21 @@ namespace ShipWorks.Stores.Platforms.Groupon
 
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    carrierCode = "UPS";
+                    ShippingManager.EnsureShipmentLoaded(shipmentEntity);
+                    //The shipment is a UPS shipment, check to see if it is UPS-MI
+                    if (UpsUtility.IsUpsMiService((UpsServiceType)shipmentEntity.Ups.Service))
+                    {
+                        carrierCode = "upsmi";
+
+                    }
+                    else
+                    {
+                        carrierCode = "UPS";
+                    }
                     break;
 
                 case ShipmentTypeCode.OnTrac:
-                    carrierCode = "OnTrac";
+                    carrierCode = "ont";
                     break;
 
                 case ShipmentTypeCode.iParcel:
