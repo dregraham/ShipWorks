@@ -2,7 +2,6 @@
 using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -35,6 +34,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.UspsResellerType = uspsResellerType;
 
+            // Update the Express1 controls now in addition to on visible changed because we were seeing crashes
+            // where express1settings was null because save was being called before the controls got loaded.
+            UpdateExpress1ControlDisplay();
             VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
         }
 
@@ -156,21 +158,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             log.Info("Saving settings to UspsOptionsControl");
             optionsControl.SaveSettings(settings);
+            log.Info("Saved settings to UspsOptionsControl");
 
             if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
-                log.Info("Preparing to save Express1 options");
+                log.InfoFormat("Preparing to save Express1 options {0}", express1Options == null);
                 express1Options.SaveSettings(settings);
+                log.Info("Finished saving Express1 options");
             }
             else
             {
-                log.Info("Preparing to save Express1 settings");
+                log.InfoFormat("Preparing to save Express1 settings {0}", express1Settings == null);
                 express1Settings.SaveSettings(settings);
+                log.Info("Finished saving Express1 settings");
             }
 
             if (uspsResellerType == UspsResellerType.None)
             {
+                log.InfoFormat("Saving insurance provider {0} {1} {2}", settings == null, insuranceProviderChooser == null, insuranceProviderChooser.InsuranceProvider);
                 settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
+                log.Info("Finished saving insurance provider");
             }
         }
 
