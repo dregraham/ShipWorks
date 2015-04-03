@@ -67,13 +67,13 @@ namespace ShipWorks.AddressValidation
         {
             AddressValidationResult addressValidationResult = new AddressValidationResult
             {
-                Street1 = address.Address1,
+                Street1 = address.Address1 ?? string.Empty,
                 Street2 = address.Address2 ?? string.Empty,
-                Street3 = address.Address3 ?? string.Empty, 
-                City = address.City, 
-                StateProvCode = address.State, 
-                PostalCode = GetPostalCode(address),
-                CountryCode = address.Country,
+                Street3 = address.Address3 ?? string.Empty,
+                City = address.City ?? string.Empty,
+                StateProvCode = address.State ?? string.Empty,
+                PostalCode = GetPostalCode(address) ?? string.Empty,
+                CountryCode = address.Country ?? string.Empty,
                 IsValid = isValid,
                 POBox = ConvertPoBox(isPoBox),
                 ResidentialStatus = ConvertResidentialStatus(residentialStatus)
