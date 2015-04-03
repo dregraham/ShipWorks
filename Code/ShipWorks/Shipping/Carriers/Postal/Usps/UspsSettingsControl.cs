@@ -156,21 +156,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             log.Info("Saving settings to UspsOptionsControl");
             optionsControl.SaveSettings(settings);
+            log.Info("Saved settings to UspsOptionsControl");
 
             if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
-                log.Info("Preparing to save Express1 options");
+                log.InfoFormat("Preparing to save Express1 options {0}", express1Options == null);
                 express1Options.SaveSettings(settings);
+                log.Info("Finished saving Express1 options");
             }
             else
             {
-                log.Info("Preparing to save Express1 settings");
+                log.InfoFormat("Preparing to save Express1 settings {0}", express1Settings == null);
                 express1Settings.SaveSettings(settings);
+                log.Info("Finished saving Express1 settings");
             }
 
             if (uspsResellerType == UspsResellerType.None)
             {
+                log.InfoFormat("Saving insurance provider {0} {1} {2}", settings == null, insuranceProviderChooser == null, insuranceProviderChooser.InsuranceProvider);
                 settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
+                log.Info("Finished saving insurance provider");
             }
         }
 
