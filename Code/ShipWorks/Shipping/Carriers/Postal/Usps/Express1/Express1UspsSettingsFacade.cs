@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 
@@ -12,6 +13,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
     /// </summary>
     public class Express1UspsSettingsFacade : IExpress1SettingsFacade
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(Express1UspsSettingsFacade));
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -73,8 +76,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 throw new ArgumentNullException("settings");
             }
 
+            log.InfoFormat("Saving express1 settings {0}", settings == null);
             settings.UspsAutomaticExpress1 = UseExpress1;
             settings.UspsAutomaticExpress1Account = Express1Account;
+            log.InfoFormat("Saved express1 settings");
         }
 
         /// <summary>
