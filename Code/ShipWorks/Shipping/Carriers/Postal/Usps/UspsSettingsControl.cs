@@ -2,7 +2,6 @@
 using System.Linq;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
@@ -35,6 +34,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.UspsResellerType = uspsResellerType;
 
+            // Update the Express1 controls now in addition to on visible changed because we were seeing crashes
+            // where express1settings was null because save was being called before the controls got loaded.
+            UpdateExpress1ControlDisplay();
             VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
         }
 
