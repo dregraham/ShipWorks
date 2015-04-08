@@ -1042,8 +1042,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static RateV16 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
-            PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+            PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 
             RateV16 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
@@ -1052,9 +1052,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             List<AddOnV6> addOns = new List<AddOnV6>();
 
             // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) && !ShipmentTypeManager.IsDhl(serviceType))
+            if (SupportsConfirmation(shipment))
             {
-                PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
+                PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
 
                 // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
                 if (confirmation == PostalConfirmationType.Delivery)
@@ -1066,13 +1066,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 {
                     addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USASC });
                 }
-            }
-
-                // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
+            }    // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
-                {
-                    addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
-                }
+            {
+                addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
+            }
 
             // For express, apply the signature waiver if necessary
             if (serviceType == PostalServiceType.ExpressMail)
@@ -1084,7 +1082,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
-            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
+            if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int) PostalPackagingType.Envelope)
             {
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.SCAHP });
             }
@@ -1114,6 +1112,32 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return rate;
+        }
+
+        /// <summary>
+        /// Determines if the shipto address supports confirmation addons
+        /// </summary>
+        private static bool SupportsConfirmation(ShipmentEntity shipment)
+        {
+            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            {
+                return false;
+            }
+            
+            PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+            if (!ShipmentTypeManager.IsDhl(serviceType))
+            {
+                return false;
+            }
+
+            // Per USPS: Excludes Palau, Marshall Islands, and the Federated States of Micronesia
+            List<string> notSupportedZips = new List<string> { "96939", "96940", "96941", "96942", "96943", "96944", "96960", "96970" };
+            if (notSupportedZips.Contains(shipment.ShipPostalCode))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

@@ -118,10 +118,10 @@
             this.radioModuleDirect.Checked = true;
             this.radioModuleDirect.Location = new System.Drawing.Point(23, 22);
             this.radioModuleDirect.Name = "radioModuleDirect";
-            this.radioModuleDirect.Size = new System.Drawing.Size(250, 17);
+            this.radioModuleDirect.Size = new System.Drawing.Size(202, 17);
             this.radioModuleDirect.TabIndex = 15;
             this.radioModuleDirect.TabStop = true;
-            this.radioModuleDirect.Text = "I use Magento Community or Enterprise Edition";
+            this.radioModuleDirect.Text = "Magento Module from shipworks.com";
             this.radioModuleDirect.UseVisualStyleBackColor = true;
             // 
             // radioMagentoConnect
@@ -129,9 +129,9 @@
             this.radioMagentoConnect.AutoSize = true;
             this.radioMagentoConnect.Location = new System.Drawing.Point(23, 45);
             this.radioMagentoConnect.Name = "radioMagentoConnect";
-            this.radioMagentoConnect.Size = new System.Drawing.Size(110, 17);
+            this.radioMagentoConnect.Size = new System.Drawing.Size(157, 17);
             this.radioMagentoConnect.TabIndex = 16;
-            this.radioMagentoConnect.Text = "I use Magento Go";
+            this.radioMagentoConnect.Text = "MagentoConnect Extension";
             this.radioMagentoConnect.UseVisualStyleBackColor = true;
             // 
             // label9
