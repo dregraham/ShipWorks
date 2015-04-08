@@ -98,10 +98,6 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         private void LoadShipmentTypePages()
         {
-            // Ensure that the main panel has the most up to date data loaded because removing and re-adding the options
-            // controls will save whatever is currently in the panel
-            providerRulesControl.LoadSettings(GetEnabledShipmentTypes());
-
             while (optionControl.OptionPages.Count > 1)
             {
                 optionControl.OptionPages.RemoveAt(1);
