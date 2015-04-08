@@ -420,7 +420,7 @@ namespace Interapptive.Shared.Business
         public string PostalCode
         {
             get { return GetField<string>("PostalCode"); }
-            set { SetField("PostalCode", value); }
+            set { SetField("PostalCode", value == null ? null : value.Trim()); }
         }
 
         /// <summary>
