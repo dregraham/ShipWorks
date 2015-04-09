@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
             {
                 // As of v42 of the API, only single label is provided for shipments going to Canada
-                labels.Add(CreatePostalLabelToCanada(shipment, labelUrls, serviceType));
+                labels.AddRange(CreatePostalLabelsToCanada(shipment, labelUrls, serviceType));
             }
             else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
             {
@@ -161,14 +161,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         }
 
         /// <summary>
-        /// Creates the postal label for shipments going to Canada.
+        /// Creates the postal labels for shipments going to Canada.
         /// </summary>
-        private Label CreatePostalLabelToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
+        private IEnumerable<Label> CreatePostalLabelsToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
         {
             // Use the single international cropping style for International First service, so the shipping
             // instructions are excluded from the label.
             Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst ? CroppingStyles.SingleInternationalCrop : CroppingStyles.None;
-            return CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle);
+
+            List<Label> labels = new List<Label>();
+
+            for (int index = 0; index < labelUrls.Count; index++)
+            {
+                string url = labelUrls[index];
+                string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", index);
+
+                labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
+            }
+
+            return labels;
         }
 
         /// <summary>
