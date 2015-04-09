@@ -41,7 +41,50 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static bool IsCorrectSchemaVersion()
         {
-            return GetInstalledSchemaVersion() == GetRequiredSchemaVersion();
+            return GetInstalledSchemaVersion() == GetRequiredSchemaVersion() &&
+                GetInstalledAssemblyVersion() == GetRequiredAssemblyVersion();
+        }
+
+        /// <summary>
+        /// Gets whether an update is required
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsUpgradeRequired()
+        {
+            return GetInstalledSchemaVersion() < GetRequiredSchemaVersion() ||
+                   GetInstalledAssemblyVersion() < GetRequiredAssemblyVersion();
+        }
+
+        /// <summary>
+        /// Get the version of the installed assembly
+        /// </summary>
+        private static Version GetInstalledAssemblyVersion()
+        {
+            const string getVersionSql = @"SELECT CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionMajor') AS varchar(max)) + '.' +
+		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionMinor') AS varchar(max)) + '.' +
+		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionBuild') AS varchar(max)) + '.' +
+		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionRevision') AS varchar(max))";
+
+            using (SqlConnection con = SqlSession.Current.OpenConnection())
+            {
+                using (SqlCommand comm = con.CreateCommand())
+                {
+                    comm.CommandText = getVersionSql;
+
+                    string versionString = comm.ExecuteScalar() as string;
+
+                    return versionString != null ? new Version(versionString) : new Version();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the version of the existing sql clr assembly
+        /// </summary>
+        /// <returns></returns>
+        private static Version GetRequiredAssemblyVersion()
+        {
+            return typeof (StoredProcedures).Assembly.GetName().Version;
         }
 
         /// <summary>
@@ -77,6 +120,7 @@ namespace ShipWorks.Data.Administration
                 }
             }
         }
+
         /// <summary>
         /// Upgrade the current database to the latest version.  debuggingMode is only provided as an option for debugging purposes, and should always be false in 
         /// customer or production scenarios.
@@ -122,18 +166,13 @@ namespace ShipWorks.Data.Administration
                             if (!MigrationController.IsMigrationInProgress())
                             {
                                 // If the filter sql version has changed, that means we need to regenerate them to get updated calculation SQL into the database
-                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedTransaction);
+                                UpdateFilters(progressFunctionality, ExistingConnectionScope.ScopedConnection, ExistingConnectionScope.ScopedTransaction);
                             }
-
-                            // Now we need to update the database to return the correct schema version that is now installed
-                            UpdateSchemaVersionStoredProcedure();
 
                             // Functionality is done
                             progressFunctionality.PercentComplete = 100;
                             progressFunctionality.Detail = "Done";
                             progressFunctionality.Completed();
-
-                            ExistingConnectionScope.Commit();
 
                             // If we were upgrading from 3.9.3.0 or before we adjust the FILEGROW settings.  Can't be in a transaction, so has to be here.
                             if (installed <= new Version(3, 9, 3, 0))
@@ -296,14 +335,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Update the schema version store procuedure to match the required schema version.  This should only be called after installing or updating to the latest schema.
-        /// </summary>
-        public static void UpdateSchemaVersionStoredProcedure()
-        {
-            ExistingConnectionScope.ExecuteWithCommand(cmd => UpdateSchemaVersionStoredProcedure(cmd, GetRequiredSchemaVersion()));
-        }
-
-        /// <summary>
         /// Update the schema version stored procedure to say the current schema is the given version
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlCommand cmd, Version version)
@@ -367,6 +398,8 @@ namespace ShipWorks.Data.Administration
             // Go through each update script (they are already sorted in version order)
             foreach (SqlUpdateScript script in updateScripts)
             {
+                ExistingConnectionScope.BeginTransaction();
+
                 log.InfoFormat("Updating to {0}", script.SchemaVersion);
 
                 // How many scripts we've finished with so far
@@ -384,6 +417,10 @@ namespace ShipWorks.Data.Administration
 
                 // Run all the batches in the script
                 ExistingConnectionScope.ExecuteWithCommand(executor.Execute);
+
+                ExistingConnectionScope.ExecuteWithCommand(x => UpdateSchemaVersionStoredProcedure(x, script.SchemaVersion));
+                
+                ExistingConnectionScope.Commit();
             }
 
             // Since we have a single, long-lived connection, we want to remove the message handler so future messages
@@ -409,7 +446,7 @@ namespace ShipWorks.Data.Administration
         /// Since our filters use column masks that are exactly dependant on column positioning, we regenerate them every time
         /// there is a schema change, just in case.
         /// </summary>
-        private static void UpdateFilters(ProgressItem progress, SqlTransaction transaction)
+        private static void UpdateFilters(ProgressItem progress, SqlConnection connection, SqlTransaction transaction)
         {
             progress.Detail = "Updating filters...";
 
@@ -423,8 +460,8 @@ namespace ShipWorks.Data.Administration
                 ExistingConnectionScope.ExecuteWithAdapter(FilterLayoutContext.Current.RegenerateAllFilters);
 
                 // We can wipe any dirties and any current checkpoint - they don't matter since we have regenerated all filters anyway
-                SqlUtility.TruncateTable("FilterNodeContentDirty", transaction.Connection, transaction);
-                SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", transaction.Connection, transaction);
+                SqlUtility.TruncateTable("FilterNodeContentDirty", connection, transaction);
+                SqlUtility.TruncateTable("FilterNodeUpdateCheckpoint", connection, transaction);
             }
             finally
             {
