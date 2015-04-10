@@ -45,14 +45,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
                     {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
-                        
-                        // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
-                        if (labelUrls.Count >= 2)
+                        if (shipment.ActualLabelFormat.HasValue)
                         {
-                            labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
-                            labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            // Thermal
+
+                            labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            if (labelUrls.Count >= 2)
+                            {
+                                // print this form 3 times.
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart2", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart3", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart4", labelUrls[1]));
+                            }
+                        }
+                        else
+                        {
+                            // Standard
+                            labels.Add(CreateStandardLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            labels.Add(CreateStandardLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
+
+                            // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
+                            if (labelUrls.Count >= 2)
+                            {
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            }
                         }
                     }
                     else
