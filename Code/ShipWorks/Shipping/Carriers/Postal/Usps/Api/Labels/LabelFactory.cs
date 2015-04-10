@@ -182,18 +182,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         private IEnumerable<Label> CreatePostalLabelsToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
         {
-            // Use the single international cropping style for International First service, so the shipping
-            // instructions are excluded from the label.
-            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst ? CroppingStyles.SingleInternationalCrop : CroppingStyles.None;
+            // When customs value exceeds $400, the label images we get from the API are different
+            bool customsValueExceedsThreshold = shipment.CustomsValue >= 400M;
+
+            // Use the single international cropping style, so the shipping instructions are excluded from the label.
+            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst || customsValueExceedsThreshold ?
+                    CroppingStyles.SingleInternationalCrop :
+                    CroppingStyles.None;
+
+            // In cases where customs value >= $400, multiple labels are included on one image/URL and need
+            // to be cropped separates; in cases where customs value < $400, the continuation label is sent 
+            // down as a separate image/URL and no additional cropping is needed
+            bool continuationLabelsNeedCropping = customsValueExceedsThreshold && labelUrls.Count > 2;
+
+            // Exclude the instructions page that comes down on these shipments
+            int numberOfLabelsToCreate = customsValueExceedsThreshold ? labelUrls.Count - 1 : labelUrls.Count;
 
             List<Label> labels = new List<Label>();
 
-            for (int index = 0; index < labelUrls.Count; index++)
+            for (int index = 0; index < numberOfLabelsToCreate; index++)
             {
                 string url = labelUrls[index];
-                string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", index);
+                string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", labels.Count + 1);
 
                 labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
+
+                if (continuationLabelsNeedCropping)
+                {
+                    labels.Add(CreateLabel(shipment, string.Format("LabelPart{0}", labels.Count + 1), url, CroppingStyles.ContinuationCrop));
+                }
             }
 
             return labels;
