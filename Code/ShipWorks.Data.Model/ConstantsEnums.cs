@@ -2315,6 +2315,8 @@ namespace ShipWorks.Data.Model
 		DownloadItemDetails,
 		///<summary>DownloadPayPalDetails. </summary>
 		DownloadPayPalDetails,
+		///<summary>DownloadOlderOrders. </summary>
+		DownloadOlderOrders,
 		///<summary>PayPalApiCredentialType. </summary>
 		PayPalApiCredentialType,
 		///<summary>PayPalApiUserName. </summary>

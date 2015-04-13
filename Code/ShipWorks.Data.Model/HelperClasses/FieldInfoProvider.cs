@@ -691,6 +691,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayStoreEntity", "AcceptedPaymentList", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.AcceptedPaymentList, 30, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "DownloadItemDetails", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadItemDetails, 0, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "DownloadPayPalDetails", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadPayPalDetails, 0, 0, 0);
+			base.AddElementFieldInfo("EbayStoreEntity", "DownloadOlderOrders", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadOlderOrders, 0, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiCredentialType", typeof(System.Int16), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiCredentialType, 0, 0, 5);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiUserName", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiUserName, 255, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiPassword", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiPassword, 80, 0, 0);
