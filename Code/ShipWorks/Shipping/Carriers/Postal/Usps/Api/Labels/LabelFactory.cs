@@ -186,7 +186,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             bool customsValueExceedsThreshold = shipment.CustomsValue >= 400M;
 
             // Use the single international cropping style, so the shipping instructions are excluded from the label.
-            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst || customsValueExceedsThreshold ?
+            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst || customsValueExceedsThreshold || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRatePaddedEnvelope ?
                     CroppingStyles.SingleInternationalCrop :
                     CroppingStyles.None;
 
