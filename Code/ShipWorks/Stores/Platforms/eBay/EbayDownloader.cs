@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.Business;
@@ -12,18 +11,12 @@ using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
-using ShipWorks.Data.Adapter.Custom;
-using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.Linq;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
@@ -31,7 +24,6 @@ using ShipWorks.Stores.Platforms.Ebay.Tokens;
 using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
-using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Stores.Platforms.Ebay
 {
@@ -52,9 +44,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // Total number of orders expected during this download
         int expectedCount = -1;
 
-        // Used to track the most recent online modified date in a download batch
-        private DateTime? nextStartDate;
-
         /// <summary>
         /// Create the new eBay downloader
         /// </summary>
@@ -62,7 +51,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             : base(store)
         {
             webClient = new EbayWebClient(EbayToken.FromStore((EbayStoreEntity) store));
-            nextStartDate = null;
         }
 
         /// <summary>
@@ -103,11 +91,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 throw new DownloadException(ex.Message, ex);
             }
-            finally
-            {
-                // Reset this for the next download
-                nextStartDate = null;
-            }
         }
 
         #region Orders
@@ -118,7 +101,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         private bool DownloadOrders()
         {
             // Controls wether we download using eBay paging, or using our typical sliding method where we always just adjust the start time and ask for page 1.
-            bool usePagedDownload = true;
+            //bool usePagedDownload = true;
 
             // Get the date\time to start downloading from
             DateTime rangeStart = GetOnlineLastModifiedStartingPoint() ?? DateTime.UtcNow.AddDays(-7);
@@ -152,18 +135,19 @@ namespace ShipWorks.Stores.Platforms.Ebay
                         return false;
                     }
 
-                    DateTime lastModified = orderType.CheckoutStatus.LastModifiedTime;
+                    //DateTime lastModified = orderType.CheckoutStatus.LastModifiedTime;
 
                     // Skip any that are out of range.  We take any that are a day out of range back, b\c eBay's API sometimes returns stuff in the next page that should have been on the previous.
                     // I have open bug reports with them.  12/18/13
-                    if (!usePagedDownload)
-                    {
-                        if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
-                        {
-                            log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
-                            continue;
-                        }
-                    }
+                    // Comented out because hopefully we can add this back...
+                    //if (!usePagedDownload)
+                    //{
+                    //    if (lastModified < rangeStart.AddDays(-1) || lastModified > rangeEnd)
+                    //    {
+                    //        log.WarnFormat("Skipping eBay order {0} since it's out of our date range {1}", orderType.OrderID, orderType.CheckoutStatus.LastModifiedTime);
+                    //        continue;
+                    //    }
+                    //}
 
                     ProcessOrder(orderType);
 
@@ -171,13 +155,13 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
 
                     // Update the range for the next time around.  Should always be ascending
-                    if (!usePagedDownload)
-                    {
-                        if (lastModified > rangeStart)
-                        {
-                            rangeStart = lastModified;
-                        }
-                    }
+                    //if (!usePagedDownload)
+                    //{
+                    //    if (lastModified > rangeStart)
+                    //    {
+                    //        rangeStart = lastModified;
+                    //    }
+                    //}
                 }
 
                 // Quit if eBay says there aren't any more
@@ -187,10 +171,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 }
 
                 // Increment the page, if that's the method we are using
-                if (usePagedDownload)
-                {
+                //if (usePagedDownload)
+                //{
                     page++;
-                }
+                //}
             }
         }
 
@@ -220,12 +204,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Update last modified
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
-
-            // We need this for calculating the starting point when downloading the next page or orders
-            if (!nextStartDate.HasValue || order.OnlineLastModified > nextStartDate)
-            {
-                nextStartDate = order.OnlineLastModified;
-            }
 
             // Online status
             order.OnlineStatusCode = (int)orderType.OrderStatus;
@@ -334,11 +312,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // We have to use the exact scope that SaveDownloadedOrder will, or a MSDTC exception will be thrown since the connection would be slightly different
-            using (AuditBehaviorScope auditScope = CreateOrderAuditScope(order))
+            using (CreateOrderAuditScope(order))
             {
                 SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.ProcessOrder for entity {0}", order.OrderID));
 
-                sqlDeadlockRetry.ExecuteWithRetry((SqlAdapter adapter) => { 
+                sqlDeadlockRetry.ExecuteWithRetry(adapter => { 
                     // Save the new order
                     SaveDownloadedOrder(order);
 
@@ -454,7 +432,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private string DetermineBuyerEmail(OrderType orderType)
         {
-            var buyerNodes = orderType.TransactionArray.Select(t => t.Buyer).Where(b => b != null);
+            var buyerNodes = orderType.TransactionArray.Select(t => t.Buyer).Where(b => b != null).ToList();
 
             // eBay doesn't always send the real email address. First check for the first real email address we find.
             string email = buyerNodes.Select(b => b.Email).FirstOrDefault(e => e != null && e.Contains('@'));
@@ -471,17 +449,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Update the address of the ebay order with the address infomration provided
         /// </summary>
-        private void UpdateOrderAddress(EbayOrderEntity order, ShipWorks.Stores.Platforms.Ebay.WebServices.AddressType address)
+        private void UpdateOrderAddress(EbayOrderEntity order, WebServices.AddressType address)
         {
             // Put the downloaded address in an adapter
-            AddressAdapter downloadedShipAddress = new AddressAdapter()
+            AddressAdapter downloadedShipAddress = new AddressAdapter
             {
                 Street1 = address.Street1 ?? "",
                 Street2 = address.Street2 ?? "",
                 City = address.CityName ?? "",
                 StateProvCode = address.StateOrProvince == null ? string.Empty : Geography.GetStateProvCode(address.StateOrProvince) ?? "",
                 PostalCode = address.PostalCode ?? "",
-                CountryCode = address.CountrySpecified ? Enum.GetName(typeof(ShipWorks.Stores.Platforms.Ebay.WebServices.CountryCodeType), address.Country) : ""
+                CountryCode = address.CountrySpecified ? Enum.GetName(typeof(WebServices.CountryCodeType), address.Country) : ""
             };
 
             if (!DoesDownloadedAddressMatchOriginal(order, downloadedShipAddress))
@@ -534,12 +512,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             if (((EbayStoreEntity) Store).DownloadOlderOrders)
             {
-                if (nextStartDate.HasValue)
-                {
-                    // We're in the middle of a download cycle, so just use this date
-                    return nextStartDate;
-                }
-
                 // We need to calculate the starting point for the initial starting point of
                 // a download cycle
                 return CalculateStartingPoint(onlineLastModifiedStartingPoint);
@@ -705,7 +677,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             }
 
             // Tax
-            OrderChargeEntity tax = GetCharge(order, "TAX", "Sales Tax", true);
+            OrderChargeEntity tax = GetCharge(order, "TAX", "Sales Tax");
             tax.Amount = salesTax;
 
             #endregion
@@ -874,8 +846,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             if (transaction.ShippingDetails.CalculatedShippingRate != null)
             {
-                ShipWorks.Stores.Platforms.Ebay.WebServices.MeasureType weightMajor = transaction.ShippingDetails.CalculatedShippingRate.WeightMajor;
-                ShipWorks.Stores.Platforms.Ebay.WebServices.MeasureType weightMinor = transaction.ShippingDetails.CalculatedShippingRate.WeightMinor;
+                WebServices.MeasureType weightMajor = transaction.ShippingDetails.CalculatedShippingRate.WeightMajor;
+                WebServices.MeasureType weightMinor = transaction.ShippingDetails.CalculatedShippingRate.WeightMinor;
 
                 if (weightMajor != null && weightMinor != null)
                 {
@@ -986,7 +958,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 order.OnlineStatusCode is int && (int)order.OnlineStatusCode == (int)OrderStatusCodeType.Completed && // only make adjustments if it's considered complete
                 !order.CombinedLocally) // Don't bother trying to reconcile a locally combined order
             {
-                OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other", true);
+                OrderChargeEntity otherCharge = GetCharge(order, "OTHER", "Other");
                 otherCharge.Description = "Other";
                 otherCharge.Amount += Convert.ToDecimal(amountPaid) - order.OrderTotal;
             }
@@ -1036,7 +1008,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     if (gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1 != null)
                     {
                         // Try to split the Street1 property based on comma
-                        List<string> splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new char[] { ',' }).ToList();
+                        List<string> splitStreetInfo = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Street1.Split(new[] { ',' }).ToList();
 
                         // We'll always have at least one value in the result of the split which will be our value for street1
                         streetLines[0] = splitStreetInfo[0];
@@ -1055,7 +1027,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     order.GspCity = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.CityName ?? string.Empty;
                     order.GspStateProvince = Geography.GetStateProvCode(gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.StateOrProvince) ?? string.Empty;
                     order.GspPostalCode = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.PostalCode ?? string.Empty;
-                    order.GspCountryCode = Enum.GetName(typeof(ShipWorks.Stores.Platforms.Ebay.WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
+                    order.GspCountryCode = Enum.GetName(typeof(WebServices.CountryCodeType), gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.Country);
 
                     // Pull out the reference ID that will identify the order to the international shipping provider
                     order.GspReferenceID = gspDetails.SellerShipmentToLogisticsProvider.ShipToAddress.ReferenceID;
@@ -1353,10 +1325,10 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 if (candidates.Count > 1)
                 {
                     // Pick the first one that matches the gross amount, if there's only one
-                    var matches = candidates.Where(p => Math.Abs(Convert.ToDecimal(p.GrossAmount.Value)) == (decimal) amount);
-                    if (matches.Count() == 1)
+                    var matches = candidates.Where(p => Math.Abs(Convert.ToDecimal(p.GrossAmount.Value)) == (decimal) amount).ToList();
+                    if (matches.Any())
                     {
-                        return matches.FirstOrDefault().TransactionID;
+                        return matches.First().TransactionID;
                     }
                 }
 
