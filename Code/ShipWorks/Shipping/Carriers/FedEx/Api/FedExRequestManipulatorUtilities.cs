@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -115,7 +116,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             Duck(address, "City", person.City);
             Duck(address, "PostalCode", person.PostalCode);
             Duck(address, "StateOrProvinceCode", person.StateProvCode);
-            Duck(address, "CountryCode", AdjustFedExCountryCode(person.CountryCode));
+            Duck(address, "CountryCode", AdjustFedExCountryCode(person.CountryCode, person.StateProvCode));
 
             return address;
         }
@@ -123,12 +124,17 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Adjust the country code for what FedEx requires expects
         /// </summary>
-        public static string AdjustFedExCountryCode(string code)
+        public static string AdjustFedExCountryCode(string code, string state)
         {
             // FedEx wants GB
             if (code == "UK")
             {
                 code = "GB";
+            }
+
+            if (code == "US" && Geography.IsUSInternationalTerritory(state))
+            {
+                code = state;
             }
 
             return code;

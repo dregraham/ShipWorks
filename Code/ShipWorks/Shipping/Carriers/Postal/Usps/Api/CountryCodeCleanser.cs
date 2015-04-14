@@ -1,26 +1,23 @@
-﻿
+﻿using Interapptive.Shared.Business;
+
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api
 {
+    /// <summary>
+    /// Replace country codes with values that Stamps (USPS) expects
+    /// </summary>
     public static class CountryCodeCleanser
     {
         /// <summary>
-        /// Cleanse the country code for the USPS API
+        /// Cleanse the country code for rating and shipping through USPS
         /// </summary>
         public static string CleanseCountryCode(string code)
         {
-            // USPS does not like UK.. only GB
             if (code == "UK")
             {
-                code = "GB";
+                return "GB";
             }
 
-            // Puerto Rico is treated as the United States by USPS
-            if (code == "PR" || code == "VI")
-            {
-                return "US";
-            }
-
-            return code;
+            return Geography.IsUSInternationalTerritory(code) ? "US" : code;
         }
     }
 }

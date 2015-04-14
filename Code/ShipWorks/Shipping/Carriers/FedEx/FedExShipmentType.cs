@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -770,7 +771,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
-            decimal? maxPackageDeclaredValue = (overriddenShipment.ShipCountryCode != "US") ? (shipment.CustomsValue / shipment.FedEx.Packages.Count) : (decimal?) null;
+            decimal? maxPackageDeclaredValue = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(overriddenShipment.ShipCountryCode, overriddenShipment.ShipStateProvCode) != "US" ? 
+                shipment.CustomsValue / shipment.FedEx.Packages.Count : 
+                (decimal?) null;
 
             // Check the FedEx wide PennyOne settings and get them updated
             foreach (var package in shipment.FedEx.Packages)
@@ -1166,7 +1169,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override bool IsDomestic(ShipmentEntity shipmentEntity)
         {
-            return base.IsDomestic(shipmentEntity) && !IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
+            if (shipmentEntity == null)
+            {
+                throw new ArgumentNullException("shipmentEntity");
+            }
+
+            string originCountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(shipmentEntity.OriginCountryCode, shipmentEntity.OriginStateProvCode);
+            string destinationCountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(shipmentEntity.ShipCountryCode, shipmentEntity.ShipStateProvCode);
+
+            return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

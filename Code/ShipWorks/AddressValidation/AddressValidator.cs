@@ -236,7 +236,7 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static int InternationalTerritoryStatus(string stateProvCode, string countryCode)
         {
-            return PostalUtility.IsUSInternationalTerritory(countryCode) || PostalUtility.IsUSInternationalTerritory(stateProvCode) ?
+            return Geography.IsUSInternationalTerritory(countryCode) || Geography.IsUSInternationalTerritory(stateProvCode) ?
                 (int) ValidationDetailStatusType.Yes :
                 (int) ValidationDetailStatusType.No;
         }

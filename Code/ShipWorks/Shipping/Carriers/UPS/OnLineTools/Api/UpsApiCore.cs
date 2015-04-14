@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
@@ -184,9 +185,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                 code = "GB";
             }
 
-            if (code == "US" && state == "PR")
+            if (code == "US" && Geography.IsUSInternationalTerritory(state))
             {
-                code = "PR";
+                code = state;
             }
 
             return code;

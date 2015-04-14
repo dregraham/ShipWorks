@@ -69,7 +69,7 @@ namespace Interapptive.Shared.Business
             }
 
             // Some carts send down variations of the US country name
-            if (string.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || string.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
+            if (String.Compare("united states", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("usa", name, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare("united states of america", name, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 return "US";
             }
@@ -106,6 +106,40 @@ namespace Interapptive.Shared.Business
             }
 
             return code;
+        }
+
+        /// <summary>
+        /// Indicates if the given foreign country code is a US international territory
+        /// </summary>
+        public static bool IsUSInternationalTerritory(string countryCode)
+        {
+            return
+
+                // American Samoa
+                countryCode == "AS" ||
+
+                // Federated States of Micronesia
+                countryCode == "FM" ||
+
+                // Guam
+                countryCode == "GU" ||
+
+                // Marshall Islands
+                countryCode == "MH" ||
+
+                // Northern Mariana Islands
+                countryCode == "MP" ||
+
+                // Palau
+                countryCode == "PW" ||
+
+                // Puerto Rico
+                countryCode == "PR" ||
+
+                // Virgin Islands
+                countryCode == "VI" ||
+                countryCode == "VL" ||
+                countryCode == "UV";
         }
 
         /// <summary>
@@ -389,9 +423,9 @@ namespace Interapptive.Shared.Business
         public static string GetStateProvCode(string name)
         {
             // If we get a null (which we've seen from ebay at least), just return an empty string
-            if (string.IsNullOrEmpty(name))
+            if (String.IsNullOrEmpty(name))
             {
-                return string.Empty;
+                return String.Empty;
             }
 
             string code;
@@ -815,6 +849,5 @@ namespace Interapptive.Shared.Business
         }
 
         #endregion
-
     }
 }
