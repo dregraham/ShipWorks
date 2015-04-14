@@ -226,7 +226,7 @@ namespace ShipWorks.Data.Caching
         /// <summary>
         /// Processes the check for changes SQL exception - Add ChangeTracking to the table if possible.
         /// </summary>
-        private void ProcessCheckForChangesSqlException(SqlException sqlException)
+        private static void ProcessCheckForChangesSqlException(SqlException sqlException)
         {
             log.Error("Error in CheckForChanges", sqlException);
             log.Info("Attempting to enable change tracking.");
