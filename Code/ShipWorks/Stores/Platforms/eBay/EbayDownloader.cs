@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Common.Logging;
+using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
+using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
@@ -44,8 +49,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
         // WebClient to use for connetivity
         EbayWebClient webClient;
 
-        // Total number of ordres expected during this download
+        // Total number of orders expected during this download
         int expectedCount = -1;
+
+        // Used to track the most recent online modified date in a download batch
+        private DateTime? nextStartDate;
 
         /// <summary>
         /// Create the new eBay downloader
@@ -54,6 +62,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             : base(store)
         {
             webClient = new EbayWebClient(EbayToken.FromStore((EbayStoreEntity) store));
+            nextStartDate = null;
         }
 
         /// <summary>
@@ -93,6 +102,11 @@ namespace ShipWorks.Stores.Platforms.Ebay
             catch (SqlForeignKeyException ex)
             {
                 throw new DownloadException(ex.Message, ex);
+            }
+            finally
+            {
+                // Reset this for the next download
+                nextStartDate = null;
             }
         }
 
@@ -139,7 +153,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     }
 
                     DateTime lastModified = orderType.CheckoutStatus.LastModifiedTime;
-                    
+
                     // Skip any that are out of range.  We take any that are a day out of range back, b\c eBay's API sometimes returns stuff in the next page that should have been on the previous.
                     // I have open bug reports with them.  12/18/13
                     if (!usePagedDownload)
@@ -206,6 +220,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // Update last modified
             order.OnlineLastModified = orderType.CheckoutStatus.LastModifiedTime;
+
+            // We need this for calculating the starting point when downloading the next page or orders
+            if (!nextStartDate.HasValue || order.OnlineLastModified > nextStartDate)
+            {
+                nextStartDate = order.OnlineLastModified;
+            }
 
             // Online status
             order.OnlineStatusCode = (int)orderType.OrderStatus;
@@ -502,6 +522,101 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 downloadAddressMatchesOriginal = (originalAddressAdapter == downloadedShipAddress);
             }
             return downloadAddressMatchesOriginal;
+        }
+
+        /// <summary>
+        /// Gets the largest last modified time we have in our database for non-manual orders for this store.
+        /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
+        /// </summary>
+        protected override DateTime? GetOnlineLastModifiedStartingPoint()
+        {
+            DateTime? onlineLastModifiedStartingPoint = base.GetOnlineLastModifiedStartingPoint();
+
+            if (((EbayStoreEntity) Store).DownloadOlderOrders)
+            {
+                if (nextStartDate.HasValue)
+                {
+                    // We're in the middle of a download cycle, so just use this date
+                    return nextStartDate;
+                }
+
+                // We need to calculate the starting point for the initial starting point of
+                // a download cycle
+                return CalculateStartingPoint(onlineLastModifiedStartingPoint);
+            }
+
+            // Use the default behavior - the store is not configured to check for older orders
+            return onlineLastModifiedStartingPoint;
+        }
+
+        /// <summary>
+        /// Calculates the DateTime to use as the starting point from the previous four download cycles.
+        /// </summary>
+        /// <param name="onlineLastModifiedStartingPoint">The DateTime of the most recent online last modified date that ShipWorks is aware of. This is used 
+        /// in the event that the last four download cycles are more recent (i.e. this is to ensure overlap).</param>
+        /// <returns>The DateTime to use as the starting point of a download.</returns>
+        private DateTime? CalculateStartingPoint(DateTime? onlineLastModifiedStartingPoint)
+        {
+            // Need to check previous download history for this store to calculate the starting point.
+            const int previousNumberOfDownloads = 4;
+            List<DateTime> startDates = GetPreviousDownloadStartTimes(previousNumberOfDownloads);
+
+            if (startDates.None())
+            {
+                return onlineLastModifiedStartingPoint;
+            }
+            if (startDates.Count < 4)
+            {
+                // We don't have enough download history, so subtract the initial download days from the 
+                // earliest download date to mimic the first download cycle
+                return startDates.Min().Subtract(TimeSpan.FromDays(Store.InitialDownloadDays ?? 7));
+            }
+            else
+            {
+                // Subtract 5 minutes to mimic the buffer used during the previous download
+                DateTime? startingPoint = startDates.Min().Subtract(TimeSpan.FromMinutes(5));
+
+                // Use the lesser value of starting point and the most recent last modified date. This is 
+                // for the case where the order data has been modified by support (or an action has been
+                // previously created by support to manipulate the last modified date to resolve skipped
+                // orders).
+                return startingPoint < onlineLastModifiedStartingPoint ? startingPoint : onlineLastModifiedStartingPoint;
+            }
+        }
+
+        /// <summary>
+        /// Gets the date/time that the last number of most recent, successful downloads having orders 
+        /// were started for this store.
+        /// </summary>
+        /// <param name="previousDownloadCount">The number of previous downloads to use when getting starting point(s).</param>
+        /// <returns>A List of DateTime instance representing the time the previous downloads started.</returns>
+        private List<DateTime> GetPreviousDownloadStartTimes(int previousDownloadCount)
+        {
+            // Only interested in successful downloads that contained orders
+            RelationPredicateBucket bucket = new RelationPredicateBucket
+            (
+                DownloadFields.StoreID == Store.StoreID &
+                DownloadFields.Result == (int)DownloadResult.Success &
+                DownloadFields.QuantityTotal > 0
+            );
+
+            // We just want the start date of the download
+            ResultsetFields resultFields = new ResultsetFields(1);
+            resultFields.DefineField(DownloadFields.Started, 0, "Started", string.Empty);
+
+            // Sort so we only get the latest download records
+            ISortExpression sort = new SortExpression(DownloadFields.DownloadID | SortOperator.Descending);
+
+            List<DateTime> startDates = new DateTimeList();
+            using (SqlDataReader reader = (SqlDataReader)SqlAdapter.Default.FetchDataReader(resultFields, bucket, CommandBehavior.CloseConnection, previousDownloadCount, sort, false))
+            {
+                while (reader.Read())
+                {
+                    startDates.Add(reader.GetDateTime(0));
+                }
+            }
+
+            return startDates;
         }
 
         /// <summary>
