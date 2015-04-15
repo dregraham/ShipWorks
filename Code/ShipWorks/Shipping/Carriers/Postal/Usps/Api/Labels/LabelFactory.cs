@@ -45,14 +45,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
                     {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
-                        
-                        // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
-                        if (labelUrls.Count >= 2)
+                        if (shipment.ActualLabelFormat.HasValue)
                         {
-                            labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
-                            labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            // Thermal
+
+                            labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            if (labelUrls.Count >= 2)
+                            {
+                                // print this form 3 times.
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart2", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart3", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart4", labelUrls[1]));
+                            }
+                        }
+                        else
+                        {
+                            // Standard
+                            labels.Add(CreateStandardLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            labels.Add(CreateStandardLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
+
+                            // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
+                            if (labelUrls.Count >= 2)
+                            {
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            }
                         }
                     }
                     else
@@ -107,7 +124,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
             {
                 // As of v42 of the API, only single label is provided for shipments going to Canada
-                labels.Add(CreatePostalLabelToCanada(shipment, labelUrls, serviceType));
+                labels.AddRange(CreatePostalLabelsToCanada(shipment, labelUrls, serviceType));
             }
             else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
             {
@@ -161,14 +178,42 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         }
 
         /// <summary>
-        /// Creates the postal label for shipments going to Canada.
+        /// Creates the postal labels for shipments going to Canada.
         /// </summary>
-        private Label CreatePostalLabelToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
+        private IEnumerable<Label> CreatePostalLabelsToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
         {
-            // Use the single international cropping style for International First service, so the shipping
-            // instructions are excluded from the label.
-            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst ? CroppingStyles.SingleInternationalCrop : CroppingStyles.None;
-            return CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle);
+            // When customs value exceeds $400, the label images we get from the API are different
+            bool customsValueExceedsThreshold = shipment.CustomsValue >= 400M;
+
+            // Use the single international cropping style, so the shipping instructions are excluded from the label.
+            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst || customsValueExceedsThreshold || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRatePaddedEnvelope ?
+                    CroppingStyles.SingleInternationalCrop :
+                    CroppingStyles.None;
+
+            // In cases where customs value >= $400, multiple labels are included on one image/URL and need
+            // to be cropped separates; in cases where customs value < $400, the continuation label is sent 
+            // down as a separate image/URL and no additional cropping is needed
+            bool continuationLabelsNeedCropping = customsValueExceedsThreshold && labelUrls.Count > 2;
+
+            // Exclude the instructions page that comes down on these shipments
+            int numberOfLabelsToCreate = customsValueExceedsThreshold ? labelUrls.Count - 1 : labelUrls.Count;
+
+            List<Label> labels = new List<Label>();
+
+            for (int index = 0; index < numberOfLabelsToCreate; index++)
+            {
+                string url = labelUrls[index];
+                string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", labels.Count + 1);
+
+                labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
+
+                if (continuationLabelsNeedCropping)
+                {
+                    labels.Add(CreateLabel(shipment, string.Format("LabelPart{0}", labels.Count + 1), url, CroppingStyles.ContinuationCrop));
+                }
+            }
+
+            return labels;
         }
 
         /// <summary>
