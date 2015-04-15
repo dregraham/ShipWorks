@@ -10138,3 +10138,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountBusinessAddressException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Shipping.Carriers.UPS.OpenAccount.UpsOpenAccountSoapException")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2240:ImplementISerializableCorrectly", Scope = "type", Target = "ShipWorks.Users.Security.PermissionException")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities", Scope = "member", Target = "ShipWorks.Data.Administration.SqlSchemaUpdater.#UpdateVersionStoredProcedure(System.Data.SqlClient.SqlCommand,System.Version,System.String)")]

@@ -39,7 +39,11 @@ namespace ShipWorks.Tests.Core
             {
                 con.Open();
 
-                SqlAssemblyDeployer.DropAssemblies(con);
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    SqlAssemblyDeployer.DropAssemblies(con, transaction);
+                    transaction.Commit();
+                }
             }
         }
 
@@ -56,8 +60,12 @@ namespace ShipWorks.Tests.Core
             {
                 con.Open();
 
-                SqlAssemblyDeployer.DeployAssemblies(con);
-
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    SqlAssemblyDeployer.DeployAssemblies(con, transaction);
+                    transaction.Commit();
+                }
+                
                 SqlSchemaUpdater.UpdateSchemaVersionStoredProcedure(con);
             }
         }

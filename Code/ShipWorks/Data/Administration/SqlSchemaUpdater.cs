@@ -42,7 +42,7 @@ namespace ShipWorks.Data.Administration
         public static bool IsCorrectSchemaVersion()
         {
             return GetInstalledSchemaVersion() == GetRequiredSchemaVersion() &&
-                GetInstalledAssemblyVersion() == GetRequiredAssemblyVersion();
+                GetInstalledAssemblyVersion() == GetRequiredSchemaVersion();
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace ShipWorks.Data.Administration
         public static bool IsUpgradeRequired()
         {
             return GetInstalledSchemaVersion() < GetRequiredSchemaVersion() ||
-                   GetInstalledAssemblyVersion() < GetRequiredAssemblyVersion();
+                   GetInstalledAssemblyVersion() < GetRequiredSchemaVersion();
         }
 
         /// <summary>
@@ -60,31 +60,38 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static Version GetInstalledAssemblyVersion()
         {
-            const string getVersionSql = @"SELECT CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionMajor') AS varchar(max)) + '.' +
-		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionMinor') AS varchar(max)) + '.' +
-		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionBuild') AS varchar(max)) + '.' +
-		CAST(ASSEMBLYPROPERTY('ShipWorks.SqlServer', 'VersionRevision') AS varchar(max))";
-
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                using (SqlCommand comm = con.CreateCommand())
+                try
                 {
-                    comm.CommandText = getVersionSql;
+                    using (SqlCommand cmd = SqlCommandProvider.Create(con, "GetAssemblySchemaVersion"))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
 
-                    string versionString = comm.ExecuteScalar() as string;
+                        return new Version((string) SqlCommandProvider.ExecuteScalar(cmd));
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    // "Could not find stored procedure"
+                    if (ex.Number == 2812 || ex.Number == 21343)
+                    {
+                        return new Version(3,0);
+                    }
 
-                    return versionString != null ? new Version(versionString) : new Version();
+                    throw;
+                }
+                catch (ArgumentException ex)
+                {
+                    // We can't figure out the version, which means it's been modified
+                    if (ex.Message.Contains("Version"))
+                    {
+                        throw new InvalidShipWorksDatabaseException("Invalid ShipWorks database.", ex);
+                    }
+
+                    throw;
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets the version of the existing sql clr assembly
-        /// </summary>
-        /// <returns></returns>
-        private static Version GetRequiredAssemblyVersion()
-        {
-            return typeof (StoredProcedures).Assembly.GetName().Version;
         }
 
         /// <summary>
@@ -339,14 +346,30 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         public static void UpdateSchemaVersionStoredProcedure(SqlCommand cmd, Version version)
         {
+            UpdateVersionStoredProcedure(cmd, version, "GetSchemaVersion");
+        }
+
+        /// <summary>
+        /// Update the assembly version stored procedure to say the current schema is the given version
+        /// </summary>
+        public static void UpdateAssemblyVersionStoredProcedure(SqlCommand cmd)
+        {
+            UpdateVersionStoredProcedure(cmd, GetRequiredSchemaVersion(), "GetAssemblySchemaVersion");
+        }
+
+        /// <summary>
+        /// Update a stored procedure for checking a version
+        /// </summary>
+        private static void UpdateVersionStoredProcedure(SqlCommand cmd, Version version, string procedureName)
+        {
             if (version == null)
             {
                 throw new ArgumentNullException("version");
             }
 
-            cmd.CommandText = @"
-                IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[GetSchemaVersion]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
-                    DROP PROCEDURE [dbo].[GetSchemaVersion]";
+            cmd.CommandText = string.Format(@"
+                IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+                    DROP PROCEDURE [dbo].[{0}]", procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
 
             #if DEBUG
@@ -356,10 +379,10 @@ namespace ShipWorks.Data.Administration
             #endif
 
             cmd.CommandText = string.Format(@"
-                CREATE PROCEDURE dbo.GetSchemaVersion 
+                CREATE PROCEDURE dbo.{2} 
                 {0}
                 AS 
-                SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4));
+                SELECT '{1}' AS 'SchemaVersion'", withEncryption, version.ToString(4), procedureName);
             SqlCommandProvider.ExecuteNonQuery(cmd);
         }
 

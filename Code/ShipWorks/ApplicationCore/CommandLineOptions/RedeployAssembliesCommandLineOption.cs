@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Interapptive.Shared.Win32;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Connection;
@@ -40,11 +35,15 @@ namespace ShipWorks.ApplicationCore.CommandLineOptions
                 SqlSession.Initialize();
                 using (SqlConnection sqlConnection = SqlSession.Current.OpenConnection())
                 {
-                    SqlAssemblyDeployer.DropAssemblies(sqlConnection);
+                    using (SqlTransaction transaction = sqlConnection.BeginTransaction())
+                    {
+                        SqlAssemblyDeployer.DropAssemblies(sqlConnection, transaction);
+                        SqlAssemblyDeployer.DeployAssemblies(sqlConnection, transaction);
 
-                    SqlAssemblyDeployer.DeployAssemblies(sqlConnection);
+                        transaction.Commit();
 
-                    log.Info("Successfully redeployed assemblies.");
+                        log.Info("Successfully redeployed assemblies.");   
+                    }
                 }
             }
             catch (SqlException ex)
