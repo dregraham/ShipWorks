@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Text;
@@ -187,13 +188,13 @@ namespace ShipWorks.Data.Administration
                 BEGIN
                     PRINT 'Enabling change tracking on table {0}'
                     ALTER TABLE [{0}] ENABLE CHANGE_TRACKING
-                END";
+                END{1}";
             
             // Build up the SQL for enabling change tracking on all the tables that require change tracking
             StringBuilder query = new StringBuilder();
             foreach (string table in TablesRequiringChangeTracking)
             {
-                query.AppendFormat(enableTableChangeTrackingFormat, table);
+                query.AppendFormat(enableTableChangeTrackingFormat, table, Environment.NewLine);
             }
 
             try
