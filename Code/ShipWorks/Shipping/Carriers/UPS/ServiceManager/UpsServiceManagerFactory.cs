@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager
         /// <returns>An ICarrierServiceManager object.</returns>
         public IUpsServiceManager Create(ShipmentEntity shipment)
         {
-            IUpsServiceManager serviceManager = serviceManagers.FirstOrDefault(manager => manager.CountryCode == shipment.OriginCountryCode);
+            IUpsServiceManager serviceManager = serviceManagers.FirstOrDefault(manager => manager.CountryCode == shipment.AdjustedOriginCountryCode());
             
             if (serviceManager == null)
             {

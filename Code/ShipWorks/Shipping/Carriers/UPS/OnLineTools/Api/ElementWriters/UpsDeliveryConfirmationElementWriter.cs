@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // 2 - Delivery Confirmation Signature Required 
             // 3 - Delivery Confirmation Adult Signature Required
             // 4 - USPS Delivery Confirmation
-            if (upsShipment.Shipment.OriginCountryCode == upsShipment.Shipment.ShipCountryCode)
+            if (upsShipment.Shipment.AdjustedOriginCountryCode() == upsShipment.Shipment.AdjustedShipCountryCode())
             {
                 // Delivery confirmation
                 if (upsShipment.DeliveryConfirmation != (int)UpsDeliveryConfirmationType.None)
@@ -57,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             // Valid values are: 
             // 1 - Delivery Confirmation Signature Required 
             // 2 - Delivery Confirmation Adult Signature Required
-            if (upsShipment.Shipment.OriginCountryCode != upsShipment.Shipment.ShipCountryCode)
+            if (upsShipment.Shipment.AdjustedOriginCountryCode() != upsShipment.Shipment.AdjustedShipCountryCode())
             {
                 // Delivery confirmation
                 UpsDeliveryConfirmationType upsDeliveryConfirmationType = (UpsDeliveryConfirmationType)upsShipment.DeliveryConfirmation;

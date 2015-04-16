@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("AddressArtifactFormat");
             xmlWriter.WriteElementString("PoliticalDivision2", shipment.OriginCity);
             xmlWriter.WriteElementString("PoliticalDivision1", UpsApiCore.AdjustUpsStateProvinceCode(shipment.OriginCountryCode, shipment.OriginStateProvCode));
-            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.OriginCountryCode, shipment.OriginStateProvCode));
+            xmlWriter.WriteElementString("CountryCode", shipment.AdjustedOriginCountryCode());
             xmlWriter.WriteElementString("PostcodePrimaryLow", shipment.OriginPostalCode);
             xmlWriter.WriteEndElement();
             xmlWriter.WriteEndElement();
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteStartElement("AddressArtifactFormat");
             xmlWriter.WriteElementString("PoliticalDivision2", shipment.ShipCity);
             xmlWriter.WriteElementString("PoliticalDivision1", UpsApiCore.AdjustUpsStateProvinceCode(shipment.ShipCountryCode, shipment.ShipStateProvCode));
-            xmlWriter.WriteElementString("CountryCode", UpsApiCore.AdjustUpsCountryCode(shipment.ShipCountryCode, shipment.ShipStateProvCode));
+            xmlWriter.WriteElementString("CountryCode", shipment.AdjustedShipCountryCode());
             xmlWriter.WriteElementString("PostcodePrimaryLow", shipment.ShipPostalCode);
 
             if (ResidentialDeterminationService.DetermineResidentialAddress(shipment))
@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             }
 
             // Documents only
-            if (UpsUtility.IsDocumentsOnlyRequired(shipment.OriginCountryCode, shipment.ShipCountryCode) && ups.CustomsDocumentsOnly)
+            if (UpsUtility.IsDocumentsOnlyRequired(shipment.AdjustedOriginCountryCode(), shipment.AdjustedShipCountryCode()) && ups.CustomsDocumentsOnly)
             {
                 xmlWriter.WriteElementString("DocumentsOnlyIndicator", null);
             }
@@ -164,7 +164,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                     // Use the service manager to try to identify the service by the transit code
                     ICarrierServiceManagerFactory serviceManagerFactory = new UpsServiceManagerFactory(shipment);
                     IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
-                    UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.ShipCountryCode).UpsServiceType;
+                    UpsServiceType service = serviceManager.GetServiceByTransitCode(serviceCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
 
                     if (!transitTimes.Any(t => t.Service == service))
                     {

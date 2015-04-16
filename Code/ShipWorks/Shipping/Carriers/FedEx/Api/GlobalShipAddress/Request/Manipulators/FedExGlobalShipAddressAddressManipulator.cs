@@ -32,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
                 City = request.ShipmentEntity.ShipCity,
                 StateOrProvinceCode = request.ShipmentEntity.ShipStateProvCode,
                 PostalCode = request.ShipmentEntity.ShipPostalCode,
-                CountryCode = request.ShipmentEntity.ShipCountryCode,
+                CountryCode = request.ShipmentEntity.AdjustedShipCountryCode(),
                 Residential = request.ShipmentEntity.ResidentialResult
             };
 

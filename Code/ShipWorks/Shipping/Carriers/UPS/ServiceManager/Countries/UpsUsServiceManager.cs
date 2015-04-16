@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         /// <returns>A list of the available services.</returns>
         public List<UpsServiceMapping> GetServices(ShipmentEntity shipment)
         {
-            return GetServiceTypes(shipment.ShipCountryCode, (ShipmentTypeCode) shipment.ShipmentType);
+            return GetServiceTypes(shipment.AdjustedShipCountryCode(), (ShipmentTypeCode) shipment.ShipmentType);
         }
 
         /// <summary>

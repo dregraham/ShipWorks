@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
                         location += ((location != "") ? ", " : "") + stateCode;
                     }
 
-                    if (countryCode != shipment.OriginCountryCode)
+                    if (countryCode != shipment.AdjustedOriginCountryCode())
                     {
                         // Only show the country code if it differs than the country of origin
                         location += ((location != "") ? ", " : "") + Geography.GetCountryName(countryCode);

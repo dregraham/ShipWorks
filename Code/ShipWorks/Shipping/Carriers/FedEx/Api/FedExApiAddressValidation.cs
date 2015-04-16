@@ -205,7 +205,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             address.City = person.City;
             address.PostalCode = person.PostalCode;
             address.StateOrProvinceCode = person.StateProvCode;
-            address.CountryCode = AdjustFedExCountryCode(person.CountryCode);
+            address.CountryCode = AdjustFedExCountryCode(person.AdjustedCountryCode(ShipmentTypeCode.FedEx));
 
             return address;
         }

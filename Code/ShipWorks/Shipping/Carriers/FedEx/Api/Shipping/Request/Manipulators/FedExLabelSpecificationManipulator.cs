@@ -168,7 +168,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                             City = person.City,
                             StateOrProvinceCode = person.StateProvCode,
                             PostalCode = person.PostalCode,
-                            CountryCode = person.CountryCode
+                            CountryCode = person.AdjustedCountryCode(ShipmentTypeCode.FedEx)
                         }
                     };
                 }

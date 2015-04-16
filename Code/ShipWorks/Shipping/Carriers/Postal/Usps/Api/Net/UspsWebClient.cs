@@ -451,7 +451,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             Address address = CreateAddress(person);
 
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
-            address.Country = CountryCodeCleanser.CleanseCountryCode(person.CountryCode);
+            address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
             using (SwsimV43 webService = CreateWebService("CleanseAddress"))
             {
@@ -978,7 +978,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 address.PostalCode = person.PostalCode;
             }
 
-            address.Country = CountryCodeCleanser.CleanseCountryCode(person.CountryCode);
+            address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
             if (person.CountryCode == "US")
             {
@@ -1001,14 +1001,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
             string toZipCode = shipment.ShipPostalCode;
-            string toCountry = CountryCodeCleanser.CleanseCountryCode(shipment.ShipCountryCode);
+            string toCountry = shipment.AdjustedShipCountryCode();
 
             // Swap the to/from for return shipments.
             if (shipment.ReturnShipment)
             {
                 rate.FromZIPCode = toZipCode;
                 rate.ToZIPCode = fromZipCode;
-                rate.ToCountry = CountryCodeCleanser.CleanseCountryCode(shipment.OriginCountryCode);
+                rate.ToCountry = shipment.AdjustedOriginCountryCode();
             }
             else
             {

@@ -506,7 +506,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.ToState = PostalUtility.AdjustState(recipient.CountryCode, recipient.StateProvCode);
             request.ToPostalCode = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode5 : recipient.PostalCode;
             request.ToZIP4 = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode4 : "";
-            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+            request.ToCountryCode = recipient.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
             request.ToPhone = recipient.Phone10Digits;
             request.ToEMail = recipient.Email;
 
@@ -733,24 +733,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             customs.CustomsItems = customsItems.ToArray();
         }
-        
-        /// <summary>
-        /// Get the country code given the specified country.  This gives us an opportunity to use Endicia specific country name values, if necessary, 
-        /// which i think it will be.
-        /// </summary>
-        private static string GetElsCountryCode(string country)
-        {
-            // First ensure its a code
-            string code = Geography.GetCountryCode(country);
-
-            // ELS does wants Great Britain to be UK
-            if (code == "UK")
-            {
-                code = "GB";
-            }
-
-            return code;
-        }
 
         /// <summary>
         /// Save the label images generated for the shipment
@@ -898,7 +880,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             }
 
             request.ToPostalCode = recipient.PostalCode5;
-            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+            request.ToCountryCode = recipient.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
 
             // We show rate matrix based on delivery and signature options
             if (isDomestic)
@@ -1379,7 +1361,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             
             // Address stuff
             request.ToPostalCode = recipient.PostalCode5;
-            request.ToCountryCode = GetElsCountryCode(recipient.CountryCode);
+            request.ToCountryCode = recipient.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
 
             // When shipping
             request.ShipDate = shipment.ShipDate.ToString("MM/dd/yyyy");

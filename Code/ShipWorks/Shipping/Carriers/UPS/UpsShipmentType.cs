@@ -1141,8 +1141,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ArgumentNullException("shipmentEntity");
             }
 
-            string originCountryCode = UpsApiCore.AdjustUpsCountryCode(shipmentEntity.OriginCountryCode, shipmentEntity.OriginStateProvCode);
-            string destinationCountryCode = UpsApiCore.AdjustUpsCountryCode(shipmentEntity.ShipCountryCode, shipmentEntity.ShipStateProvCode);
+            string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
+            string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
 
             return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }
@@ -1354,8 +1354,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            if (UpsApiCore.AdjustUpsCountryCode(shipment.OriginCountryCode, shipment.OriginStateProvCode) == "PR" && 
-                UpsApiCore.AdjustUpsCountryCode(shipment.ShipCountryCode, shipment.ShipPostalCode) == "US")
+            if (shipment.AdjustedOriginCountryCode() == "PR" && 
+                shipment.AdjustedShipCountryCode() == "US")
             {
                 return false;
             }

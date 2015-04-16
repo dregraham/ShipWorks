@@ -422,6 +422,7 @@
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
     <Compile Include="Shipping\ShipmentTypeTest.cs" />
+    <Compile Include="Shipping\AdjustedAddressExtensionsTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />
     <Compile Include="Shipping\ShipSense\Customs\KnowledgebaseCustomsItemXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\Hashing\KnowledgebaseHashTest.cs" />
@@ -590,6 +591,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\MultiPagePdf.pdf" />
     <EmbeddedResource Include="Resources\SinglePagePdf.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shipping\AdjustedCountryCodeData.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

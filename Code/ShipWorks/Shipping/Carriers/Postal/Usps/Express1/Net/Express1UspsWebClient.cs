@@ -842,7 +842,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 address.PostalCode = person.PostalCode;
             }
 
-            address.Country = CountryCodeCleanser.CleanseCountryCode(person.CountryCode);
+            address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Express1Usps);
 
             if (person.CountryCode == "US")
             {
@@ -869,14 +869,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             fromZipCode = !string.IsNullOrEmpty(account.MailingPostalCode) ? account.MailingPostalCode : shipment.OriginPostalCode;
             toZipCode = shipment.ShipPostalCode;
-            toCountry = CountryCodeCleanser.CleanseCountryCode(shipment.ShipCountryCode);
+            toCountry = shipment.AdjustedShipCountryCode();
 
             // Swap the to/from for return shipments.
             if (shipment.ReturnShipment)
             {
                 rate.FromZIPCode = toZipCode;
                 rate.ToZIPCode = fromZipCode;
-                rate.ToCountry = CountryCodeCleanser.CleanseCountryCode(shipment.OriginCountryCode);
+                rate.ToCountry = shipment.AdjustedOriginCountryCode();
             }
             else
             {

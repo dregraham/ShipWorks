@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         public List<UpsServiceMapping> GetServices(ShipmentEntity shipment)
         {
             // Find the valid service types based on the ship country code
-            List<UpsServiceMapping> servicesForShipment = serviceMappings.Where(m => m.DestinationCountryCode.ToUpperInvariant() == shipment.ShipCountryCode.ToUpperInvariant()).ToList();
+            List<UpsServiceMapping> servicesForShipment = serviceMappings.Where(m => m.DestinationCountryCode.ToUpperInvariant() == shipment.AdjustedShipCountryCode().ToUpperInvariant()).ToList();
 
             if (!servicesForShipment.Any())
             {

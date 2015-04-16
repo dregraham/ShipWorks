@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
         public iParcelShipRequest(iParcelCredentials credentials, ShipmentEntity shipment)
             : base(credentials, "iParcelShipRequest")
         {
-            bool isDomestic = shipment.OriginCountryCode.ToUpperInvariant() == shipment.ShipCountryCode.ToUpperInvariant();
+            bool isDomestic = shipment.AdjustedOriginCountryCode().ToUpperInvariant() == shipment.AdjustedShipCountryCode().ToUpperInvariant();
 
             // Default the validation element to domestic for now
             RequestElements.Add(new iParcelShipValidationElement(credentials, isDomestic, false));

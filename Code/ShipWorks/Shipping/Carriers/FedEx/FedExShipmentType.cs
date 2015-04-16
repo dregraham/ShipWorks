@@ -771,7 +771,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
-            decimal? maxPackageDeclaredValue = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(overriddenShipment.ShipCountryCode, overriddenShipment.ShipStateProvCode) != "US" ? 
+            decimal? maxPackageDeclaredValue = overriddenShipment.AdjustedShipCountryCode() != "US" ? 
                 shipment.CustomsValue / shipment.FedEx.Packages.Count : 
                 (decimal?) null;
 
@@ -1174,8 +1174,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 throw new ArgumentNullException("shipmentEntity");
             }
 
-            string originCountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(shipmentEntity.OriginCountryCode, shipmentEntity.OriginStateProvCode);
-            string destinationCountryCode = FedExRequestManipulatorUtilities.AdjustFedExCountryCode(shipmentEntity.ShipCountryCode, shipmentEntity.ShipStateProvCode);
+            string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
+            string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
 
             return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }

@@ -130,8 +130,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             customsDetail.ExportDetail = exportDetail;
 
-            if ((!shipment.ReturnShipment && shipment.OriginCountryCode == "CA" && shipment.ShipCountryCode != "US") ||
-                (shipment.ReturnShipment && shipment.ShipCountryCode == "CA" && shipment.OriginCountryCode != "US"))
+            if ((!shipment.ReturnShipment && shipment.AdjustedOriginCountryCode() == "CA" && shipment.AdjustedShipCountryCode() != "US") ||
+                (shipment.ReturnShipment && shipment.AdjustedShipCountryCode() == "CA" && shipment.AdjustedOriginCountryCode() != "US"))
             {
                 exportDetail.B13AFilingOption = GetApiFilingOption(filingOption);
                 exportDetail.B13AFilingOptionSpecified = true;
