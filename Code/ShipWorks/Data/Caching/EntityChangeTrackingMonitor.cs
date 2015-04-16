@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using log4net;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
@@ -82,7 +83,8 @@ namespace ShipWorks.Data.Caching
 
                 if (result is DBNull)
                 {
-                    EnableChangeTracking();
+                    new SqlChangeTracking().Enable();
+                    
                     result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
 
                     if (result is DBNull)
@@ -197,33 +199,6 @@ namespace ShipWorks.Data.Caching
         }
 
         /// <summary>
-        /// Enables the change tracking.
-        /// </summary>
-        private static void EnableChangeTracking()
-        {
-            log.Error("Change Tracking disabled. Attempting to re-enable");
-            string dbName = string.Empty;
-            try
-            {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
-                    {
-                        dbName = cmd.Connection.Database;
-                        cmd.CommandText = string.Format("alter database {0} set change_tracking=on", dbName);
-                        cmd.ExecuteNonQuery();
-
-                        log.InfoFormat("Change tracking enabled for database {0}", dbName);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                log.Error(string.Format("Error enabling change tracking for database '{0}'", dbName), ex);
-            }
-        }
-
-        /// <summary>
         /// Processes the check for changes SQL exception - Add ChangeTracking to the table if possible.
         /// </summary>
         private static void ProcessCheckForChangesSqlException(SqlException sqlException)
@@ -231,45 +206,9 @@ namespace ShipWorks.Data.Caching
             log.Error("Error in CheckForChanges", sqlException);
             log.Info("Attempting to enable change tracking.");
 
-            string tableWithoutChangeTracking = string.Empty;
-            foreach (SqlError error in sqlException.Errors)
+            if (sqlException.Errors.Cast<SqlError>().Any(error => error.Number == 22105))
             {
-                // from https://technet.microsoft.com/en-us/library/cc645893%28v=sql.105%29.aspx
-                // 22105 Change tracking is not enabled on table '%.*ls'.
-                if (error.Number == 22105)
-                {
-                    Match match = Regex.Match(error.Message, @"\'(.*?)\'", RegexOptions.IgnoreCase);
-                    if (match.Groups.Count > 1)
-                    {
-                        tableWithoutChangeTracking = match.Groups[0].Value.Trim('\'');
-                    }
-                }
-            }
-
-            if (string.IsNullOrEmpty(tableWithoutChangeTracking))
-            {
-                log.Info("Couldn't find a table to enable change tracking on.");
-                return;
-            }
-
-            log.InfoFormat("Enabling Change tracking for '{0}'", tableWithoutChangeTracking);
-
-            try
-            {
-                using (SqlConnection con = SqlSession.Current.OpenConnection())
-                {
-                    using (SqlCommand cmd = SqlCommandProvider.Create(con))
-                    {
-                        cmd.CommandText = "ALTER TABLE [" + tableWithoutChangeTracking + "] ENABLE CHANGE_TRACKING";
-                        cmd.ExecuteNonQuery();
-
-                        log.InfoFormat("Change tracking enabled for '{0}'", tableWithoutChangeTracking);
-                    }
-                }
-            }
-            catch (SqlException ex)
-            {
-                log.Error(string.Format("Error enabling change tracking for {0}", tableWithoutChangeTracking), ex);
+                new SqlChangeTracking().Enable();
             }
         }
 
