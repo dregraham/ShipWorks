@@ -219,6 +219,10 @@ namespace ShipWorks.ApplicationCore.Services
                 if (hasChanged)
                 {
                     SqlSession.Initialize();
+
+                    // Make sure that change tracking is enabled for the database and all applicable tables.
+                    SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
+                    sqlChangeTracking.Enable();
                 }
 
                 try
