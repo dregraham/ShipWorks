@@ -42,6 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     public class UspsShipmentType : PostalShipmentType
     {
         private const int MinNumberOfDaysBeforeShowingUspsPromo = 14;
+        private readonly List<PostalServicePackagingCombination> adultSignatureAllowed = new List<PostalServicePackagingCombination>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsShipmentType"/> class.
@@ -53,6 +54,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Use the "live" versions by default
             AccountRepository = new UspsAccountRepository();
             LogEntryFactory = new LogEntryFactory();
+
+            LoadAdultSignatureServiceAndPackagingCombinations();
         }
 
         /// <summary>
@@ -717,7 +720,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 return new List<PostalConfirmationType> { PostalConfirmationType.None };
             }
 
-            return base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+            List<PostalConfirmationType> confirmationTypes = base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+
+            if (packaging != null && adultSignatureAllowed.Any(asr => asr.ServiceType == service && asr.PackagingType == packaging))
+            {
+                confirmationTypes.Add(PostalConfirmationType.AdultSignatureRequired);
+                confirmationTypes.Add(PostalConfirmationType.AdultSignatureRestricted);
+            }
+
+            return confirmationTypes;
         }
 
         /// <summary>
@@ -887,6 +898,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
 
             adapter.UpdateEntitiesDirectly(new UspsShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
+        }
+
+        /// <summary>
+        /// Add adult signature restricted values
+        /// </summary>
+        private void LoadAdultSignatureServiceAndPackagingCombinations()
+        {
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.LargeEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.Package));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateSmallBox));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateMediumBox));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateLargeBox));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRatePaddedEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateLegalEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxA));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxB));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxC));
+
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.LargeEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.Package));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateMediumBox));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRatePaddedEnvelope));
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateLegalEnvelope));
+
+            adultSignatureAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
         }
     }
 }

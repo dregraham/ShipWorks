@@ -17,6 +17,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         Delivery = 1,
 
         [Description("Signature Confirmation")]
-        Signature = 2
+        Signature = 2,
+
+        [Description("Adult Signature Required")]
+        AdultSignatureRequired = 3,
+
+        [Description("Adult Signature Restricted Delivery")]
+        AdultSignatureRestricted = 4
     }
 }
