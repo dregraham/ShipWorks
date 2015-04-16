@@ -18,19 +18,11 @@ namespace ShipWorks.Data.Administration
         private readonly List<string> tablesRequiringChangeTracking;        
         
         /// <summary>
-        /// Initializes a new instance of the <see cref="SqlChangeTracking"/> class.
-        /// </summary>
-        public SqlChangeTracking()
-            : this(LogManager.GetLogger(typeof(SqlChangeTracking)))
-        { }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="SqlChangeTracking" /> class.
         /// </summary>
-        /// <param name="log">An instance of ILog that should be used for logging purposes.</param>
-        public SqlChangeTracking(ILog log)
+        public SqlChangeTracking()
         {
-            this.log = log;
+            log = LogManager.GetLogger(typeof (SqlChangeTracking));
 
             tablesRequiringChangeTracking = new List<string>
             {
@@ -185,16 +177,15 @@ namespace ShipWorks.Data.Administration
 	
 	                WHERE sys.tables.name = '{0}'
                 )
-                BEGIN
-                    PRINT 'Enabling change tracking on table {0}'
+                
                     ALTER TABLE [{0}] ENABLE CHANGE_TRACKING
-                END{1}";
+                ";
             
             // Build up the SQL for enabling change tracking on all the tables that require change tracking
             StringBuilder query = new StringBuilder();
             foreach (string table in TablesRequiringChangeTracking)
             {
-                query.AppendFormat(enableTableChangeTrackingFormat, table, Environment.NewLine);
+                query.AppendFormat(enableTableChangeTrackingFormat, table);
             }
 
             try
