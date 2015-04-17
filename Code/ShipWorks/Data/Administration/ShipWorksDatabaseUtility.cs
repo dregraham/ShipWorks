@@ -105,7 +105,11 @@ namespace ShipWorks.Data.Administration
                 // Create the ShipWorks schema
                 sqlLoader["CreateSchema"].Execute(con);
 
-                SqlAssemblyDeployer.DeployAssemblies(con);
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    SqlAssemblyDeployer.DeployAssemblies(con, transaction);
+                    transaction.Commit();
+                }
 
                 // Add any initial data via script
                 sqlLoader["InitialData"].Execute(con);

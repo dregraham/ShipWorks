@@ -14,20 +14,30 @@ using ShipWorks.Templates;
 using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using log4net;
+using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
     /// <summary>
     /// Base class for tests to initialize ShipWorks
     /// </summary>
-    public abstract class ShipWorksInitializer
+    public class ShipWorksInitializer
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipWorksInitializer));
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
         /// </summary>
-        protected ShipWorksInitializer()
+        public ShipWorksInitializer()
+            : this (null)
+        { }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
+        /// </summary>
+        /// <param name="executionMode">The instance of execution mode to use when initializing dependencies.</param>
+        /// <exception cref="System.Exception">A 'shipworks' account with password 'shipworks' needs to be created.</exception>
+        public ShipWorksInitializer(ExecutionMode executionMode)
         {
             Guid swInstance = GetShipWorksInstance();
 
@@ -52,7 +62,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
                 UserManager.InitializeForCurrentUser();
 
-                UserSession.InitializeForCurrentDatabase();
+                UserSession.InitializeForCurrentDatabase(executionMode);
 
                 if (!UserSession.Logon("shipworks", "shipworks", true))
                 {

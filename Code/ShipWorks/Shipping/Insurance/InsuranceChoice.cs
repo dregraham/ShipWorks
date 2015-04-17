@@ -114,5 +114,35 @@ namespace ShipWorks.Shipping.Insurance
                 pennyOneEntity.SetNewFieldValue(pennyOneFieldPrefix + "InsurancePennyOne", value);
             }
         }
+
+        public static bool AllFedExShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ShipmentTypeManager.IsFedEx((ShipmentTypeCode)c.Shipment.ShipmentType));
+        }
+
+        public static bool AllUpsShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ShipmentTypeManager.IsUps((ShipmentTypeCode)c.Shipment.ShipmentType));
+        }
+
+        public static bool AllOnTracShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.OnTrac);
+        }
+
+        public static bool AlliParcelShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.iParcel);
+        }
+
+        public static bool AllEndiciaShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Endicia);
+        }
+
+        public static bool AllUspsShipments(IEnumerable<InsuranceChoice> choices)
+        {
+            return choices.All(c => ((ShipmentTypeCode)c.Shipment.ShipmentType) == ShipmentTypeCode.Usps);
+        }
     }
 }

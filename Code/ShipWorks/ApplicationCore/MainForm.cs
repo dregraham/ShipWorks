@@ -253,6 +253,10 @@ namespace ShipWorks
                 return;
             }
 
+            // Make sure that change tracking is enabled for the database and all applicable tables.
+            SqlChangeTracking sqlChangeTracking = new SqlChangeTracking();
+            sqlChangeTracking.Enable();
+
             // Initiate the logon sequence
             InitiateLogon();
 
@@ -764,7 +768,7 @@ namespace ShipWorks
             log.InfoFormat("CheckDatabaseVersion: Installed: {0}, Required {1}", installedVersion, SqlSchemaUpdater.GetRequiredSchemaVersion());
 
             // See if it needs upgraded
-            if (installedVersion < SqlSchemaUpdater.GetRequiredSchemaVersion() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
+            if (SqlSchemaUpdater.IsUpgradeRequired() || !SqlSession.Current.IsSqlServer2008OrLater() || MigrationController.IsMigrationInProgress())
             {
                 using (ConnectionSensitiveScope scope = new ConnectionSensitiveScope("update the database", this))
                 {
@@ -792,7 +796,7 @@ namespace ShipWorks
             }
             
             // See if its too new
-            if (installedVersion > SqlSchemaUpdater.GetRequiredSchemaVersion())
+            if (!SqlSchemaUpdater.IsCorrectSchemaVersion())
             {
                 using (NeedUpgradeShipWorks dlg = new NeedUpgradeShipWorks())
                 {
