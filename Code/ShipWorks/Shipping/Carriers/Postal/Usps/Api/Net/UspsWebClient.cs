@@ -317,6 +317,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                                 name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
                                 confirmationType = PostalConfirmationType.Signature;
                                 break;
+
+                            case AddOnTypeV6.USAASR:
+                                name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
+                                confirmationType = PostalConfirmationType.AdultSignatureRequired;
+                                break;
+
+                            case AddOnTypeV6.USAASRD:
+                                name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
+                                confirmationType = PostalConfirmationType.AdultSignatureRestricted;
+                                break;
                         }
 
                         if (name != null)
