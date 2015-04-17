@@ -1066,19 +1066,30 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             {
                 PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
 
+                // TODO: This comment was in here, but no supporting code for it.  Determine if it's still valid.
                 // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
-                if (confirmation == PostalConfirmationType.Delivery)
-                {
-                    addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
-                }
 
-                if (confirmation == PostalConfirmationType.Signature)
+                switch (confirmation)
                 {
-                    addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USASC });
+                    case PostalConfirmationType.Delivery:
+                        addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
+                        break;
+                    case PostalConfirmationType.Signature:
+                        addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USASC });
+                        break;
+                    case PostalConfirmationType.AdultSignatureRequired:
+                        addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USAASR });
+                        break;
+                    case PostalConfirmationType.AdultSignatureRestricted:
+                        addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USAASRD });
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
-            }    // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
+            }    
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
+                // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
                 addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USADC });
             }
 
@@ -1135,7 +1146,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-            if (!ShipmentTypeManager.IsDhl(serviceType))
+            if (ShipmentTypeManager.IsDhl(serviceType))
             {
                 return false;
             }
