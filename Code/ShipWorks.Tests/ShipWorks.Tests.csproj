@@ -405,6 +405,7 @@
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipShipmentTypeTest.cs" />
     <Compile Include="Shipping\CustomsManagerTest.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResultTest.cs" />
+    <Compile Include="Shipping\Insurance\InsuranceChoiceTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateProviderTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipAffiliateTest.cs" />
     <Compile Include="Shipping\Insurance\InsureShip\InsureShipClaimTest.cs" />
