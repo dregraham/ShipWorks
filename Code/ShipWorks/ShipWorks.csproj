@@ -813,6 +813,7 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
@@ -962,6 +963,7 @@
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
