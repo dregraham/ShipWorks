@@ -717,7 +717,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits EbayStoreEntity's mappings</summary>
 		private void InitEbayStoreEntityMappings()
 		{
-			base.AddElementMapping( "EbayStoreEntity", "ShipWorksLocal", @"dbo", "EbayStore", 15 );
+			base.AddElementMapping( "EbayStoreEntity", "ShipWorksLocal", @"dbo", "EbayStore", 16 );
 			base.AddElementFieldMapping( "EbayStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "EbayStoreEntity", "EBayUserID", "eBayUserID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "EbayStoreEntity", "EBayToken", "eBayToken", false, (int)SqlDbType.Text, 2147483647, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -725,14 +725,15 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EbayStoreEntity", "AcceptedPaymentList", "AcceptedPaymentList", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "EbayStoreEntity", "DownloadItemDetails", "DownloadItemDetails", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
 			base.AddElementFieldMapping( "EbayStoreEntity", "DownloadPayPalDetails", "DownloadPayPalDetails", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 6 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiCredentialType", "PayPalApiCredentialType", false, (int)SqlDbType.SmallInt, 0, 0, 5, false, "", null, typeof(System.Int16), 7 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiUserName", "PayPalApiUserName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiPassword", "PayPalApiPassword", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiSignature", "PayPalApiSignature", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 11 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "DomesticShippingService", "DomesticShippingService", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "InternationalShippingService", "InternationalShippingService", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "EbayStoreEntity", "FeedbackUpdatedThrough", "FeedbackUpdatedThrough", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 14 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "DownloadOlderOrders", "DownloadOlderOrders", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 7 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiCredentialType", "PayPalApiCredentialType", false, (int)SqlDbType.SmallInt, 0, 0, 5, false, "", null, typeof(System.Int16), 8 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiUserName", "PayPalApiUserName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiPassword", "PayPalApiPassword", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiSignature", "PayPalApiSignature", false, (int)SqlDbType.NVarChar, 80, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "PayPalApiCertificate", "PayPalApiCertificate", true, (int)SqlDbType.VarBinary, 2048, 0, 0, false, "", null, typeof(System.Byte[]), 12 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "DomesticShippingService", "DomesticShippingService", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "InternationalShippingService", "InternationalShippingService", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "EbayStoreEntity", "FeedbackUpdatedThrough", "FeedbackUpdatedThrough", true, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 15 );
 		}
 		/// <summary>Inits EmailAccountEntity's mappings</summary>
 		private void InitEmailAccountEntityMappings()

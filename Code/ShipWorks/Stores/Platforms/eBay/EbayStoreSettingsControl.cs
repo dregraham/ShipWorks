@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             downloadDetailsCheckBox.Checked = ebayStore.DownloadItemDetails;
             downloadPayPalCheckBox.Checked = ebayStore.DownloadPayPalDetails;
+            downloadOlderOrders.Checked = ebayStore.DownloadOlderOrders;
 
             // keep a copy of the store around
             storeCopy = EntityUtility.CloneEntity<EbayStoreEntity>(ebayStore);
@@ -144,6 +145,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             // download details
             ebayStore.DownloadItemDetails = downloadDetailsCheckBox.Checked;
             ebayStore.DownloadPayPalDetails = downloadPayPalCheckBox.Checked;
+            ebayStore.DownloadOlderOrders = downloadOlderOrders.Checked;
 
             // accepted payments
             acceptedPaymentsControl.SaveToEntity(ebayStore);

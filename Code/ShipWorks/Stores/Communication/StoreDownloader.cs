@@ -165,7 +165,7 @@ namespace ShipWorks.Stores.Communication
         /// Gets the largest last modified time we have in our database for non-manual orders for this store.
         /// If no such orders exist, and there is an initial download policy, that policy is applied.  Otherwise null is returned.
         /// </summary>
-        protected DateTime? GetOnlineLastModifiedStartingPoint()
+        protected virtual DateTime? GetOnlineLastModifiedStartingPoint()
         {
             using (SqlAdapter adapter = new SqlAdapter())
             {
