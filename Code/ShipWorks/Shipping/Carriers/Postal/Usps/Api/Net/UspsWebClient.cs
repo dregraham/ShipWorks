@@ -1083,8 +1083,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     case PostalConfirmationType.AdultSignatureRestricted:
                         addOns.Add(new AddOnV6 { AddOnType = AddOnTypeV6.USAASRD });
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
                 }
             }    
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))

@@ -122,7 +122,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 }
             }
 
-            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int) PostalConfirmationType.None)
+            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
