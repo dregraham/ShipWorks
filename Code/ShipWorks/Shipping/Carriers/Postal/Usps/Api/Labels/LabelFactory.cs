@@ -184,19 +184,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         {
             // When customs value exceeds $400, the label images we get from the API are different
             bool customsValueExceedsThreshold = shipment.CustomsValue >= 400M;
-
-            // Use the single international cropping style, so the shipping instructions are excluded from the label.
-            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst || customsValueExceedsThreshold || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRatePaddedEnvelope ?
-                    CroppingStyles.SingleInternationalCrop :
-                    CroppingStyles.None;
+            Rectangle croppingStyle = GetCanadaCroppingStyle(shipment, serviceType, customsValueExceedsThreshold);
 
             // In cases where customs value >= $400, multiple labels are included on one image/URL and need
             // to be cropped separates; in cases where customs value < $400, the continuation label is sent 
             // down as a separate image/URL and no additional cropping is needed
-            bool continuationLabelsNeedCropping = customsValueExceedsThreshold && labelUrls.Count > 2;
+            bool continuationLabelsNeedCropping = customsValueExceedsThreshold && labelUrls.Count >= 2;
 
             // Exclude the instructions page that comes down on these shipments
-            int numberOfLabelsToCreate = customsValueExceedsThreshold ? labelUrls.Count - 1 : labelUrls.Count;
+            int numberOfLabelsToCreate = customsValueExceedsThreshold ? Math.Max(1, labelUrls.Count - 1) : labelUrls.Count;
 
             List<Label> labels = new List<Label>();
 
@@ -214,6 +210,70 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             }
 
             return labels;
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for International Express labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaCroppingStyle(ShipmentEntity shipment, PostalServiceType serviceType, bool customsValueExceedsThreshold)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.InternationalFirst:
+                    return CroppingStyles.SingleInternationalCrop;
+
+                case PostalServiceType.InternationalPriority:
+                    return GetCanadaInternationalPriorityCroppingStyle(shipment, customsValueExceedsThreshold);
+
+                case PostalServiceType.InternationalExpress:
+                    return GetCanadaInternationalExpressCroppingStyle(shipment, customsValueExceedsThreshold);
+            }
+
+            return CroppingStyles.None;
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaInternationalPriorityCroppingStyle(ShipmentEntity shipment, bool customsValueExceedsThreshold)
+        {
+            Rectangle croppingStyle = CroppingStyles.None;
+
+            if (customsValueExceedsThreshold)
+            {
+                croppingStyle = CroppingStyles.SingleInternationalCrop;
+            }
+            else
+            {
+                if (shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRatePaddedEnvelope || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRateLegalEnvelope || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRateSmallBox)
+                {
+                    croppingStyle = CroppingStyles.SingleInternationalCrop;
+                }
+            }
+
+            return croppingStyle;
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for International Express labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaInternationalExpressCroppingStyle(ShipmentEntity shipment, bool customsValueExceedsThreshold)
+        {
+            Rectangle croppingStyle = CroppingStyles.None;
+
+            if (customsValueExceedsThreshold)
+            {
+                croppingStyle = CroppingStyles.SingleInternationalCrop;
+            }
+            else
+            {
+                if (shipment.Postal.PackagingType == (int) PostalPackagingType.FlatRateSmallBox)
+                {
+                    croppingStyle = CroppingStyles.SingleInternationalCrop;
+                }
+            }
+
+            return croppingStyle;
         }
 
         /// <summary>
