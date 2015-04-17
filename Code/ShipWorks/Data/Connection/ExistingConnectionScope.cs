@@ -26,7 +26,6 @@ namespace ShipWorks.Data.Connection
             }
 
             ScopedConnection = SqlSession.Current.OpenConnection();
-            ScopedTransaction = ScopedConnection.BeginTransaction();
         }
 
         /// <summary>
@@ -59,6 +58,19 @@ namespace ShipWorks.Data.Connection
                 ScopedTransaction.Commit();
                 ScopedTransaction = null;
             }
+        }
+
+        /// <summary>
+        /// Begin a new transaction
+        /// </summary>
+        public static void BeginTransaction()
+        {
+            if (ScopedTransaction != null)
+            {
+                throw new InvalidOperationException("Cannot start a new transaction when one has already began");
+            }
+
+            ScopedTransaction = ScopedConnection.BeginTransaction();
         }
 
         /// <summary>

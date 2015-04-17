@@ -11071,6 +11071,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
