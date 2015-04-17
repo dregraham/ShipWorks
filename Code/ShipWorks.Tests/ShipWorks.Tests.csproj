@@ -398,6 +398,7 @@
     <Compile Include="Shipping\Carriers\UPS\OpenAccount\Api\Response\UpsOpenAccountResponseTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsResponseFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsClerkTest.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverterTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizerTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentTypeTest.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsUtilityTest.cs" />
