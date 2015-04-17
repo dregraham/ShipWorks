@@ -9,6 +9,7 @@ using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
+using Microsoft.Web.Services3.Referral;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data;
@@ -543,17 +544,24 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 // earliest download date to mimic the first download cycle
                 return startDates.Min().Subtract(TimeSpan.FromDays(Store.InitialDownloadDays ?? 7));
             }
-            else
-            {
-                // Subtract 5 minutes to mimic the buffer used during the previous download
-                DateTime? startingPoint = startDates.Min().Subtract(TimeSpan.FromMinutes(5));
 
-                // Use the lesser value of starting point and the most recent last modified date. This is 
-                // for the case where the order data has been modified by support (or an action has been
-                // previously created by support to manipulate the last modified date to resolve skipped
-                // orders).
-                return startingPoint < onlineLastModifiedStartingPoint ? startingPoint : onlineLastModifiedStartingPoint;
-            }
+            // Subtract 5 minutes to mimic the buffer used during the previous download
+            DateTime downloadIntervalStartTime = startDates.Min().Subtract(TimeSpan.FromMinutes(5));
+
+            // Use ebay official time in case the computer server time is off.
+            DateTime twoHoursAgo = eBayOfficialTime.Subtract(TimeSpan.FromMinutes(120));
+
+            // Use the lesser value of two hours ago, downloadIntervalStartTime and the most recent 
+            // last modified date. This is for the case where the order data has been modified by support 
+            // (or an action has been previously created by support to manipulate the last modified date 
+            // to resolve skipped orders).
+            // The two hours ago protects from people jamming on the download button
+            return new[]
+            {
+                twoHoursAgo,
+                downloadIntervalStartTime,
+                onlineLastModifiedStartingPoint
+            }.Min();
         }
 
         /// <summary>
