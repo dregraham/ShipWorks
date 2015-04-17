@@ -542,7 +542,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 string tracking = shipment.TrackingNumber;
 
                 // For the purposes of U-PIC logging, CustomsNumber cannot be counted as a true TrackingNumber
-                if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) && !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) && !shipment.ShipPerson.IsDomesticCountry())
                 {
                     tracking = "";
                 }

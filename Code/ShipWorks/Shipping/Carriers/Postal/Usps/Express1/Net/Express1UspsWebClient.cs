@@ -290,7 +290,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 throw new UspsException("No USPS account is selected for the shipment.");
             }
 
-            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
+            if (shipment.ReturnShipment && !(shipment.OriginPerson.IsDomesticCountry() && shipment.ShipPerson.IsDomesticCountry()))
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
@@ -623,7 +623,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 fromAddress = tmpAddress;
             }
 
-            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(toAddress.Country) && PostalUtility.IsDomesticCountry(fromAddress.Country)))
+            if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
@@ -657,7 +657,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // For international thermal labels, we need to set the print layout or else most service/package type combinations
             // will fail with a "does not support Zebra printers" error
             if (thermalType.HasValue &&
-                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+                !shipment.ShipPerson.IsDomesticCountry() &&
                 !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 rate.PrintLayout = "Normal4X6CN22";
@@ -830,7 +830,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             address.City = person.City;
 
-            if (PostalUtility.IsDomesticCountry(person.CountryCode))
+            if (person.IsDomesticCountry())
             {
                 address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
                 address.ZIPCode = person.PostalCode5;
@@ -921,7 +921,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             List<AddOnV4> addOns = new List<AddOnV4>();
 
             // For domestic, add in Delivery\Signature confirmation
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 PostalConfirmationType confirmation = (PostalConfirmationType)shipment.Postal.Confirmation;
 

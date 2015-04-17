@@ -184,7 +184,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
                 errors.AddRange(ValidateDataIsProvided(address.Address1, "A street address is required for the physical address."));
                 errors.AddRange(ValidateDataIsProvided(address.City, "A city is required for the physical address."));
 
-                if (!string.IsNullOrEmpty(address.Country) && PostalUtility.IsDomesticCountry(address.Country))
+                if (!string.IsNullOrEmpty(address.Country) && address.AsAddressAdapter().IsDomesticCountry())
                 {
                     errors.AddRange(ValidateDataIsProvided(address.State, "A state is required for the physical address."));
                     errors.AddRange(ValidateDataIsProvided(address.ZIPCode, "A postal code is required for the physical address."));

@@ -11,8 +11,8 @@ namespace ShipWorks.Shipping
     /// </summary>
     public static class AdjustedAddressExtensions
     {
-        private static readonly Lazy<IDictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>>> adjustmentMethods =
-            new Lazy<IDictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>>>(LoadAdjustmentMethods);
+        private static readonly Lazy<IDictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>>> adjustmentMethods =
+            new Lazy<IDictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>>>(LoadAdjustmentMethods);
 
         /// <summary>
         /// Get the ship country code that has been adjusted according to carrier specific rules
@@ -44,17 +44,16 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the country code that has been adjusted according to carrier specific rules
         /// </summary>
-        public static string AdjustedCountryCode(this PersonAdapter person, ShipmentTypeCode shipmentType)
+        public static string AdjustedCountryCode(this IAddressAdapter person, ShipmentTypeCode shipmentType)
         {
             MethodConditions.EnsureArgumentIsNotNull(person, "person");
 
-            PersonAdapter copiedPerson = new PersonAdapter();
-            person.CopyTo(copiedPerson);
+            IAddressAdapter copiedPerson = CreateAddressCopy(person);
 
             copiedPerson.CountryCode = copiedPerson.CountryCode.ToUpperInvariant();
             copiedPerson.StateProvCode = copiedPerson.StateProvCode.ToUpperInvariant();
 
-            IEnumerable<Func<PersonAdapter, string>> methods;
+            IEnumerable<Func<IAddressAdapter, string>> methods;
             return adjustmentMethods.Value.TryGetValue(shipmentType, out methods) ? 
                 ApplyAdjustments(methods, copiedPerson) : 
                 copiedPerson.CountryCode;
@@ -63,9 +62,9 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Apply the adjustment methods to the person adapter
         /// </summary>
-        private static string ApplyAdjustments(IEnumerable<Func<PersonAdapter, string>> methods, PersonAdapter person)
+        private static string ApplyAdjustments(IEnumerable<Func<IAddressAdapter, string>> methods, IAddressAdapter person)
         {
-            foreach (Func<PersonAdapter, string> method in methods)
+            foreach (Func<IAddressAdapter, string> method in methods)
             {
                 person.CountryCode = method(person);
             }
@@ -76,7 +75,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Replace country name with country code
         /// </summary>
-        private static string ReplaceCountryNameWithCountryCode(PersonAdapter person)
+        private static string ReplaceCountryNameWithCountryCode(IAddressAdapter person)
         {
             return Geography.GetCountryCode(person.CountryCode);
         }
@@ -84,7 +83,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Replace UK with GB
         /// </summary>
-        private static string ReplaceUnitedKingdomWithGreatBritain(PersonAdapter person)
+        private static string ReplaceUnitedKingdomWithGreatBritain(IAddressAdapter person)
         {
             return person.CountryCode == "UK" ? "GB" : person.CountryCode;
         }
@@ -92,27 +91,27 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Replace US territory country code with US
         /// </summary>
-        private static string ReplaceInternationalTerritoryCountryCodeWithUnitedStates(PersonAdapter person)
+        private static string ReplaceInternationalTerritoryCountryCodeWithUnitedStates(IAddressAdapter person)
         {
-            return Geography.IsUSInternationalTerritory(person.CountryCode) ? "US" : person.CountryCode;
+            return person.IsUSInternationalTerritory() ? "US" : person.CountryCode;
         }
 
         /// <summary>
         /// Replace US with US territory country code
         /// </summary>
-        private static string ReplaceUnitedStatesWithInternationalTerritoryCountryCode(PersonAdapter person)
+        private static string ReplaceUnitedStatesWithInternationalTerritoryCountryCode(IAddressAdapter person)
         {
-            return person.CountryCode == "US" && Geography.IsUSInternationalTerritory(person.StateProvCode) ? 
+            return person.CountryCode == "US" && person.IsUSInternationalTerritory() ? 
                 person.StateProvCode : person.CountryCode;
         }
 
         /// <summary>
         /// Populate the adjustment methods
         /// </summary>
-        private static IDictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>> LoadAdjustmentMethods()
+        private static IDictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>> LoadAdjustmentMethods()
         {
-            Dictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>> adjustments =
-                new Dictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>>();
+            Dictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>> adjustments =
+                new Dictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>>();
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip, ShipmentTypeCode.FedEx },
                 ReplaceUnitedKingdomWithGreatBritain, ReplaceUnitedStatesWithInternationalTerritoryCountryCode);
@@ -132,13 +131,30 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Add an adjustments for the specified shipment types
         /// </summary>
-        private static void AddAdjustment(IDictionary<ShipmentTypeCode, IEnumerable<Func<PersonAdapter, string>>> adjustments,
-            IEnumerable<ShipmentTypeCode> shipmentTypes, params Func<PersonAdapter, string>[] methods)
+        private static void AddAdjustment(IDictionary<ShipmentTypeCode, IEnumerable<Func<IAddressAdapter, string>>> adjustments,
+            IEnumerable<ShipmentTypeCode> shipmentTypes, params Func<IAddressAdapter, string>[] methods)
         {
             foreach (ShipmentTypeCode shipmentType in shipmentTypes)
             {
                 adjustments.Add(shipmentType, methods);
             }
+        }
+
+        /// <summary>
+        /// Create a copy of an address
+        /// </summary>
+        private static IAddressAdapter CreateAddressCopy(IAddressAdapter person)
+        {
+            return new AddressAdapter
+            {
+                Street1 = person.Street1,
+                Street2 = person.Street2,
+                Street3 = person.Street3,
+                City = person.City,
+                StateProvCode = person.StateProvCode,
+                CountryCode = person.CountryCode,
+                PostalCode = person.PostalCode
+            };
         }
     }
 }

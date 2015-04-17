@@ -198,10 +198,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             PostalServiceType serviceType = (PostalServiceType) overriddenShipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType) overriddenShipment.Postal.PackagingType;
-            string countryCode = overriddenShipment.ShipCountryCode;
 
             // If its domestic ensure a domestic service - use the overridden shipment for comparing the ShipToCountry
-            if (PostalUtility.IsDomesticCountry(countryCode))
+            if (overriddenShipment.ShipPerson.IsDomesticCountry())
             {
                 List<PostalServiceType> domesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
 
@@ -234,7 +233,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 }
             }
 
-            List<PostalConfirmationType> availableConfirmationTypes = GetAvailableConfirmationTypes(countryCode, serviceType, packagingType);
+            List<PostalConfirmationType> availableConfirmationTypes = GetAvailableConfirmationTypes(overriddenShipment.ShipCountryCode, serviceType, packagingType);
             if (availableConfirmationTypes == null)
             {
                     throw new NullReferenceException("availableConfirmationTypes was null.");

@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 ShipmentEntity overriddenShipment = ShippingManager.GetOverriddenStoreShipment(shipment);
 
                 // Check the overridden shipment to see if all are international or domestic
-                if (PostalUtility.IsDomesticCountry(overriddenShipment.ShipCountryCode))
+                if (overriddenShipment.ShipPerson.IsDomesticCountry())
                 {
                     allInternational = false;
                 }

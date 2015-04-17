@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -269,9 +270,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         private static List<UpsServiceMapping> GetQualifyingSurePostServices(string destinationCountryCode)
         {
             List<UpsServiceMapping> surePostServices = new List<UpsServiceMapping>();
+            bool isDomesticCountry = new AddressAdapter {CountryCode = destinationCountryCode}.IsDomesticCountry();
 
             // Postal domestic country restrictions apply to SurePost the service
-            if (PostalUtility.IsDomesticCountry(destinationCountryCode) && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
+            if (isDomesticCountry && EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None)
             {
                 surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePostLessThan1Lb, destinationCountryCode, "92", "92", string.Empty, "USL", WorldShipServiceDescriptions.UpsSurePostLessThan1Lb, false, true));
                 surePostServices.Add(new UpsServiceMapping(UpsServiceType.UpsSurePost1LbOrGreater, destinationCountryCode, "93", "93", string.Empty, "USG", WorldShipServiceDescriptions.UpsSurePost1LbOrGreater, false, true));

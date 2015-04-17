@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Drawing;
 using Interapptive.Shared.Properties;
 using System.Collections;
+using Interapptive.Shared.Utility;
 
 namespace Interapptive.Shared.Business
 {
@@ -111,7 +112,18 @@ namespace Interapptive.Shared.Business
         /// <summary>
         /// Indicates if the given foreign country code is a US international territory
         /// </summary>
-        public static bool IsUSInternationalTerritory(string countryCode)
+        public static bool IsUSInternationalTerritory(this IAddressAdapter address)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(address, "address");
+
+            return IsUSInternationalTerritory(address.CountryCode) || 
+                (string.Equals(address.CountryCode, "US", StringComparison.OrdinalIgnoreCase) && IsUSInternationalTerritory(address.StateProvCode));
+        }
+
+        /// <summary>
+        /// Indicates if the given foreign country code is a US international territory
+        /// </summary>
+        private static bool IsUSInternationalTerritory(string countryCode)
         {
             return
 

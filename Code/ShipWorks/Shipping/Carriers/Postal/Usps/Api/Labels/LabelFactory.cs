@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
 
             // Domestic
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 // For APO/FPO, the customs docs come in the next two images
                 if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && PostalUtility.IsMilitaryPostalCode(shipment.ShipPostalCode))

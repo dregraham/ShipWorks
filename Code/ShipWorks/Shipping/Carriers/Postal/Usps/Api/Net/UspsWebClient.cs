@@ -258,7 +258,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 throw new UspsException("No USPS account is selected for the shipment.");
             }
 
-            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(shipment.OriginCountryCode) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode)))
+            if (shipment.ReturnShipment && !(shipment.OriginPerson.IsDomesticCountry() && shipment.ShipPerson.IsDomesticCountry()))
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
@@ -733,8 +733,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string tracking = string.Empty;
             string labelUrl;
 
-            Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
-            Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Usps.RequireFullAddressValidation);
+            Address fromAddress = CleanseAddress(account, shipment.OriginPerson, false);
+            Address toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
 
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
@@ -744,7 +744,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 fromAddress = tmpAddress;
             }
 
-            if (shipment.ReturnShipment && !(PostalUtility.IsDomesticCountry(toAddress.Country) && PostalUtility.IsDomesticCountry(fromAddress.Country)))
+            if (shipment.ReturnShipment && 
+                !toAddress.AsAddressAdapter().IsDomesticCountry() && 
+                fromAddress.AsAddressAdapter().IsDomesticCountry())
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
@@ -755,7 +757,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
 
             // Per stamps - only send state for domestic - send province for Intl
-            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (!shipment.ShipPerson.IsDomesticCountry())
             {
                 toAddress.Province = shipment.ShipStateProvCode;
                 toAddress.State = string.Empty;
@@ -770,7 +772,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // For international thermal labels, we need to set the print layout or else most service/package type combinations
             // will fail with a "does not support Zebra printers" error
             if (thermalType.HasValue &&
-                !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) &&
+                !shipment.ShipPerson.IsDomesticCountry() &&
                 !PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
             {
                 rate.PrintLayout = "Normal4X6CN22";
@@ -966,7 +968,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             address.City = person.City;
 
-            if (PostalUtility.IsDomesticCountry(person.CountryCode))
+            if (person.IsDomesticCountry())
             {
                 address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
                 address.ZIPCode = person.PostalCode5;
@@ -1119,7 +1121,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private static bool SupportsConfirmation(ShipmentEntity shipment)
         {
-            if (!PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (!shipment.ShipPerson.IsDomesticCountry())
             {
                 return false;
             }

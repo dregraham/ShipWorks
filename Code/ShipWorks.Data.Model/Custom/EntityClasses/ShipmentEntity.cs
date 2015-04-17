@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Runtime.Serialization;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -22,6 +23,22 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get { return customsItemsLoaded; }
             set { customsItemsLoaded = value; }
+        }
+
+        /// <summary>
+        /// Gets the origin as a person adapter
+        /// </summary>
+        public PersonAdapter OriginPerson
+        {
+            get { return new PersonAdapter(this, "Origin"); }
+        }
+
+        /// <summary>
+        /// Gets the shipping address as a person adapter
+        /// </summary>
+        public PersonAdapter ShipPerson
+        {
+            get {return new PersonAdapter(this, "Ship"); }
         }
 
         /// <summary>

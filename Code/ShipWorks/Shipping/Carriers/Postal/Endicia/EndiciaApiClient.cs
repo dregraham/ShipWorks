@@ -340,7 +340,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 }
             }
             // APO/FPO gets marked as "Domestic"
-            else if (CustomsManager.IsCustomsRequired(shipment) && PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            else if (CustomsManager.IsCustomsRequired(shipment) && shipment.ShipPerson.IsDomesticCountry())
             {
                 request.LabelType = "Domestic";
                 request.LabelSubtype = "Integrated";
@@ -504,14 +504,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.ToAddress3 = recipient.Street3;
             request.ToCity = PostalUtility.StripPunctuation(recipient.City);
             request.ToState = PostalUtility.AdjustState(recipient.CountryCode, recipient.StateProvCode);
-            request.ToPostalCode = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode5 : recipient.PostalCode;
-            request.ToZIP4 = PostalUtility.IsDomesticCountry(recipient.CountryCode) ? recipient.PostalCode4 : "";
+            request.ToPostalCode = recipient.IsDomesticCountry() ? recipient.PostalCode5 : recipient.PostalCode;
+            request.ToZIP4 = recipient.IsDomesticCountry() ? recipient.PostalCode4 : "";
             request.ToCountryCode = recipient.AdjustedCountryCode((ShipmentTypeCode) shipment.ShipmentType);
             request.ToPhone = recipient.Phone10Digits;
             request.ToEMail = recipient.Email;
 
             // Special case for US territories, that Endicia wants the state code filled out
-            if (string.IsNullOrWhiteSpace(request.ToState) && PostalUtility.IsDomesticCountry(recipient.CountryCode))
+            if (string.IsNullOrWhiteSpace(request.ToState) && recipient.IsDomesticCountry())
             {
                 request.ToState = request.ToCountryCode;
             }
@@ -836,7 +836,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // is the category that most of our users will be in.
             request.WeightOz = shipment.TotalWeight > 0 ? CalculateWeight(shipment) : BestRateScope.IsActive ? 14 : .1;
 
-            bool isDomestic = PostalUtility.IsDomesticCountry(shipment.ShipCountryCode);
+            bool isDomestic = shipment.ShipPerson.IsDomesticCountry();
 
             // Service and packaging
             request.MailClass = isDomestic ? "Domestic" : "International";
@@ -1119,7 +1119,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             List<RateResult> results = new List<RateResult>();
             List<Exception> errors = new List<Exception>();
 
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 PostalPackagingType packagingType = (PostalPackagingType) shipment.Postal.PackagingType;
 

@@ -117,17 +117,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Indicates if the given foreign country code is considered a postal domestic shipment.
         /// Per http://www.usps.com/ncsc/lookups/abbr_state.txt
         /// </summary>
-        public static bool IsDomesticCountry(string countryCode)
+        public static bool IsDomesticCountry(this IAddressAdapter address)
         {
-            return
+            MethodConditions.EnsureArgumentIsNotNull(address, "address");
 
-                // Of course US
-                countryCode == "US" ||
-
-                // District of Columbia
-                countryCode == "DC" ||
-
-                Geography.IsUSInternationalTerritory(countryCode);
+            return address.CountryCode == "US" || 
+                address.CountryCode == "DC" ||
+                address.IsUSInternationalTerritory();
         }
 
         /// <summary>
@@ -372,7 +368,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     PostalCustomsForm.CN22;
             }
 
-            if (IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 return PostalCustomsForm.None;
             }
