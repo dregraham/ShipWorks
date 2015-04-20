@@ -1125,7 +1125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
-            if (!ShipmentTypeManager.IsDhl(serviceType))
+            if (ShipmentTypeManager.IsDhl(serviceType))
             {
                 return false;
             }
