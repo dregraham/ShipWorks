@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                 return;
             }
 
-            NoMoreRackTemplate.InstallNoMoreRackTemplate();
+            ChoxiTemplate.InstallChoxiTemplate();
         }
     }
 }
