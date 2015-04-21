@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
         /// </summary>
         private void DoTest(string url)
         {
-            DoTest(url, "http://staging.vendor-api.nomorerack.com/api/v1/shipworks/60", "1.0.0.0");
+            DoTest(url, "staging.vendor-api.nomorerack.com/api/v1/shipworks/60", "1.0.0.0");
         }
         
         /// <summary>
