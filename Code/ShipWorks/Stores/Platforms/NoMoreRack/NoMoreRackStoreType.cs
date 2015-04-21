@@ -69,7 +69,10 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         {
             get
             {
-                return ((GenericModuleStoreEntity)Store).ModuleUrl;
+                //NMR rebranded as Choxi, have to send old url as the identifier 
+                //to keep from having to reset all of the tango licenses
+
+                return ((GenericModuleStoreEntity)Store).ModuleUrl.Replace( "choxi", "nomorerack");
             }
         }
 

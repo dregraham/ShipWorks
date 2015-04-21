@@ -1,4 +1,4 @@
 ﻿UPDATE       GenericModuleStore
-SET                ModuleUrl = REPLACE(ModuleUrl, 'vendor-api.nomorerack.com', 'vendor-api.choxi.com')
-WHERE        (ModuleUrl LIKE '%vendor-api.nomorerack.com%') AND (ModulePlatform = 'Nomorerack')
+SET                ModuleUrl = REPLACE(ModuleUrl, 'nomorerack', 'choxi')
+WHERE        (ModuleUrl LIKE '%nomorerack%') AND (ModulePlatform = 'Nomorerack')
 GO
