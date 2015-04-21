@@ -24,8 +24,8 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
     /// </summary>
     public partial class NoMoreRackStoreAccountSettingsControl : AccountSettingsControlBase
     {
-        private const string TestUrl = "http://staging.vendor-api.nomorerack.com/api/v1/shipworks/";
-        private const string LiveUrl = "https://vendor-api.nomorerack.com/api/v1/shipworks/";
+        private const string TestUrl = "http://staging.vendor-api.choxi.com/api/v1/shipworks/";
+        private const string LiveUrl = "https://vendor-api.choxi.com/api/v1/shipworks/";
 
         /// <summary>
         /// Constructor
