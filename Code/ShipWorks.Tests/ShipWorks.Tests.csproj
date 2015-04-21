@@ -468,6 +468,7 @@
     <Compile Include="Stores\Newegg\RemoveItemRequestTest.cs" />
     <Compile Include="Stores\Newegg\ShippingRequestTest.cs" />
     <Compile Include="Stores\Newegg\ShippingResponseSerializerTest.cs" />
+    <Compile Include="Stores\NoMoreRack\IdentifierTests.cs" />
     <Compile Include="Stores\PayPal\ExceptionSerializationTests.cs" />
     <Compile Include="Stores\Platforms\GenericModule\GenericStoreStatusCodeProviderTest.cs" />
     <Compile Include="Stores\Shopify\IdentifierTests.cs" />

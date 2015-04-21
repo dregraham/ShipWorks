@@ -37,5 +37,13 @@ namespace ShipWorks.Stores.Platforms.XCart
                 return ApiLogSource.XCart;
             }
         }
+
+        /// <summary>
+        /// Gets the account settings help URL.
+        /// </summary>
+        public override string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/support/solutions/articles/4000029976"; }
+        }
     }
 }
