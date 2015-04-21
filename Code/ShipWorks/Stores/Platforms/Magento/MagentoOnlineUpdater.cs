@@ -38,29 +38,16 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         private void GetShipmentDetails(OrderEntity order, ref string carrier, ref string tracking)
         {
-            string tempCarrier = "";
-            string tempTracking = "";
+            carrier = "";
+            tracking = "";
 
             // upload tracking number for the most recent processed, not voided shipment
             ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(order.OrderID);
             if (shipment != null)
             {
-                tempTracking = shipment.TrackingNumber;
-                tempCarrier = CreateCarrierString(shipment);
-
-                // Adjust tracking details per Mail Innovations and others
-                WorldShipUtility.DetermineAlternateTracking(shipment, (track, service) =>
-                    {
-                        if (track.Length > 0)
-                        {
-                            tempCarrier = "usps";
-                            tempTracking = track;
-                        }
-                    });
+                tracking = shipment.TrackingNumber;
+                carrier = CreateCarrierString(shipment);
             }
-
-            carrier = tempCarrier;
-            tracking = tempTracking;
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         /// </summary>
         public virtual string AccountSettingsHelpUrl
         {
-            get { return "http://www.interapptive.com/shipworks/help"; }
+            get { return "http://support.shipworks.com/support/solutions/articles/4000048147"; }
         }
 
         /// <summary>
