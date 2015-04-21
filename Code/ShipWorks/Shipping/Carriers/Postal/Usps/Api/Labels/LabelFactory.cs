@@ -6,6 +6,8 @@ using System.Net;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
@@ -80,21 +82,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                         labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
                     }
                 }
+                else if (ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
+                {
+                    // If customs are required and it's not an envelope, we're going to get instructions that we don't need so we can crop them
+                    Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? 
+                        CroppingStyles.None : 
+                        CroppingStyles.PrimaryCrop;
+
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
+                }
                 else
                 {
-                    // The bottom half of Guam are instructions we do not need.
-                    if (shipment.ShipCountryCode == "GU" || shipment.ShipStateProvCode == "GU")
-                    {
-                        // Cropping the envelopes shouldn't occur
-                        Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? CroppingStyles.None : CroppingStyles.PrimaryCrop;
-
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
-                    }
-                    else
-                    {
-                        // First one is always the primary
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
-                    }
+                    // First one is always the primary
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
                 }
             }
             else
