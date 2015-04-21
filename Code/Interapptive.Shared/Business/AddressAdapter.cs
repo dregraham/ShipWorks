@@ -93,14 +93,14 @@ namespace Interapptive.Shared.Business
             // Only copy the origin of there is one to copy from
             if (fromAdapter.HasField("OriginID")) toAdapter.OriginID = fromAdapter.OriginID;
 
-            toAdapter.Street1 = fromAdapter.Street1;
-            toAdapter.Street2 = fromAdapter.Street2;
-            toAdapter.Street3 = fromAdapter.Street3;
+            toAdapter.Street1 = fromAdapter.Street1.Trim();
+            toAdapter.Street2 = fromAdapter.Street2.Trim();
+            toAdapter.Street3 = fromAdapter.Street3.Trim();
 
-            toAdapter.City = fromAdapter.City;
-            toAdapter.StateProvCode = fromAdapter.StateProvCode;
-            toAdapter.PostalCode = fromAdapter.PostalCode;
-            toAdapter.CountryCode = fromAdapter.CountryCode;
+            toAdapter.City = fromAdapter.City.Trim();
+            toAdapter.StateProvCode = fromAdapter.StateProvCode.Trim();
+            toAdapter.PostalCode = fromAdapter.PostalCode.Trim();
+            toAdapter.CountryCode = fromAdapter.CountryCode.Trim();
 
             toAdapter.ResidentialStatus = fromAdapter.ResidentialStatus;
             toAdapter.POBox = fromAdapter.POBox;

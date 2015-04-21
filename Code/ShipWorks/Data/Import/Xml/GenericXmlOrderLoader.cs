@@ -258,13 +258,13 @@ namespace ShipWorks.Data.Import.Xml
         private static void LoadAddress(OrderEntity order, XPathNavigator xpath, string dbPrefix, string xmlPrefix)
         {
             // FullName must be sent, or FirstName/MiddleName/LastName
-            string fullName = XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FullName", "");
+            string fullName = XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FullName", "").Trim();
             if (fullName.Length == 0)
             {
                 order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)PersonNameParseStatus.Simple);
-                order.SetNewFieldValue(dbPrefix + "FirstName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FirstName", ""));
-                order.SetNewFieldValue(dbPrefix + "MiddleName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/MiddleName", ""));
-                order.SetNewFieldValue(dbPrefix + "LastName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/LastName", ""));
+                order.SetNewFieldValue(dbPrefix + "FirstName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/FirstName", "").Trim());
+                order.SetNewFieldValue(dbPrefix + "MiddleName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/MiddleName", "").Trim());
+                order.SetNewFieldValue(dbPrefix + "LastName", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/LastName", "").Trim());
             }
             else
             {
@@ -272,27 +272,27 @@ namespace ShipWorks.Data.Import.Xml
                 PersonName personName = PersonName.Parse(fullName);
 
                 order.SetNewFieldValue(dbPrefix + "NameParseStatus", (int)personName.ParseStatus);
-                order.SetNewFieldValue(dbPrefix + "UnparsedName", personName.UnparsedName);
-                order.SetNewFieldValue(dbPrefix + "FirstName", personName.First);
-                order.SetNewFieldValue(dbPrefix + "MiddleName", personName.Middle);
-                order.SetNewFieldValue(dbPrefix + "LastName", personName.Last);
+                order.SetNewFieldValue(dbPrefix + "UnparsedName", personName.UnparsedName.Trim());
+                order.SetNewFieldValue(dbPrefix + "FirstName", personName.First.Trim());
+                order.SetNewFieldValue(dbPrefix + "MiddleName", personName.Middle.Trim());
+                order.SetNewFieldValue(dbPrefix + "LastName", personName.Last.Trim());
             }
 
-            order.SetNewFieldValue(dbPrefix + "Company", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Company", ""));
-            order.SetNewFieldValue(dbPrefix + "Street1", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street1", ""));
-            order.SetNewFieldValue(dbPrefix + "Street2", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street2", ""));
-            order.SetNewFieldValue(dbPrefix + "Street3", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street3", ""));
+            order.SetNewFieldValue(dbPrefix + "Company", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Company", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Street1", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street1", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Street2", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street2", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Street3", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Street3", "").Trim());
 
-            order.SetNewFieldValue(dbPrefix + "City", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/City", ""));
-            order.SetNewFieldValue(dbPrefix + "StateProvCode", Geography.GetStateProvCode(XPathUtility.Evaluate(xpath, xmlPrefix + "Address/State", "")));
-            order.SetNewFieldValue(dbPrefix + "PostalCode", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/PostalCode", ""));
-            order.SetNewFieldValue(dbPrefix + "CountryCode", Geography.GetCountryCode(XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Country", "")));
+            order.SetNewFieldValue(dbPrefix + "City", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/City", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "StateProvCode", Geography.GetStateProvCode(XPathUtility.Evaluate(xpath, xmlPrefix + "Address/State", "").Trim()));
+            order.SetNewFieldValue(dbPrefix + "PostalCode", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/PostalCode", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "CountryCode", Geography.GetCountryCode(XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Country", "").Trim()));
 
             order.SetNewFieldValue(dbPrefix + "Residential", XPathUtility.EvaluateXsdBoolean(xpath, xmlPrefix + "Address/Residential", true));
-            order.SetNewFieldValue(dbPrefix + "Phone", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Phone", ""));
-            order.SetNewFieldValue(dbPrefix + "Fax", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Fax", ""));
-            order.SetNewFieldValue(dbPrefix + "Email", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Email", ""));
-            order.SetNewFieldValue(dbPrefix + "Website", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Website", ""));
+            order.SetNewFieldValue(dbPrefix + "Phone", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Phone", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Fax", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Fax", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Email", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Email", "").Trim());
+            order.SetNewFieldValue(dbPrefix + "Website", XPathUtility.Evaluate(xpath, xmlPrefix + "Address/Website", "").Trim());
         }
     }
 }
