@@ -14,62 +14,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
     {
         UpsShipmentType testObject = new UpsOltShipmentType();
 
-        private UpsServiceRate serviceRate;
-        private UpsTransitTime upsTransitTime;
-
-        [TestMethod]
-        public void GetServiceLevel_ReturnsThreeDays_WhenPassedUps3DaySelect_Test()
-        {
-            ServiceLevelType serviceLevel = UpsShipmentType.GetServiceLevel(UpsServiceType.Ups3DaySelect, null);
-
-            Assert.AreEqual(ServiceLevelType.ThreeDays, serviceLevel); 
-        }
 
         [TestMethod]
         public void SupportsMultiplePackages_ReturnsTrue_Test()
         {
             Assert.IsTrue(testObject.SupportsMultiplePackages);
-        }
-
-        [TestMethod]
-        public void GetServiceLevel_ReturnsAnytime_WhenPassedUpsGroundAndNegativeOneDays_Test()
-        {
-            ServiceLevelType serviceLevel = UpsShipmentType.GetServiceLevel(UpsServiceType.UpsGround, -1);
-
-            Assert.AreEqual(ServiceLevelType.Anytime, serviceLevel);
-        }
-
-        [TestMethod]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUps2DayAirAMAndNull_Test()
-        {
-            serviceRate = new UpsServiceRate(UpsServiceType.Ups2DayAirAM, 1, false, 5);
-            upsTransitTime = new UpsTransitTime(UpsServiceType.Ups2DayAirAM, 1, DateTime.Today);
-
-            ServiceLevelType serviceLevel = testObject.GetServiceLevel(serviceRate, upsTransitTime);
-
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
-        }
-
-        [TestMethod]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndServiceRateDefines2Days_Test()
-        {
-            serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, 2);
-            upsTransitTime = new UpsTransitTime(UpsServiceType.UpsGround, 1, DateTime.Today);
-
-            ServiceLevelType serviceLevel = testObject.GetServiceLevel(serviceRate, upsTransitTime);
-
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
-        }
-
-        [TestMethod]
-        public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndTransitTimeDefines2Days_Test()
-        {
-            serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, null);
-            upsTransitTime = new UpsTransitTime(UpsServiceType.UpsGround, 2, DateTime.Today);
-
-            ServiceLevelType serviceLevel = testObject.GetServiceLevel(serviceRate, upsTransitTime);
-
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
         }
     }
 }
