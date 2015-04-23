@@ -316,10 +316,10 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("loadedcommerce")]
         LoadedCommerce = 60,
 
-        [Description("NoMoreRack")]
+        [Description("Choxi")]
         [StoreTypeIdentity("NOMORERACK", "NMR")]
-        [StoreTypeIcon("nomorerack")]
-        NoMoreRack = 61,
+        [StoreTypeIcon("choxi")]
+        Choxi = 61,
 
         [Description("Groupon")]
         [StoreTypeIdentity("GROUPON", "GON")]

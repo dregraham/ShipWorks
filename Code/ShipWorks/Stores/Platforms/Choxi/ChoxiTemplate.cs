@@ -9,23 +9,23 @@ using ShipWorks.Templates;
 using log4net;
 
 
-namespace ShipWorks.Stores.Platforms.NoMoreRack
+namespace ShipWorks.Stores.Platforms.Choxi
 {
-    public static class NoMoreRackTemplate
+    public static class ChoxiTemplate
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(NoMoreRackStoreType));
+        static readonly ILog log = LogManager.GetLogger(typeof(ChoxiStoreType));
 
         /// <summary>
-        /// Install the Groupon Template
+        /// Install the NoMoreRack Template
         /// </summary>
-        public static void InstallNoMoreRackTemplate()
+        public static void InstallChoxiTemplate()
         {
             // Get all templates
             IList<TemplateEntity> templates = TemplateManager.Tree.AllTemplates;
 
             //Check to see if the template already exists
-            if (!templates.Any(t => t.Name == "NoMoreRack Invoice"))
+            if (!templates.Any(t => t.Name == "Choxi Invoice"))
             {
                 //Template Tree
                 TemplateTree tree = TemplateManager.Tree.CreateEditableClone();
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                 }
                 catch (Exception ex)
                 {
-                    log.Error("Error saving Groupon Template", ex);
+                    log.Error("Error saving Choxi Template", ex);
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
             }
             else
             {
-                log.InfoFormat("Creating folder to hold the NoMoreRack Template");
+                log.InfoFormat("Creating folder to hold the Choxi Template");
 
                 TemplateFolderEntity newFolder = new TemplateFolderEntity();
                 newFolder.Name = name;
@@ -94,8 +94,8 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         private static void SetTemplateDefaults(TemplateEntity template, TemplateTree tree, TemplateFolderEntity parent)
         {
             //set template properties
-            template.Name = "NoMoreRack Invoice";
-            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.NoMoreRack.Template.NoMoreRackPackingSlip.xsl");
+            template.Name = "Choxi Invoice";
+            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.Choxi.Template.ChoxiPackingSlip.xsl");
             template.Type = (int)TemplateType.Standard;
             template.Context = (int)TemplateInputContext.Order;
             template.OutputFormat = (int)TemplateOutputFormat.Html;
