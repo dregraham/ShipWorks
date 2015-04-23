@@ -95,7 +95,7 @@ namespace ShipWorks.Stores.Platforms.Choxi
         {
             //set template properties
             template.Name = "Choxi Invoice";
-            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.NoMoreRack.Template.ChoxiPackingSlip.xsl");
+            template.Xsl = GetXsl("ShipWorks.Stores.Platforms.Choxi.Template.ChoxiPackingSlip.xsl");
             template.Type = (int)TemplateType.Standard;
             template.Context = (int)TemplateInputContext.Order;
             template.OutputFormat = (int)TemplateOutputFormat.Html;
