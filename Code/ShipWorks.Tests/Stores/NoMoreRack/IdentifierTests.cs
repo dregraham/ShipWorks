@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
         {
             GenericModuleStoreEntity nmrStore = new GenericModuleStoreEntity();
             nmrStore.ModuleUrl = url;
-            nmrStore.TypeCode = (int)StoreTypeCode.NoMoreRack;
+            nmrStore.TypeCode = (int)StoreTypeCode.Choxi;
             nmrStore.SchemaVersion = schemaVersion;
 
             StoreType storeType = StoreTypeManager.GetType(nmrStore);
