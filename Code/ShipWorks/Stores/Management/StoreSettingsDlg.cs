@@ -240,13 +240,13 @@ namespace ShipWorks.Stores.Management
                 storeSettingsControl.Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right;
                 optionPageSettings.Controls.Add(storeSettingsControl);
 
-                panelStoreStatus.Top = storeSettingsControl.Bottom + 8;
+                UpdateControlPositionBelowControl(storeSettingsControl);
 
-                storeSettingsControl.SizeChanged += (sender, args) => panelStoreStatus.Top = storeSettingsControl.Bottom + 8;
+                storeSettingsControl.SizeChanged += (sender, args) => UpdateControlPositionBelowControl(storeSettingsControl);
             }
             else
             {
-                panelStoreStatus.Top = manualOrderSettingsControl.Bottom + 8;
+                UpdateControlPositionBelowControl(manualOrderSettingsControl);
             }
 
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
@@ -269,6 +269,15 @@ namespace ShipWorks.Stores.Management
 
             // Store status
             storeDisabled.Checked = !store.Enabled;
+        }
+
+        /// <summary>
+        /// Update the location of controls below the specified control
+        /// </summary>
+        private void UpdateControlPositionBelowControl(Control control)
+        {
+            panelStoreStatus.Top = control.Bottom + 8;
+            panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
         }
 
         /// <summary>
