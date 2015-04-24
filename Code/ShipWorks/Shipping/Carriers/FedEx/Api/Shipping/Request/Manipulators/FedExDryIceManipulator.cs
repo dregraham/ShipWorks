@@ -40,19 +40,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 
             IFedExNativeShipmentRequest nativeRequest = InitializeShipmentRequest(request);
 
-            if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages[currentPackageIndex].DryIceWeight > 0)
+            if (request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
             {
-                // Dry ice must be configured at the package level for any service other than ground 
-                ConfigurePackage(request, nativeRequest, currentPackageIndex);
-            }
-
-            if (request.ShipmentEntity.FedEx.Service == (int) FedExServiceType.FedExGround && request.ShipmentEntity.FedEx.Packages.Any(p => p.DryIceWeight > 0))
-            {
-                // Dry ice must be configured at the shipment level for ground service 
-                ConfigureShipment(request, nativeRequest);
+                // Customers noted errors sending dry ice through ground because it was being set at the shipment level
+                // FedEx support said that dry ice should be at the package level for ground, even though we passed
+                // certification sending it at the shipment level and that code was in place for years
+                ConfigurePackage(request, nativeRequest, currentPackageIndex);   
             }
         }
-
 
         /// <summary>
         /// Validates the specified request.
@@ -71,36 +66,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
         }
 
         /// <summary>
-        /// Configures dry ice properties at the shipment level.
-        /// </summary>
-        /// <param name="request">The request.</param>
-        /// <param name="nativeRequest">The native request.</param>
-        private void ConfigureShipment(CarrierRequest request, IFedExNativeShipmentRequest nativeRequest)
-        {
-            ShipmentSpecialServiceType[] shipmentSpecialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-            Array.Resize(ref shipmentSpecialServiceTypes, shipmentSpecialServiceTypes.Length + 1);
-            nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = shipmentSpecialServiceTypes;
-
-            shipmentSpecialServiceTypes[shipmentSpecialServiceTypes.Length - 1] = ShipmentSpecialServiceType.DRY_ICE;
-
-            nativeRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail = new ShipmentDryIceDetail
-            {
-                PackageCount = request.ShipmentEntity.FedEx.Packages.Count(p => p.DryIceWeight > 0).ToString(),
-                TotalWeight = new Weight
-                {
-                    Value = (decimal)(request.ShipmentEntity.FedEx.Packages.Sum(p => p.DryIceWeight) / 2.2046),
-                    Units = WeightUnits.KG
-                }
-            };
-        }
-
-        /// <summary>
         /// Configures dry ice properties at the package level.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="nativeRequest">The native request.</param>
         /// <param name="currentPackageIndex">Index of the current package.</param>
-        private void ConfigurePackage(CarrierRequest request, IFedExNativeShipmentRequest nativeRequest, int currentPackageIndex)
+        private static void ConfigurePackage(CarrierRequest request, IFedExNativeShipmentRequest nativeRequest, int currentPackageIndex)
         {
             PackageSpecialServiceType[] packageSpecialServiceTypes = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SpecialServiceTypes;
             Array.Resize(ref packageSpecialServiceTypes, packageSpecialServiceTypes.Length + 1);
@@ -115,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             };
         }
 
-        private IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request)
+        private static IFedExNativeShipmentRequest InitializeShipmentRequest(CarrierRequest request)
         {
             if (request == null)
             {

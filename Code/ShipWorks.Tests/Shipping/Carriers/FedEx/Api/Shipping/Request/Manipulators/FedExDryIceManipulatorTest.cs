@@ -48,38 +48,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [TestMethod]
-        public void Manipulate_DryIceShipmentWeightIsThree_ShipmentEntityHasThreeKgOfDryIce_Test()
-        {
-            testObject.Manipulate(shipRequest);
-
-            Assert.AreEqual(3,ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail.TotalWeight.Value);
-        }
-
-        [TestMethod]
-        public void Manipulate_DryIceShipmentWeightIsInKg_ShipmentEntityHasThreeKgOfDryIce_Test()
-        {
-            testObject.Manipulate(shipRequest);
-
-            Assert.AreEqual(WeightUnits.KG, ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail.TotalWeight.Units);
-        }
-
-        [TestMethod]
-        public void Manipulate_DryIceInShipmentSpecialServiceTypes_ShipmentEntityHasThreeKgOfDryIce_Test()
-        {
-            testObject.Manipulate(shipRequest);
-
-            Assert.AreEqual(1, ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count(t => t == ShipmentSpecialServiceType.DRY_ICE));
-        }
-
-        [TestMethod]
-        public void Manipulate_HasOneShipmentSpecialServiceType_ShipmentEntityHasThreeKgOfDryIce_Test()
-        {
-            testObject.Manipulate(shipRequest);
-
-            Assert.AreEqual(1, ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count());
-        }
-
-        [TestMethod]
         public void Manipulate_DryIceInPackageSpecialServiceType_WhenNotUsingGroundService_ShipmentEntityHasThreeKgOfDryIce_Test()
         {
             shipmentEntity.FedEx.Service = (int) FedExServiceType.PriorityOvernight;
@@ -117,16 +85,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(shipRequest);
 
             Assert.AreEqual(WeightUnits.KG, ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.DryIceWeight.Units);
-        }
-
-        [TestMethod]
-        public void Manipulate_NumberOfPackagesWithDryIceIsTwo_WhenUsingGroundService_ShipmentEntityHasTwoPackagesWithDryIce_Test()
-        {
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
-
-            testObject.Manipulate(shipRequest);
-
-            Assert.AreEqual("2", ProcessShipmentRequest.RequestedShipment.SpecialServicesRequested.ShipmentDryIceDetail.PackageCount);
         }
 
         [TestMethod]
