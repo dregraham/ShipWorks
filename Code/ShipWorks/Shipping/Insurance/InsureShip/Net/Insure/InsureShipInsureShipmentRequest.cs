@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
             postData.Add("shipping_city", Shipment.ShipCity);
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);
-            postData.Add("shipping_country", Shipment.ShipCountryCode);
+            postData.Add("shipping_country", Shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
             postData.Add("shipment_value", InsuranceUtility.GetInsuredValue(Shipment).ToString(CultureInfo.InvariantCulture));
             postData.Add("order_id", unqiueShipmentId);
             postData.Add("shipment_id", unqiueShipmentId);
@@ -79,7 +79,5 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Insure
 
             return postData;
         }
-
-
     }
 }

@@ -116,7 +116,7 @@ namespace ShipWorks.Shipping
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.UpsOnLineTools, ShipmentTypeCode.UpsWorldShip, ShipmentTypeCode.FedEx },
                 ReplaceUnitedKingdomWithGreatBritain, ReplaceUnitedStatesWithInternationalTerritoryCountryCode);
 
-            AddAdjustment(adjustments, new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Express1Usps },
+            AddAdjustment(adjustments, new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.None },
                 ReplaceUnitedKingdomWithGreatBritain, ReplaceInternationalTerritoryCountryCodeWithUnitedStates);
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia },

@@ -62,11 +62,11 @@ namespace ShipWorks.Shipping.Insurance.InsureShip.Net.Claim
             postData.Add("shipping_city", Shipment.ShipCity);
             postData.Add("shipping_state", Shipment.ShipStateProvCode);
             postData.Add("shipping_zip", Shipment.ShipPostalCode);
-            postData.Add("shipping_country", Shipment.ShipCountryCode);
+            postData.Add("shipping_country", Shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
             postData.Add("billing_city", Shipment.Order.BillCity);
             postData.Add("billing_state", Shipment.Order.BillStateProvCode);
             postData.Add("billing_zip", Shipment.Order.BillPostalCode);
-            postData.Add("billing_country", Shipment.Order.BillCountryCode);
+            postData.Add("billing_country", Shipment.Order.BillPerson.AdjustedCountryCode(ShipmentTypeCode.None));
             postData.Add("order_id", new InsureShipShipmentIdentifier(Shipment).GetUniqueShipmentId());
             postData.Add("tracking_id", Shipment.TrackingNumber);
             postData.Add("carrier", shipmentType.ShipmentTypeName);
