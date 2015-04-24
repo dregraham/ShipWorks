@@ -41,3 +41,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Usps", Scope = "member", Target = "ShipWorks.Shipping.ShipmentTypeCode.#Express1Usps")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Groupon", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Groupon")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Insta", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#InstaStore")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Choxi", Scope = "member", Target = "ShipWorks.Stores.StoreTypeCode.#Choxi")]
