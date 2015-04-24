@@ -106,7 +106,7 @@ namespace ShipWorks.UI.Controls
             if (panelValues.Controls.Count == 0)
             {
                 panelValues.Height = 0;
-                panelBottom.Top = Top;
+                panelBottom.Top = 0;
             }
             else
             {
