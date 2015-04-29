@@ -119,5 +119,6 @@ namespace ShipWorks.ApplicationCore.Logging
         OrderBot,
         OpenSky,
         Choxi,
+        InstanteStore,
     }
 }
