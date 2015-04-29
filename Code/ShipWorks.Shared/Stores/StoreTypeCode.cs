@@ -336,9 +336,9 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("revolutionparts")]
         RevolutionParts = 64,
 
-        [Description("InstaStore")]
+        [Description("InstanteStore")]
         [StoreTypeIdentity("INSTASTORE", "IST")]
-        [StoreTypeIcon("instastore")]
+        [StoreTypeIcon("instantestore")]
         InstaStore = 65,
 
         [Description("OrderBot")]

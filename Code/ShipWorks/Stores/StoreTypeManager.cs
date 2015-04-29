@@ -141,7 +141,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.StageBloc: return new Platforms.StageBloc.StageBlocStoreType(store);
 				case StoreTypeCode.Groupon: return new Platforms.Groupon.GrouponStoreType(store);
                 case StoreTypeCode.RevolutionParts: return new Platforms.RevolutionParts.RevolutionPartsStoreType(store);
-                case StoreTypeCode.InstaStore: return new Platforms.InstaStore.InstaStoreStoreType(store);
+                case StoreTypeCode.InstaStore: return new Platforms.InstanteStore.InstanteStoreStoreType(store);
                 case StoreTypeCode.OrderBot: return new Platforms.OrderBot.OrderBotStoreType(store);
                 case StoreTypeCode.OpenSky: return new Platforms.OpenSky.OpenSkyStoreType(store);
             }
