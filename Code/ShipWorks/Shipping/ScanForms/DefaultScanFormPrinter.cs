@@ -22,13 +22,19 @@ namespace ShipWorks.Shipping.ScanForms
         /// <returns>Returns [true] if the SCAN form was printed successfully; otherwise [false].</returns>
         public bool Print(IWin32Window owner, ScanForm scanForm)
         {
+            List<DataResourceReference> resources = GetScanFormResources(scanForm);
+
+            return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Form", resources.Select(r => Image.FromFile(r.GetCachedFilename())).ToList(), true, true);
+        }
+
+        private static List<DataResourceReference> GetScanFormResources(ScanForm scanForm)
+        {
             List<DataResourceReference> resources = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId);
             if (resources == null || resources.None())
             {
                 throw new InvalidOperationException("No resource saved for scan form " + scanForm.ScanFormId);
             }
-
-            return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Form", resources.Select(r => Image.FromFile(r.GetCachedFilename())).ToList(), true, true);
+            return resources;
         }
 
 
@@ -46,13 +52,7 @@ namespace ShipWorks.Shipping.ScanForms
             {
                 foreach (ScanForm scanForm in scanFormBatch.ScanForms)
                 {
-                    DataResourceReference resource = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId).FirstOrDefault();
-                    if (resource == null)
-                    {
-                        throw new InvalidOperationException("No resource saved for scan form " + scanForm.ScanFormId);
-                    }
-
-                    scanFormImages.Add(Image.FromFile(resource.GetCachedFilename()));
+                    scanFormImages.AddRange(GetScanFormResources(scanForm).Select(r => Image.FromFile(r.GetCachedFilename())));
                 }
 
                 return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Forms", scanFormImages.ToList(), true, true);
