@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ShipWorks.Data;
 using System.Drawing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using System.Windows.Forms;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping.ScanForms
 {
@@ -15,12 +15,6 @@ namespace ShipWorks.Shipping.ScanForms
     public class DefaultScanFormPrinter : IScanFormPrinter, IScanFormBatchPrinter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DefaultScanFormPrinter"/> class.
-        /// </summary>
-        public DefaultScanFormPrinter()
-        { }
-
-        /// <summary>
         /// Prints the SCAN form.
         /// </summary>
         /// <param name="owner">The IWin32Window object that a print dialog will below to if needed.</param>
@@ -28,16 +22,13 @@ namespace ShipWorks.Shipping.ScanForms
         /// <returns>Returns [true] if the SCAN form was printed successfully; otherwise [false].</returns>
         public bool Print(IWin32Window owner, ScanForm scanForm)
         {
-            DataResourceReference resource = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId).FirstOrDefault();
-            if (resource == null)
+            List<DataResourceReference> resources = DataResourceManager.LoadConsumerResourceReferences(scanForm.ScanFormId);
+            if (resources == null || resources.None())
             {
                 throw new InvalidOperationException("No resource saved for scan form " + scanForm.ScanFormId);
             }
 
-            using (Image image = Image.FromFile(resource.GetCachedFilename()))
-            {
-                return PrintUtility.PrintImage(owner, "ShipWorks - SCAN Form", image, true, true);
-            }
+            return PrintUtility.PrintImages(owner, "ShipWorks - SCAN Form", resources.Select(r => Image.FromFile(r.GetCachedFilename())).ToList(), true, true);
         }
 
 

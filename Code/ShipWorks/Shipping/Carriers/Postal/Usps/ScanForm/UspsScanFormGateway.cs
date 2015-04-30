@@ -1,8 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
+using Interapptive.Shared.Pdf;
+using Rebex.Mail;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -97,7 +103,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                 scanEntity.Description = "Non-cubic shipments";
 
                 // Notify the batch of the new scan form
-                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, DownloadFormImage(scanEntity.ScanFormUrl));
+                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, DownloadFormImages(scanEntity.ScanFormUrl));
 
                 entities.Add(scanEntity);
             }
@@ -106,19 +112,35 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         /// <summary>
-        /// Downloads the form image.
+        /// Downloads the SCAN form images.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>A byte array containing the image data.</returns>
-        private byte[] DownloadFormImage(string url)
+        private List<byte[]> DownloadFormImages(string url)
         {
             try
             {
-                using (WebClient client = new WebClient())
+                List<byte[]> images = new List<byte[]>();
+
+                string[] scanFormUrls = new[] { url };
+                if (url.Contains(" "))
                 {
-                    byte[] image = client.DownloadData(url);
-                    return image;
+                    // This is really only applicable for DHL SCAN forms/manifest files as those are on 
+                    // multiple pages. For USPS SCAN forms, the first URL contains the actual SCAN form 
+                    // for Stamps.com
+                    scanFormUrls = url.Split(new char[] { ' ' });
                 }
+
+                foreach (string scanFormUrl in scanFormUrls)
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        byte[] imageBytes = client.DownloadData(scanFormUrl);
+                        images.Add(imageBytes);
+                    }
+                }
+
+                return images;
             }
             catch (Exception ex)
             {

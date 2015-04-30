@@ -169,18 +169,35 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [TestMethod]
-        public void CreateScanForm_InstantiatesScanForm_Test()
+        public void CreateScanForm_InstantiatesScanForm_WithSingleImage_Test()
         {
             List<ShipmentEntity> shipments = new List<ShipmentEntity>();
 
             byte[] image = new byte[10];
 
-            ScanForm result = testObject.CreateScanForm("Test", shipments, null, image);
+            ScanForm result = testObject.CreateScanForm("Test", shipments, null, new List<byte[]> { image });
 
             Assert.AreEqual(carrierAccount.Object, result.CarrierAccount);
             Assert.AreEqual("Test", result.Description);
             Assert.AreEqual(shipments, result.Shipments);
-            Assert.AreEqual(image, result.Image);
+            Assert.AreEqual(image, result.Images[0]);
+        }
+
+        [TestMethod]
+        public void CreateScanForm_InstantiatesScanForm_WithMultipleImages_Test()
+        {
+            List<ShipmentEntity> shipments = new List<ShipmentEntity>();
+
+            byte[] image1 = new byte[10];
+            byte[] image2 = new byte[40];
+
+            ScanForm result = testObject.CreateScanForm("Test", shipments, null, new List<byte[]> { image1, image2 });
+
+            Assert.AreEqual(carrierAccount.Object, result.CarrierAccount);
+            Assert.AreEqual("Test", result.Description);
+            Assert.AreEqual(shipments, result.Shipments);
+            Assert.AreEqual(image1, result.Images[0]);
+            Assert.AreEqual(image2, result.Images[1]);
         }
 
         [TestMethod]
