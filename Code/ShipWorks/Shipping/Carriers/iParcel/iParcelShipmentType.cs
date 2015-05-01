@@ -1047,10 +1047,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             // There was a conscious decision made with input from Rich that for now we can assume the origin 
             // country will always be US when the shipment is configured to ship from the account address
             string originCountryCode = (ShipmentOriginSource)shipment.OriginOriginID == ShipmentOriginSource.Account ? 
-                                        "US" : shipment.OriginCountryCode;
+                                        "US" : shipment.AdjustedOriginCountryCode();
 
             // We only want to check i-parcel for international shipments originating in the US
-            if (originCountryCode != shipment.ShipCountryCode && originCountryCode == "US")
+            if (originCountryCode != shipment.AdjustedShipCountryCode() && originCountryCode == "US")
             {
                 return new iParcelBestRateBroker();
             }
@@ -1071,7 +1071,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             bool requiresCustoms = base.IsCustomsRequiredByShipment(shipment);
 
-            if (shipment.OriginCountryCode == "US")
+            if (shipment.AdjustedOriginCountryCode() == "US")
             {
                 // i-Parcel allows customers to upload their SKUs and customs info, so we don't need to enter it in ShipWorks
                 // So Customs is never required.

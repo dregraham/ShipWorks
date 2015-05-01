@@ -9,7 +9,7 @@ namespace Interapptive.Shared.Business
     /// <summary>
     /// Wraps an entity to expose its address details
     /// </summary>
-    public class AddressAdapter : EntityAdapter
+    public class AddressAdapter : EntityAdapter, IAddressAdapter
     {
         /// <summary>
         /// Creates a new instance of the adapter that maintains its own values, and has no backing entity.

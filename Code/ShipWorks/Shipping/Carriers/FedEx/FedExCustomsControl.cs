@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {
-                    if (shipment.ShipCountryCode == "CA")
+                    if (shipment.AdjustedShipCountryCode() == "CA")
                     {
                         anyCanada = true;
                     }

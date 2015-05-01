@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
             // We can safely cast this since we've passed initialization
             IFedExNativeShipmentRequest nativeRequest = request.NativeRequest as IFedExNativeShipmentRequest;
 
-            if (request.ShipmentEntity.ShipCountryCode == "CA")
+            if (request.ShipmentEntity.AdjustedShipCountryCode() == "CA")
             {
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging = GetApiAdmissibilityPackagingType((FedExPhysicalPackagingType) request.ShipmentEntity.FedEx.CustomsAdmissibilityPackaging);
                 nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified = true;

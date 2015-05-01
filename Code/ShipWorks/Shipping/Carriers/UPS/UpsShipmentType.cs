@@ -1136,7 +1136,15 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public override bool IsDomestic(ShipmentEntity shipmentEntity)
         {
-            return base.IsDomestic(shipmentEntity) && !IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
+            if (shipmentEntity == null)
+            {
+                throw new ArgumentNullException("shipmentEntity");
+            }
+
+            string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
+            string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
+
+            return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -1258,7 +1266,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
         {
-            if (shipment.OriginCountryCode == "PR" && shipment.ShipCountryCode == "US")
+            if (shipment.AdjustedOriginCountryCode() == "PR" && 
+                shipment.AdjustedShipCountryCode() == "US")
             {
                 return false;
             }

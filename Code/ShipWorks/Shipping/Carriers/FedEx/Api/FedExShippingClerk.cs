@@ -769,7 +769,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
                 decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
-                if (shipment.OriginCountryCode.ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
                 {
                     cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
                 }

@@ -721,12 +721,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 // Check for US territories in case of territory is used as country code
                 if (shipmentEntity.OriginCountryCode.ToUpperInvariant() == "US")
                 {
-                    isDomestic = PostalUtility.IsDomesticCountry(shipmentEntity.ShipCountryCode);
+                    isDomestic = shipmentEntity.ShipPerson.IsDomesticCountry();
                 }
                 else if (shipmentEntity.ShipCountryCode.ToUpperInvariant() == "US")
                 {
                     // Check in case someone is shipping from VI, PR, etc. to the US
-                    isDomestic = PostalUtility.IsDomesticCountry(shipmentEntity.OriginCountryCode);
+                    isDomestic = shipmentEntity.OriginPerson.IsDomesticCountry();
                 }
             }
             
@@ -796,7 +796,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Legacy stuff
             ElementOutline outline = container.AddElement("USPS", ElementOutline.If(() => shipment().Processed));
             outline.AddAttributeLegacy2x();
-            outline.AddElement("CustomsNumber", () => shipment().TrackingNumber, ElementOutline.If(() => !PostalUtility.IsDomesticCountry(shipment().ShipCountryCode)));
+            outline.AddElement("CustomsNumber", () => shipment().TrackingNumber, ElementOutline.If(() => !shipment().ShipPerson.IsDomesticCountry()));
         }
 
         /// <summary>

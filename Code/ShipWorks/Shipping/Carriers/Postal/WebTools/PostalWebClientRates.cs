@@ -54,7 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 DimensionsAdapter dimensions = new DimensionsAdapter(shipment.Postal);
 
                 // Domestic
-                if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                if (shipment.ShipPerson.IsDomesticCountry())
                 {
                     xmlWriter.WriteStartElement("RateV4Request");
                     xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             logger.LogRequest(xmlRequest);
 
             // Process the request
-            string xmlResponse = ProcessXmlRequest(xmlRequest, PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) ? "RateV4" : "IntlRateV2");
+            string xmlResponse = ProcessXmlRequest(xmlRequest, shipment.ShipPerson.IsDomesticCountry() ? "RateV4" : "IntlRateV2");
 
             // Log the response
             logger.LogResponse(xmlResponse);
@@ -143,7 +143,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 throw new ShippingException("Response from USPS: " + error);
             }
 
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 return ProcessXmlDomesticResponse(xmlDocument, packaging);
             }

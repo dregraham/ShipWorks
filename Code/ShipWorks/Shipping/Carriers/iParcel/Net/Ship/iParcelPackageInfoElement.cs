@@ -151,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
                                             new XElement("City", shipment.OriginCity),
                                             new XElement("StateProvince", shipment.OriginStateProvCode),
                                             new XElement("PostCode", shipment.OriginPostalCode),
-                                            new XElement("CountryCode", AdjustCountryCode(shipment.OriginCountryCode))
+                                            new XElement("CountryCode", shipment.AdjustedOriginCountryCode())
                                 );
             return element;
         }
@@ -169,31 +169,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel.Net.Ship
                                             new XElement("Address1", shipment.ShipStreet1),
                                             new XElement("Address2", shipment.ShipStreet2),
                                             new XElement("City", shipment.ShipCity),
-                                            new XElement("StateProvince", shipment.ShipCountryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : shipment.ShipStateProvCode),
+                                            new XElement("StateProvince", shipment.AdjustedShipCountryCode().Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : shipment.ShipStateProvCode),
                                             new XElement("PostCode", shipment.ShipPostalCode),
-                                            new XElement("CountryCode", AdjustCountryCode(shipment.ShipCountryCode)),
+                                            new XElement("CountryCode", shipment.AdjustedShipCountryCode()),
                                             new XElement("Phone", shipment.ShipPhone),
                                             new XElement("Email", shipment.ShipEmail),
                                             new XElement("TrackByEmail", shipment.IParcel.TrackByEmail ? "1" : "0"),
                                             new XElement("TrackBySMS", shipment.IParcel.TrackBySMS ? "1" : "0")
                                 );
             return element;
-        }
-
-        /// <summary>
-        /// Adjusts the country code.
-        /// </summary>
-        /// <param name="countryCode">The country code.</param>
-        /// <returns>A string with the updated country code for i-parcel.</returns>
-        private string AdjustCountryCode(string countryCode)
-        {
-            if (countryCode.ToUpperInvariant() == "UK")
-            {
-                // i-parcel does not like UK since it's not the ISO code
-                countryCode = "GB";
-            }
-
-            return countryCode;
         }
 
         /// <summary>

@@ -221,7 +221,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
                 }
 
                 PersonAdapter personAdapter = new PersonAdapter(account, "");
-                return personAdapter.CountryCode == shipment.OriginCountryCode;
+                return personAdapter.AdjustedCountryCode((ShipmentTypeCode)shipment.ShipmentType) == shipment.AdjustedOriginCountryCode();
             });
 
             return accounts.ToList();

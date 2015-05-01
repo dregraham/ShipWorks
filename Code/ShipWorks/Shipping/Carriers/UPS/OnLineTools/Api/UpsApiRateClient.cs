@@ -315,7 +315,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 
             // Defer to the service manager to get the service type for this shipment
             IUpsServiceManager serviceManager = serviceManagerFactory.Create(shipment);
-            return serviceManager.GetServicesByRateCode(rateServiceCode, shipment.ShipCountryCode).UpsServiceType;
+            return serviceManager.GetServicesByRateCode(rateServiceCode, shipment.AdjustedShipCountryCode()).UpsServiceType;
         }
     }
 }
