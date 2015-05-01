@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -200,12 +201,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             {
                 string url = labelUrls[index];
                 string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", labels.Count + 1);
-
-                labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
-
-                if (continuationLabelsNeedCropping)
+                
+                if (index==0)
                 {
-                    labels.Add(CreateLabel(shipment, string.Format("LabelPart{0}", labels.Count + 1), url, CroppingStyles.ContinuationCrop));
+                    labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
+
+                    if (continuationLabelsNeedCropping)
+                    {
+                        labels.Add(CreateLabel(shipment, string.Format("LabelPart{0}", labels.Count + 1), url, CroppingStyles.ContinuationCrop));
+                    }
+                }
+                else
+                {
+                    labels.Add(CreateLabel(shipment, labelName, url, CroppingStyles.None));
                 }
             }
 
@@ -245,13 +253,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             }
             else
             {
-                if (shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRatePaddedEnvelope || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRateLegalEnvelope || shipment.Postal.PackagingType == (int)PostalPackagingType.FlatRateSmallBox)
+                if (UseSingleInternationalCropForCanadaInternationalPriority((PostalPackagingType)shipment.Postal.PackagingType))
                 {
                     croppingStyle = CroppingStyles.SingleInternationalCrop;
                 }
             }
 
             return croppingStyle;
+        }
+
+        /// <summary>
+        /// Uses the single international crop.
+        /// </summary>
+        private static bool UseSingleInternationalCropForCanadaInternationalPriority(PostalPackagingType packagingType)
+        {
+            PostalPackagingType[] packagesThatNeedSingleInternationalCrop =
+            {
+                PostalPackagingType.FlatRatePaddedEnvelope,
+                PostalPackagingType.FlatRateLegalEnvelope, 
+                PostalPackagingType.FlatRateSmallBox, 
+                PostalPackagingType.FlatRateEnvelope
+            };
+
+            return packagesThatNeedSingleInternationalCrop.Contains(packagingType);
         }
 
         /// <summary>
