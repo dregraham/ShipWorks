@@ -49,8 +49,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
                     UspsScanFormEntity uspsScanFormEntity = scanForm.ScanFormEntity as UspsScanFormEntity;
                     scanForm.ScanFormId = uspsScanFormEntity.UspsScanFormID;
 
-                    // Should have the scan form ID populated now so save the image to the data source
-                    DataResourceManager.CreateFromBytes(scanForm.Image, uspsScanFormEntity.UspsScanFormID, "SCAN Form");
+                    // Should have the scan form ID populated now so save the image to the data source. The Stamps.com
+                    // API could have returned multiple images as is the case with DHL driver manifest form
+                    foreach (byte[] image in scanForm.Images)
+                    {
+                        DataResourceManager.CreateFromBytes(image, uspsScanFormEntity.UspsScanFormID, "SCAN Form");
+                    }
 
                     // Now we have to update each shipment with the scan form record ID
                     foreach (ShipmentEntity shipment in scanForm.Shipments)

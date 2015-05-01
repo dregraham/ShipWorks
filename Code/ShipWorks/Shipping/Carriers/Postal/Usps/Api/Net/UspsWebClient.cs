@@ -617,13 +617,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     );
             }
 
-            if (scanFormUrl.Contains(" "))
-            {
-                // According to the docs, there is a chance that there could be multiple URLs; the first
-                // URL contains the actual SCAN form though
-                scanFormUrl = scanFormUrl.Split(new char[] { ' ' })[0];
-            }
-
             string responseXml = string.Format("<ScanForm><TransactionId>{0}</TransactionId><Url>{1}</Url></ScanForm>", scanFormUspsId, scanFormUrl);
             XDocument response = XDocument.Parse(responseXml);
 
