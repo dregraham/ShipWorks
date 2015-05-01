@@ -1043,8 +1043,8 @@
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
-    <Compile Include="Stores\Platforms\InstaStore\InstaStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
@@ -11212,6 +11212,7 @@
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
+    <None Include="Resources\instantestore.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

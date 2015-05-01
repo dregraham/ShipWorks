@@ -8,6 +8,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -50,8 +51,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     EndiciaScanFormEntity endiciaScanFormEntity = scanForm.ScanFormEntity as EndiciaScanFormEntity;
                     scanForm.ScanFormId = endiciaScanFormEntity.EndiciaScanFormID;
 
-                    // Should have the scan form ID populated now so save the image to the data source
-                    DataResourceManager.CreateFromBytes(scanForm.Image, endiciaScanFormEntity.EndiciaScanFormID, "SCAN Form");
+                    // Should have the scan form ID populated now so save the image to the data source. The Endicia-based 
+                    // APIs always generates a single image for the SCAN form
+                    DataResourceManager.CreateFromBytes(scanForm.Images.FirstOrDefault(), endiciaScanFormEntity.EndiciaScanFormID, "SCAN Form");
 
                     // Now we have to update each shipment with the scan form record ID
                     foreach (ShipmentEntity shipment in scanForm.Shipments)

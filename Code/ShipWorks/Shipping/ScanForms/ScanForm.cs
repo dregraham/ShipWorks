@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Windows.Forms;
@@ -27,7 +26,7 @@ namespace ShipWorks.Shipping.ScanForms
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanForm" /> class. This version of the
         /// constructor is intended to be used when the SCAN form needs to be generated. The
-        /// shipment count will be populated from the collecton of shipments provided.
+        /// shipment count will be populated from the collection of shipments provided.
         /// </summary>
         /// <param name="account">The account.</param>
         /// <param name="batchId">The batch ID.</param>
@@ -43,7 +42,7 @@ namespace ShipWorks.Shipping.ScanForms
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ScanForm" /> class. This is intended to be used after
-        /// the SCAN form has already been generated and the object is just being rehydrated from a data source
+        /// the SCAN form has already been generated and the object is just being re-hydrated from a data source
         /// as the collection of shipments is not specified in this constructor.
         /// </summary>
         /// <param name="account">The account.</param>
@@ -51,10 +50,9 @@ namespace ShipWorks.Shipping.ScanForms
         /// <param name="description">The description.</param>
         /// <param name="scanFormId">The scan form ID.</param>
         /// <param name="createdDate">The created date.</param>
-        /// <param name="shipmentCount">The shipment count.</param>
         public ScanForm(IScanFormCarrierAccount account, long scanFormId, long batchId, string description, DateTime createdDate)
         {
-            this.CarrierAccount = account;
+            CarrierAccount = account;
             
             BatchId = batchId;
             Description = description;
@@ -87,10 +85,10 @@ namespace ShipWorks.Shipping.ScanForms
         public long ScanFormId { get; set; }
 
         /// <summary>
-        /// Gets or sets the image.
+        /// Gets or sets the images that make up the actual forms.
         /// </summary>
         /// <value>The image.</value>
-        public byte[] Image { get; set; }
+        public List<byte[]> Images { get; set; }
 
         /// <summary>
         /// Gets the shipments.

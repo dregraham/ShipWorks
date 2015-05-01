@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
             using (MemoryStream stream = new MemoryStream(Convert.FromBase64String((string) xDocument.Descendants("SCANForm").Single())))
             {
                 // Notify the batch of the new scan form
-                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, stream.ToArray());
+                scanFormBatch.CreateScanForm(scanEntity.Description, shipments, scanEntity, new List<byte[]> { stream.ToArray() });
             }
 
             entities.Add(scanEntity);
