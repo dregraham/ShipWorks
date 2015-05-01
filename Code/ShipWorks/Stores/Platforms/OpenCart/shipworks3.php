@@ -18,7 +18,7 @@
 |
  */
 define('REQUIRE_SECURE', TRUE);
-$moduleVersion = "3.10.0.0";
+$moduleVersion = "4.0.0.0";
 $schemaVersion = "1.1.0";
 
 header("Content-Type: text/xml;charset=utf-8");
@@ -79,8 +79,8 @@ $log = new Log($config->get('config_error_filename'));
 $registry->set('log', $log);
 
 $offsetQuery = $db->query("SELECT UNIX_TIMESTAMP() - UNIX_TIMESTAMP(UTC_TIMESTAMP()) AS offset")->row['offset'];
-$offsetinSeconds = (int)($offsetQuery ? $offsetQuery : 0);
-$mySqlTimeZone = TimeZoneName($offsetinSeconds);
+$offsetInSeconds = (int)($offsetQuery ? $offsetQuery : 0);
+$mySqlTimeZone = TimeZoneName($offsetInSeconds);
 
 // write xml documenta declaration
 function writeXmlDeclaration()
@@ -197,7 +197,7 @@ function checkAdminLogin()
 		$username = $_REQUEST['username'];
 		$password = $_REQUEST['password'];
 
-		$user_query = $db->query("SELECT * FROM " . DB_PREFIX . "user WHERE username = '" . $db->escape($username) . "' AND (password = SHA1(CONCAT(salt, SHA1(CONCAT(salt, SHA1('" . $db->escape($password) . "'))))) OR password = '" . $db->escape(md5($password)) . "') AND status = '1'")->row;
+		$user_query = $db->query("SELECT * FROM `" . DB_PREFIX . "user` WHERE username = '" . $db->escape($username) . "' AND (password = SHA1(CONCAT(salt, SHA1(CONCAT(salt, SHA1('" . $db->escape($password) . "'))))) OR password = '" . $db->escape(md5($password)) . "') AND status = '1'")->row;
 
 
 		if($user_query && $user_query['user_group_id'] == 1)
@@ -405,16 +405,26 @@ function WriteOrderItems($orderItems)
 {
 	global $registry;
 	global $db;
-	
+
 	writeStartTag("Items");
 	
 	foreach ($orderItems as $item)
 	{
-		
+		$order_id = $item['order_id'];
 		$product_id = $item['product_id'];
+		$order_product_id = $item['order_product_id'];
 
-		$product = $db->query("SELECT DISTINCT *, (SELECT keyword FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id . "') AS keyword FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id ."'")->rows;
+		$product = $db->query("SELECT DISTINCT *, (SELECT keyword FROM `" . DB_PREFIX . "url_alias` WHERE query = 'product_id=" . (int)$product_id . "') AS keyword FROM `" . DB_PREFIX . "product` p LEFT JOIN `" . DB_PREFIX . "product_description` pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id ."'")->rows;
 		$product = reset($product);
+
+		$weight = 0;
+		$productWeightClassId = (int)$product['weight_class_id'];
+
+		if($productWeightClassId != ''){
+			$weightsTable = $db->query("SELECT * FROM `" . DB_PREFIX . "weight_class` wc INNER JOIN `" . DB_PREFIX . "weight_class_description` wcd ON wc.weight_class_id = wcd.weight_class_id WHERE wc.weight_class_id = $productWeightClassId")->row;
+
+			$weight = ($product['weight']/$weightsTable['value']) * 2.2046;
+		}
 
 		writeStartTag("Item");
 		writeElement("Code", $item['model']);
@@ -422,10 +432,21 @@ function WriteOrderItems($orderItems)
 		writeElement("Name", $item['name']);
 		writeElement("Quantity", (int)$item['quantity']);
 		writeElement("UnitPrice", (float)$item['price']);
-		writeElement("Weight", number_format((float)$product['weight'], 3, '.', ''));
+		writeElement("Weight", number_format((float)$weight, 3, '.', ''));
 		writeElement("Image", HTTP_CATALOG."image/".$product['image']);
 		//writeElement("Thumbnail", HTTP_CATALOG."image/".$product['image']);
 		writeStartTag("Attributes");
+
+		$options = $db->query("SELECT name, value FROM `" . DB_PREFIX . "order_option` WHERE order_id = $order_id AND order_product_id = $order_product_id")->rows;
+
+		foreach($options as $option){
+
+			writeStartTag("Attribute");
+			writeElement("Name", $option['name']);
+			writeelement("Value", $option['value']);
+			writeCloseTag("Attribute");
+		}
+
 		writeCloseTag("Attributes");
 		
 		writeCloseTag("Item");
