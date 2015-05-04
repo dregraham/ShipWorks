@@ -582,7 +582,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataSources\" />
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
   </ItemGroup>
   <ItemGroup>
@@ -597,8 +596,19 @@
     <EmbeddedResource Include="Resources\SinglePagePdf.pdf" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Shipping\AdjustedCountryCodeData.xlsx">
+    <None Include="Shipping\AdjustedCountryCodeData_Endicia.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shipping\AdjustedCountryCodeData_FedEx.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shipping\AdjustedCountryCodeData_iParcel.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shipping\AdjustedCountryCodeData_Ups.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Shipping\AdjustedCountryCodeData_Usps.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
