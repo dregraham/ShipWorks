@@ -260,7 +260,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// </summary>
         public static bool IsCodAvailable(ShipmentEntity shipment)
         {
-            return IsCodAvailable((UpsServiceType) shipment.Ups.Service, shipment.ShipCountryCode);
+            return IsCodAvailable((UpsServiceType) shipment.Ups.Service, shipment.AdjustedShipCountryCode());
         }
 
         /// <summary>

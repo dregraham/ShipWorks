@@ -137,11 +137,11 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.CsCart: return new Platforms.CsCart.CsCartStoreType(store);
                 case StoreTypeCode.PrestaShop: return new Platforms.PrestaShop.PrestaShopStoreType(store);
                 case StoreTypeCode.LoadedCommerce: return new Platforms.LoadedCommerce.LoadedCommerceStoreType(store);
-                case StoreTypeCode.NoMoreRack: return new Platforms.NoMoreRack.NoMoreRackStoreType(store);
+                case StoreTypeCode.Choxi: return new Platforms.Choxi.ChoxiStoreType(store);
                 case StoreTypeCode.StageBloc: return new Platforms.StageBloc.StageBlocStoreType(store);
 				case StoreTypeCode.Groupon: return new Platforms.Groupon.GrouponStoreType(store);
                 case StoreTypeCode.RevolutionParts: return new Platforms.RevolutionParts.RevolutionPartsStoreType(store);
-                case StoreTypeCode.InstaStore: return new Platforms.InstaStore.InstaStoreStoreType(store);
+                case StoreTypeCode.InstaStore: return new Platforms.InstanteStore.InstanteStoreStoreType(store);
                 case StoreTypeCode.OrderBot: return new Platforms.OrderBot.OrderBotStoreType(store);
                 case StoreTypeCode.OpenSky: return new Platforms.OpenSky.OpenSkyStoreType(store);
             }

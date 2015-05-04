@@ -766,11 +766,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 }
 
                 // Cost
-                RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsRequestedRateType) ?? 
-                    rateDetail.RatedShipmentDetails[0];
+                RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
                 decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
-                if (shipment.OriginCountryCode.ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
                 {
                     cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
                 }
@@ -793,26 +792,43 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         }
 
         /// <summary>
-        /// Is the rated shipment detail of the type requested by the customer
+        /// Gets the rate reply detail.
         /// </summary>
-        private bool IsRequestedRateType(RatedShipmentDetail detail)
+        private RatedShipmentDetail GetRateReplyDetail(RateReplyDetail rateDetail)
         {
-            return detail.ShipmentRateDetail.RateTypeSpecified && 
-                detail.ShipmentRateDetail.RateType == RequestedRateType;
+            RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsPreferredRequestedRateType) ??
+                                                        rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType)??
+                                                      rateDetail.RatedShipmentDetails[0];
+            return ratedShipmentDetail;
         }
 
         /// <summary>
-        /// Gets the rate type requested by the customer
+        /// Is the rated shipment detail of the type the preferred rate requested by the customer
         /// </summary>
-        private ReturnedRateType RequestedRateType
+        private bool IsPreferredRequestedRateType(RatedShipmentDetail detail)
         {
-            get
-            {
-                return settingsRepository.UseListRates ? 
-                    ReturnedRateType.PAYOR_LIST_PACKAGE : 
-                    ReturnedRateType.PAYOR_ACCOUNT_PACKAGE;
-            }
+            ReturnedRateType preferredRateType = settingsRepository.UseListRates ?
+                    ReturnedRateType.PAYOR_LIST_PACKAGE :
+                    ReturnedRateType.PAYOR_ACCOUNT_SHIPMENT;
+
+            return detail.ShipmentRateDetail.RateTypeSpecified &&
+                detail.ShipmentRateDetail.RateType == preferredRateType;
         }
+
+
+        /// <summary>
+        /// Is the rated shipment detail a fallback type requested by the customer
+        /// </summary>
+        private bool IsSecondaryRequestedRateType(RatedShipmentDetail detail)
+        {
+            ReturnedRateType secondaryRequestedRateType = settingsRepository.UseListRates ?
+                ReturnedRateType.PAYOR_LIST_PACKAGE :
+                ReturnedRateType.PAYOR_ACCOUNT_PACKAGE;
+
+            return detail.ShipmentRateDetail.RateTypeSpecified &&
+                detail.ShipmentRateDetail.RateType == secondaryRequestedRateType;
+        }
+
 
         /// <summary>
         /// Gets the service level.

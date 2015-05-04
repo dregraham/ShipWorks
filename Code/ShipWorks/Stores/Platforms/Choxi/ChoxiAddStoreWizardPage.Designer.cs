@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.NoMoreRack
+﻿namespace ShipWorks.Stores.Platforms.Choxi
 {
-    partial class NoMoreRackAddStoreWizardPage
+    partial class ChoxiAddStoreWizardPage
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.accountSettingsControl = new ShipWorks.Stores.Platforms.NoMoreRack.NoMoreRackStoreAccountSettingsControl();
+            this.accountSettingsControl = new ShipWorks.Stores.Platforms.Choxi.ChoxiStoreAccountSettingsControl();
             this.SuspendLayout();
             // 
             // accountSettingsControl
@@ -53,7 +53,7 @@
 
         #endregion
 
-        private NoMoreRackStoreAccountSettingsControl accountSettingsControl;
+        private ChoxiStoreAccountSettingsControl accountSettingsControl;
 
     }
 }

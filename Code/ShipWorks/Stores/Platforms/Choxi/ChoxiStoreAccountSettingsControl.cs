@@ -17,26 +17,26 @@ using Interapptive.Shared.Net;
 using Interapptive.Shared.UI;
 using ShipWorks.Stores.Management;
 
-namespace ShipWorks.Stores.Platforms.NoMoreRack
+namespace ShipWorks.Stores.Platforms.Choxi
 {
     /// <summary>
     /// Account settings for GenericStore
     /// </summary>
-    public partial class NoMoreRackStoreAccountSettingsControl : AccountSettingsControlBase
+    public partial class ChoxiStoreAccountSettingsControl : AccountSettingsControlBase
     {
-        private const string TestUrl = "http://staging.vendor-api.nomorerack.com/api/v1/shipworks/";
-        private const string LiveUrl = "https://vendor-api.nomorerack.com/api/v1/shipworks/";
+        private const string TestUrl = "http://staging.vendor-api.choxi.com/api/v1/shipworks/";
+        private const string LiveUrl = "https://vendor-api.choxi.com/api/v1/shipworks/";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public NoMoreRackStoreAccountSettingsControl()
+        public ChoxiStoreAccountSettingsControl()
         {
             InitializeComponent();
 
             useTestServer.Visible = InterapptiveOnly.MagicKeysDown;
 
-            NoMoreRackStoreType store = new NoMoreRackStoreType(new GenericModuleStoreEntity { TypeCode = (int)StoreTypeCode.NoMoreRack });
+            ChoxiStoreType store = new ChoxiStoreType(new GenericModuleStoreEntity { TypeCode = (int)StoreTypeCode.Choxi });
             helpLink.Url = store.AccountSettingsHelpUrl;
 
         }
@@ -120,6 +120,6 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                     genericStore.Fields[(int)GenericModuleStoreFieldIndex.ModuleOnlineStoreCode].IsChanged);
         }
 
- 
+
     }
 }

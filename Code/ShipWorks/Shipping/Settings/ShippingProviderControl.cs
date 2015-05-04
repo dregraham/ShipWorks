@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using ShipWorks.UI.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -17,6 +18,7 @@ namespace ShipWorks.Shipping.Settings
     public partial class ShippingProviderControl : UserControl
     {
         List<ShipmentType> activeShipmentTypes;
+        private MessengerToken carrierConfiguredToken;
 
         /// <summary>
         /// Constructor
@@ -27,6 +29,13 @@ namespace ShipWorks.Shipping.Settings
 
             toolStripFakeDelete.Renderer = new NoBorderToolStripRenderer();
             toolStripAddRule.Renderer = new NoBorderToolStripRenderer();
+
+            carrierConfiguredToken = Messenger.Current.Handle<CarrierConfiguredMessage>(this, HandleCarrierConfigured);
+        }
+
+        private void HandleCarrierConfigured(CarrierConfiguredMessage message)
+        {
+            SetDefaultShipmentType();
         }
 
         /// <summary>
@@ -39,15 +48,20 @@ namespace ShipWorks.Shipping.Settings
 
             UpdateActiveProviders(shipmentTypes);
 
+            SetDefaultShipmentType();
+
+            LoadRules();
+
+            UpdateLayout();
+        }
+
+        private void SetDefaultShipmentType()
+        {
             shipmentTypeCombo.SelectedValue = (ShipmentTypeCode) ShippingSettings.Fetch().DefaultType;
             if (shipmentTypeCombo.SelectedIndex < 0)
             {
                 shipmentTypeCombo.SelectedIndex = 0;
             }
-
-            LoadRules();
-
-            UpdateLayout();
         }
 
         /// <summary>

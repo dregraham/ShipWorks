@@ -664,6 +664,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Data\Administration\SqlChangeTracking.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
@@ -755,6 +756,7 @@
     </Compile>
     <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
+    <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
@@ -813,6 +815,7 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
@@ -823,7 +826,6 @@
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Api\CountryCodeCleanser.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\Label.cs" />
@@ -963,6 +965,7 @@
       <DependentUpon>UpsPharmaceuticalControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\UPS\UpsPackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\UPS\UpsServiceLevelConverter.cs" />
     <Compile Include="Shipping\Carriers\UPS\UpsShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\UPS\WorldShip\WorldShipProfileControl.cs">
       <SubType>UserControl</SubType>
@@ -1040,8 +1043,10 @@
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
+    <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
-    <Compile Include="Stores\Platforms\InstaStore\InstaStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
@@ -2462,20 +2467,19 @@
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorLog.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\TlsAppDomain.cs" />
     <Compile Include="Stores\Platforms\MarketplaceAdvisor\AppDomainHelpers\MarketplaceAdvisorOrderDto.cs" />
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreType.cs" />
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.cs">
+    <Compile Include="Stores\Platforms\Choxi\ChoxiStoreType.cs" />
+    <Compile Include="Stores\Platforms\Choxi\ChoxiStoreAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.Designer.cs">
-      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Choxi\ChoxiStoreAccountSettingsControl.Designer.cs">
+      <DependentUpon>ChoxiStoreAccountSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.cs">
+    <Compile Include="Stores\Platforms\Choxi\ChoxiAddStoreWizardPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.Designer.cs">
-      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    <Compile Include="Stores\Platforms\Choxi\ChoxiAddStoreWizardPage.Designer.cs">
+      <DependentUpon>ChoxiAddStoreWizardPage.cs</DependentUpon>
     </Compile>
-    <Compile Include="Stores\Platforms\NoMoreRack\NoMoreRackTemplate.cs" />
     <Compile Include="Stores\Platforms\nopCommerce\nopCommerceStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMStoreType.cs" />
     <Compile Include="Stores\Platforms\LimeLightCRM\LimeLightCRMWebClient.cs" />
@@ -7845,11 +7849,11 @@
     <EmbeddedResource Include="Stores\Platforms\Newegg\WizardPages\NeweggDownloadCriteriaPage.resx">
       <DependentUpon>NeweggDownloadCriteriaPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackStoreAccountSettingsControl.resx">
-      <DependentUpon>NoMoreRackStoreAccountSettingsControl.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Choxi\ChoxiStoreAccountSettingsControl.resx">
+      <DependentUpon>ChoxiStoreAccountSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\NoMoreRackAddStoreWizardPage.resx">
-      <DependentUpon>NoMoreRackAddStoreWizardPage.cs</DependentUpon>
+    <EmbeddedResource Include="Stores\Platforms\Choxi\ChoxiAddStoreWizardPage.resx">
+      <DependentUpon>ChoxiAddStoreWizardPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\Sears\SearsAccountSettingsControl.resx">
       <DependentUpon>SearsAccountSettingsControl.cs</DependentUpon>
@@ -11069,6 +11073,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -11206,6 +11213,8 @@
     <None Include="Resources\help16.png" />
     <None Include="Resources\earth16.png" />
     <None Include="Resources\instastore.png" />
+    <None Include="Resources\choxi.png" />
+    <None Include="Resources\instantestore.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />
@@ -11389,7 +11398,7 @@
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\code\local\Interapptive\ShipWorks\etc\config.xml" />
     <Content Include="Stores\Platforms\Magento\MagentoConnectExtension\app\etc\modules\Interapptive_ShipWorks.xml" />
     <None Include="Stores\Platforms\XCart\Modules\XCart5\shipworks3.php" />
-    <EmbeddedResource Include="Stores\Platforms\NoMoreRack\Template\NoMoreRackPackingSlip.xsl" />
+    <EmbeddedResource Include="Stores\Platforms\Choxi\Template\ChoxiPackingSlip.xsl" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\settings.xml" />
     <Content Include="Templates\Distribution\Source\Emails\Shipment Notification\template.xsl" />
     <Content Include="Templates\Distribution\Source\Invoices\Blue\invoiceHeaderBlue.jpg" />

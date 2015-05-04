@@ -239,7 +239,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.FromCity = from.City;
             worldship.FromStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(from.CountryCode, from.StateProvCode);
             worldship.FromPostalCode = from.PostalCode;
-            worldship.FromCountryCode = UpsApiCore.AdjustUpsCountryCode(from.CountryCode, from.StateProvCode);
+            worldship.FromCountryCode = from.AdjustedCountryCode(ShipmentTypeCode.UpsWorldShip);
             worldship.FromTelephone = PersonUtility.GetPhoneDigits(from.Phone, 15, true);
             worldship.FromEmail = UpsUtility.GetCorrectedEmailAddress(from.Email);
             worldship.FromAccountNumber = account.AccountNumber;
@@ -254,7 +254,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             worldship.ToCity = to.City;
             worldship.ToStateProvCode = UpsApiCore.AdjustUpsStateProvinceCode(to.CountryCode, to.StateProvCode);
             worldship.ToPostalCode = to.PostalCode;
-            worldship.ToCountryCode = UpsApiCore.AdjustUpsCountryCode(to.CountryCode, to.StateProvCode);
+            worldship.ToCountryCode = to.AdjustedCountryCode(ShipmentTypeCode.UpsWorldShip);
             worldship.ToTelephone = PersonUtility.GetPhoneDigits(to.Phone, 15, true);
             worldship.ToEmail = UpsUtility.GetCorrectedEmailAddress(to.Email);
             worldship.ToResidential = shipment.ResidentialResult ? "Y" : "N";
@@ -756,8 +756,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// 1 for Package</returns>
         private static UpsDeliveryConfirmationEntityLevel GetShipmentOrPackageForDeliveryConfirmation(ShipmentEntity shipment)
         {
-            string fromCountry = shipment.OriginCountryCode.ToUpperInvariant();
-            string toCountry = shipment.ShipCountryCode.ToUpperInvariant();
+            string fromCountry = shipment.AdjustedOriginCountryCode().ToUpperInvariant();
+            string toCountry = shipment.AdjustedShipCountryCode().ToUpperInvariant();
 
             // See http://fogbugz.interapptive.com/default.asp?185745#1387154 for UPS Appendix defining the matrix
             switch (fromCountry)

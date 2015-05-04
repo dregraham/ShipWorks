@@ -384,6 +384,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
             ebayStore.PayPalApiCredentialType = (short)PayPalCredentialType.Signature;
             ebayStore.DownloadItemDetails = false;
             ebayStore.DownloadPayPalDetails = false;
+            ebayStore.DownloadOlderOrders = false;
             
             List<BuyerPaymentMethodCodeType> defaults = new List<BuyerPaymentMethodCodeType>
             {

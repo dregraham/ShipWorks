@@ -75,5 +75,45 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             Assert.AreEqual("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
         }
+
+        [TestMethod]
+        public void IsUSInternationalTerritory_ReturnsTrue_WhenCountryCodeIsInternationalTerritory()
+        {
+            AddressAdapter address = new AddressAdapter { CountryCode = "AS" };
+            bool result = address.IsUSInternationalTerritory();
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsUSInternationalTerritory_ReturnsTrue_WhenCountryCodeIsUSAndStateIsInternationalTerritory()
+        {
+            AddressAdapter address = new AddressAdapter { CountryCode = "US", StateProvCode = "AS"};
+            bool result = address.IsUSInternationalTerritory();
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsUSAndStateIsMO()
+        {
+            AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "MO" };
+            bool result = address.IsUSInternationalTerritory();
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsCanadaAndStateIsInternationalTerritory()
+        {
+            AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "AS" };
+            bool result = address.IsUSInternationalTerritory();
+            Assert.IsFalse(result);
+        }
+
+        [TestMethod]
+        public void IsUSInternationalTerritory_ReturnsFalse_WhenCountryCodeIsCanadaAndStateIsON()
+        {
+            AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "ON" };
+            bool result = address.IsUSInternationalTerritory();
+            Assert.IsFalse(result);
+        }
     }
 }

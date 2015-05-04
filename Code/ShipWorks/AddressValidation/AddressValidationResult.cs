@@ -7,7 +7,7 @@ namespace ShipWorks.AddressValidation
     /// <summary>
     /// Address data as returned from the call to the validation service
     /// </summary>
-    public class AddressValidationResult
+    public class AddressValidationResult : IAddressAdapter
     {
         /// <summary>
         /// Creates a new AddressValidationResult

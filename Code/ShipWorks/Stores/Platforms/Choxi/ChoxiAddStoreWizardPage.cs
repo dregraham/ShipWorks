@@ -12,17 +12,17 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.NoMoreRack
+namespace ShipWorks.Stores.Platforms.Choxi
 {
     /// <summary>
-    /// Add Store Wizard page for configuring NoMoreRack credentials
+    /// Add Store Wizard page for configuring Choxi credentials
     /// </summary>
-    public partial class NoMoreRackAddStoreWizardPage : AddStoreWizardPage
+    public partial class ChoxiAddStoreWizardPage : AddStoreWizardPage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NoMoreRackAddStoreWizardPage"/> class.
+        /// Initializes a new instance of the <see cref="ChoxiAddStoreWizardPage"/> class.
         /// </summary>
-        public NoMoreRackAddStoreWizardPage()
+        public ChoxiAddStoreWizardPage()
         {
             InitializeComponent();
         }
@@ -63,7 +63,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
                 return;
             }
 
-            NoMoreRackTemplate.InstallNoMoreRackTemplate();
+            ChoxiTemplate.InstallChoxiTemplate();
         }
     }
 }

@@ -29,21 +29,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
             {
                 case ShipmentTypeCode.UpsOnLineTools:
                 case ShipmentTypeCode.UpsWorldShip:
-                    if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)shipment.Ups.Service))
-                    {
-                        carrierCode = isDomestic ? "E-UPS" : "E-UPS-I";
-                    }
-                    else
-                    {
-                        if (shipment.Ups.Packages[0].InsurancePennyOne)
-                        {
-                            carrierCode = "UPS-P1";
-                        }
-                        else
-                        {
-                            carrierCode = isDomestic ? "UPS" : "UPS-I";
-                        }
-                    }
+                    carrierCode = GetUpsCarrierCode(shipment, isDomestic);
                     break;
 
                 case ShipmentTypeCode.Usps:
@@ -66,22 +52,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                 break;
 
                 case ShipmentTypeCode.FedEx:
-                    FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
-                    if (fedExServiceType == FedExServiceType.InternationalEconomy || fedExServiceType == FedExServiceType.InternationalEconomyFreight || fedExServiceType == FedExServiceType.SmartPost)
-                    {
-                        carrierCode = isDomestic ? "E-FEDEX" : "E-FEDEX-I";
-                    }
-                    else
-                    {
-                        if (isDomestic)
-                        {
-                            carrierCode = shipment.FedEx.Packages[0].InsurancePennyOne ? "FEDEX-P1" : "FEDEX";
-                        }
-                        else
-                        {
-                            carrierCode = "FEDEX-I";
-                        }
-                    }
+                    carrierCode = GetFedExCarrierCode(shipment, isDomestic);
                     break;
 
                 case ShipmentTypeCode.OnTrac:
@@ -100,6 +71,55 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
                     throw new ArgumentOutOfRangeException("shipment", string.Format("ShipmentType '{0}' not valid for InsureShip", EnumHelper.GetDescription(shipmentTypeCode)));
             }
 
+            return carrierCode;
+        }
+
+        /// <summary>
+        /// Gets the FedEx carrier code based on the shipment configuration.
+        /// </summary>
+        private static string GetFedExCarrierCode(ShipmentEntity shipment, bool isDomestic)
+        {
+            string carrierCode;
+            FedExServiceType fedExServiceType = (FedExServiceType) shipment.FedEx.Service;
+            if (fedExServiceType == FedExServiceType.InternationalEconomy || fedExServiceType == FedExServiceType.InternationalEconomyFreight || fedExServiceType == FedExServiceType.SmartPost)
+            {
+                carrierCode = isDomestic ? "E-FEDEX" : "E-FEDEX-I";
+            }
+            else
+            {
+                if (isDomestic)
+                {
+                    carrierCode = shipment.FedEx.Packages[0].InsurancePennyOne ? "FEDEX-P1" : "FEDEX";
+                }
+                else
+                {
+                    carrierCode = "FEDEX-I";
+                }
+            }
+            return carrierCode;
+        }
+
+        /// <summary>
+        /// Gets the UPS carrier code based on the shipment configuration.
+        /// </summary>
+        private static string GetUpsCarrierCode(ShipmentEntity shipment, bool isDomestic)
+        {
+            string carrierCode;
+            if (UpsUtility.IsUpsMiOrSurePostService((UpsServiceType)shipment.Ups.Service))
+            {
+                carrierCode = isDomestic ? "E-UPS" : "E-UPS-I";
+            }
+            else
+            {
+                if (shipment.Ups.Packages[0].InsurancePennyOne)
+                {
+                    carrierCode = "UPS-P1";
+                }
+                else
+                {
+                    carrierCode = isDomestic ? "UPS" : "UPS-I";
+                }
+            }
             return carrierCode;
         }
     }

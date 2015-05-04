@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
@@ -770,7 +771,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             
             // If it's international we have to make sure we wouldn't send more total declared value than the customs value - use the overridden shipment
             // to compare the country code in case it's been overridden such as an eBay GSP order
-            decimal? maxPackageDeclaredValue = (overriddenShipment.ShipCountryCode != "US") ? (shipment.CustomsValue / shipment.FedEx.Packages.Count) : (decimal?) null;
+            decimal? maxPackageDeclaredValue = overriddenShipment.AdjustedShipCountryCode() != "US" ? 
+                shipment.CustomsValue / shipment.FedEx.Packages.Count : 
+                (decimal?) null;
 
             // Check the FedEx wide PennyOne settings and get them updated
             foreach (var package in shipment.FedEx.Packages)
@@ -1075,90 +1078,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
         {
-            var labels = new Lazy<List<TemplateLabelData>>(() => LoadLabelData(shipment));
-
-            // Add the labels content
-            container.AddElement("Labels",
-                new LabelsOutline(container.Context, shipment, labels, ImageFormat.Png),
-                ElementOutline.If(() => shipment().Processed));
-
-            Lazy<TemplateLabelData> codReturn = new Lazy<TemplateLabelData>(() => labels.Value.FirstOrDefault(l => l.Name == "COD"));
-
-            // Legacy stuff
-            ElementOutline outline = container.AddElement("FedEx", ElementOutline.If(() => shipment().Processed));
-            outline.AddAttributeLegacy2x();
-            outline.AddElement("Voided", () => shipment().Voided);
-            
-            outline.AddElement("LabelCODReturn",
-                () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, codReturn.Value.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png))),
-                ElementOutline.If(() => shipment().ActualLabelFormat == null && codReturn.Value != null));
-            
-            outline.AddElement("Package",
-                new FedExLegacyPackageTemplateOutline(container.Context),
-                () => labels.Value.Where(l => l.Category == TemplateLabelCategory.Primary),
-                ElementOutline.If(() => shipment().ActualLabelFormat == null));
-        }
-
-        /// <summary>
-        /// Load all the label data for the given shipmentID
-        /// </summary>
-        private static List<TemplateLabelData> LoadLabelData(Func<ShipmentEntity> shipment)
-        {
-            List<TemplateLabelData> labelData = new List<TemplateLabelData>();
-
-            // FedEx stores some stuff at the shipmentID level, but we include it as apart of the first package
-            List<DataResourceReference> shipmentResources = DataResourceManager.GetConsumerResourceReferences(shipment().ShipmentID);
-
-            // Add labels for each package
-            foreach (long packageID in DataProvider.GetRelatedKeys(shipment().ShipmentID, EntityType.FedExPackageEntity))
-            {
-                // Get the resource list for our shipment
-                List<DataResourceReference> packageResources = DataResourceManager.GetConsumerResourceReferences(packageID);
-
-                // Could be none for upgraded 2x shipments
-                if (packageResources.Count > 0)
-                {
-                    // Add our standard label output
-                    DataResourceReference labelResource = packageResources.Single(i => i.Label == "LabelImage");
-                    labelData.Add(new TemplateLabelData(packageID, "Label", TemplateLabelCategory.Primary, labelResource));
-
-                    // For Ground it will be at the package level,
-                    DataResourceReference codPackageResource = packageResources.SingleOrDefault(r => r.Label == "COD");
-                    if (codPackageResource != null)
-                    {
-                        labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codPackageResource));
-                    }
-
-                    // Will be non-null first time through
-                    if (shipmentResources != null)
-                    {
-                        DataResourceReference codShipmentResource = shipmentResources.SingleOrDefault(r => r.Label == "COD");
-
-                        if (codShipmentResource != null)
-                        {
-                            labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codShipmentResource));
-                        }
-
-                        var shipmentDocuments = shipmentResources.Where(r => r.Label.StartsWith("Document"));
-                        foreach (DataResourceReference shipmentDocument in shipmentDocuments)
-                        {
-                            labelData.Add(new TemplateLabelData(packageID, shipmentDocument.Label.Replace("Document", ""), TemplateLabelCategory.Supplemental, shipmentDocument));
-                        }
-
-                        // Don't need it anymore
-                        shipmentResources = null;
-                    }
-
-                    // Add any supporting package documents that may exist
-                    var documentResources = packageResources.Where(r => r.Label.StartsWith("Document"));
-                    foreach (DataResourceReference documentResource in documentResources)
-                    {
-                        labelData.Add(new TemplateLabelData(packageID, documentResource.Label.Replace("Document", ""), TemplateLabelCategory.Supplemental, documentResource));
-                    }
-                }
-            }
-
-            return labelData;
+            FedExTemplateElementGenerator.Generate(container, shipment, loaded);
         }
 
         /// <summary>
@@ -1166,7 +1086,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override bool IsDomestic(ShipmentEntity shipmentEntity)
         {
-            return base.IsDomestic(shipmentEntity) && !IsShipmentBetweenUnitedStatesAndPuertoRico(shipmentEntity);
+            if (shipmentEntity == null)
+            {
+                throw new ArgumentNullException("shipmentEntity");
+            }
+
+            string originCountryCode = shipmentEntity.AdjustedOriginCountryCode();
+            string destinationCountryCode = shipmentEntity.AdjustedShipCountryCode();
+
+            return string.Equals(originCountryCode, destinationCountryCode, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>
@@ -1240,37 +1168,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return fields;
-        }
-
-        /// <summary>
-        /// Outline for the legacy FedEx 'Package' element
-        /// </summary>
-        private class FedExLegacyPackageTemplateOutline : ElementOutline
-        {
-            private TemplateLabelData labelData;
-
-            /// <summary>
-            /// Constructor
-            /// </summary>
-            public FedExLegacyPackageTemplateOutline(TemplateTranslationContext context)
-                : base(context)
-            {
-                Lazy<string> labelFile = new Lazy<string>(() => labelData.Resource.GetAlternateFilename(TemplateLabelUtility.GetFileExtension(ImageFormat.Png)));
-
-                AddAttribute("ID", () => labelData.PackageID);
-                AddElement("LabelOnly", () => TemplateLabelUtility.GenerateRotatedLabel(RotateFlipType.Rotate90FlipNone, labelFile.Value));
-            }
-
-            /// <summary>
-            /// Create the bound clone
-            /// </summary>
-            public override ElementOutline CreateDataBoundClone(object data)
-            {
-                return new FedExLegacyPackageTemplateOutline(Context)
-                {
-                    labelData = (TemplateLabelData) data
-                };
-            }
         }
 
         /// <summary>

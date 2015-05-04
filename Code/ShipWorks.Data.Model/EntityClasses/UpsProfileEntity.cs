@@ -1152,12 +1152,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_shippingProfile !=null);
 						DesetupSyncShippingProfile(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("ShippingProfile");
-						}
 					}
 					else
 					{

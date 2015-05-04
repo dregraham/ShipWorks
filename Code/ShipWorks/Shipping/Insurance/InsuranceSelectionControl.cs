@@ -46,55 +46,16 @@ namespace ShipWorks.Shipping.Insurance
         public void LoadInsuranceChoices(IEnumerable<InsuranceChoice> choices)
         {
             loading = true;
+            bool isMultiPackage = false;
+            InsuranceProvider? insuranceProvider = null;
 
             loadedInsurance = choices.ToList();
-
-            bool allFedEx = true;
-            bool allUps = true;
-            bool allOnTrac = true;
-            bool allEndicia = true;
-            bool alliParcel = true;
-            bool allUsps = true;
-
-            bool isMultiPackage = false;
-            
-            InsuranceProvider? insuranceProvider = null;
 
             // Update the insurance status and amount used
             using (MultiValueScope scope = new MultiValueScope())
             {
                 foreach (InsuranceChoice choice in loadedInsurance)
                 {
-                    if (!ShipmentTypeManager.IsFedEx((ShipmentTypeCode) choice.Shipment.ShipmentType))
-                    {
-                        allFedEx = false;
-                    }
-
-                    if (!ShipmentTypeManager.IsUps((ShipmentTypeCode) choice.Shipment.ShipmentType))
-                    {
-                        allUps = false;
-                    }
-
-                    if (ShipmentTypeCode.OnTrac != (ShipmentTypeCode) choice.Shipment.ShipmentType)
-                    {
-                        allOnTrac = false;
-                    }
-
-                    if (!ShipmentTypeManager.IsiParcel((ShipmentTypeCode)choice.Shipment.ShipmentType))
-                    {
-                        alliParcel = false;
-                    }
-
-                    if (choice.Shipment.ShipmentType != (int) ShipmentTypeCode.Endicia)
-                    {
-                        allEndicia = false;
-                    }
-
-                    if (choice.Shipment.ShipmentType != (int)ShipmentTypeCode.Usps)
-                    {
-                        allUsps = false;
-                    }
-
                     if (insuranceProvider == null)
                     {
                         insuranceProvider = choice.InsuranceProvider;
@@ -114,6 +75,28 @@ namespace ShipWorks.Shipping.Insurance
                 }
             }
 
+            SetLabelTextValues(insuranceProvider, loadedInsurance);
+
+            // Update the insurance cost calculation if there's only one selected
+            if (loadedInsurance.Count == 1 && !isMultiPackage)
+            {
+                UpdateCostDisplay(loadedInsurance[0].Shipment, loadedInsurance[0].InsuranceValue);
+            }
+            else
+            {
+                ClearInsuranceCost();
+            }
+
+            loading = false;
+
+            OnChangeUseInsurance(null, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Sets the label text values for the insurance choice fields.
+        /// </summary>
+        private void SetLabelTextValues(InsuranceProvider? insuranceProvider, List<InsuranceChoice> choices)
+        {
             if (insuranceProvider == InsuranceProvider.ShipWorks)
             {
                 labelInsurance.Text = "Insurance:";
@@ -130,40 +113,26 @@ namespace ShipWorks.Shipping.Insurance
 
                 if (insuranceProvider == InsuranceProvider.Carrier)
                 {
-                    if (allUps || allFedEx || allOnTrac || alliParcel)
+                    if (InsuranceChoice.AllUpsShipments(choices) || InsuranceChoice.AllFedExShipments(choices) || InsuranceChoice.AllOnTracShipments(choices) || InsuranceChoice.AlliParcelShipments(choices))
                     {
-                        //if insurance provider is not null, loadedInsurance will always have at least one value.
-						string carrierName = ShippingManager.GetCarrierName((ShipmentTypeCode) loadedInsurance.First().Shipment.ShipmentType);
-						
+                        // loadedInsurance will always have at least one value when insurance provider is not null
+                        string carrierName = ShippingManager.GetCarrierName((ShipmentTypeCode) loadedInsurance.First().Shipment.ShipmentType);
+
                         useInsurance.Text = string.Format("{0} Declared Value", carrierName);
                         labelValue.Text = "Declared value:";
                     }
-                    else if (allEndicia)
+                    else if (InsuranceChoice.AllEndiciaShipments(choices))
                     {
                         useInsurance.Text = "Endicia Insurance";
                         labelValue.Text = "Insured value:";
                     }
-                    else if (allUsps)
+                    else if (InsuranceChoice.AllUspsShipments(choices))
                     {
                         useInsurance.Text = UspsUtility.StampsInsuranceDisplayName;
                         labelValue.Text = "Insured value";
                     }
                 }
             }
-
-            // Update the insurance cost calculation if there's only one selected
-            if (loadedInsurance.Count == 1 && !isMultiPackage)
-            {
-                UpdateCostDisplay(loadedInsurance[0].Shipment, loadedInsurance[0].InsuranceValue);
-            }
-            else
-            {
-                ClearInsuranceCost();
-            }
-
-            loading = false;
-
-            OnChangeUseInsurance(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -199,89 +168,104 @@ namespace ShipWorks.Shipping.Insurance
             // Get the cost 
             InsuranceCost cost = InsuranceUtility.GetInsuranceCost(shipment, value);
 
-            // Show Carrier cost
             if (shipment.InsuranceProvider != (int) InsuranceProvider.ShipWorks)
             {
+                ShowCarrierCost(cost);
+            }
+            else
+            {
+                ShowShipWorksInsuranceCost(shipment, cost);
+            }
+        }
+
+        /// <summary>
+        /// Updates the controls to show the ShipWorks insurance cost.
+        /// </summary>
+        private void ShowShipWorksInsuranceCost(ShipmentEntity shipment, InsuranceCost cost)
+        {
+            // See if there is an info message to display
+            if (cost.InfoMessage != null)
+            {
+                infoTip.Visible = true;
+                labelCost.Left = infoTip.Right + 1;
+
+                infoTip.Caption = cost.InfoMessage;
+            }
+            else
+            {
                 infoTip.Visible = false;
+                labelCost.Left = infoTip.Left;
+            }
+
+            // If there is no SW cost for this shipment, clear it
+            if (cost.ShipWorks == null)
+            {
                 labelCost.Visible = false;
 
-                if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
+                linkSavings.Visible = false;
+                linkSavings.Left = labelCost.Left;
+            }
+            else
+            {
+                // Show the cost
+                labelCost.Visible = true;
+                labelCost.Text = string.Format("${0:0.00}", cost.ShipWorks);
+
+                // Adjust savings position
+                linkSavings.Left = labelCost.Right;
+
+                if (cost.ShipWorks > 0)
                 {
                     linkSavings.Visible = true;
-                    linkSavings.Left = infoTip.Left;
-
-                    linkSavings.Text = string.Format("(Learn how to save ${0:0.00})", cost.Carrier - cost.ShipWorks);
                     linkSavings.Tag = cost;
+
+                    // Only show savings if there is a savings
+                    if (cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
+                    {
+                        linkSavings.Text = string.Format("(Compare to ${0:0.00})", cost.Carrier);
+                    }
+                    else
+                    {
+                        linkSavings.Text = "(Learn more)";
+                    }
                 }
                 else
                 {
                     linkSavings.Visible = false;
                 }
             }
-            // Show our cost
+
+            if (cost.ShipWorks == null || cost.ShipWorks == 0)
+            {
+                if (cost.AdvertisePennyOne)
+                {
+                    linkSavings.Visible = true;
+                    linkSavings.Text = "Add coverage for the first $100";
+                    linkSavings.Tag = (ShipmentTypeCode) shipment.ShipmentType;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the controls to show the carrier cost.
+        /// </summary>
+        /// <param name="cost">The cost.</param>
+        private void ShowCarrierCost(InsuranceCost cost)
+        {
+            infoTip.Visible = false;
+            labelCost.Visible = false;
+
+            if (cost.ShipWorks > 0 && cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
+            {
+                linkSavings.Visible = true;
+                linkSavings.Left = infoTip.Left;
+
+                linkSavings.Text = string.Format("(Learn how to save ${0:0.00})", cost.Carrier - cost.ShipWorks);
+                linkSavings.Tag = cost;
+            }
             else
             {
-                // See if there is an info message to display
-                if (cost.InfoMessage != null)
-                {
-                    infoTip.Visible = true;
-                    labelCost.Left = infoTip.Right + 1;
-
-                    infoTip.Caption = cost.InfoMessage;
-                }
-                else
-                {
-                    infoTip.Visible = false;
-                    labelCost.Left = infoTip.Left;
-                }
-
-                // If there is no SW cost for this shipment, clear it
-                if (cost.ShipWorks == null)
-                {
-                    labelCost.Visible = false;
-
-                    linkSavings.Visible = false;
-                    linkSavings.Left = labelCost.Left;
-                }
-                else
-                {
-                    // Show the cost
-                    labelCost.Visible = true;
-                    labelCost.Text = string.Format("${0:0.00}", cost.ShipWorks);
-
-                    // Adjust savings position
-                    linkSavings.Left = labelCost.Right;
-
-                    if (cost.ShipWorks > 0)
-                    {
-                        linkSavings.Visible = true;
-                        linkSavings.Tag = cost;
-
-                        // Only show savings if there is a savings
-                        if (cost.Carrier.HasValue && cost.Carrier > cost.ShipWorks)
-                        {
-                            linkSavings.Text = string.Format("(Compare to ${0:0.00})", cost.Carrier);
-                        }
-                        else
-                        {
-                            linkSavings.Text = "(Learn more)";
-                        }
-                    }
-                    else
-                    {
-                        linkSavings.Visible = false;
-                    }
-                }
-
-                if (cost.ShipWorks == null || cost.ShipWorks == 0)
-                {
-                    if (cost.AdvertisePennyOne)
-                    {
-                        linkSavings.Visible = true;
-                        linkSavings.Text = "Add coverage for the first $100";
-                        linkSavings.Tag = (ShipmentTypeCode) shipment.ShipmentType;
-                    }
-                }
+                linkSavings.Visible = false;
             }
         }
 
@@ -406,7 +390,7 @@ namespace ShipWorks.Shipping.Insurance
         }
 
         /// <summary>
-        /// Controls whehter inputting insured value is enabled
+        /// Controls whether inputting insured value is enabled
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

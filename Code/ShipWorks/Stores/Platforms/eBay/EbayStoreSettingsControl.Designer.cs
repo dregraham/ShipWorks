@@ -45,6 +45,7 @@
             this.acceptedPaymentsControl = new ShipWorks.Stores.Platforms.Ebay.OrderCombining.AcceptedPaymentsControl();
             this.sectionInvoices = new ShipWorks.UI.Controls.SectionTitle();
             this.sectionDownloadDetails = new ShipWorks.UI.Controls.SectionTitle();
+            this.downloadOlderOrders = new System.Windows.Forms.CheckBox();
             this.credentialsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -71,7 +72,7 @@
             // downloadPayPalCheckBox
             // 
             this.downloadPayPalCheckBox.AutoSize = true;
-            this.downloadPayPalCheckBox.Location = new System.Drawing.Point(23, 77);
+            this.downloadPayPalCheckBox.Location = new System.Drawing.Point(23, 95);
             this.downloadPayPalCheckBox.Name = "downloadPayPalCheckBox";
             this.downloadPayPalCheckBox.Size = new System.Drawing.Size(268, 17);
             this.downloadPayPalCheckBox.TabIndex = 2;
@@ -86,7 +87,7 @@
             this.credentialsPanel.Controls.Add(this.credentialTypeTextBox);
             this.credentialsPanel.Controls.Add(this.label3);
             this.credentialsPanel.Controls.Add(this.label2);
-            this.credentialsPanel.Location = new System.Drawing.Point(53, 97);
+            this.credentialsPanel.Location = new System.Drawing.Point(53, 115);
             this.credentialsPanel.Name = "credentialsPanel";
             this.credentialsPanel.Size = new System.Drawing.Size(393, 57);
             this.credentialsPanel.TabIndex = 8;
@@ -139,7 +140,7 @@
             // 
             this.internationalComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.internationalComboBox.FormattingEnabled = true;
-            this.internationalComboBox.Location = new System.Drawing.Point(181, 363);
+            this.internationalComboBox.Location = new System.Drawing.Point(181, 373);
             this.internationalComboBox.Name = "internationalComboBox";
             this.internationalComboBox.Size = new System.Drawing.Size(238, 21);
             this.internationalComboBox.TabIndex = 16;
@@ -148,7 +149,7 @@
             // 
             this.domesticComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.domesticComboBox.FormattingEnabled = true;
-            this.domesticComboBox.Location = new System.Drawing.Point(181, 336);
+            this.domesticComboBox.Location = new System.Drawing.Point(181, 346);
             this.domesticComboBox.Name = "domesticComboBox";
             this.domesticComboBox.Size = new System.Drawing.Size(238, 21);
             this.domesticComboBox.TabIndex = 15;
@@ -156,7 +157,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(20, 367);
+            this.label6.Location = new System.Drawing.Point(20, 377);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(154, 13);
             this.label6.TabIndex = 14;
@@ -165,7 +166,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(39, 340);
+            this.label5.Location = new System.Drawing.Point(39, 350);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(135, 13);
             this.label5.TabIndex = 13;
@@ -174,7 +175,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(25, 201);
+            this.label4.Location = new System.Drawing.Point(25, 211);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(155, 13);
             this.label4.TabIndex = 12;
@@ -182,16 +183,16 @@
             // 
             // acceptedPaymentsControl
             // 
-            this.acceptedPaymentsControl.Location = new System.Drawing.Point(33, 220);
+            this.acceptedPaymentsControl.Location = new System.Drawing.Point(33, 230);
             this.acceptedPaymentsControl.Name = "acceptedPaymentsControl";
             this.acceptedPaymentsControl.Size = new System.Drawing.Size(385, 108);
             this.acceptedPaymentsControl.TabIndex = 11;
             // 
             // sectionInvoices
             // 
-            this.sectionInvoices.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.sectionInvoices.Location = new System.Drawing.Point(0, 169);
+            this.sectionInvoices.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionInvoices.Location = new System.Drawing.Point(0, 179);
             this.sectionInvoices.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
             this.sectionInvoices.Name = "sectionInvoices";
             this.sectionInvoices.Size = new System.Drawing.Size(535, 22);
@@ -208,10 +209,21 @@
             this.sectionDownloadDetails.TabIndex = 17;
             this.sectionDownloadDetails.Text = "Download Details";
             // 
+            // downloadOlderOrders
+            // 
+            this.downloadOlderOrders.AutoSize = true;
+            this.downloadOlderOrders.Location = new System.Drawing.Point(23, 72);
+            this.downloadOlderOrders.Name = "downloadOlderOrders";
+            this.downloadOlderOrders.Size = new System.Drawing.Size(146, 17);
+            this.downloadOlderOrders.TabIndex = 18;
+            this.downloadOlderOrders.Text = "Redownload older orders";
+            this.downloadOlderOrders.UseVisualStyleBackColor = true;
+            // 
             // EbayStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.downloadOlderOrders);
             this.Controls.Add(this.sectionDownloadDetails);
             this.Controls.Add(this.internationalComboBox);
             this.Controls.Add(this.sectionInvoices);
@@ -227,7 +239,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.MinimumSize = new System.Drawing.Size(535, 262);
             this.Name = "EbayStoreSettingsControl";
-            this.Size = new System.Drawing.Size(535, 401);
+            this.Size = new System.Drawing.Size(535, 409);
             this.Load += new System.EventHandler(this.OnLoad);
             this.credentialsPanel.ResumeLayout(false);
             this.credentialsPanel.PerformLayout();
@@ -255,5 +267,6 @@
         private System.Windows.Forms.Label label5;
         private ShipWorks.UI.Controls.SectionTitle sectionInvoices;
         private ShipWorks.UI.Controls.SectionTitle sectionDownloadDetails;
+        private System.Windows.Forms.CheckBox downloadOlderOrders;
     }
 }

@@ -65,9 +65,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                 CodDetail codDetail = GetCodDetail(shipmentEntity);
                 
                 // Determine which currency to use based on the recipient's country code (for certification purposes)
-                string currency = EnumHelper.GetApiValue(ShipmentType.GetCurrencyForCountryCode(shipmentEntity.ShipCountryCode));
+                string currency = EnumHelper.GetApiValue(ShipmentType.GetCurrencyForCountryCode(shipmentEntity.AdjustedShipCountryCode()));
                 
-
                 if (shipmentEntity.FedEx.Service == (int)FedExServiceType.FedExGround || shipmentEntity.FedEx.Service == (int)FedExServiceType.GroundHomeDelivery)
                 {
                     // Ground services require configuring the COD settings at the package level

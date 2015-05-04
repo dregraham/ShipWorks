@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
 {
@@ -37,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
 
             // Domestic
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 // For APO/FPO, the customs docs come in the next two images
                 if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) && PostalUtility.IsMilitaryPostalCode(shipment.ShipPostalCode))
@@ -45,14 +48,31 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // They come down different depending on form type
                     if (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72)
                     {
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
-                        labels.Add(CreateLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
-                        
-                        // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
-                        if (labelUrls.Count >= 2)
+                        if (shipment.ActualLabelFormat.HasValue)
                         {
-                            labels.Add(CreateLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
-                            labels.Add(CreateLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            // Thermal
+
+                            labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            if (labelUrls.Count >= 2)
+                            {
+                                // print this form 3 times.
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart2", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart3", labelUrls[1]));
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart4", labelUrls[1]));
+                            }
+                        }
+                        else
+                        {
+                            // Standard
+                            labels.Add(CreateStandardLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            labels.Add(CreateStandardLabel(shipment, "LabelPart2", labelUrls[0], CroppingStyles.MilitaryContinuationCrop));
+
+                            // Sometimes we don't get additional label urls (large envelope, etc..), so only try to add 3 and 4 if they exist.
+                            if (labelUrls.Count >= 2)
+                            {
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart3", labelUrls[1], CroppingStyles.MilitaryPrimaryCrop));
+                                labels.Add(CreateStandardLabel(shipment, "LabelPart4", labelUrls[1], CroppingStyles.MilitaryContinuationCrop));
+                            }
                         }
                     }
                     else
@@ -63,21 +83,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                         labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
                     }
                 }
+                else if (ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
+                {
+                    // If customs are required and it's not an envelope, we're going to get instructions that we don't need so we can crop them
+                    Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? 
+                        CroppingStyles.None : 
+                        CroppingStyles.PrimaryCrop;
+
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
+                }
                 else
                 {
-                    // The bottom half of Guam are instructions we do not need.
-                    if (shipment.ShipCountryCode == "GU" || shipment.ShipStateProvCode == "GU")
-                    {
-                        // Cropping the envelopes shouldn't occur
-                        Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? CroppingStyles.None : CroppingStyles.PrimaryCrop;
-
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
-                    }
-                    else
-                    {
-                        // First one is always the primary
-                        labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
-                    }
+                    // First one is always the primary
+                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.None));
                 }
             }
             else
@@ -107,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             else if (shipment.ShipCountryCode == "CA" && !UspsUtility.IsInternationalConsolidatorServiceType(serviceType))
             {
                 // As of v42 of the API, only single label is provided for shipments going to Canada
-                labels.Add(CreatePostalLabelToCanada(shipment, labelUrls, serviceType));
+                labels.AddRange(CreatePostalLabelsToCanada(shipment, labelUrls, serviceType));
             }
             else if (serviceType == PostalServiceType.InternationalFirst || (serviceType == PostalServiceType.InternationalPriority && labelUrls.Count <= 2))
             {
@@ -161,14 +179,125 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         }
 
         /// <summary>
-        /// Creates the postal label for shipments going to Canada.
+        /// Creates the postal labels for shipments going to Canada.
         /// </summary>
-        private Label CreatePostalLabelToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
+        private IEnumerable<Label> CreatePostalLabelsToCanada(ShipmentEntity shipment, List<string> labelUrls, PostalServiceType serviceType)
         {
-            // Use the single international cropping style for International First service, so the shipping
-            // instructions are excluded from the label.
-            Rectangle croppingStyle = serviceType == PostalServiceType.InternationalFirst ? CroppingStyles.SingleInternationalCrop : CroppingStyles.None;
-            return CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle);
+            // When customs value exceeds $400, the label images we get from the API are different
+            bool customsValueExceedsThreshold = shipment.CustomsValue >= 400M;
+            Rectangle croppingStyle = GetCanadaCroppingStyle(shipment, serviceType, customsValueExceedsThreshold);
+
+            // In cases where customs value >= $400, multiple labels are included on one image/URL and need
+            // to be cropped separates; in cases where customs value < $400, the continuation label is sent 
+            // down as a separate image/URL and no additional cropping is needed
+            bool continuationLabelsNeedCropping = customsValueExceedsThreshold && labelUrls.Count >= 2;
+
+            // Exclude the instructions page that comes down on these shipments
+            int numberOfLabelsToCreate = customsValueExceedsThreshold ? Math.Max(1, labelUrls.Count - 1) : labelUrls.Count;
+
+            List<Label> labels = new List<Label>();
+
+            for (int index = 0; index < numberOfLabelsToCreate; index++)
+            {
+                string url = labelUrls[index];
+                string labelName = index == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", labels.Count + 1);
+                
+                if (index==0)
+                {
+                    labels.Add(CreateLabel(shipment, labelName, url, croppingStyle));
+
+                    if (continuationLabelsNeedCropping)
+                    {
+                        labels.Add(CreateLabel(shipment, string.Format("LabelPart{0}", labels.Count + 1), url, CroppingStyles.ContinuationCrop));
+                    }
+                }
+                else
+                {
+                    labels.Add(CreateLabel(shipment, labelName, url, CroppingStyles.None));
+                }
+            }
+
+            return labels;
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for International Express labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaCroppingStyle(ShipmentEntity shipment, PostalServiceType serviceType, bool customsValueExceedsThreshold)
+        {
+            switch (serviceType)
+            {
+                case PostalServiceType.InternationalFirst:
+                    return CroppingStyles.SingleInternationalCrop;
+
+                case PostalServiceType.InternationalPriority:
+                    return GetCanadaInternationalPriorityCroppingStyle(shipment, customsValueExceedsThreshold);
+
+                case PostalServiceType.InternationalExpress:
+                    return GetCanadaInternationalExpressCroppingStyle(shipment, customsValueExceedsThreshold);
+            }
+
+            return CroppingStyles.None;
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaInternationalPriorityCroppingStyle(ShipmentEntity shipment, bool customsValueExceedsThreshold)
+        {
+            Rectangle croppingStyle = CroppingStyles.None;
+
+            if (customsValueExceedsThreshold)
+            {
+                croppingStyle = CroppingStyles.SingleInternationalCrop;
+            }
+            else
+            {
+                if (UseSingleInternationalCropForCanadaInternationalPriority((PostalPackagingType)shipment.Postal.PackagingType))
+                {
+                    croppingStyle = CroppingStyles.SingleInternationalCrop;
+                }
+            }
+
+            return croppingStyle;
+        }
+
+        /// <summary>
+        /// Uses the single international crop.
+        /// </summary>
+        private static bool UseSingleInternationalCropForCanadaInternationalPriority(PostalPackagingType packagingType)
+        {
+            PostalPackagingType[] packagesThatNeedSingleInternationalCrop =
+            {
+                PostalPackagingType.FlatRatePaddedEnvelope,
+                PostalPackagingType.FlatRateLegalEnvelope, 
+                PostalPackagingType.FlatRateSmallBox, 
+                PostalPackagingType.FlatRateEnvelope
+            };
+
+            return packagesThatNeedSingleInternationalCrop.Contains(packagingType);
+        }
+
+        /// <summary>
+        /// Determines the cropping style to use for International Express labels to Canada.
+        /// </summary>
+        private Rectangle GetCanadaInternationalExpressCroppingStyle(ShipmentEntity shipment, bool customsValueExceedsThreshold)
+        {
+            Rectangle croppingStyle = CroppingStyles.None;
+
+            if (customsValueExceedsThreshold)
+            {
+                croppingStyle = CroppingStyles.SingleInternationalCrop;
+            }
+            else
+            {
+                if (shipment.Postal.PackagingType == (int) PostalPackagingType.FlatRateSmallBox)
+                {
+                    croppingStyle = CroppingStyles.SingleInternationalCrop;
+                }
+            }
+
+            return croppingStyle;
         }
 
         /// <summary>

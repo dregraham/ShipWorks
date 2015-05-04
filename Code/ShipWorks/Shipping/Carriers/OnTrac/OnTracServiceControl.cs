@@ -97,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
             // type needs to be updated for the loop to loop correctly
-            bool allInternational = LoadedShipments.Any(shipment => !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode));
+            bool allInternational = LoadedShipments.Any(shipment => !shipment.ShipPerson.IsDomesticCountry());
 
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;

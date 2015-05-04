@@ -256,7 +256,7 @@ namespace ShipWorks.AddressValidation
                 return false;
             }
 
-            if (!PostalUtility.IsDomesticCountry(currentShippingAddress.CountryCode) &&
+            if (!currentShippingAddress.IsDomesticCountry() &&
                 !PostalUtility.IsMilitaryState(currentShippingAddress.CountryCode))
             {
                 currentShippingAddress.AddressValidationError = "ShipWorks cannot validate international addresses";

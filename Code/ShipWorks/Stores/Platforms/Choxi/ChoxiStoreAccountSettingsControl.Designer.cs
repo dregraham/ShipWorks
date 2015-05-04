@@ -1,6 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.NoMoreRack
+﻿namespace ShipWorks.Stores.Platforms.Choxi
 {
-    partial class NoMoreRackStoreAccountSettingsControl
+    partial class ChoxiStoreAccountSettingsControl
     {
         /// <summary> 
         /// Required designer variable.

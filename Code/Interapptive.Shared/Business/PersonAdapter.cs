@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Text.RegularExpressions;
 using Interapptive.Shared.Data;
 
 namespace Interapptive.Shared.Business
@@ -10,7 +8,7 @@ namespace Interapptive.Shared.Business
     /// <summary>
     /// Wraps an entity to expose its person and address details
     /// </summary>
-    public class PersonAdapter : EntityAdapter
+    public class PersonAdapter : EntityAdapter, IAddressAdapter
     {
         /// <summary>
         /// Creates a new instance of the adapter that maintains its own values, and has no backing entity.
@@ -420,7 +418,7 @@ namespace Interapptive.Shared.Business
         public string PostalCode
         {
             get { return GetField<string>("PostalCode"); }
-            set { SetField("PostalCode", value); }
+            set { SetField("PostalCode", value == null ? null : value.Trim()); }
         }
 
         /// <summary>

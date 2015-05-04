@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
         public List<UpsServiceMapping> GetServices(ShipmentEntity shipment)
         {
             return services
-                .Where(s => s.DestinationCountryCode == shipment.ShipCountryCode || s.DestinationCountryCode == internationalCode)
+                .Where(s => s.DestinationCountryCode == shipment.AdjustedShipCountryCode() || s.DestinationCountryCode == internationalCode)
                 .ToList();
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using System.Xml;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters;
@@ -151,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
             xmlWriter.WriteElementString("City", person.City);
             xmlWriter.WriteElementString("StateProvinceCode", AdjustUpsStateProvinceCode(person.CountryCode, person.StateProvCode));
             xmlWriter.WriteElementString("PostalCode", person.PostalCode);
-            xmlWriter.WriteElementString("CountryCode", AdjustUpsCountryCode(person.CountryCode, person.StateProvCode));
+            xmlWriter.WriteElementString("CountryCode", person.AdjustedCountryCode(ShipmentTypeCode.UpsOnLineTools));
 
             if (!string.IsNullOrWhiteSpace(residentialFlag))
             {
@@ -171,25 +172,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         {
             // If Puerto Rico is the country, we'll just use it as the state as well
             return countryCode.Equals("PR", StringComparison.OrdinalIgnoreCase) ? "PR" : stateProvCode;
-        }
-
-        /// <summary>
-        /// Translate the given country code to that which UPS will be happy with
-        /// </summary>
-        public static string AdjustUpsCountryCode(string code, string state)
-        {
-            // UPS does not like UK.. only GB
-            if (code == "UK")
-            {
-                code = "GB";
-            }
-
-            if (code == "US" && state == "PR")
-            {
-                code = "PR";
-            }
-
-            return code;
         }
 
         /// <summary>
@@ -439,7 +421,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
         public static bool IsDomesticUnitedStatesOrPuertoRico(ShipmentEntity shipment)
         {
             return !ShipmentType.IsShipmentBetweenUnitedStatesAndPuertoRico(shipment) &&
-                   ((shipment.ShipCountryCode == "US" && shipment.OriginCountryCode == "US") ||
+                   ((shipment.AdjustedShipCountryCode() == "US" && shipment.AdjustedOriginCountryCode() == "US") ||
                     (ShipmentType.IsPuertoRicoAddress(shipment, "Ship") && ShipmentType.IsPuertoRicoAddress(shipment, "Origin")));
         }
     }

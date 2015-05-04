@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     allDomestic = false;
                 }
 
-                if (overriddenShipment.ShipCountryCode != "CA")
+                if (overriddenShipment.AdjustedShipCountryCode() != "CA")
                 {
                     allCanada = false;
                 }

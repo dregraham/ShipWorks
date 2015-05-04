@@ -2,17 +2,17 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms.GenericModule;
 
-namespace ShipWorks.Stores.Platforms.InstaStore
+namespace ShipWorks.Stores.Platforms.InstanteStore
 {
     /// <summary>
     /// Store specific integration into ShipWorks
     /// </summary>
-    public class InstaStoreStoreType : GenericModuleStoreType
+    public class InstanteStoreStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public InstaStoreStoreType(StoreEntity store) :
+        public InstanteStoreStoreType(StoreEntity store) :
             base(store)
         {
 
@@ -30,13 +30,13 @@ namespace ShipWorks.Stores.Platforms.InstaStore
         }
 
         /// <summary>
-        /// Log request/responses as InstaStore
+        /// Log request/responses as InstanteStore
         /// </summary>
         public override ApiLogSource LogSource
         {
             get
             {
-                return ApiLogSource.InstaStore;
+                return ApiLogSource.InstanteStore;
             }
         }
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.InstaStore
         /// </summary>
         //public override string AccountSettingsHelpUrl
         //{
-        //    get { return "http://support.shipworks.com/solution/articles/4000022268-connecting-InstaStore-with"; }
+        //    get { return "http://support.shipworks.com/solution/articles/4000022268-connecting-InstanteStore-with"; }
         //}
     }
 }

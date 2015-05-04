@@ -122,7 +122,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             PersonAdapter personAdapter = new PersonAdapter(account, "");
             contactInformation.SaveToEntity(personAdapter);
 
-            if (personAdapter.CountryCode != "US")
+            if (personAdapter.AdjustedCountryCode(ShipmentTypeCode.OnTrac) != "US")
             {
                 MessageHelper.ShowInformation(this, "OnTrac only supports US addresses.");
                 e.NextPage = CurrentPage;

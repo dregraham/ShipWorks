@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web.UI.WebControls;
 using log4net;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Connection;
@@ -14,6 +16,7 @@ using Interapptive.Shared.Data;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.FactoryClasses;
 using ShipWorks.SqlServer.Common.Data;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Data.Caching
 {
@@ -80,7 +83,14 @@ namespace ShipWorks.Data.Caching
 
                 if (result is DBNull)
                 {
-                    throw new InvalidOperationException("Change tracking is not enabled.");
+                    new SqlChangeTracking().Enable();
+                    
+                    result = SqlCommandProvider.ExecuteScalar(con, "SELECT CHANGE_TRACKING_CURRENT_VERSION()");
+
+                    if (result is DBNull)
+                    {
+                        throw new InvalidOperationException("Change tracking is not enabled and attempt to enable failed.");
+                    }
                 }
 
                 return (long) result;
@@ -136,7 +146,7 @@ namespace ShipWorks.Data.Caching
                 }
                 catch (SqlException ex)
                 {
-                    log.Error("Error in CheckForChanges", ex);
+                    ProcessCheckForChangesSqlException(ex);
                     return tables.Select(EntityChangeTrackingChangeset.LoadAsInvalid).ToList();
                 }
 
@@ -185,6 +195,20 @@ namespace ShipWorks.Data.Caching
                 }
 
                 return changes;
+            }
+        }
+
+        /// <summary>
+        /// Processes the check for changes SQL exception - Add ChangeTracking to the table if possible.
+        /// </summary>
+        private static void ProcessCheckForChangesSqlException(SqlException sqlException)
+        {
+            log.Error("Error in CheckForChanges", sqlException);
+            log.Info("Attempting to enable change tracking.");
+
+            if (sqlException.Errors.Cast<SqlError>().Any(error => error.Number == 22105))
+            {
+                new SqlChangeTracking().Enable();
             }
         }
 

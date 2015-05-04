@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Settings
+﻿using Interapptive.Shared.Messaging;
+
+namespace ShipWorks.Shipping.Settings
 {
     partial class ShippingProviderControl
     {
@@ -13,9 +15,14 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                Messenger.Current.Remove(carrierConfiguredToken);
+
+                if (components != null)
+                {
+                    components.Dispose();   
+                }
             }
             base.Dispose(disposing);
         }

@@ -8,14 +8,14 @@ using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.UI.Wizard;
 
-namespace ShipWorks.Stores.Platforms.NoMoreRack
+namespace ShipWorks.Stores.Platforms.Choxi 
 {
-    public class NoMoreRackStoreType : GenericModuleStoreType
+    public class ChoxiStoreType : GenericModuleStoreType
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="NoMoreRackStoreType"/> class.
         /// </summary>
-        public NoMoreRackStoreType(StoreEntity store)
+        public ChoxiStoreType(StoreEntity store)
             : base(store)
         {
 
@@ -28,7 +28,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         {
             get
             {
-                return StoreTypeCode.NoMoreRack;
+                return StoreTypeCode.Choxi;
             }
         }
 
@@ -40,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         {
             get
             {
-                return ApiLogSource.NoMoreRack;
+                return ApiLogSource.Choxi;
             }
         }
 
@@ -49,7 +49,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
-            return new NoMoreRackStoreAccountSettingsControl();
+            return new ChoxiStoreAccountSettingsControl();
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
-            List<WizardPage> pages = new List<WizardPage> { new NoMoreRackAddStoreWizardPage() };
+            List<WizardPage> pages = new List<WizardPage> { new ChoxiAddStoreWizardPage() };
 
             return pages;
         }
@@ -69,7 +69,10 @@ namespace ShipWorks.Stores.Platforms.NoMoreRack
         {
             get
             {
-                return ((GenericModuleStoreEntity)Store).ModuleUrl;
+                //NMR rebranded as Choxi, have to send old url as the identifier 
+                //to keep from having to reset all of the tango licenses
+
+                return ((GenericModuleStoreEntity)Store).ModuleUrl.Replace( "choxi", "nomorerack");
             }
         }
 

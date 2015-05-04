@@ -19,6 +19,7 @@ using System.Net;
 using log4net;
 using Interapptive.Shared.Net;
 using System.Drawing;
+using System.Xml;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 
@@ -354,7 +355,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:
                     {
-                        if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                        if (shipment.ShipPerson.IsDomesticCountry())
                         {
                             rate = 0.75m;
                         }
@@ -411,7 +412,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     {
-                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
+                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
 
@@ -424,14 +425,16 @@ namespace ShipWorks.Shipping.Insurance
                         }
                         else
                         {
-                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
+                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                         }
                     }
                     break;
 
                 case ShipmentTypeCode.Usps:
                     {
-                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? null : CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType)shipment.Postal.Service);
+                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? 
+                            null : 
+                            CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
 
@@ -487,9 +490,9 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Calculate the cost of USPS insurance
         /// </summary>
-        private static decimal? CalculatePostalCost(decimal declaredValue, string countryCode, PostalServiceType postalService)
+        private static decimal? CalculatePostalCost(decimal declaredValue, bool isDomesticCountry, PostalServiceType postalService)
         {
-            if (PostalUtility.IsDomesticCountry(countryCode))
+            if (isDomesticCountry)
             {
                 if (declaredValue <= 50)
                 {
@@ -545,7 +548,7 @@ namespace ShipWorks.Shipping.Insurance
             {
                 try
                 {
-                    if (!File.Exists(countryExclusionsFile))
+                    if (!CountryExclusionsFileIsValid())
                     {
                         Directory.CreateDirectory(Path.GetDirectoryName(countryExclusionsFile));
 
@@ -590,6 +593,30 @@ namespace ShipWorks.Shipping.Insurance
                     throw;
                 }
             }
+        }
+
+        /// <summary>
+        /// Determines if the country exclusions file exists and can be successfully parsed by XElement.
+        /// </summary>
+        /// <returns>True if the file exists and does not throw an XmlException on XElement.Parse</returns>
+        private static bool CountryExclusionsFileIsValid()
+        {
+            if (!File.Exists(countryExclusionsFile))
+            {
+                return false;
+            }
+
+            try
+            {
+                XElement xCountries = XElement.Parse(File.ReadAllText(countryExclusionsFile));
+            }
+            catch (XmlException ex)
+            {
+                log.Error("The insurance country exclusions file had invalid xml.  Rebuilding.", ex);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
