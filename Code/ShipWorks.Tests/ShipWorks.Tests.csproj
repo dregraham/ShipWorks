@@ -582,6 +582,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="DataSources\" />
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
   </ItemGroup>
   <ItemGroup>
@@ -596,6 +597,7 @@
     <EmbeddedResource Include="Resources\SinglePagePdf.pdf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="Shipping\AdjustedCountryCodeData.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

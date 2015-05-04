@@ -53,8 +53,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "FedEx$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_FedEx")]
         public void AdjustedShipCountryCode_ForFedEx()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.FedEx);
@@ -62,8 +61,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Ups$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Ups")]
         public void AdjustedShipCountryCode_ForUpsOnlineTools()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.UpsOnLineTools);
@@ -71,8 +69,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Ups$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Ups")]
         public void AdjustedShipCountryCode_ForUpsWorldShip()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.UpsWorldShip);
@@ -80,8 +77,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Usps$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Usps")]
         public void AdjustedShipCountryCode_ForUsps()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.Usps);
@@ -89,8 +85,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Usps$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Usps")]
         public void AdjustedShipCountryCode_ForUspsExpress1()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.Express1Usps);
@@ -98,8 +93,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Endicia$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Endicia")]
         public void AdjustedShipCountryCode_ForEndicia()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.Endicia);
@@ -107,8 +101,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Endicia$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Endicia")]
         public void AdjustedShipCountryCode_ForEndiciaExpress1()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.Express1Endicia);
@@ -116,8 +109,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "iParcel$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_iParcel")]
         public void AdjustedShipCountryCode_ForIParcel()
         {
             TestAdjustedShipCountryCode(ShipmentTypeCode.iParcel);
@@ -125,8 +117,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "FedEx$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_FedEx")]
         public void AdjustedOriginCountryCode_ForFedEx()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.FedEx);
@@ -134,8 +125,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Ups$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Ups")]
         public void AdjustedOriginCountryCode_ForUpsOnlineTools()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.UpsOnLineTools);
@@ -143,8 +133,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Ups$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Ups")]
         public void AdjustedOriginCountryCode_ForUpsWorldShip()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.UpsWorldShip);
@@ -152,8 +141,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Usps$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Usps")]
         public void AdjustedOriginCountryCode_ForUsps()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Usps);
@@ -161,8 +149,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Usps$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Usps")]
         public void AdjustedOriginCountryCode_ForUspsExpress1()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Express1Usps);
@@ -170,8 +157,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Endicia$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Endicia")]
         public void AdjustedOriginCountryCode_ForEndicia()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Endicia);
@@ -179,8 +165,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "Endicia$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_Endicia")]
         public void AdjustedOriginCountryCode_ForEndiciaExpress1()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Express1Endicia);
@@ -188,8 +173,7 @@ namespace ShipWorks.Tests.Shipping
 
         [TestMethod]
         [DeploymentItem("Shipping\\AdjustedCountryCodeData.xlsx")]
-        [DataSource("System.Data.Odbc",
-            "Dsn=Excel Files;dbq=|DataDirectory|\\Shipping\\AdjustedCountryCodeData.xlsx", "iParcel$", DataAccessMethod.Sequential)]
+        [DataSource("DataSource_AdjustedCountryCodes_iParcel")]
         public void AdjustedOriginCountryCode_ForIParcel()
         {
             TestAdjustedOriginCountryCode(ShipmentTypeCode.iParcel);
