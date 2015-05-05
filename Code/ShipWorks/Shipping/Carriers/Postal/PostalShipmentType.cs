@@ -316,6 +316,21 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets all of the confirmation types that are available to a particular implementation of PostalShipmentType. The types available
+        /// to all postal implementations are available here. Derived classes may have additional confirmation types.
+        /// </summary>
+        /// <returns>A collection of all the confirmation types that are available to a Express1 (USPS) shipment.</returns>
+        public virtual IEnumerable<PostalConfirmationType> GetAllConfirmationTypes()
+        {
+            return new List<PostalConfirmationType>
+            {
+                PostalConfirmationType.None,
+                PostalConfirmationType.Delivery,
+                PostalConfirmationType.Signature
+            };
+        }
+
+        /// <summary>
         /// Determines if delivery\signature confirmation is available for the given service
         /// </summary>
         public virtual List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)

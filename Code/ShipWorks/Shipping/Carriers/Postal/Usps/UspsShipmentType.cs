@@ -705,6 +705,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
 
         /// <summary>
+        /// Gets all of the confirmation types that are available to a particular implementation of PostalShipmentType.
+        /// Derived classes may have additional confirmation types.
+        /// </summary>
+        /// <returns>A collection of all the confirmation types that are available to a Express1 (USPS) shipment.</returns>
+        public override IEnumerable<PostalConfirmationType> GetAllConfirmationTypes()
+        {
+            List<PostalConfirmationType> types = base.GetAllConfirmationTypes().ToList();
+            return types.Concat(new List<PostalConfirmationType> { PostalConfirmationType.AdultSignatureRequired, PostalConfirmationType.AdultSignatureRestricted });
+        }
+
+        /// <summary>
         /// Determines if delivery\signature confirmation is available for the given service
         /// </summary>
         public override List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)
