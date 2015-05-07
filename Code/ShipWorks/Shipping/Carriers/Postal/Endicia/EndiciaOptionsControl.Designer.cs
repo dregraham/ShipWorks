@@ -143,7 +143,7 @@
             this.requestedLabelFormat.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.requestedLabelFormat.Location = new System.Drawing.Point(24, 27);
             this.requestedLabelFormat.Name = "requestedLabelFormat";
-            this.requestedLabelFormat.Size = new System.Drawing.Size(340, 25);
+            this.requestedLabelFormat.Size = new System.Drawing.Size(394, 25);
             this.requestedLabelFormat.TabIndex = 60;
             // 
             // EndiciaOptionsControl
