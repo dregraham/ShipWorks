@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Business;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Model.EntityClasses
@@ -96,6 +97,14 @@ namespace ShipWorks.Data.Model.EntityClasses
             }
 
             base.OnBeforeEntitySave();
+        }
+
+        /// <summary>
+        /// Gets the billing address as a person adapter
+        /// </summary>
+        public PersonAdapter BillPerson
+        {
+            get { return new PersonAdapter(this, "Bill"); }
         }
     }
 }

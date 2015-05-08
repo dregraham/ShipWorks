@@ -129,7 +129,11 @@ namespace ShipWorks.ApplicationCore.Options
 
             using (SqlConnection con = SqlSession.Current.OpenConnection())
             {
-                SqlAssemblyDeployer.DeployAssemblies(con);
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
+                    SqlAssemblyDeployer.DeployAssemblies(con, transaction);
+                    transaction.Commit();
+                }
             }
 
             MessageHelper.ShowMessage(this, "Deploy complete.");
@@ -152,8 +156,12 @@ namespace ShipWorks.ApplicationCore.Options
 
                     using (SqlConnection con = SqlSession.Current.OpenConnection())
                     {
-                        SqlAssemblyDeployer.DropAssemblies(con);
-                        SqlAssemblyDeployer.DeployAssembly(assembly, con);
+                        using (SqlTransaction transaction = con.BeginTransaction())
+                        {
+                            SqlAssemblyDeployer.DropAssemblies(con, transaction);
+                            SqlAssemblyDeployer.DeployAssembly(assembly, con, transaction);
+                            transaction.Commit();
+                        }
                     }
 
                     MessageHelper.ShowMessage(this, "Deploy complete.");

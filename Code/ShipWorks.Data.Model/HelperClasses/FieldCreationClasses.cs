@@ -4992,6 +4992,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadPayPalDetails);}
 		}
+		/// <summary>Creates a new EbayStoreEntity.DownloadOlderOrders field instance</summary>
+		public static EntityField2 DownloadOlderOrders
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadOlderOrders);}
+		}
 		/// <summary>Creates a new EbayStoreEntity.PayPalApiCredentialType field instance</summary>
 		public static EntityField2 PayPalApiCredentialType
 		{

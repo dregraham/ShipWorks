@@ -1366,6 +1366,7 @@ CREATE TABLE [dbo].[EbayStore]
 [eBayTokenExpire] [datetime] NOT NULL,
 [AcceptedPaymentList] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [DownloadItemDetails] [bit] NOT NULL,
+[DownloadOlderOrders] [bit] NOT NULL,
 [DownloadPayPalDetails] [bit] NOT NULL,
 [PayPalApiCredentialType] [smallint] NOT NULL,
 [PayPalApiUserName] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

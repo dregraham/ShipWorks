@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode) && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
+            if (shipment.ShipPerson.IsDomesticCountry() && shipment.Postal.Confirmation == (int) PostalConfirmationType.None)
             {
                 PostalPackagingType packaging = (PostalPackagingType) shipment.Postal.PackagingType;
 

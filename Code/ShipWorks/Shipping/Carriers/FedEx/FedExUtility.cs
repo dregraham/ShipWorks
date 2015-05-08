@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             };
 
             // Since all shipments are going to the same country, just pick out the first one
-            if (shipments.Count > 0 && shipments.First().ShipCountryCode == "US")
+            if (shipments.Count > 0 && shipments.First().AdjustedShipCountryCode() == "US")
             {
                 // Add additional service types for US domestic
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
@@ -112,7 +112,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.OneRateExpressSaver);
                 serviceTypes.Add(FedExServiceType.OneRate2Day);
                 serviceTypes.Add(FedExServiceType.OneRate2DayAM);
-
             }
 
             return serviceTypes;
@@ -134,7 +133,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.InternationalEconomyFreight
             };
 
-            if (shipments.All(s => (s.OriginCountryCode == "US" && s.ShipCountryCode == "CA") || (s.OriginCountryCode == "CA" && s.ShipCountryCode == "US")))
+            if (shipments.All(s => (s.AdjustedOriginCountryCode() == "US" && s.AdjustedShipCountryCode() == "CA") || 
+                (s.AdjustedOriginCountryCode() == "CA" && s.AdjustedShipCountryCode() == "US")))
             {
                 // Ground service is allowed between US and CA
                 serviceTypes.Add(FedExServiceType.FedExGround);

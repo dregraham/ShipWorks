@@ -1,13 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using log4net;
 using System.Data.SqlClient;
 using Microsoft.SqlServer.Server;
-using System.Data;
-using System.Text.RegularExpressions;
-using System.Data.SqlTypes;
 using System.IO;
 using System.Collections;
 using Interapptive.Shared.Data;
@@ -26,15 +22,6 @@ namespace ShipWorks.Data.Administration
         /// Deploy all ShipWorks assemblies to the SQL Server on the given connection. The assemblies are dropped
         /// before they are deployed.
         /// </summary>
-        public static void DeployAssemblies(SqlConnection con)
-        {
-            DeployAssemblies(con, null);
-        }
-
-        /// <summary>
-        /// Deploy all ShipWorks assemblies to the SQL Server on the given connection. The assemblies are dropped
-        /// before they are deployed.
-        /// </summary>
         public static void DeployAssemblies(SqlConnection con, SqlTransaction transaction)
         {
             if (con == null)
@@ -46,13 +33,13 @@ namespace ShipWorks.Data.Administration
 
             DropAssembly(sqlServer, con, transaction);
 
-            SqlAssemblyDeployer.DeployAssembly(sqlServer, con, transaction);
+            DeployAssembly(sqlServer, con, transaction);
         }
 
         /// <summary>
         /// Drop all ShipWorks assemblies to the SQL Server on the given connection
         /// </summary>
-        public static void DropAssemblies(SqlConnection con)
+        public static void DropAssemblies(SqlConnection con, SqlTransaction sqlTransaction)
         {
             if (con == null)
             {
@@ -61,21 +48,13 @@ namespace ShipWorks.Data.Administration
 
             Assembly sqlServer = typeof(StoredProcedures).Assembly;
 
-            DropAssembly(sqlServer, con, null);
+            DropAssembly(sqlServer, con, sqlTransaction);
         }
 
         /// <summary>
         /// Deploy the given assembly to the connection specified by the SQL Session
         /// </summary>
-        public static void DeployAssembly(Assembly assembly, SqlConnection con)
-        {
-            DeployAssembly(assembly, con, null);
-        }
-
-        /// <summary>
-        /// Deploy the given assembly to the connection specified by the SQL Session
-        /// </summary>
-        private static void DeployAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
+        public static void DeployAssembly(Assembly assembly, SqlConnection con, SqlTransaction transaction)
         {
             if (con == null)
             {
@@ -91,6 +70,8 @@ namespace ShipWorks.Data.Administration
 
             // Now create the assembly
             CreateAssembly(assembly, con, transaction);
+
+            UpdateAssemblySchemaVersionProcedure(con, transaction);
 
             // Look at each type in the assembly
             foreach (Type type in assembly.GetTypes())
@@ -136,6 +117,18 @@ namespace ShipWorks.Data.Administration
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Update the stored procedure that specifies the schema version to which the installed assembly applies
+        /// </summary>
+        private static void UpdateAssemblySchemaVersionProcedure(SqlConnection con, SqlTransaction transaction)
+        {
+            using (SqlCommand command = con.CreateCommand())
+            {
+                command.Transaction = transaction;
+                SqlSchemaUpdater.UpdateAssemblyVersionStoredProcedure(command);
             }
         }
 

@@ -257,7 +257,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 uspsRegistration.PhysicalAddress.State = Geography.GetStateProvCode(UspsAccount.StateProvCode);
                 uspsRegistration.PhysicalAddress.Country = Geography.GetCountryCode(UspsAccount.CountryCode);
 
-                if (PostalUtility.IsDomesticCountry(uspsRegistration.PhysicalAddress.Country))
+                if (uspsRegistration.PhysicalAddress.AsAddressAdapter().IsDomesticCountry())
                 {
                     // USPS inspects the ZIP code for US addresses
                     uspsRegistration.PhysicalAddress.ZIPCode = UspsAccount.PostalCode;

@@ -867,7 +867,7 @@ namespace ShipWorks.Shipping
                 throw new ArgumentNullException("shipmentEntity");
             }
 
-            return shipmentEntity.OriginCountryCode.ToUpperInvariant() == shipmentEntity.ShipCountryCode.ToUpperInvariant();
+            return shipmentEntity.AdjustedOriginCountryCode().ToUpperInvariant() == shipmentEntity.AdjustedShipCountryCode().ToUpperInvariant();
         }
 
         /// <summary>
@@ -1064,7 +1064,7 @@ namespace ShipWorks.Shipping
         {
             bool requiresCustoms = !IsDomestic(shipment);
 
-            if (shipment.ShipCountryCode == "US")
+            if (shipment.AdjustedShipCountryCode() == "US")
             {
                 if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode))
                 {

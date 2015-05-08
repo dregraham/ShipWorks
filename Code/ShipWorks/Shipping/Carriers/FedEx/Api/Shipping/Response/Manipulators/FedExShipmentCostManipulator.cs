@@ -65,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
                 shipment.ShipmentCost = rateDetail.TotalNetCharge.Amount;
 
                 // per FedEx PIW
-                if (shipment.OriginCountryCode.ToUpper() == "CA")
+                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA")
                 {
                     shipment.ShipmentCost = rateDetail.TotalNetFedExCharge.Amount;
                 }

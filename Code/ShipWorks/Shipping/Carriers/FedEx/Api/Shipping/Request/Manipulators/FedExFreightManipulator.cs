@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
             specialServiceTypes.AddRange(requestedShipment.SpecialServicesRequested.SpecialServiceTypes);
 
             // So far, this needs to stay US...  even if shipping CA => CA
-            if (fedex.Shipment.ShipCountryCode == "US" && fedex.Shipment.ShipStateProvCode != "PR")
+            if (fedex.Shipment.AdjustedShipCountryCode() == "US")
             {
                 if (fedex.FreightInsideDelivery && !specialServiceTypes.Contains(ShipmentSpecialServiceType.INSIDE_DELIVERY))
                 {

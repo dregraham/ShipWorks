@@ -376,7 +376,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                                     UpsServiceMapping upsServiceMapping = null;
                                     try
                                     {
-                                        upsServiceMapping = upsServiceManager.GetServicesByWorldShipDescription(worldShipServiceType, upsShipment.Shipment.ShipCountryCode);
+                                        upsServiceMapping = upsServiceManager.GetServicesByWorldShipDescription(worldShipServiceType, upsShipment.Shipment.AdjustedShipCountryCode());
                                     }
                                     catch (UpsException)
                                     {

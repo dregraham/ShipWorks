@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                 xmlWriter.Formatting = Formatting.Indented;
 
-                if (PostalUtility.IsDomesticCountry(postalShipment.Shipment.ShipCountryCode))
+                if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
                 {
                     if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
                     {
@@ -440,7 +440,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // The production server URL
             string serverUrl = "https://secure.shippingapis.com/ShippingAPI.dll?";
 
-            if (PostalUtility.IsDomesticCountry(postalShipment.Shipment.ShipCountryCode))
+            if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
                 if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
                 {
@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // Interapptive users have an Unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(postalShipment.ShipmentID);
 
-            if (PostalUtility.IsDomesticCountry(postalShipment.Shipment.ShipCountryCode))
+            if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
                 if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
                 {

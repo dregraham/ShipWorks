@@ -355,7 +355,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Endicia:
                 case ShipmentTypeCode.Usps:
                     {
-                        if (PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                        if (shipment.ShipPerson.IsDomesticCountry())
                         {
                             rate = 0.75m;
                         }
@@ -412,7 +412,7 @@ namespace ShipWorks.Shipping.Insurance
                 case ShipmentTypeCode.Express1Usps:
                 case ShipmentTypeCode.PostalWebTools:
                     {
-                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
+                        cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
 
@@ -425,14 +425,16 @@ namespace ShipWorks.Shipping.Insurance
                         }
                         else
                         {
-                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType) shipment.Postal.Service);
+                            cost.Carrier = CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                         }
                     }
                     break;
 
                 case ShipmentTypeCode.Usps:
                     {
-                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? null : CalculatePostalCost(declaredValue, shipment.ShipCountryCode, (PostalServiceType)shipment.Postal.Service);
+                        cost.Carrier = UspsUtility.IsStampsInsuranceActive ? 
+                            null : 
+                            CalculatePostalCost(declaredValue, shipment.ShipPerson.IsDomesticCountry(), (PostalServiceType)shipment.Postal.Service);
                     }
                     break;
 
@@ -488,9 +490,9 @@ namespace ShipWorks.Shipping.Insurance
         /// <summary>
         /// Calculate the cost of USPS insurance
         /// </summary>
-        private static decimal? CalculatePostalCost(decimal declaredValue, string countryCode, PostalServiceType postalService)
+        private static decimal? CalculatePostalCost(decimal declaredValue, bool isDomesticCountry, PostalServiceType postalService)
         {
-            if (PostalUtility.IsDomesticCountry(countryCode))
+            if (isDomesticCountry)
             {
                 if (declaredValue <= 50)
                 {

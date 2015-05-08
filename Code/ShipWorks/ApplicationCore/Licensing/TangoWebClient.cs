@@ -542,7 +542,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 string tracking = shipment.TrackingNumber;
 
                 // For the purposes of U-PIC logging, CustomsNumber cannot be counted as a true TrackingNumber
-                if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) && !PostalUtility.IsDomesticCountry(shipment.ShipCountryCode))
+                if (PostalUtility.IsPostalShipmentType(shipmentType.ShipmentTypeCode) && !shipment.ShipPerson.IsDomesticCountry())
                 {
                     tracking = "";
                 }
@@ -602,7 +602,7 @@ namespace ShipWorks.ApplicationCore.Licensing
                 postRequest.Variables.Add("pennyone", pennyOne ? "1" : "0");
                 postRequest.Variables.Add("carrier", ShippingManager.GetCarrierName(shipmentType.ShipmentTypeCode));
                 postRequest.Variables.Add("service", ShippingManager.GetServiceUsed(shipment));
-                postRequest.Variables.Add("country", shipment.ShipCountryCode);
+                postRequest.Variables.Add("country", shipment.ShipPerson.AdjustedCountryCode(ShipmentTypeCode.None));
                 postRequest.Variables.Add("tracking", tracking);
                 postRequest.Variables.Add("firstname", shipment.ShipFirstName);
                 postRequest.Variables.Add("lastname", shipment.ShipLastName);

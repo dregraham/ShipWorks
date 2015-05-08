@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -116,51 +117,13 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Indicates if the given foreign country code is considered a postal domestic shipment.
         /// Per http://www.usps.com/ncsc/lookups/abbr_state.txt
         /// </summary>
-        public static bool IsDomesticCountry(string countryCode)
+        public static bool IsDomesticCountry(this IAddressAdapter address)
         {
-            return
+            MethodConditions.EnsureArgumentIsNotNull(address, "address");
 
-                // Of course US
-                countryCode == "US" ||
-
-                // District of Columbia
-                countryCode == "DC" ||
-
-                IsUSInternationalTerritory(countryCode);
-        }
-
-        /// <summary>
-        /// Indicates if the given foreign country code is a US international territory
-        /// </summary>
-        public static bool IsUSInternationalTerritory(string countryCode)
-        {
-            return
-
-                // American Samoa
-                countryCode == "AS" ||
-
-                // Federated States of Micronesia
-                countryCode == "FM" ||
-
-                // Guam
-                countryCode == "GU" ||
-
-                // Marshall Islands
-                countryCode == "MH" ||
-
-                // Northern Mariana Islands
-                countryCode == "MP" ||
-
-                // Palau
-                countryCode == "PW" ||
-
-                // Puerto Rico
-                countryCode == "PR" ||
-
-                // Virgin Islands
-                countryCode == "VI" ||
-                countryCode == "VL" ||
-                countryCode == "UV";
+            return address.CountryCode == "US" || 
+                address.CountryCode == "DC" ||
+                address.IsUSInternationalTerritory();
         }
 
         /// <summary>
@@ -405,7 +368,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     PostalCustomsForm.CN22;
             }
 
-            if (IsDomesticCountry(shipment.ShipCountryCode))
+            if (shipment.ShipPerson.IsDomesticCountry())
             {
                 return PostalCustomsForm.None;
             }

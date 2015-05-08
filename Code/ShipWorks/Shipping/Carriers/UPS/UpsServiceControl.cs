@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 UpsServiceType thisService = (UpsServiceType)overriddenShipment.Ups.Service;
                 serviceTypes.Add(thisService);
 
-                if (!UpsUtility.IsCodAvailable((UpsServiceType)overriddenShipment.Ups.Service, overriddenShipment.ShipCountryCode))
+                if (!UpsUtility.IsCodAvailable((UpsServiceType)overriddenShipment.Ups.Service, overriddenShipment.AdjustedShipCountryCode()))
                 {
                     allCodAvailable = false;
                 }
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
             // If a distinct on country code only returns a count of 1, all countries are the same
-            bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.ShipCountryCode, s.OriginCountryCode)).Distinct().Count() == 1;
+            bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.AdjustedShipCountryCode(), s.AdjustedOriginCountryCode())).Distinct().Count() == 1;
 
             // If they are all of the same service class, we can load the service classes
             if (allSameCountry)
