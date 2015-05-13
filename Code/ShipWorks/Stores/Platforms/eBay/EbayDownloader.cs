@@ -1127,13 +1127,21 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 throw new InvalidOperationException("OrderIdentifier of type EbayOrderIdentifier expected.");
             }
 
-            return FindOrder(identifier, true);
+            OrderEntity orderEntity = null;
+            SqlAdapterRetry<SqlDeadlockException> sqlDeadlockRetry = new SqlAdapterRetry<SqlDeadlockException>(5, -5, string.Format("EbayDownloader.FindOrder for entity {0}", orderIdentifier.ToString()));
+
+            sqlDeadlockRetry.ExecuteWithRetry(adapter => {
+                orderEntity = FindOrder(adapter, identifier, true);
+            });
+
+
+            return orderEntity;
         }
 
         /// <summary>
         /// Find and load an order of the given identifier, optionally including child charges
         /// </summary>
-        private EbayOrderEntity FindOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private EbayOrderEntity FindOrder(SqlAdapter adapter, EbayOrderIdentifier identifier, bool includeCharges)
         {
             PrefetchPath2 prefetch = null;
 
@@ -1153,7 +1161,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
                 // Look for any existing EbayOrderItem with matching ebayItemID and TransactionID
                 // it's parent order will be the order we're looking for
-                object objOrderID = SqlAdapter.Default.GetScalar(EbayOrderItemFields.OrderID,
+                object objOrderID = adapter.GetScalar(EbayOrderItemFields.OrderID,
                     null, AggregateFunction.None,
                     EbayOrderItemFields.EbayItemID == identifier.EbayItemID & EbayOrderItemFields.EbayTransactionID == identifier.TransactionID &
                         OrderFields.StoreID == Store.StoreID & OrderFields.IsManual == false,
@@ -1171,7 +1179,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     long orderID = (long) objOrderID;
 
                     EbayOrderEntity ebayOrder = new EbayOrderEntity(orderID);
-                    SqlAdapter.Default.FetchEntity(ebayOrder, prefetch);
+                    adapter.FetchEntity(ebayOrder, prefetch);
 
                     return ebayOrder;
                 }
@@ -1182,12 +1190,12 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayOrderFields.EbayOrderID == identifier.EbayOrderID & EbayOrderFields.StoreID == Store.StoreID);
 
                 EntityCollection<EbayOrderEntity> collection = new EntityCollection<EbayOrderEntity>();
-                SqlAdapter.Default.FetchEntityCollection(collection, bucket, prefetch);
+                adapter.FetchEntityCollection(collection, bucket, prefetch);
                 EbayOrderEntity ebayOrder = collection.FirstOrDefault();
 
                 if (ebayOrder==null)
                 {
-                    ebayOrder = GetCombinedOrder(identifier, includeCharges);
+                    ebayOrder = GetCombinedOrder(adapter, identifier, includeCharges);
                 }
 
                 return ebayOrder;
@@ -1197,7 +1205,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// <summary>
         /// Gets the locally combined order if it exists.
         /// </summary>
-        private EbayOrderEntity GetCombinedOrder(EbayOrderIdentifier identifier, bool includeCharges)
+        private EbayOrderEntity GetCombinedOrder(SqlAdapter adapter, EbayOrderIdentifier identifier, bool includeCharges)
         {
             EbayOrderEntity ebayOrder = null;
 
@@ -1223,7 +1231,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
                 EbayCombinedOrderRelationEntity ebayCombinedOrderRelationEntity;
                 using (EntityCollection<EbayCombinedOrderRelationEntity> relationCollection = new EntityCollection<EbayCombinedOrderRelationEntity>())
                 {
-                    SqlAdapter.Default.FetchEntityCollection(relationCollection, relationPredicateBucket, prefetch);
+                    adapter.FetchEntityCollection(relationCollection, relationPredicateBucket, prefetch);
                     ebayCombinedOrderRelationEntity = relationCollection.FirstOrDefault();
                 }
 
