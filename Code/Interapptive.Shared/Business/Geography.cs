@@ -484,7 +484,7 @@ namespace Interapptive.Shared.Business
             // Check for lowercase codes
             if (name.Length <= 2)
             {
-                return name.ToUpper();
+                return name.ToUpperInvariant();
             }
  
             return name;
