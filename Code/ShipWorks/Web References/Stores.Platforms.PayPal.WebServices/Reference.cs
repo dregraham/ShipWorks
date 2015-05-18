@@ -5520,6 +5520,14 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices {
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("express-checkout")]
         expresscheckout,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("pro-hosted")]
+        prohosted,
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlEnumAttribute("pro-api")]
+        proapi,
         
         /// <remarks/>
         credit,
