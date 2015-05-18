@@ -17,6 +17,7 @@ namespace Interapptive.Shared.Business
         static SortedList<string, string> countries = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
         static SortedList<string, string> states = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
         static SortedList<string, string> provinces = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        static SortedList<string, string> countriesWithNoStateProvinces = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
         /// <summary>
         /// Static contructor
@@ -26,6 +27,7 @@ namespace Interapptive.Shared.Business
             LoadCountries();
             LoadStates();
             LoadProvinces();
+            LoadCountriesWithNoStateProvinces();
         }
 
         /// <summary>
@@ -434,10 +436,26 @@ namespace Interapptive.Shared.Business
         /// </summary>
         public static string GetStateProvCode(string name)
         {
+            return GetStateProvCode(name, string.Empty);
+        }
+
+        /// <summary>
+        /// Get the code of the state or province name.  If not found, the original name is returned.
+        /// If countryCode is a country that does not have states/provinces, string.Empty is returned.
+        /// </summary>
+        public static string GetStateProvCode(string name, string countryCode)
+        {
             // If we get a null (which we've seen from ebay at least), just return an empty string
             if (String.IsNullOrEmpty(name))
             {
                 return String.Empty;
+            }
+
+            // If the state/prov is for a country that doesn't have states or provinces, just return string.Empty
+            if (countriesWithNoStateProvinces.ContainsKey(countryCode) ||
+                countriesWithNoStateProvinces.ContainsValue(countryCode))
+            {
+                return string.Empty;
             }
 
             string code;
@@ -468,7 +486,7 @@ namespace Interapptive.Shared.Business
             {
                 return name.ToUpper();
             }
-
+ 
             return name;
         }
 
@@ -858,6 +876,15 @@ namespace Interapptive.Shared.Business
             provinces.Add("Quebec", "QC");
             provinces.Add("Saskatchewan", "SK");
             provinces.Add("Yukon", "YT");
+        }
+
+
+        /// <summary>
+        /// Load the list of countries without states/provinces
+        /// </summary>
+        private static void LoadCountriesWithNoStateProvinces()
+        {
+            countriesWithNoStateProvinces.Add("Great Britain", "GB");
         }
 
         #endregion
