@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                     }
                     else
                     {
-                        resellerType = UspsResellerType.Express1;  
+                        resellerType = UspsResellerType.Express1;
                     }
 
                     Exception exception = null;
