@@ -18,26 +18,26 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Templates.Tokens;
-using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.AccountInfo;
-using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.Address;
-using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ContentTypeV2;
-using CreateIndiciumModeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.CreateIndiciumModeV1;
-using Credentials = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.Credentials;
-using CustomsLine = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.CustomsLine;
-using CustomsV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.CustomsV2;
-using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.EltronPrinterDPIType;
-using ImageType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ImageType;
-using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.NonDeliveryOption;
+using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.AccountInfo;
+using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.Address;
+using ContentTypeV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ContentTypeV2;
+using CreateIndiciumModeV1 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.CreateIndiciumModeV1;
+using Credentials = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.Credentials;
+using CustomsLine = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.CustomsLine;
+using CustomsV2 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.CustomsV2;
+using EltronPrinterDPIType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.EltronPrinterDPIType;
+using ImageType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ImageType;
+using NonDeliveryOption = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.NonDeliveryOption;
 using PackageTypeV6 = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV6;
-using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.PurchaseStatus;
-using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ResidentialDeliveryIndicatorType;
-using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ServiceType;
-using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.StatusCodes;
-using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.UrlType;
+using PurchaseStatus = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.PurchaseStatus;
+using ResidentialDeliveryIndicatorType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ResidentialDeliveryIndicatorType;
+using ServiceType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ServiceType;
+using StatusCodes = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.StatusCodes;
+using UrlType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.UrlType;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -98,7 +98,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV29 CreateWebService(string logName)
+        private SwsimV45 CreateWebService(string logName)
         {
             return CreateWebService(logName, LogActionType.Other);
         }
@@ -106,9 +106,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
-        private SwsimV29 CreateWebService(string logName, LogActionType logActionType)
+        private SwsimV45 CreateWebService(string logName, LogActionType logActionType)
         {
-            SwsimV29 webService = new Express1UspsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1, logName, logActionType))
+            SwsimV45 webService = new Express1UspsServiceWrapper(logEntryFactory.GetLogEntry(ApiLogSource.UspsExpress1, logName, logActionType))
             {
                 Url = express1UspsConnectionDetails.ServiceUrl
             };
@@ -129,8 +129,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
                 string bannerText = string.Empty;
                 bool passwordExpired = false;
+                bool codewordsSet;
 
-                using (SwsimV29 webService = CreateWebService("Authenticate"))
+                using (SwsimV45 webService = CreateWebService("Authenticate"))
                 {
                     CheckCertificate(webService.Url);
 
@@ -139,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         IntegrationID = new Guid(express1UspsConnectionDetails.ApiKey),
                         Username = username,
                         Password = password
-                    }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired);
+                    }, out lastLoginTime, out clearCredential, out bannerText, out passwordExpired, out codewordsSet);
 
                     usernameAuthenticatorMap[username] = auth;
                 }
@@ -209,7 +210,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         {
             AccountInfo accountInfo;
 
-            using (SwsimV29 webService = CreateWebService("GetAccountInfo"))
+            using (SwsimV45 webService = CreateWebService("GetAccountInfo"))
             {
                 // Address and CustomerEmail are not returned by Express1, so do not use them.
                 Address address;
@@ -237,7 +238,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         {
             string url;
 
-            using (SwsimV29 webService = CreateWebService("GetURL"))
+            using (SwsimV45 webService = CreateWebService("GetURL"))
             {
                 string auth = webService.GetURL(GetAuthenticator(account), urlType, string.Empty, out url);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -261,12 +262,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         {
             PurchaseStatus purchaseStatus;
             int transactionID;
-            Usps.WebServices.v29.PostageBalance postageBalance;
+            Usps.WebServices.v45.PostageBalance postageBalance;
             string rejectionReason;
 
             bool miRequired_Unused;
 
-            using (SwsimV29 webService = CreateWebService("PurchasePostage"))
+            using (SwsimV45 webService = CreateWebService("PurchasePostage"))
             {
                 string auth = webService.PurchasePostage(GetAuthenticator(account), amount, controlTotal, null, null, out purchaseStatus, out transactionID, out postageBalance, out rejectionReason, out miRequired_Unused);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -299,14 +300,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 List<RateResult> rates = new List<RateResult>();
 
-                foreach (RateV11 uspsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
+                foreach (RateV17 uspsRate in AuthenticationWrapper(() => { return GetRatesInternal(shipment, account); }, account))
                 {
                     PostalServiceType serviceType = UspsUtility.GetPostalServiceType(ConvertServiceType(uspsRate.ServiceType));
 
                     RateResult baseRate = null;
 
                     // If its a rate that has sig\deliv, then you can's select the core rate itself
-                    if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV4.USADC))
+                    if (uspsRate.AddOns.Any(a => a.AddOnType == AddOnTypeV7.USADC))
                     {
                         baseRate = new RateResult(
                             PostalUtility.GetPostalServiceTypeDescription(serviceType),
@@ -333,19 +334,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                     rates.Add(baseRate);
 
                     // Add a rate for each add-on
-                    foreach (AddOnV4 addOn in uspsRate.AddOns)
+                    foreach (AddOnV7 addOn in uspsRate.AddOns)
                     {
                         string name = null;
                         PostalConfirmationType confirmationType = PostalConfirmationType.None;
 
                         switch (addOn.AddOnType)
                         {
-                            case AddOnTypeV4.USADC:
+                            case AddOnTypeV7.USADC:
                                 name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
                                 confirmationType = PostalConfirmationType.Delivery;
                                 break;
 
-                            case AddOnTypeV4.USASC:
+                            case AddOnTypeV7.USASC:
                                 name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
                                 confirmationType = PostalConfirmationType.Signature;
                                 break;
@@ -390,17 +391,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// The internal GetRates implementation intended to be wrapped by the auth wrapper
         /// </summary>
-        private List<RateV11> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
+        private List<RateV17> GetRatesInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV11 rate = CreateRateForRating(shipment, account);
+            RateV17 rate = CreateRateForRating(shipment, account);
 
-            List<RateV11> rateResults = new List<RateV11>();
+            List<RateV17> rateResults = new List<RateV17>();
 
-            using (SwsimV29 webService = CreateWebService("GetRates", LogActionType.GetRates))
+            using (SwsimV45 webService = CreateWebService("GetRates", LogActionType.GetRates))
             {
                 CheckCertificate(webService.Url);
 
-                RateV11[] ratesArray;
+                RateV17[] ratesArray;
 
                 string auth = webService.GetRates(GetAuthenticator(account), rate, out ratesArray);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -408,7 +409,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 rateResults = ratesArray.ToList();
             }
 
-            List<RateV11> noConfirmationServiceRates = new List<RateV11>();
+            List<RateV17> noConfirmationServiceRates = new List<RateV17>();
 
             // If its a "Flat" then FirstClass and Priority can't have a confirmation
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
@@ -418,11 +419,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             }
 
             // Remove the Delivery and Signature add ons from all those that shouldn't support it
-            foreach (RateV11 noConfirmationServiceRate in noConfirmationServiceRates)
+            foreach (RateV17 noConfirmationServiceRate in noConfirmationServiceRates)
             {
                 if (noConfirmationServiceRate != null && noConfirmationServiceRate.AddOns != null)
                 {
-                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV4.USASC && a.AddOnType != AddOnTypeV4.USADC).ToArray();
+                    noConfirmationServiceRate.AddOns = noConfirmationServiceRate.AddOns.Where(a => a.AddOnType != AddOnTypeV7.USASC && a.AddOnType != AddOnTypeV7.USADC).ToArray();
                 }
             }
 
@@ -457,10 +458,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             bool isPoBoxSpecified;
             Address[] candidates;
             StatusCodes statusCodes;
+            RateV17[] rates;
 
-            using (SwsimV29 webService = CreateWebService("CleanseAddress"))
+            using (SwsimV45 webService = CreateWebService("CleanseAddress"))
             {
-                string auth = webService.CleanseAddress(GetAuthenticator(account), ref address, out addressMatch, out cityStateZipOK, out residentialIndicator, out isPoBox, out isPoBoxSpecified, out candidates, out statusCodes);
+                string auth = webService.CleanseAddress(GetAuthenticator(account), 
+                    ref address, 
+                    address.ZIPCode,
+                    out addressMatch, 
+                    out cityStateZipOK, 
+                    out residentialIndicator, 
+                    out isPoBox, 
+                    out isPoBoxSpecified, 
+                    out candidates, 
+                    out statusCodes,
+                    out rates);
                 usernameAuthenticatorMap[account.Username] = auth;
 
                 if (!addressMatch)
@@ -516,7 +528,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             string scanFormUspsId = string.Empty;
             string scanFormUrl = string.Empty;
 
-            using (SwsimV29 webService = CreateWebService("ScanForm"))
+            using (SwsimV45 webService = CreateWebService("ScanForm"))
             {
                 webService.CreateScanForm
                     (
@@ -525,6 +537,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         CreateScanFormAddress(person),
                         ImageType.Png,
                         false, // Don't print instructions
+                        Carrier.Usps, 
                         null,
                         false,
                         out scanFormUspsId,
@@ -557,7 +570,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         private void VoidShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            using (SwsimV29 webService = CreateWebService("Void"))
+            using (SwsimV45 webService = CreateWebService("Void"))
             {
                 string auth = webService.CancelIndicium(GetAuthenticator(account), shipment.Postal.Usps.UspsTransactionID);
                 usernameAuthenticatorMap[account.Username] = auth;
@@ -628,9 +641,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
-            RateV11 rate = CreateRateForProcessing(shipment, account);
-            CustomsV2 customs = CreateCustoms(shipment);
-            WebServices.v29.PostageBalance postageBalance;
+            RateV17 rate = CreateRateForProcessing(shipment, account);
+            CustomsV3 customs = CreateCustoms(shipment);
+            WebServices.v45.PostageBalance postageBalance;
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;
@@ -683,7 +696,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 thermalType = null;
 
                 // A separate service call is used for processing envelope according to USPS as of v. 22
-                using (SwsimV29 webService = CreateWebService("Process"))
+                using (SwsimV45 webService = CreateWebService("Process"))
                 {
                     // Always use the personal envelope layout to generate the envelope label
                     rate.PrintLayout = "EnvelopePersonal";
@@ -710,7 +723,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             else
             {
                 // Labels for all other package types other than envelope get created via the CreateIndicium method
-                using (SwsimV29 webService = CreateWebService("Process"))
+                using (SwsimV45 webService = CreateWebService("Process"))
                 {
                     string auth = webService.CreateIndicium(GetAuthenticator(account), ref integratorGuid,
                         ref tracking,
@@ -724,12 +737,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         EltronPrinterDPIType.Default,
                         UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
-                        "", // recipient email
                         false, // delivery notify
-                        false, // shipment notify
-                        false, // shipment notify cc to main
-                        false, // shipment notify from company
-                        false, // shipment notify company in subject
+                        null,  // shipment notification
                         0, // Rotation
                         null, false, // horizontal offset
                         null, false, // vertical offset
@@ -741,6 +750,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         null, // redirectTo
                         null, // OriginalPostageHash 
                         null, false, // returnImageData
+                        null,
+                        PaperSizeV1.Default,
+                        null,
+                        false, //PayOnPrint
+                        null, //ReturnLabelExpirationDays
+                        false, //ReturnLabelExpirationDaysSpecified
                         out uspsGuid,
                         out labelUrl,
                         out postageBalance,
@@ -859,9 +874,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Create a Rate object used as the rate info for the GetRates method
         /// </summary>
-        private static RateV11 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV17 CreateRateForRating(ShipmentEntity shipment, UspsAccountEntity account)
         {
-            RateV11 rate = new RateV11();
+            RateV17 rate = new RateV17();
 
             string fromZipCode = string.Empty;
             string toZipCode = string.Empty;
@@ -909,16 +924,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Create the rate object for the given shipment
         /// </summary>
-        private static RateV11 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
+        private static RateV17 CreateRateForProcessing(ShipmentEntity shipment, UspsAccountEntity account)
         {
             PostalServiceType serviceType = (PostalServiceType)shipment.Postal.Service;
             PostalPackagingType packagingType = (PostalPackagingType)shipment.Postal.PackagingType;
 
-            RateV11 rate = CreateRateForRating(shipment, account);
+            RateV17 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
             rate.PrintLayout = "Normal";
 
-            List<AddOnV4> addOns = new List<AddOnV4>();
+            List<AddOnV7> addOns = new List<AddOnV7>();
 
             // For domestic, add in Delivery\Signature confirmation
             if (shipment.ShipPerson.IsDomesticCountry())
@@ -928,19 +943,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
                 if (confirmation == PostalConfirmationType.Delivery)
                 {
-                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USADC });
+                    addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
                 }
 
                 if (confirmation == PostalConfirmationType.Signature)
                 {
-                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASC });
+                    addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USASC });
                 }
             }
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
-                addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USADC });
+                addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
             }
 
             // For express, apply the signature waiver if necessary
@@ -948,14 +963,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             {
                 if (!shipment.Postal.ExpressSignatureWaiver)
                 {
-                    addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.USASR });
+                    addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USASR });
                 }
             }
 
             // Add in the hidden postage option (but not supported for envelopes)
             if (shipment.Postal.Usps.HidePostage && shipment.Postal.PackagingType != (int)PostalPackagingType.Envelope)
             {
-                addOns.Add(new AddOnV4 { AddOnType = AddOnTypeV4.SCAHP });
+                addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.SCAHP });
             }
 
             if (addOns.Count > 0)
@@ -981,14 +996,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// <summary>
         /// Create the customs information for the given shipment
         /// </summary>
-        private static CustomsV2 CreateCustoms(ShipmentEntity shipment)
+        private static CustomsV3 CreateCustoms(ShipmentEntity shipment)
         {
             if (!CustomsManager.IsCustomsRequired(shipment))
             {
                 return null;
             }
 
-            CustomsV2 customs = new CustomsV2();
+            CustomsV3 customs = new CustomsV3();
 
             // Content type
             customs.ContentType = ConvertContentType(UspsUtility.GetApiContentType((PostalCustomsContentType)shipment.Postal.CustomsContentType));
@@ -1114,34 +1129,34 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Converts a current ServiceType to a v29 ServiceType
+        /// Converts a current ServiceType to a v45 ServiceType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ServiceType serviceType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ServiceType serviceType)
         {
             switch (serviceType)
             {
                 case Usps.WebServices.ServiceType.USFC:
-                    return Usps.WebServices.v29.ServiceType.USFC;
+                    return Usps.WebServices.v45.ServiceType.USFC;
                 case Usps.WebServices.ServiceType.USPM:
-                    return Usps.WebServices.v29.ServiceType.USPM;
+                    return Usps.WebServices.v45.ServiceType.USPM;
                 case Usps.WebServices.ServiceType.USXM:
-                    return Usps.WebServices.v29.ServiceType.USXM;
+                    return Usps.WebServices.v45.ServiceType.USXM;
                 case Usps.WebServices.ServiceType.USMM:
-                    return Usps.WebServices.v29.ServiceType.USMM;
+                    return Usps.WebServices.v45.ServiceType.USMM;
                 case Usps.WebServices.ServiceType.USBP:
-                    return Usps.WebServices.v29.ServiceType.USBP;
+                    return Usps.WebServices.v45.ServiceType.USBP;
                 case Usps.WebServices.ServiceType.USLM:
-                    return Usps.WebServices.v29.ServiceType.USLM;
+                    return Usps.WebServices.v45.ServiceType.USLM;
                 case Usps.WebServices.ServiceType.USEMI:
-                    return Usps.WebServices.v29.ServiceType.USEMI;
+                    return Usps.WebServices.v45.ServiceType.USEMI;
                 case Usps.WebServices.ServiceType.USPMI:
-                    return Usps.WebServices.v29.ServiceType.USPMI;
+                    return Usps.WebServices.v45.ServiceType.USPMI;
                 case Usps.WebServices.ServiceType.USFCI:
-                    return Usps.WebServices.v29.ServiceType.USFCI;
+                    return Usps.WebServices.v45.ServiceType.USFCI;
                 case Usps.WebServices.ServiceType.USCM:
-                    return Usps.WebServices.v29.ServiceType.USCM;
+                    return Usps.WebServices.v45.ServiceType.USCM;
                 case Usps.WebServices.ServiceType.USPS:
-                    return Usps.WebServices.v29.ServiceType.USPS;
+                    return Usps.WebServices.v45.ServiceType.USPS;
 
                 case Usps.WebServices.ServiceType.DHLPE:
                 case Usps.WebServices.ServiceType.DHLPG:
@@ -1155,33 +1170,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Converts a v29 ServiceType to the ServiceType
+        /// Converts a v45 ServiceType to the ServiceType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ServiceType serviceType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ServiceType ConvertServiceType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ServiceType serviceType)
         {
             switch (serviceType)
             {
-                case Usps.WebServices.v29.ServiceType.USFC:
+                case Usps.WebServices.v45.ServiceType.USFC:
                     return Usps.WebServices.ServiceType.USFC;
-                case Usps.WebServices.v29.ServiceType.USPM:
+                case Usps.WebServices.v45.ServiceType.USPM:
                     return Usps.WebServices.ServiceType.USPM;
-                case Usps.WebServices.v29.ServiceType.USXM:
+                case Usps.WebServices.v45.ServiceType.USXM:
                     return Usps.WebServices.ServiceType.USXM;
-                case Usps.WebServices.v29.ServiceType.USMM:
+                case Usps.WebServices.v45.ServiceType.USMM:
                     return Usps.WebServices.ServiceType.USMM;
-                case Usps.WebServices.v29.ServiceType.USBP:
+                case Usps.WebServices.v45.ServiceType.USBP:
                     return Usps.WebServices.ServiceType.USBP;
-                case Usps.WebServices.v29.ServiceType.USLM:
+                case Usps.WebServices.v45.ServiceType.USLM:
                     return Usps.WebServices.ServiceType.USLM;
-                case Usps.WebServices.v29.ServiceType.USEMI:
+                case Usps.WebServices.v45.ServiceType.USEMI:
                     return Usps.WebServices.ServiceType.USEMI;
-                case Usps.WebServices.v29.ServiceType.USPMI:
+                case Usps.WebServices.v45.ServiceType.USPMI:
                     return Usps.WebServices.ServiceType.USPMI;
-                case Usps.WebServices.v29.ServiceType.USFCI:
+                case Usps.WebServices.v45.ServiceType.USFCI:
                     return Usps.WebServices.ServiceType.USFCI;
-                case Usps.WebServices.v29.ServiceType.USCM:
+                case Usps.WebServices.v45.ServiceType.USCM:
                     return Usps.WebServices.ServiceType.USCM;
-                case Usps.WebServices.v29.ServiceType.USPS:
+                case Usps.WebServices.v45.ServiceType.USPS:
                     return Usps.WebServices.ServiceType.USPS;
                 default:
                     throw new ArgumentOutOfRangeException("serviceType");
@@ -1189,72 +1204,72 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
         
         /// <summary>
-        /// Gets the v29 version of the CodewordType
+        /// Gets the v45 version of the CodewordType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV6 packageType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.PackageTypeV6 ConvertPackageType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PackageTypeV6 packageType)
         {
             switch (packageType)
             {
                 case PackageTypeV6.Postcard:
-                    return Usps.WebServices.v29.PackageTypeV6.Postcard;
+                    return Usps.WebServices.v45.PackageTypeV6.Postcard;
                 case PackageTypeV6.Letter:
-                    return Usps.WebServices.v29.PackageTypeV6.Letter;
+                    return Usps.WebServices.v45.PackageTypeV6.Letter;
                 case PackageTypeV6.LargeEnvelopeorFlat:
-                    return Usps.WebServices.v29.PackageTypeV6.LargeEnvelopeorFlat;
+                    return Usps.WebServices.v45.PackageTypeV6.LargeEnvelopeorFlat;
                 case PackageTypeV6.ThickEnvelope:
-                    return Usps.WebServices.v29.PackageTypeV6.ThickEnvelope;
+                    return Usps.WebServices.v45.PackageTypeV6.ThickEnvelope;
                 case PackageTypeV6.Package:
-                    return Usps.WebServices.v29.PackageTypeV6.Package;
+                    return Usps.WebServices.v45.PackageTypeV6.Package;
                 case PackageTypeV6.FlatRateBox:
-                    return Usps.WebServices.v29.PackageTypeV6.FlatRateBox;
+                    return Usps.WebServices.v45.PackageTypeV6.FlatRateBox;
                 case PackageTypeV6.SmallFlatRateBox:
-                    return Usps.WebServices.v29.PackageTypeV6.SmallFlatRateBox;
+                    return Usps.WebServices.v45.PackageTypeV6.SmallFlatRateBox;
                 case PackageTypeV6.LargeFlatRateBox:
-                    return Usps.WebServices.v29.PackageTypeV6.LargeFlatRateBox;
+                    return Usps.WebServices.v45.PackageTypeV6.LargeFlatRateBox;
                 case PackageTypeV6.FlatRateEnvelope:
-                    return Usps.WebServices.v29.PackageTypeV6.FlatRateEnvelope;
+                    return Usps.WebServices.v45.PackageTypeV6.FlatRateEnvelope;
                 case PackageTypeV6.FlatRatePaddedEnvelope:
-                    return Usps.WebServices.v29.PackageTypeV6.FlatRatePaddedEnvelope;
+                    return Usps.WebServices.v45.PackageTypeV6.FlatRatePaddedEnvelope;
                 case PackageTypeV6.LargePackage:
-                    return Usps.WebServices.v29.PackageTypeV6.LargePackage;
+                    return Usps.WebServices.v45.PackageTypeV6.LargePackage;
                 case PackageTypeV6.OversizedPackage:
-                    return Usps.WebServices.v29.PackageTypeV6.OversizedPackage;
+                    return Usps.WebServices.v45.PackageTypeV6.OversizedPackage;
                 case PackageTypeV6.RegionalRateBoxA:
-                    return Usps.WebServices.v29.PackageTypeV6.RegionalRateBoxA;
+                    return Usps.WebServices.v45.PackageTypeV6.RegionalRateBoxA;
                 case PackageTypeV6.RegionalRateBoxB:
-                    return Usps.WebServices.v29.PackageTypeV6.RegionalRateBoxB;
+                    return Usps.WebServices.v45.PackageTypeV6.RegionalRateBoxB;
                 case PackageTypeV6.LegalFlatRateEnvelope:
-                    return Usps.WebServices.v29.PackageTypeV6.LegalFlatRateEnvelope;
+                    return Usps.WebServices.v45.PackageTypeV6.LegalFlatRateEnvelope;
                 case PackageTypeV6.RegionalRateBoxC:
-                    return Usps.WebServices.v29.PackageTypeV6.RegionalRateBoxC;
+                    return Usps.WebServices.v45.PackageTypeV6.RegionalRateBoxC;
                 default:
                     throw new ArgumentOutOfRangeException("packageType");
             }
         }
 
         /// <summary>
-        /// Gets the v29 version of the ContentType
+        /// Gets the v45 version of the ContentType
         /// </summary>
-        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29.ContentTypeV2 ConvertContentType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ContentTypeV2 contentType)
+        private static ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45.ContentTypeV2 ConvertContentType(ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.ContentTypeV2 contentType)
         {
             switch (contentType)
             {
                 case Usps.WebServices.ContentTypeV2.CommercialSample:
-                    return Usps.WebServices.v29.ContentTypeV2.CommercialSample;
+                    return Usps.WebServices.v45.ContentTypeV2.CommercialSample;
                 case Usps.WebServices.ContentTypeV2.Gift:
-                    return Usps.WebServices.v29.ContentTypeV2.Gift;
+                    return Usps.WebServices.v45.ContentTypeV2.Gift;
                 case Usps.WebServices.ContentTypeV2.Document:
-                    return Usps.WebServices.v29.ContentTypeV2.Document;
+                    return Usps.WebServices.v45.ContentTypeV2.Document;
                 case Usps.WebServices.ContentTypeV2.ReturnedGoods:
-                    return Usps.WebServices.v29.ContentTypeV2.ReturnedGoods;
+                    return Usps.WebServices.v45.ContentTypeV2.ReturnedGoods;
                 case Usps.WebServices.ContentTypeV2.Other:
-                    return Usps.WebServices.v29.ContentTypeV2.Other;
+                    return Usps.WebServices.v45.ContentTypeV2.Other;
                 case Usps.WebServices.ContentTypeV2.Merchandise:
-                    return Usps.WebServices.v29.ContentTypeV2.Merchandise;
+                    return Usps.WebServices.v45.ContentTypeV2.Merchandise;
                 case Usps.WebServices.ContentTypeV2.HumanitarianDonation:
-                    return Usps.WebServices.v29.ContentTypeV2.HumanitarianDonation;
+                    return Usps.WebServices.v45.ContentTypeV2.HumanitarianDonation;
                 case Usps.WebServices.ContentTypeV2.DangerousGoods:
-                    return Usps.WebServices.v29.ContentTypeV2.DangerousGoods;
+                    return Usps.WebServices.v45.ContentTypeV2.DangerousGoods;
                 default:
                     throw new ArgumentOutOfRangeException("contentType");
             }

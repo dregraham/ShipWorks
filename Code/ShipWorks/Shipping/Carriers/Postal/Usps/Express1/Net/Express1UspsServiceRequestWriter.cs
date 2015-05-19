@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         // A list of namespaces from which we want to translate
         private static readonly Dictionary<string, string> express1NamespaceMap =
             new Dictionary<string, string> {
-                { "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29", "http://www.express1.com/2011/08" }
+                { "http://stamps.com/xml/namespace/2015/05/swsim/swsimv45", "http://www.express1.com/2011/08" }
             };
 
         // A list of local names we want to translate

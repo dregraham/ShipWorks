@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Convert Express1 Usps Address into an IAddressAdapter
         /// </summary>
-        public static IAddressAdapter AsAddressAdapter(this Carriers.Postal.Usps.WebServices.v29.Address source)
+        public static IAddressAdapter AsAddressAdapter(this Carriers.Postal.Usps.WebServices.v45.Address source)
         {
             return source == null ?
                 null :
