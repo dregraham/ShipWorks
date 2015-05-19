@@ -53,6 +53,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
                 DimensionsAdapter dimensions = new DimensionsAdapter(shipment.Postal);
 
+                PersonAdapter fromAdapter = new PersonAdapter(shipment, "Origin");
+                PersonAdapter toAdapter = new PersonAdapter(shipment, "Ship");
+
                 // Domestic
                 if (shipment.ShipPerson.IsDomesticCountry())
                 {
@@ -64,8 +67,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteAttributeString("ID", "0");
 
                     xmlWriter.WriteElementString("Service", "ONLINE");
-                    xmlWriter.WriteElementString("ZipOrigination", new PersonAdapter(shipment, "Origin").PostalCode5);
-                    xmlWriter.WriteElementString("ZipDestination", new PersonAdapter(shipment, "Ship").PostalCode5);
+                    xmlWriter.WriteElementString("ZipOrigination", fromAdapter.PostalCode5);
+                    xmlWriter.WriteElementString("ZipDestination", toAdapter.PostalCode5);
                     
                     WeightValue weightValue = new WeightValue(ratedWeight);
                     xmlWriter.WriteElementString("Pounds", weightValue.PoundsOnly.ToString());
@@ -90,6 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteStartElement("IntlRateV2Request");
                     xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
                     xmlWriter.WriteAttributeString("PASSWORD", PostalWebUtility.UspsPassword);
+                    
+                    xmlWriter.WriteElementString("Revision", "2");
 
                     xmlWriter.WriteStartElement("Package");
                     xmlWriter.WriteAttributeString("ID", "0");
@@ -108,6 +113,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("Length", dimensions.Length.ToString());
                     xmlWriter.WriteElementString("Height", dimensions.Height.ToString());
                     xmlWriter.WriteElementString("Girth", dimensions.Girth.ToString());
+                    
+                    xmlWriter.WriteElementString("OriginZip", fromAdapter.PostalCode);
+                    xmlWriter.WriteElementString("AcceptanceDateTime", DateTime.Now.ToString("O"));
+                    xmlWriter.WriteElementString("DestinationPostalCode", toAdapter.PostalCode);
 
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndElement();
@@ -159,7 +168,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(string xmlRequest, string api)
         {
             // The production server URL
-            string serverUrl = "http://production.shippingapis.com/ShippingAPI.dll?API=" + api + "&XML=";
+            string serverUrl = (PostalWebUtility.UseTestServer ?
+                "http://stg-production.shippingapis.com/ShippingApi.dll?API="
+                : "http://production.shippingapis.com/ShippingAPI.dll?API=")
+                               + api + "&XML=";
 
             try
             {

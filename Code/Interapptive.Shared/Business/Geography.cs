@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Drawing;
@@ -484,7 +485,7 @@ namespace Interapptive.Shared.Business
             // Check for lowercase codes
             if (name.Length <= 2)
             {
-                return name.ToUpper();
+                return name.ToUpper(CultureInfo.InvariantCulture);
             }
  
             return name;

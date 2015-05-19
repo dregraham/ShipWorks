@@ -184,8 +184,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             {
                 xmlWriter.WriteStartElement(
                     PostalWebUtility.UseTestServer ?
-                        "SigConfirmCertifyV3.0Request" :
-                        "SignatureConfirmationV3.0Request");
+                        "SigConfirmCertifyV4.0Request" :
+                        "SignatureConfirmationV4.0Request");
             }
 
             // Delivery Confirm
@@ -193,8 +193,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             {
                 xmlWriter.WriteStartElement(
                     PostalWebUtility.UseTestServer ?
-                        "DelivConfirmCertifyV3.0Request" :
-                        "DeliveryConfirmationV3.0Request");
+                        "DelivConfirmCertifyV4.0Request" :
+                        "DeliveryConfirmationV4.0Request");
             }
 
             // Username and password
@@ -346,6 +346,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 
             xmlWriter.WriteElementString("ImageType", "TIF");
             xmlWriter.WriteElementString("ImageLayout", "ONEPERFILE");
+            
+            if (toAdapter.CountryCode == "CA")
+            {
+                xmlWriter.WriteElementString("POZipCode", fromAdapter.PostalCode5);                
+            }
 
             xmlWriter.WriteElementString("LabelDate", string.Format("{0:MM/dd/yyyy}", shipment.ShipDate.ToLocalTime()));
 
@@ -438,7 +443,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(PostalShipmentEntity postalShipment, string xmlRequest)
         {
             // The production server URL
-            string serverUrl = "https://secure.shippingapis.com/ShippingAPI.dll?";
+            string serverUrl = PostalWebUtility.UseTestServer ?
+                "https://stg-secure.shippingapis.com/ShippingApi.dll?"
+                : "http://production.shippingapis.com/ShippingAPI.dll?";
 
             if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
@@ -454,16 +461,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     if (postalShipment.Confirmation == (int)PostalConfirmationType.Signature)
                     {
                         serverUrl += PostalWebUtility.UseTestServer ?
-                            "API=SignatureConfirmationCertifyV3&XML=" :
-                            "API=SignatureConfirmationV3&XML=";
+                            "API=SignatureConfirmationCertify43&XML=" :
+                            "API=SignatureConfirmationV4&XML=";
                     }
 
                     // Delivery Confirm
                     else
                     {
                         serverUrl += PostalWebUtility.UseTestServer ?
-                            "API=DelivConfirmCertifyV3&XML=" :
-                            "API=DeliveryConfirmationV3&XML=";
+                            "API=DelivConfirmCertifyV4&XML=" :
+                            "API=DeliveryConfirmationV4&XML=";
                     }
                 }
             }
