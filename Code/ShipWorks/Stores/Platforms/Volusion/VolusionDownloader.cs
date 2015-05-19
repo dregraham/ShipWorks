@@ -87,7 +87,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     {
                         Progress.PercentComplete = 100;
                         Progress.Detail = "Done.";
-                        return;
+                        continue;
                     }
 
                     XPathNavigator xpath = ordersResponse.CreateNavigator();
@@ -97,18 +97,20 @@ namespace ShipWorks.Stores.Platforms.Volusion
                     {
                         Progress.PercentComplete = 100;
                         Progress.Detail = "Done.";
-                        return;
+                        continue;
                     }
 
                     XPathNodeIterator orders = xpath.Select("//Orders");
                     while (orders.MoveNext())
                     {
-                        Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved + 1, totalCount);
+                        Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved, totalCount);
 
                         // load each order
                         LoadOrder(client, orders.Current.Clone());
 
                         Progress.PercentComplete = Math.Min(100, 100 * (quantitySaved) / totalCount);
+
+                        quantitySaved++;
 
                         // check for cancel
                         if (Progress.IsCancelRequested)

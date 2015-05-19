@@ -159,6 +159,19 @@ namespace ShipWorks.Stores.Platforms.Volusion
             };
         }
 
+        /// <summary>
+        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
+
         #region Online Update Commands
 
         /// <summary>
