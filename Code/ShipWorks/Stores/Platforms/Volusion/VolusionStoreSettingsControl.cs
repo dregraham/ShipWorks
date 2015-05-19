@@ -60,16 +60,16 @@ namespace ShipWorks.Stores.Platforms.Volusion
             VolusionPaymentMethods paymentMethods = new VolusionPaymentMethods(store);
             paymentMethodsStatus.Text = String.Format(statusString, paymentMethods.Count, "payment methods");
 
-            //VolusionStoreType.GetOnlineStatusChoices();
-
             StoreType storeType = StoreTypeManager.GetType(store);
 
-            // order statuses
-            //statuses.Items.AddRange();
+            // get the collection of currently chosen codes to be downloaded
+            List<string> selectedStatuses = store.DownloadOrderStatuses.Split(',').ToList();
 
             foreach(string status in storeType.GetOnlineStatusChoices())
             {
-                statuses.Items.Add(status, false);
+                // check the ones that are selected
+                bool chosen = selectedStatuses.Contains(status);
+                statuses.Items.Add(status, chosen);
             }
 
         }
@@ -85,6 +85,15 @@ namespace ShipWorks.Stores.Platforms.Volusion
             
             volusionStore.ShipmentMethods = this.store.ShipmentMethods;
             volusionStore.PaymentMethods = this.store.PaymentMethods;
+
+            List<string> chosenStatuses = new List<string>();
+            foreach (string selectedItem in statuses.CheckedItems)
+            {
+                chosenStatuses.Add(selectedItem);
+            }
+
+            // save the selected statuses as CSV
+            volusionStore.DownloadOrderStatuses = string.Join(",", chosenStatuses);
 
             return true;
         }

@@ -74,6 +74,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             store.ApiPassword = "";
             store.ShipmentMethods = "";
             store.PaymentMethods = "";
+            store.DownloadOrderStatuses = "Ready to Ship, New";
 
             return store;
         }

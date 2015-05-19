@@ -860,7 +860,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_postalShipment !=null);
 						DesetupSyncPostalShipment(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("PostalShipment");
+						}
 					}
 					else
 					{
