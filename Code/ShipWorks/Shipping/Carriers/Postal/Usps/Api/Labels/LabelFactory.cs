@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     // If customs are required and it's not an envelope, we're going to get instructions that we don't need so we can crop them
                     Rectangle croppingStyle = PostalPackagingType.Envelope == (PostalPackagingType)shipment.Postal.PackagingType ? 
                         CroppingStyles.None : 
-                        CroppingStyles.PrimaryCrop;
+                        CroppingStyles.SingleInternationalCrop;
 
                     labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], croppingStyle));
                 }
