@@ -341,13 +341,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
             submitter.Variables.Add("SELECT_Columns", String.Join(",", selectColumns.ToArray()));
 
             // add the where clause
-            foreach (string key in whereClause.Keys)
-            {
-                string value = whereClause[key];
+            //foreach (string key in whereClause.Keys)
+            //{
+            //    string value = whereClause[key];
 
-                submitter.Variables.Add("WHERE_Column", key);
-                submitter.Variables.Add("WHERE_Value", value);
-            }
+            //    submitter.Variables.Add("WHERE_Column", key);
+            //    submitter.Variables.Add("WHERE_Value", value);
+            //}
         }
 
         /// <summary>

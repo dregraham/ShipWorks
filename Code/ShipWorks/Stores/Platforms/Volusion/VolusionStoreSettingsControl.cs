@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             timeZoneControl.SelectedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
 
             UpdateStatusLabels();
+            
         }
 
         /// <summary>
@@ -58,6 +59,19 @@ namespace ShipWorks.Stores.Platforms.Volusion
             // payment methods
             VolusionPaymentMethods paymentMethods = new VolusionPaymentMethods(store);
             paymentMethodsStatus.Text = String.Format(statusString, paymentMethods.Count, "payment methods");
+
+            //VolusionStoreType.GetOnlineStatusChoices();
+
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            // order statuses
+            //statuses.Items.AddRange();
+
+            foreach(string status in storeType.GetOnlineStatusChoices())
+            {
+                statuses.Items.Add(status, false);
+            }
+
         }
 
         /// <summary>
