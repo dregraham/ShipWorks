@@ -101,10 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             PersonAdapter toAdapter = new PersonAdapter(shipment, "Ship");
             PersonAdapter fromAdapter = new PersonAdapter(shipment, "Origin");
 
-            xmlWriter.WriteStartElement(
-                PostalWebUtility.UseTestServer ?
-                    "ExpressMailLabelCertifyRequest" :
-                    "ExpressMailLabelRequest");
+            xmlWriter.WriteStartElement("ExpressMailLabelRequest");
 
             // Username and password
             xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
@@ -182,19 +179,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // Signature Confirm
             if (postalShipment.Confirmation == (int)PostalConfirmationType.Signature)
             {
-                xmlWriter.WriteStartElement(
-                    PostalWebUtility.UseTestServer ?
-                        "SigConfirmCertifyV4.0Request" :
-                        "SignatureConfirmationV4.0Request");
+                xmlWriter.WriteStartElement("SignatureConfirmationV4.0Request");
             }
 
             // Delivery Confirm
             else
             {
-                xmlWriter.WriteStartElement(
-                    PostalWebUtility.UseTestServer ?
-                        "DelivConfirmCertifyV4.0Request" :
-                        "DeliveryConfirmationV4.0Request");
+                xmlWriter.WriteStartElement("DeliveryConfirmationV4.0Request");
             }
 
             // Username and password
@@ -258,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             PersonAdapter toAdapter = new PersonAdapter(shipment, "Ship");
             PersonAdapter fromAdapter = new PersonAdapter(shipment, "Origin");
 
-            xmlWriter.WriteStartElement(GetInternationalServiceTagBase(postalShipment) + (PostalWebUtility.UseTestServer ? "Certify" : "") + "Request");
+            xmlWriter.WriteStartElement(GetInternationalServiceTagBase(postalShipment) + "Request");
 
             // Username and password
             xmlWriter.WriteAttributeString("USERID", PostalWebUtility.UspsUsername);
@@ -451,32 +442,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             {
                 if (postalShipment.Service == (int)PostalServiceType.ExpressMail)
                 {
-                    serverUrl += PostalWebUtility.UseTestServer ?
-                        "API=ExpressMailLabelCertify&XML=" :
-                        "API=ExpressMailLabel&XML=";
+                    serverUrl += "API=ExpressMailLabel&XML=";
                 }
                 else
                 {
                     // Signature Confirm
                     if (postalShipment.Confirmation == (int)PostalConfirmationType.Signature)
                     {
-                        serverUrl += PostalWebUtility.UseTestServer ?
-                            "API=SignatureConfirmationCertify43&XML=" :
-                            "API=SignatureConfirmationV4&XML=";
+                        serverUrl += "API=SignatureConfirmationV4&XML=";
                     }
 
                     // Delivery Confirm
                     else
                     {
-                        serverUrl += PostalWebUtility.UseTestServer ?
-                            "API=DelivConfirmCertifyV4&XML=" :
-                            "API=DeliveryConfirmationV4&XML=";
+                        serverUrl += "API=DeliveryConfirmationV4&XML=";
                     }
                 }
             }
             else
             {
-                serverUrl += "API=" + GetInternationalServiceTagBase(postalShipment) + (PostalWebUtility.UseTestServer ? "Certify" : "") + "&XML=";
+                serverUrl += "API=" + GetInternationalServiceTagBase(postalShipment) + "&XML=";
             }
 
             try
