@@ -338,6 +338,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             xmlWriter.WriteElementString("ImageType", "TIF");
             xmlWriter.WriteElementString("ImageLayout", "ONEPERFILE");
             
+            // This field is newly required for Canada
             if (toAdapter.CountryCode == "CA")
             {
                 xmlWriter.WriteElementString("POZipCode", fromAdapter.PostalCode5);                
