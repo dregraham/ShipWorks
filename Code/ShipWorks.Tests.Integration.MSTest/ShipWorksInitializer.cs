@@ -112,6 +112,9 @@ namespace ShipWorks.Tests.Integration.MSTest
                     case "benz-pc":
                         instance = Guid.Parse("{a21e0f50-8eb6-469c-8d23-7632c5cdc652}");
                         break;
+                    case "mirza-pc":
+                        instance = Guid.Parse("{4c5c2b9a-32d3-4314-a4f7-200000000000}");
+                        break;
                     default:
                         throw new ApplicationException("Enter your machine and ShipWorks instance GUID in the ShipWorksInitializer");
                 }
