@@ -42,7 +42,7 @@
       </reportTargets>
     </htmlpublisher.HtmlPublisher>    
 	<hudson.plugins.emailext.ExtendedEmailPublisher plugin="email-ext@2.39">
-      <recipientList>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipientList>
+      <recipientList>j.yedlicka@shipworks.com t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipientList>
       <configuredTriggers>
         <hudson.plugins.emailext.plugins.trigger.FailureTrigger>
           <email>
