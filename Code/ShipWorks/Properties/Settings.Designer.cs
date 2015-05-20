@@ -22,15 +22,6 @@ namespace ShipWorks.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://swsim.testing.stamps.com/swsim/SwsimV45.asmx")]
-        public string ShipWorks_Shipping_Carriers_Postal_Usps_WebServices_v45_SwsimV45 {
-            get {
-                return ((string)(this["ShipWorks_Shipping_Carriers_Postal_Usps_WebServices_v45_SwsimV45"]));
-            }
-        }
+      
     }
 }

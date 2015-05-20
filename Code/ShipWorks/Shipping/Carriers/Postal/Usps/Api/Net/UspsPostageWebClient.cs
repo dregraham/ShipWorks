@@ -59,7 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             else
             {
-                Usps.WebServices.v45.AccountInfo accountInfo = (Usps.WebServices.v45.AccountInfo)client.GetAccountInfo(account);
+                Usps.WebServices.v36.AccountInfo accountInfo = (Usps.WebServices.v36.AccountInfo)client.GetAccountInfo(account);
 
                 // Make a note of the control total for purchasing purposes
                 controlTotal = accountInfo.PostageBalance.ControlTotal;

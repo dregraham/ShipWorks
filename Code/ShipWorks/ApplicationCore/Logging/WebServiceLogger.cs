@@ -146,12 +146,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     }
 }		
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV45
+    partial class SwsimV36
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV45(IApiLogEntry logEntry)
+        internal SwsimV36(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -4261,7 +4261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SDCV24Service
+    partial class SDCV36Service
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -4270,7 +4270,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SDCV24Service(IApiLogEntry logEntry)
+        internal SDCV36Service(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

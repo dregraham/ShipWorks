@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://www.express1.com/2011/08" elementFormDefault="qualified" targetNamespace="http://www.express1.com/2011/08" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="https://service.express1.com/Services/SDCV24Service.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
+  <xs:import schemaLocation="https://service.express1.com/Services/SDCV36Service.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
   <xs:element name="CreateIndicium">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="Item" />
         <xs:element minOccurs="0" maxOccurs="1" name="IntegratorTxID" type="xs:string" />
         <xs:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xs:string" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV9" />
+        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV14" />
         <xs:element minOccurs="0" maxOccurs="1" name="From" type="tns:Address" />
         <xs:element minOccurs="0" maxOccurs="1" name="To" type="tns:Address" />
         <xs:element minOccurs="0" maxOccurs="1" name="CustomerID" type="xs:string" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:Customs" />
+        <xs:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:CustomsV2" />
         <xs:element minOccurs="1" maxOccurs="1" name="SampleOnly" type="xs:boolean" />
         <xs:element minOccurs="1" maxOccurs="1" name="ImageType" type="tns:ImageType" />
         <xs:element minOccurs="1" maxOccurs="1" name="EltronPrinterDPIType" type="tns:EltronPrinterDPIType" />
@@ -27,13 +27,19 @@
         <xs:element minOccurs="1" maxOccurs="1" name="horizontalOffset" nillable="true" type="xs:int" />
         <xs:element minOccurs="1" maxOccurs="1" name="verticalOffset" nillable="true" type="xs:int" />
         <xs:element minOccurs="1" maxOccurs="1" name="printDensity" nillable="true" type="xs:int" />
-        <xs:element minOccurs="1" maxOccurs="1" name="printInstructions" nillable="true" type="xs:boolean" />
-        <xs:element minOccurs="1" maxOccurs="1" name="nonDeliveryOption" type="tns:NonDeliveryOption" />
         <xs:element minOccurs="1" maxOccurs="1" name="printMemo" nillable="true" type="xs:boolean" />
+        <xs:element minOccurs="1" maxOccurs="1" name="printInstructions" nillable="true" type="xs:boolean" />
+        <xs:element minOccurs="1" maxOccurs="1" name="requestPostageHash" type="xs:boolean" />
+        <xs:element minOccurs="1" maxOccurs="1" name="nonDeliveryOption" type="tns:NonDeliveryOption" />
+        <xs:element minOccurs="0" maxOccurs="1" name="RedirectTo" type="tns:Address" />
+        <xs:element minOccurs="0" maxOccurs="1" name="OriginalPostageHash" type="xs:string" />
+        <xs:element minOccurs="1" maxOccurs="1" name="ReturnImageData" nillable="true" type="xs:boolean" />
+        <xs:element minOccurs="0" maxOccurs="1" name="InternalTransactionNumber" type="xs:string" />
+        <xs:element minOccurs="1" maxOccurs="1" name="PaperSize" type="tns:PaperSizeV1" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="RateV9">
+  <xs:complexType name="RateV14">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" name="FromZIPCode" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="ToZIPCode" type="xs:string" />
@@ -46,11 +52,12 @@
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="WeightLb" type="xs:double" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="WeightOz" type="xs:double" />
       <xs:element minOccurs="0" maxOccurs="1" default="Unknown" name="PackageType" type="tns:PackageTypeV6" />
-      <xs:element minOccurs="0" maxOccurs="1" name="RequiresAllOf" type="tns:ArrayOfArrayOfAddOnTypeV2" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequiresAllOf" type="tns:ArrayOfArrayOfAddOnTypeV6" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="Length" type="xs:double" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="Width" type="xs:double" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="Height" type="xs:double" />
       <xs:element minOccurs="0" maxOccurs="1" default="0001-01-01T00:00:00" name="ShipDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" maxOccurs="1" default="0001-01-01T00:00:00" name="DeliveryDate" type="xs:dateTime" />
       <xs:element minOccurs="0" maxOccurs="1" default="0.0" name="InsuredValue" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" default="0.0" name="RegisteredValue" type="xs:decimal" />
       <xs:element minOccurs="0" maxOccurs="1" default="0.0" name="CODValue" type="xs:decimal" />
@@ -64,7 +71,7 @@
       <xs:element minOccurs="0" maxOccurs="1" name="GEMNotes" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="MaxDimensions" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="DimWeighting" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="AddOns" type="tns:ArrayOfAddOnV2" />
+      <xs:element minOccurs="0" maxOccurs="1" name="AddOns" type="tns:ArrayOfAddOnV6" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="EffectiveWeightInOunces" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" default="false" name="IsIntraBMC" type="xs:boolean" />
       <xs:element minOccurs="0" maxOccurs="1" default="0" name="Zone" type="xs:int" />
@@ -79,13 +86,14 @@
       <xs:enumeration value="US-FC" />
       <xs:enumeration value="US-PM" />
       <xs:enumeration value="US-XM" />
-      <xs:enumeration value="US-PP" />
       <xs:enumeration value="US-MM" />
       <xs:enumeration value="US-BP" />
+      <xs:enumeration value="US-LM" />
       <xs:enumeration value="US-EMI" />
       <xs:enumeration value="US-PMI" />
       <xs:enumeration value="US-FCI" />
       <xs:enumeration value="US-CM" />
+      <xs:enumeration value="US-PS" />
     </xs:restriction>
   </xs:simpleType>
   <xs:simpleType name="PackageTypeV6">
@@ -110,17 +118,17 @@
       <xs:enumeration value="Cubic" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="ArrayOfArrayOfAddOnTypeV2">
+  <xs:complexType name="ArrayOfArrayOfAddOnTypeV6">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="RequiresOneOf" nillable="true" type="tns:ArrayOfAddOnTypeV2" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RequiresOneOf" nillable="true" type="tns:ArrayOfAddOnTypeV6" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="ArrayOfAddOnTypeV2">
+  <xs:complexType name="ArrayOfAddOnTypeV6">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AddOnTypeV2" type="tns:AddOnTypeV2" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AddOnTypeV6" type="tns:AddOnTypeV6" />
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="AddOnTypeV2">
+  <xs:simpleType name="AddOnTypeV6">
     <xs:restriction base="xs:string">
       <xs:enumeration value="US-A-INS" />
       <xs:enumeration value="US-A-COD" />
@@ -136,23 +144,31 @@
       <xs:enumeration value="SC-A-INS" />
       <xs:enumeration value="SC-A-INSRM" />
       <xs:enumeration value="SC-A-HP" />
-      <xs:enumeration value="US-A-WDS" />
+      <xs:enumeration value="US-A-SR" />
       <xs:enumeration value="US-A-NDW" />
       <xs:enumeration value="US-A-ESH" />
       <xs:enumeration value="US-A-NND" />
+      <xs:enumeration value="US-A-RRE" />
+      <xs:enumeration value="US-A-LANS" />
+      <xs:enumeration value="US-A-LAWS" />
+      <xs:enumeration value="US-A-HM" />
+      <xs:enumeration value="US-A-CR" />
+      <xs:enumeration value="US-A-1030" />
+      <xs:enumeration value="US-A-ASR" />
+      <xs:enumeration value="US-A-ASRD" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="ArrayOfAddOnV2">
+  <xs:complexType name="ArrayOfAddOnV6">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="AddOnV2" nillable="true" type="tns:AddOnV2" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="AddOnV6" nillable="true" type="tns:AddOnV6" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="AddOnV2">
+  <xs:complexType name="AddOnV6">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="1" default="0.0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="1" maxOccurs="1" name="AddOnType" type="tns:AddOnTypeV2" />
-      <xs:element minOccurs="0" maxOccurs="1" name="RequiresAllOf" type="tns:ArrayOfArrayOfAddOnTypeV2" />
-      <xs:element minOccurs="0" maxOccurs="1" name="ProhibitedWithAnyOf" type="tns:ArrayOfAddOnTypeV2" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AddOnType" type="tns:AddOnTypeV6" />
+      <xs:element minOccurs="0" maxOccurs="1" name="RequiresAllOf" type="tns:ArrayOfArrayOfAddOnTypeV6" />
+      <xs:element minOccurs="0" maxOccurs="1" name="ProhibitedWithAnyOf" type="tns:ArrayOfAddOnTypeV6" />
       <xs:element minOccurs="0" maxOccurs="1" name="MissingData" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
@@ -186,9 +202,9 @@
       <xs:element minOccurs="0" maxOccurs="1" name="OverrideHash" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:complexType name="Customs">
+  <xs:complexType name="CustomsV2">
     <xs:sequence>
-      <xs:element minOccurs="1" maxOccurs="1" name="ContentType" type="tns:ContentType" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ContentType" type="tns:ContentTypeV2" />
       <xs:element minOccurs="0" maxOccurs="1" name="Comments" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="LicenseNumber" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="CertificateNumber" type="xs:string" />
@@ -197,13 +213,16 @@
       <xs:element minOccurs="0" maxOccurs="1" name="CustomsLines" type="tns:ArrayOfCustomsLine" />
     </xs:sequence>
   </xs:complexType>
-  <xs:simpleType name="ContentType">
+  <xs:simpleType name="ContentTypeV2">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Commercial Sample" />
       <xs:enumeration value="Gift" />
       <xs:enumeration value="Document" />
       <xs:enumeration value="Returned Goods" />
       <xs:enumeration value="Other" />
+      <xs:enumeration value="Merchandise" />
+      <xs:enumeration value="Humanitarian Donation" />
+      <xs:enumeration value="Dangerous Goods" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="ArrayOfCustomsLine">
@@ -246,6 +265,14 @@
       <xs:enumeration value="Undefined" />
       <xs:enumeration value="Return" />
       <xs:enumeration value="Abandon" />
+      <xs:enumeration value="Redirect" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="PaperSizeV1">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="LabelSize" />
+      <xs:enumeration value="Letter85x11" />
+      <xs:enumeration value="Default" />
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="PostageBalance">
@@ -262,40 +289,24 @@
       <xs:element minOccurs="0" maxOccurs="1" name="PartnerCustomerID" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
+  <xs:complexType name="ArrayOfBase64Binary">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="base64Binary" nillable="true" type="xs:base64Binary" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:element name="CreateIndiciumResponse">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="CreateIndiciumResult" type="xs:string" />
         <xs:element minOccurs="0" maxOccurs="1" name="IntegratorTxID" type="xs:string" />
         <xs:element minOccurs="0" maxOccurs="1" name="TrackingNumber" type="xs:string" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV9" />
+        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV14" />
         <xs:element xmlns:q2="http://microsoft.com/wsdl/types/" minOccurs="1" maxOccurs="1" name="StampsTxID" type="q2:guid" />
         <xs:element minOccurs="0" maxOccurs="1" name="URL" type="xs:string" />
         <xs:element minOccurs="0" maxOccurs="1" name="PostageBalance" type="tns:PostageBalance" />
         <xs:element minOccurs="0" maxOccurs="1" name="Mac" type="xs:string" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CreateTestIndicium">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="1" name="Item" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV9" />
-        <xs:element minOccurs="0" maxOccurs="1" name="From" type="tns:Address" />
-        <xs:element minOccurs="0" maxOccurs="1" name="To" type="tns:Address" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Customs" type="tns:Customs" />
-        <xs:element minOccurs="1" maxOccurs="1" name="ImageType" type="tns:ImageType" />
-        <xs:element minOccurs="1" maxOccurs="1" name="EltronPrinterDPIType" type="tns:EltronPrinterDPIType" />
-        <xs:element minOccurs="1" maxOccurs="1" name="rotationDegrees" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="CreateTestIndiciumResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" maxOccurs="1" name="CreateTestIndiciumResult" type="xs:string" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV9" />
-        <xs:element minOccurs="0" maxOccurs="1" name="URL" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="1" name="PostageHash" type="xs:string" />
+        <xs:element minOccurs="0" maxOccurs="1" name="ImageData" type="tns:ArrayOfBase64Binary" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -303,20 +314,20 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="Item" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV9" />
+        <xs:element minOccurs="0" maxOccurs="1" name="Rate" type="tns:RateV14" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:complexType name="ArrayOfRateV9">
+  <xs:complexType name="ArrayOfRateV14">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="RateV9" nillable="true" type="tns:RateV9" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="RateV14" nillable="true" type="tns:RateV14" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="GetRatesResponse">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="GetRatesResult" type="xs:string" />
-        <xs:element minOccurs="0" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV9" />
+        <xs:element minOccurs="0" maxOccurs="1" name="Rates" type="tns:ArrayOfRateV14" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -358,13 +369,33 @@
       <xs:element minOccurs="1" maxOccurs="1" name="MeterBalanceLimit" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="MonthlyPostagePurchaseLimit" type="xs:int" />
       <xs:element minOccurs="1" maxOccurs="1" name="MaxUsers" type="xs:int" />
-      <xs:element minOccurs="0" maxOccurs="1" name="Capabilities" type="tns:CapabilitiesV5" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Capabilities" type="tns:CapabilitiesV7" />
       <xs:element minOccurs="0" maxOccurs="1" name="MeterPhysicalAddress" type="tns:Address" />
       <xs:element minOccurs="1" maxOccurs="1" name="ResubmitStatus" type="tns:ResubmissionStatus" />
       <xs:element minOccurs="0" maxOccurs="1" default="" name="ResubmitCookie" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="PlanID" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="PendingPlanId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Username" type="xs:string" />
     </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="CapabilitiesV7">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CapabilitiesV6">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="CanUseCertifiedMail" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="CanPrintAllIndiciumValues" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CapabilitiesV6">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:CapabilitiesV5">
+        <xs:sequence>
+          <xs:element minOccurs="1" maxOccurs="1" name="CanUseInvoicing" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="CapabilitiesV5">
     <xs:complexContent mixed="false">
@@ -453,9 +484,43 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="Item" />
         <xs:element minOccurs="0" maxOccurs="1" name="Address" type="tns:Address" />
+        <xs:element minOccurs="0" maxOccurs="1" name="StatusCodes" type="tns:StatusCodes" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:complexType name="StatusCodes">
+    <xs:sequence>
+      <xs:element minOccurs="1" maxOccurs="1" name="ReturnCode" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Footnotes" type="tns:ArrayOfFootnote" />
+      <xs:element minOccurs="0" maxOccurs="1" name="DpvFootnotes" type="tns:ArrayOfDpvFootnote" />
+      <xs:element minOccurs="0" maxOccurs="1" name="SdcFootnotes" type="tns:ArrayOfInt" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfFootnote">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="Footnote" nillable="true" type="tns:Footnote" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Footnote">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Value" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfDpvFootnote">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DpvFootnote" nillable="true" type="tns:DpvFootnote" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="DpvFootnote">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="Value" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ArrayOfInt">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
   <xs:complexType name="ArrayOfAddress">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="Address" nillable="true" type="tns:Address" />
@@ -550,7 +615,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" maxOccurs="1" name="Item" />
         <xs:element minOccurs="0" maxOccurs="1" name="StampsTxIDs" type="tns:ArrayOfGuid" />
-        <xs:element minOccurs="0" maxOccurs="1" name="FromAddress" type="tns:from_address_v1" />
+        <xs:element minOccurs="0" maxOccurs="1" name="FromAddress" type="tns:Address" />
         <xs:element minOccurs="1" maxOccurs="1" name="ImageType" type="tns:ImageType" />
         <xs:element minOccurs="1" maxOccurs="1" name="PrintInstructions" type="xs:boolean" />
         <xs:element minOccurs="1" maxOccurs="1" name="ShipDate" nillable="true" type="xs:dateTime" />
@@ -560,22 +625,6 @@
   <xs:complexType name="ArrayOfGuid">
     <xs:sequence>
       <xs:element xmlns:q4="http://microsoft.com/wsdl/types/" minOccurs="0" maxOccurs="unbounded" name="guid" type="q4:guid" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:complexType name="from_address_v1">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="1" name="name_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="title_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="dept_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="company_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="address_1_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="address_2_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="urbanization_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="city_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="state_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="zip_code_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="zip_code_add_on_" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="phone_number_" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="ArrayOfString">

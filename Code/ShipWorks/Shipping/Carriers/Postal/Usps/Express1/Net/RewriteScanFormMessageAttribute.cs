@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Web.Services.Protocols;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -34,7 +34,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         [Conditional("DEBUG")]
         public static void CheckNecessaryCodeIsInPlace()
         {
-            Type uspsWebServiceType = typeof(SwsimV45);
+            Type uspsWebServiceType = typeof(SwsimV36);
             MethodInfo createScanFormMethod = uspsWebServiceType.GetMethod("CreateScanForm");
 
             Type attributeType = typeof(RewriteScanFormMessageAttribute);

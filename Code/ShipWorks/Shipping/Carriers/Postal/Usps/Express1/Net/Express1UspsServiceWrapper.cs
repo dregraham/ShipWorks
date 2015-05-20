@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Web.Services.Protocols;
 using System.Xml;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45;
+using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 {
@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
     /// Custome web service proxy that enables ShipWorks to use Express1's web service via the USPS API 
     /// classes.
     /// </summary>
-    public class Express1UspsServiceWrapper : SwsimV45  
+    public class Express1UspsServiceWrapper : SwsimV36   
     {
         // using relction, we need to set message.method.action, which is what message.Action is
         FieldInfo methodField;
@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
         // the namespaces being swapped
         string expressNamespace = "http://www.express1.com/2011/08/ISDCV36Service";
-        string uspsNamespace = "http://stamps.com/xml/namespace/2015/05/swsim/swsimv45";
+        string uspsNamespace = "http://stamps.com/xml/namespace/2014/05/swsim/swsimv36";
 
         WebRequest webRequest = null;
 

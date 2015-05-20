@@ -5,6 +5,6 @@
     Renaming the file extension or editing the content of this file may   
     cause the file to be unrecognizable by the program.
 -->
-<GenericObjectDataSource DisplayName="PurchaseStatus" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.PurchaseStatus, Web References.Shipping.Carriers.Postal.Usps.WebServices.Reference.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
+<GenericObjectDataSource DisplayName="NetStampsLayout" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+   <TypeInfo>ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.NetStampsLayout, Web References.Shipping.Carriers.Postal.Usps.WebServices.v36.Reference.cs, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

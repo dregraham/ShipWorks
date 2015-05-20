@@ -9,7 +9,7 @@
 	var services = new object[]
 	{
 		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV45",
-		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v45", "SwsimV45",
+		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
 		"ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerService", "CustomerService",
