@@ -994,6 +994,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             // If domestic, assume they are all available (may be overridden later)
                             confirmationOptions.Add(PostalConfirmationType.Delivery);
                             confirmationOptions.Add(PostalConfirmationType.Signature);
+                            confirmationOptions.Add(PostalConfirmationType.AdultSignatureRequired);
+                            confirmationOptions.Add(PostalConfirmationType.AdultSignatureRestricted);
+
 
                             if (serviceType == PostalServiceType.ExpressMail)
                             {
@@ -1031,6 +1034,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             if (confirmationOptions.Contains(PostalConfirmationType.Signature))
                             {
                                 rates.Add(new RateResult(string.Format("       Signature Confirmation ({0:c})", price.Fees.SignatureConfirmation), "", price.Postage.TotalAmount + price.Fees.SignatureConfirmation, new PostalRateSelection(serviceType, PostalConfirmationType.Signature)));
+                            }
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRequired))
+                            {
+                                rates.Add(new RateResult(string.Format("       Adult Signature Required ({0:c})", price.Fees.AdultSignature), "", price.Postage.TotalAmount + price.Fees.AdultSignature, new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRequired)));
+                            }
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRestricted))
+                            {
+                                rates.Add(new RateResult(string.Format("       Adult Signature Restricted ({0:c})", price.Fees.AdultSignatureRestrictedDelivery), "", price.Postage.TotalAmount + price.Fees.AdultSignatureRestrictedDelivery, new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRestricted)));
                             }
                         }
                         else
