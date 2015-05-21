@@ -62,6 +62,8 @@ namespace ShipWorks.Stores.Platforms.Volusion
 
             StoreType storeType = StoreTypeManager.GetType(store);
 
+            statuses.Items.Clear();
+
             // get the collection of currently chosen codes to be downloaded
             List<string> selectedStatuses = store.DownloadOrderStatuses.Split(',').ToList();
 
