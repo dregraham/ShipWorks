@@ -354,10 +354,28 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private static Dictionary<string, string> BuildQuestionAnswerList(IEnumerable<QuestionType> questionList)
         {
-            return questionList == null ? 
-                new Dictionary<string, string>() :
-                questionList.Where(q => !ExcludeSpecificQuestions(q))
-                            .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+            //return questionList == null ? 
+            //    new Dictionary<string, string>() :
+            //    questionList.Where(q => !ExcludeSpecificQuestions(q))
+            //                .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+
+            //ShipWorks was crashing because Network Solutions asked the same quetsion twice
+            //this caused us to try to add the same key twice to the dictonary
+            Dictionary<string, string> questions = new Dictionary<string, string>();
+
+            if (questionList != null)
+            {
+                foreach (QuestionType question in questionList)
+                {
+                    //Check to see if the quetsion has been asked before adding it to the dictionary
+                    if (!questions.ContainsKey(question.Title))
+                    {
+                        questions.Add(question.Title, BuildAnswerFromQuestion(question));
+                    }
+                }
+            }
+
+            return questions;
         }
 
         /// <summary>
