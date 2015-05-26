@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -340,14 +341,14 @@ namespace ShipWorks.Shipping.Carriers.Postal
             bool confirmationTypesAvailable = false;
 
             var servicesThatAllowConfirmationTypes = new List<PostalServiceType>
-                {                        
-                    PostalServiceType.PriorityMail,
-                    PostalServiceType.StandardPost,
-                    PostalServiceType.MediaMail,
-                    PostalServiceType.LibraryMail,
-                    PostalServiceType.CriticalMail,
-                    PostalServiceType.ParcelSelect
-                };
+            {
+                PostalServiceType.PriorityMail,
+                PostalServiceType.StandardPost,
+                PostalServiceType.MediaMail,
+                PostalServiceType.LibraryMail,
+                PostalServiceType.CriticalMail,
+                PostalServiceType.ParcelSelect
+            };
 
             // All the DHL services require confirmation
             servicesThatAllowConfirmationTypes.AddRange(EnumHelper.GetEnumList<PostalServiceType>().Where(entry => ShipmentTypeManager.IsEndiciaDhl(entry.Value)).Select(entry => entry.Value));
@@ -355,7 +356,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             if (servicesThatAllowConfirmationTypes.Contains(service))
             {
                 confirmationTypesAvailable = true;
-            } 
+            }
             else if (service == PostalServiceType.FirstClass && packaging != PostalPackagingType.Envelope && packaging != PostalPackagingType.LargeEnvelope)
             {
                 confirmationTypesAvailable = true;
@@ -368,16 +369,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 confirmationTypes.Add(PostalConfirmationType.Delivery);
                 confirmationTypes.Add(PostalConfirmationType.Signature);
             }
-            else
-            {
-                confirmationTypes.Add(PostalConfirmationType.None);
-            }
-            
+
             List<PostalServicePackagingCombination> adultSignatureAllowed = GetAdultSignatureServiceAndPackagingCombinations();
             if (packaging != null && adultSignatureAllowed.Any(asr => asr.ServiceType == service && asr.PackagingType == packaging))
             {
                 confirmationTypes.Add(PostalConfirmationType.AdultSignatureRequired);
                 confirmationTypes.Add(PostalConfirmationType.AdultSignatureRestricted);
+            }
+
+            if (confirmationTypes.None())
+            {
+                confirmationTypes.Add(PostalConfirmationType.None);
             }
 
             return confirmationTypes;
