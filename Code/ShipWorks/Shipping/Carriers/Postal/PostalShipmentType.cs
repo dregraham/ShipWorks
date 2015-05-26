@@ -370,7 +370,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 confirmationTypes.Add(PostalConfirmationType.Signature);
             }
 
-            List<PostalServicePackagingCombination> adultSignatureAllowed = GetAdultSignatureServiceAndPackagingCombinations();
+            IEnumerable<PostalServicePackagingCombination> adultSignatureAllowed = GetAdultSignatureServiceAndPackagingCombinations();
             if (packaging != null && adultSignatureAllowed.Any(asr => asr.ServiceType == service && asr.PackagingType == packaging))
             {
                 confirmationTypes.Add(PostalConfirmationType.AdultSignatureRequired);
@@ -518,7 +518,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Add adult signature restricted values
         /// </summary>
-        private List<PostalServicePackagingCombination> GetAdultSignatureServiceAndPackagingCombinations()
+        private static IEnumerable<PostalServicePackagingCombination> GetAdultSignatureServiceAndPackagingCombinations()
         {
             List<PostalServicePackagingCombination> adultSignatureAllowed = new List<PostalServicePackagingCombination>();
 

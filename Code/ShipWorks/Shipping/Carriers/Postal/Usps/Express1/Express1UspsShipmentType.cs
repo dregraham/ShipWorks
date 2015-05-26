@@ -258,5 +258,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 PostalConfirmationType.Signature
             };
         }
+
+        /// <summary>
+        /// Determines if delivery\signature confirmation is available for the given service
+        /// </summary>
+        public override List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)
+        {
+            List<PostalConfirmationType> availableConfirmationTypes = base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+
+            return availableConfirmationTypes.Where(c=>c != PostalConfirmationType.AdultSignatureRequired && c!= PostalConfirmationType.AdultSignatureRestricted).ToList();
+        }
     }
 }
