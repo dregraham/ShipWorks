@@ -77,6 +77,10 @@ namespace ShipWorks.Stores.Platforms.Groupon
                     start = start.AddHours(23);
 
                 } while (start <= DateTime.UtcNow);
+
+                Progress.Detail = "Done";
+                Progress.PercentComplete = 100;
+
             }
             catch (GrouponException ex)
             {
