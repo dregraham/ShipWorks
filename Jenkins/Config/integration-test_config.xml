@@ -47,7 +47,7 @@
       <testResultsFile>TestResults/integration-results.trx</testResultsFile>
     </hudson.plugins.mstest.MSTestPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
+      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>

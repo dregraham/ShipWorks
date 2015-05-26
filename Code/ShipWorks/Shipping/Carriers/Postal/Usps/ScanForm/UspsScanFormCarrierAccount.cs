@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using Interapptive.Shared.Utility;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
@@ -13,11 +13,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
     /// <summary>
     /// A USPS implementation of the IScanFormCarrierAccount interface.
     /// </summary>
-    public class UspsScanFormCarrierAccount : IScanFormCarrierAccount
+    public class UspsScanFormCarrierAccount : BaseScanFormCarrierAccount
     {
         private readonly UspsAccountEntity accountEntity;
-        private readonly IScanFormRepository repository;
-        private readonly ILog log;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsScanFormCarrierAccount" /> class.
@@ -34,18 +32,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// <param name="repository">The repository.</param>
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
-        public UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log)
+        public UspsScanFormCarrierAccount(IScanFormRepository repository, UspsAccountEntity accountEntity, ILog log) :
+            base(repository, log, ShipmentTypeCode.Usps)
         {
-            this.repository = repository;
             this.accountEntity = accountEntity;
-            this.log = log;
         }
 
         /// <summary>
         /// Gets the account entity.
         /// </summary>
         /// <returns>A carrier-specific account entity.</returns>
-        public IEntity2 GetAccountEntity()
+        public override IEntity2 GetAccountEntity()
         {
             return accountEntity;
         }
@@ -54,116 +51,56 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.ScanForm
         /// Gets the name of the shipping carrier.
         /// </summary>
         /// <value>The name of the shipping carrier.</value>
-        public virtual string ShippingCarrierName
+        public override string ShippingCarrierName
         {
             get { return EnumHelper.GetDescription(ShipmentTypeCode); }
         }
 
         /// <summary>
-        /// Gets the shipment type code.
-        /// </summary>
-        /// <value>The shipment type code.</value>
-        public virtual ShipmentTypeCode ShipmentTypeCode 
-        { 
-            get { return ShipmentTypeCode.Usps; }
-        }
-
-        /// <summary>
-        /// Gets the description.
-        /// </summary>
-        /// <returns>A string describing the account</returns>
-        public string GetDescription()
-        {
-            // The USPS account doesn't have a description field, so we'll just build it here
-            return string.Format("{0} - {1}", 
-                EnumHelper.GetDescription(ShipmentTypeCode),
-                accountEntity.Description);
-        }
-        
-        /// <summary>
         /// Gets the gateway object to use for communicating with the shipping carrier API for generating SCAN forms.
         /// </summary>
         /// <returns>An IScanFormGateway object.</returns>
-        public virtual IScanFormGateway GetGateway()
+        public override IScanFormGateway GetGateway()
         {
             return new UspsScanFormGateway(new UspsWebClient((UspsResellerType)accountEntity.UspsReseller));
         }
-        
-        /// <summary>
-        /// Gets the printer to use for printing a carrier's SCAN form.
-        /// </summary>
-        /// <returns>An IScanFormPrinter object.</returns>
-        public IScanFormPrinter GetPrinter()
-        {
-            return new DefaultScanFormPrinter();
-        }
-
 
         /// <summary>
-        /// Gets the existing scan form batches.
+        /// Get the description of the account
         /// </summary>
-        /// <returns>A collection fo ScanFormBatch objects.</returns>
-        public IEnumerable<ScanFormBatch> GetExistingScanFormBatches()
+        protected override string AccountDescription
         {
-            return repository.GetExistingScanFormBatches(this);
-        }
-
-        /// <summary>
-        /// Saves the specified scan form batch.
-        /// </summary>
-        /// <param name="scanFormBatch">The scan form batch.</param>
-        /// <returns>A long value representing the SCAN form batch ID.</returns>
-        /// <exception cref="ShippingException">The ScanFormBatch is null.</exception>
-        public long Save(ScanFormBatch scanFormBatch)
-        {
-            if (scanFormBatch != null)
+            get
             {
-                // Delegate to  the  IScanFormRepository to carry out the saving and return the scan form batch ID value.
-                return repository.Save(scanFormBatch);
-            }
-            else
-            {
-                string message = string.Format("ShipWorks was unable to create a SCAN form through {0} at this time. Please try again later.", ShippingCarrierName);
-
-                log.Error(message + " (A null scan form batch tried to be saved.)");
-                throw new ShippingException(message);
+                return accountEntity.Description;
             }
         }
 
         /// <summary>
-        /// Gets the IDs of the shipments eligible for a SCAN form.
+        /// Add any carrier specific filters or relations to the bucket
         /// </summary>
-        /// <returns>A collection of shipment ID values.</returns>
-        public IEnumerable<long> GetEligibleShipmentIDs()
+        protected override void AddPredicateFilters(RelationPredicateBucket bucket)
         {
-            // Create the predicate for the query to determine which shipments are eligible
-            RelationPredicateBucket bucket = new RelationPredicateBucket
-            (
-                // Shipment has to be processed and not yet voided
-                ShipmentFields.Processed == true & ShipmentFields.Voided == false &
+            int[] dhlServiceTypes = EnumHelper.GetEnumList<PostalServiceType>(ShipmentTypeManager.IsStampsDhl)
+                .Select(entry => (int)entry.Value)
+                .ToArray();
 
-                // Shipment isn't a return
-                ShipmentFields.ReturnShipment == false &
+            bucket.PredicateExpression.Add(
+                // Only allow shipments processed today, unless they are DHL which can be on a SCAN form at any time
+                (ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime() |
+                    PostalShipmentFields.Service == dhlServiceTypes) &
 
                 // Has to not have been scanned yet and is for the selected account
                 UspsShipmentFields.ScanFormBatchID == DBNull.Value &
                 UspsShipmentFields.UspsAccountID == accountEntity.UspsAccountID &
 
-                // And has to have been processed today.  This will get all shipments that were processed since midnight locally.
-                ShipmentFields.ProcessedDate > DateTime.Now.Date.ToUniversalTime() & 
-
                 // Exclude first class envelopes
-                !(PostalShipmentFields.Service == (int)PostalServiceType.FirstClass & 
-                    (PostalShipmentFields.PackagingType == (int)PostalPackagingType.Envelope | PostalShipmentFields.PackagingType == (int)PostalPackagingType.LargeEnvelope))
-            );
-            
-            bucket.PredicateExpression.Add(ShipmentFields.ShipmentType == (int)ShipmentTypeCode);
+                !(PostalShipmentFields.Service == (int)PostalServiceType.FirstClass &
+                    (PostalShipmentFields.PackagingType == (int)PostalPackagingType.Envelope | 
+                        PostalShipmentFields.PackagingType == (int)PostalPackagingType.LargeEnvelope)));
 
-            bucket.Relations.Add(ShipmentEntity.Relations.PostalShipmentEntityUsingShipmentID);
+
             bucket.Relations.Add(PostalShipmentEntity.Relations.UspsShipmentEntityUsingShipmentID);
-
-            // Defer to the repository to perform the actual lookup
-            return repository.GetShipmentIDs(bucket);
         }
     }
 }
