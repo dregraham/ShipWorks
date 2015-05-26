@@ -26,11 +26,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         /// <param name="accountEntity">The account entity.</param>
         /// <param name="log">The log.</param>
         public Express1EndiciaScanFormCarrierAccount(IScanFormRepository repository, EndiciaAccountEntity accountEntity, ILog log, IScanFormShipmentTypeName scanFormShipmentTypeName)
-            : base(repository, accountEntity, log, scanFormShipmentTypeName)
+            : base(repository, accountEntity, log, scanFormShipmentTypeName, ShipmentTypeCode.Express1Endicia)
         {
             // Just need to set the shipment type code for express 1 that 
             // gets used in the GetEligibleShipmentIDs method
-            ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
+           // ShipmentTypeCode = ShipmentTypeCode.Express1Endicia;
         }
 
         /// <summary>
