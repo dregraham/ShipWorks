@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 { "CancelIndiciumResult", "Authenticator" },
                 { "CreateScanFormResult", "Authenticator" },
                 { "CleanseAddressResult", "Authenticator" },
-                { "RateV11", "Rate" }
+                { "RateV14", "Rate" }
             };
 
         /// <summary>
