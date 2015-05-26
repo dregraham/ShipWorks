@@ -44,6 +44,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             timeZoneControl.SelectedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(volusionStore.ServerTimeZone);
 
             UpdateStatusLabels();
+            
         }
 
         /// <summary>
@@ -58,6 +59,21 @@ namespace ShipWorks.Stores.Platforms.Volusion
             // payment methods
             VolusionPaymentMethods paymentMethods = new VolusionPaymentMethods(store);
             paymentMethodsStatus.Text = String.Format(statusString, paymentMethods.Count, "payment methods");
+
+            StoreType storeType = StoreTypeManager.GetType(store);
+
+            statuses.Items.Clear();
+
+            // get the collection of currently chosen codes to be downloaded
+            List<string> selectedStatuses = store.DownloadOrderStatuses.Split(',').ToList();
+
+            foreach(string status in storeType.GetOnlineStatusChoices())
+            {
+                // check the ones that are selected
+                bool chosen = selectedStatuses.Contains(status);
+                statuses.Items.Add(status, chosen);
+            }
+
         }
 
         /// <summary>
@@ -71,6 +87,15 @@ namespace ShipWorks.Stores.Platforms.Volusion
             
             volusionStore.ShipmentMethods = this.store.ShipmentMethods;
             volusionStore.PaymentMethods = this.store.PaymentMethods;
+
+            List<string> chosenStatuses = new List<string>();
+            foreach (string selectedItem in statuses.CheckedItems)
+            {
+                chosenStatuses.Add(selectedItem);
+            }
+
+            // save the selected statuses as CSV
+            volusionStore.DownloadOrderStatuses = string.Join(",", chosenStatuses);
 
             return true;
         }

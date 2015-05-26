@@ -493,6 +493,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentMethods", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("DownloadOrderStatuses", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("ServerTimeZone", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -634,6 +637,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.ShipmentMethods, true); }
 			set	{ SetValue((int)VolusionStoreFieldIndex.ShipmentMethods, value); }
+		}
+
+		/// <summary> The DownloadOrderStatuses property of the Entity VolusionStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "VolusionStore"."DownloadOrderStatuses"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String DownloadOrderStatuses
+		{
+			get { return (System.String)GetValue((int)VolusionStoreFieldIndex.DownloadOrderStatuses, true); }
+			set	{ SetValue((int)VolusionStoreFieldIndex.DownloadOrderStatuses, value); }
 		}
 
 		/// <summary> The ServerTimeZone property of the Entity VolusionStore<br/><br/>

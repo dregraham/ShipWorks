@@ -39,62 +39,84 @@ namespace ShipWorks.Stores.Platforms.Volusion
         }
 
         /// <summary>
+        /// Convenience property for quick access to the specific entity
+        /// </summary>
+        protected VolusionStoreEntity VolusionStoreEntity
+        {
+            get
+            {
+                return (VolusionStoreEntity)Store;
+            }
+        }
+
+        /// <summary>
         /// Download orders from the store
         /// </summary>
         protected override void Download()
         {
             try
-            {
-                Progress.Detail = "Preparing to download orders...";
-                shippingMethods = new VolusionShippingMethods((VolusionStoreEntity)Store);
-                paymentMethods = new VolusionPaymentMethods((VolusionStoreEntity)Store);
+            { 
+                // get the collection of currently chosen codes to be downloaded
+                List<string> selectedStatuses = VolusionStoreEntity.DownloadOrderStatuses.Split(',').ToList();
 
-                Progress.Detail = "Downloading Ready to Ship Orders...";
-
-                VolusionWebClient client = new VolusionWebClient((VolusionStoreEntity)Store);
-
-                // get all the orders - volusion just gives them all. At once.
-                IXPathNavigable ordersResponse = client.GetOrders();
-
-                // check for cancel
-                if (Progress.IsCancelRequested)
+                // Volusion requires an explicit value when querying for orders, cannot pass a range or list of statuses
+                // download for each status
+                foreach(string status in selectedStatuses)
                 {
-                    return;
-                }
+                    int quantitySaved = 0;
+                    Progress.Detail = "Preparing to download orders...";
+                    shippingMethods = new VolusionShippingMethods((VolusionStoreEntity)Store);
+                    paymentMethods = new VolusionPaymentMethods((VolusionStoreEntity)Store);
 
-                // volusion returns a completely blank response sometimes.  This is
-                // apparently completely fine and A.OK.
-                if (ordersResponse == null)
-                {
-                    Progress.PercentComplete = 100;
-                    Progress.Detail = "Done.";
-                    return;
-                }
+                    Progress.Detail = string.Format("Downloading {0} Orders...", status);
 
-                XPathNavigator xpath = ordersResponse.CreateNavigator();
+                    VolusionWebClient client = new VolusionWebClient((VolusionStoreEntity)Store);
 
-                int totalCount = GetOrderCount(xpath);
-                if (totalCount == 0)
-                {
-                    Progress.PercentComplete = 100;
-                    Progress.Detail = "Done.";
-                    return;
-                }
-
-                XPathNodeIterator orders = xpath.Select("//Orders");
-                while (orders.MoveNext())
-                {
-                    Progress.Detail = String.Format("Processing order {0} of {1}...", QuantitySaved + 1, totalCount);
-
-                    // load each order
-                    LoadOrder(client, orders.Current.Clone());
-
-                    Progress.PercentComplete = Math.Min(100, 100 * (QuantitySaved) / totalCount);
+                    // get all the orders - volusion just gives them all. At once.
+                    IXPathNavigable ordersResponse = client.GetOrders(status);
 
                     // check for cancel
                     if (Progress.IsCancelRequested)
                     {
                         return;
+                    }
+
+                    // volusion returns a completely blank response sometimes.  This is
+                    // apparently completely fine and A.OK.
+                    if (ordersResponse == null)
+                    {
+                        Progress.PercentComplete = 100;
+                        Progress.Detail = "Done.";
+                        continue;
+                    }
+
+                    XPathNavigator xpath = ordersResponse.CreateNavigator();
+
+                    int totalCount = GetOrderCount(xpath);
+                    if (totalCount == 0)
+                    {
+                        Progress.PercentComplete = 100;
+                        Progress.Detail = "Done.";
+                        continue;
+                    }
+
+                    XPathNodeIterator orders = xpath.Select("//Orders");
+                    while (orders.MoveNext())
+                    {
+                        Progress.Detail = String.Format("Processing order {0} of {1}...", quantitySaved, totalCount);
+
+                        // load each order
+                        LoadOrder(client, orders.Current.Clone());
+
+                        Progress.PercentComplete = Math.Min(100, 100 * (quantitySaved) / totalCount);
+
+                        quantitySaved++;
+
+                        // check for cancel
+                        if (Progress.IsCancelRequested)
+                        {
+                            return;
+                        }
                     }
                 }
             }

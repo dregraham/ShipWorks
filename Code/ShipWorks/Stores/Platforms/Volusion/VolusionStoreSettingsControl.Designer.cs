@@ -36,6 +36,9 @@
             this.refreshShippingMethodsLink = new ShipWorks.UI.Controls.LinkControl();
             this.refreshPaymentMethodsLink = new ShipWorks.UI.Controls.LinkControl();
             this.timeZoneControl = new ShipWorks.Stores.Platforms.Volusion.VolusionTimeZoneControl();
+            this.sectionTitle2 = new ShipWorks.UI.Controls.SectionTitle();
+            this.label1 = new System.Windows.Forms.Label();
+            this.statuses = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // sectionDownloadDetails
@@ -50,8 +53,8 @@
             // 
             // sectionTitle1
             // 
-            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitle1.Location = new System.Drawing.Point(0, 133);
             this.sectionTitle1.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
             this.sectionTitle1.Name = "sectionTitle1";
@@ -66,7 +69,7 @@
             this.label2.Size = new System.Drawing.Size(467, 19);
             this.label2.TabIndex = 25;
             this.label2.Text = "ShipWorks needs the lists of shipping and payment methods from your online store." +
-                "";
+    "";
             // 
             // shippingMethodsStatus
             // 
@@ -114,16 +117,48 @@
             // 
             // timeZoneControl
             // 
-            this.timeZoneControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.timeZoneControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.timeZoneControl.Location = new System.Drawing.Point(19, 30);
             this.timeZoneControl.Name = "timeZoneControl";
             this.timeZoneControl.Size = new System.Drawing.Size(448, 88);
             this.timeZoneControl.TabIndex = 31;
             // 
+            // sectionTitle2
+            // 
+            this.sectionTitle2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle2.Location = new System.Drawing.Point(0, 240);
+            this.sectionTitle2.Margin = new System.Windows.Forms.Padding(3, 3, 4, 3);
+            this.sectionTitle2.Name = "sectionTitle2";
+            this.sectionTitle2.Size = new System.Drawing.Size(489, 22);
+            this.sectionTitle2.TabIndex = 32;
+            this.sectionTitle2.Text = "Order Status";
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(19, 276);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(424, 28);
+            this.label1.TabIndex = 33;
+            this.label1.Text = "ShipWorks downloads Volusion orders by their order status. Select all of the orde" +
+    "r statuses you want ShipWorks to download each time.";
+            // 
+            // statuses
+            // 
+            this.statuses.CheckOnClick = true;
+            this.statuses.FormattingEnabled = true;
+            this.statuses.Location = new System.Drawing.Point(44, 315);
+            this.statuses.Name = "statuses";
+            this.statuses.Size = new System.Drawing.Size(216, 116);
+            this.statuses.TabIndex = 34;
+            // 
             // VolusionStoreSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.statuses);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.sectionTitle2);
             this.Controls.Add(this.timeZoneControl);
             this.Controls.Add(this.refreshPaymentMethodsLink);
             this.Controls.Add(this.refreshShippingMethodsLink);
@@ -132,9 +167,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.sectionTitle1);
             this.Controls.Add(this.sectionDownloadDetails);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "VolusionStoreSettingsControl";
-            this.Size = new System.Drawing.Size(489, 236);
+            this.Size = new System.Drawing.Size(489, 448);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -150,5 +185,8 @@
         private ShipWorks.UI.Controls.LinkControl refreshShippingMethodsLink;
         private ShipWorks.UI.Controls.LinkControl refreshPaymentMethodsLink;
         private VolusionTimeZoneControl timeZoneControl;
+        private UI.Controls.SectionTitle sectionTitle2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckedListBox statuses;
     }
 }
