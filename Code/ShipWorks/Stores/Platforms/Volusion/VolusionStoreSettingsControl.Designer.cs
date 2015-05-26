@@ -136,18 +136,18 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 275);
+            this.label1.Location = new System.Drawing.Point(19, 276);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(130, 13);
+            this.label1.Size = new System.Drawing.Size(424, 28);
             this.label1.TabIndex = 33;
-            this.label1.Text = "Volusion orders of status:";
+            this.label1.Text = "ShipWorks downloads Volusion orders by their order status. Select all of the orde" +
+    "r statuses you want ShipWorks to download each time.";
             // 
             // statuses
             // 
             this.statuses.CheckOnClick = true;
             this.statuses.FormattingEnabled = true;
-            this.statuses.Location = new System.Drawing.Point(44, 291);
+            this.statuses.Location = new System.Drawing.Point(44, 315);
             this.statuses.Name = "statuses";
             this.statuses.Size = new System.Drawing.Size(216, 116);
             this.statuses.TabIndex = 34;
@@ -169,7 +169,7 @@
             this.Controls.Add(this.sectionDownloadDetails);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "VolusionStoreSettingsControl";
-            this.Size = new System.Drawing.Size(489, 429);
+            this.Size = new System.Drawing.Size(489, 448);
             this.ResumeLayout(false);
             this.PerformLayout();
 

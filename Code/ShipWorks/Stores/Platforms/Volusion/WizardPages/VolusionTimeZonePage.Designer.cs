@@ -45,13 +45,13 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(16, 147);
+            this.label2.Location = new System.Drawing.Point(18, 147);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(366, 54);
+            this.label2.Size = new System.Drawing.Size(498, 54);
             this.label2.TabIndex = 42;
-            this.label2.Text = "ShipWorks downloads Volusion orders by their order statuses.  Select the order st" +
-    "atuses ShipWorks will download each time. \r\n\r\nThis selection can be changed late" +
-    "r.";
+            this.label2.Text = "ShipWorks downloads Volusion orders by their order status. Select all of the orde" +
+    "r statuses you want ShipWorks to download each time. \r\n\r\nThis selection can be c" +
+    "hanged at any time.";
             // 
             // label1
             // 
@@ -67,7 +67,7 @@
             // 
             this.statuses.CheckOnClick = true;
             this.statuses.FormattingEnabled = true;
-            this.statuses.Location = new System.Drawing.Point(48, 204);
+            this.statuses.Location = new System.Drawing.Point(36, 204);
             this.statuses.Name = "statuses";
             this.statuses.Size = new System.Drawing.Size(216, 116);
             this.statuses.TabIndex = 40;
