@@ -11,6 +11,7 @@ using ShipWorks.Stores.Platforms.NetworkSolutions.WebServices;
 using Interapptive.Shared.Business;
 using ShipWorks.Stores.Content;
 using System.Globalization;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.NetworkSolutions
 {
@@ -354,10 +355,11 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions
         /// </summary>
         private static Dictionary<string, string> BuildQuestionAnswerList(IEnumerable<QuestionType> questionList)
         {
-            return questionList == null ? 
-                new Dictionary<string, string>() :
-                questionList.Where(q => !ExcludeSpecificQuestions(q))
-                            .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
+            return questionList == null ?
+            new Dictionary<string, string>() :
+            questionList.Where(q => !ExcludeSpecificQuestions(q))
+                        .Distinct(new GenericPropertyEqualityComparer<QuestionType, string>(q => q.Title))
+                        .ToDictionary(question => question.Title, BuildAnswerFromQuestion);
         }
 
         /// <summary>

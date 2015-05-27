@@ -46,7 +46,7 @@ cp ./Artifacts/Distribute/*.* //intfs01/support/Testing/InternalReleases/@@FEATU
       <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.8">
-      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com</recipients>
+      <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
