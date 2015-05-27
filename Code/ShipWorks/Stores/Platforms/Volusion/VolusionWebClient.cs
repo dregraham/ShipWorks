@@ -94,13 +94,13 @@ namespace ShipWorks.Stores.Platforms.Volusion
         /// <summary>
         /// Downloads orders that are Ready To Ship
         /// </summary>
-        public IXPathNavigable GetOrders()
+        public IXPathNavigable GetOrders(string status)
         {
             List<string> selectColumns = new List<string>();
             selectColumns.Add("*");
 
             NameValueCollection whereClause = new NameValueCollection();
-            whereClause.Add("OrderStatus", "Ready to Ship");
+            whereClause.Add("OrderStatus", status);
 
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             ConfigureRequest(submitter, "Generic\\Orders", selectColumns, whereClause);

@@ -172,7 +172,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         private static string ProcessXmlRequest(string xmlRequest)
         {
             // The production server URL
-            const string serverUrl = "http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=";
+            string serverUrl = PostalWebUtility.UseTestServer ?
+                "http://stg-production.shippingapis.com/ShippingApi.dll?API=TrackV2&XML="
+                : "http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=";
 
             try
             {
