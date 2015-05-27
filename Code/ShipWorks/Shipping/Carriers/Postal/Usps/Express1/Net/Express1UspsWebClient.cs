@@ -223,14 +223,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
-        /// Get the USPS URL of the given urlType
-        /// </summary>
-        public string GetUrl(UspsAccountEntity account, UrlType urlType)
-        {
-            return AuthenticationWrapper(() => GetUrlInternal(account, urlType), account);
-        }
-
-        /// <summary>
         /// The internal GetUrl implementation that is intended to be wrapped by the auth wrapper
         /// </summary>
         private string GetUrlInternal(UspsAccountEntity account, UrlType urlType)
