@@ -39,7 +39,28 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 if (!MagicKeysDown)
                 {
                     IUspsWebClient webClient = GetWebClient(resellerType);
-                    webClient.ProcessShipment(shipment);
+
+                    try
+                    {
+                        webClient.ProcessShipment(shipment);
+                    }
+                    catch (Exception ex)
+                    {
+                        // If we are out of postage, add some more and try again
+                        if (ex.Message.Contains("Insufficient"))
+                        {
+                            UspsAccountEntity account = UspsAccountManager.GetAccount(shipment.Postal.Usps.UspsAccountID);
+
+                            UspsPostageWebClient postageWebClient = new UspsPostageWebClient(account);
+                            postageWebClient.Purchase(100.0m);
+
+                            webClient.ProcessShipment(shipment);
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
 
                     //shipment.ContentWeight = shipment.FedEx.Packages.Sum(p => p.Weight) + shipment.FedEx.Packages.Sum(p => p.DimsWeight) + shipment.FedEx.Packages.Sum(p => p.DryIceWeight);
                     shipment.Processed = true;

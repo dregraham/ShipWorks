@@ -115,5 +115,59 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             bool result = address.IsUSInternationalTerritory();
             Assert.IsFalse(result);
         }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsEmptyString_WhenCountryCodeIsGreatBrittain()
+        {
+            string stateProvince = Geography.GetStateProvCode("something", "GB");
+            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsEmptyString_WhenStateProvinceIsEmptyAndCountryCodeIsGreatBrittain()
+        {
+            string stateProvince = Geography.GetStateProvCode(string.Empty, "GB");
+            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsPassedInStateProvince_WhenCountryCodeIsUnknown()
+        {
+            string expected = "something";
+            string actual = Geography.GetStateProvCode(expected, "unknown country");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsMO_WhenStateProvinceIsMissouriAndCountryCodeIsUs()
+        {
+            string expected = "MO";
+            string actual = Geography.GetStateProvCode("Missouri", "US");
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsPassedInStateProvince_WhenCountryCodeIsNotPassedIn()
+        {
+            string expected = "something";
+            string actual = Geography.GetStateProvCode(expected);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsEmptyString_WhenStateProvinceIsEmptyAndCountryCodeIsNotPassedIn()
+        {
+            string expected = string.Empty;
+            string actual = Geography.GetStateProvCode(string.Empty);
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void GetStateProvCode_ReturnsMO_WhenStateProvinceIsMissouriAndCountryCodeNotPassedIn()
+        {
+            string expected = "MO";
+            string actual = Geography.GetStateProvCode("Missouri");
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

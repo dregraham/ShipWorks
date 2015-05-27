@@ -412,9 +412,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 SetStreetAddress(new PersonAdapter(order, "Ship"), addressLines);
 
                 order.ShipCity = XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:City", "");
-                order.ShipStateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:StateOrRegion", ""));
                 order.ShipPostalCode = XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:PostalCode", "");
                 order.ShipCountryCode = Geography.GetCountryCode(XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:CountryCode", ""));
+                order.ShipStateProvCode = Geography.GetStateProvCode(XPathUtility.Evaluate(xpath, "amz:ShippingAddress/amz:StateOrRegion", ""), order.ShipCountryCode);
 
                 // 10/18/2011, Amazon just added BuyerName and BuyerEmail.  Use it here to ovewrite
                 string buyerFullName = XPathUtility.Evaluate(xpath, "amz:BuyerName", "");

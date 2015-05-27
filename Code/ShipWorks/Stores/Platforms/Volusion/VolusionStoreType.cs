@@ -74,6 +74,7 @@ namespace ShipWorks.Stores.Platforms.Volusion
             store.ApiPassword = "";
             store.ShipmentMethods = "";
             store.PaymentMethods = "";
+            store.DownloadOrderStatuses = "Ready to Ship, New";
 
             return store;
         }
@@ -156,6 +157,19 @@ namespace ShipWorks.Stores.Platforms.Volusion
                 "Partially Returned",
                 "Returned"
             };
+        }
+
+        /// <summary>
+        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
         }
 
         #region Online Update Commands
