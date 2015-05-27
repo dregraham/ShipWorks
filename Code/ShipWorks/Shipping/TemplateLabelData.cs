@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using System.Drawing.Imaging;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 
 namespace ShipWorks.Shipping
 {
@@ -16,16 +18,27 @@ namespace ShipWorks.Shipping
         string name;
         TemplateLabelCategory category;
         DataResourceReference resource;
+        bool canPrintThermal;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public TemplateLabelData(long? packageID, string name, TemplateLabelCategory category, DataResourceReference resource)
+        public TemplateLabelData(long? packageID, string name, TemplateLabelCategory category, DataResourceReference resource) :
+            this(packageID, name, category, resource, true)
+        {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public TemplateLabelData(long? packageID, string name, TemplateLabelCategory category, DataResourceReference resource, bool canPrintThermal)
         {
             this.packageID = packageID;
             this.name = name;
             this.category = category;
             this.resource = resource;
+            this.canPrintThermal = canPrintThermal;
         }
 
         /// <summary>
@@ -58,6 +71,17 @@ namespace ShipWorks.Shipping
         public DataResourceReference Resource
         {
             get { return resource; }
+        }
+
+        /// <summary>
+        /// Checks whether this label can be printed with a thermal printer
+        /// </summary>
+        public bool CanPrintThermal
+        {
+            get
+            {
+                return canPrintThermal;   
+            }
         }
     }
 }
