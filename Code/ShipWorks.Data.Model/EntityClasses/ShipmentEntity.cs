@@ -2606,7 +2606,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_bestRate !=null);
 						DesetupSyncBestRate(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("BestRate");
+						}
 					}
 					else
 					{
@@ -2644,7 +2649,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_fedEx !=null);
 						DesetupSyncFedEx(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("FedEx");
+						}
 					}
 					else
 					{
@@ -2682,7 +2692,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_insurancePolicy !=null);
 						DesetupSyncInsurancePolicy(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("InsurancePolicy");
+						}
 					}
 					else
 					{
@@ -2720,7 +2735,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_iParcel !=null);
 						DesetupSyncIParcel(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("IParcel");
+						}
 					}
 					else
 					{
@@ -2758,7 +2778,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_onTrac !=null);
 						DesetupSyncOnTrac(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("OnTrac");
+						}
 					}
 					else
 					{
@@ -2796,7 +2821,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_other !=null);
 						DesetupSyncOther(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Other");
+						}
 					}
 					else
 					{
@@ -2834,7 +2864,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_postal !=null);
 						DesetupSyncPostal(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Postal");
+						}
 					}
 					else
 					{
@@ -2872,7 +2907,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_ups !=null);
 						DesetupSyncUps(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("Ups");
+						}
 					}
 					else
 					{

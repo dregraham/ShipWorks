@@ -86,6 +86,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Amazon
                         },
 
+                    new GridColumnDefinition("{74CFD9FC-21DF-45D6-8F58-E1F72901EE44}", true,
+                        new GridEnumDisplayType<AmazonMwsIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonMwsIsPrime.True,
+                        AmazonOrderFields.IsPrime)
+                        {
+                            StoreTypeCode = StoreTypeCode.Amazon
+                        },
+
                     new GridColumnDefinition("{CA3ECAB1-B96A-4c17-BC66-9EC7D0DF1035}", true,
                         new GridOrderNumberDisplayType(), "ClickCartPro #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.ClickCartPro, "ORD100002"), 
                         ClickCartProOrderFields.ClickCartProOrderID)

@@ -384,6 +384,8 @@ namespace ShipWorks.Data.Model
 		AmazonCommission,
 		///<summary>FulfillmentChannel. </summary>
 		FulfillmentChannel,
+		///<summary>IsPrime. </summary>
+		IsPrime,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2313,10 +2315,10 @@ namespace ShipWorks.Data.Model
 		AcceptedPaymentList,
 		///<summary>DownloadItemDetails. </summary>
 		DownloadItemDetails,
-		///<summary>DownloadPayPalDetails. </summary>
-		DownloadPayPalDetails,
 		///<summary>DownloadOlderOrders. </summary>
 		DownloadOlderOrders,
+		///<summary>DownloadPayPalDetails. </summary>
+		DownloadPayPalDetails,
 		///<summary>PayPalApiCredentialType. </summary>
 		PayPalApiCredentialType,
 		///<summary>PayPalApiUserName. </summary>

@@ -190,6 +190,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.AmazonOrderID = "";
             order.AmazonCommission = 0.0m;
             order.FulfillmentChannel = (int) AmazonMwsFulfillmentChannel.Unknown;
+            order.IsPrime = (int)AmazonMwsIsPrime.Unknown;
 
             return order;
         }
@@ -319,6 +320,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("AmazonOrderID", () => order.Value.AmazonOrderID);
             outline.AddElement("Commission", () => order.Value.AmazonCommission);
             outline.AddElement("FulfilledBy", () => EnumHelper.GetDescription((AmazonMwsFulfillmentChannel) order.Value.FulfillmentChannel));
+            outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime)order.Value.IsPrime));
         }
 
         /// <summary>

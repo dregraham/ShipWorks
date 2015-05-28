@@ -328,6 +328,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderEntity", "AmazonOrderID", typeof(System.String), false, false, false, false,  (int)AmazonOrderFieldIndex.AmazonOrderID, 32, 0, 0);
 			base.AddElementFieldInfo("AmazonOrderEntity", "AmazonCommission", typeof(System.Decimal), false, false, false, false,  (int)AmazonOrderFieldIndex.AmazonCommission, 0, 4, 19);
 			base.AddElementFieldInfo("AmazonOrderEntity", "FulfillmentChannel", typeof(System.Int32), false, false, false, false,  (int)AmazonOrderFieldIndex.FulfillmentChannel, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)AmazonOrderFieldIndex.IsPrime, 0, 0, 10);
 		}
 		/// <summary>Inits AmazonOrderItemEntity's FieldInfo objects</summary>
 		private void InitAmazonOrderItemEntityInfos()
@@ -690,8 +691,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EbayStoreEntity", "EBayTokenExpire", typeof(System.DateTime), false, false, false, false,  (int)EbayStoreFieldIndex.EBayTokenExpire, 0, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "AcceptedPaymentList", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.AcceptedPaymentList, 30, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "DownloadItemDetails", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadItemDetails, 0, 0, 0);
-			base.AddElementFieldInfo("EbayStoreEntity", "DownloadPayPalDetails", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadPayPalDetails, 0, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "DownloadOlderOrders", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadOlderOrders, 0, 0, 0);
+			base.AddElementFieldInfo("EbayStoreEntity", "DownloadPayPalDetails", typeof(System.Boolean), false, false, false, false,  (int)EbayStoreFieldIndex.DownloadPayPalDetails, 0, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiCredentialType", typeof(System.Int16), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiCredentialType, 0, 0, 5);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiUserName", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiUserName, 255, 0, 0);
 			base.AddElementFieldInfo("EbayStoreEntity", "PayPalApiPassword", typeof(System.String), false, false, false, false,  (int)EbayStoreFieldIndex.PayPalApiPassword, 80, 0, 0);
