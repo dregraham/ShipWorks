@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
     /// <summary>
     /// Condition for the amazon fulfillment channel field
     /// </summary>
-    [ConditionElement("IsPrime", "Amazon.IsPrime")]
+    [ConditionElement("Amazon Prime", "Amazon.IsPrime")]
     [ConditionStoreType(StoreTypeCode.Amazon)]
     public class AmazonIsPrimeCondition : EnumCondition<AmazonMwsIsPrime>
     {
@@ -22,7 +22,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters
         /// </summary>
         public AmazonIsPrimeCondition()
         {
-            Value = AmazonMwsIsPrime.False;
+            Value = AmazonMwsIsPrime.Yes;
         }
 
         /// <summary>

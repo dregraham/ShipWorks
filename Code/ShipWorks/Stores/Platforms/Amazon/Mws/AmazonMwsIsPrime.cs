@@ -16,10 +16,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         [Description("Unavailable")]
         Unknown = 0,
 
-        [Description("True")]
-        True = 1,
+        [Description("Yes")]
+        Yes = 1,
 
-        [Description("False")]
-        False = 2
+        [Description("No")]
+        No = 2
     }
 }

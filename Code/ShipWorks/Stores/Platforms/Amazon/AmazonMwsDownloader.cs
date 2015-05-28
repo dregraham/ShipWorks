@@ -248,8 +248,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
         {
             switch (IsPrime.ToUpperInvariant())
             {
-                case "TRUE": return AmazonMwsIsPrime.True;
-                case "FALSE": return AmazonMwsIsPrime.False;
+                case "TRUE": return AmazonMwsIsPrime.Yes;
+                case "FALSE": return AmazonMwsIsPrime.No;
             }
 
             return AmazonMwsIsPrime.Unknown;
