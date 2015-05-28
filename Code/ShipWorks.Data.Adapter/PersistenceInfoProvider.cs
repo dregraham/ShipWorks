@@ -2875,7 +2875,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits VolusionStoreEntity's mappings</summary>
 		private void InitVolusionStoreEntityMappings()
 		{
-			base.AddElementMapping( "VolusionStoreEntity", "ShipWorksLocal", @"dbo", "VolusionStore", 9 );
+			base.AddElementMapping( "VolusionStoreEntity", "ShipWorksLocal", @"dbo", "VolusionStore", 10 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "StoreUrl", "StoreUrl", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "WebUserName", "WebUserName", false, (int)SqlDbType.VarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -2883,8 +2883,9 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ApiPassword", "ApiPassword", false, (int)SqlDbType.VarChar, 100, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "PaymentMethods", "PaymentMethods", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 5 );
 			base.AddElementFieldMapping( "VolusionStoreEntity", "ShipmentMethods", "ShipmentMethods", false, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 8 );
+			base.AddElementFieldMapping( "VolusionStoreEntity", "DownloadOrderStatuses", "DownloadOrderStatuses", false, (int)SqlDbType.VarChar, 255, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZone", "ServerTimeZone", false, (int)SqlDbType.VarChar, 30, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "VolusionStoreEntity", "ServerTimeZoneDST", "ServerTimeZoneDST", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 9 );
 		}
 		/// <summary>Inits WorldShipGoodsEntity's mappings</summary>
 		private void InitWorldShipGoodsEntityMappings()

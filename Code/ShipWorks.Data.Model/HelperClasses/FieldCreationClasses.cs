@@ -20832,6 +20832,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ShipmentMethods);}
 		}
+		/// <summary>Creates a new VolusionStoreEntity.DownloadOrderStatuses field instance</summary>
+		public static EntityField2 DownloadOrderStatuses
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.DownloadOrderStatuses);}
+		}
 		/// <summary>Creates a new VolusionStoreEntity.ServerTimeZone field instance</summary>
 		public static EntityField2 ServerTimeZone
 		{

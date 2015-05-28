@@ -9749,6 +9749,8 @@ namespace ShipWorks.Data.Model
 		PaymentMethods,
 		///<summary>ShipmentMethods. </summary>
 		ShipmentMethods,
+		///<summary>DownloadOrderStatuses. </summary>
+		DownloadOrderStatuses,
 		///<summary>ServerTimeZone. </summary>
 		ServerTimeZone,
 		///<summary>ServerTimeZoneDST. </summary>

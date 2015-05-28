@@ -2727,6 +2727,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("VolusionStoreEntity", "ApiPassword", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ApiPassword, 100, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "PaymentMethods", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.PaymentMethods, 2147483647, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "ShipmentMethods", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ShipmentMethods, 2147483647, 0, 0);
+			base.AddElementFieldInfo("VolusionStoreEntity", "DownloadOrderStatuses", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.DownloadOrderStatuses, 255, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZone", typeof(System.String), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZone, 30, 0, 0);
 			base.AddElementFieldInfo("VolusionStoreEntity", "ServerTimeZoneDST", typeof(System.Boolean), false, false, false, false,  (int)VolusionStoreFieldIndex.ServerTimeZoneDST, 0, 0, 0);
 		}

@@ -3659,6 +3659,7 @@ CREATE TABLE [dbo].[VolusionStore]
 [ApiPassword] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [PaymentMethods] [xml] NOT NULL,
 [ShipmentMethods] [xml] NOT NULL,
+[DownloadOrderStatuses] [varchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ServerTimeZone] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ServerTimeZoneDST] [bit] NOT NULL
 )
