@@ -34,5 +34,33 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             string result = "Foobar".Truncate(3);
             Assert.AreEqual("Foo", result);
         }
+
+        [TestMethod]
+        public void FormatFriendlyCurrenty_ReturnsCurrencyString_WhenCentsAreWhole()
+        {
+            string result = StringUtility.FormatFriendlyCurrency(.45M);
+            Assert.AreEqual("$0.45", result);
+        }
+
+        [TestMethod]
+        public void FormatFriendlyCurrenty_ReturnsCurrencyStringWithHalf_WhenCentsHaveHalfValue()
+        {
+            string result = StringUtility.FormatFriendlyCurrency(.455M);
+            Assert.AreEqual("$0.45\u00bd", result);
+        }
+
+        [TestMethod]
+        public void FormatFriendlyCurrenty_ReturnsRoundedUpCent_WhenCentsHaveOverHalfCent()
+        {
+            string result = StringUtility.FormatFriendlyCurrency(.456M);
+            Assert.AreEqual("$0.46", result);
+        }
+
+        [TestMethod]
+        public void FormatFriendlyCurrenty_ReturnsRoundedDownCent_WhenCentsHaveLessHalfCent()
+        {
+            string result = StringUtility.FormatFriendlyCurrency(.452M);
+            Assert.AreEqual("$0.45", result);
+        }
     }
 }

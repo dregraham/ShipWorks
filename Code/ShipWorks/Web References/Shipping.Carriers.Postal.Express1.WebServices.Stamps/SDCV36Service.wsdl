@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://www.express1.com/2011/08" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="SDCV36Service" targetNamespace="http://www.express1.com/2011/08" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="BasicHttpBinding_ISDCV36Service_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://www.express1.com/2011/08/Imports">
+      <xsd:import schemaLocation="https://service.express1.com/Services/SDCV36Service.svc?xsd=xsd0" namespace="http://www.express1.com/2011/08" />
+      <xsd:import schemaLocation="https://service.express1.com/Services/SDCV36Service.svc?xsd=xsd1" namespace="http://microsoft.com/wsdl/types/" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ISDCV36Service_CreateIndicium_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateIndicium" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CreateIndicium_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateIndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_GetRates_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetRates" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_GetRates_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_AuthenticateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateUser" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_AuthenticateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AuthenticateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_GetAccountInfo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountInfo" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_GetAccountInfo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAccountInfoResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CleanseAddress_InputMessage">
+    <wsdl:part name="parameters" element="tns:CleanseAddress" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CleanseAddress_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CleanseAddressResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CancelIndicium_InputMessage">
+    <wsdl:part name="parameters" element="tns:CancelIndicium" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CancelIndicium_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CancelIndiciumResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_PurchasePostage_InputMessage">
+    <wsdl:part name="parameters" element="tns:PurchasePostage" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_PurchasePostage_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PurchasePostageResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_PurchasePostageViaProPay_InputMessage">
+    <wsdl:part name="parameters" element="tns:PurchasePostageViaProPay" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_PurchasePostageViaProPay_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PurchasePostageViaProPayResponse" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CreateScanForm_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateScanForm" />
+  </wsdl:message>
+  <wsdl:message name="ISDCV36Service_CreateScanForm_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateScanFormResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ISDCV36Service">
+    <wsdl:operation name="CreateIndicium">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CreateIndicium" message="tns:ISDCV36Service_CreateIndicium_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CreateIndiciumResponse" message="tns:ISDCV36Service_CreateIndicium_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRates">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/GetRates" message="tns:ISDCV36Service_GetRates_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/GetRatesResponse" message="tns:ISDCV36Service_GetRates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateUser">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/AuthenticateUser" message="tns:ISDCV36Service_AuthenticateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/AuthenticateUserResponse" message="tns:ISDCV36Service_AuthenticateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountInfo">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/GetAccountInfo" message="tns:ISDCV36Service_GetAccountInfo_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/GetAccountInfoResponse" message="tns:ISDCV36Service_GetAccountInfo_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CleanseAddress">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CleanseAddress" message="tns:ISDCV36Service_CleanseAddress_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CleanseAddressResponse" message="tns:ISDCV36Service_CleanseAddress_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CancelIndicium">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CancelIndicium" message="tns:ISDCV36Service_CancelIndicium_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CancelIndiciumResponse" message="tns:ISDCV36Service_CancelIndicium_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PurchasePostage">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostage" message="tns:ISDCV36Service_PurchasePostage_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostageResponse" message="tns:ISDCV36Service_PurchasePostage_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PurchasePostageViaProPay">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostageViaProPay" message="tns:ISDCV36Service_PurchasePostageViaProPay_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostageViaProPayResponse" message="tns:ISDCV36Service_PurchasePostageViaProPay_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateScanForm">
+      <wsdl:input wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CreateScanForm" message="tns:ISDCV36Service_CreateScanForm_InputMessage" />
+      <wsdl:output wsaw:Action="http://www.express1.com/2011/08/ISDCV36Service/CreateScanFormResponse" message="tns:ISDCV36Service_CreateScanForm_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ISDCV36Service" type="tns:ISDCV36Service">
+    <wsp:PolicyReference URI="#BasicHttpBinding_ISDCV36Service_policy" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateIndicium">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/CreateIndicium" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRates">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/GetRates" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AuthenticateUser">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/AuthenticateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAccountInfo">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/GetAccountInfo" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CleanseAddress">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/CleanseAddress" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CancelIndicium">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/CancelIndicium" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PurchasePostage">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostage" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PurchasePostageViaProPay">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/PurchasePostageViaProPay" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreateScanForm">
+      <soap:operation soapAction="http://www.express1.com/2011/08/ISDCV36Service/CreateScanForm" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SDCV36Service">
+    <wsdl:port name="BasicHttpBinding_ISDCV36Service" binding="tns:BasicHttpBinding_ISDCV36Service">
+      <soap:address location="https://service.express1.com/Services/SDCV36Service.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

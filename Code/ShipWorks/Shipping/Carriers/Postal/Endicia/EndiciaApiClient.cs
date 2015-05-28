@@ -832,6 +832,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
+            // Used to rate shipments having a future ship date; seven days is the upper bound
+            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
+
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
             request.WeightOz = shipment.TotalWeight > 0 ? CalculateWeight(shipment) : BestRateScope.IsActive ? 14 : .1;
@@ -1305,6 +1308,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary = new CertifiedIntermediary();
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
+
+            // Used to rate shipments having a future ship date; seven days is the upper bound
+            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.

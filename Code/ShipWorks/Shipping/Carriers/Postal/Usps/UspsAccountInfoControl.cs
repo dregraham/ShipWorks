@@ -126,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 try
                 {
                     balance = postageBalance.Value;
-                    postage.Text = balance.Value.ToString("c");
+                    postage.Text = StringUtility.FormatFriendlyCurrency(balance.Value);
 
                     purchase.Left = postage.Right;
                     panelInfo.Enabled = true;
