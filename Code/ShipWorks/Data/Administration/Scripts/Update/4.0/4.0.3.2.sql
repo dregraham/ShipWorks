@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[tmp_rg_xx_AmazonOrder]
 [IsPrime] [int] NOT NULL
 )
 GO
-INSERT INTO [dbo].[tmp_rg_xx_AmazonOrder]([OrderID], [AmazonOrderID], [AmazonCommission], [FulfillmentChannel]) 
+INSERT INTO [dbo].[tmp_rg_xx_AmazonOrder]([OrderID], [AmazonOrderID], [AmazonCommission], [FulfillmentChannel], [IsPrime]) 
 SELECT [OrderID], [AmazonOrderID], [AmazonCommission], [FulfillmentChannel], 0 FROM [dbo].[AmazonOrder]
 GO
 DROP TABLE [dbo].[AmazonOrder]
