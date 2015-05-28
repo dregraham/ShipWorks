@@ -89,6 +89,7 @@
         <Separator />
         <Condition identifier="Amazon.OrderID" />
         <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
+        <Condition identifier="Amazon.IsPrime" displayAs="Amazon Prime" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
         <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />

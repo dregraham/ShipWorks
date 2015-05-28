@@ -177,6 +177,10 @@ namespace ShipWorks.Stores.Platforms.Amazon
             string fulfillmentChannel = XPathUtility.Evaluate(xpath, "amz:FulfillmentChannel", "");
             order.FulfillmentChannel = (int) TranslateFulfillmentChannel(fulfillmentChannel);
 
+            // IsPrime
+            string isPrime = XPathUtility.Evaluate(xpath, "amz:IsPrime", "");
+            order.IsPrime = (int)TranslateIsPrime(isPrime);
+
             // no customer ID in this Api
             order.OnlineCustomerID = null;
 
@@ -235,6 +239,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
             }
 
             return AmazonMwsFulfillmentChannel.Unknown;
+        }
+
+        /// <summary>
+        /// Map the IsPrime string provided by Amazon to our internal representation
+        /// </summary>
+        private static AmazonMwsIsPrime TranslateIsPrime(string IsPrime)
+        {
+            switch (IsPrime.ToUpperInvariant())
+            {
+                case "TRUE": return AmazonMwsIsPrime.Yes;
+                case "FALSE": return AmazonMwsIsPrime.No;
+            }
+
+            return AmazonMwsIsPrime.Unknown;
         }
 
         /// <summary>

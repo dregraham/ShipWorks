@@ -672,12 +672,25 @@ CREATE TABLE [dbo].[AmazonOrder]
 [OrderID] [bigint] NOT NULL,
 [AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonCommission] [money] NOT NULL,
-[FulfillmentChannel] [int] NOT NULL
+[FulfillmentChannel] [int] NOT NULL,
+[IsPrime] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
 GO
 ALTER TABLE [dbo].[AmazonOrder] ADD CONSTRAINT [PK_AmazonOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_Auto_AmazonOrderID] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_AmazonOrderID] ON [dbo].[AmazonOrder] ([AmazonOrderID])
+GO
+PRINT N'Creating index [IX_Auto_FulfillmentChannel] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_FulfillmentChannel] ON [dbo].[AmazonOrder] ([FulFillmentChannel])
+GO
+PRINT N'Creating index [IX_Auto_IsPrime] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
 GO
 PRINT N'Creating [dbo].[OrderItem]'
 GO
