@@ -672,7 +672,8 @@ CREATE TABLE [dbo].[AmazonOrder]
 [OrderID] [bigint] NOT NULL,
 [AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonCommission] [money] NOT NULL,
-[FulfillmentChannel] [int] NOT NULL
+[FulfillmentChannel] [int] NOT NULL,
+[IsPrime] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
