@@ -36,3 +36,15 @@ PRINT N'Adding foreign keys to [dbo].[AmazonOrder]'
 GO
 ALTER TABLE [dbo].[AmazonOrder] ADD CONSTRAINT [FK_AmazonOrder_Order] FOREIGN KEY ([OrderID]) REFERENCES [dbo].[Order] ([OrderID])
 GO
+PRINT N'Creating index [IX_Auto_AmazonOrderID] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_AmazonOrderID] ON [dbo].[AmazonOrder] ([AmazonOrderID])
+GO
+PRINT N'Creating index [IX_Auto_FulfillmentChannel] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_FulfillmentChannel] ON [dbo].[AmazonOrder] ([FulFillmentChannel])
+GO
+PRINT N'Creating index [IX_Auto_IsPrime] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
+GO
