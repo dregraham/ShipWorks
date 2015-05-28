@@ -238,6 +238,20 @@ namespace ShipWorks.Stores.Platforms.Amazon
         }
 
         /// <summary>
+        /// Map the IsPrime string provided by Amazon to our internal representation
+        /// </summary>
+        private static AmazonMwsIsPrime TranslateIsPrime(string IsPrime)
+        {
+            switch (IsPrime)
+            {
+                case "true": return AmazonMwsIsPrime.True;
+                case "false": return AmazonMwsIsPrime.False;
+            }
+
+            return AmazonMwsIsPrime.Unknown;
+        }
+
+        /// <summary>
         /// Loads the order items of an amazon order
         /// </summary>
         private void LoadOrderItems(AmazonMwsClient client, AmazonOrderEntity order)
