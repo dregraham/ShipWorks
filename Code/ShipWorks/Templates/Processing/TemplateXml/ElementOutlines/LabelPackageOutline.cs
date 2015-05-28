@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
@@ -56,7 +57,10 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         /// </summary>
         private IEnumerable<object> GetThermalLabels(IEnumerable<TemplateLabelData> source)
         {
-            return (shipment.ActualLabelFormat == null) ? null : source.Select(l => Tuple.Create(l, (ThermalLanguage)shipment.ActualLabelFormat));
+            return shipment.ActualLabelFormat == null ? 
+                null : 
+                source.Where(l => l.CanPrintThermal)
+                      .Select(l => Tuple.Create(l, (ThermalLanguage)shipment.ActualLabelFormat));
         }
 
         /// <summary>
@@ -66,7 +70,7 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
         {
             if (shipment.ActualLabelFormat != null)
             {
-                return null;
+                source = source.Where(x => !x.CanPrintThermal).ToList();
             }
 
             // We need two outputs for each - a 'tall' version and a 'wide' version
