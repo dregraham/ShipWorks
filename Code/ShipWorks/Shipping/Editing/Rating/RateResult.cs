@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
 
@@ -111,6 +112,17 @@ namespace ShipWorks.Shipping.Editing.Rating
         public decimal Amount
         {
             get { return amount; }
+        }
+
+        /// <summary>
+        /// Returns the amount formatted as currency. If there is a half cent, 1/2 is added to the end.
+        /// </summary>
+        public string FormattedAmount
+        {
+            get
+            {
+                return StringUtility.FormatFriendlyCurrency(Amount);
+            }
         }
 
         /// <summary>

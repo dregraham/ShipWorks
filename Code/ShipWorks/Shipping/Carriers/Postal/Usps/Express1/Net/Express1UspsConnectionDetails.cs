@@ -49,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             get
             {
                 return (TestServer) ?
-                    "http://www.express1dev.com/Services/SDCV29Service.svc" :
-                    "https://service.express1.com/Services/SDCV29Service.svc";
+                    "http://www.express1dev.com/Services/SDCV36Service.svc" :
+                    "https://service.express1.com/Services/SDCV36Service.svc";
             }
         }
 

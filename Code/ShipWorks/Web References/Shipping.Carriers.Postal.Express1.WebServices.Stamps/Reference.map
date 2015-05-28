@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="https://service.express1.com/Services/SDCV24Service.svc?wsdl" filename="SDCV24Service.wsdl" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="https://service.express1.com/Services/SDCV24Service.svc?xsd=xsd0" filename="SDCV24Service.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="https://service.express1.com/Services/SDCV24Service.svc?xsd=xsd1" filename="SDCV24Service0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="https://service.express1.com/Services/SDCV36Service.svc?wsdl" filename="SDCV36Service.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="https://service.express1.com/Services/SDCV36Service.svc?xsd=xsd1" filename="SDCV36Service.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="https://service.express1.com/Services/SDCV36Service.svc?xsd=xsd0" filename="SDCV36Service0.xsd" />
   </Results>
 </DiscoveryClientResultsFile>

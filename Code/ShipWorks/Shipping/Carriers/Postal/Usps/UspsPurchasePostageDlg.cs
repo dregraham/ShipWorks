@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using Interapptive.Shared.UI;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.EntityClasses;
@@ -36,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
             
-            current.Text = postageBalance.Value.ToString("c");
+            current.Text = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
             this.account = account;
         }
 
@@ -49,7 +50,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
 
-            current.Text = balance.ToString("c");
+            current.Text = StringUtility.FormatFriendlyCurrency(balance);
+
             this.account = account;
         }
 
@@ -95,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // We have a valid USPS account, so we can use it to initialize the account info
             // and show the dialog
-            current.Text = GetBalance(account).ToString("c");
+            current.Text = StringUtility.FormatFriendlyCurrency(GetBalance(account));
             return ShowDialog(owner);
         }
 
@@ -148,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             try
             {
-                current.Text = postageBalance.Value.ToString("c");
+                current.Text = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
             }
             catch (UspsException ex)
             {
