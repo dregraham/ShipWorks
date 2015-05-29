@@ -301,37 +301,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     rates.Add(baseRate);
 
                     // Add a rate for each add-on
-                    foreach (AddOnV7 addOn in uspsRate.AddOns)
-                    {
-                        string name = null;
-                        PostalConfirmationType confirmationType = PostalConfirmationType.None;
-
-                        switch (addOn.AddOnType)
-                        {
-                            case AddOnTypeV7.USADC:
-                                name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.Delivery;
-                                break;
-
-                            case AddOnTypeV7.USASC:
-                                name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
-                                confirmationType = PostalConfirmationType.Signature;
-                                break;
-                        }
-
-                        if (name != null)
-                        {
-                            RateResult addOnRate = new RateResult(
-                                name,
-                                string.Empty,
-                                uspsRate.Amount + addOn.Amount,
-                                new UspsPostalRateSelection(serviceType, confirmationType, account));
-
-                            PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
-
-                            rates.Add(addOnRate);
-                        }
-                    }
+                    AddRatesForAddOns(uspsRate, serviceType, account, rates);
                 }
 
                 return rates;
@@ -352,6 +322,55 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 // This isn't an authentication exception, so just throw the original exception
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Iterates through each rate add on and creates a rate for each
+        /// </summary>
+        private static void AddRatesForAddOns(RateV17 uspsRate, PostalServiceType serviceType, UspsAccountEntity account, List<RateResult> rates)
+        {
+            // Add a rate for each add-on
+            foreach (AddOnV7 addOn in uspsRate.AddOns)
+            {
+                string name = null;
+                PostalConfirmationType confirmationType = PostalConfirmationType.None;
+
+                switch (addOn.AddOnType)
+                {
+                    case AddOnTypeV7.USADC:
+                        name = string.Format("       Delivery Confirmation ({0:c})", addOn.Amount);
+                        confirmationType = PostalConfirmationType.Delivery;
+                        break;
+
+                    case AddOnTypeV7.USASC:
+                        name = string.Format("       Signature Confirmation ({0:c})", addOn.Amount);
+                        confirmationType = PostalConfirmationType.Signature;
+                        break;
+
+                    case AddOnTypeV7.USAASR:
+                        name = string.Format("       Adult Signature Required ({0:c})", addOn.Amount);
+                        confirmationType = PostalConfirmationType.AdultSignatureRequired;
+                        break;
+
+                    case AddOnTypeV7.USAASRD:
+                        name = string.Format("       Adult Signature Restricted Delivery ({0:c})", addOn.Amount);
+                        confirmationType = PostalConfirmationType.AdultSignatureRestricted;
+                        break;
+                }
+
+                if (name != null)
+                {
+                    RateResult addOnRate = new RateResult(
+                        name,
+                        string.Empty,
+                        uspsRate.Amount + addOn.Amount,
+                        new UspsPostalRateSelection(serviceType, confirmationType, account));
+
+                    PostalUtility.SetServiceDetails(addOnRate, serviceType, uspsRate.DeliverDays);
+
+                    rates.Add(addOnRate);
+                }
             }
         }
 
@@ -729,36 +748,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             Address fromAddress;
             Address toAddress;
 
-            // If this is a return shipment, swap the to/from addresses
-            if (shipment.ReturnShipment)
-            {
-                toAddress = CleanseAddress(account, shipment.OriginPerson, false);
-                fromAddress = CreateAddress(shipment.ShipPerson);
-            }
-            else
-            {
-                fromAddress = CreateAddress(shipment.OriginPerson);
-                toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);                
-            }
-
-            if (shipment.ReturnShipment && 
-                !toAddress.AsAddressAdapter().IsDomesticCountry() && 
-                fromAddress.AsAddressAdapter().IsDomesticCountry())
-            {
-                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
-            }
+            FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
 
             RateV17 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
             Usps.WebServices.PostageBalance postageBalance;
-
-
-            // Per stamps - only send state for domestic - send province for Intl
-            if (!shipment.ShipPerson.IsDomesticCountry())
-            {
-                toAddress.Province = shipment.ShipStateProvCode;
-                toAddress.State = string.Empty;
-            }
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;    
@@ -871,6 +865,41 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string[] labelUrls = labelUrl.Split(' ');
             SaveLabels(shipment, labelUrls);
+        }
+
+        /// <summary>
+        /// Updates addresses based on shipment properties like ReturnShipment, etc
+        /// </summary>
+        private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
+        {
+
+            // If this is a return shipment, swap the to/from addresses
+            // If this is a return shipment, swap the to/from addresses
+            if (shipment.ReturnShipment)
+            {
+                toAddress = CleanseAddress(account, shipment.OriginPerson, false);
+                fromAddress = CreateAddress(shipment.ShipPerson);
+            }
+            else
+            {
+                fromAddress = CreateAddress(shipment.OriginPerson);
+                toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
+            }
+
+            if (shipment.ReturnShipment &&
+                !toAddress.AsAddressAdapter().IsDomesticCountry() &&
+                fromAddress.AsAddressAdapter().IsDomesticCountry())
+            {
+                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+            }
+
+
+            // Per stamps - only send state for domestic - send province for Intl
+            if (!shipment.ShipPerson.IsDomesticCountry())
+            {
+                toAddress.Province = shipment.ShipStateProvCode;
+                toAddress.State = string.Empty;
+            }
         }
 
         /// <summary>
@@ -1048,28 +1077,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
             rate.PrintLayout = "Normal";
 
-            List<AddOnV7> addOns = new List<AddOnV7>();
-
-            // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
-            if (SupportsConfirmation(shipment))
-            {
-                PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
-
-                // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
-                if (confirmation == PostalConfirmationType.Delivery)
-                {
-                    addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
-                }
-
-                if (confirmation == PostalConfirmationType.Signature)
-                {
-                    addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USASC });
-                }
-            }    // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
-            {
-                addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
-            }
+            // Get the confirmation type add ons
+            List<AddOnV7> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
 
             // For express, apply the signature waiver if necessary
             if (serviceType == PostalServiceType.ExpressMail)
@@ -1111,6 +1120,45 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
 
             return rate;
+        }
+
+        /// <summary>
+        /// Returns a list of confirmation type add ons for the shipment
+        /// </summary>
+        private static List<AddOnV7> AddConfirmationTypeAddOnsForProcessing(ShipmentEntity shipment, PostalServiceType serviceType, PostalPackagingType packagingType)
+        {
+            List<AddOnV7> addOns = new List<AddOnV7>();
+
+            // For domestic, add in Delivery\Signature confirmation; delivery confirmation is not allowed on DHL services
+            if (SupportsConfirmation(shipment))
+            {
+                PostalConfirmationType confirmation = (PostalConfirmationType) shipment.Postal.Confirmation;
+
+                // TODO: This comment was in here, but no supporting code for it.  Determine if it's still valid.
+                // If the service type is Parcel Select, Force DC, otherwise USPS throws an error
+
+                switch (confirmation)
+                {
+                    case PostalConfirmationType.Delivery:
+                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USADC});
+                        break;
+                    case PostalConfirmationType.Signature:
+                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USASC});
+                        break;
+                    case PostalConfirmationType.AdultSignatureRequired:
+                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USAASR});
+                        break;
+                    case PostalConfirmationType.AdultSignatureRestricted:
+                        addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USAASRD});
+                        break;
+                }
+            }
+            else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
+            {
+                // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
+                addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USADC});
+            }
+            return addOns;
         }
 
         /// <summary>

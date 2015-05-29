@@ -281,11 +281,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             availablePostalConfirmationTypes = base.GetAvailableConfirmationTypes(countryCode, service, packaging);
 
-            if (service == PostalServiceType.ParcelSelect)
-            {
-                availablePostalConfirmationTypes.Add(PostalConfirmationType.None);
-            }
-
             return availablePostalConfirmationTypes;
         }
 
