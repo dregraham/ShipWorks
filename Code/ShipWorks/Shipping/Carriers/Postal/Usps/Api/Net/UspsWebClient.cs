@@ -450,6 +450,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         {
             Address address = CreateAddress(person);
 
+            address.Address1 = AdjustAddressLineForLength(address.Address1);
+            address.Address2 = AdjustAddressLineForLength(address.Address2);
+            address.Address3 = AdjustAddressLineForLength(address.Address3);
+
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
@@ -509,6 +513,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     Candidates = candidates.ToList()
                 };
             }
+        }
+
+        /// <summary>
+        /// Adjusts the length of the address line to be not more than 50 characters.
+        /// </summary>
+        private static string AdjustAddressLineForLength(string addressLine)
+        {
+            const int maxLength = 50;
+            return addressLine.Length > maxLength ? addressLine.Substring(0, maxLength) : addressLine;
         }
 
         /// <summary>
