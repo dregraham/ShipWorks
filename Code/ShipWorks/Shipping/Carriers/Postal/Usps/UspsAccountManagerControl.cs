@@ -101,7 +101,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 try
                 {
-                    result = (new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper())).Value.ToString("c");
+                    PostageBalance postageBalance = new PostageBalance(new UspsPostageWebClient(account), new TangoWebClientWrapper());
+                    result = StringUtility.FormatFriendlyCurrency(postageBalance.Value);
                 }
                 catch (UspsException ex)
                 {

@@ -122,7 +122,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                 }
             }
 
-            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail && shipment.Postal.Confirmation != (int) PostalConfirmationType.None)
+            if (shipment.Postal.Service == (int) PostalServiceType.ExpressMail &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.None &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRestricted &&
+                shipment.Postal.Confirmation != (int)PostalConfirmationType.AdultSignatureRequired)
             {
                 throw new ShippingException("A confirmation option cannot be used with Express mail.");
             }
@@ -180,6 +183,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Gets all of the confirmation types that are available to a particular implementation of PostalShipmentType.
+        /// </summary>
+        /// <returns>A collection of all the confirmation types that are available to a USPS Web Tools shipment.</returns>
+        public override IEnumerable<PostalConfirmationType> GetAllConfirmationTypes()
+        {
+            // The adult signature types are not available
+            return new List<PostalConfirmationType>
+            {
+                PostalConfirmationType.None,
+                PostalConfirmationType.Delivery,
+                PostalConfirmationType.Signature
+            };
+        }
+
+        /// <summary>
+        /// Determines which confirmation types are available for the given service
+        /// </summary>
+        public override List<PostalConfirmationType> GetAvailableConfirmationTypes(string countryCode, PostalServiceType service, PostalPackagingType? packaging)
+        {
+            IEnumerable<PostalConfirmationType> baseAvailableConfirmationTypes =  base.GetAvailableConfirmationTypes(countryCode, service, packaging);
+
+            // Remove the Adult Sig types since we aren't supporting them.
+            return baseAvailableConfirmationTypes.Where(ct => ct != PostalConfirmationType.AdultSignatureRequired &&
+                                                              ct != PostalConfirmationType.AdultSignatureRestricted).ToList();
         }
     }
 }

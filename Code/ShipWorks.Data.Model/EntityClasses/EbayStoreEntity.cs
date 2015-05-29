@@ -540,10 +540,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("DownloadItemDetails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DownloadPayPalDetails", fieldHashtable);
+			_fieldsCustomProperties.Add("DownloadOlderOrders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("DownloadOlderOrders", fieldHashtable);
+			_fieldsCustomProperties.Add("DownloadPayPalDetails", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("PayPalApiCredentialType", fieldHashtable);
@@ -720,17 +720,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)EbayStoreFieldIndex.DownloadItemDetails, value); }
 		}
 
-		/// <summary> The DownloadPayPalDetails property of the Entity EbayStore<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EbayStore"."DownloadPayPalDetails"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Boolean DownloadPayPalDetails
-		{
-			get { return (System.Boolean)GetValue((int)EbayStoreFieldIndex.DownloadPayPalDetails, true); }
-			set	{ SetValue((int)EbayStoreFieldIndex.DownloadPayPalDetails, value); }
-		}
-
 		/// <summary> The DownloadOlderOrders property of the Entity EbayStore<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "EbayStore"."DownloadOlderOrders"<br/>
@@ -740,6 +729,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)EbayStoreFieldIndex.DownloadOlderOrders, true); }
 			set	{ SetValue((int)EbayStoreFieldIndex.DownloadOlderOrders, value); }
+		}
+
+		/// <summary> The DownloadPayPalDetails property of the Entity EbayStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "EbayStore"."DownloadPayPalDetails"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean DownloadPayPalDetails
+		{
+			get { return (System.Boolean)GetValue((int)EbayStoreFieldIndex.DownloadPayPalDetails, true); }
+			set	{ SetValue((int)EbayStoreFieldIndex.DownloadPayPalDetails, value); }
 		}
 
 		/// <summary> The PayPalApiCredentialType property of the Entity EbayStore<br/><br/>

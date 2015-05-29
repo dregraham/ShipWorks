@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.Drawing;
@@ -78,6 +79,21 @@ namespace Interapptive.Shared.Utility
             }
 
             return timeText;
+        }
+
+        /// <summary>
+        /// Formats amount to a currency amount with support for a half penny.
+        /// </summary>
+        public static string FormatFriendlyCurrency(decimal amount)
+        {
+            string formattedAmount = amount.ToString("c");
+            decimal truncatedAmount = decimal.Parse(formattedAmount, NumberStyles.Currency);
+            if (truncatedAmount - amount == .005M)
+            {
+                formattedAmount = string.Format("{0}\u00bd", (amount - .005M).ToString("c"));
+            }
+
+            return formattedAmount;
         }
 
         /// <summary>

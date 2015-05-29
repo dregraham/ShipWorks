@@ -50,7 +50,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             // Only Express 1 Endicia should see the cubic packaging type
             EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || (ShipmentTypeCode)profile.ShipmentType == ShipmentTypeCode.Express1Endicia));
             EnumHelper.BindComboBox<PostalCustomsContentType>(contentType);
-            EnumHelper.BindComboBox<PostalConfirmationType>(confirmation);
+
+            LoadConfirmationTypes(profile);
 
             dimensionsControl.Initialize();
 
@@ -93,6 +94,20 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(shipmentType).Concat(PostalUtility.GetInternationalServices(shipmentType))
                 .Select(s => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(s), s)).ToList());
+        }
+
+        /// <summary>
+        /// Loads the confirmation types available to the shipment type.
+        /// </summary>
+        private void LoadConfirmationTypes(ShippingProfileEntity profile)
+        {
+            confirmation.DisplayMember = "Key";
+            confirmation.ValueMember = "Value";
+
+            PostalShipmentType postalType = ShipmentTypeManager.GetType((ShipmentTypeCode) profile.ShipmentType) as PostalShipmentType;
+
+            confirmation.DataSource = postalType.GetAllConfirmationTypes()
+                .Select(confirmationType => new KeyValuePair<string, PostalConfirmationType>(EnumHelper.GetDescription(confirmationType), confirmationType)).ToList();
         }
 
         /// <summary>

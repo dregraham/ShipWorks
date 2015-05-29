@@ -772,6 +772,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.FulfillmentChannel);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.IsPrime field instance</summary>
+		public static EntityField2 IsPrime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.IsPrime);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonOrderItemEntity</summary>
@@ -4987,15 +4992,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadItemDetails);}
 		}
-		/// <summary>Creates a new EbayStoreEntity.DownloadPayPalDetails field instance</summary>
-		public static EntityField2 DownloadPayPalDetails
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadPayPalDetails);}
-		}
 		/// <summary>Creates a new EbayStoreEntity.DownloadOlderOrders field instance</summary>
 		public static EntityField2 DownloadOlderOrders
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadOlderOrders);}
+		}
+		/// <summary>Creates a new EbayStoreEntity.DownloadPayPalDetails field instance</summary>
+		public static EntityField2 DownloadPayPalDetails
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(EbayStoreFieldIndex.DownloadPayPalDetails);}
 		}
 		/// <summary>Creates a new EbayStoreEntity.PayPalApiCredentialType field instance</summary>
 		public static EntityField2 PayPalApiCredentialType
@@ -20826,6 +20831,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 ShipmentMethods
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.ShipmentMethods);}
+		}
+		/// <summary>Creates a new VolusionStoreEntity.DownloadOrderStatuses field instance</summary>
+		public static EntityField2 DownloadOrderStatuses
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(VolusionStoreFieldIndex.DownloadOrderStatuses);}
 		}
 		/// <summary>Creates a new VolusionStoreEntity.ServerTimeZone field instance</summary>
 		public static EntityField2 ServerTimeZone

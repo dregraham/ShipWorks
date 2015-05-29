@@ -428,6 +428,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             // Service options
             request.Services = new SpecialServices();
             request.Services.SignatureConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Signature) ? "ON" : "OFF";
+            request.Services.AdultSignature = (postal.Confirmation == (int)PostalConfirmationType.AdultSignatureRequired) ? "ON" : "OFF";
+            request.Services.AdultSignatureRestrictedDelivery = (postal.Confirmation == (int)PostalConfirmationType.AdultSignatureRestricted) ? "ON" : "OFF";
+
             // request.Services.DeliveryConfirmation = (postal.Confirmation == (int) PostalConfirmationType.Delivery) ? "ON" : "OFF"; -> Documented as set automatically and ignored by ELS
 
             // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
@@ -573,6 +576,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         // Only none is allowed for parcel select, so set these to OFF
                         request.Services.SignatureConfirmation = "OFF";
                         request.Services.DeliveryConfirmation = "OFF";
+                        request.Services.AdultSignatureRestrictedDelivery = "OFF";
+                        request.Services.AdultSignature = "OFF";
                     }
                     else if (serviceType == PostalServiceType.ExpressMail)
                     {
@@ -832,6 +837,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
 
+            // Used to rate shipments having a future ship date; seven days is the upper bound
+            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
+
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.
             request.WeightOz = shipment.TotalWeight > 0 ? CalculateWeight(shipment) : BestRateScope.IsActive ? 14 : .1;
@@ -888,6 +896,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 request.Services = new SpecialServices();
                 request.Services.DeliveryConfirmation = "ON";
                 request.Services.SignatureConfirmation = "ON";
+                request.Services.AdultSignatureRestrictedDelivery = "ON";
+                request.Services.AdultSignature = "ON";
             }
             else
             {
@@ -987,38 +997,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         // Days in transit
                         string days = PostalUtility.GetServiceTransitDays(serviceType);
 
-                        List<PostalConfirmationType> confirmationOptions = new List<PostalConfirmationType>();
+                        List<PostalConfirmationType> confirmationOptions = endiciaShipmentType.GetAvailableConfirmationTypes(shipment.ShipCountryCode, serviceType, packagingType);
 
-                        if (isDomestic)
-                        {
-                            // If domestic, assume they are all available (may be overridden later)
-                            confirmationOptions.Add(PostalConfirmationType.Delivery);
-                            confirmationOptions.Add(PostalConfirmationType.Signature);
-
-                            if (serviceType == PostalServiceType.ExpressMail)
-                            {
-                                confirmationOptions.Clear();
-                            }
-
-                            if (serviceType == PostalServiceType.FirstClass)
-                            {
-                                // Special DestinationConfirmation (not Delivery) handling
-                                if (packagingType == PostalPackagingType.Envelope || packagingType == PostalPackagingType.LargeEnvelope)
-                                {
-                                    confirmationOptions.Clear();
-                                }
-                            }
-                        }
-                        else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(recipient.CountryCode, serviceType, packagingType))
-                        {
-                            confirmationOptions.Add(PostalConfirmationType.Delivery);
-                        }
-
-                        if (confirmationOptions.Count > 0)
+                        if (confirmationOptions.Count > 0 && confirmationOptions.All(x => x != PostalConfirmationType.None))
                         {
                             // Add the 'base' rate for the service type, without any confirmations\extras
-                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days) 
-                            { 
+                            rates.Add(new RateResult(PostalUtility.GetPostalServiceTypeDescription(serviceType), days)
+                            {
                                 Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
                                 ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Endicia)
                             });
@@ -1031,6 +1016,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                             if (confirmationOptions.Contains(PostalConfirmationType.Signature))
                             {
                                 rates.Add(new RateResult(string.Format("       Signature Confirmation ({0:c})", price.Fees.SignatureConfirmation), "", price.Postage.TotalAmount + price.Fees.SignatureConfirmation, new PostalRateSelection(serviceType, PostalConfirmationType.Signature)));
+                            }
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRequired) && price.Fees.AdultSignature > 0)
+                            {
+                                rates.Add(new RateResult(string.Format("       Adult Signature Required ({0:c})", price.Fees.AdultSignature), "", price.Postage.TotalAmount + price.Fees.AdultSignature, new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRequired)));
+                            }
+
+                            if (confirmationOptions.Contains(PostalConfirmationType.AdultSignatureRestricted) && price.Fees.AdultSignatureRestrictedDelivery > 0)
+                            {
+                                rates.Add(new RateResult(string.Format("       Adult Signature Restricted ({0:c})", price.Fees.AdultSignatureRestrictedDelivery), "", price.Postage.TotalAmount + price.Fees.AdultSignatureRestrictedDelivery, new PostalRateSelection(serviceType, PostalConfirmationType.AdultSignatureRestricted)));
                             }
                         }
                         else
@@ -1305,6 +1300,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.CertifiedIntermediary = new CertifiedIntermediary();
             request.CertifiedIntermediary.AccountID = account.AccountNumber;
             request.CertifiedIntermediary.PassPhrase = SecureText.Decrypt(account.ApiUserPassword, "Endicia");
+
+            // Used to rate shipments having a future ship date; seven days is the upper bound
+            request.DateAdvance = (int)Math.Max(0, (int)Math.Min((shipment.ShipDate.Date - DateTime.Now.Date).TotalDays, 7));
 
             // Default the weight to 14oz for best rate if it is 0, so we can get a rate without needing the user to provide a value.  We do 14oz so it kicks it into a Priority shipment, which
             // is the category that most of our users will be in.

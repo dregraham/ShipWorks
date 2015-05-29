@@ -1162,7 +1162,7 @@ namespace ShipWorks.Shipping
                     panelTrackingMessage.Visible = false;
 
                     trackingProcessedDate.Text = shipment.ProcessedDate.Value.ToLocalTime().ToString("M/dd/yyy h:mm tt");
-                    trackingCost.Text = shipment.ShipmentCost.ToString("c");
+                    trackingCost.Text = StringUtility.FormatFriendlyCurrency(shipment.ShipmentCost);
 
                     ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
                     List<string> trackingList = shipmentType.GetTrackingNumbers(shipment);
