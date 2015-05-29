@@ -48,7 +48,7 @@
 
             <tr>
                 <td style="{$rowStyle};">Shipping (charged to customers):</td>
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shipping, '#,##0.000')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shipping, '#,##0.00#')" /></td>
             </tr>
 
             <tr>
