@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV43
+    partial class SwsimV45
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV43(IApiLogEntry logEntry)
+        internal SwsimV45(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -146,12 +146,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
     }
 }		
 
-namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
+namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
 {
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SwsimV29
+    partial class SwsimV36
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v29
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV29(IApiLogEntry logEntry)
+        internal SwsimV36(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -4261,7 +4261,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
     /// <summary>
     /// Partial class for the webservices generated class, to help with logging
     /// </summary>
-    partial class SDCV24Service
+    partial class SDCV36Service
     {
         WebServiceRawSoap rawSoap = new WebServiceRawSoap();
         IApiLogEntry logEntry;
@@ -4270,7 +4270,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SDCV24Service(IApiLogEntry logEntry)
+        internal SDCV36Service(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         // A list of namespaces from which we want to translate
         private static readonly Dictionary<string, string> uspsNamespaceMap =
             new Dictionary<string, string> {
-                { "http://www.express1.com/2011/08", "http://stamps.com/xml/namespace/2013/05/swsim/swsimv29" }
+                { "http://www.express1.com/2011/08", "http://stamps.com/xml/namespace/2014/05/swsim/swsimv36" }
             };
 
         // A list of local names we want to translate
@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                 { "CancelIndiciumResult", "Authenticator" },
                 { "CreateScanFormResult", "Authenticator" },
                 { "CleanseAddressResult", "Authenticator" },
-                { "RateV11", "Rate" }
+                { "RateV14", "Rate" }
             };
 
         /// <summary>

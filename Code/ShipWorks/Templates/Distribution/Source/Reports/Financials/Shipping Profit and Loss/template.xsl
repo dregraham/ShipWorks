@@ -79,8 +79,8 @@
 				        </xsl:if>
                 
                 <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(Charge[Type='SHIPPING']/Amount, '#,##0.00')" /></td>
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCosts, '#,##0.00')" /></td>
-                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(Charge[Type='SHIPPING']/Amount - $shippingCosts, '#,##0.00')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number($shippingCosts, '#,##0.000')" /></td>
+                <td style="{$rowStyle};" align="right">$<xsl:value-of select="format-number(Charge[Type='SHIPPING']/Amount - $shippingCosts, '#,##0.000')" /></td>
             </tr>
                 
             </xsl:for-each>
@@ -98,9 +98,9 @@
                 <td style="{$rowStyle}"></td>
                 <td style="{$rowStyle}"></td>
                 <td style="{$rowStyle}" align="right"><b>Totals:</b></td>
-                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCharges, '#,##0.00')" /></td>
-                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCost, '#,##0.00')" /></td>
-                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCharges - $totalShippingCost, '#,##0.00')" /></td>
+                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCharges, '#,##0.000')" /></td>
+                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCost, '#,##0.000')" /></td>
+                <td style="{$rowStyle}" align="right">$<xsl:value-of select="format-number($totalShippingCharges - $totalShippingCost, '#,##0.000')" /></td>
             </tr>
             
          </table>
