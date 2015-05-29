@@ -13,44 +13,52 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
+namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
     [TestClass]
     public class Express1UspsShipmentTypeTest
     {
+        private Express1UspsShipmentType testObject;
+
         private List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
+        private List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
         [TestInitialize]
         public void Initialize()
         {
+            testObject = new Express1UspsShipmentType();
+
+            LoadAdultSignatureServiceAndPackagingCombinations();
+
             LoadAllPostalServicePackageTypes();
         }
 
         [TestMethod]
-        public void AdultSignatureRequred_IsNotReturned_WhenExpress1UspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
+        public void AdultSignatureRequred_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
-            Express1UspsShipmentType express1UspsShipmentType = new Express1UspsShipmentType();
-
-            // No combination is allowed, so use all combinations.
-            foreach (PostalServicePackagingCombination combo in allCombinations)
+            foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                List<PostalConfirmationType> returnedConfirmationTypes = express1UspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
-
-                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
+                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
         [TestMethod]
-        public void AdultSignatureRestricted_IsNotReturned_WhenExpress1UspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
+        public void AdultSignatureRestricted_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
-            Express1UspsShipmentType express1UspsShipmentType = new Express1UspsShipmentType();
-
-            // No combination is allowed, so use all combinations.
-            foreach (PostalServicePackagingCombination combo in allCombinations)
+            foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                List<PostalConfirmationType> returnedConfirmationTypes = express1UspsShipmentType.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
+                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+            }
+        }
 
-                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRestricted), "AdultSignatureRestricted should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
+        [TestMethod]
+        public void AdultSignatureRequred_IsNotReturned_WhenUspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
+        {
+            foreach (PostalServicePackagingCombination combo in allCombinations.Except(adultSignatureCombinationsAllowed))
+            {
+                List<PostalConfirmationType> returnedConfirmationTypes = testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
+
+                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
             }
         }
 
@@ -64,6 +72,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
                     allCombinations.Add(new PostalServicePackagingCombination(postalServiceType.Value, postalPackageType.Value));
                 }
             }
+        }
+
+        /// <summary>
+        /// Add adult signature restricted values
+        /// </summary>
+        private void LoadAdultSignatureServiceAndPackagingCombinations()
+        {
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.LargeEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.Package));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateSmallBox));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateMediumBox));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateLargeBox));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRatePaddedEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.FlatRateLegalEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxA));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxB));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.PriorityMail, PostalPackagingType.RateRegionalBoxC));
+
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.LargeEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.Package));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateMediumBox));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRatePaddedEnvelope));
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ExpressMail, PostalPackagingType.FlatRateLegalEnvelope));
+
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.ParcelSelect, PostalPackagingType.Package));
+
+            adultSignatureCombinationsAllowed.Add(new PostalServicePackagingCombination(PostalServiceType.CriticalMail, PostalPackagingType.LargeEnvelope));
         }
     }
 }

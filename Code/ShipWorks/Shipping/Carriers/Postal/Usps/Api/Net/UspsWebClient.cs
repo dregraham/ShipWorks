@@ -745,10 +745,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             string tracking = string.Empty;
             string labelUrl;
 
-            Address fromAddress = CleanseAddress(account, shipment.OriginPerson, false);
-            Address toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
+            Address fromAddress;
+            Address toAddress;
 
-            FixWebserviceAddresses(shipment, toAddress, fromAddress);
+            FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
 
             RateV17 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
@@ -870,14 +870,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Updates addresses based on shipment properties like ReturnShipment, etc
         /// </summary>
-        private static void FixWebserviceAddresses(ShipmentEntity shipment, Address toAddress, Address fromAddress)
+        private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
         {
+
+            // If this is a return shipment, swap the to/from addresses
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
-                Address tmpAddress = toAddress;
-                toAddress = fromAddress;
-                fromAddress = tmpAddress;
+                toAddress = CleanseAddress(account, shipment.OriginPerson, false);
+                fromAddress = CreateAddress(shipment.ShipPerson);
+            }
+            else
+            {
+                fromAddress = CreateAddress(shipment.OriginPerson);
+                toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
             }
 
             if (shipment.ReturnShipment &&

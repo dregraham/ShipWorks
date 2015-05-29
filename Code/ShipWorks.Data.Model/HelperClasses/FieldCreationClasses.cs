@@ -772,6 +772,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.FulfillmentChannel);}
 		}
+		/// <summary>Creates a new AmazonOrderEntity.IsPrime field instance</summary>
+		public static EntityField2 IsPrime
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonOrderFieldIndex.IsPrime);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity AmazonOrderItemEntity</summary>

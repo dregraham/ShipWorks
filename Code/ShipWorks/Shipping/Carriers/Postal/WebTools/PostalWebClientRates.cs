@@ -84,6 +84,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
                     xmlWriter.WriteElementString("Machinable", shipment.Postal.NonMachinable ? "false" : "true");
                     xmlWriter.WriteElementString("ReturnLocations", "false");
 
+                    // ShipDate can only be a maximum of 3 days in the future
+                    xmlWriter.WriteElementString("ShipDate", Math.Abs(shipment.ShipDate.Subtract(DateTime.Now).Days) > 3 ? DateTime.Now.AddDays(3).ToString("yyyy-MM-dd") : shipment.ShipDate.ToString("yyyy-MM-dd"));
+
                     xmlWriter.WriteEndElement();
                     xmlWriter.WriteEndElement();
                 }

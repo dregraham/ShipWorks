@@ -6,6 +6,7 @@ using System.Linq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters.Content.Conditions.Shipments;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
@@ -85,26 +86,34 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                             labelData.Add(new TemplateLabelData(packageID, "COD", TemplateLabelCategory.Supplemental, codShipmentResource));
                         }
 
-                        var shipmentDocuments = shipmentResources.Where(r => r.Label.StartsWith("Document"));
-                        foreach (DataResourceReference shipmentDocument in shipmentDocuments)
-                        {
-                            labelData.Add(new TemplateLabelData(packageID, shipmentDocument.Label.Replace("Document", ""), TemplateLabelCategory.Supplemental, shipmentDocument));
-                        }
+                        AddDocumentResourceLabelData(packageID, shipmentResources, labelData);
 
                         // Don't need it anymore
                         shipmentResources = null;
                     }
 
                     // Add any supporting package documents that may exist
-                    var documentResources = packageResources.Where(r => r.Label.StartsWith("Document"));
-                    foreach (DataResourceReference documentResource in documentResources)
-                    {
-                        labelData.Add(new TemplateLabelData(packageID, documentResource.Label.Replace("Document", ""), TemplateLabelCategory.Supplemental, documentResource));
-                    }
+                    AddDocumentResourceLabelData(packageID, packageResources, labelData);
                 }
             }
 
             return labelData;
+        }
+
+        /// <summary>
+        /// Add document resources to the label data collection
+        /// </summary>
+        private static void AddDocumentResourceLabelData(long packageID, IEnumerable<DataResourceReference> resources, ICollection<TemplateLabelData> labelData)
+        {
+            IEnumerable<DataResourceReference> documentResources = resources.Where(r => r.Label.StartsWith("Document", StringComparison.OrdinalIgnoreCase));
+            foreach (DataResourceReference documentResource in documentResources)
+            {
+                labelData.Add(new TemplateLabelData(packageID, 
+                    documentResource.Label.Replace("Document", ""), 
+                    TemplateLabelCategory.Supplemental, 
+                    documentResource, 
+                    documentResource.Label != "DocumentCommercialInvoice"));
+            }
         }
 
         /// <summary>

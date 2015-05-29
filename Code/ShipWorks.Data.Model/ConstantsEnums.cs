@@ -384,6 +384,8 @@ namespace ShipWorks.Data.Model
 		AmazonCommission,
 		///<summary>FulfillmentChannel. </summary>
 		FulfillmentChannel,
+		///<summary>IsPrime. </summary>
+		IsPrime,
 		/// <summary></summary>
 		AmountOfFields
 	}

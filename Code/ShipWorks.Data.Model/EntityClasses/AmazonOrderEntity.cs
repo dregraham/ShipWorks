@@ -497,6 +497,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("FulfillmentChannel", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("IsPrime", fieldHashtable);
 		}
 		#endregion
 
@@ -601,6 +604,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)AmazonOrderFieldIndex.FulfillmentChannel, true); }
 			set	{ SetValue((int)AmazonOrderFieldIndex.FulfillmentChannel, value); }
+		}
+
+		/// <summary> The IsPrime property of the Entity AmazonOrder<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonOrder"."IsPrime"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 IsPrime
+		{
+			get { return (System.Int32)GetValue((int)AmazonOrderFieldIndex.IsPrime, true); }
+			set	{ SetValue((int)AmazonOrderFieldIndex.IsPrime, value); }
 		}
 
 
