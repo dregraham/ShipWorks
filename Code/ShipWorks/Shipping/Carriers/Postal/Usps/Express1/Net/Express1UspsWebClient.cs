@@ -452,6 +452,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             address = CreateAddress(person);
 
+            address.Address1 = AdjustAddressLineForLength(address.Address1);
+            address.Address2 = AdjustAddressLineForLength(address.Address2);
+            address.Address3 = AdjustAddressLineForLength(address.Address3);
+
             bool addressMatch;
             bool cityStateZipOK;
             ResidentialDeliveryIndicatorType residentialIndicator;
@@ -606,6 +610,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
+        /// Adjusts the length of the address line to be not more than 50 characters.
+        /// </summary>
+        private static string AdjustAddressLineForLength(string addressLine)
+        {
+            const int maxLength = 50;
+            return addressLine.Length > maxLength ? addressLine.Substring(0, maxLength) : addressLine;
+        }
+
+        /// <summary>
         /// The internal ProcessShipment implementation intended to be wrapped by the auth wrapper
         /// </summary>
         private void ProcessShipmentInternal(ShipmentEntity shipment, UspsAccountEntity account)
@@ -616,7 +629,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
             Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Usps.RequireFullAddressValidation);
-
+            
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
