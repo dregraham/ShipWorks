@@ -37,5 +37,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// Candidate addresses if a full match wasn't found
         /// </summary>
         public IEnumerable<Address> Candidates { get; set; }
+
+        /// <summary>
+        /// Gets or sets the message.
+        /// </summary>
+        public string BadAddressMessage { get; set; }
     }
 }

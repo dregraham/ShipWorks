@@ -486,9 +486,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 Address[] candidates;
                 StatusCodes statusCodes;
             	RateV17[] rates;
+                string badAddressMessage = null;
 
                 webService.OnlyLogOnMagicKeys = true;
-
 
                 try
                 {
@@ -510,16 +510,28 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     log.Error(ex);
 
                     // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
-                    string message = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
-                    message = Regex.Replace(message, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
+                    badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
+                    badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
 
-                    throw new AddressValidationException(message, ex);
+                    return new UspsAddressValidationResults()
+                    {
+                        IsSuccessfulMatch = false,
+                        BadAddressMessage = badAddressMessage,
+                        Candidates = new List<Address>()
+                    };
                 }
                 catch (Exception ex)
                 {
                     log.Error(ex);
 
                     throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+                }
+
+                if (!addressMatch)
+                {
+                    badAddressMessage=cityStateZipOk?
+                        "City, State and ZIP Code are valid, but street address is not a match." :
+                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
                 }
 
                 return new UspsAddressValidationResults
@@ -529,7 +541,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     ResidentialIndicator = residentialIndicator,
                     IsPoBox = isPoBox,
                     MatchedAddress = address,
-                    Candidates = candidates.ToList()
+                    Candidates = candidates.ToList(),
+                    BadAddressMessage = badAddressMessage
                 };
             }
         }
@@ -885,8 +898,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
         {
-
-            // If this is a return shipment, swap the to/from addresses
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
