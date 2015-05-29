@@ -243,5 +243,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         {
             // Don't update Express1 entries because they could overwrite Usps records
         }
+
+        /// <summary>
+        /// Gets all of the confirmation types that are available to a particular implementation of PostalShipmentType.
+        /// </summary>
+        /// <returns>A collection of all the confirmation types that are available to a Express1 (USPS) shipment.</returns>
+        public override IEnumerable<PostalConfirmationType> GetAllConfirmationTypes()
+        {
+            // The adult signature types are not available
+            return new List<PostalConfirmationType>
+            {
+                PostalConfirmationType.None,
+                PostalConfirmationType.Delivery,
+                PostalConfirmationType.Signature,
+                PostalConfirmationType.AdultSignatureRequired,
+                PostalConfirmationType.AdultSignatureRestricted
+            };
+        }
     }
 }

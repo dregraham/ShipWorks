@@ -824,6 +824,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />
