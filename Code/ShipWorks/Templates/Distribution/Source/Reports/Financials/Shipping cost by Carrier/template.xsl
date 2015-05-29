@@ -74,27 +74,27 @@
           <tr>
             <td style="{$rowStyle};">USPS</td>
             <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($usps, '#,##0.000')" />
+              $<xsl:value-of select="format-number($usps, '#,##0.00#')" />
             </td>
           </tr>
           <tr>
             <td style="{$rowStyle};">USPS (Endicia)</td>
             <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($uspsEndicia, '#,##0.000')" />
+              $<xsl:value-of select="format-number($uspsEndicia, '#,##0.00#')" />
             </td>
           </tr>
 
           <tr>
             <td style="{$rowStyle};">USPS (Express1)</td>
             <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($uspsExpress1, '#,##0.000')" />
+              $<xsl:value-of select="format-number($uspsExpress1, '#,##0.00#')" />
             </td>
           </tr>
 
           <tr>
             <td style="{$rowStyle};">USPS (Express1 for Endicia)</td>
             <td style="{$rowStyle};" align="right">
-              $<xsl:value-of select="format-number($uspsExpress1Endicia, '#,##0.000')" />
+              $<xsl:value-of select="format-number($uspsExpress1Endicia, '#,##0.00#')" />
             </td>
           </tr>
           
@@ -116,7 +116,7 @@
             </td>
             <td style="{$rowStyle};" align="right">
               <b>
-                $<xsl:value-of select="format-number($total, '#,##0.00')" />
+                $<xsl:value-of select="format-number($total, '#,##0.00#')" />
               </b>
             </td>
           </tr>
