@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Templates.Tokens;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.Address;
@@ -627,8 +628,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             string tracking = string.Empty;
             string labelUrl;
 
-            Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
-            Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Usps.RequireFullAddressValidation);
+            Address fromAddress = CreateAddress(shipment.OriginPerson);
+            Address toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
             
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
