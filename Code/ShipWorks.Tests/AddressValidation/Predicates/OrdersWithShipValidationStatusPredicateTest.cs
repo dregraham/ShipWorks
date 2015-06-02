@@ -8,7 +8,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
     [TestClass]
     public class UnprocessedShipmentsWithShipValidationStatusPredicateTest
     {
-        private UnprocessedShipmentsWithShipValidationStatusPredicate predicate;
+        private UnprocessedErrorShipmentsPredicate predicate;
         private FakePredicateExpression pred;
 
         [TestInitialize]
@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             pred = new FakePredicateExpression();
 
-            predicate = new UnprocessedShipmentsWithShipValidationStatusPredicate(AddressValidationStatusType.Error);
+            predicate = new UnprocessedErrorShipmentsPredicate();
         }
 
         [TestMethod]

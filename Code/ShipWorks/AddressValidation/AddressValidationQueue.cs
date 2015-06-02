@@ -100,14 +100,17 @@ namespace ShipWorks.AddressValidation
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
                     ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
-                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
+                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
-                    ValidateShipmentAddresses(AddressValidationStatusType.Pending, shipments => shipments.Any());
+                    ValidatePendingShipmentAddresses();
 
                     // Validate any errors. See above comment about validating order errors...
-                    ValidateShipmentAddresses(AddressValidationStatusType.Error,
-                        shipments => shipments.Any() && shipments.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
+                    ValidateErrorShipmentAddresses();
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error validating addresses", ex);
                 }
                 finally
                 {
@@ -119,9 +122,19 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<ShipmentEntity>, bool> shouldContinue)
+        private static void ValidatePendingShipmentAddresses()
         {
-            ValidateAddresses(new UnprocessedShipmentsWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
+            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any();
+            ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
+        }
+
+        /// <summary>
+        /// Validate shipments with a given address validation status
+        /// </summary>
+        private static void ValidateErrorShipmentAddresses()
+        {
+            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
+            ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
