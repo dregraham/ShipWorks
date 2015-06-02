@@ -94,12 +94,12 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateOrderAddresses(AddressValidationStatusType.Pending, orders => orders.Any());
+                    ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
-                    ValidateOrderAddresses(AddressValidationStatusType.Error,
+                    ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
                         orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
@@ -114,14 +114,6 @@ namespace ShipWorks.AddressValidation
                     SqlAppLockUtility.ReleaseLock(connection, SqlAppLockName);
                 }
             }
-        }
-
-        /// <summary>
-        /// Validate orders with a given address validation status
-        /// </summary>
-        private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<OrderEntity>, bool> shouldContinue)
-        {
-            ValidateAddresses(new OrdersWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
         }
 
         /// <summary>
