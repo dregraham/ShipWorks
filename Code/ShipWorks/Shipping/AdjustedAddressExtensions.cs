@@ -97,6 +97,14 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Replaces the curacao with netherlands.
+        /// </summary>
+        private static string ReplaceCuracaoWithNetherlands(IAddressAdapter person)
+        {
+            return person.CountryCode == "CB" ? "NL" : person.CountryCode;
+        }
+
+        /// <summary>
         /// Replace US with US territory country code
         /// </summary>
         private static string ReplaceUnitedStatesWithInternationalTerritoryCountryCode(IAddressAdapter person)
@@ -117,7 +125,7 @@ namespace ShipWorks.Shipping
                 ReplaceUnitedKingdomWithGreatBritain, ReplaceUnitedStatesWithInternationalTerritoryCountryCode);
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.Usps, ShipmentTypeCode.Express1Usps, ShipmentTypeCode.None },
-                ReplaceUnitedKingdomWithGreatBritain, ReplaceInternationalTerritoryCountryCodeWithUnitedStates);
+                ReplaceUnitedKingdomWithGreatBritain, ReplaceInternationalTerritoryCountryCodeWithUnitedStates, ReplaceCuracaoWithNetherlands);
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia },
                 ReplaceCountryNameWithCountryCode, ReplaceUnitedKingdomWithGreatBritain);
