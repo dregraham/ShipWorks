@@ -864,15 +864,39 @@ namespace ShipWorks.Shipping
         /// </summary>
         private bool ShouldEnableShippingAddress(bool enableEditing)
         {
-            if (!enableEditing || loadedShipmentEntities.Count <= 0)
+            if (!enableEditing || loadedShipmentEntities == null || loadedShipmentEntities.Count <= 0)
             {
                 return enableEditing;
             }
 
             // Check with the store to see if the shipping address should be editable
-            OrderEntity order = DataProvider.GetEntity(loadedShipmentEntities.FirstOrDefault().OrderID) as OrderEntity;
-            StoreType storeType = StoreTypeManager.GetType(StoreManager.GetStore(order.StoreID));
+            ShipmentEntity loadedOrder = loadedShipmentEntities.FirstOrDefault();
+            if (loadedOrder==null)
+            {
+                log.Warn("loadedOrder was null in ShouldEnableShippingAddress");
+                return false;
+            }
 
+            OrderEntity order = DataProvider.GetEntity(loadedOrder.OrderID) as OrderEntity;
+            if (order == null)
+            {
+                log.Warn("Fetch order was null in ShouldEnableShippingAddress");
+                return false;
+            }
+
+            StoreEntity storeEntity = StoreManager.GetStore(order.StoreID);
+            if (storeEntity == null)
+            {
+                log.Warn("storeEntity was null in ShouldEnableShippingAddress");
+                return false;
+            }
+            StoreType storeType = StoreTypeManager.GetType(storeEntity);
+
+            if (storeType == null)
+            {
+                log.Warn("storeType was null in ShouldEnableShippingAddress");
+                return false;
+            }
             return loadedShipmentEntities.All(storeType.IsShippingAddressEditable);
         }
 
