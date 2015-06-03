@@ -529,7 +529,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 if (!addressMatch)
                 {
-                    badAddressMessage=cityStateZipOk?
+                    badAddressMessage = cityStateZipOk ?
                         "City, State and ZIP Code are valid, but street address is not a match." :
                         "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
                 }
@@ -910,18 +910,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
             }
 
-            if (shipment.ReturnShipment &&
-                !toAddress.AsAddressAdapter().IsDomesticCountry() &&
-                fromAddress.AsAddressAdapter().IsDomesticCountry())
+            if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
-
             // Per stamps - only send state for domestic - send province for Intl
-            if (!shipment.ShipPerson.IsDomesticCountry())
+            if (!toAddress.AsAddressAdapter().IsDomesticCountry())
             {
-                toAddress.Province = shipment.ShipStateProvCode;
+                toAddress.Province = toAddress.State;
                 toAddress.State = string.Empty;
             }
         }
