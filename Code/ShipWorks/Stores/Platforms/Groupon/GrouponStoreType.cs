@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
 using ShipWorks.Stores.Management;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
@@ -185,6 +187,16 @@ namespace ShipWorks.Stores.Platforms.Groupon
             return entity;
         }
 
+        /// <summary>
+        /// Generate the template XML output for the given order
+        /// </summary>
+        public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
+        {
+            var order = new Lazy<GrouponOrderEntity>(() => (GrouponOrderEntity)orderSource());
+
+            ElementOutline outline = container.AddElement("Groupon");
+            outline.AddElement("GrouponOrderID", () => order.Value.GrouponOrderID);
+        }
 
         /// <summary>
         /// Creates the OrderIdentifier for locating Volusion orders
