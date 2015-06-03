@@ -133,6 +133,8 @@ namespace ShipWorks.AddressValidation
         /// </summary>
         private static void ValidateErrorShipmentAddresses()
         {
+            // shouldContinue evaluates the shipments after processing them through address validation. 
+            // If each order in the batch still has an error (or there are no shipments) this will bail.
             Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
             ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
@@ -144,6 +146,7 @@ namespace ShipWorks.AddressValidation
         {
             EntityCollection<T> pendingOrders;
 
+            // The predicate gets orders in batches at a time (50 at the time of this comment).
             do
             {
                 using (SqlAdapter adapter = new SqlAdapter())

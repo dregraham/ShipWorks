@@ -13,6 +13,9 @@ namespace ShipWorks.AddressValidation.Predicates
     /// </summary>
     public class UnprocessedErrorShipmentsPredicate : IPredicateProvider, ILimitResultRows
     {
+        /// <summary>
+        /// Apply the logic to the predicate expression
+        /// </summary>
         public void Apply(IPredicateExpression predicate)
         {
             DateTime validationThreshold = DateTime.UtcNow.AddDays(-7);
@@ -22,6 +25,9 @@ namespace ShipWorks.AddressValidation.Predicates
                 .Add(new FieldCompareSetPredicate(ShipmentFields.OrderID, null, OrderFields.OrderID, null, SetOperator.In, OrderFields.OrderDate > validationThreshold));
         }
 
+        /// <summary>
+        /// Maximum rows that this predicate should return; 0 returns all rows
+        /// </summary>
         public int MaximumRows
         {
             get
