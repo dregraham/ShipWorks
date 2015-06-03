@@ -10,15 +10,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
     public class GrouponOrderIdentifier : OrderIdentifier
     {
         // GrouponStore's Order ID
-        private readonly string GrouponStoreOrderId = "";
+        private readonly string grouponStoreOrderId = "";
 
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="GrouponStoreOrderID"></param>
-        public GrouponOrderIdentifier(string GrouponStoreOrderId)
+        public GrouponOrderIdentifier(string grouponStoreOrderId)
         {
-            this.GrouponStoreOrderId = GrouponStoreOrderId;
+            this.grouponStoreOrderId = grouponStoreOrderId;
         }
 
         /// <summary>
@@ -26,14 +25,14 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
-            GrouponOrderEntity GrouponStoreOrder = order as GrouponOrderEntity;
+            GrouponOrderEntity grouponStoreOrder = order as GrouponOrderEntity;
 
-            if (GrouponStoreOrder == null)
+            if (grouponStoreOrder == null)
             {
                 throw new InvalidOperationException("A non GrouponStore order was passed to the GrouponStore order identifier.");
             }
 
-            GrouponStoreOrder.GrouponOrderID = GrouponStoreOrderId;
+            grouponStoreOrder.GrouponOrderID = grouponStoreOrderId;
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
-            downloadDetail.ExtraStringData1 = GrouponStoreOrderId;
+            downloadDetail.ExtraStringData1 = grouponStoreOrderId;
         }
 
         /// <summary>
@@ -49,7 +48,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         /// </summary>
         public override string ToString()
         {
-            return string.Format("GrouponStoreOrderID:{0}", GrouponStoreOrderId);
+            return string.Format("GrouponStoreOrderID:{0}", grouponStoreOrderId);
         }
     }
 }
