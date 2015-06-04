@@ -492,18 +492,21 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 try
                 {
-                    webService.CleanseAddress(
-                        GetCredentials(account, true), 
-                        ref address, 
-                        address.ZIPCode, 
-                        out addressMatch, 
-                        out cityStateZipOk, 
-                        out residentialIndicator, 
-                        out isPoBox, 
-                        out isPoBoxSpecified, 
-                        out candidates, 
-                        out statusCodes, 
-                        out rates);
+                    using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
+                    {
+                        webService.CleanseAddress(
+                            GetCredentials(account, true),
+                            ref address,
+                            null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
+                            out addressMatch,
+                            out cityStateZipOk,
+                            out residentialIndicator,
+                            out isPoBox,
+                            out isPoBoxSpecified,
+                            out candidates,
+                            out statusCodes,
+                            out rates);
+                    }
                 }
                 catch (SoapException ex)
                 {
