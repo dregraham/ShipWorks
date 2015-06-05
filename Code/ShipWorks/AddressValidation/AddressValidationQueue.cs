@@ -100,7 +100,7 @@ namespace ShipWorks.AddressValidation
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
                     ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
-                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
+                        orders => orders.Any() && orders.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
                     ValidatePendingShipmentAddresses();
@@ -135,7 +135,7 @@ namespace ShipWorks.AddressValidation
         {
             // shouldContinue evaluates the shipments after processing them through address validation. 
             // If each order in the batch still has an error (or there are no shipments) this will bail.
-            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.All(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
+            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
             ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
 
