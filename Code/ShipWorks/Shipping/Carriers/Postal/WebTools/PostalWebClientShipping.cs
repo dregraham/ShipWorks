@@ -437,7 +437,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // The production server URL
             string serverUrl = PostalWebUtility.UseTestServer ?
                 "https://stg-secure.shippingapis.com/ShippingApi.dll?"
-                : "http://production.shippingapis.com/ShippingAPI.dll?";
+                : "https://secure.shippingapis.com/ShippingAPI.dll?";
 
             if (postalShipment.Shipment.ShipPerson.IsDomesticCountry())
             {
