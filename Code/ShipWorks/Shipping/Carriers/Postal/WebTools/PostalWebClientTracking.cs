@@ -174,7 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             // The production server URL
             string serverUrl = PostalWebUtility.UseTestServer ?
                 "http://stg-production.shippingapis.com/ShippingApi.dll?API=TrackV2&XML="
-                : "http://production.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=";
+                : "https://secure.shippingapis.com/ShippingAPI.dll?API=TrackV2&XML=";
 
             try
             {
