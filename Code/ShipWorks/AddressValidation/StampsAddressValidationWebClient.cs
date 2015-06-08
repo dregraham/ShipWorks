@@ -42,9 +42,7 @@ namespace ShipWorks.AddressValidation
                 }
                 else
                 {
-                    validationResult.AddressValidationError = uspsResult.IsCityStateZipOk ?
-                        "City, State and ZIP Code are valid, but street address is not a match." :
-                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
+                    validationResult.AddressValidationError = uspsResult.BadAddressMessage;
                 }
 
                 foreach (Address address in uspsResult.Candidates)

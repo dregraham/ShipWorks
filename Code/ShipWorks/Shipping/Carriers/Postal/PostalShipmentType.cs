@@ -373,6 +373,10 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IEnumerable<PostalServicePackagingCombination> adultSignatureAllowed = GetAdultSignatureServiceAndPackagingCombinations();
             if (packaging != null && adultSignatureAllowed.Any(asr => asr.ServiceType == service && asr.PackagingType == packaging))
             {
+                if (!confirmationTypesAvailable) // No confirmation types available, they should have an option other than adult signature
+                {
+                    confirmationTypes.Add(PostalConfirmationType.None);
+                }
                 confirmationTypes.Add(PostalConfirmationType.AdultSignatureRequired);
                 confirmationTypes.Add(PostalConfirmationType.AdultSignatureRestricted);
             }

@@ -93,6 +93,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Amazon
                         },
 
+                    new GridColumnDefinition("{94454F08-0E76-4777-96DD-F184ED77AFFD}", true,
+                        new GridOrderNumberDisplayType(), "Groupon Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Groupon, "AB-1234567-1234567"),
+                        GrouponOrderFields.GrouponOrderID)
+                        {
+                            StoreTypeCode = StoreTypeCode.Groupon
+                        },
+
                     new GridColumnDefinition("{CA3ECAB1-B96A-4c17-BC66-9EC7D0DF1035}", true,
                         new GridOrderNumberDisplayType(), "ClickCartPro #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.ClickCartPro, "ORD100002"), 
                         ClickCartProOrderFields.ClickCartProOrderID)
