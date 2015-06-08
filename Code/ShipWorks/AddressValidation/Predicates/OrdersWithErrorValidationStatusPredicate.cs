@@ -22,7 +22,7 @@ namespace ShipWorks.AddressValidation.Predicates
 
             // We need to get all oders from the first predicate above that have shipments that are not processed or voided
             FieldCompareSetPredicate shipmentsNotProcessedOrVoided = new FieldCompareSetPredicate(OrderFields.OrderID, null, ShipmentFields.OrderID, null, SetOperator.Exist,
-                ShipmentFields.Processed == false & ShipmentFields.Voided == false, false);
+                ShipmentFields.OrderID == OrderFields.OrderID & ShipmentFields.Processed == false & ShipmentFields.Voided == false, false);
 
             // We also need all of the matching orders that don't have any shipments
             FieldCompareSetPredicate ordersWithNoShipments = new FieldCompareSetPredicate(OrderFields.OrderID, null, ShipmentFields.OrderID, null, SetOperator.Exist,
