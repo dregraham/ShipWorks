@@ -23,6 +23,8 @@ namespace ShipWorks.Templates.Processing.TemplateXml.ElementOutlines
             : base(context)
         {
             AddAttribute("ID", () => Parcel.PackageID, If(() => Parcel.PackageID != null));
+            
+            AddAttribute("TrackingNumber", () => Parcel.TrackingNumber, If(() => !string.IsNullOrEmpty(Parcel.TrackingNumber)));
 
             // Insurance selection
             AddElement("Insurance", new InsuranceOutline(context), () => Parcel.Insurance);

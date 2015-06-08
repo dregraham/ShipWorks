@@ -776,7 +776,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 var package = shipment.Ups.Packages[parcelIndex];
 
-                return new ShipmentParcel(shipment, package.UpsPackageID,
+                return new ShipmentParcel(shipment, package.UpsPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
                     new DimensionsAdapter(package));
             }
