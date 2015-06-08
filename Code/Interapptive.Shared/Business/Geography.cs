@@ -219,7 +219,7 @@ namespace Interapptive.Shared.Business
                 case "CI": return Flags.cote_divoire;
                 case "HR": return Flags.croatia;
                 case "CU": return Flags.cuba;
-                case "CB": return null; // Curacao
+                case "CW": return null; // Curacao
                 case "CY": return Flags.cyprus;
                 case "CZ": return Flags.czech_republic;
                 case "DK": return Flags.denmark;
@@ -587,7 +587,7 @@ namespace Interapptive.Shared.Business
             countries.Add("Cote d'Ivoire", "CI");
             countries.Add("Croatia", "HR");
             countries.Add("Cuba", "CU");
-            countries.Add("Curacao", "CB");
+            countries.Add("Curacao", "CW");
             countries.Add("Cyprus", "CY");
             countries.Add("Czech Republic", "CZ");
             countries.Add("Denmark", "DK");
