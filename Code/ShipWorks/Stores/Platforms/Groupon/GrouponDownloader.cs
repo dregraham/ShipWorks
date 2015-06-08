@@ -109,20 +109,11 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 return;
             }
 
-            //OrderNumber
-            string orderNumber = orderid.Substring(0, orderid.IndexOf("-"));
-
-            //OrderNumberPostfix
-            string orderNumberPostfix = orderid.Substring(orderid.IndexOf("-"));
+            // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
+            order.OrderNumber = GetNextOrderNumber();
 
             // set the progress detail
             Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
-
-            //OrderNumber
-            order.OrderNumber = Convert.ToInt64(orderNumber);
-
-            //OrderNumberPostfix
-            order.ApplyOrderNumberPostfix(orderNumberPostfix);
 
             //Order Date
             DateTime orderDate = GetDate(jsonOrder["date"].ToString());
