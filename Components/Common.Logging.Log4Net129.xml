@@ -1,20 +1,9 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>Common.Logging.Log4Net1210</name>
+        <name>Common.Logging.Log4Net129</name>
     </assembly>
     <members>
-        <member name="T:AssemblyDoc">
-            <summary>
-            <para>This assembly contains the adapter to the log4net 1.2.10 library</para>
-            <para>For an example on how to configure
-            <list type="bullet">
-            <item>Common.Logging to render its output to log4net, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/>.</item>
-            <item>log4net to render its output to Common.Logging use <see cref="T:Common.Logging.Log4Net.CommonLoggingAppender"/>.</item>
-            </list>
-            </para>
-            </summary>
-        </member>
         <member name="T:Common.Logging.Log4Net.CommonLoggingAppender">
             <summary>
             Routes log events to Common.Logging infrastructure.
@@ -24,7 +13,7 @@
             <code>
             &lt;log4net&gt;
                 &lt;appender name=&quot;CommonLoggingAppender&quot; 
-                          type=&quot;Common.Logging.Log4Net.CommonLoggingAppender, Common.Logging.Log4Net&quot;&gt;
+                          type=&quot;Common.Logging.Log4Net.CommonLoggingAppender, Common.Logging.Log4Net129&quot;&gt;
                     &lt;layout type=&quot;log4net.Layout.PatternLayout, log4net&quot;&gt;
                         &lt;param name=&quot;ConversionPattern&quot; value=&quot;%level - %class.%method: %message&quot; /&gt;
                     &lt;/layout&gt;
@@ -59,9 +48,83 @@
             Wrapper class that prevents exceptions from being rendered in the message
             </summary>
         </member>
+        <member name="T:Common.Logging.Log4Net.Log4NetThreadVariablesContext">
+            <summary>
+            A global context for logger variables
+            </summary>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetThreadVariablesContext.Set(System.String,System.Object)">
+            <summary>
+            Sets the value of a new or existing variable within the global context
+            </summary>
+            <param name="key">The key of the variable that is to be added</param>
+            <param name="value">The value to add</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetThreadVariablesContext.Get(System.String)">
+            <summary>
+            Gets the value of a variable within the global context
+            </summary>
+            <param name="key">The key of the variable to get</param>
+            <returns>The value or null if not found</returns>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetThreadVariablesContext.Contains(System.String)">
+            <summary>
+            Checks if a variable is set within the global context
+            </summary>
+            <param name="key">The key of the variable to check for</param>
+            <returns>True if the variable is set</returns>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetThreadVariablesContext.Remove(System.String)">
+            <summary>
+            Removes a variable from the global context by key
+            </summary>
+            <param name="key">The key of the variable to remove</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetThreadVariablesContext.Clear">
+            <summary>
+            Clears the global context variables
+            </summary>
+        </member>
+        <member name="T:Common.Logging.Log4Net.Log4NetGlobalVariablesContext">
+            <summary>
+            A global context for logger variables
+            </summary>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetGlobalVariablesContext.Set(System.String,System.Object)">
+            <summary>
+            Sets the value of a new or existing variable within the global context
+            </summary>
+            <param name="key">The key of the variable that is to be added</param>
+            <param name="value">The value to add</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetGlobalVariablesContext.Get(System.String)">
+            <summary>
+            Gets the value of a variable within the global context
+            </summary>
+            <param name="key">The key of the variable to get</param>
+            <returns>The value or null if not found</returns>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetGlobalVariablesContext.Contains(System.String)">
+            <summary>
+            Checks if a variable is set within the global context
+            </summary>
+            <param name="key">The key of the variable to check for</param>
+            <returns>True if the variable is set</returns>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetGlobalVariablesContext.Remove(System.String)">
+            <summary>
+            Removes a variable from the global context by key
+            </summary>
+            <param name="key">The key of the variable to remove</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetGlobalVariablesContext.Clear">
+            <summary>
+            Clears the global context variables
+            </summary>
+        </member>
         <member name="T:Common.Logging.Log4Net.Log4NetLogger">
             <summary>
-            Concrete implementation of <see cref="T:Common.Logging.ILog"/> interface specific to log4net 1.2.10.
+            Concrete implementation of <see cref="T:Common.Logging.ILog"/> interface specific to log4net 1.2.9-1.2.11.
             </summary>
             <remarks>
             Log4net is capable of outputting extended debug information about where the current 
@@ -84,7 +147,7 @@
         </member>
         <member name="M:Common.Logging.Log4Net.Log4NetLogger.WriteInternal(Common.Logging.LogLevel,System.Object,System.Exception)">
             <summary>
-            Sends the message to the underlying log4net system.
+            Actually sends the message to the underlying log system.
             </summary>
             <param name="logLevel">the level of this log event.</param>
             <param name="message">the message to log</param>
@@ -98,37 +161,47 @@
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsTraceEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Trace" /> level.
+            
             </summary>
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsDebugEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Debug" /> level.
+            
             </summary>
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsInfoEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Info" /> level.
+            
             </summary>
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsWarnEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Warn" /> level.
+            
             </summary>
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsErrorEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Error" /> level.
+            
             </summary>
         </member>
         <member name="P:Common.Logging.Log4Net.Log4NetLogger.IsFatalEnabled">
             <summary>
-            Checks if this logger is enabled for the <see cref="F:Common.Logging.LogLevel.Fatal" /> level.
+            
+            </summary>
+        </member>
+        <member name="P:Common.Logging.Log4Net.Log4NetLogger.GlobalVariablesContext">
+            <summary>
+            Returns the global context for variables
+            </summary>
+        </member>
+        <member name="P:Common.Logging.Log4Net.Log4NetLogger.ThreadVariablesContext">
+            <summary>
+            Returns the thread-specific context for variables
             </summary>
         </member>
         <member name="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter">
             <summary>
-            Concrete subclass of ILoggerFactoryAdapter specific to log4net 1.2.10.
+            Concrete subclass of ILoggerFactoryAdapter specific to log4net 1.2.9-1.2.11.
             </summary>
             <remarks>
             The following configuration property values may be configured:
@@ -146,7 +219,7 @@
             </list>
             </remarks>
             <example>
-            The following snippet shows an example of how to configure log4net logging with Common.Logging:
+            The following snippet shows an example of how to configure log4net with Common.Logging:
             <code>
             &lt;configuration&gt;
               &lt;configSections&gt;
@@ -162,7 +235,7 @@
             
               &lt;common&gt;
                 &lt;logging&gt;
-                  &lt;factoryAdapter type=&quot;Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter, Common.Logging.Log4Net&quot;&gt;
+                  &lt;factoryAdapter type=&quot;Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter, Common.Logging.Log4Net129&quot;&gt;
                     &lt;arg key=&quot;level&quot; value=&quot;ALL&quot; /&gt;
                     &lt;arg key=&quot;configType&quot; value=&quot;INLINE&quot; /&gt;
                   &lt;/factoryAdapter&gt;
@@ -204,13 +277,19 @@
             <author>Gilles Bayon</author>
             <author>Erich Eichinger</author>
         </member>
-        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection)">
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(Common.Logging.Configuration.NameValueCollection)">
             <summary>
             Constructor
             </summary>
             <param name="properties">configuration properties, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/> for more.</param>
         </member>
-        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection,Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime)">
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(System.Collections.Specialized.NameValueCollection)">
+            <summary>
+            Constructor for binary backwards compatibility with non-portableversions
+            </summary>
+            <param name="properties">The properties.</param>
+        </member>
+        <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.#ctor(Common.Logging.Configuration.NameValueCollection,Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime)">
             <summary>
             Constructor accepting configuration properties and an arbitrary 
             <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime"/> instance.
@@ -244,19 +323,6 @@
         </member>
         <member name="M:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter.ILog4NetRuntime.GetLogger(System.String)">
             <summary>Calls <see cref="M:Common.Logging.LogManager.GetLogger(System.String)"/></summary>
-        </member>
-        <member name="T:Common.Logging.Log4Net.NamespaceDoc">
-            <summary>
-            <para>
-            This namespace contains the implementations to plug log4net 1.2.10 into Common.Logging.
-            </para>
-            <para>For an example on how to configure
-            <list type="bullet">
-            <item>Common.Logging to render its output to log4net, see <see cref="T:Common.Logging.Log4Net.Log4NetLoggerFactoryAdapter"/>.</item>
-            <item>log4net to render its output to Common.Logging use <see cref="T:Common.Logging.Log4Net.CommonLoggingAppender"/>.</item>
-            </list>
-            </para>
-            </summary>
         </member>
     </members>
 </doc>

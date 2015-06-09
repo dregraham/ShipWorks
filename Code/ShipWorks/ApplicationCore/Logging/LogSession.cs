@@ -72,7 +72,7 @@ namespace ShipWorks.ApplicationCore.Logging
             logOptions = LoadLogOptions();
             ApplyLogOptions();
 
-            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
+            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new CommonLogging.Configuration.NameValueCollection());
         }
 
         /// <summary>
