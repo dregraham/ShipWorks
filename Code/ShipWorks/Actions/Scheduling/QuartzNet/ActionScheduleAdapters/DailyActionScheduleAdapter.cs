@@ -12,6 +12,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 ScheduleBuilder =
                     CalendarIntervalScheduleBuilder.Create()
                         .WithIntervalInDays(schedule.FrequencyInDays)
+                        .PreserveHourOfDayAcrossDaylightSavings(true)
             };
         }
     }

@@ -15,6 +15,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             {
                 ScheduleBuilder =
                     CalendarIntervalScheduleBuilder.Create()
+                        .PreserveHourOfDayAcrossDaylightSavings(true)
                         .WithIntervalInDays(1),
 
                 Calendar =
