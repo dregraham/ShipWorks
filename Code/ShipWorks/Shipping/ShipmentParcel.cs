@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Shipping
 {
@@ -39,6 +40,15 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShipmentParcel(ShipmentEntity shipment, long? packageID, string trackingNumber, InsuranceChoice insurance, DimensionsAdapter dimensions) :
+            this(shipment, packageID, insurance, dimensions)
+        {
+            TrackingNumber = trackingNumber;
+        }
+
+        /// <summary>
         /// The shipment that holds the parcel
         /// </summary>
         public ShipmentEntity Shipment
@@ -69,5 +79,10 @@ namespace ShipWorks.Shipping
         {
             get { return dimensions; }
         }
+
+        /// <summary>
+        /// Tracking number for the package, if it exists
+        /// </summary>
+        public string TrackingNumber { get; private set; }
     }
 }
