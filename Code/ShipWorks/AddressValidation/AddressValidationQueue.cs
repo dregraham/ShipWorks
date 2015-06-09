@@ -94,20 +94,23 @@ namespace ShipWorks.AddressValidation
                 try
                 {
                     // Validate any pending orders first
-                    ValidateOrderAddresses(AddressValidationStatusType.Pending, orders => orders.Any());
+                    ValidateAddresses<OrderEntity>(new OrdersWithPendingValidationStatusPredicate(), orders => orders.Any());
 
                     // Validate any errors, but don't continue if any of the orders in the validated batch are still errors
                     // since that would suggest that there is still something wrong with the web service. This gets called after we attempt to validate a batch.
                     // If they are all errors, each address in the batch JUST failed.
-                    ValidateOrderAddresses(AddressValidationStatusType.Error,
-                        orders => orders.Any() && orders.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
+                    ValidateAddresses<OrderEntity>(new OrdersWithErrorValidationStatusPredicate(),
+                        orders => orders.Any() && orders.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error));
 
                     // Validate any pending shipments next
-                    ValidateShipmentAddresses(AddressValidationStatusType.Pending, shipments => shipments.Any());
+                    ValidatePendingShipmentAddresses();
 
                     // Validate any errors. See above comment about validating order errors...
-                    ValidateShipmentAddresses(AddressValidationStatusType.Error,
-                        shipments => shipments.Any() && shipments.All(x => x.ShipAddressValidationStatus != (int)AddressValidationStatusType.Error));
+                    ValidateErrorShipmentAddresses();
+                }
+                catch (Exception ex)
+                {
+                    log.Error("Error validating addresses", ex);
                 }
                 finally
                 {
@@ -117,19 +120,23 @@ namespace ShipWorks.AddressValidation
         }
 
         /// <summary>
-        /// Validate orders with a given address validation status
+        /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateOrderAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<OrderEntity>, bool> shouldContinue)
+        private static void ValidatePendingShipmentAddresses()
         {
-            ValidateAddresses(new OrdersWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
+            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any();
+            ValidateAddresses(new UnprocessedPendingShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
         /// Validate shipments with a given address validation status
         /// </summary>
-        private static void ValidateShipmentAddresses(AddressValidationStatusType statusToValidate, Func<ICollection<ShipmentEntity>, bool> shouldContinue)
+        private static void ValidateErrorShipmentAddresses()
         {
-            ValidateAddresses(new UnprocessedShipmentsWithShipValidationStatusPredicate(statusToValidate), shouldContinue);
+            // shouldContinue evaluates the shipments after processing them through address validation. 
+            // If each order in the batch still has an error (or there are no shipments) this will bail.
+            Func<ICollection<ShipmentEntity>, bool> shouldContinue = shipments => shipments.Any() && shipments.Any(x => x.ShipAddressValidationStatus != (int) AddressValidationStatusType.Error);
+            ValidateAddresses(new UnprocessedErrorShipmentsPredicate(), shouldContinue);
         }
 
         /// <summary>
@@ -139,6 +146,7 @@ namespace ShipWorks.AddressValidation
         {
             EntityCollection<T> pendingOrders;
 
+            // The predicate gets orders in batches at a time (50 at the time of this comment).
             do
             {
                 using (SqlAdapter adapter = new SqlAdapter())

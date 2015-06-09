@@ -665,7 +665,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             {
                 IParcelPackageEntity package = shipment.IParcel.Packages[parcelIndex];
 
-                return new ShipmentParcel(shipment, package.IParcelPackageID,
+                return new ShipmentParcel(shipment, package.IParcelPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
                     new DimensionsAdapter(package));
             }

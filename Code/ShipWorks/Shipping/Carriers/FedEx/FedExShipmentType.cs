@@ -920,7 +920,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 var package = shipment.FedEx.Packages[parcelIndex];
 
-                return new ShipmentParcel(shipment, package.FedExPackageID,
+                return new ShipmentParcel(shipment, package.FedExPackageID, package.TrackingNumber,
                     new InsuranceChoice(shipment, package, package, package),
                     new DimensionsAdapter(package));
             }

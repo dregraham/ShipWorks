@@ -21,6 +21,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Templates.Tokens;
 using AccountInfo = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.AccountInfo;
 using Address = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36.Address;
@@ -627,21 +628,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             string tracking = string.Empty;
             string labelUrl;
 
-            Address fromAddress = CleanseAddress(account, new PersonAdapter(shipment, "Origin"), false);
-            Address toAddress = CleanseAddress(account, new PersonAdapter(shipment, "Ship"), shipment.Postal.Usps.RequireFullAddressValidation);
-            
-            // If this is a return shipment, swap the to/from addresses
-            if (shipment.ReturnShipment)
-            {
-                Address tmpAddress = toAddress;
-                toAddress = fromAddress;
-                fromAddress = tmpAddress;
-            }
+            Address fromAddress;
+            Address toAddress;
 
-            if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
-            {
-                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
-            }
+            FixWebserviceAddresses(account, shipment, out toAddress, out fromAddress);
 
             RateV14 rate = CreateRateForProcessing(shipment, account);
             CustomsV2 customs = CreateCustoms(shipment);
@@ -778,6 +768,29 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             string[] labelUrls = labelUrl.Split(' ');
             SaveLabels(shipment, labelUrls);
+        }
+
+        /// <summary>
+        /// Updates addresses based on shipment properties like ReturnShipment, etc
+        /// </summary>
+        private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
+        {
+            // If this is a return shipment, swap the to/from addresses
+            if (shipment.ReturnShipment)
+            {
+                toAddress = CleanseAddress(account, shipment.OriginPerson, false);
+                fromAddress = CreateAddress(shipment.ShipPerson);
+            }
+            else
+            {
+                fromAddress = CreateAddress(shipment.OriginPerson);
+                toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
+            }
+
+            if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
+            {
+                throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
+            }
         }
 
         /// <summary>
