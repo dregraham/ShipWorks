@@ -1,4 +1,5 @@
-﻿using Quartz;
+﻿using System;
+using Quartz;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 
 namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
@@ -18,6 +19,7 @@ namespace ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                     CalendarIntervalScheduleBuilder.Create()
                         .WithIntervalInHours(schedule.FrequencyInHours)
                         .PreserveHourOfDayAcrossDaylightSavings(true)
+                        .InTimeZone(TimeZoneInfo.Local)
             };
         }
     }
