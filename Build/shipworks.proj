@@ -291,6 +291,7 @@
 
   <!-- Obfuscate the assemblies -->
   <ItemGroup>
+    <ObfuscationExcludedAssemblies Include="Apitron.PDF.Rasterizer, Version=3.0.25.0, Culture=neutral, PublicKeyToken=6E759DBB0039406E" />
     <ObfuscationExcludedAssemblies Include="Divelements.SandRibbon, Version=1.6.6.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
     <ObfuscationExcludedAssemblies Include="SandDock, Version=3.0.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3" />
