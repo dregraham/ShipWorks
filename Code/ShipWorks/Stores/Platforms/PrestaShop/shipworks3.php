@@ -18,7 +18,7 @@
  */
 
 define('REQUIRE_SECURE', FALSE);
-$moduleVersion = "3.10.0";
+$moduleVersion = "3.10.0.1";
 $schemaVersion = "1.1.0";
 
 require'config/config.inc.php';

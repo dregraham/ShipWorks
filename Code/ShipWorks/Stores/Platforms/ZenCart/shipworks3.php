@@ -56,7 +56,7 @@
          *
          */
 
-        $moduleVersion = "3.3.7.0";
+        $moduleVersion = "3.3.7.1";
         $schemaVersion = "1.0.0";
 
         header("Content-Type: text/xml;charset=utf-8");

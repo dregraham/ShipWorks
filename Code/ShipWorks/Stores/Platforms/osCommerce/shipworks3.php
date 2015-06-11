@@ -21,7 +21,7 @@
 	|
 	*/
 	
-	$moduleVersion = "3.0.1.2";
+	$moduleVersion = "3.0.1.3";
 	$schemaVersion = "1.0.0";
 	
 	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");

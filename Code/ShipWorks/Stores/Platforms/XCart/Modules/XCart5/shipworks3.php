@@ -19,7 +19,7 @@
     |
      */
     define('REQUIRE_SECURE', TRUE);
-    $moduleVersion = "3.9.3.0";
+    $moduleVersion = "3.9.3.1";
     $schemaVersion = "1.0.0";
     
     require_once 'top.inc.php';

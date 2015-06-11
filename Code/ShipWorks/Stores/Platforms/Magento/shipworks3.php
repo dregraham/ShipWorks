@@ -18,7 +18,7 @@
 |
  */
 define('REQUIRE_SECURE', TRUE);
-$moduleVersion = "3.10.0.0";
+$moduleVersion = "3.10.0.1";
 $schemaVersion = "1.0.0";
 
 // include the Mage engine

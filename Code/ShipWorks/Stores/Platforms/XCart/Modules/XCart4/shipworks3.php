@@ -39,7 +39,7 @@
 
 
     # ShipWorks configuration
-    $moduleVersion = "3.3.6.0";
+    $moduleVersion = "3.3.6.1";
     $schemaVersion = "1.0.0";
 
 	header("Content-Type: text/xml;charset=utf-8");

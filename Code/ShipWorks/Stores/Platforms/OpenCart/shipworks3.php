@@ -18,7 +18,7 @@
 |
  */
 define('REQUIRE_SECURE', TRUE);
-$moduleVersion = "4.0.0.0";
+$moduleVersion = "4.0.0.1";
 $schemaVersion = "1.1.0";
 
 header("Content-Type: text/xml;charset=utf-8");
