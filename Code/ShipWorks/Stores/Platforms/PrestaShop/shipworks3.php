@@ -116,7 +116,7 @@ writeStartTag("ShipWorks", array("moduleVersion" => $moduleVersion, "schemaVersi
 // Enforse SSL
 if (!$secure && REQUIRE_SECURE)
 {
-	outputError(10, 'A secure (https://) connection is required.');
+	outputError(10, "Invalid URL, HTTPS is required");
 }
 else
 {
@@ -133,7 +133,7 @@ else
 			case 'updatestatus': action_UpdateStatus();break;
 			case 'updateshipment': action_UpdateShipment(); break;
 			default:
-				outputError(20, "'$action' is not supported.");
+				outputError(20, "Invalid action '$action'");
 		}
 	}
 }
@@ -173,7 +173,7 @@ function checkAdminLogin()
 
 	if (!$loginOK)
 	{
-		outputError(50, "The username or password is incorrect or user provided does not have administrator access.");
+		outputError(50, "Username or password is incorrect");
 	}
 
 	return $loginOK;
@@ -528,7 +528,7 @@ function action_UpdateStatus()
 
 	if (!isset($_POST['order']) || !isset($_POST['status']) || !isset($_POST['comments']))
 	{
-		outputError(50, "Not all parameters supplied.");
+		outputError(40, "Insufficient parameters");
 		return;
 	}
 
@@ -557,7 +557,7 @@ function action_UpdateShipment()
 
 	if (!isset($_POST['order']) || !isset($_POST['tracking']))
 	{
-		outputError(50, "Not all parameters supplied.");
+		outputError(40, "Insufficient parameters");
 		return;
 	}
 

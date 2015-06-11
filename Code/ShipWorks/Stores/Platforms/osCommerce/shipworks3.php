@@ -112,20 +112,20 @@
 	// Enforse SSL
 	if (!$secure && REQUIRE_SECURE)
 	{
-		outputError(10, 'A secure (https://) connection is required.');
+		outputError(10, "Invalid URL, HTTPS is required");
 	}
 	
 	// Connect to database
 	else if (!tep_db_connect())
 	{
-		outputError(20, 'The ShipWorks module was unable to connect to database.');
+		outputError(70, "The ShipWorks module was unable to connect to database");
 	}
 	// Check we are in the admin folder
 	else if (!function_exists("tep_get_orders_status"))
 	{
-	    outputError(30, 
-	        "The ShipWorks module could not find certain required osCommerce functions. " .
-	        "This may be because the module is not installed in the 'admin' directory of your store.");
+	    outputError(1000, 
+	        "The ShipWorks module could not find certain required osCommerce functions, " .
+			"which could be caused if the module is not installed in the 'admin' directory of your store");
 	}
 	// Proceed
 	else
@@ -158,7 +158,7 @@
 				    case 'getorders': Action_GetOrders(); break;
 				    case 'getstatuscodes': Action_GetStatusCodes(); break;
 				    case 'updatestatus': Action_UpdateStatus(); break;
-				    default: outputError(70, "'$action' not supported");
+				    default: outputError(20, "Invalid action '$action'");
 			    }
 		    }
 		}
@@ -202,12 +202,12 @@
                 
                 if (!$loginOK)
                 {
-                    outputError(50, "The username or password is incorrect.");
+                    outputError(50, "Username or password is incorrect");
                 }
             }
             else
             {
-                outputError(60, "The username and password was not supplied.");
+                outputError(30, "Username or password was not supplied");
             }
 
 	        return $loginOK;
@@ -650,7 +650,7 @@
 	{	    
 	    if (!isset($_REQUEST['order']) || !isset($_REQUEST['status']) || !isset($_REQUEST['comments']))
 	    {
-	        outputError(40, "Not all parameters supplied.");
+	        outputError(40, "Insufficient parameters");
 	        return;
 	    }
 	    

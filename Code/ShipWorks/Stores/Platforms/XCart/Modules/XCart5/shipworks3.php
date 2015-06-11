@@ -131,7 +131,7 @@
                                 case 'updatestatus': action_UpdateStatus();break;
                                 case 'updateshipment': action_UpdateShipment(); break;
 				default:
-					outputError(20, "'$action' is not supported.");
+					outputError(20, "Invalid action '$action'");
 				}
         }
     }
@@ -164,7 +164,7 @@
 
         if (!$loginOK)
         {
-            outputError(50, "The username or password is incorrect or user provided does not have administrator access.");
+            outputError(50, "Username or password is incorrect");
         }
 
         return $loginOK;
@@ -526,7 +526,7 @@
 
         if (!isset($_POST['order']) || !isset($_POST['status']))
         {
-            outputError(50, "Not all parameters supplied.");
+            outputError(40, "Insufficient parameters");
             return;
         }
 
@@ -565,7 +565,7 @@
 
         if (!isset($_POST['order']) || !isset($_POST['tracking']))
         {
-            outputError(50, "Not all parameters supplied.");
+            outputError(40, "Insufficient parameters");
             return;
         }
 
