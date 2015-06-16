@@ -17,7 +17,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
     public class DownloadOrdersRequest : IDownloadOrderRequest
     {
         // The skeleton of the URL for submitting download requests to
-        public const string RequestUrl = "https://api.newegg.com/marketplace/ordermgmt/order/orderinfo?sellerid={0}";
+        public const string RequestUrl = "{0}/ordermgmt/order/orderinfo?sellerid={1}";
 
         Credentials credentials;
         INeweggRequest request;
@@ -154,12 +154,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         /// <returns>A NeweggResponse object.</returns>
         private NeweggResponse SubmitRequest(string requestBody)
         {
-            // Format our request URL with the value of the seller ID and configure the request
-            string formattedUrl = string.Format(RequestUrl, credentials.SellerId);            
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
 
-            RequestConfiguration requestConfig = new RequestConfiguration("Downloading Orders")
+            // Format our request URL with the value of the seller ID and configure the request
+            string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);
+
+            RequestConfiguration requestConfig = new RequestConfiguration("Downloading Orders", formattedUrl)
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Put, 
                 Body = requestBody
             };

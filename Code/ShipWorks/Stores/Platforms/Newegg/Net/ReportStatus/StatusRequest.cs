@@ -4,6 +4,7 @@ using System.Net;
 using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
 {
@@ -12,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
     /// </summary>
     public class StatusRequest : IStatusRequest
     {
-        private const string RequestUrl = "https://api.newegg.com/marketplace/reportmgmt/report/status?sellerid={0}";
+        private const string RequestUrl = "{0}/reportmgmt/report/status?sellerid={1}";
 
         //public const string RequestIdParameterName = "RequestId";
         private Credentials credentials;
@@ -69,11 +70,13 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus
         /// </returns>
         private NeweggResponse SubmitRequest()
         {
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
+
             // Format our request URL with the value of the seller ID and configure the request
-            string formattedUrl = string.Format(RequestUrl, credentials.SellerId);
-            RequestConfiguration requestConfig = new RequestConfiguration("Report Status")
+            string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);
+            RequestConfiguration requestConfig = new RequestConfiguration("Report Status", formattedUrl)
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Put, 
                 Body = GetRequestBody() 
             };

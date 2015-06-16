@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using System.Xml;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
 {
@@ -15,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
     /// </summary>
     public class ShippingRequest : IShippingRequest
     {
-        private const string RequestUrl = "https://api.newegg.com/marketplace/ordermgmt/orderstatus/orders/{0}?sellerid={1}";
+        private const string RequestUrl = "{0}/ordermgmt/orderstatus/orders/{1}?sellerid={2}";
         
         private Credentials credentials;
         private INeweggRequest request;
@@ -55,11 +56,13 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping
                 throw new InvalidOperationException("A null shipment value was provided.");
             }
 
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
+
             // Format our request URL with the value of the order number and seller ID and configure the request
-            string formattedUrl = string.Format(RequestUrl, shipment.Header.OrderNumber, credentials.SellerId);
-            RequestConfiguration requestConfig = new RequestConfiguration("Uploading Shipment Details")
+            string formattedUrl = string.Format(RequestUrl, marketplace, shipment.Header.OrderNumber, credentials.SellerId);
+            RequestConfiguration requestConfig = new RequestConfiguration("Uploading Shipment Details", formattedUrl)
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Put, 
                 Body = GetRequestBody(shipment) 
             };

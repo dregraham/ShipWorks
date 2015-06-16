@@ -1617,11 +1617,12 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits NeweggStoreEntity's mappings</summary>
 		private void InitNeweggStoreEntityMappings()
 		{
-			base.AddElementMapping( "NeweggStoreEntity", "ShipWorksLocal", @"dbo", "NeweggStore", 4 );
+			base.AddElementMapping( "NeweggStoreEntity", "ShipWorksLocal", @"dbo", "NeweggStore", 5 );
 			base.AddElementFieldMapping( "NeweggStoreEntity", "StoreID", "StoreID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "NeweggStoreEntity", "SellerID", "SellerID", false, (int)SqlDbType.VarChar, 10, 0, 0, false, "", null, typeof(System.String), 1 );
 			base.AddElementFieldMapping( "NeweggStoreEntity", "SecretKey", "SecretKey", false, (int)SqlDbType.VarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "NeweggStoreEntity", "ExcludeFulfilledByNewegg", "ExcludeFulfilledByNewegg", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 3 );
+			base.AddElementFieldMapping( "NeweggStoreEntity", "Channel", "Channel", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 4 );
 		}
 		/// <summary>Inits NoteEntity's mappings</summary>
 		private void InitNoteEntityMappings()

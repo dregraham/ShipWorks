@@ -1537,6 +1537,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("NeweggStoreEntity", "SellerID", typeof(System.String), false, false, false, false,  (int)NeweggStoreFieldIndex.SellerID, 10, 0, 0);
 			base.AddElementFieldInfo("NeweggStoreEntity", "SecretKey", typeof(System.String), false, false, false, false,  (int)NeweggStoreFieldIndex.SecretKey, 50, 0, 0);
 			base.AddElementFieldInfo("NeweggStoreEntity", "ExcludeFulfilledByNewegg", typeof(System.Boolean), false, false, false, false,  (int)NeweggStoreFieldIndex.ExcludeFulfilledByNewegg, 0, 0, 0);
+			base.AddElementFieldInfo("NeweggStoreEntity", "Channel", typeof(System.Int32), false, false, false, false,  (int)NeweggStoreFieldIndex.Channel, 0, 0, 10);
 		}
 		/// <summary>Inits NoteEntity's FieldInfo objects</summary>
 		private void InitNoteEntityInfos()

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using Interapptive.Shared.Net;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation
@@ -13,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation
     {
         // We could really just use any URL here since we're just going to bounce a request off the 
         // Newegg API to see that we don't get an authentication error
-        private const string RequestUrl = "https://api.newegg.com/marketplace/ordermgmt/servicestatus?sellerid={0}";
+        private const string RequestUrl = "{0}/ordermgmt/servicestatus?sellerid={1}";
         private INeweggRequest request;
 
         /// <summary>
@@ -47,11 +48,13 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation
 
         private NeweggResponse SubmitRequest(Credentials credentials)
         {
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
+
             // Format our request URL with the value of the seller ID and configure the request
-            string formattedUrl = string.Format(RequestUrl, credentials.SellerId);
-            RequestConfiguration requestConfig = new RequestConfiguration("Check Credentials") 
+            string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);
+            RequestConfiguration requestConfig = new RequestConfiguration("Check Credentials", formattedUrl) 
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Get, 
                 Body = string.Empty 
             };

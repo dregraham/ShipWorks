@@ -23,6 +23,7 @@ using ShipWorks.Filters.Content;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Platforms.Newegg.WizardPages;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -73,6 +74,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             store.SellerID = string.Empty;
             store.SecretKey = string.Empty;
             store.ExcludeFulfilledByNewegg = false;
+            store.Channel = (int)NeweggChannelType.Marketplace;
 
             return store;
         }
@@ -131,6 +133,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             List<WizardPage> wizardPages = new List<WizardPage>()
             {
+                new NeweggMarketplacePage(),
                 new NeweggAccountPage(),
                 new NeweggDownloadCriteriaPage()
             };

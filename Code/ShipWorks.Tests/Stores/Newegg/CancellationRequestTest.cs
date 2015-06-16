@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Stores.Platforms.Newegg;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation;
@@ -26,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         [TestInitialize]
         public void Initialize()
         {
-            credentials = new Credentials(string.Empty, string.Empty);
+            credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.Marketplace);
             orderToCancel = new Order { OrderNumber = orderNumberToCancel };
 
             string failureResponse = @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -122,7 +123,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             // the test object to use a "live" NeweggHttpRequest and an order setup in
             // our sandbox seller account, and use the sandbox seller account credentials
             Order sandboxedOrderToCancel = new Order { OrderNumber = 137956884 };
-            Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
+            Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.Marketplace);
             testObject = new CancelOrderRequest(credentials, new Mocked.NonLoggingNeweggRequest());
 
             // This should throw an exception since the order we're trying to cancel has

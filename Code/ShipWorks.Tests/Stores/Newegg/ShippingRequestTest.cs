@@ -8,6 +8,7 @@ using System.Xml;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Shipping.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
@@ -30,7 +31,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         [TestInitialize]
         public void Initialize()
         {
-            credentials = new Credentials(sellerId, string.Empty);
+            credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.Marketplace);
             InitializeShipment();
 
             string errorResponse = @"<?xml version=""1.0"" encoding=""utf-8""?>

@@ -2381,7 +2381,8 @@ CREATE TABLE [dbo].[NeweggStore]
 [StoreID] [bigint] NOT NULL,
 [SellerID] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SecretKey] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ExcludeFulfilledByNewegg] [bit] NOT NULL
+[ExcludeFulfilledByNewegg] [bit] NOT NULL,
+[Channel] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_NeweggStore] on [dbo].[NeweggStore]'
