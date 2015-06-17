@@ -89,7 +89,7 @@ namespace ShipWorks
                 {
                     if (changesDetected)
                     {
-                        mainForm.filterTree.UpdateFilterCounts();
+                        mainForm.UpdateFilterCounts();
 
                         if (forceReload)
                         {
@@ -132,15 +132,13 @@ namespace ShipWorks
                         // Grid columns are layout dependant.  Save off the current set before we reload
                         mainForm.gridControl.SaveGridColumnState();
 
-                        // Reload the filter tree
-                        mainForm.filterTree.SelectedFilterNodeChanged -= new EventHandler(mainForm.OnSelectedFilterNodeChanged);
-                        mainForm.filterTree.ReloadLayouts();
-                        mainForm.filterTree.SelectedFilterNodeChanged += new EventHandler(mainForm.OnSelectedFilterNodeChanged);
+                        // Reload the filter trees
+                        mainForm.ReloadFilterLayouts();
 
                         // Update the new active filter tree selection. Don't clear a search though.
                         if (!mainForm.gridControl.IsSearchActive)
                         {
-                            mainForm.gridControl.ActiveFilterNode = mainForm.filterTree.SelectedFilterNode;
+                            mainForm.gridControl.ActiveFilterNode = mainForm.SelectedFilterNode();
                         }
 
                         // If a node moved, it could now be inheriting different settings, so we have to force the columns to reload.
@@ -156,11 +154,11 @@ namespace ShipWorks
                         // changes to definitions and such are reported as IsLayoutDirty
                         foreach (FilterEntity filter in FilterLayoutContext.Current.RefreshFilters())
                         {
-                            mainForm.filterTree.UpdateFilter(filter);
+                            mainForm.UpdateFilter(filter);    
                         }
 
                         // Ensure the filter tree is showing up-to-date counts
-                        mainForm.filterTree.UpdateFilterCounts();
+                        mainForm.UpdateFilterCounts();
 
                         // Ensure the grids are up to date
                         if (forceReload)
@@ -207,13 +205,13 @@ namespace ShipWorks
                 base.FinishHeartbeat();
 
                 // If the filter tree is showing some spinning, go ahead and have it update as their may be new counts loaded by now
-                if (mainForm.filterTree.HasCalculatingNodes())
+                if (mainForm.FiltersHaveCalculatingNodes())
                 {
-                    mainForm.filterTree.UpdateFilterCounts();
+                    mainForm.UpdateFilterCounts();
                 }
 
                 // If the filter tree is showing some spinning, then loop back around so we can get the updated non-spinning counts as soon as possible
-                if (mainForm.filterTree.HasCalculatingNodes())
+                if (mainForm.FiltersHaveCalculatingNodes())
                 {
                     log.DebugFormat("[Heartbeat] Forcing reloop due to spinning filters");
 

@@ -600,8 +600,8 @@ namespace ShipWorks
             gridControl.InitializeForTarget(FilterTarget.Orders, contextMenuOrderGrid, contextOrderCopy);
             gridControl.InitializeForTarget(FilterTarget.Customers, contextMenuCustomerGrid, contextCustomerCopy);
 
-            filterTree.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers);
-            filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+            // Initialize any filter trees
+            InitializeFilterTrees(user);
 
             // Update the custom actions UI.  Has to come before applying the layout, so the QAT can pickup the buttons
             UpdateCustomButtonsActionsUI();
@@ -644,6 +644,15 @@ namespace ShipWorks
             {
                 ShowDownloadProgress();
             }
+        }
+
+        private void InitializeFilterTrees(UserEntity user)
+        {
+            orderFilterTree.LoadLayouts(FilterTarget.Orders);
+            orderFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+
+            customerFilterTree.LoadLayouts(FilterTarget.Customers);
+            customerFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
         }
 
         /// <summary>
@@ -832,7 +841,9 @@ namespace ShipWorks
             // Grid has to be cleared first - otherwise the current settings will be saved in response to the filtertree clearing,
             // and notifying the grid that the selected filter changed.
             gridControl.Reset();
-            filterTree.Clear();
+
+            // Clear Filter Trees
+            ClearFilterTrees();
 
             ribbon.Tabs.Clear();
             ribbon.ToolBar = null;
@@ -848,6 +859,12 @@ namespace ShipWorks
             Focus();
 
             log.InfoFormat("UI hidden");
+        }
+
+        private void ClearFilterTrees()
+        {
+            orderFilterTree.Clear();
+            customerFilterTree.Clear();
         }
 
         /// <summary>
@@ -892,7 +909,7 @@ namespace ShipWorks
             panelDockingArea.Visible = true;
 
             // Make the filter tree
-            filterTree.Focus();
+            orderFilterTree.Focus();
         }
 
         /// <summary>
@@ -1000,7 +1017,7 @@ namespace ShipWorks
             settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
 
             // Save the filter expand collapse state
-            settings.FilterExpandedFolders = filterTree.GetFolderState().GetState();
+            settings.FilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
 
             // Save the last active filter
             if (gridControl.IsSearchActive)
@@ -1152,7 +1169,6 @@ namespace ShipWorks
         /// </summary>
         private void PrepareEditionManagedUI()
         {
-            editionGuiHelper.RegisterElement(meuItemNewFilter, EditionFeature.FilterLimit, () => FilterLayoutContext.Current == null ? 0 : FilterLayoutContext.Current.GetTopLevelFilterCount());
             editionGuiHelper.RegisterElement(contextCustomerNewOrder, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonNewOrder, EditionFeature.AddOrderCustomer);
             editionGuiHelper.RegisterElement(buttonNewCustomer, EditionFeature.AddOrderCustomer);
@@ -1936,6 +1952,102 @@ namespace ShipWorks
         #region Filtering
 
         /// <summary>
+        ///  Update filter tree fitler counts
+        /// </summary>
+        public void UpdateFilterCounts()
+        {
+            orderFilterTree.UpdateFilterCounts();
+            customerFilterTree.UpdateFilterCounts();
+        }
+
+        /// <summary>
+        ///  Reload filter tree layouts
+        /// </summary>
+        public void ReloadFilterLayouts()
+        {
+            orderFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
+            customerFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
+
+            orderFilterTree.ReloadLayouts();
+            customerFilterTree.ReloadLayouts();
+
+            customerFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+            orderFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+        }
+
+        /// <summary>
+        ///  Return the currently selected filter tree node of the visible window.
+        /// </summary>
+        public FilterNodeEntity SelectedFilterNode()
+        {
+            if (dockableWindowOrderFilters.Visible && dockableWindowOrderFilters.IsOpen)
+            {
+                return orderFilterTree.SelectedFilterNode;
+            }
+            else
+            {
+                return customerFilterTree.SelectedFilterNode;
+            }
+        }
+
+        /// <summary>
+        /// Update the filter in the appropriate filter tree.
+        /// </summary>
+        public void UpdateFilter(FilterEntity filter)
+        {
+            if (filter.FilterTarget == (int)FilterTarget.Orders)
+            {
+                orderFilterTree.UpdateFilter(filter);
+            }
+            else
+            {
+                customerFilterTree.UpdateFilter(filter);
+            }
+        }
+
+        /// <summary>
+        /// Returns true if any filter tree has calculating nodes
+        /// </summary>
+        /// <returns></returns>
+        public bool FiltersHaveCalculatingNodes()
+        {
+            return orderFilterTree.HasCalculatingNodes() || customerFilterTree.HasCalculatingNodes();
+        }
+
+        /// <summary>
+        /// Called when one of the filter windows gets displayed.  It then brings focus to the correct filter.
+        /// </summary>
+        void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
+        {
+            // Get the dockable window so that we can get the filter tree
+            DockControl dockableWindowFilters = (DockableWindow)sender;
+            FilterTree currentFilterTree = (FilterTree)dockableWindowFilters.Controls[0];
+
+            // If we are switching from order to/from customer and there was a custom search going,
+            // we need to cancel out of it so we don't crash.
+            if (gridControl.IsSearchActive)
+            {
+                gridControl.CancelSearch();
+            }
+
+            // We only want to refresh if this window is visible, no search, and not exiting the app (user IS logged in)
+            if (dockableWindowFilters.Visible && dockableWindowFilters.IsOpen && 
+                currentFilterTree.ActiveSearchNode == null && UserSession.IsLoggedOn)
+            {
+                // If no filter node is selected, select the first one.
+                if (currentFilterTree.SelectedFilterNodeID == 0)
+                {
+                    currentFilterTree.SelectFirstNode();
+                }
+                else
+                {
+                    // There is a selcted node, force a refresh of the UI
+                    OnSelectedFilterNodeChanged(currentFilterTree, null);
+                }
+            }
+        }
+
+        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)
@@ -1944,7 +2056,7 @@ namespace ShipWorks
             searchRestoreFilterNodeID = 0;
 
             // Update the grid to show the new node
-            gridControl.ActiveFilterNode = filterTree.SelectedFilterNode;
+            gridControl.ActiveFilterNode = ((FilterTree)sender).SelectedFilterNode;
 
             // Could be changing to a Null node selection due to logging off.  If that's the case, we don't have to 
             // update UI, b\c its already blank.
@@ -1987,26 +2099,26 @@ namespace ShipWorks
         {
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = filterTree.SelectedFilterNodeID;
+                searchRestoreFilterNodeID = orderFilterTree.SelectedFilterNodeID;
 
-                filterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
+                orderFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
 
-                filterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                filterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
+                orderFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
+                orderFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
 
-                filterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                orderFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
             }
             else
             {
                 // Restore the previously selected node before search started
                 if (searchRestoreFilterNodeID != 0)
                 {
-                    filterTree.SelectedFilterNodeID = searchRestoreFilterNodeID;
+                    orderFilterTree.SelectedFilterNodeID = searchRestoreFilterNodeID;
                 }
 
                 searchRestoreFilterNodeID = 0;
 
-                filterTree.ActiveSearchNode = null;
+                orderFilterTree.ActiveSearchNode = null;
             }
 
             UpdateSelectionDependentUI();
@@ -2039,12 +2151,12 @@ namespace ShipWorks
             }
 
             // Select it
-            filterTree.SelectedFilterNodeID = initialID;
+            orderFilterTree.SelectedFilterNodeID = initialID;
 
             // If there is nothing selected, that doesn't exist anymore
-            if (filterTree.SelectedFilterNode == null)
+            if (orderFilterTree.SelectedFilterNode == null)
             {
-                filterTree.SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
+                orderFilterTree.SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
             }
         }
 
@@ -2053,84 +2165,9 @@ namespace ShipWorks
         /// </summary>
         private void OnManageFilters(object sender, EventArgs e)
         {
-            using (FilterOrganizerDlg dlg = new FilterOrganizerDlg(filterTree.SelectedFilterNode, filterTree.GetFolderState()))
+            using (FilterOrganizerDlg dlg = new FilterOrganizerDlg(orderFilterTree.SelectedFilterNode, orderFilterTree.GetFolderState()))
             {
                 dlg.ShowDialog(this);
-            }
-        }
-
-        /// <summary>
-        /// Context menu for the filter tree is opening
-        /// </summary>
-        private void OnFilterTreeContextMenuOpening(object sender, CancelEventArgs e)
-        {
-            bool filtersPermission = UserSession.Security.HasPermission(PermissionType.ManageFilters);
-            bool filterSelected = filterTree.SelectedFilterNode != null;
-            bool myFilter = filterSelected ? FilterHelper.IsMyFilter(filterTree.SelectedFilterNode) : false;
-
-            menuItemEditFilter.Enabled = filterSelected;
-            menuItemEditFilter.Available = filtersPermission || myFilter;
-
-            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(filterTree.SelectedFilterNode.FilterID))
-            {
-                menuItemEditFilter.Available = false;
-            }
-
-            menuItemEditFilterSep.Available = menuItemEditFilter.Available;
-        }
-
-        /// <summary>
-        /// Edit the selected filter or folder, if any
-        /// </summary>
-        private void OnEditFilter(object sender, EventArgs e)
-        {
-            FilterEditingResult result = FilterEditingService.EditFilter(filterTree.SelectedFilterNode, this);
-
-            if (result == FilterEditingResult.OK)
-            {
-                filterTree.UpdateFilter(filterTree.SelectedFilterNode.Filter);
-            }
-        }
-
-        /// <summary>
-        /// Create a new filter, based on the current selection
-        /// </summary>
-        private void OnNewFilter(object sender, EventArgs e)
-        {
-            CreateFilter(false, (filterTree.SelectedLocation != null) ? filterTree.SelectedLocation.ParentNode : null);
-        }
-
-        /// <summary>
-        /// Create a new filter folder, based on the current selection
-        /// </summary>
-        private void OnNewFolder(object sender, EventArgs e)
-        {
-            CreateFilter(true, (filterTree.SelectedLocation != null) ? filterTree.SelectedLocation.ParentNode : null);
-        }
-
-        /// <summary>
-        /// Initiate the creation of a new filter or folder
-        /// </summary>
-        private void CreateFilter(bool isFolder, FilterNodeEntity parent)
-        {
-            // Creating a filter can create more than one node (if the parent is linked), but 
-            // this one will be the one that should be selected
-            FilterNodeEntity primaryNode;
-
-            FilterEditingResult result = FilterEditingService.NewFilter(
-                isFolder,
-                parent,
-                filterTree.GetFolderState(),
-                this,
-                out primaryNode);
-
-            if (result == FilterEditingResult.OK)
-            {
-                filterTree.ReloadLayouts();
-                filterTree.SelectedFilterNode = primaryNode;
-
-                // # of filters present can effect edition issues
-                editionGuiHelper.UpdateUI();
             }
         }
 
@@ -2426,7 +2463,7 @@ namespace ShipWorks
             }
 
             // Ensure the customer grid is active
-            filterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Customers).FilterNode;
+            customerFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Customers).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateCustomerLookupDefinition(order.CustomerID));
         }
 
@@ -2442,7 +2479,7 @@ namespace ShipWorks
             }
 
             // Ensure the customer grid is active
-            filterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(customer));
         }
 
@@ -2526,7 +2563,7 @@ namespace ShipWorks
         private void LookupOrder(long orderID)
         {
             // Ensure the order grid is active
-            filterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
         }
 
@@ -2540,7 +2577,7 @@ namespace ShipWorks
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
                     // Ensure the customer grid is active
-                    filterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Customers).FilterNode;
+                    customerFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Customers).FilterNode;
                     gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateCustomerLookupDefinition(dlg.CustomerID));
                 }
             }
@@ -2884,7 +2921,7 @@ namespace ShipWorks
             }
             else
             {
-                filterNode = filterTree.SelectedFilterNode;
+                filterNode = orderFilterTree.SelectedFilterNode;
             }
 
             if (filterNode == null)

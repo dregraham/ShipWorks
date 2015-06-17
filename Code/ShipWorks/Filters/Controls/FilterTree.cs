@@ -27,6 +27,7 @@ using ShipWorks.UI;
 using System.Linq;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
+using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
 
 namespace ShipWorks.Filters.Controls
@@ -43,7 +44,7 @@ namespace ShipWorks.Filters.Controls
         Dictionary<FilterNodeEntity, FilterTreeGridRow> nodeOwnerMap = new Dictionary<FilterNodeEntity, FilterTreeGridRow>();
 
         // Used to make sure something is always selected. WhitespaceClickBehavior is set to None, but there is a bug (feature?) of the current grid that if you
-        // collapse a parent folder when a child is selected, that child selection get's cleared.  If that gets fixed, we can remove this.
+        // collapse a parent folder when a child is selected, that child selection get's cleared.  If that gets fixed, we can remove 
         FilterTreeGridRow lastSelectedRow;
 
         // Indiciates if the "My Filters" is always shown, or only shown if it has contents
@@ -82,12 +83,26 @@ namespace ShipWorks.Filters.Controls
         // Event raised when a drag-drop operation has taken place
         public event FilterDragDropCompleteEventHandler DragDropComplete;
 
+        // Context menu and items
+        private ContextMenuStrip contextMenuFilterTree;
+        private ToolStripMenuItem menuItemEditFilter;
+        private ToolStripSeparator menuItemEditFilterSep;
+        private ToolStripMenuItem menuItemNewFilter;
+        private ToolStripMenuItem menuItemNewFolder;
+        private ToolStripSeparator toolStripSeparator;
+        private ToolStripMenuItem menuItemOrganizeFilters;
+
+        // Edition helper for UI updates
+        private EditionGuiHelper editionGuiHelper;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public FilterTree()
         {
             InitializeComponent();
+
+            InitializeContextMenu();
 
             sandGrid.PrimaryGrid.NewRowType = typeof(FilterTreeGridRow);
 
@@ -98,6 +113,162 @@ namespace ShipWorks.Filters.Controls
             UpdateQuickFilterDisplay();
 
             filterEditedToken = Messenger.Current.Handle<FilterNodeEditedMessage>(this, HandleFilterEdited);
+        }
+
+        /// <summary>
+        /// Initialize the filter tree's context menu
+        /// </summary>
+        private void InitializeContextMenu()
+        {
+            editionGuiHelper = new ShipWorks.Editions.EditionGuiHelper(this.components);
+            contextMenuFilterTree = new System.Windows.Forms.ContextMenuStrip(components);
+            menuItemEditFilter = new System.Windows.Forms.ToolStripMenuItem();
+            menuItemEditFilterSep = new System.Windows.Forms.ToolStripSeparator();
+            menuItemNewFilter = new System.Windows.Forms.ToolStripMenuItem();
+            menuItemNewFolder = new System.Windows.Forms.ToolStripMenuItem();
+            toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            menuItemOrganizeFilters = new System.Windows.Forms.ToolStripMenuItem();
+
+            ContextMenuStrip = contextMenuFilterTree;
+
+            contextMenuFilterTree.Font = new System.Drawing.Font("Segoe UI", 9F);
+            contextMenuFilterTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+                menuItemEditFilter,
+                menuItemEditFilterSep,
+                menuItemNewFilter,
+                menuItemNewFolder,
+                toolStripSeparator,
+                menuItemOrganizeFilters});
+            contextMenuFilterTree.Name = "contextMenuCustomerFilterTree";
+            contextMenuFilterTree.Size = new System.Drawing.Size(152, 104);
+            contextMenuFilterTree.Opening += new System.ComponentModel.CancelEventHandler(OnFilterTreeContextMenuOpening);
+
+            // menuItemEditFilter
+            menuItemEditFilter.Image = global::ShipWorks.Properties.Resources.edit16;
+            menuItemEditFilter.Name = "menuItemEditFilter";
+            menuItemEditFilter.Size = new System.Drawing.Size(151, 22);
+            menuItemEditFilter.Text = "Edit";
+            menuItemEditFilter.Click += new System.EventHandler(OnEditFilter);
+
+            // menuItemEditFilterSep
+            menuItemEditFilterSep.Name = "menuItemEditFilterSep";
+            menuItemEditFilterSep.Size = new System.Drawing.Size(148, 6);
+            
+            // meuItemNewFilter
+            menuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
+            menuItemNewFilter.Name = "meuItemNewFilter";
+            menuItemNewFilter.Size = new System.Drawing.Size(151, 22);
+            menuItemNewFilter.Text = "New Filter";
+            menuItemNewFilter.Click += new System.EventHandler(OnNewFilter);
+             
+            // menuItemNewFolder
+            menuItemNewFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
+            menuItemNewFolder.Name = "menuItemNewFolder";
+            menuItemNewFolder.Size = new System.Drawing.Size(151, 22);
+            menuItemNewFolder.Text = "New Folder";
+            menuItemNewFolder.Click += new System.EventHandler(OnNewFolder);
+            
+            // toolStripSeparator1
+            toolStripSeparator.Name = "toolStripSeparator1";
+            toolStripSeparator.Size = new System.Drawing.Size(148, 6);
+            
+            // menuItemOrganizeFilters
+            menuItemOrganizeFilters.Image = global::ShipWorks.Properties.Resources.funnel_properties_16;
+            menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
+            menuItemOrganizeFilters.Size = new System.Drawing.Size(151, 22);
+            menuItemOrganizeFilters.Text = "Manage Filters";
+            menuItemOrganizeFilters.Click += new System.EventHandler(OnManageFilters);
+
+            editionGuiHelper.RegisterElement(menuItemNewFilter, EditionFeature.FilterLimit, () => FilterLayoutContext.Current == null ? 0 : FilterLayoutContext.Current.GetTopLevelFilterCount());
+        }
+
+        /// <summary>
+        /// Context menu for the filter tree is opening
+        /// </summary>
+        private void OnFilterTreeContextMenuOpening(object sender, CancelEventArgs e)
+        {
+            // Find the filter tree for the calling menu item
+            FilterTree currentFilterTree = (FilterTree)((ContextMenuStrip)sender).SourceControl;
+
+            bool filtersPermission = UserSession.Security.HasPermission(PermissionType.ManageFilters);
+            bool filterSelected = currentFilterTree.SelectedFilterNode != null;
+            bool myFilter = filterSelected ? FilterHelper.IsMyFilter(currentFilterTree.SelectedFilterNode) : false;
+
+            menuItemEditFilter.Enabled = filterSelected;
+            menuItemEditFilter.Available = filtersPermission || myFilter;
+
+            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(currentFilterTree.SelectedFilterNode.FilterID))
+            {
+                menuItemEditFilter.Available = false;
+            }
+
+            menuItemEditFilterSep.Available = menuItemEditFilter.Available;
+        }
+
+        /// <summary>
+        /// Edit the selected filter or folder, if any
+        /// </summary>
+        private void OnEditFilter(object sender, EventArgs e)
+        {
+            FilterEditingResult result = FilterEditingService.EditFilter(SelectedFilterNode, this);
+
+            if (result == FilterEditingResult.OK)
+            {
+                UpdateFilter(SelectedFilterNode.Filter);
+            }
+        }
+
+        /// <summary>
+        /// Create a new filter, based on the current selection
+        /// </summary>
+        private void OnNewFilter(object sender, EventArgs e)
+        {
+            CreateFilter(false, (SelectedLocation != null) ? SelectedLocation.ParentNode : null);
+        }
+
+        /// <summary>
+        /// Create a new filter folder, based on the current selection
+        /// </summary>
+        private void OnNewFolder(object sender, EventArgs e)
+        {
+            CreateFilter(true, (SelectedLocation != null) ? SelectedLocation.ParentNode : null);
+        }
+
+        /// <summary>
+        /// Initiate the creation of a new filter or folder
+        /// </summary>
+        private void CreateFilter(bool isFolder, FilterNodeEntity parent)
+        {
+            // Creating a filter can create more than one node (if the parent is linked), but 
+            // this one will be the one that should be selected
+            FilterNodeEntity primaryNode;
+
+            FilterEditingResult result = FilterEditingService.NewFilter(
+                isFolder,
+                parent,
+                GetFolderState(),
+                this,
+                out primaryNode);
+
+            if (result == FilterEditingResult.OK)
+            {
+                ReloadLayouts();
+                SelectedFilterNode = primaryNode;
+
+                // # of filters present can effect edition issues
+                editionGuiHelper.UpdateUI();
+            }
+        }
+
+        /// <summary>
+        /// Open the filter organizer
+        /// </summary>
+        private void OnManageFilters(object sender, EventArgs e)
+        {
+            using (FilterOrganizerDlg dlg = new FilterOrganizerDlg(SelectedFilterNode, GetFolderState()))
+            {
+                dlg.ShowDialog(this);
+            }
         }
 
         /// <summary>
@@ -274,7 +445,7 @@ namespace ShipWorks.Filters.Controls
             get
             {
                 // Seen cases where for some reason we arent' created yet, and row heights arent set
-                IntPtr ensureCreated = this.Handle;
+                IntPtr ensureCreated = Handle;
 
                 List<SandGridTreeRow> rows = sandGrid.GetAllRows();
 
@@ -345,7 +516,7 @@ namespace ShipWorks.Filters.Controls
             FolderExpansionState state = GetFolderState();
 
             // Don't listen to layout changes while we reload
-            sandGrid.SelectionChanged -= new SelectionChangedEventHandler(this.OnGridSelectionChanged);
+            sandGrid.SelectionChanged -= new SelectionChangedEventHandler(OnGridSelectionChanged);
 
             // We have to reload the context
             layoutContext.Reload();
@@ -360,7 +531,7 @@ namespace ShipWorks.Filters.Controls
             SelectedFilterNodeID = selectedNodeID;
 
             // Start listening for selection changes again
-            sandGrid.SelectionChanged += new SelectionChangedEventHandler(this.OnGridSelectionChanged);
+            sandGrid.SelectionChanged += new SelectionChangedEventHandler(OnGridSelectionChanged);
 
             // If its not available anymore, we wont have succesfully selected it
             if (SelectedFilterNodeID != selectedNodeID)
@@ -383,7 +554,7 @@ namespace ShipWorks.Filters.Controls
             }
 
             // We will need this
-            this.layoutContext = FilterLayoutContext.Current;
+            layoutContext = FilterLayoutContext.Current;
             this.targets = targets;
 
             // Load the layout for each target
