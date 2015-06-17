@@ -156,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // only shorten so long as we know they're still using long account numbers.
             if (descriptionBase.Length == 36)
             {
-                descriptionBase = "Express1";
+                descriptionBase = String.Empty;
             }
 
             StringBuilder description = new StringBuilder(descriptionBase);
