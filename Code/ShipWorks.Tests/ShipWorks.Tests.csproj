@@ -183,9 +183,7 @@
     <Compile Include="Shipping\Carriers\BestRate\BrokerExceptionSeverityLevelComparerTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\CounterRatesOriginAddressValidatorTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Fake\FakeExceptionHandlerBroker.cs" />
-    <Compile Include="Shipping\Carriers\BestRate\Fake\FakeRateFootnoteControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Shipping\Carriers\BestRate\Fake\FakeRateFootnoteControl.cs" />
     <Compile Include="Shipping\Carriers\BestRate\Footnote\BrokerExceptionsFootnoteFactoryTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateExpress1PromotionFootnoteFilterTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateFilterFactoryTest.cs" />
