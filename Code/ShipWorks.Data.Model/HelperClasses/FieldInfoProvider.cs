@@ -2635,6 +2635,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			base.AddElementFieldInfo("UspsAccountEntity", "UspsAccountID", typeof(System.Int64), true, false, true, false,  (int)UspsAccountFieldIndex.UspsAccountID, 0, 0, 19);
 			base.AddElementFieldInfo("UspsAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)UspsAccountFieldIndex.RowVersion, 0, 0, 0);
+			base.AddElementFieldInfo("UspsAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Description, 50, 0, 0);
 			base.AddElementFieldInfo("UspsAccountEntity", "Username", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Username, 50, 0, 0);
 			base.AddElementFieldInfo("UspsAccountEntity", "Password", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.Password, 100, 0, 0);
 			base.AddElementFieldInfo("UspsAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)UspsAccountFieldIndex.FirstName, 30, 0, 0);

@@ -64,7 +64,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Registration
             uspsAccount.Website = string.Empty;
 
             uspsAccount.CreatedDate = DateTime.UtcNow;
-            
+
+            uspsAccount.Description = UspsAccountManager.GetDefaultDescription(uspsAccount);
+
             // Persist the account entity to the database
             UspsAccountManager.SaveAccount(uspsAccount);
 

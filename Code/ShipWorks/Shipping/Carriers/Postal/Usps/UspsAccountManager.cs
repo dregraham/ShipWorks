@@ -145,21 +145,23 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public static string GetDefaultDescription(UspsAccountEntity account)
         {
-            string descriptionBase = account.UspsAccountID.ToString(CultureInfo.InvariantCulture);
-
             // Express1 uses terribly long account numbers
-            if (account.UspsReseller == (int)UspsResellerType.Express1)
+            if (account.UspsReseller != 1)
             {
-                // only shorten so long as we know they're still using long account numbers.
-                if (descriptionBase.Length == 36)
-                {
-                    descriptionBase = "Express1";
-                }
+                return account.Username;
+            }
+
+            string descriptionBase = account.Username;
+
+            // only shorten so long as we know they're still using long account numbers.
+            if (descriptionBase.Length == 36)
+            {
+                descriptionBase = "Express1";
             }
 
             StringBuilder description = new StringBuilder(descriptionBase);
 
-            if (account.Street1.Length > 0)
+            if (!string.IsNullOrEmpty(account.Street1))
             {
                 if (description.Length > 0)
                 {
@@ -169,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 description.Append(account.Street1);
             }
 
-            if (account.PostalCode.Length > 0)
+            if (!string.IsNullOrEmpty(account.PostalCode))
             {
                 if (description.Length > 0)
                 {
