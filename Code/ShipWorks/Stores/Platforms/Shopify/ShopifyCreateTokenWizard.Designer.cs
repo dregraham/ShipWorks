@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Stores.Platforms.Shopify
+﻿using ShipWorks.Common.Net;
+
+namespace ShipWorks.Stores.Platforms.Shopify
 {
     partial class ShopifyCreateTokenWizard
     {
@@ -35,7 +37,7 @@
             this.labelAddress = new System.Windows.Forms.Label();
             this.wizardPageAuthenticate = new ShipWorks.UI.Wizard.WizardPage();
             this.panelBrowser = new System.Windows.Forms.Panel();
-            this.webBrowser = new System.Windows.Forms.WebBrowser();
+            this.webBrowser = new ExtendedWebBrowser();
             this.wizardPageSuccess = new ShipWorks.UI.Wizard.WizardPage();
             this.imageStatus = new System.Windows.Forms.PictureBox();
             this.labelStatus = new System.Windows.Forms.Label();
@@ -63,7 +65,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageShopAddress);
+            this.mainPanel.Controls.Add(this.wizardPageAuthenticate);
             this.mainPanel.Size = new System.Drawing.Size(733, 466);
             // 
             // etchBottom
@@ -139,7 +141,7 @@
             this.wizardPageAuthenticate.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageAuthenticate.Location = new System.Drawing.Point(0, 0);
             this.wizardPageAuthenticate.Name = "wizardPageAuthenticate";
-            this.wizardPageAuthenticate.Size = new System.Drawing.Size(756, 772);
+            this.wizardPageAuthenticate.Size = new System.Drawing.Size(733, 466);
             this.wizardPageAuthenticate.TabIndex = 0;
             this.wizardPageAuthenticate.Title = "Login to Shopify";
             this.wizardPageAuthenticate.SteppingInto += new System.EventHandler<ShipWorks.UI.Wizard.WizardSteppingIntoEventArgs>(this.OnSteppingIntoAuthenticatePage);
@@ -154,7 +156,7 @@
             this.panelBrowser.Controls.Add(this.webBrowser);
             this.panelBrowser.Location = new System.Drawing.Point(23, 7);
             this.panelBrowser.Name = "panelBrowser";
-            this.panelBrowser.Size = new System.Drawing.Size(711, 751);
+            this.panelBrowser.Size = new System.Drawing.Size(688, 445);
             this.panelBrowser.TabIndex = 1;
             // 
             // webBrowser
@@ -164,7 +166,7 @@
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
             this.webBrowser.ScriptErrorsSuppressed = true;
-            this.webBrowser.Size = new System.Drawing.Size(707, 747);
+            this.webBrowser.Size = new System.Drawing.Size(684, 441);
             this.webBrowser.TabIndex = 0;
             this.webBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.OnWebBrowserNavigated);
             // 
@@ -239,7 +241,7 @@
         private System.Windows.Forms.TextBox shopUrlName;
         private System.Windows.Forms.Label labelAddress;
         private System.Windows.Forms.Panel panelBrowser;
-        private System.Windows.Forms.WebBrowser webBrowser;
+        private ExtendedWebBrowser webBrowser;
         private System.Windows.Forms.Label labelStatus;
         private System.Windows.Forms.PictureBox imageStatus;
         private System.Windows.Forms.Label label1;
