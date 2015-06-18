@@ -155,7 +155,21 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Download
         private NeweggResponse SubmitRequest(string requestBody)
         {
             // API URL depends on which marketplace the seller selected 
-            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
+            string marketplace = "";
+
+            switch (credentials.Channel)
+            {
+                case NeweggChannelType.US:
+                    break;
+                case NeweggChannelType.Business:
+                    marketplace = "/b2b";
+                    break;
+                case NeweggChannelType.Canada:
+                    marketplace = "/can";
+                    break;
+                default:
+                    break;
+            }
 
             // Format our request URL with the value of the seller ID and configure the request
             string formattedUrl = string.Format(RequestUrl, marketplace, credentials.SellerId);

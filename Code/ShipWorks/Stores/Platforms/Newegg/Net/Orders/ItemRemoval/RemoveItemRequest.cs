@@ -56,8 +56,22 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
                 throw new ArgumentNullException("The order parameter cannot not be null");
             }
 
-                        // API URL depends on which marketplace the seller selected 
-            string marketplace = (credentials.Channel == NeweggChannelType.Business) ? "/b2b" : "";
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = "";
+
+            switch (credentials.Channel)
+            {
+                case NeweggChannelType.US:
+                    break;
+                case NeweggChannelType.Business:
+                    marketplace = "/b2b";
+                    break;
+                case NeweggChannelType.Canada:
+                    marketplace = "/can";
+                    break;
+                default:
+                    break;
+            }
 
             string formattedUrl = string.Format(RequestUrl, marketplace, order.OrderNumber, credentials.SellerId);
 

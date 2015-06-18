@@ -30,7 +30,6 @@ namespace ShipWorks.Stores.Platforms.Newegg.Enums
         /// NewEgg for Canada
         /// Not Yet Supported U
         /// </summary>
-        [Hidden]
         [Description("Newegg Canada Marketplace")]
         Canada = 2
     }
