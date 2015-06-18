@@ -135,7 +135,6 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             List<WizardPage> wizardPages = new List<WizardPage>()
             {
-                new NeweggMarketplacePage(),
                 new NeweggAccountPage(),
                 new NeweggDownloadCriteriaPage()
             };
