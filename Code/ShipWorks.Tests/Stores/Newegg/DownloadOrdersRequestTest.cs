@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             fortyTwoOrdersRequest = new Mocked.MockedNeweggRequest(fortyTwoOrdersResponseXml);
             twoHundredOrdersRequest = new Mocked.MockedNeweggRequest(twoHundredOrdersResponseXml);
 
-            credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.Marketplace);
+            credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.US);
         }
 
         private string GetEmbeddedResourceXml(string embeddedResourceName)

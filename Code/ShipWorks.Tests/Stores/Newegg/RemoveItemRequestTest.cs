@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         [TestInitialize]
         public void Initialize()
         {
-            credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.Marketplace);
+            credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.US);
             orderToRemoveItemsFrom = new Order { OrderNumber = orderNumberToRemoveFrom };
             itemToRemove = new Item { SellerPartNumber = sellerPartNumberToRemove };
             

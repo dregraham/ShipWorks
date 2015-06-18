@@ -35,9 +35,10 @@
             // lblEnterCredentials
             // 
             this.lblEnterCredentials.AutoSize = true;
-            this.lblEnterCredentials.Location = new System.Drawing.Point(3, 6);
+            this.lblEnterCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold);
+            this.lblEnterCredentials.Location = new System.Drawing.Point(16, 10);
             this.lblEnterCredentials.Name = "lblEnterCredentials";
-            this.lblEnterCredentials.Size = new System.Drawing.Size(243, 13);
+            this.lblEnterCredentials.Size = new System.Drawing.Size(276, 13);
             this.lblEnterCredentials.TabIndex = 10;
             this.lblEnterCredentials.Text = "What type of NewEgg store do you want to add?";
             // 
@@ -56,7 +57,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.marketplace);
             this.Controls.Add(this.lblEnterCredentials);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "NeweggStoreMarketplaceControl";
             this.Size = new System.Drawing.Size(375, 114);
             this.ResumeLayout(false);

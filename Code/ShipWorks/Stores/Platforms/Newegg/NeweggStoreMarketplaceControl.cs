@@ -10,6 +10,7 @@ using ShipWorks.Stores.Platforms.Newegg.Enums;
 using Interapptive.Shared.Business;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -25,10 +26,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             InitializeComponent();
 
-            marketplace.Items.Add(NeweggChannelType.Marketplace);
-            marketplace.Items.Add(NeweggChannelType.Business);
-            
-            marketplace.SelectedItem = NeweggChannelType.Marketplace;
+            EnumHelper.BindComboBox<NeweggChannelType>(marketplace);
         }
 
         /// <summary>
@@ -42,7 +40,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
                 throw new ArgumentException("NewEggStoreEntity expected.", "store");
             }
 
-            saveStore.Channel = (int)Enum.Parse(typeof(NeweggChannelType),marketplace.SelectedItem.ToString());
+            saveStore.Channel = (int)marketplace.SelectedValue;
 
             return true;
         }

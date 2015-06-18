@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.ComponentModel;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Enums
 {
@@ -16,13 +17,21 @@ namespace ShipWorks.Stores.Platforms.Newegg.Enums
         /// <summary>
         /// NewEgg Markplace
         /// </summary>
-        [Description("Unavailable")]
-        Marketplace = 0,
+        [Description("Newegg US Marketplace")]
+        US = 0,
 
         /// <summary>
         /// NewEgg for Business
         /// </summary>
-        [Description("Unavailable")]
-        Business = 1  
+        [Description("Newegg Business Marketplace")]
+        Business = 1,
+
+        /// <summary>
+        /// NewEgg for Canada
+        /// Not Yet Supported U
+        /// </summary>
+        [Hidden]
+        [Description("Newegg Canada Marketplace")]
+        Canada = 2
     }
 }

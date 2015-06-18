@@ -46,7 +46,7 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
 
         public StatusResult GetStatus()
         {
-            Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.Marketplace);
+            Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             return SubmitRequest(credentials, new Dictionary<string, object>()).Result as StatusResult;
         }
 

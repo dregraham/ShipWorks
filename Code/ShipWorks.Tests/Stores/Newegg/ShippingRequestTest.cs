@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         [TestInitialize]
         public void Initialize()
         {
-            credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.Marketplace);
+            credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.US);
             InitializeShipment();
 
             string errorResponse = @"<?xml version=""1.0"" encoding=""utf-8""?>

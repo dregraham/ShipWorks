@@ -74,7 +74,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             store.SellerID = string.Empty;
             store.SecretKey = string.Empty;
             store.ExcludeFulfilledByNewegg = false;
-            store.Channel = (int)NeweggChannelType.Marketplace;
+            store.Channel = (int)NeweggChannelType.US;
+
+            
 
             return store;
         }
