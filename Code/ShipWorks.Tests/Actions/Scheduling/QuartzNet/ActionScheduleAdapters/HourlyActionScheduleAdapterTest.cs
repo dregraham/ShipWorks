@@ -44,5 +44,41 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
             Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
+
+        [TestMethod]
+        public void FiresAtSpecifiedFrequencyWhenDaylightSavingTimeEnds()
+        {
+            var schedule = new HourlyActionSchedule
+            {
+                StartDateTimeInUtc = DateTime.Parse("10/31/2015 6:00:00 PM").ToUniversalTime(),
+                FrequencyInHours = 3
+            };
+
+            var fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
+
+            var intervals = fireTimes.Skip(1)
+                .Zip(fireTimes, (x, x0) => x - x0)
+                .ToArray();
+
+            Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
+        }
+
+        [TestMethod]
+        public void FiresAtSpecifiedFrequencyWhenDaylightSavingTimeStarts()
+        {
+            var schedule = new HourlyActionSchedule
+            {
+                StartDateTimeInUtc = DateTime.Parse("3/7/2015 6:00:00 PM").ToUniversalTime(),
+                FrequencyInHours = 3
+            };
+
+            var fireTimes = schedule.ComputeFireTimes(target, 5).ToArray();
+
+            var intervals = fireTimes.Skip(1)
+                .Zip(fireTimes, (x, x0) => x - x0)
+                .ToArray();
+
+            Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
+        }
     }
 }
