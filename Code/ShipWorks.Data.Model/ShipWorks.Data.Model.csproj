@@ -136,7 +136,6 @@
     <Compile Include="Custom\EntityClasses\LabelSheetEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShipmentEntity.cs" />
-    <Compile Include="Custom\EntityClasses\UspsAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\StoreEntity.cs" />
     <Compile Include="Custom\EntityClasses\TemplateEntity.cs" />
     <Compile Include="Custom\EntityClasses\TemplateFolderEntity.cs" />

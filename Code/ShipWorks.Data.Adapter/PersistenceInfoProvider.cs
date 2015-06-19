@@ -2783,29 +2783,30 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
 		{
-			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 22 );
+			base.AddElementMapping( "UspsAccountEntity", "ShipWorksLocal", @"dbo", "UspsAccount", 23 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "UspsAccountID", "UspsAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UspsAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Password", "Password", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "FirstName", "FirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "MiddleName", "MiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "LastName", "LastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Company", "Company", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 11 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Phone", "Phone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 15 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 16 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "MailingPostalCode", "MailingPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 18 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "UspsReseller", "UspsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 19 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
-			base.AddElementFieldMapping( "UspsAccountEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 21 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Username", "Username", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 3 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Password", "Password", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "FirstName", "FirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "MiddleName", "MiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "LastName", "LastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Company", "Company", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Phone", "Phone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 16 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 17 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 18 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "MailingPostalCode", "MailingPostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 19 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "UspsReseller", "UspsReseller", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 20 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "ContractType", "ContractType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 21 );
+			base.AddElementFieldMapping( "UspsAccountEntity", "CreatedDate", "CreatedDate", false, (int)SqlDbType.DateTime, 0, 0, 0, false, "", null, typeof(System.DateTime), 22 );
 		}
 		/// <summary>Inits UspsProfileEntity's mappings</summary>
 		private void InitUspsProfileEntityMappings()

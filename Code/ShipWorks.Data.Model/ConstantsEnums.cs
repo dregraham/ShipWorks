@@ -9489,6 +9489,8 @@ namespace ShipWorks.Data.Model
 		UspsAccountID,
 		///<summary>RowVersion. </summary>
 		RowVersion,
+		///<summary>Description. </summary>
+		Description,
 		///<summary>Username. </summary>
 		Username,
 		///<summary>Password. </summary>

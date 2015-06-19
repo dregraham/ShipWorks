@@ -4585,6 +4585,7 @@ CREATE TABLE [dbo].[UspsAccount]
 (
 [UspsAccountID] [bigint] NOT NULL IDENTITY(1052, 1000),
 [RowVersion] [timestamp] NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,

@@ -491,6 +491,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             UspsAccount.Username = accountUserName;
             UspsAccount.Password = encryptedPassword;
 
+            UspsAccount.Description = UspsAccountManager.GetDefaultDescription(UspsAccount);
+
             // Save the USPS account and use it to initialize the stamps info control
             UspsAccountManager.SaveAccount(UspsAccount);
 
