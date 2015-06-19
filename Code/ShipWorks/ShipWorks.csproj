@@ -529,9 +529,11 @@
     <Compile Include="AddressValidation\EntityGridAddressSelector.cs" />
     <Compile Include="AddressValidation\Predicates\ILimitResultRows.cs" />
     <Compile Include="AddressValidation\Predicates\IPredicateProvider.cs" />
-    <Compile Include="AddressValidation\Predicates\OrdersWithShipValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithErrorValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\OrdersWithPendingValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedErrorShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsForOrderPredicate.cs" />
-    <Compile Include="AddressValidation\Predicates\UnprocessedShipmentsWithShipValidationStatusPredicate.cs" />
+    <Compile Include="AddressValidation\Predicates\UnprocessedPendingShipmentsPredicate.cs" />
     <Compile Include="AddressValidation\StampsAddressValidationWebClient.cs" />
     <Compile Include="AddressValidation\ValidatedOrderShipAddress.cs" />
     <Compile Include="AddressValidation\ValidatedShipmentShipAddress.cs" />
@@ -11063,6 +11065,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

@@ -47,6 +47,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.RRDISAL, PostalServiceType.RrdIsal},
             {ServiceType.RRDEPKT, PostalServiceType.RrdEpsePacketService},
 			{ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
+            {ServiceType.DHLPE, PostalServiceType.DhlParcelExpedited},
             {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusExpedited},
             {ServiceType.DHLPPG, PostalServiceType.DhlParcelPlusGround},
             {ServiceType.DHLBPME, PostalServiceType.DhlBpmExpedited},

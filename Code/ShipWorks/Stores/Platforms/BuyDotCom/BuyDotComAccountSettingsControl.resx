@@ -120,7 +120,7 @@
   <data name="labelInstructions.Text" xml:space="preserve">
     <value>In order for Shipworks to connect with Buy.com you need FTP credentials.
 
-FTP credentials are seperate from your Buy.com marketplace account and need to be requested directly from the Buy.com merchant integration team at
+FTP credentials are separate from your Buy.com marketplace account and need to be requested directly from the Buy.com merchant integration team at
 
 Please include your Seller ID and Buy.com login email address in your request.
 </value>

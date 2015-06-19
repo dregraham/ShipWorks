@@ -6,25 +6,14 @@ namespace ShipWorks.AddressValidation.Predicates
     /// <summary>
     /// Get orders with a specified ship address validation status
     /// </summary>
-    public class UnprocessedShipmentsWithShipValidationStatusPredicate : IPredicateProvider, ILimitResultRows
+    public class OrdersWithPendingValidationStatusPredicate : IPredicateProvider, ILimitResultRows
     {
-        private readonly AddressValidationStatusType statusType;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public UnprocessedShipmentsWithShipValidationStatusPredicate(AddressValidationStatusType statusType)
-        {
-            this.statusType = statusType;
-        }
-
         /// <summary>
         /// Apply the logic to the predicate expression
         /// </summary>
         public void Apply(IPredicateExpression predicate)
         {
-            predicate.Add(ShipmentFields.ShipAddressValidationStatus == (int)statusType)
-                .AddWithAnd(ShipmentFields.Processed == false);
+            predicate.Add(OrderFields.ShipAddressValidationStatus == (int) AddressValidationStatusType.Pending);
         }
 
         /// <summary>

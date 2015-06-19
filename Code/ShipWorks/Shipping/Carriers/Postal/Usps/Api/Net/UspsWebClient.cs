@@ -486,40 +486,55 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 Address[] candidates;
                 StatusCodes statusCodes;
             	RateV17[] rates;
+                string badAddressMessage = null;
 
                 webService.OnlyLogOnMagicKeys = true;
 
-
                 try
                 {
-                    webService.CleanseAddress(
-                        GetCredentials(account, true), 
-                        ref address, 
-                        address.ZIPCode, 
-                        out addressMatch, 
-                        out cityStateZipOk, 
-                        out residentialIndicator, 
-                        out isPoBox, 
-                        out isPoBoxSpecified, 
-                        out candidates, 
-                        out statusCodes, 
-                        out rates);
+                    using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
+                    {
+                        webService.CleanseAddress(
+                            GetCredentials(account, true),
+                            ref address,
+                            null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
+                            out addressMatch,
+                            out cityStateZipOk,
+                            out residentialIndicator,
+                            out isPoBox,
+                            out isPoBoxSpecified,
+                            out candidates,
+                            out statusCodes,
+                            out rates);
+                    }
                 }
                 catch (SoapException ex)
                 {
                     log.Error(ex);
 
                     // Rethrow the exception, but filter out namespaces and information that isn't useful to customers
-                    string message = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
-                    message = Regex.Replace(message, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
+                    badAddressMessage = ex.Message.Replace("Invalid SOAP message due to XML Schema validation failure. ", string.Empty);
+                    badAddressMessage = Regex.Replace(badAddressMessage, @"http://stamps.com/xml/namespace/\d{4}/\d{1,2}/swsim/swsimv\d*:", string.Empty);
 
-                    throw new AddressValidationException(message, ex);
+                    return new UspsAddressValidationResults()
+                    {
+                        IsSuccessfulMatch = false,
+                        BadAddressMessage = badAddressMessage,
+                        Candidates = new List<Address>()
+                    };
                 }
                 catch (Exception ex)
                 {
                     log.Error(ex);
 
                     throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
+                }
+
+                if (!addressMatch)
+                {
+                    badAddressMessage = cityStateZipOk ?
+                        "City, State and ZIP Code are valid, but street address is not a match." :
+                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
                 }
 
                 return new UspsAddressValidationResults
@@ -529,7 +544,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     ResidentialIndicator = residentialIndicator,
                     IsPoBox = isPoBox,
                     MatchedAddress = address,
-                    Candidates = candidates.ToList()
+                    Candidates = candidates.ToList(),
+                    BadAddressMessage = badAddressMessage
                 };
             }
         }
@@ -885,8 +901,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         private void FixWebserviceAddresses(UspsAccountEntity account, ShipmentEntity shipment, out Address toAddress, out Address fromAddress)
         {
-
-            // If this is a return shipment, swap the to/from addresses
             // If this is a return shipment, swap the to/from addresses
             if (shipment.ReturnShipment)
             {
@@ -899,18 +913,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 toAddress = CleanseAddress(account, shipment.ShipPerson, shipment.Postal.Usps.RequireFullAddressValidation);
             }
 
-            if (shipment.ReturnShipment &&
-                !toAddress.AsAddressAdapter().IsDomesticCountry() &&
-                fromAddress.AsAddressAdapter().IsDomesticCountry())
+            if (shipment.ReturnShipment && !(toAddress.AsAddressAdapter().IsDomesticCountry() && fromAddress.AsAddressAdapter().IsDomesticCountry()))
             {
                 throw new UspsException("Return shipping labels can only be used to send packages to and from domestic addresses.");
             }
 
-
             // Per stamps - only send state for domestic - send province for Intl
-            if (!shipment.ShipPerson.IsDomesticCountry())
+            if (!toAddress.AsAddressAdapter().IsDomesticCountry())
             {
-                toAddress.Province = shipment.ShipStateProvCode;
+                toAddress.Province = toAddress.State;
                 toAddress.State = string.Empty;
             }
         }
