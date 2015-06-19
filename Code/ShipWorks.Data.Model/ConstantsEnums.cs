@@ -5838,6 +5838,8 @@ namespace ShipWorks.Data.Model
 		SecretKey,
 		///<summary>ExcludeFulfilledByNewegg. </summary>
 		ExcludeFulfilledByNewegg,
+		///<summary>Channel. </summary>
+		Channel,
 		/// <summary></summary>
 		AmountOfFields
 	}

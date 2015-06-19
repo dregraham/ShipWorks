@@ -12652,6 +12652,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.ExcludeFulfilledByNewegg);}
 		}
+		/// <summary>Creates a new NeweggStoreEntity.Channel field instance</summary>
+		public static EntityField2 Channel
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(NeweggStoreFieldIndex.Channel);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity NoteEntity</summary>

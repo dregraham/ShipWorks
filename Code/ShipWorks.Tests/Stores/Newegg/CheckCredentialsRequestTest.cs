@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Stores.Platforms.Newegg;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 
@@ -20,9 +21,9 @@ namespace ShipWorks.Tests.Stores.Newegg
             // Use the non-logging newegg request so we don't have to have a ShipWorks session
             testObject = new CheckCredentialsRequest(new Mocked.NonLoggingNeweggRequest());
 
-            validCredentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-            invalidSellerCredentials = new Credentials("123", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-            invalidSecretKeyCredentials = new Credentials("A09V", "ABCD");
+            validCredentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.US);
+            invalidSellerCredentials = new Credentials("123", "E09799F3-A8FD-46E0-989F-B8587A1817E0", NeweggChannelType.US);
+            invalidSecretKeyCredentials = new Credentials("A09V", "ABCD", NeweggChannelType.US);
         }
 
         [TestMethod]

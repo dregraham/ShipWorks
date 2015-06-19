@@ -7,6 +7,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
 {
@@ -17,7 +18,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
     /// </summary>
     public class RemoveItemRequest : IRemoveItemRequest
     {
-        private const string RequestUrl = "https://api.newegg.com/marketplace/ordermgmt/killitem/orders/{0}/?sellerid={1}";
+        private const string RequestUrl = "{0}/ordermgmt/killitem/orders/{1}/?sellerid={2}";
 
         private Credentials credentials;
         private INeweggRequest request;
@@ -55,11 +56,27 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.ItemRemoval
                 throw new ArgumentNullException("The order parameter cannot not be null");
             }
 
-            string formattedUrl = string.Format(RequestUrl, order.OrderNumber, credentials.SellerId);
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = "";
 
-            RequestConfiguration requestConfig = new RequestConfiguration("Remove Items") 
+            switch (credentials.Channel)
+            {
+                case NeweggChannelType.US:
+                    break;
+                case NeweggChannelType.Business:
+                    marketplace = "/b2b";
+                    break;
+                case NeweggChannelType.Canada:
+                    marketplace = "/can";
+                    break;
+                default:
+                    break;
+            }
+
+            string formattedUrl = string.Format(RequestUrl, marketplace, order.OrderNumber, credentials.SellerId);
+
+            RequestConfiguration requestConfig = new RequestConfiguration("Remove Items", formattedUrl) 
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Put, 
                 Body = GetRequestBody(items) 
             };

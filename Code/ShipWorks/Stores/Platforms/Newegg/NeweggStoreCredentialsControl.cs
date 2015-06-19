@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -20,6 +22,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
         public NeweggStoreCredentialsControl()            
         {
             InitializeComponent();
+
+            EnumHelper.BindComboBox<NeweggChannelType>(marketplace);
         }
 
         /// <summary>
@@ -40,6 +44,16 @@ namespace ShipWorks.Stores.Platforms.Newegg
         {
             get { return secretKey.Text; }
             set { secretKey.Text = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the Marketplace.
+        /// </summary>
+        /// <value>The secret key.</value>
+        public int Marketplace
+        {
+            get { return (int)marketplace.SelectedValue; }
+            set { marketplace.SelectedValue = (NeweggChannelType)value; }
         }
     }
 }
