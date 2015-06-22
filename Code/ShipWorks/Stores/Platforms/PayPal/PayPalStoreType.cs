@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
 using ShipWorks.UI.Wizard;
 using System.Data.SqlTypes;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -43,6 +48,45 @@ namespace ShipWorks.Stores.Platforms.PayPal
         protected override string InternalLicenseIdentifier
         {
             get { return ((PayPalStoreEntity)Store).ApiUserName; }
+        }
+
+        /// <summary>
+        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
+        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        /// </summary>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            var ShippingStatuses = EnumHelper.GetEnumList<PayPalPaymentStatus>()
+              .Select(statusEnumEntry => statusEnumEntry.Value)
+              .ToList();
+
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (PayPalPaymentStatus shippingStatus in ShippingStatuses)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                PayPalPaymentStatusCondition shippingStatusCondition = new PayPalPaymentStatusCondition();
+                shippingStatusCondition.Operator = EqualityOperator.Equals;
+                shippingStatusCondition.Value = shippingStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = Store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                filters.Add(new FilterEntity
+                {
+                    Name = EnumHelper.GetDescription(shippingStatus),
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
         }
 
         /// <summary>

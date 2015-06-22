@@ -187,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 storeCondition.Value = Store.StoreID;
                 definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
 
-                filters.Add(new FilterEntity()
+                filters.Add(new FilterEntity
                 {
                     Name =  EnumHelper.GetDescription(shippingStatus),
                     Definition = definition.GetXml(),
