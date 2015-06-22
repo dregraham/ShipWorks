@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
@@ -315,6 +316,18 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     issueAdder.Add(orderID, ex);
                 }
             }
+        }
+
+        /// <summary>
+        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
+        /// Online Status filter.
+        /// </summary>
+        public override ICollection<string> GetOnlineStatusChoices()
+        {
+            return EnumHelper.GetEnumList<ChannelAdvisorShippingStatus>()
+                .Where(status => status.Value != ChannelAdvisorShippingStatus.NoChange && status.Value != ChannelAdvisorShippingStatus.Unknown)
+                .Select(status=>EnumHelper.GetDescription(status.Value))
+                .ToList();
         }
     }
 }
