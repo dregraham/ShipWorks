@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
-using Interapptive.Shared.Utility;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -189,8 +188,6 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             order.OnlinePaymentStatus = (int)ChannelAdvisorHelper.GetShipWorksPaymentStatus(caOrder.OrderStatus.PaymentStatus);
             order.OnlineCheckoutStatus = (int)ChannelAdvisorHelper.GetShipWorksCheckoutStatus(caOrder.OrderStatus.CheckoutStatus);
             order.OnlineShippingStatus = (int)ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus);
-
-            order.OnlineStatus = EnumHelper.GetDescription(ChannelAdvisorHelper.GetShipWorksShippingStatus(caOrder.OrderStatus.ShippingStatus));
 
             // flags
             SetChannelAdvisorOrderFlags(order, caOrder);
