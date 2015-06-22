@@ -183,21 +183,44 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Select the initial filter based on the given user settings
+        /// </summary>
+        public void SelectInitialFilter(UserSettingsEntity settings)
+        {
+            long initialID;
+
+            if (settings.FilterInitialUseLastActive)
+            {
+                initialID = settings.FilterLastActive;
+            }
+            else
+            {
+                initialID = settings.FilterInitialSpecified;
+            }
+
+            // Select it
+            SelectedFilterNodeID = initialID;
+
+            // If there is nothing selected, that doesn't exist anymore
+            if (SelectedFilterNode == null)
+            {
+                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(this.targets.FirstOrDefault());
+            }
+        }
+
+        /// <summary>
         /// Context menu for the filter tree is opening
         /// </summary>
         private void OnFilterTreeContextMenuOpening(object sender, CancelEventArgs e)
         {
-            // Find the filter tree for the calling menu item
-            FilterTree currentFilterTree = (FilterTree)((ContextMenuStrip)sender).SourceControl;
-
             bool filtersPermission = UserSession.Security.HasPermission(PermissionType.ManageFilters);
-            bool filterSelected = currentFilterTree.SelectedFilterNode != null;
-            bool myFilter = filterSelected ? FilterHelper.IsMyFilter(currentFilterTree.SelectedFilterNode) : false;
+            bool filterSelected = SelectedFilterNode != null;
+            bool myFilter = filterSelected ? FilterHelper.IsMyFilter(SelectedFilterNode) : false;
 
             menuItemEditFilter.Enabled = filterSelected;
             menuItemEditFilter.Available = filtersPermission || myFilter;
 
-            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(currentFilterTree.SelectedFilterNode.FilterID))
+            if (filterSelected && BuiltinFilter.IsSearchPlaceholderKey(SelectedFilterNode.FilterID))
             {
                 menuItemEditFilter.Available = false;
             }

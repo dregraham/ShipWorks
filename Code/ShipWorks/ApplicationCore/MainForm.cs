@@ -646,6 +646,9 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Initialize the filter trees for display
+        /// </summary>
         private void InitializeFilterTrees(UserEntity user)
         {
             orderFilterTree.LoadLayouts(FilterTarget.Orders);
@@ -861,6 +864,9 @@ namespace ShipWorks
             log.InfoFormat("UI hidden");
         }
 
+        /// <summary>
+        /// Clear each of the filter trees
+        /// </summary>
         private void ClearFilterTrees()
         {
             orderFilterTree.Clear();
@@ -1980,14 +1986,7 @@ namespace ShipWorks
         /// </summary>
         public FilterNodeEntity SelectedFilterNode()
         {
-            if (dockableWindowOrderFilters.Visible && dockableWindowOrderFilters.IsOpen)
-            {
-                return orderFilterTree.SelectedFilterNode;
-            }
-            else
-            {
-                return customerFilterTree.SelectedFilterNode;
-            }
+            return ActiveFilterTree().SelectedFilterNode;
         }
 
         /// <summary>
@@ -2021,7 +2020,16 @@ namespace ShipWorks
         {
             // Get the dockable window so that we can get the filter tree
             DockControl dockableWindowFilters = (DockableWindow)sender;
-            FilterTree currentFilterTree = (FilterTree)dockableWindowFilters.Controls[0];
+            if (dockableWindowFilters == null)
+            {
+                throw new InvalidOperationException("OnFilterDockableWindowVisibleChanged called by an object that is not a DockableWindow.");
+            }
+
+            FilterTree currentFilterTree = dockableWindowFilters.Controls.OfType<FilterTree>().FirstOrDefault();
+            if (currentFilterTree == null)
+            {
+                throw new InvalidOperationException("MainForm has a dockable window that is missing a filter tree.");
+            }
 
             // If we are switching from order to/from customer and there was a custom search going,
             // we need to cancel out of it so we don't crash.
@@ -2097,32 +2105,75 @@ namespace ShipWorks
         /// </summary>
         private void OnGridSearchActiveChanged(object sender, EventArgs e)
         {
+            FilterTree currentFilterTree = ActiveFilterTree();
+            FilterTree inactiveFilterTree = InActiveFilterTree();
+
             if (gridControl.IsSearchActive)
             {
-                searchRestoreFilterNodeID = orderFilterTree.SelectedFilterNodeID;
+                searchRestoreFilterNodeID = currentFilterTree.SelectedFilterNodeID;
 
-                orderFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
+                currentFilterTree.SelectedFilterNodeChanged -= new EventHandler(OnSelectedFilterNodeChanged);
 
-                orderFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
-                orderFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
+                currentFilterTree.ActiveSearchNode = gridControl.ActiveFilterNode;
+                currentFilterTree.SelectedFilterNode = gridControl.ActiveFilterNode;
 
-                orderFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
+                currentFilterTree.SelectedFilterNodeChanged += new EventHandler(OnSelectedFilterNodeChanged);
             }
             else
             {
                 // Restore the previously selected node before search started
                 if (searchRestoreFilterNodeID != 0)
                 {
-                    orderFilterTree.SelectedFilterNodeID = searchRestoreFilterNodeID;
+                    currentFilterTree.SelectedFilterNodeID = searchRestoreFilterNodeID;
                 }
 
                 searchRestoreFilterNodeID = 0;
 
-                orderFilterTree.ActiveSearchNode = null;
+                currentFilterTree.ActiveSearchNode = null;
             }
+
+            // Now that the user can be switching back and forth between order and customer trees, we have to 
+            // manually kill the opposite filter tree's search node otherwise we get object null exceptions.
+            inactiveFilterTree.ActiveSearchNode = null;
 
             UpdateSelectionDependentUI();
             UpdateDetailViewSettingsUI();
+        }
+
+        /// <summary>
+        /// Determine and return the INactive filter tree based on the grid
+        /// </summary>
+        private FilterTree InActiveFilterTree()
+        {
+            switch (gridControl.ActiveFilterTarget)
+            {
+                case FilterTarget.Orders:
+                    return customerFilterTree;
+                case FilterTarget.Customers:
+                    return orderFilterTree;
+                case FilterTarget.Shipments:
+                case FilterTarget.Items:
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Determine and return the active filter tree based on the grid
+        /// </summary>
+        private FilterTree ActiveFilterTree()
+        {
+            switch (gridControl.ActiveFilterTarget)
+            {
+                case FilterTarget.Orders:
+                    return orderFilterTree;
+                case FilterTarget.Customers:
+                    return customerFilterTree;
+                case FilterTarget.Shipments:
+                case FilterTarget.Items:
+                default:
+                    return null;
+            }
         }
 
         /// <summary>
@@ -2139,25 +2190,8 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            long initialID;
-
-            if (settings.FilterInitialUseLastActive)
-            {
-                initialID = settings.FilterLastActive;
-            }
-            else
-            {
-                initialID = settings.FilterInitialSpecified;
-            }
-
-            // Select it
-            orderFilterTree.SelectedFilterNodeID = initialID;
-
-            // If there is nothing selected, that doesn't exist anymore
-            if (orderFilterTree.SelectedFilterNode == null)
-            {
-                orderFilterTree.SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
-            }
+            orderFilterTree.SelectInitialFilter(settings);
+            //customerFilterTree.SelectInitialFilter(settings);
         }
 
         /// <summary>
@@ -2921,7 +2955,7 @@ namespace ShipWorks
             }
             else
             {
-                filterNode = orderFilterTree.SelectedFilterNode;
+                filterNode = ActiveFilterTree().SelectedFilterNode;
             }
 
             if (filterNode == null)
