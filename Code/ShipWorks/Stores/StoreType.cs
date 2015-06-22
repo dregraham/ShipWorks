@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
 using ShipWorks.UI;
@@ -215,7 +218,34 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual List<FilterEntity> CreateInitialFilters()
         {
-            return null;
+            ICollection<string> onlineStatusChoices = GetOnlineStatusChoices();
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (string onlineStatus in onlineStatusChoices)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                OnlineStatusCondition onlineStatusCondition = new OnlineStatusCondition();
+                onlineStatusCondition.Operator = StringOperator.Equals;
+                onlineStatusCondition.TargetValue = onlineStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(onlineStatusCondition);
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                filters.Add(new FilterEntity()
+                {
+                    Name = onlineStatus,
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
         }
 
         /// <summary>
