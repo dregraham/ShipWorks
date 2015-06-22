@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.Miva.WizardPages;
 using ShipWorks.Stores.Communication;
@@ -256,6 +258,17 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     issueAdder.Add(orderID, ex);
                 }
             }
-        }    
+        }
+
+        /// <summary>
+        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
+        /// Online Status filter.
+        /// </summary>
+        public override ICollection<string> GetOnlineStatusChoices()
+        {
+            return EnumHelper.GetEnumList<NeweggOrderStatus>()
+                .Select(s => Enum.GetName(typeof(NeweggOrderStatus), s.Value))
+                .ToList();
+        }
     }
 }
