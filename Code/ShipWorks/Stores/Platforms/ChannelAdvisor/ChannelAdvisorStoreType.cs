@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
 using ShipWorks.UI.Wizard;
@@ -155,6 +157,46 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
             return new OnlineUpdateShipmentUpdateActionControl(typeof(ChannelAdvisorShipmentUploadTask));
+        }
+
+        /// <summary>
+        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
+        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        /// </summary>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            var ShippingStatuses = EnumHelper.GetEnumList<ChannelAdvisorShippingStatus>()
+                .Where(status => status.Value != ChannelAdvisorShippingStatus.NoChange && status.Value != ChannelAdvisorShippingStatus.Unknown)
+                .Select(statusEnumEntry => statusEnumEntry.Value)
+                .ToList();
+
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (ChannelAdvisorShippingStatus shippingStatus in ShippingStatuses)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                ChannelAdvisorShippingStatusCondition shippingStatusCondition = new ChannelAdvisorShippingStatusCondition();
+                shippingStatusCondition.Operator = EqualityOperator.Equals;
+                shippingStatusCondition.Value = shippingStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = Store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                filters.Add(new FilterEntity()
+                {
+                    Name =  EnumHelper.GetDescription(shippingStatus),
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
         }
 
         /// <summary>
