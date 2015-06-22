@@ -101,33 +101,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Create the definition for the "Shipped" order filter
-        /// </summary>
-        private static FilterDefinition CreateDefinitionShipped()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            // If [Any]
-            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
-
-            // Local Status = 'Shipped'
-            LocalStatusCondition statusCondition = new LocalStatusCondition();
-            statusCondition.Operator = StringOperator.Equals;
-            statusCondition.TargetValue = "Shipped";
-            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
-
-            // For any shipment, Processed = true
-            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
-            ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
-            processedCondition.Operator = EqualityOperator.Equals;
-            processedCondition.Value = ShipmentStatusType.Processed;
-            anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
-            definition.RootContainer.FirstGroup.Conditions.Add(anyShipment);
-
-            return definition;
-        }
-
-        /// <summary>
         /// Create the definition of the "Not Shipped" filter
         /// </summary>
         public static FilterDefinition CreateDefinitionNotShipped()
