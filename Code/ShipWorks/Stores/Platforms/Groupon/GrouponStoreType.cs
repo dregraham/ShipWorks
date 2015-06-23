@@ -140,6 +140,19 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
+        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
+
+        /// <summary>
         /// Creates the order downloader
         /// </summary>
         public override StoreDownloader CreateDownloader()
