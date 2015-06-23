@@ -265,7 +265,6 @@ namespace ShipWorks.Shipping.Editing
         private void UpdateRowDescription(GridRow row, string description)
         {
             List<ShipmentCustomsItemEntity> customsItems = (List<ShipmentCustomsItemEntity>) row.Tag;
-            customsItems.ForEach(item => item.Description = description);
 
             if (customsItems.Count < loadedShipments.Count)
             {
