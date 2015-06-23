@@ -1110,7 +1110,7 @@ namespace ShipWorks
             this.dockableWindowOrderFilters.Size = new System.Drawing.Size(214, 231);
             this.dockableWindowOrderFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
             this.dockableWindowOrderFilters.TabIndex = 0;
-            this.dockableWindowOrderFilters.Text = "Order Filters";
+            this.dockableWindowOrderFilters.Text = "Orders";
             this.dockableWindowOrderFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
             // 
             // dockableWindowCustomerFilters
@@ -1122,9 +1122,9 @@ namespace ShipWorks
             this.dockableWindowCustomerFilters.Name = "dockableWindowCustomerFilters";
             this.dockableWindowCustomerFilters.ShowOptions = false;
             this.dockableWindowCustomerFilters.Size = new System.Drawing.Size(214, 231);
-            this.dockableWindowCustomerFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
+            this.dockableWindowCustomerFilters.TabImage = global::ShipWorks.Properties.Resources.customer16;
             this.dockableWindowCustomerFilters.TabIndex = 0;
-            this.dockableWindowCustomerFilters.Text = "Customer Filters";
+            this.dockableWindowCustomerFilters.Text = "Customers";
             dockableWindowCustomerFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
             // 
             // orderFilterTree
