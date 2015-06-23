@@ -9460,20 +9460,26 @@ namespace ShipWorks.Data.Model
 		GridMenuLayout,
 		///<summary>FilterInitialUseLastActive. </summary>
 		FilterInitialUseLastActive,
-		///<summary>FilterInitialSpecified. </summary>
-		FilterInitialSpecified,
+		///<summary>OrderFilterInitialSpecified. </summary>
+		OrderFilterInitialSpecified,
 		///<summary>FilterInitialSortType. </summary>
 		FilterInitialSortType,
-		///<summary>FilterLastActive. </summary>
-		FilterLastActive,
-		///<summary>FilterExpandedFolders. </summary>
-		FilterExpandedFolders,
+		///<summary>OrderFilterLastActive. </summary>
+		OrderFilterLastActive,
+		///<summary>OrderFilterExpandedFolders. </summary>
+		OrderFilterExpandedFolders,
 		///<summary>ShippingWeightFormat. </summary>
 		ShippingWeightFormat,
 		///<summary>TemplateExpandedFolders. </summary>
 		TemplateExpandedFolders,
 		///<summary>TemplateLastSelected. </summary>
 		TemplateLastSelected,
+		///<summary>CustomerFilterInitialSpecified. </summary>
+		CustomerFilterInitialSpecified,
+		///<summary>CustomerFilterLastActive. </summary>
+		CustomerFilterLastActive,
+		///<summary>CustomerFilterExpandedFolders. </summary>
+		CustomerFilterExpandedFolders,
 		/// <summary></summary>
 		AmountOfFields
 	}

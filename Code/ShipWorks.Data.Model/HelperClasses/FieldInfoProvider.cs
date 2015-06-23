@@ -2623,13 +2623,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "WindowLayout", typeof(System.Byte[]), false, false, false, false,  (int)UserSettingsFieldIndex.WindowLayout, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "GridMenuLayout", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.GridMenuLayout, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialUseLastActive", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialUseLastActive, 0, 0, 0);
-			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialSpecified", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialSpecified, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "OrderFilterInitialSpecified", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.OrderFilterInitialSpecified, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialSortType", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialSortType, 0, 0, 10);
-			base.AddElementFieldInfo("UserSettingsEntity", "FilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.FilterLastActive, 0, 0, 19);
-			base.AddElementFieldInfo("UserSettingsEntity", "FilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.FilterExpandedFolders, 2147483647, 0, 0);
+			base.AddElementFieldInfo("UserSettingsEntity", "OrderFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.OrderFilterLastActive, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "OrderFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderFilterExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "ShippingWeightFormat", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.ShippingWeightFormat, 0, 0, 10);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.TemplateExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterInitialSpecified", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterInitialSpecified, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

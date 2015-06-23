@@ -50,7 +50,7 @@ namespace ShipWorks.Data.Controls
             UserEntity user = UserSession.User;
 
             filterTree.LoadLayouts(filterTarget);
-            filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+            filterTree.ApplyFolderState(new FolderExpansionState(user.Settings.OrderFilterExpandedFolders));
 
             // Select the root node
             filterTree.SelectFirstNode();

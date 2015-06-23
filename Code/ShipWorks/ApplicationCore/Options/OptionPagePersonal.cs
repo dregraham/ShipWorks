@@ -58,7 +58,7 @@ namespace ShipWorks.ApplicationCore.Options
                 filterComboBox.LoadLayouts(FilterTarget.Orders, FilterTarget.Customers);
 
                 // Find the node we need in the layout
-                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(settings.FilterInitialSpecified);
+                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(settings.OrderFilterInitialSpecified);
                 if (filterNode == null)
                 {
                     filterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
@@ -101,7 +101,7 @@ namespace ShipWorks.ApplicationCore.Options
                 data.ShowQatBelowRibbon = showQatBelowRibbon.Checked;
 
                 settings.FilterInitialUseLastActive = radioInitialFilterRecent.Checked;
-                settings.FilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
+                settings.OrderFilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
                 settings.FilterInitialSortType = (int) filterInitialSort.SelectedValue;
 
                 settings.ShippingWeightFormat = (int) comboWeightFormat.SelectedValue;

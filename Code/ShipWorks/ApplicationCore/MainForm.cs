@@ -652,10 +652,10 @@ namespace ShipWorks
         private void InitializeFilterTrees(UserEntity user)
         {
             orderFilterTree.LoadLayouts(FilterTarget.Orders);
-            orderFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+            orderFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.OrderFilterExpandedFolders));
 
             customerFilterTree.LoadLayouts(FilterTarget.Customers);
-            customerFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.FilterExpandedFolders));
+            customerFilterTree.ApplyFolderState(new FolderExpansionState(user.Settings.CustomerFilterExpandedFolders));
         }
 
         /// <summary>
@@ -1023,16 +1023,31 @@ namespace ShipWorks
             settings.GridMenuLayout = gridMenuLayoutProvider.SerializeLayout();
 
             // Save the filter expand collapse state
-            settings.FilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
+            settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
+            settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
 
             // Save the last active filter
             if (gridControl.IsSearchActive)
             {
-                settings.FilterLastActive = searchRestoreFilterNodeID;
+                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                {
+                    settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
+                }
+                else
+                {
+                    settings.OrderFilterLastActive = searchRestoreFilterNodeID;
+                }
             }
             else
             {
-                settings.FilterLastActive = gridControl.ActiveFilterNode != null ? gridControl.ActiveFilterNode.FilterNodeID : 0;
+                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
+                {
+                    settings.CustomerFilterLastActive = gridControl.ActiveFilterNode != null ? gridControl.ActiveFilterNode.FilterNodeID : 0;
+                }
+                else
+                {
+                    settings.OrderFilterLastActive = gridControl.ActiveFilterNode != null ? gridControl.ActiveFilterNode.FilterNodeID : 0;   
+                }
             }
 
             // Save the grid column state
@@ -2190,8 +2205,17 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            orderFilterTree.SelectInitialFilter(settings);
-            //customerFilterTree.SelectInitialFilter(settings);
+            if (dockableWindowOrderFilters.IsOpen)
+            {
+                orderFilterTree.SelectInitialFilter(settings);
+            }
+
+            if (dockableWindowCustomerFilters.IsOpen)
+            {
+                customerFilterTree.SelectInitialFilter(settings);
+            }
+
+
         }
 
         /// <summary>
@@ -2759,8 +2783,38 @@ namespace ShipWorks
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
             UpdatePanelState(e.DockControl);
+
+            if (UserSession.IsLoggedOn)
+            {
+                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
+                {
+                    gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
+                }
+                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
+                {
+                    gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
+                }
+            }
         }
 
+        /// <summary>
+        /// When closing a order or customer filter, switch to the other one.
+        /// </summary>
+        void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
+        {
+            if (UserSession.IsLoggedOn)
+            {
+                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
+                {
+                    gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
+                }
+                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
+                {
+                    gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
+                }
+            }
+        }
+        
         /// <summary>
         /// Open the editor for the context menu of the active grid
         /// </summary>

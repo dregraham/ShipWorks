@@ -484,16 +484,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FilterInitialUseLastActive", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("FilterInitialSpecified", fieldHashtable);
+			_fieldsCustomProperties.Add("OrderFilterInitialSpecified", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("FilterInitialSortType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("FilterLastActive", fieldHashtable);
+			_fieldsCustomProperties.Add("OrderFilterLastActive", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("FilterExpandedFolders", fieldHashtable);
+			_fieldsCustomProperties.Add("OrderFilterExpandedFolders", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShippingWeightFormat", fieldHashtable);
@@ -503,6 +503,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("TemplateLastSelected", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CustomerFilterInitialSpecified", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CustomerFilterLastActive", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("CustomerFilterExpandedFolders", fieldHashtable);
 		}
 		#endregion
 
@@ -677,15 +686,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UserSettingsFieldIndex.FilterInitialUseLastActive, value); }
 		}
 
-		/// <summary> The FilterInitialSpecified property of the Entity UserSettings<br/><br/>
+		/// <summary> The OrderFilterInitialSpecified property of the Entity UserSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UserSettings"."FilterInitialSpecified"<br/>
+		/// <remarks>Mapped on  table field: "UserSettings"."OrderFilterInitialSpecified"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 FilterInitialSpecified
+		public virtual System.Int64 OrderFilterInitialSpecified
 		{
-			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.FilterInitialSpecified, true); }
-			set	{ SetValue((int)UserSettingsFieldIndex.FilterInitialSpecified, value); }
+			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.OrderFilterInitialSpecified, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.OrderFilterInitialSpecified, value); }
 		}
 
 		/// <summary> The FilterInitialSortType property of the Entity UserSettings<br/><br/>
@@ -699,26 +708,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)UserSettingsFieldIndex.FilterInitialSortType, value); }
 		}
 
-		/// <summary> The FilterLastActive property of the Entity UserSettings<br/><br/>
+		/// <summary> The OrderFilterLastActive property of the Entity UserSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UserSettings"."FilterLastActive"<br/>
+		/// <remarks>Mapped on  table field: "UserSettings"."OrderFilterLastActive"<br/>
 		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.Int64 FilterLastActive
+		public virtual System.Int64 OrderFilterLastActive
 		{
-			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.FilterLastActive, true); }
-			set	{ SetValue((int)UserSettingsFieldIndex.FilterLastActive, value); }
+			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.OrderFilterLastActive, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.OrderFilterLastActive, value); }
 		}
 
-		/// <summary> The FilterExpandedFolders property of the Entity UserSettings<br/><br/>
+		/// <summary> The OrderFilterExpandedFolders property of the Entity UserSettings<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UserSettings"."FilterExpandedFolders"<br/>
+		/// <remarks>Mapped on  table field: "UserSettings"."OrderFilterExpandedFolders"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual System.String FilterExpandedFolders
+		public virtual System.String OrderFilterExpandedFolders
 		{
-			get { return (System.String)GetValue((int)UserSettingsFieldIndex.FilterExpandedFolders, true); }
-			set	{ SetValue((int)UserSettingsFieldIndex.FilterExpandedFolders, value); }
+			get { return (System.String)GetValue((int)UserSettingsFieldIndex.OrderFilterExpandedFolders, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.OrderFilterExpandedFolders, value); }
 		}
 
 		/// <summary> The ShippingWeightFormat property of the Entity UserSettings<br/><br/>
@@ -752,6 +761,39 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.TemplateLastSelected, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.TemplateLastSelected, value); }
+		}
+
+		/// <summary> The CustomerFilterInitialSpecified property of the Entity UserSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."CustomerFilterInitialSpecified"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 CustomerFilterInitialSpecified
+		{
+			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.CustomerFilterInitialSpecified, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.CustomerFilterInitialSpecified, value); }
+		}
+
+		/// <summary> The CustomerFilterLastActive property of the Entity UserSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."CustomerFilterLastActive"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 CustomerFilterLastActive
+		{
+			get { return (System.Int64)GetValue((int)UserSettingsFieldIndex.CustomerFilterLastActive, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.CustomerFilterLastActive, value); }
+		}
+
+		/// <summary> The CustomerFilterExpandedFolders property of the Entity UserSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."CustomerFilterExpandedFolders"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Xml, 0, 0, 2147483647<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual System.String CustomerFilterExpandedFolders
+		{
+			get { return (System.String)GetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, value); }
 		}
 
 

@@ -183,6 +183,34 @@ namespace ShipWorks.Filters.Controls
         }
 
         /// <summary>
+        /// Gets the FilterLastActive for the current target type.  Defaults to Order value if more than one target is specified
+        /// or if only one target and Customers is not it.
+        /// </summary>
+        private long FilterLastActive(UserSettingsEntity settings)
+        {
+            if (targets.Count() == 1 && targets.Contains(FilterTarget.Customers))
+            {
+                return settings.CustomerFilterLastActive;
+            }
+
+            return settings.OrderFilterLastActive;
+        }
+
+        /// <summary>
+        /// Gets the FilterInitialSpecified for the current target type.  Defaults to Order value if more than one target is specified
+        /// or if only one target and Customers is not it.
+        /// </summary>
+        private long FilterInitialSpecified(UserSettingsEntity settings)
+        {
+            if (targets.Count() == 1 && targets.Contains(FilterTarget.Customers))
+            {
+                return settings.CustomerFilterInitialSpecified;
+            }
+
+            return settings.OrderFilterInitialSpecified;
+        }
+
+        /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
         public void SelectInitialFilter(UserSettingsEntity settings)
@@ -191,11 +219,11 @@ namespace ShipWorks.Filters.Controls
 
             if (settings.FilterInitialUseLastActive)
             {
-                initialID = settings.FilterLastActive;
+                initialID = FilterLastActive(settings);
             }
             else
             {
-                initialID = settings.FilterInitialSpecified;
+                initialID = FilterInitialSpecified(settings);
             }
 
             // Select it
