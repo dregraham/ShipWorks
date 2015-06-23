@@ -41,8 +41,11 @@
             this.accountPanel = new System.Windows.Forms.Panel();
             this.personControl = new ShipWorks.Data.Controls.PersonControl();
             this.mailingPostalCode = new ShipWorks.UI.Controls.PromptTextBox();
-            this.accountInfoControl = new UspsAccountInfoControl();
+            this.accountInfoControl = new ShipWorks.Shipping.Carriers.Postal.Usps.UspsAccountInfoControl();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            this.labelDescription = new System.Windows.Forms.Label();
+            this.description = new ShipWorks.UI.Controls.PromptTextBox();
+            this.labelOptional = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
             this.accountPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
@@ -61,7 +64,7 @@
             // labelMailingPostalCode
             // 
             this.labelMailingPostalCode.AutoSize = true;
-            this.labelMailingPostalCode.Location = new System.Drawing.Point(13, 391);
+            this.labelMailingPostalCode.Location = new System.Drawing.Point(12, 415);
             this.labelMailingPostalCode.Name = "labelMailingPostalCode";
             this.labelMailingPostalCode.Size = new System.Drawing.Size(68, 13);
             this.labelMailingPostalCode.TabIndex = 44;
@@ -71,7 +74,7 @@
             // 
             this.labelMailingPostOffice.AutoSize = true;
             this.labelMailingPostOffice.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelMailingPostOffice.Location = new System.Drawing.Point(10, 368);
+            this.labelMailingPostOffice.Location = new System.Drawing.Point(9, 392);
             this.labelMailingPostOffice.Name = "labelMailingPostOffice";
             this.labelMailingPostOffice.Size = new System.Drawing.Size(110, 13);
             this.labelMailingPostOffice.TabIndex = 43;
@@ -89,7 +92,7 @@
             // labelNote
             // 
             this.labelNote.ForeColor = System.Drawing.Color.DimGray;
-            this.labelNote.Location = new System.Drawing.Point(38, 420);
+            this.labelNote.Location = new System.Drawing.Point(37, 444);
             this.labelNote.Name = "labelNote";
             this.labelNote.Size = new System.Drawing.Size(325, 27);
             this.labelNote.TabIndex = 26;
@@ -99,7 +102,7 @@
             // pictureBox
             // 
             this.pictureBox.Image = global::ShipWorks.Properties.Resources.exclamation16;
-            this.pictureBox.Location = new System.Drawing.Point(16, 420);
+            this.pictureBox.Location = new System.Drawing.Point(15, 444);
             this.pictureBox.Name = "pictureBox";
             this.pictureBox.Size = new System.Drawing.Size(16, 16);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -112,7 +115,7 @@
             this.labelUsps.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelUsps.Location = new System.Drawing.Point(12, 9);
             this.labelUsps.Name = "labelUsps";
-            this.labelUsps.Size = new System.Drawing.Size(50, 13);
+            this.labelUsps.Size = new System.Drawing.Size(36, 13);
             this.labelUsps.TabIndex = 27;
             this.labelUsps.Text = "USPS";
             // 
@@ -120,7 +123,7 @@
             // 
             this.cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancel.Location = new System.Drawing.Point(290, 465);
+            this.cancel.Location = new System.Drawing.Point(290, 505);
             this.cancel.Name = "cancel";
             this.cancel.Size = new System.Drawing.Size(75, 23);
             this.cancel.TabIndex = 38;
@@ -130,7 +133,7 @@
             // ok
             // 
             this.ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ok.Location = new System.Drawing.Point(209, 465);
+            this.ok.Location = new System.Drawing.Point(209, 505);
             this.ok.Name = "ok";
             this.ok.Size = new System.Drawing.Size(75, 23);
             this.ok.TabIndex = 37;
@@ -140,7 +143,10 @@
             // 
             // accountPanel
             // 
+            this.accountPanel.Controls.Add(this.labelDescription);
+            this.accountPanel.Controls.Add(this.description);
             this.accountPanel.Controls.Add(this.changePassword);
+            this.accountPanel.Controls.Add(this.labelOptional);
             this.accountPanel.Controls.Add(this.personControl);
             this.accountPanel.Controls.Add(this.pictureBox);
             this.accountPanel.Controls.Add(this.cancel);
@@ -150,13 +156,14 @@
             this.accountPanel.Controls.Add(this.mailingPostalCode);
             this.accountPanel.Controls.Add(this.labelPassword);
             this.accountPanel.Controls.Add(this.labelMailingPostOffice);
-            this.accountPanel.Location = new System.Drawing.Point(3, 169);
+            this.accountPanel.Location = new System.Drawing.Point(5, 175);
             this.accountPanel.Name = "accountPanel";
-            this.accountPanel.Size = new System.Drawing.Size(368, 491);
+            this.accountPanel.Size = new System.Drawing.Size(368, 531);
             this.accountPanel.TabIndex = 48;
             // 
             // personControl
             // 
+            this.personControl.AddressSelector = null;
             this.personControl.AvailableFields = ((ShipWorks.Data.Controls.PersonFields)((((((((((ShipWorks.Data.Controls.PersonFields.Name | ShipWorks.Data.Controls.PersonFields.Company) 
             | ShipWorks.Data.Controls.PersonFields.Street) 
             | ShipWorks.Data.Controls.PersonFields.City) 
@@ -166,16 +173,17 @@
             | ShipWorks.Data.Controls.PersonFields.Residential) 
             | ShipWorks.Data.Controls.PersonFields.Email) 
             | ShipWorks.Data.Controls.PersonFields.Phone)));
+            this.personControl.EnableValidationControls = false;
             this.personControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.personControl.FullName = "";
-            this.personControl.Location = new System.Drawing.Point(8, 37);
+            this.personControl.Location = new System.Drawing.Point(7, 61);
             this.personControl.Name = "personControl";
             this.personControl.Size = new System.Drawing.Size(358, 328);
             this.personControl.TabIndex = 35;
             // 
             // mailingPostalCode
             // 
-            this.mailingPostalCode.Location = new System.Drawing.Point(85, 388);
+            this.mailingPostalCode.Location = new System.Drawing.Point(84, 412);
             this.fieldLengthProvider.SetMaxLengthSource(this.mailingPostalCode, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaAccountDescription);
             this.mailingPostalCode.Name = "mailingPostalCode";
             this.mailingPostalCode.PromptColor = System.Drawing.SystemColors.GrayText;
@@ -191,13 +199,42 @@
             this.accountInfoControl.Size = new System.Drawing.Size(348, 144);
             this.accountInfoControl.TabIndex = 47;
             // 
+            // labelDescription
+            // 
+            this.labelDescription.AutoSize = true;
+            this.labelDescription.Location = new System.Drawing.Point(12, 37);
+            this.labelDescription.Name = "labelDescription";
+            this.labelDescription.Size = new System.Drawing.Size(64, 13);
+            this.labelDescription.TabIndex = 49;
+            this.labelDescription.Text = "Description:";
+            // 
+            // description
+            // 
+            this.description.Location = new System.Drawing.Point(84, 34);
+            this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.UpsAccountDescription);
+            this.description.Name = "description";
+            this.description.PromptColor = System.Drawing.SystemColors.GrayText;
+            this.description.PromptText = null;
+            this.description.Size = new System.Drawing.Size(211, 21);
+            this.description.TabIndex = 50;
+            // 
+            // labelOptional
+            // 
+            this.labelOptional.AutoSize = true;
+            this.labelOptional.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.labelOptional.Location = new System.Drawing.Point(301, 37);
+            this.labelOptional.Name = "labelOptional";
+            this.labelOptional.Size = new System.Drawing.Size(53, 13);
+            this.labelOptional.TabIndex = 51;
+            this.labelOptional.Text = "(optional)";
+            // 
             // UspsAccountEditorDlg
             // 
             this.AcceptButton = this.ok;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancel;
-            this.ClientSize = new System.Drawing.Size(385, 672);
+            this.ClientSize = new System.Drawing.Size(385, 720);
             this.Controls.Add(this.accountPanel);
             this.Controls.Add(this.accountInfoControl);
             this.Controls.Add(this.labelUsps);
@@ -233,5 +270,8 @@
         private Data.Controls.PersonControl personControl;
         private UspsAccountInfoControl accountInfoControl;
         private System.Windows.Forms.Panel accountPanel;
+        private System.Windows.Forms.Label labelDescription;
+        private UI.Controls.PromptTextBox description;
+        private System.Windows.Forms.Label labelOptional;
     }
 }

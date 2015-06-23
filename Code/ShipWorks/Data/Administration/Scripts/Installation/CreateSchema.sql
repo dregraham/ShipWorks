@@ -2381,7 +2381,8 @@ CREATE TABLE [dbo].[NeweggStore]
 [StoreID] [bigint] NOT NULL,
 [SellerID] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [SecretKey] [varchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[ExcludeFulfilledByNewegg] [bit] NOT NULL
+[ExcludeFulfilledByNewegg] [bit] NOT NULL,
+[Channel] [int] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_NeweggStore] on [dbo].[NeweggStore]'
@@ -4322,6 +4323,10 @@ CREATE TABLE [dbo].[Scheduling_BLOB_TRIGGERS]
 [BLOB_DATA] [image] NULL
 )
 GO
+PRINT N'Creating primary key [PK_Scheduling_BLOB_TRIGGERS] on [dbo].[Scheduling_BLOB_TRIGGERS]'
+GO
+ALTER TABLE [dbo].[Scheduling_BLOB_TRIGGERS] ADD CONSTRAINT [PK_Scheduling_BLOB_TRIGGERS] PRIMARY KEY CLUSTERED  ([SCHED_NAME], [TRIGGER_NAME], [TRIGGER_GROUP])
+GO
 PRINT N'Creating [dbo].[Scheduling_CALENDARS]'
 GO
 CREATE TABLE [dbo].[Scheduling_CALENDARS]
@@ -4345,6 +4350,7 @@ CREATE TABLE [dbo].[Scheduling_FIRED_TRIGGERS]
 [TRIGGER_GROUP] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [INSTANCE_NAME] [nvarchar] (200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FIRED_TIME] [bigint] NOT NULL,
+[SCHED_TIME] [bigint] NOT NULL,
 [PRIORITY] [int] NOT NULL,
 [STATE] [nvarchar] (16) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [JOB_NAME] [nvarchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
@@ -4579,6 +4585,7 @@ CREATE TABLE [dbo].[UspsAccount]
 (
 [UspsAccountID] [bigint] NOT NULL IDENTITY(1052, 1000),
 [RowVersion] [timestamp] NOT NULL,
+[Description] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Username] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Password] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [FirstName] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
