@@ -110,7 +110,8 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 order.OrderNumber = GetNextOrderNumber();
 
                 // Set Order Online Status
-                order.OnlineStatus = status;
+                order.OnlineStatus = GetOrderStatusName(status);
+                order.OnlineStatusCode = GetOrderStatusName(status);
 
                 // set the progress detail
                 Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
@@ -147,7 +148,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
             }
             else
             {
-                return;
+               return;
             }
         }
 
@@ -231,6 +232,20 @@ namespace ShipWorks.Stores.Platforms.Groupon
             {
                 return DateTime.Parse(date);
             }
+        }
+
+        /// <summary>
+        /// Get the display name for the given order status code
+        /// </summary>
+        public static string GetOrderStatusName(string orderStatus)
+        {
+            switch (orderStatus)
+            {
+                case "ship": return "Shipped";
+                case "open": return "Open";
+            }
+
+            return orderStatus;
         }
     }
 }
