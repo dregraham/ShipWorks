@@ -204,6 +204,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.ServiceManager.Countries
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.WorldwideExpress, MxCountryCode, "07", "07", "01", "ES", WorldShipServiceDescriptions.WorldwideExpress, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.WorldwideSaver, MxCountryCode, "65", "65", "28", "SV", WorldShipServiceDescriptions.WorldwideSaver, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.WorldwideExpedited, MxCountryCode, "08", "08", "19", "EX", WorldShipServiceDescriptions.WorldwideExpedited, false, false));
+            tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.UpsStandard, MxCountryCode, "11", "11", "08", "ST", WorldShipServiceDescriptions.UpsStandard, false, false));
 
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.WorldwideExpress, InternationalCountryCode, "07", "07", "01", "ES", WorldShipServiceDescriptions.WorldwideExpress, false, false));
             tmpUpsServiceTypeMapping.Add(new UpsServiceMapping(UpsServiceType.WorldwideSaver, InternationalCountryCode, "65", "65", "28", "SV", WorldShipServiceDescriptions.WorldwideSaver, false, false));

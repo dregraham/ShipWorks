@@ -1,31 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
-using Common.Logging.Log4Net;
-using ShipWorks.Common.Threading;
-using log4net.Config;
-using System.Diagnostics;
-using System.Data;
-using System.IO;
-using System.Xml.Serialization;
-using System.Xml;
 using log4net.Appender;
-using log4net;
-using log4net.Layout;
-using log4net.Filter;
+using log4net.Config;
 using log4net.Core;
+using log4net.Filter;
+using log4net.Layout;
+using ShipWorks.Common.Threading;
+using System.Diagnostics;
+using System.IO;
 using SD.LLBLGen.Pro.DQE.SqlServer;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Threading;
-using ShipWorks.ApplicationCore;
-using Interapptive.Shared;
 using ShipWorks.ApplicationCore.Interaction;
-using Interapptive.Shared.Utility;
 using System.Security;
-using ShipWorks.Data.Grid.Paging;
-using CommonLogging = Common.Logging;
-
+using Common.Logging.Log4Net;
+using Common.Logging;
+using NameValueCollection = Common.Logging.Configuration.NameValueCollection;
 
 namespace ShipWorks.ApplicationCore.Logging
 {
@@ -72,7 +61,7 @@ namespace ShipWorks.ApplicationCore.Logging
             logOptions = LoadLogOptions();
             ApplyLogOptions();
 
-            CommonLogging.LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
+            LogManager.Adapter = new Log4NetLoggerFactoryAdapter(new NameValueCollection());
         }
 
         /// <summary>
@@ -170,7 +159,7 @@ namespace ShipWorks.ApplicationCore.Logging
         /// </summary>
         private static void ApplyLogOptions()
         {
-            LogManager.ResetConfiguration();
+            log4net.LogManager.ResetConfiguration();
 
             Trace.Listeners.Clear();
             Trace.Listeners.Add(new DefaultTraceListener());

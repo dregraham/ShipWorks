@@ -64,7 +64,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             this.store = store;
             this.requestFactory = requestFactory;
 
-            credentials = new Credentials(store.SellerID, store.SecretKey);
+            
+
+            credentials = new Credentials(store.SellerID, store.SecretKey, (NeweggChannelType)store.Channel);
         }
 
         /// <summary>

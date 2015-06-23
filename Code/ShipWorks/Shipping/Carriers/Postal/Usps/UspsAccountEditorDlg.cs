@@ -11,6 +11,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
     {
         private readonly UspsAccountEntity account;
         private bool passwordUpdated;
+        private bool descriptionUpdated;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UspsAccountEditorDlg"/> class.
@@ -54,6 +55,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 account.CountryCode = "US";
             }
 
+            if (account.Description != UspsAccountManager.GetDefaultDescription(account))
+            {
+                description.Text = account.Description;
+            }
+
+            description.PromptText = UspsAccountManager.GetDefaultDescription(account);
+
             personControl.LoadEntity(new PersonAdapter(account, string.Empty));
 
             mailingPostalCode.Text = account.MailingPostalCode;
@@ -67,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </value>
         public bool AccountChanged
         {
-            get { return passwordUpdated || accountInfoControl.PostagePurchased; }
+            get { return passwordUpdated || accountInfoControl.PostagePurchased || descriptionUpdated; }
         }
 
         /// <summary>
@@ -107,6 +115,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {
                 MessageHelper.ShowError(this, "Enter a street address for the account.");
                 return;
+            }
+
+            string currentDescription = account.Description;
+
+            if (description.Text.Trim().Length > 0)
+            {
+                account.Description = description.Text.Trim();
+            }
+            else
+            {
+                account.Description = UspsAccountManager.GetDefaultDescription(account);
+            }
+
+            if (currentDescription != account.Description)
+            {
+                descriptionUpdated = true;
             }
 
             account.MailingPostalCode = mailingPostalCode.Text.Trim();

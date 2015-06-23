@@ -35,6 +35,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             storeCredentialsControl.SellerId = neweggStore.SellerID;
             storeCredentialsControl.SecretKey = neweggStore.SecretKey;
+            storeCredentialsControl.Marketplace = neweggStore.Channel;
+            
         }
 
 
@@ -60,7 +62,8 @@ namespace ShipWorks.Stores.Platforms.Newegg
 
             neweggStore.SellerID = storeCredentialsControl.SellerId;
             neweggStore.SecretKey = storeCredentialsControl.SecretKey;
-            
+            neweggStore.Channel = storeCredentialsControl.Marketplace;
+
             if (neweggStore.IsDirty)
             {
                 // The store settings have been changed, so let's bounce them off the 
@@ -97,6 +100,7 @@ namespace ShipWorks.Stores.Platforms.Newegg
             NeweggStoreEntity storeForValidation = new NeweggStoreEntity();
             storeForValidation.SellerID = storeCredentialsControl.SellerId;
             storeForValidation.SecretKey = storeCredentialsControl.SecretKey;
+            storeForValidation.Channel = storeCredentialsControl.Marketplace;
 
             return NeweggAccountSettingsValidator.Validate(storeForValidation);
         }
