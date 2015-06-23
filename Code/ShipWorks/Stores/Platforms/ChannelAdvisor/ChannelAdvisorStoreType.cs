@@ -169,34 +169,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                 .Where(status => status.Value != ChannelAdvisorShippingStatus.NoChange && status.Value != ChannelAdvisorShippingStatus.Unknown)
                 .Select(statusEnumEntry => statusEnumEntry.Value)
                 .ToList();
-
-            List<FilterEntity> filters = new List<FilterEntity>();
-
-            foreach (ChannelAdvisorShippingStatus shippingStatus in ShippingStatuses)
-            {
-                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
-
-                ChannelAdvisorShippingStatusCondition shippingStatusCondition = new ChannelAdvisorShippingStatusCondition();
-                shippingStatusCondition.Operator = EqualityOperator.Equals;
-                shippingStatusCondition.Value = shippingStatus;
-                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
-
-                StoreCondition storeCondition = new StoreCondition();
-                storeCondition.Operator = EqualityOperator.Equals;
-                storeCondition.Value = Store.StoreID;
-                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-
-                filters.Add(new FilterEntity
-                {
-                    Name =  EnumHelper.GetDescription(shippingStatus),
-                    Definition = definition.GetXml(),
-                    IsFolder = false,
-                    FilterTarget = (int)FilterTarget.Orders
-                });
-            }
-
-            return filters;
+            return CreateInitialFilters<ChannelAdvisorShippingStatus, ChannelAdvisorShippingStatusCondition>(ShippingStatuses);
         }
 
         /// <summary>

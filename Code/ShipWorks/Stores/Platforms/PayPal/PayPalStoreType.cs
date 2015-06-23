@@ -56,38 +56,14 @@ namespace ShipWorks.Stores.Platforms.PayPal
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            var ShippingStatuses = EnumHelper.GetEnumList<PayPalPaymentStatus>()
+            List<PayPalPaymentStatus> ShippingStatuses = EnumHelper.GetEnumList<PayPalPaymentStatus>()
               .Select(statusEnumEntry => statusEnumEntry.Value)
               .ToList();
 
-            List<FilterEntity> filters = new List<FilterEntity>();
-
-            foreach (PayPalPaymentStatus shippingStatus in ShippingStatuses)
-            {
-                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
-
-                PayPalPaymentStatusCondition shippingStatusCondition = new PayPalPaymentStatusCondition();
-                shippingStatusCondition.Operator = EqualityOperator.Equals;
-                shippingStatusCondition.Value = shippingStatus;
-                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
-
-                StoreCondition storeCondition = new StoreCondition();
-                storeCondition.Operator = EqualityOperator.Equals;
-                storeCondition.Value = Store.StoreID;
-                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
-
-                filters.Add(new FilterEntity
-                {
-                    Name = EnumHelper.GetDescription(shippingStatus),
-                    Definition = definition.GetXml(),
-                    IsFolder = false,
-                    FilterTarget = (int)FilterTarget.Orders
-                });
-            }
-
-            return filters;
+            return CreateInitialFilters<PayPalPaymentStatus, PayPalPaymentStatusCondition>(ShippingStatuses);
         }
+
+
 
         /// <summary>
         /// Store settings control

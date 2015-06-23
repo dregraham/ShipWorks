@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
@@ -239,6 +240,39 @@ namespace ShipWorks.Stores
                 filters.Add(new FilterEntity()
                 {
                     Name = onlineStatus,
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
+        }
+
+        protected List<FilterEntity> CreateInitialFilters<TStatus, TCondition>(List<TStatus> statusesForFilters)
+            where TCondition : EnumCondition<TStatus>, new()
+            where TStatus : struct
+        {
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (TStatus shippingStatus in statusesForFilters)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                TCondition shippingStatusCondition = new TCondition();
+                shippingStatusCondition.Operator = EqualityOperator.Equals;
+                shippingStatusCondition.Value = shippingStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = Store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                filters.Add(new FilterEntity
+                {
+                    Name = EnumHelper.GetDescription((Enum)(object)shippingStatus),
                     Definition = definition.GetXml(),
                     IsFolder = false,
                     FilterTarget = (int)FilterTarget.Orders
