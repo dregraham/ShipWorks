@@ -11,6 +11,12 @@ namespace ShipWorks.Stores
     /// </summary>
     public class StoreFilterRepositorySaveResult
     {
+        public StoreFilterRepositorySaveResult()
+        {
+            CreatedFilters = new List<FilterEntity>();
+            CollisionFilters = new List<FilterEntity>();
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether [folder created].
         /// </summary>
@@ -33,7 +39,7 @@ namespace ShipWorks.Stores
         /// <value>
         /// The created filters.
         /// </value>
-        public List<FilterEntity> CreatedFilters { get; set; }
+        public List<FilterEntity> CreatedFilters { get; private set; }
 
         /// <summary>
         /// Gets or sets the collision filters - These were not created
@@ -41,6 +47,6 @@ namespace ShipWorks.Stores
         /// <value>
         /// The collision filters that couldn't be created
         /// </value>
-        public List<FilterEntity> CollisionFilters { get; set; }
+        public List<FilterEntity> CollisionFilters { get; private set; }
     }
 }
