@@ -2782,8 +2782,6 @@ namespace ShipWorks
         // A dock control that didnt used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
-            UpdatePanelState(e.DockControl);
-
             if (UserSession.IsLoggedOn)
             {
                 if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
@@ -2795,6 +2793,8 @@ namespace ShipWorks
                     gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
                 }
             }
+
+            UpdateSelectionDependentUI();
         }
 
         /// <summary>
