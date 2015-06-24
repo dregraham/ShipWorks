@@ -915,7 +915,7 @@ namespace ShipWorks
             panelDockingArea.Visible = true;
 
             // Make the filter tree
-            orderFilterTree.Focus();
+            filterTabControl.Focus();
         }
 
         /// <summary>
@@ -1026,28 +1026,27 @@ namespace ShipWorks
             settings.OrderFilterExpandedFolders = orderFilterTree.GetFolderState().GetState();
             settings.CustomerFilterExpandedFolders = customerFilterTree.GetFolderState().GetState();
 
+            // Save the filter target that is currently selected.
+            settings.LastFilterTargetSelected = (int)filterTabControl.ActiveFilterTree.Targets.FirstOrDefault();
+
             // Save the last active filter
             if (gridControl.IsSearchActive)
             {
                 if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
                 {
                     settings.CustomerFilterLastActive = searchRestoreFilterNodeID;
+                    settings.OrderFilterLastActive = 0;
                 }
                 else
                 {
                     settings.OrderFilterLastActive = searchRestoreFilterNodeID;
+                    settings.CustomerFilterLastActive = 0;
                 }
             }
             else
             {
-                if (gridControl.ActiveFilterTarget == FilterTarget.Customers)
-                {
-                    settings.CustomerFilterLastActive = gridControl.ActiveFilterNode != null ? gridControl.ActiveFilterNode.FilterNodeID : 0;
-                }
-                else
-                {
-                    settings.OrderFilterLastActive = gridControl.ActiveFilterNode != null ? gridControl.ActiveFilterNode.FilterNodeID : 0;   
-                }
+                settings.CustomerFilterLastActive = customerFilterTree.SelectedFilterNodeID;
+                settings.OrderFilterLastActive = orderFilterTree.SelectedFilterNodeID;
             }
 
             // Save the grid column state
@@ -2029,48 +2028,6 @@ namespace ShipWorks
         }
 
         /// <summary>
-        /// Called when one of the filter windows gets displayed.  It then brings focus to the correct filter.
-        /// </summary>
-        void OnFilterDockableWindowVisibleChanged(object sender, System.EventArgs e)
-        {
-            // Get the dockable window so that we can get the filter tree
-            DockControl dockableWindowFilters = (DockableWindow)sender;
-            if (dockableWindowFilters == null)
-            {
-                throw new InvalidOperationException("OnFilterDockableWindowVisibleChanged called by an object that is not a DockableWindow.");
-            }
-
-            FilterTree currentFilterTree = dockableWindowFilters.Controls.OfType<FilterTree>().FirstOrDefault();
-            if (currentFilterTree == null)
-            {
-                throw new InvalidOperationException("MainForm has a dockable window that is missing a filter tree.");
-            }
-
-            // If we are switching from order to/from customer and there was a custom search going,
-            // we need to cancel out of it so we don't crash.
-            if (gridControl.IsSearchActive)
-            {
-                gridControl.CancelSearch();
-            }
-
-            // We only want to refresh if this window is visible, no search, and not exiting the app (user IS logged in)
-            if (dockableWindowFilters.Visible && dockableWindowFilters.IsOpen && 
-                currentFilterTree.ActiveSearchNode == null && UserSession.IsLoggedOn)
-            {
-                // If no filter node is selected, select the first one.
-                if (currentFilterTree.SelectedFilterNodeID == 0)
-                {
-                    currentFilterTree.SelectFirstNode();
-                }
-                else
-                {
-                    // There is a selcted node, force a refresh of the UI
-                    OnSelectedFilterNodeChanged(currentFilterTree, null);
-                }
-            }
-        }
-
-        /// <summary>
         /// Called when the user selects a different filter.
         /// </summary>
         private void OnSelectedFilterNodeChanged(object sender, EventArgs e)
@@ -2160,17 +2117,7 @@ namespace ShipWorks
         /// </summary>
         private FilterTree InActiveFilterTree()
         {
-            switch (gridControl.ActiveFilterTarget)
-            {
-                case FilterTarget.Orders:
-                    return customerFilterTree;
-                case FilterTarget.Customers:
-                    return orderFilterTree;
-                case FilterTarget.Shipments:
-                case FilterTarget.Items:
-                default:
-                    return null;
-            }
+            return filterTabControl.InActiveFilterTree;
         }
 
         /// <summary>
@@ -2178,17 +2125,7 @@ namespace ShipWorks
         /// </summary>
         private FilterTree ActiveFilterTree()
         {
-            switch (gridControl.ActiveFilterTarget)
-            {
-                case FilterTarget.Orders:
-                    return orderFilterTree;
-                case FilterTarget.Customers:
-                    return customerFilterTree;
-                case FilterTarget.Shipments:
-                case FilterTarget.Items:
-                default:
-                    return null;
-            }
+            return filterTabControl.ActiveFilterTree;
         }
 
         /// <summary>
@@ -2205,17 +2142,7 @@ namespace ShipWorks
         /// </summary>
         private void SelectInitialFilter(UserSettingsEntity settings)
         {
-            if (dockableWindowOrderFilters.IsOpen)
-            {
-                orderFilterTree.SelectInitialFilter(settings);
-            }
-
-            if (dockableWindowCustomerFilters.IsOpen)
-            {
-                customerFilterTree.SelectInitialFilter(settings);
-            }
-
-
+            filterTabControl.SelectInitialFilter(settings);
         }
 
         /// <summary>
@@ -2782,39 +2709,9 @@ namespace ShipWorks
         // A dock control that didnt used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
-            if (UserSession.IsLoggedOn)
-            {
-                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
-                }
-                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
-                }
-            }
-
             UpdateSelectionDependentUI();
         }
 
-        /// <summary>
-        /// When closing a order or customer filter, switch to the other one.
-        /// </summary>
-        void OnDockControlClosing(object sender, DockControlClosingEventArgs e)
-        {
-            if (UserSession.IsLoggedOn)
-            {
-                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
-                }
-                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
-                }
-            }
-        }
-        
         /// <summary>
         /// Open the editor for the context menu of the active grid
         /// </summary>

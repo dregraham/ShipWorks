@@ -2765,7 +2765,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			base.AddElementMapping( "UserSettingsEntity", "ShipWorksLocal", @"dbo", "UserSettings", 16 );
+			base.AddElementMapping( "UserSettingsEntity", "ShipWorksLocal", @"dbo", "UserSettings", 17 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "UserID", "UserID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
@@ -2782,6 +2782,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UserSettingsEntity", "CustomerFilterInitialSpecified", "CustomerFilterInitialSpecified", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 13 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "CustomerFilterLastActive", "CustomerFilterLastActive", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 14 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "CustomerFilterExpandedFolders", "CustomerFilterExpandedFolders", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "UserSettingsEntity", "LastFilterTargetSelected", "LastFilterTargetSelected", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 16 );
 		}
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()

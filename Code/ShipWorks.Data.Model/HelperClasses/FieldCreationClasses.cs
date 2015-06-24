@@ -20317,6 +20317,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterExpandedFolders);}
 		}
+		/// <summary>Creates a new UserSettingsEntity.LastFilterTargetSelected field instance</summary>
+		public static EntityField2 LastFilterTargetSelected
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastFilterTargetSelected);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity UspsAccountEntity</summary>

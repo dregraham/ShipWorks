@@ -72,7 +72,7 @@ namespace ShipWorks.Filters.Controls
 
         // The state of the layout
         FilterLayoutContext layoutContext;
-        FilterTarget[] targets;
+        public FilterTarget[] Targets { get; private set; }
 
         // The quick filter node, if any
         FilterNodeEntity quickFilterNode = null;
@@ -188,7 +188,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private long FilterLastActive(UserSettingsEntity settings)
         {
-            if (targets.Count() == 1 && targets.Contains(FilterTarget.Customers))
+            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
             {
                 return settings.CustomerFilterLastActive;
             }
@@ -202,7 +202,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private long FilterInitialSpecified(UserSettingsEntity settings)
         {
-            if (targets.Count() == 1 && targets.Contains(FilterTarget.Customers))
+            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
             {
                 return settings.CustomerFilterInitialSpecified;
             }
@@ -232,7 +232,7 @@ namespace ShipWorks.Filters.Controls
             // If there is nothing selected, that doesn't exist anymore
             if (SelectedFilterNode == null)
             {
-                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(this.targets.FirstOrDefault());
+                SelectedFilterNodeID = BuiltinFilter.GetTopLevelKey(this.Targets.FirstOrDefault());
             }
         }
 
@@ -573,7 +573,7 @@ namespace ShipWorks.Filters.Controls
             layoutContext.Reload();
 
             // Do the reload
-            LoadLayouts(targets);
+            LoadLayouts(Targets);
 
             // Reapply the state
             ApplyFolderState(state);
@@ -606,7 +606,7 @@ namespace ShipWorks.Filters.Controls
 
             // We will need this
             layoutContext = FilterLayoutContext.Current;
-            this.targets = targets;
+            this.Targets = targets;
 
             // Load the layout for each target
             foreach (FilterTarget target in targets)
@@ -670,7 +670,7 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void UpdateActiveSearchNodeDisplay()
         {
-            if (layoutContext == null || targets == null || targets.Length == 0)
+            if (layoutContext == null || Targets == null || Targets.Length == 0)
             {
                 return;
             }
@@ -831,7 +831,7 @@ namespace ShipWorks.Filters.Controls
                 }
 
                 FilterNodeEntity potential = layoutContext.FindNode(value);
-                if (potential != null && potential.Purpose == (int) FilterNodePurpose.Quick && Array.IndexOf(targets, (FilterTarget) potential.Filter.FilterTarget) >= 0)
+                if (potential != null && potential.Purpose == (int) FilterNodePurpose.Quick && Array.IndexOf(Targets, (FilterTarget) potential.Filter.FilterTarget) >= 0)
                 {
                     SelectedFilterNode = potential;
                     return;
@@ -1497,14 +1497,14 @@ namespace ShipWorks.Filters.Controls
 
             if (quickFilterNode == null)
             {
-                if (targets.Length == 1)
+                if (Targets.Length == 1)
                 {
-                    OnQuickFilterCreate(new ToolStripMenuItem { Tag = targets[0] }, EventArgs.Empty);
+                    OnQuickFilterCreate(new ToolStripMenuItem { Tag = Targets[0] }, EventArgs.Empty);
                 }
                 else
                 {
                     ContextMenuStrip targetMenu = new ContextMenuStrip();
-                    foreach (FilterTarget target in targets)
+                    foreach (FilterTarget target in Targets)
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(EnumHelper.GetDescription(target).TrimEnd('s') + " Filter");
                         menuItem.Click += new EventHandler(OnQuickFilterCreate);
@@ -1574,14 +1574,14 @@ namespace ShipWorks.Filters.Controls
         /// </summary>
         private void OnQuickFilterChoose(object sender, EventArgs e)
         {
-            FilterTarget initialTarget = targets[0];
+            FilterTarget initialTarget = Targets[0];
 
             if (quickFilterNode != null)
             {
                 initialTarget = (FilterTarget) quickFilterNode.Filter.FilterTarget;
             }
 
-            using (QuickFilterChooserDlg dlg = new QuickFilterChooserDlg(targets, initialTarget))
+            using (QuickFilterChooserDlg dlg = new QuickFilterChooserDlg(Targets, initialTarget))
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {

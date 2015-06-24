@@ -512,6 +512,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("CustomerFilterExpandedFolders", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("LastFilterTargetSelected", fieldHashtable);
 		}
 		#endregion
 
@@ -794,6 +797,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, true); }
 			set	{ SetValue((int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, value); }
+		}
+
+		/// <summary> The LastFilterTargetSelected property of the Entity UserSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UserSettings"."LastFilterTargetSelected"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 LastFilterTargetSelected
+		{
+			get { return (System.Int32)GetValue((int)UserSettingsFieldIndex.LastFilterTargetSelected, true); }
+			set	{ SetValue((int)UserSettingsFieldIndex.LastFilterTargetSelected, value); }
 		}
 
 

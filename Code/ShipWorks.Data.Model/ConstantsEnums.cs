@@ -9480,6 +9480,8 @@ namespace ShipWorks.Data.Model
 		CustomerFilterLastActive,
 		///<summary>CustomerFilterExpandedFolders. </summary>
 		CustomerFilterExpandedFolders,
+		///<summary>LastFilterTargetSelected. </summary>
+		LastFilterTargetSelected,
 		/// <summary></summary>
 		AmountOfFields
 	}
