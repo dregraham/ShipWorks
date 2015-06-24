@@ -38,6 +38,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.WizardPages
             NeweggStoreEntity store = GetStore<NeweggStoreEntity>();
             store.SellerID = storeSettingsControl.SellerId;
             store.SecretKey = storeSettingsControl.SecretKey;
+            store.Channel = storeSettingsControl.Marketplace;
 
             // Let's bounce the store's connection settings off the Newegg API to confirm that they are correct
             try
@@ -70,6 +71,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.WizardPages
             NeweggStoreEntity storeForValidation = new NeweggStoreEntity();
             storeForValidation.SellerID = storeSettingsControl.SellerId;
             storeForValidation.SecretKey = storeSettingsControl.SecretKey;
+            storeForValidation.Channel = storeSettingsControl.Marketplace;
 
             return NeweggAccountSettingsValidator.Validate(storeForValidation);
         }

@@ -1,29 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Miva.WizardPages;
 using ShipWorks.Stores.Communication;
-using Interapptive.Shared.Net;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Stores.Content;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Platforms.Newegg.WizardPages;
 
 namespace ShipWorks.Stores.Platforms.Newegg
@@ -75,6 +63,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
             store.SellerID = string.Empty;
             store.SecretKey = string.Empty;
             store.ExcludeFulfilledByNewegg = false;
+            store.Channel = (int)NeweggChannelType.US;
+
+            
 
             return store;
         }

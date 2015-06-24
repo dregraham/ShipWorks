@@ -1,5 +1,6 @@
-﻿
-using ShipWorks.ApplicationCore;
+﻿using ShipWorks.ApplicationCore;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
+
 namespace ShipWorks.Stores.Platforms.Newegg.Net
 {
     /// <summary>
@@ -13,10 +14,11 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         /// </summary>
         /// <param name="sellerId">The seller ID.</param>
         /// <param name="secretKey">The secret key.</param>
-        public Credentials(string sellerId, string secretKey)
+        public Credentials(string sellerId, string secretKey, NeweggChannelType channel)
         {
             this.SellerId = sellerId;
             this.SecretKey = secretKey;
+            this.Channel = channel;
         }
 
 
@@ -58,6 +60,14 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
             }            
         }
 
+
+        /// <summary>
+        /// Gets or sets the Channel.
+        /// </summary>
+        /// <value>
+        /// The Channel.
+        /// </value>
+        public NeweggChannelType Channel { get; set; }
 
         /// <summary>
         /// Gets or sets the seller ID.
