@@ -2229,21 +2229,23 @@ namespace ShipWorks
                 {
                     FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
-                    if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers && dockableWindowCustomerFilters.IsOpen)
+                    if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers)
                     {
                         customerFilterTree.SelectInitialFilter(settings);
+                        dockableWindowCustomerFilters.Open();
                         customerFilterTree.Focus();
                     }
                     else
                     {
                         orderFilterTree.SelectInitialFilter(settings);
+                        dockableWindowOrderFilters.Open();
                         orderFilterTree.Focus();
                     }
                 }
             }
             else
             {
-                customerFilterTree.SelectInitialFilter(settings);
+                 customerFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.Focus();
             }
@@ -2653,6 +2655,7 @@ namespace ShipWorks
         {
             // Ensure the order grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
+            gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
         }
 
@@ -2813,18 +2816,6 @@ namespace ShipWorks
         // A dock control that didnt used to be open now is
         private void OnDockControlActivated(object sender, DockControlEventArgs e)
         {
-            if (UserSession.IsLoggedOn)
-            {
-                if (e.DockControl.Guid == dockableWindowOrderFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
-                }
-                else if (e.DockControl.Guid == dockableWindowCustomerFilters.Guid)
-                {
-                    gridControl.ActiveFilterNode = customerFilterTree.SelectedFilterNode;
-                }
-            }
-
             UpdateSelectionDependentUI();
         }
 
