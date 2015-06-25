@@ -39,6 +39,10 @@ namespace ShipWorks.Stores.Management
             this.storeAddressControl = new ShipWorks.Stores.Management.StoreAddressControl();
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
+            this.panelDefaultFilters = new System.Windows.Forms.Panel();
+            this.CreateDefaultFilters = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.sectionTitle2 = new ShipWorks.UI.Controls.SectionTitle();
             this.panelAddressValidation = new System.Windows.Forms.Panel();
             this.addressValidationSetting = new System.Windows.Forms.ComboBox();
             this.labelAddressValidationSetting = new System.Windows.Forms.Label();
@@ -77,6 +81,7 @@ namespace ShipWorks.Stores.Management
             this.optionControl.SuspendLayout();
             this.optionPageStoreDetails.SuspendLayout();
             this.optionPageSettings.SuspendLayout();
+            this.panelDefaultFilters.SuspendLayout();
             this.panelAddressValidation.SuspendLayout();
             this.panelStoreStatus.SuspendLayout();
             this.optionPageStatusPreset.SuspendLayout();
@@ -192,6 +197,7 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.AutoScroll = true;
             this.optionPageSettings.BackColor = System.Drawing.Color.White;
             this.optionPageSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionPageSettings.Controls.Add(this.panelDefaultFilters);
             this.optionPageSettings.Controls.Add(this.panelAddressValidation);
             this.optionPageSettings.Controls.Add(this.labelAllowDownload);
             this.optionPageSettings.Controls.Add(this.comboAllowDownload);
@@ -206,6 +212,46 @@ namespace ShipWorks.Stores.Management
             this.optionPageSettings.Size = new System.Drawing.Size(600, 466);
             this.optionPageSettings.TabIndex = 7;
             this.optionPageSettings.Text = "Store Settings";
+            // 
+            // panelDefaultFilters
+            // 
+            this.panelDefaultFilters.Controls.Add(this.CreateDefaultFilters);
+            this.panelDefaultFilters.Controls.Add(this.label3);
+            this.panelDefaultFilters.Controls.Add(this.sectionTitle2);
+            this.panelDefaultFilters.Location = new System.Drawing.Point(15, 394);
+            this.panelDefaultFilters.Name = "panelDefaultFilters";
+            this.panelDefaultFilters.Size = new System.Drawing.Size(564, 80);
+            this.panelDefaultFilters.TabIndex = 35;
+            // 
+            // CreateDefaultFilters
+            // 
+            this.CreateDefaultFilters.Location = new System.Drawing.Point(261, 51);
+            this.CreateDefaultFilters.Name = "CreateDefaultFilters";
+            this.CreateDefaultFilters.Size = new System.Drawing.Size(127, 23);
+            this.CreateDefaultFilters.TabIndex = 30;
+            this.CreateDefaultFilters.Text = "Create Default Filters";
+            this.CreateDefaultFilters.UseVisualStyleBackColor = true;
+            this.CreateDefaultFilters.Click += new System.EventHandler(this.OnClickCreateDefaultFilters);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(20, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(435, 13);
+            this.label3.TabIndex = 29;
+            this.label3.Text = "Create the default filters for this store. This will not overwrite any of your ex" +
+    "isting filters.";
+            // 
+            // sectionTitle2
+            // 
+            this.sectionTitle2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.sectionTitle2.Location = new System.Drawing.Point(0, 0);
+            this.sectionTitle2.Name = "sectionTitle2";
+            this.sectionTitle2.Size = new System.Drawing.Size(564, 22);
+            this.sectionTitle2.TabIndex = 28;
+            this.sectionTitle2.Text = "Default Filters";
             // 
             // panelAddressValidation
             // 
@@ -333,7 +379,7 @@ namespace ShipWorks.Stores.Management
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
             this.sectionAutoDownloads.Name = "sectionAutoDownloads";
-            this.sectionAutoDownloads.Size = new System.Drawing.Size(564, 22);
+            this.sectionAutoDownloads.Size = new System.Drawing.Size(530, 22);
             this.sectionAutoDownloads.TabIndex = 3;
             this.sectionAutoDownloads.Text = "Downloading";
             // 
@@ -343,7 +389,7 @@ namespace ShipWorks.Stores.Management
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleManualOrders.Location = new System.Drawing.Point(15, 129);
             this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
-            this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
+            this.sectionTitleManualOrders.Size = new System.Drawing.Size(530, 22);
             this.sectionTitleManualOrders.TabIndex = 2;
             this.sectionTitleManualOrders.Text = "Manual Orders";
             // 
@@ -594,6 +640,8 @@ namespace ShipWorks.Stores.Management
             this.optionPageStoreDetails.ResumeLayout(false);
             this.optionPageSettings.ResumeLayout(false);
             this.optionPageSettings.PerformLayout();
+            this.panelDefaultFilters.ResumeLayout(false);
+            this.panelDefaultFilters.PerformLayout();
             this.panelAddressValidation.ResumeLayout(false);
             this.panelAddressValidation.PerformLayout();
             this.panelStoreStatus.ResumeLayout(false);
@@ -659,5 +707,9 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Panel panelAddressValidation;
         private System.Windows.Forms.ComboBox addressValidationSetting;
         private System.Windows.Forms.Label labelAddressValidationSetting;
+        private System.Windows.Forms.Panel panelDefaultFilters;
+        private System.Windows.Forms.Button CreateDefaultFilters;
+        private System.Windows.Forms.Label label3;
+        private UI.Controls.SectionTitle sectionTitle2;
     }
 }
