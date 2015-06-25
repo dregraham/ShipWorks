@@ -115,7 +115,8 @@ namespace ShipWorks
             this.panelPrinted = new ShipWorks.Stores.Content.Panels.PrintResultsPanel();
             this.sandDockManager = new TD.SandDock.SandDockManager();
             this.dockContainer = new TD.SandDock.DockContainer();
-            this.dockableWindowFilters = new TD.SandDock.DockableWindow();
+            this.dockableWindowOrderFilters = new TD.SandDock.DockableWindow();
+            this.dockableWindowCustomerFilters = new TD.SandDock.DockableWindow();
             this.orderFilterTree = new ShipWorks.Filters.Controls.FilterTree();
             this.customerFilterTree = new ShipWorks.Filters.Controls.FilterTree();
             this.dockableWindowNotes = new TD.SandDock.DockableWindow();
@@ -315,8 +316,8 @@ namespace ShipWorks
             this.dockableWindowEmail.SuspendLayout();
             this.dockableWindowPrinted.SuspendLayout();
             this.dockContainer.SuspendLayout();
-            this.dockableWindowFilters.SuspendLayout();
-            //this.dockableWindowCustomerFilters.SuspendLayout();
+            this.dockableWindowOrderFilters.SuspendLayout();
+            this.dockableWindowCustomerFilters.SuspendLayout();
             this.dockableWindowNotes.SuspendLayout();
             this.notifyIconMenuStrip.SuspendLayout();
             this.contextMenuOrderGrid.SuspendLayout();
@@ -1078,18 +1079,19 @@ namespace ShipWorks
             this.sandDockManager.OwnerForm = this;
             this.sandDockManager.Renderer = new TD.SandDock.Rendering.Office2007Renderer();
             this.sandDockManager.DockControlActivated += new TD.SandDock.DockControlEventHandler(this.OnDockControlActivated);
-            //this.sandDockManager.DockControlClosing += OnDockControlClosing;
+            this.sandDockManager.DockControlClosing += OnDockControlClosing;
             // 
             // dockContainer
             // 
             this.dockContainer.ContentSize = 214;
-            this.dockContainer.Controls.Add(this.dockableWindowFilters);
-            //this.dockContainer.Controls.Add(this.dockableWindowCustomerFilters);
+            this.dockContainer.Controls.Add(this.dockableWindowOrderFilters);
+            this.dockContainer.Controls.Add(this.dockableWindowCustomerFilters);
             this.dockContainer.Controls.Add(this.dockableWindowNotes);
             this.dockContainer.Dock = System.Windows.Forms.DockStyle.Left;
             this.dockContainer.LayoutSystem = new TD.SandDock.SplitLayoutSystem(new System.Drawing.SizeF(250F, 400F), System.Windows.Forms.Orientation.Horizontal, new TD.SandDock.LayoutSystemBase[] {
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(250F, 406.0914F), new TD.SandDock.DockControl[] {
-                        ((TD.SandDock.DockControl)(this.dockableWindowFilters))}, this.dockableWindowFilters))),
+                        ((TD.SandDock.DockControl)(this.dockableWindowOrderFilters)),
+                        ((TD.SandDock.DockControl)(this.dockableWindowCustomerFilters))}, this.dockableWindowOrderFilters))),
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(156.6059F, 393.9086F), new TD.SandDock.DockControl[] {
                         ((TD.SandDock.DockControl)(this.dockableWindowNotes))}, this.dockableWindowNotes)))});
             this.dockContainer.Location = new System.Drawing.Point(2, 0);
@@ -1100,25 +1102,31 @@ namespace ShipWorks
             // 
             // dockableWindowOrderFilters
             // 
-            filterTabControl = new FilterTabControl(orderFilterTree, customerFilterTree);
-            filterTabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                | System.Windows.Forms.AnchorStyles.Left)
-                | System.Windows.Forms.AnchorStyles.Right)));
-            filterTabControl.Dock = DockStyle.Fill;
-            //filterTabControl.CustomerFilterTree = customerFilterTree;
-            //filterTabControl.OrderFilterTree = orderFilterTree;
-            
-            this.dockableWindowFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
-            this.dockableWindowFilters.Controls.Add(filterTabControl);
-            this.dockableWindowFilters.Guid = new System.Guid("14a0dd81-b0e7-475b-aa54-aef3c97eb515");
-            this.dockableWindowFilters.Location = new System.Drawing.Point(0, 21);
-            this.dockableWindowFilters.Name = "dockableWindowOrderFilters";
-            this.dockableWindowFilters.ShowOptions = false;
-            this.dockableWindowFilters.Size = new System.Drawing.Size(214, 231);
-            this.dockableWindowFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
-            this.dockableWindowFilters.TabIndex = 0;
-            this.dockableWindowFilters.Text = "Filters";
-            //this.dockableWindowOrderFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
+            this.dockableWindowOrderFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
+            this.dockableWindowOrderFilters.Controls.Add(this.orderFilterTree);
+            this.dockableWindowOrderFilters.Guid = new System.Guid("14a0dd81-b0e7-475b-aa54-aef3c97eb515");
+            this.dockableWindowOrderFilters.Location = new System.Drawing.Point(0, 21);
+            this.dockableWindowOrderFilters.Name = "dockableWindowOrderFilters";
+            this.dockableWindowOrderFilters.ShowOptions = false;
+            this.dockableWindowOrderFilters.Size = new System.Drawing.Size(214, 231);
+            this.dockableWindowOrderFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
+            this.dockableWindowOrderFilters.TabIndex = 0;
+            this.dockableWindowOrderFilters.Text = "Orders";
+            this.dockableWindowOrderFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
+            // 
+            // dockableWindowCustomerFilters
+            // 
+            this.dockableWindowCustomerFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
+            this.dockableWindowCustomerFilters.Controls.Add(this.customerFilterTree);
+            this.dockableWindowCustomerFilters.Guid = new System.Guid("5F3097BE-C6E4-4F85-B9FF-24844749AE44");
+            this.dockableWindowCustomerFilters.Location = new System.Drawing.Point(0, 21);
+            this.dockableWindowCustomerFilters.Name = "dockableWindowCustomerFilters";
+            this.dockableWindowCustomerFilters.ShowOptions = false;
+            this.dockableWindowCustomerFilters.Size = new System.Drawing.Size(214, 231);
+            this.dockableWindowCustomerFilters.TabImage = global::ShipWorks.Properties.Resources.customer16;
+            this.dockableWindowCustomerFilters.TabIndex = 0;
+            this.dockableWindowCustomerFilters.Text = "Customers";
+            dockableWindowCustomerFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
             // 
             // orderFilterTree
             // 
@@ -2749,8 +2757,8 @@ namespace ShipWorks
             this.dockableWindowEmail.ResumeLayout(false);
             this.dockableWindowPrinted.ResumeLayout(false);
             this.dockContainer.ResumeLayout(false);
-            this.dockableWindowFilters.ResumeLayout(false);
-            //this.dockableWindowCustomerFilters.ResumeLayout(false);
+            this.dockableWindowOrderFilters.ResumeLayout(false);
+            this.dockableWindowCustomerFilters.ResumeLayout(false);
             this.dockableWindowNotes.ResumeLayout(false);
             this.notifyIconMenuStrip.ResumeLayout(false);
             this.contextMenuOrderGrid.ResumeLayout(false);
@@ -2851,8 +2859,8 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonShipOrders;
         private Divelements.SandRibbon.Button buttonTrackOrders;
         private Divelements.SandRibbon.Button buttonOptions;
-        private TD.SandDock.DockableWindow dockableWindowFilters;
-        private FilterTabControl filterTabControl;
+        private TD.SandDock.DockableWindow dockableWindowOrderFilters;
+        private TD.SandDock.DockableWindow dockableWindowCustomerFilters;
         private TD.SandDock.SandDockManager sandDockManager;
         private TD.SandDock.DockContainer dockContainer;
         private System.Windows.Forms.ContextMenuStrip contextMenuOrderGrid;

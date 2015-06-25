@@ -27,6 +27,7 @@ using ShipWorks.UI;
 using System.Linq;
 using ShipWorks.ApplicationCore.Appearance;
 using Interapptive.Shared.UI;
+using ShipWorks.Data;
 using ShipWorks.Editions;
 using ShipWorks.Filters.Search;
 
@@ -195,27 +196,13 @@ namespace ShipWorks.Filters.Controls
 
             return settings.OrderFilterLastActive;
         }
-
-        /// <summary>
-        /// Gets the FilterInitialSpecified for the current target type.  Defaults to Order value if more than one target is specified
-        /// or if only one target and Customers is not it.
-        /// </summary>
-        private long FilterInitialSpecified(UserSettingsEntity settings)
-        {
-            if (Targets.Count() == 1 && Targets.Contains(FilterTarget.Customers))
-            {
-                return settings.CustomerFilterInitialSpecified;
-            }
-
-            return settings.OrderFilterInitialSpecified;
-        }
-
+        
         /// <summary>
         /// Select the initial filter based on the given user settings
         /// </summary>
         public void SelectInitialFilter(UserSettingsEntity settings)
         {
-            long initialID;
+            long initialID = 0;
 
             if (settings.FilterInitialUseLastActive)
             {
@@ -223,7 +210,7 @@ namespace ShipWorks.Filters.Controls
             }
             else
             {
-                initialID = FilterInitialSpecified(settings);
+                initialID = settings.FilterInitialSpecified;
             }
 
             // Select it

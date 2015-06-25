@@ -20,23 +20,22 @@ CREATE TABLE [dbo].[tmp_rg_xx_UserSettings]
 [WindowLayout] [varbinary] (max) NOT NULL,
 [GridMenuLayout] [xml] NULL,
 [FilterInitialUseLastActive] [bit] NOT NULL,
-[OrderFilterInitialSpecified] [bigint] NOT NULL,
+[FilterInitialSpecified] [bigint] NOT NULL,
 [FilterInitialSortType] [int] NOT NULL,
 [OrderFilterLastActive] [bigint] NOT NULL,
 [OrderFilterExpandedFolders] [xml] NULL,
 [ShippingWeightFormat] [int] NOT NULL,
 [TemplateExpandedFolders] [xml] NULL,
 [TemplateLastSelected] [bigint] NOT NULL,
-[CustomerFilterInitialSpecified] [bigint] NOT NULL,
 [CustomerFilterLastActive] [bigint] NOT NULL,
 [CustomerFilterExpandedFolders] [xml] NULL
 )
 GO
-INSERT INTO [dbo].[tmp_rg_xx_UserSettings]([UserID], [DisplayColorScheme], [DisplaySystemTray], [WindowLayout], [GridMenuLayout], [FilterInitialUseLastActive], [OrderFilterInitialSpecified], [FilterInitialSortType], [OrderFilterLastActive], [OrderFilterExpandedFolders], [ShippingWeightFormat], [TemplateExpandedFolders], [TemplateLastSelected],
-			[CustomerFilterInitialSpecified], [CustomerFilterLastActive],[CustomerFilterExpandedFolders]) 
-	SELECT [UserID], [DisplayColorScheme], [DisplaySystemTray], [WindowLayout], [GridMenuLayout], [FilterInitialUseLastActive], [FilterInitialSpecified], [FilterInitialSortType], [FilterLastActive], [FilterExpandedFolders], [ShippingWeightFormat], [TemplateExpandedFolders], [TemplateLastSelected],
-			0, 0, null 
-	FROM [dbo].[UserSettings]
+INSERT INTO [dbo].[tmp_rg_xx_UserSettings]([UserID], [DisplayColorScheme], [DisplaySystemTray], [WindowLayout], [GridMenuLayout], [FilterInitialUseLastActive], [FilterInitialSpecified], [FilterInitialSortType], [OrderFilterLastActive], [OrderFilterExpandedFolders], [ShippingWeightFormat], [TemplateExpandedFolders], 
+		[TemplateLastSelected], [CustomerFilterLastActive], [CustomerFilterExpandedFolders]) 
+	SELECT [UserID], [DisplayColorScheme], [DisplaySystemTray], [WindowLayout], [GridMenuLayout], [FilterInitialUseLastActive], [FilterInitialSpecified], [FilterInitialSortType], [FilterLastActive], [FilterExpandedFolders], [ShippingWeightFormat], [TemplateExpandedFolders], 
+		[TemplateLastSelected], 0, null 
+		FROM [dbo].[UserSettings]
 GO
 DROP TABLE [dbo].[UserSettings]
 GO
@@ -49,4 +48,10 @@ GO
 PRINT N'Adding foreign keys to [dbo].[UserSettings]'
 GO
 ALTER TABLE [dbo].[UserSettings] ADD CONSTRAINT [FK_UserSetting_User] FOREIGN KEY ([UserID]) REFERENCES [dbo].[User] ([UserID])
+GO
+
+-- Rename the order and customer root filter nodes to be 'All' (if they haven't been changed from their default names)
+update Filter set Name = 'All' where Name = 'Customers' and FilterID = -28
+update Filter set Name = 'All' where Name = 'Orders' and FilterID = -26
+
 GO

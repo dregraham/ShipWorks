@@ -207,12 +207,11 @@ namespace ShipWorks.Users
 
             settings.FilterInitialUseLastActive = false;
             settings.OrderFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
-            settings.OrderFilterInitialSpecified = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
+            settings.FilterInitialSpecified = settings.OrderFilterLastActive;
             settings.FilterInitialSortType = (int) FilterInitialSortType.CurrentSort;
             settings.OrderFilterExpandedFolders = null;
 
             settings.CustomerFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Customers);
-            settings.CustomerFilterInitialSpecified = BuiltinFilter.GetTopLevelKey(FilterTarget.Customers);
             settings.CustomerFilterExpandedFolders = null;
 
             settings.ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds;

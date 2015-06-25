@@ -20267,10 +20267,10 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.FilterInitialUseLastActive);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.OrderFilterInitialSpecified field instance</summary>
-		public static EntityField2 OrderFilterInitialSpecified
+		/// <summary>Creates a new UserSettingsEntity.FilterInitialSpecified field instance</summary>
+		public static EntityField2 FilterInitialSpecified
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderFilterInitialSpecified);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.FilterInitialSpecified);}
 		}
 		/// <summary>Creates a new UserSettingsEntity.FilterInitialSortType field instance</summary>
 		public static EntityField2 FilterInitialSortType
@@ -20302,11 +20302,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.TemplateLastSelected);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.CustomerFilterInitialSpecified field instance</summary>
-		public static EntityField2 CustomerFilterInitialSpecified
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterInitialSpecified);}
-		}
 		/// <summary>Creates a new UserSettingsEntity.CustomerFilterLastActive field instance</summary>
 		public static EntityField2 CustomerFilterLastActive
 		{
@@ -20316,11 +20311,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 CustomerFilterExpandedFolders
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterExpandedFolders);}
-		}
-		/// <summary>Creates a new UserSettingsEntity.LastFilterTargetSelected field instance</summary>
-		public static EntityField2 LastFilterTargetSelected
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.LastFilterTargetSelected);}
 		}
 	}
 
