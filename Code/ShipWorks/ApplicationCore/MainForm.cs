@@ -900,7 +900,7 @@ namespace ShipWorks
 
             // Make sure any users upgrading from a previous version will always see (and 
             // be made aware of) the rate panel; they can still choose to remove it later
-            OpenRatePanelForUpgrade(settings);
+            OpenNewPanelsOnUpgrade(settings);
             
             // Load the user's saved menu settings
             gridMenuLayoutProvider.LoadLayout(settings.GridMenuLayout);
@@ -920,12 +920,12 @@ namespace ShipWorks
 
         /// <summary>
         /// Inspects the WindowLayout of the user settings to see if the user has upgraded from a
-        /// version of ShipWorks that didn't have the rate panel and opens the rate panel so everyone
-        /// is aware of it and users don't have to manually enabled it. 
+        /// version of ShipWorks that does not have the panels we want shown to all users on upgrade
+        /// so they are aware of it and don't have to manually enabled it. 
         /// </summary>
         /// <param name="settings">The user settings being inspected.</param>
         /// <exception cref="AppearanceException">The file is not a valid ShipWorks layout.</exception>
-        private void OpenRatePanelForUpgrade(UserSettingsEntity settings)
+        private void OpenNewPanelsOnUpgrade(UserSettingsEntity settings)
         {
             // Write out the user's current window layout to disk
             string tempFile = Path.Combine(DataPath.ShipWorksTemp, Guid.NewGuid().ToString("N") + ".swl");
@@ -950,15 +950,17 @@ namespace ShipWorks
                 throw new AppearanceException("The file is not a valid ShipWorks layout.", ex);
             }
 
+
             // Read the panels.xml file that was extracted
             string panelXml = File.ReadAllText(Path.Combine(tempPath, "panels.xml"), Encoding.Unicode);
-
-            // Check to see if the Window GUID for the rates panel is present
             XmlDocument panelDoc = new XmlDocument();
             panelDoc.LoadXml(panelXml);
 
-            // The GUID value is set at design-time by the designer sandDockManager, so we can look for it
+
+            // Check to see if the Window GUID for the rates panel is present. The GUID value is set at 
+            // design-time by the designer sandDockManager, so we can look for it
             const string RatePanelID = "61946061-0df9-4143-92ed-0e71826d7d5f";
+            
             XmlNode ratePanelNode = panelDoc.SelectSingleNode(string.Format("/Layout/Window[@Guid='{0}']", RatePanelID));
 
             if (ratePanelNode == null)
@@ -970,6 +972,27 @@ namespace ShipWorks
                 {
                     // We want to display the rate panel for everyone after an upgrade by default
                     dockControl.Open(WindowOpenMethod.OnScreen);
+                }
+            }
+
+            // Attach the customers filter panel to the same container layout as the order filter panel.
+            // The GUID value is set at design-time by the designer sandDockManager, so we can look for it in the panel XML. If the 
+            // node is not found in the panelDoc XML, ShipWorks was just upgraded from a previous version. The section below
+            // will add the customers filter panel alongside the orders filter panel if it is being shown/used in a dock container
+            const string dockableCustomersFilterID = "5f3097be-c6e4-4f85-b9ff-24844749ae44";
+            XmlNode customerFiltersPanelNode = panelDoc.SelectSingleNode(string.Format("/Layout/Window[@Guid='{0}']", dockableCustomersFilterID));
+
+            if (customerFiltersPanelNode == null)
+            {
+                // The customer filter panel doesn't exists in the panel settings, so we need to attach it to the order filters
+                // if the order filters are being used in a container
+                DockContainer orderFiltersContainer = sandDockManager.GetDockContainers().FirstOrDefault(c => c.Controls.Contains(dockableWindowOrderFilters));
+                if (orderFiltersContainer != null)
+                {
+                    // We've found the container the order filters below to, so we need to add the customer 
+                    // filters panel to the same layout of the order filter panel. This creates the appearance
+                    // of the panels appearing as "tabs" within the container's layout
+                    dockableWindowOrderFilters.LayoutSystem.Controls.Add(dockableWindowCustomerFilters);
                 }
             }
         }
