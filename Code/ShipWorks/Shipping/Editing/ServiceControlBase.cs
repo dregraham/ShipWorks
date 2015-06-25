@@ -54,6 +54,11 @@ namespace ShipWorks.Shipping.Editing
         public event EventHandler RecipientDestinationChanged;
 
         /// <summary>
+        /// Raise when the country or state of the origin has changed
+        /// </summary>
+        public event EventHandler OriginDestinationChanged;
+
+        /// <summary>
         /// Occurs when [shipment service changed].
         /// </summary>
         public event EventHandler ShipmentServiceChanged;
@@ -554,6 +559,17 @@ namespace ShipWorks.Shipping.Editing
             if (RecipientDestinationChanged != null)
             {
                 RecipientDestinationChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// User has changed the recipient state\country
+        /// </summary>
+        protected void OnOriginDestinationChanged(object sender, EventArgs e)
+        {
+            if (OriginDestinationChanged != null)
+            {
+                OriginDestinationChanged(this, EventArgs.Empty);
             }
         }
 

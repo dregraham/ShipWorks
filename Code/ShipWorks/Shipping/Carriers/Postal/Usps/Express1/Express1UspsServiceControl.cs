@@ -75,7 +75,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
+            originControl.DestinationChanged += OnOriginDestinationChanged;
 
             // Load the origin
             originControl.LoadShipments(shipments);

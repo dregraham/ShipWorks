@@ -53,7 +53,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
+            originControl.DestinationChanged += OnOriginDestinationChanged;
 
             // Load the origin
             originControl.LoadShipments(shipments);

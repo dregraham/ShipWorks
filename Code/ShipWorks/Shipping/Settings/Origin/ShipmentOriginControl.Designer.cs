@@ -68,6 +68,7 @@
             this.personControl.Size = new System.Drawing.Size(338, 414);
             this.personControl.TabIndex = 3;
             this.personControl.ContentChanged += new System.EventHandler(this.OnPersonContentChanged);
+            this.personControl.DestinationChanged += new System.EventHandler(this.OnDestinationChanged);
             // 
             // labelOrigin
             // 
