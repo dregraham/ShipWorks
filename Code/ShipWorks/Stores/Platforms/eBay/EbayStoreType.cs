@@ -1163,7 +1163,9 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            return EnumHelper.GetEnumList<OrderStatusCodeType>().Select(status => EbayUtility.GetOrderStatusName(status.Value)).Where(statusName => statusName != "Invalid").ToList();
+            IEnumerable<OrderStatusCodeType> enums = Enum.GetValues(typeof(OrderStatusCodeType)).Cast<OrderStatusCodeType>();
+
+            return enums.Select(status => EbayUtility.GetOrderStatusName(status)).Where(statusName => statusName != "Invalid").ToList();
         }
     }
 }

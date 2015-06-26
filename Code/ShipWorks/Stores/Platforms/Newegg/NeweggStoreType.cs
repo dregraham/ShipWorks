@@ -257,9 +257,9 @@ namespace ShipWorks.Stores.Platforms.Newegg
         /// </summary>
         public override ICollection<string> GetOnlineStatusChoices()
         {
-            return EnumHelper.GetEnumList<NeweggOrderStatus>()
-                .Select(s => Enum.GetName(typeof(NeweggOrderStatus), s.Value))
-                .ToList();
+            IEnumerable<NeweggOrderStatus> enums = Enum.GetValues(typeof(NeweggOrderStatus)).Cast<NeweggOrderStatus>();
+
+            return enums.Select(s => Enum.GetName(typeof(NeweggOrderStatus), s)).ToList();
         }
     }
 }
