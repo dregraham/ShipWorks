@@ -227,15 +227,15 @@ namespace ShipWorks.Stores
                 FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
                 definition.RootContainer.JoinType = ConditionGroupJoinType.And;
 
-                OnlineStatusCondition onlineStatusCondition = new OnlineStatusCondition();
-                onlineStatusCondition.Operator = StringOperator.Equals;
-                onlineStatusCondition.TargetValue = onlineStatus;
-                definition.RootContainer.FirstGroup.Conditions.Add(onlineStatusCondition);
-
                 StoreCondition storeCondition = new StoreCondition();
                 storeCondition.Operator = EqualityOperator.Equals;
                 storeCondition.Value = store.StoreID;
                 definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                OnlineStatusCondition onlineStatusCondition = new OnlineStatusCondition();
+                onlineStatusCondition.Operator = StringOperator.Equals;
+                onlineStatusCondition.TargetValue = onlineStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(onlineStatusCondition);
 
                 filters.Add(new FilterEntity()
                 {

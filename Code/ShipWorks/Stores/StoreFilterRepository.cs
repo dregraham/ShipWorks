@@ -80,16 +80,16 @@ namespace ShipWorks.Stores
         /// <summary>
         /// Adds the uniquely named filter and updates the result with the result of this call.
         /// </summary>
-        private static void AddUniquelyNamedFilter(FilterNodeEntity storeNode, FilterEntity allOrders, StoreFilterRepositorySaveResult result, int position)
+        private static void AddUniquelyNamedFilter(FilterNodeEntity folder, FilterEntity filter, StoreFilterRepositorySaveResult result, int position)
         {
-            if (!HasChildNodeWithName(storeNode, allOrders.Name, false))
+            if (!HasChildNodeWithName(folder, filter.Name, false))
             {
-                result.CreatedFilters.Add(allOrders);
-                FilterLayoutContext.Current.AddFilter(allOrders, storeNode, position);
+                result.CreatedFilters.Add(filter);
+                FilterLayoutContext.Current.AddFilter(filter, folder, position);
             }
             else
             {
-                result.CollisionFilters.Add(allOrders);
+                result.CollisionFilters.Add(filter);
             }
         }
 

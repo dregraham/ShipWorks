@@ -516,6 +516,10 @@ PRINT N'Creating index [IX_Auto_OnlineStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
 GO
+PRINT N'Creating index [IX_Order_StoreIdOnlineStatus] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
+GO
 PRINT N'Creating index [IX_Auto_RequestedShipping] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
