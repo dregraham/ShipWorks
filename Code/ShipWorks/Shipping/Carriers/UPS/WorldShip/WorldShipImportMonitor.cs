@@ -577,7 +577,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
                 // If it's already been voided, just skip voiding
-                if (!shipment.Voided && shipment.Ups != null && shipment.Ups.WorldShipStatus != (int)WorldShipStatusType.Voided)
+                if (!shipment.Voided && shipment.Ups != null)
                 {
                     // Since we pass the ShipmentID to ShippingManager.VoidShipment, we lose the status being set here,
                     // so we save the Ups entity.  This keeps ShippingManager.VoidShipment from calling the Ups Online Tools Void
