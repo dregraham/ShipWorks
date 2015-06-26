@@ -1191,6 +1191,10 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrder] on [dbo].[ChannelAdvisorOr
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrder] ADD CONSTRAINT [PK_ChannelAdvisorOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
+Go
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
 CREATE TABLE [dbo].[ChannelAdvisorOrderItem]
@@ -2706,6 +2710,10 @@ GO
 PRINT N'Creating primary key [PK_PayPalOrder] on [dbo].[PayPalOrder]'
 GO
 ALTER TABLE [dbo].[PayPalOrder] ADD CONSTRAINT [PK_PayPalOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_PayPalOrder_PaymentStatus] on [dbo].[PayPalOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_PayPalOrder_PaymentStatus] ON [dbo].[PayPalOrder] ([PaymentStatus])
 GO
 PRINT N'Creating [dbo].[PayPalStore]'
 GO
