@@ -549,7 +549,7 @@ namespace ShipWorks.Stores.Management
             StringBuilder sb = new StringBuilder();
             if (result.CreatedFilters.Any())
             {
-                sb.AppendFormat("The following fitlers where created in filter folder '{0}.'", result.StoreFolderName)
+                sb.AppendFormat("The following filter were created in filter folder '{0}.'", result.StoreFolderName)
                     .AppendLine();
 
                 result.CreatedFilters.ForEach(newFilter=>sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
@@ -561,7 +561,7 @@ namespace ShipWorks.Stores.Management
                     sb.AppendLine();
                 }
 
-                sb.AppendFormat("Fitlers already existed in '{0}.'", result.StoreFolderName)
+                sb.AppendFormat("Filters already existed in '{0}.'", result.StoreFolderName)
                     .AppendLine()
                     .AppendLine("These filters remained unchanged:");
 
