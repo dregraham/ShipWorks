@@ -2653,10 +2653,13 @@ namespace ShipWorks
         /// </summary>
         private void LookupOrder(long orderID)
         {
+            dockableWindowOrderFilters.Open(WindowOpenMethod.OnScreenSelect);
+
             // Ensure the order grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.ActiveFilterNode = orderFilterTree.SelectedFilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(orderID));
+
         }
 
         /// <summary>
@@ -2668,6 +2671,8 @@ namespace ShipWorks
             {
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
+                    dockableWindowCustomerFilters.Open(WindowOpenMethod.OnScreenSelect);
+
                     // Ensure the customer grid is active
                     customerFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Customers).FilterNode;
                     gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateCustomerLookupDefinition(dlg.CustomerID));
