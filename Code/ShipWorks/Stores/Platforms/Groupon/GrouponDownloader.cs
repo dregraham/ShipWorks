@@ -103,13 +103,9 @@ namespace ShipWorks.Stores.Platforms.Groupon
             //Order Item Status
             string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
 
-            // Nothing to do if its not new - they don't change
+            // Order already exists or is new and of status open
             if (!order.IsNew || status == "open")
             {
-                // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-                order.OrderNumber = GetNextOrderNumber();
-
-                // Set Order Online Status
                 order.OnlineStatus = GetOrderStatusName(status);
                 order.OnlineStatusCode = GetOrderStatusName(status);
 
@@ -128,27 +124,30 @@ namespace ShipWorks.Stores.Platforms.Groupon
                 //Order requestedshipping
                 order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
 
-                //Unit of measurement used for weight  
-                string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
-
-                //List of order items
-                IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
-                foreach (JToken jsonItem in jsonItems)
+                //Order is new and its status is open
+                if (order.IsNew)
                 {
-                    //Deserialized into grouponitem
-                    GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
-                    LoadItem(order, item, itemWeightUnit);
-                }
+                    // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
+                    order.OrderNumber = GetNextOrderNumber();
 
-                //OrderTotal
-                order.OrderTotal = (decimal)jsonOrder["amount"]["total"];
+                    //Unit of measurement used for weight  
+                    string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
+
+                    //List of order items
+                    IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
+                    foreach (JToken jsonItem in jsonItems)
+                    {
+                        //Deserialized into grouponitem
+                        GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
+                        LoadItem(order, item, itemWeightUnit);
+                    }
+
+                    //OrderTotal
+                    order.OrderTotal = (decimal)jsonOrder["amount"]["total"];
+                }
 
                 SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
                 retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
-            }
-            else
-            {
-               return;
             }
         }
 
