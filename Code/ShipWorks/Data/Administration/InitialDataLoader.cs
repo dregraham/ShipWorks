@@ -80,7 +80,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
+            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 0)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
