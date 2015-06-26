@@ -51,19 +51,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                         if (shipment.ActualLabelFormat.HasValue)
                         {
                             // Thermal
-                            // Create a label for each url from Stamps.
-                            for (int i = 0; i < labelUrls.Count; i++)
+
+                            labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
+                            if (labelUrls.Count >= 2)
                             {
-                                if (i == 0)
-                                {
-                                    // Create the primary label
-                                    labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
-                                }
-                                else
-                                {
-                                    // Create the remainder of labels
-                                    labels.Add(CreateThermalLabel(shipment, "LabelPart" + i, labelUrls[i])); 
-                                }
+                                // print this form 1 times.
+                                labels.Add(CreateThermalLabel(shipment, "LabelPart2", labelUrls[1]));
                             }
                         }
                         else
