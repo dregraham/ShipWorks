@@ -439,6 +439,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("RowVersion", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Username", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -582,6 +585,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Byte[])GetValue((int)UspsAccountFieldIndex.RowVersion, true); }
 
+		}
+
+		/// <summary> The Description property of the Entity UspsAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "UspsAccount"."Description"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Description
+		{
+			get { return (System.String)GetValue((int)UspsAccountFieldIndex.Description, true); }
+			set	{ SetValue((int)UspsAccountFieldIndex.Description, value); }
 		}
 
 		/// <summary> The Username property of the Entity UspsAccount<br/><br/>

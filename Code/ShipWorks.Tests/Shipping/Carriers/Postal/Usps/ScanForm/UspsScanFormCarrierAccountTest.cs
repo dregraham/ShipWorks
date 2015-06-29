@@ -28,7 +28,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
                 Username = "testUsername",
                 Password = "password",
                 PostalCode = "63102",
-                Street1 = "1 Memorial Drive"
+                Street1 = "1 Memorial Drive",
+                Description = "testUsername"
             };
 
             repository = new Mock<IScanFormRepository>();

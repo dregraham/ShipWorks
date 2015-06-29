@@ -17,19 +17,34 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net
         /// </summary>
         /// <param name="description">The description of what the request configuration is 
         /// expected to do (e.g. download orders, upload shipping details, etc.).</param>
-        public RequestConfiguration(string description)
+        public RequestConfiguration(string description, string urlSuffix)
         {
             this.TimeoutInSeconds = 30;
             this.Description = description;
+            this.urlSuffix = urlSuffix;
         }
 
         /// <summary>
-        /// Gets or sets the URL.
+        /// The url suffix
         /// </summary>
         /// <value>
         /// The URL.
         /// </value>
-        public string Url { get; set; }
+        private string urlSuffix;
+
+        /// <summary>
+        /// Gets the URL.
+        /// </summary>
+        /// <value>
+        /// The URL.
+        /// </value>
+        public string Url 
+        { 
+            get
+            {
+                return String.Format("https://api.newegg.com/marketplace{0}", this.urlSuffix);
+            } 
+        }
 
         /// <summary>
         /// Gets or sets the description of what the request configuration is expected

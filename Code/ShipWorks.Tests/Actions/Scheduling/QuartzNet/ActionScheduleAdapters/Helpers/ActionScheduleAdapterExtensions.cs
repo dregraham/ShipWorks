@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             where TSchedule : ActionSchedule
             where TAdapter : ActionScheduleAdapter<TSchedule>
         {
-            var quartzSchedule = adapter.Adapt(schedule);
+            QuartzActionSchedule quartzSchedule = adapter.Adapt(schedule);
 
             var trigger = TriggerBuilder.Create()
                 .StartAt(schedule.StartDateTimeInUtc)

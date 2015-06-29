@@ -39,7 +39,7 @@
 
 
     # ShipWorks configuration
-    $moduleVersion = "3.3.6.0";
+    $moduleVersion = "3.3.6.1";
     $schemaVersion = "1.0.0";
 
 	header("Content-Type: text/xml;charset=utf-8");
@@ -133,7 +133,7 @@
     // enforce ssl
     if (!$secure && REQUIRE_SECURE)
     {
-        outputError(60, 'A secure (https://) connection is required.');
+        outputError(10, "Invalid URL, HTTPS is required");
     }
     else
     {
@@ -152,7 +152,7 @@
                 case 'getstatuscodes': action_GetStatusCodes(); break;
                 case 'updatestatus': action_UpdateStatus();break;
                 case 'updateshipment': action_UpdateShipment(); break;
-                default: outputError(70, "'$action' not supported");
+                default: outputError(20, "Invalid action '$action'");
                 }		
             }
         }	
@@ -222,7 +222,7 @@
 
         if (!isset($_POST['order']) || !isset($_POST['tracking']))
         {
-            outputError(50, "Not all parameters supplied.");
+            outputError(40, "Insufficient parameters");
             return;
         }
 
@@ -280,7 +280,7 @@
 
         if (!isset($_POST['order']) || !isset($_POST['status']))
         {
-            outputError(50, "Not all parameters supplied.");
+            outputError(40, "Insufficient parameters");
             return;
         }
 
@@ -763,7 +763,7 @@
                 $storedPassword = text_decrypt($user_data["password"]);
                 if (is_null($storedPassword))
                 {
-                    outputError(40, "Could not decrypt password for the user $user");
+                    outputError(60, "Could not decrypt password for the user");
                     return false;
                 }
                 else
@@ -782,18 +782,18 @@
             {	
                 if (!$isAdmin)
                 {
-                    outputError(10, "Only X-Cart administrators are allowed to perform this operation.");
+                    outputError(1000, "Only X-Cart administrators are allowed to perform this operation.");
                 }	
             }
             else
             {
-                outputError(20, "The username or password is incorrect.");
+                outputError(50, "Username or password is incorrect");
             }	
 
         }
         else
         {
-            outputError(30, "The username and password was not supplied.");
+            outputError(30, "Username or password was not supplied");
         }
 
         return $loginOk && $isAdmin;

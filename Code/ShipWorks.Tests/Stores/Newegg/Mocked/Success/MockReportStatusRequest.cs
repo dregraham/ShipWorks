@@ -5,6 +5,7 @@ using System.Text;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus;
 using ShipWorks.Stores.Platforms.Newegg.Net.ReportStatus.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
 {
@@ -45,7 +46,7 @@ namespace ShipWorks.Tests.Stores.Newegg.Mocked.Success
 
         public StatusResult GetStatus()
         {
-            Credentials credentials = new Credentials(string.Empty, string.Empty);
+            Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
             return SubmitRequest(credentials, new Dictionary<string, object>()).Result as StatusResult;
         }
 

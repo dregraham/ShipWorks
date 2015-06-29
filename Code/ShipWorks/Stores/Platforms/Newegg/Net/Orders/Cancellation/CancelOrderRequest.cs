@@ -5,6 +5,7 @@ using Interapptive.Shared.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation.Response;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation
 {
@@ -13,7 +14,7 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation
     /// </summary>
     public class CancelOrderRequest : ICancelOrderRequest
     {
-        private const string RequestUrl = "https://api.newegg.com/marketplace/ordermgmt/orderstatus/orders/{0}?sellerid={1}";
+        private const string RequestUrl = "{0}/ordermgmt/orderstatus/orders/{1}?sellerid={2}";
         const int CancelledAction = 1;
 
         private Credentials credentials;
@@ -47,11 +48,27 @@ namespace ShipWorks.Stores.Platforms.Newegg.Net.Orders.Cancellation
         /// <returns>A CancellationResult object.</returns>
         public CancellationResult Cancel(Order neweggOrder, CancellationReason reason)
         {
+            // API URL depends on which marketplace the seller selected 
+            string marketplace = "";
+
+            switch (credentials.Channel)
+            {
+                case NeweggChannelType.US:
+                    break;
+                case NeweggChannelType.Business:
+                    marketplace = "/b2b";
+                    break;
+                case NeweggChannelType.Canada:
+                    marketplace = "/can";
+                    break;
+                default:
+                    break;
+            }
+
             // Format our request URL with the value of the seller ID and configure the request
-            string formattedUrl = string.Format(RequestUrl, neweggOrder.OrderNumber, credentials.SellerId);
-            RequestConfiguration requestConfig = new RequestConfiguration("Cancelling order")
+            string formattedUrl = string.Format(RequestUrl, marketplace, neweggOrder.OrderNumber, credentials.SellerId);
+            RequestConfiguration requestConfig = new RequestConfiguration("Cancelling order", formattedUrl)
             { 
-                Url = formattedUrl, 
                 Method = HttpVerb.Put, 
                 Body = GetRequestBody(reason) 
             };
