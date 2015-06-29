@@ -55,10 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                             labels.Add(CreateLabel(shipment, "LabelPrimary", labelUrls[0], CroppingStyles.MilitaryPrimaryCrop));
                             if (labelUrls.Count >= 2)
                             {
-                                // print this form 3 times.
+                                // print this form 1 times.
                                 labels.Add(CreateThermalLabel(shipment, "LabelPart2", labelUrls[1]));
-                                labels.Add(CreateThermalLabel(shipment, "LabelPart3", labelUrls[1]));
-                                labels.Add(CreateThermalLabel(shipment, "LabelPart4", labelUrls[1]));
                             }
                         }
                         else
