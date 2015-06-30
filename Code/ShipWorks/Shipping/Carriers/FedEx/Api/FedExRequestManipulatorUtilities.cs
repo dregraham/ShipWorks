@@ -212,7 +212,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Ship.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -237,8 +237,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new WebServices.Ship.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -277,8 +275,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new WebServices.Registration.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
@@ -413,7 +409,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Ship.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Ship.WebAuthenticationCredential
+                ParentCredential = new WebServices.Ship.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -438,8 +434,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new WebServices.Ship.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }
