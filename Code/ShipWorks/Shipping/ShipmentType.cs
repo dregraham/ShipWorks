@@ -1071,6 +1071,14 @@ namespace ShipWorks.Shipping
                     requiresCustoms = true;
                 }
 
+                // Show customs tab from any international territory (except Puerto Rico) to US
+                if (shipment.OriginPerson.IsUSInternationalTerritory() &&
+                    !shipment.OriginPerson.IsUSInternationalTerritory("PR") &&
+                    !shipment.ShipPerson.IsUSInternationalTerritory())
+                {
+                    requiresCustoms = true;
+                }
+
                 // Foreign US territories requiring customs forms - http://pe.usps.com/text/dmm300/608.htm
                 if (shipment.ShipPostalCode.StartsWith("96910") ||
                     shipment.ShipPostalCode.StartsWith("96912") ||
