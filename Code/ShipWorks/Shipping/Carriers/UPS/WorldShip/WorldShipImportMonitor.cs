@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Carriers.UPS.ServiceManager;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using log4net;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -576,7 +577,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                 ShippingManager.EnsureShipmentLoaded(shipment);
 
                 // If it's already been voided, just skip voiding
-                if (!shipment.Voided && shipment.Ups != null && shipment.Ups.WorldShipStatus != (int)WorldShipStatusType.Voided)
+                if (!shipment.Voided && shipment.Ups != null)
                 {
                     // Since we pass the ShipmentID to ShippingManager.VoidShipment, we lose the status being set here,
                     // so we save the Ups entity.  This keeps ShippingManager.VoidShipment from calling the Ups Online Tools Void
@@ -592,22 +593,24 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
                         adapter.Commit();
                     }
 
-                    // ShippingManager.VoidShipment(shipment.ShipmentID);
-                    try
+                    using (new AuditBehaviorScope(AuditBehaviorUser.SuperUser))
                     {
-                        SqlAdapterRetry<SqlAppResourceLockException> sqlAppResourceLockExceptionRetry =
-                            new SqlAdapterRetry<SqlAppResourceLockException>(5, -5, string.Format("WorldShipImportMonitor.ProcessVoidEntry for ShipmentID {0}", shipment.ShipmentID));
-
-                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ShippingManager.VoidShipment(shipment.ShipmentID));
-                    }
-                    catch (ShippingException ex)
-                    {
-                        // ShippingManager.VoidShipment translates a SqlAppResourceLockException to a ShippingException, so we check for that type.
-                        if (!(ex.InnerException is SqlAppResourceLockException))
+                        try
                         {
-                            // It wasn't a SqlAppResourceLockException, so re-throw 
-                            throw;
+                            SqlAdapterRetry<SqlAppResourceLockException> sqlAppResourceLockExceptionRetry =
+                                new SqlAdapterRetry<SqlAppResourceLockException>(5, -5, string.Format("WorldShipImportMonitor.ProcessVoidEntry for ShipmentID {0}", shipment.ShipmentID));
+
+                            sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => ShippingManager.VoidShipment(shipment.ShipmentID));
                         }
+                        catch (ShippingException ex)
+                        {
+                            // ShippingManager.VoidShipment translates a SqlAppResourceLockException to a ShippingException, so we check for that type.
+                            if (!(ex.InnerException is SqlAppResourceLockException))
+                            {
+                                // It wasn't a SqlAppResourceLockException, so re-throw 
+                                throw;
+                            }
+                        }   
                     }
                 }
             }

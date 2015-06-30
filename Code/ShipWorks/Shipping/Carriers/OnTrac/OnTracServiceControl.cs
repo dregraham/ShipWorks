@@ -75,9 +75,13 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
 
-            base.RecipientDestinationChanged -= OnRecipientDestinationChanged;
+            RecipientDestinationChanged -= OnRecipientDestinationChanged;
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
+
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
-            base.RecipientDestinationChanged += OnRecipientDestinationChanged;
+
+            RecipientDestinationChanged += OnRecipientDestinationChanged;
+            originControl.DestinationChanged += OnOriginDestinationChanged;
 
             LoadShipmentDetails();
             UpdateInsuranceDisplay();
