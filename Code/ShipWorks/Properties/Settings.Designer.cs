@@ -12,7 +12,7 @@ namespace ShipWorks.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "12.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -22,6 +22,15 @@ namespace ShipWorks.Properties {
                 return defaultInstance;
             }
         }
-      
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/track")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService"]));
+            }
+        }
     }
 }
