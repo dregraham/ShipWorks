@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             subscriptionCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
             
-            testObject = new FedExRegistrationClientDetailManipulator(settingsRepository.Object);
+            testObject = new FedExRegistrationClientDetailManipulator();
         }
 
         [TestMethod]

@@ -332,7 +332,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
             Assert.AreEqual(account.AccountNumber, detail.AccountNumber);
         }
@@ -345,7 +345,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship.ClientDetail detail = FedExRequestManipulatorUtilities.CreateShippingClientDetail(account);
 
             Assert.AreEqual(account.MeterNumber, detail.MeterNumber);
         }
@@ -363,7 +363,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.AreEqual(account.AccountNumber, detail.AccountNumber);
         }
@@ -376,7 +376,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.AreEqual(account.MeterNumber, detail.MeterNumber);
         }
@@ -389,7 +389,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.AreEqual(settings.ClientProductId, detail.ClientProductId);
         }
@@ -402,7 +402,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
             FedExSettings settings = new FedExSettings(settingsRepository.Object);
 
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, settings);
+            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.AreEqual(settings.ClientProductVersion, detail.ClientProductVersion);
         }

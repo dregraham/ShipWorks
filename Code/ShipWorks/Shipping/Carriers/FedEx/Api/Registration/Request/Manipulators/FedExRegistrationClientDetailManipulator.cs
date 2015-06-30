@@ -9,16 +9,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
 {
     public class FedExRegistrationClientDetailManipulator : ICarrierRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
         private Type requestType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExRegistrationClientDetailManipulator" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExRegistrationClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
+        public FedExRegistrationClientDetailManipulator()
         {
-            this.fedExSettings = new FedExSettings(settingsRepository);
         }
 
         /// <summary>
@@ -36,19 +33,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             {
                 // We can safely cast this since we've passed validation
                 VersionCaptureRequest nativeRequest = request.NativeRequest as VersionCaptureRequest;
-                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, fedExSettings);
+                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
             }
             else if (requestType == typeof(RegisterWebCspUserRequest))
             {
                 // We can safely cast this since we've passed validation
                 RegisterWebCspUserRequest nativeRequest = request.NativeRequest as RegisterWebCspUserRequest;
-                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, fedExSettings);
+                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
             }
             else
             {
                 // We can safely cast this since we've passed validation
                 SubscriptionRequest nativeRequest = request.NativeRequest as SubscriptionRequest;
-                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account, fedExSettings);
+                nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
             }
         }
 

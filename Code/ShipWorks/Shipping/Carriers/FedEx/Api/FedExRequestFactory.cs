@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator()
             };
 
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExVoidWebAuthenticationDetailManipulator(),
-                new FedExVoidClientDetailManipulator(settingsRepository),
+                new FedExVoidClientDetailManipulator(),
                 new FedExVoidVersionManipulator(),
                 new FedExVoidParametersManipulator()
             };
@@ -259,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator(),
                 new FedExCspContactManipulator()
             };
@@ -278,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator(),
                 new FedExSubscriberManipulator()
             };

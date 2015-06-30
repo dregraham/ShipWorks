@@ -230,9 +230,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateShippingClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Ship.ClientDetail CreateShippingClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Ship.ClientDetail
             {
@@ -268,9 +267,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a shipping API request.</returns>
-        public static WebServices.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Registration.ClientDetail CreateRegistrationClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Registration.ClientDetail
             {
@@ -427,9 +425,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the void API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.Ship.ClientDetail CreateVoidClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Ship.ClientDetail CreateVoidClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Ship.ClientDetail
             {
