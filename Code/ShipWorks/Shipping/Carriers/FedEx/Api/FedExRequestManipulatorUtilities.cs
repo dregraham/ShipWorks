@@ -357,7 +357,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Close.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Close.WebAuthenticationCredential
+                ParentCredential = new WebServices.Close.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword
@@ -382,8 +382,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return new WebServices.Close.ClientDetail
             {
                 AccountNumber = account.AccountNumber,
-                ClientProductId = settings.ClientProductId,
-                ClientProductVersion = settings.ClientProductVersion,
                 MeterNumber = account.MeterNumber
             };
         }

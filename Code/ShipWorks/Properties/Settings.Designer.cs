@@ -32,5 +32,15 @@ namespace ShipWorks.Properties {
                 return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/close")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService"]));
+            }
+        }
     }
 }
