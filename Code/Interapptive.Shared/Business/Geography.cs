@@ -124,6 +124,17 @@ namespace Interapptive.Shared.Business
         }
 
         /// <summary>
+        /// Indicates if the given foreign country code is a specific US international territory
+        /// </summary>
+        public static bool IsUSInternationalTerritory(this IAddressAdapter address, string territory)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(address, "address");
+
+            return address.CountryCode.Equals(territory, StringComparison.OrdinalIgnoreCase) ||
+                (address.CountryCode.Equals("US", StringComparison.OrdinalIgnoreCase) && address.StateProvCode.Equals(territory, StringComparison.OrdinalIgnoreCase));
+        }
+
+        /// <summary>
         /// Indicates if the given foreign country code is a US international territory
         /// </summary>
         private static bool IsUSInternationalTerritory(string countryCode)

@@ -124,6 +124,12 @@ namespace ShipWorks.Data.Administration
                 log.InfoFormat("Change tracking is {0} enabled on database {1}.", isDisabled ? "not" : string.Empty, SqlSession.Current.Configuration.DatabaseName);
                 return isDisabled;
             }
+            catch (InvalidOperationException ex)
+            {
+                // Log the error and assume that change tracking is enabled, so ShipWorks continues 
+                log.Error(string.Format("An error occurred checking the status of change tracking for database '{0}'. ", SqlSession.Current.Configuration.DatabaseName), ex);
+                return false;
+            }
             catch (SqlException ex)
             {
                 // Log the error and assume that change tracking is enabled, so ShipWorks continues 

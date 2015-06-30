@@ -113,9 +113,13 @@ namespace ShipWorks.Shipping.Carriers.UPS
             SuspendShipSenseFieldChangeEvent();
 
             // Load the base
-            base.RecipientDestinationChanged -= new EventHandler(OnRecipientDestinationChanged);
+            RecipientDestinationChanged -= OnRecipientDestinationChanged;
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
+
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
-            base.RecipientDestinationChanged += new EventHandler(OnRecipientDestinationChanged);
+
+            RecipientDestinationChanged += OnRecipientDestinationChanged;
+            originControl.DestinationChanged += OnOriginDestinationChanged;
 
             // The base will disable if editing is not enabled, but due to the packaging selection, we need to customize how it works
             sectionShipment.ContentPanel.Enabled = true;
