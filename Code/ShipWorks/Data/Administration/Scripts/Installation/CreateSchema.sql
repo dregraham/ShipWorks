@@ -1191,9 +1191,9 @@ PRINT N'Creating primary key [PK_ChannelAdvisorOrder] on [dbo].[ChannelAdvisorOr
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrder] ADD CONSTRAINT [PK_ChannelAdvisorOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
-PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[Order]'
+PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAdvisorOrder]'
 GO
-CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
