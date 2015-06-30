@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExCloseWebAuthenticationDetailManipulator(),
-                new FedExCloseClientDetailManipulator(settingsRepository),
+                new FedExCloseClientDetailManipulator(),
                 new FedExCloseVersionManipulator(),
                 new FedExCloseDateManipulator()
             };
@@ -220,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExCloseWebAuthenticationDetailManipulator(),
-                new FedExCloseClientDetailManipulator(settingsRepository),
+                new FedExCloseClientDetailManipulator(),
                 new FedExCloseVersionManipulator(),
                 new FedExPickupCarrierManipulator()
             };
@@ -302,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             // Create the "standard" manipulators for a FedEx rate request
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExRateClientDetailManipulator(settingsRepository),
+                new FedExRateClientDetailManipulator(),
                 new FedExRateWebAuthenticationManipulator(settings),
                 new FedExRateVersionManipulator(),
                 new FedExRateReturnTransitManipulator(),
@@ -342,7 +342,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExTrackingWebAuthenticationDetailManipulator(),
-                new FedExTrackingClientDetailManipulator(settingsRepository),
+                new FedExTrackingClientDetailManipulator(),
                 new FedExTrackingVersionManipulator(),
                 new FedExTrackingPackageIdentifierManipulator()
             };

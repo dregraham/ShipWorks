@@ -375,9 +375,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a close API request.</returns>
-        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Close.ClientDetail CreateCloseClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Close.ClientDetail
             {
@@ -390,9 +389,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the shipping API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a rate API request.</returns>
-        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Rate.ClientDetail CreateRateClientDetail(FedExAccountEntity account)
         {
             if (account == null)
             {
@@ -473,9 +471,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates the void API client detail.
         /// </summary>
         /// <param name="account">The account.</param>
-        /// <param name="settings">The settings.</param>
         /// <returns>A ClientDetail object for a void API request.</returns>
-        public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account, FedExSettings settings)
+        public static WebServices.Track.ClientDetail CreateTrackClientDetail(FedExAccountEntity account)
         {
             return new WebServices.Track.ClientDetail
             {
