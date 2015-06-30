@@ -164,19 +164,6 @@ namespace ShipWorks.Stores.Platforms.Ebay
         }
 
         /// <summary>
-        /// Get the initial set of filters supported by ebay
-        /// </summary>
-        public override List<FilterEntity> CreateInitialFilters()
-        {
-            return new List<FilterEntity>
-                {
-                    CreateFilterAwaitingPayment(),
-                    CreateFilterReadyToShip(),
-                    CreateFilterNeedsFeedback()
-                };
-        }
-
-        /// <summary>
         /// Create the "Awaiting Payment" filter entity
         /// </summary>
         private FilterEntity CreateFilterAwaitingPayment()
