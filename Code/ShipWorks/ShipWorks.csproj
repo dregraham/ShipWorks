@@ -6261,6 +6261,11 @@
       <DependentUpon>DetailedDatabaseSetupWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Users\Audit\AuditMissingObjectLabelException.cs" />
+    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -8330,11 +8335,6 @@
     <Compile Include="Users\UserSettingsDlg.Designer.cs">
       <DependentUpon>UserSettingsDlg.cs</DependentUpon>
     </Compile>
-    <Compile Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -8440,7 +8440,7 @@
     <EmbeddedResource Include="Data\Import\Xml\Schema\ShipWorksCore.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CountryService_v2.wsdl" />
@@ -8518,6 +8518,14 @@
     <None Include="Stores\Platforms\PrestaShop\shipworks3.php" />
     <None Include="Stores\Platforms\OpenCart\shipworks3.php" />
     <None Include="Stores\Platforms\VirtueMart\Modules\VirtueMart2\shipworks3.php" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationServiceDefinitions.wsdl" />
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.Close\CloseWithDocumentsReply.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -11907,14 +11915,6 @@
     <None Include="Stores\Platforms\XCart\Modules\XCart4\shipworks3.php" />
     <None Include="Stores\Platforms\ZenCart\init_admin_auth.php" />
     <None Include="Stores\Platforms\ZenCart\shipworks3.php" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationReply.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\AddressValidationServiceDefinitions.wsdl" />
-    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\ELSServices.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Endicia.WebServices.AccountService\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
@@ -12595,6 +12595,17 @@
     <WebReferences Include="Web References\" />
   </ItemGroup>
   <ItemGroup>
+    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
+      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Close\</RelPath>
@@ -12814,17 +12825,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Stores_Platforms_AmeriCommerce_WebServices_AmeriCommerceDatabaseIO</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.AddressValidation\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v2.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv45.wsdl">
       <UrlBehavior>Static</UrlBehavior>

@@ -52,5 +52,16 @@ namespace ShipWorks.Properties {
                 return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://wsbeta.fedex.com:443/web-services/addressvalidation")]
+        public string ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService {
+            get {
+                return ((string)(this["ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidation" +
+                    "Service"]));
+            }
+        }
     }
 }
