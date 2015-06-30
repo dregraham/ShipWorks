@@ -8,5 +8,8 @@
     <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/close</Value>
     </Setting>
+    <Setting Name="ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://wsbeta.fedex.com:443/web-services/openship</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

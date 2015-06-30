@@ -8446,7 +8446,7 @@
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CountryService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\GlobalShipAddressService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\LocationsService_v1.wsdl" />
-    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl" />
+    <None Include="Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PackageMovementInformationService_v5.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\PickupService_v9.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl" />
@@ -8541,10 +8541,73 @@
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.GlobalShipAddress\SearchLocationsReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\AddPackagesToOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ConfirmConsolidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ConfirmOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\CreateConsolidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\CreateOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\DeleteOpenConsolidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\DeleteOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\DeletePackagesFromOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\DeletePendingShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\GetConfirmConsolidationResultsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\GetConfirmOpenShipmentResultsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\GetCreateOpenShipmentResultsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\GetModifyOpenShipmentResultsReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ModifyConsolidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ModifyOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ModifyPackageInOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\OpenShipServiceDefinitions.wsdl" />
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\RetrieveConsolidatedCommoditiesReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\RetrieveConsolidationReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\RetrieveOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\RetrievePackageInOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\ValidateOpenShipmentReply.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.FedEx.WebServices.PackageMovement\PostalCodeInquiryReply1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -12543,6 +12606,17 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Close_CloseService</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
+      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v9.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\TrackService_v10.wsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.Track\</RelPath>
@@ -12553,17 +12627,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_Track_TrackService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\Shipping.Carriers.FedEx.WebServices.OpenShip\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\OpenShipService_v7.wsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_OpenShip_OpenShipService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="c:\work\shipworks3x\Code\ShipWorks\Shipping\Carriers\FedEx\Api\Wsdl\RateService_v18.wsdl">
       <UrlBehavior>Static</UrlBehavior>
