@@ -40,6 +40,8 @@ namespace ShipWorks.Stores.Management
             this.storeContactControl = new ShipWorks.Stores.Management.StoreContactControl();
             this.optionPageSettings = new ShipWorks.UI.Controls.OptionPage();
             this.panelDefaultFilters = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.infoTip1 = new ShipWorks.UI.Controls.InfoTip();
             this.CreateDefaultFilters = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.sectionTitle2 = new ShipWorks.UI.Controls.SectionTitle();
@@ -215,6 +217,8 @@ namespace ShipWorks.Stores.Management
             // 
             // panelDefaultFilters
             // 
+            this.panelDefaultFilters.Controls.Add(this.label7);
+            this.panelDefaultFilters.Controls.Add(this.infoTip1);
             this.panelDefaultFilters.Controls.Add(this.CreateDefaultFilters);
             this.panelDefaultFilters.Controls.Add(this.label3);
             this.panelDefaultFilters.Controls.Add(this.sectionTitle2);
@@ -223,9 +227,29 @@ namespace ShipWorks.Stores.Management
             this.panelDefaultFilters.Size = new System.Drawing.Size(564, 80);
             this.panelDefaultFilters.TabIndex = 35;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label7.Location = new System.Drawing.Point(20, 56);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(240, 13);
+            this.label7.TabIndex = 32;
+            this.label7.Text = "(This does not affect any of your existing filters)";
+            // 
+            // infoTip1
+            // 
+            this.infoTip1.Caption = "Shipworks will create a folder that houses filters for \r\neach online status speci" +
+    "fic to this store.\r\n\r\n(This will have no impact on your current active filters)";
+            this.infoTip1.Location = new System.Drawing.Point(354, 35);
+            this.infoTip1.Name = "infoTip1";
+            this.infoTip1.Size = new System.Drawing.Size(12, 12);
+            this.infoTip1.TabIndex = 31;
+            this.infoTip1.Title = "Default Filters";
+            // 
             // CreateDefaultFilters
             // 
-            this.CreateDefaultFilters.Location = new System.Drawing.Point(261, 51);
+            this.CreateDefaultFilters.Location = new System.Drawing.Point(221, 30);
             this.CreateDefaultFilters.Name = "CreateDefaultFilters";
             this.CreateDefaultFilters.Size = new System.Drawing.Size(127, 23);
             this.CreateDefaultFilters.TabIndex = 30;
@@ -238,10 +262,9 @@ namespace ShipWorks.Stores.Management
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(20, 35);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(435, 13);
+            this.label3.Size = new System.Drawing.Size(195, 13);
             this.label3.TabIndex = 29;
-            this.label3.Text = "Create the default filters for this store. This will not overwrite any of your ex" +
-    "isting filters.";
+            this.label3.Text = "Create the default filters for this store:";
             // 
             // sectionTitle2
             // 
@@ -379,7 +402,7 @@ namespace ShipWorks.Stores.Management
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
             this.sectionAutoDownloads.Name = "sectionAutoDownloads";
-            this.sectionAutoDownloads.Size = new System.Drawing.Size(530, 22);
+            this.sectionAutoDownloads.Size = new System.Drawing.Size(445, 22);
             this.sectionAutoDownloads.TabIndex = 3;
             this.sectionAutoDownloads.Text = "Downloading";
             // 
@@ -389,7 +412,7 @@ namespace ShipWorks.Stores.Management
             | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleManualOrders.Location = new System.Drawing.Point(15, 129);
             this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
-            this.sectionTitleManualOrders.Size = new System.Drawing.Size(530, 22);
+            this.sectionTitleManualOrders.Size = new System.Drawing.Size(445, 22);
             this.sectionTitleManualOrders.TabIndex = 2;
             this.sectionTitleManualOrders.Text = "Manual Orders";
             // 
@@ -711,5 +734,7 @@ namespace ShipWorks.Stores.Management
         private System.Windows.Forms.Button CreateDefaultFilters;
         private System.Windows.Forms.Label label3;
         private UI.Controls.SectionTitle sectionTitle2;
+        private System.Windows.Forms.Label label7;
+        private UI.Controls.InfoTip infoTip1;
     }
 }
