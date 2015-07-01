@@ -30,6 +30,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
                 SupportedRedirectToHoldServices = new[]
                 {
                     supportedRedirectToHoldServiceType
+                },
+                RadiusDistance = new Distance()
+                {
+                    Units = DistanceUnits.MI,
+                    UnitsSpecified = true,
+                    Value = 500.0,
+                    ValueSpecified = true
                 }
             };
 
