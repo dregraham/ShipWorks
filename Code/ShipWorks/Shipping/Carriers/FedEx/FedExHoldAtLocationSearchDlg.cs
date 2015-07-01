@@ -60,15 +60,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             Contact contact = distanceAndLocation.LocationDetail.LocationContactAndAddress.Contact;
             Address address = distanceAndLocation.LocationDetail.LocationContactAndAddress.Address;
+            string phoneLine = string.Empty;
 
-            return string.Format("{1} ({2} miles) {0}{3}{0}{4}, {5} {6}",
+            if (!string.IsNullOrWhiteSpace(contact.TollFreePhoneNumber))
+            {
+                phoneLine = contact.TollFreePhoneNumber;
+            }
+            else if (!string.IsNullOrWhiteSpace(contact.PhoneNumber))
+            {
+                phoneLine = contact.PhoneNumber;
+            }
+
+            return string.Format("{1} ({2} miles) {0}{3}{0}{4}, {5} {6}{7}",
                 Environment.NewLine,
                 contact.CompanyName,
                 Math.Round(distanceAndLocation.Distance.Value, 2),
                 string.Join(Environment.NewLine, address.StreetLines),
                 address.City,
                 address.StateOrProvinceCode,
-                address.PostalCode);
+                address.PostalCode,
+                !string.IsNullOrWhiteSpace(phoneLine) ? string.Format("{0}{1}", Environment.NewLine, phoneLine) : string.Empty);
         }
 
         /// <summary>
