@@ -51,7 +51,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "fOilEsjTTKLzuwNi";
+                // 2015 credential key
+                return "HmTIi6ILfEtv3p42";
             }
         }
 
@@ -63,7 +64,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return SecureText.Decrypt("ED92wCRD8FOLC7+3XBElFwZiMTc3af91XMaxrxLLF4g=", "apptive");
+                // 2015 password - YcLZTdWF7NALqoCD0szKwVnif
+                return SecureText.Decrypt("nezzUnZ15oqRucZWu/UnNBaktSIXqglmQalC9U1uN9Q=", "apptive");
             }
         }
 
@@ -98,7 +100,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "ITSW";
+                // This is the first part of the 2015 VersionCaptureId: IEOQ7038
+                return "IEOQ";
             }
         }
 
@@ -112,7 +115,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         {
             get
             {
-                return "5236";
+                // This is the last part of the 2015 VersionCaptureId: IEOQ7038
+                return "7038";
             }
         }
 
