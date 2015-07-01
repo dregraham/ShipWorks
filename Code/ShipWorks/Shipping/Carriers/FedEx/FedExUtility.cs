@@ -86,6 +86,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<FedExServiceType> serviceTypes = new List<FedExServiceType>
             {
                 FedExServiceType.FedExGround,
+                FedExServiceType.StandardOvernight,
                 FedExServiceType.FirstOvernight,
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx2Day,
@@ -99,7 +100,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 // Add additional service types for US domestic
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
-                serviceTypes.Add(FedExServiceType.StandardOvernight);
                 serviceTypes.Add(FedExServiceType.SmartPost);
                 serviceTypes.Add(FedExServiceType.FirstFreight);
                 serviceTypes.Add(FedExServiceType.FedEx2DayFreight);
