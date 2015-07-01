@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<definitions xmlns:ns="http://fedex.com/ws/registration/v6" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RegistrationServiceDefinitions" targetNamespace="http://fedex.com/ws/registration/v6" xmlns="http://schemas.xmlsoap.org/wsdl/">
+<definitions xmlns:ns="http://fedex.com/ws/registration/v7" xmlns:s1="http://schemas.xmlsoap.org/wsdl/soap/" name="RegistrationServiceDefinitions" targetNamespace="http://fedex.com/ws/registration/v7" xmlns="http://schemas.xmlsoap.org/wsdl/">
   <types>
-    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/registration/v6" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-      <xs:element name="RegisterWebCspUserReply" type="ns:RegisterWebCspUserReply" />
-      <xs:element name="RegisterWebCspUserRequest" type="ns:RegisterWebCspUserRequest" />
+    <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://fedex.com/ws/registration/v7" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="RegisterWebUserReply" type="ns:RegisterWebUserReply" />
+      <xs:element name="RegisterWebUserRequest" type="ns:RegisterWebUserRequest" />
       <xs:element name="SubscriptionReply" type="ns:SubscriptionReply" />
       <xs:element name="SubscriptionRequest" type="ns:SubscriptionRequest" />
       <xs:element name="VersionCaptureReply" type="ns:VersionCaptureReply" />
@@ -60,19 +60,9 @@
               <xs:documentation>This number is assigned by FedEx and identifies the unique device from which the request is originating</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="0" name="ClientProductId" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>A FedEx assigned identifier for a third party software product used by customer to do business with FedEx. Such as a Compatible Solution Provider's product.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
-          <xs:element minOccurs="0" name="ClientProductVersion" type="xs:string">
-            <xs:annotation>
-              <xs:documentation>The version of the third party product.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
           <xs:element minOccurs="0" name="IntegratorId" type="xs:string">
             <xs:annotation>
-              <xs:documentation>Only used in transactions which require identification of the Fed Ex Office integrator.</xs:documentation>
+              <xs:documentation>Only used in transactions which require identification of the FedEx Office integrator.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element minOccurs="0" name="Region" type="ns:ExpressRegionCode">
@@ -322,7 +312,7 @@
       </xs:complexType>
       <xs:complexType name="ParsedPersonName">
         <xs:annotation>
-          <xs:documentation>Middle name added to support credit card fraud detection.</xs:documentation>
+          <xs:documentation>The descriptive data for a person's name broken out into individual name elements such as first name, last name.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
           <xs:element minOccurs="0" name="Prefix" type="xs:string">
@@ -378,10 +368,7 @@
           </xs:element>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="RegisterWebCspUserReply">
-        <xs:annotation>
-          <xs:documentation>Provides two-factor authentication data for client installations of Certified Solution Provider software, as of September, 2007.</xs:documentation>
-        </xs:annotation>
+      <xs:complexType name="RegisterWebUserReply">
         <xs:sequence>
           <xs:element minOccurs="0" name="HighestSeverity" type="ns:NotificationSeverityType">
             <xs:annotation>
@@ -403,17 +390,11 @@
               <xs:documentation>Identifies the version/level of a service operation expected by a caller (in each request) and performed by the callee (in each reply).</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="0" name="Credential" type="ns:WebAuthenticationCredential">
-            <xs:annotation>
-              <xs:documentation>The credential data which must be submitted as the userCredential on subsequent transactions.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
+          <xs:element minOccurs="0" name="UserCredential" type="ns:WebAuthenticationCredential" />
+          <xs:element minOccurs="0" name="ClientProductId" type="xs:string" />
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="RegisterWebCspUserRequest">
-        <xs:annotation>
-          <xs:documentation>Requests two-factor web service authentication. Should be submitted from a new installation of CSP software prior to conducting any business transactions. This transaction obtains data to be used by the specific installation submitting the request. NOTE: the CSP's credential should appear as the AuthenticationDetail.userCredential, as this request is being sent BY the CSP (or CSP's software) to obtain the credential for the user's subsequent transactions.</xs:documentation>
-        </xs:annotation>
+      <xs:complexType name="RegisterWebUserRequest">
         <xs:sequence>
           <xs:element minOccurs="1" name="WebAuthenticationDetail" type="ns:WebAuthenticationDetail">
             <xs:annotation>
@@ -435,11 +416,7 @@
               <xs:documentation>Identifies the version/level of a service operation expected by a caller (in each request) and performed by the callee (in each reply).</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="0" name="CspCredential" type="ns:WebAuthenticationCredential">
-            <xs:annotation>
-              <xs:documentation>This field is the CSP's authentication credential, to which the new user-level credential will be linked.</xs:documentation>
-            </xs:annotation>
-          </xs:element>
+          <xs:element minOccurs="0" name="ParentCredential" type="ns:WebAuthenticationCredential" />
           <xs:element minOccurs="0" maxOccurs="unbounded" name="Categories" type="ns:WebServiceCategoryType">
             <xs:annotation>
               <xs:documentation>List (array) of all categories for which the requester wishes to register.</xs:documentation>
@@ -649,12 +626,12 @@
           <xs:documentation>Used in authentication of the sender's identity.</xs:documentation>
         </xs:annotation>
         <xs:sequence>
-          <xs:element minOccurs="1" name="CspCredential" type="ns:WebAuthenticationCredential">
+          <xs:element minOccurs="1" name="ParentCredential" type="ns:WebAuthenticationCredential">
             <xs:annotation>
-              <xs:documentation>Credential used to authenticate a CSP product/version.</xs:documentation>
+              <xs:documentation>This was renamed from cspCredential.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="0" name="UserCredential" type="ns:WebAuthenticationCredential">
+          <xs:element minOccurs="1" name="UserCredential" type="ns:WebAuthenticationCredential">
             <xs:annotation>
               <xs:documentation>Credential used to authenticate a specific software application. This value is provided by FedEx after registration.</xs:documentation>
             </xs:annotation>
@@ -688,7 +665,7 @@
               <xs:documentation>Identifies a system or sub-system which performs an operation.</xs:documentation>
             </xs:annotation>
           </xs:element>
-          <xs:element minOccurs="1" fixed="6" name="Major" type="xs:int">
+          <xs:element minOccurs="1" fixed="7" name="Major" type="xs:int">
             <xs:annotation>
               <xs:documentation>Identifies the service business level.</xs:documentation>
             </xs:annotation>
@@ -710,29 +687,29 @@
   <message name="SubscriptionRequest">
     <part name="SubscriptionRequest" element="ns:SubscriptionRequest" />
   </message>
-  <message name="RegisterWebCspUserRequest">
-    <part name="RegisterWebCspUserRequest" element="ns:RegisterWebCspUserRequest" />
+  <message name="RegisterWebUserRequest">
+    <part name="RegisterWebUserRequest" element="ns:RegisterWebUserRequest" />
   </message>
   <message name="VersionCaptureRequest">
     <part name="VersionCaptureRequest" element="ns:VersionCaptureRequest" />
   </message>
+  <message name="RegisterWebUserReply">
+    <part name="RegisterWebUserReply" element="ns:RegisterWebUserReply" />
+  </message>
   <message name="SubscriptionReply">
     <part name="SubscriptionReply" element="ns:SubscriptionReply" />
-  </message>
-  <message name="RegisterWebCspUserReply">
-    <part name="RegisterWebCspUserReply" element="ns:RegisterWebCspUserReply" />
   </message>
   <message name="VersionCaptureReply">
     <part name="VersionCaptureReply" element="ns:VersionCaptureReply" />
   </message>
   <portType name="RegistrationPortType">
+    <operation name="registerWebUser" parameterOrder="RegisterWebUserRequest">
+      <input message="ns:RegisterWebUserRequest" />
+      <output message="ns:RegisterWebUserReply" />
+    </operation>
     <operation name="versionCapture" parameterOrder="VersionCaptureRequest">
       <input message="ns:VersionCaptureRequest" />
       <output message="ns:VersionCaptureReply" />
-    </operation>
-    <operation name="registerWebCspUser" parameterOrder="RegisterWebCspUserRequest">
-      <input message="ns:RegisterWebCspUserRequest" />
-      <output message="ns:RegisterWebCspUserReply" />
     </operation>
     <operation name="subscription" parameterOrder="SubscriptionRequest">
       <input message="ns:SubscriptionRequest" />
@@ -741,8 +718,8 @@
   </portType>
   <binding name="RegistrationServiceSoapBinding" type="ns:RegistrationPortType">
     <s1:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <operation name="versionCapture">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v6/versionCapture" style="document" />
+    <operation name="registerWebUser">
+      <s1:operation soapAction="http://fedex.com/ws/registration/v7/registerWebUser" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -750,8 +727,8 @@
         <s1:body use="literal" />
       </output>
     </operation>
-    <operation name="registerWebCspUser">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v6/registerWebCspUser" style="document" />
+    <operation name="versionCapture">
+      <s1:operation soapAction="http://fedex.com/ws/registration/v7/versionCapture" style="document" />
       <input>
         <s1:body use="literal" />
       </input>
@@ -760,7 +737,7 @@
       </output>
     </operation>
     <operation name="subscription">
-      <s1:operation soapAction="http://fedex.com/ws/registration/v6/subscription" style="document" />
+      <s1:operation soapAction="http://fedex.com/ws/registration/v7/subscription" style="document" />
       <input>
         <s1:body use="literal" />
       </input>

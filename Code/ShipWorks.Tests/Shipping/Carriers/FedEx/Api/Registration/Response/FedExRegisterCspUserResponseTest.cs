@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
     {
         private FedExRegisterCspUserResponse testObject;
 
-        private RegisterWebCspUserReply nativeResponse;
+        private RegisterWebUserReply nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
@@ -31,10 +31,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             settingsRepository.Setup(r => r.SaveShippingSettings(It.IsAny<ShippingSettingsEntity>()));
 
 
-            nativeResponse = new RegisterWebCspUserReply()
+            nativeResponse = new RegisterWebUserReply()
             {
                 HighestSeverity = NotificationSeverityType.SUCCESS,
-                Credential = new WebAuthenticationCredential
+                UserCredential = new WebAuthenticationCredential
                 {
                     Key = "SomeKey",
                     Password = "password"
@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         {
             testObject.Process();
 
-            Assert.AreEqual(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
+            Assert.AreEqual(nativeResponse.UserCredential.Key, shippingSettings.FedExUsername);
         }
 
         [TestMethod]

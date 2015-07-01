@@ -35,10 +35,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
                 VersionCaptureRequest nativeRequest = request.NativeRequest as VersionCaptureRequest;
                 nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
             }
-            else if (requestType == typeof(RegisterWebCspUserRequest))
+            else if (requestType == typeof(RegisterWebUserRequest))
             {
                 // We can safely cast this since we've passed validation
-                RegisterWebCspUserRequest nativeRequest = request.NativeRequest as RegisterWebCspUserRequest;
+                RegisterWebUserRequest nativeRequest = request.NativeRequest as RegisterWebUserRequest;
                 nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
             }
             else
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulator
             }
 
             requestType = request.NativeRequest.GetType();
-            if (requestType != typeof (VersionCaptureRequest) && requestType != typeof (RegisterWebCspUserRequest) && requestType != typeof(SubscriptionRequest))
+            if (requestType != typeof (VersionCaptureRequest) && requestType != typeof (RegisterWebUserRequest) && requestType != typeof(SubscriptionRequest))
             {
                 // Abort - we have an unexpected native request
                 throw new CarrierException("An unexpected request type was provided.");

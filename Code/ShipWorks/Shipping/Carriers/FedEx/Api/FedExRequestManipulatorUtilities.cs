@@ -249,7 +249,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             return new WebServices.Registration.WebAuthenticationDetail
             {
-                CspCredential = new WebServices.Registration.WebAuthenticationCredential
+                ParentCredential = new WebServices.Registration.WebAuthenticationCredential
                 {
                     Key = settings.CspCredentialKey,
                     Password = settings.CspCredentialPassword

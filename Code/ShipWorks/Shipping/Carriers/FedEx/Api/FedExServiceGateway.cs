@@ -318,11 +318,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         /// <param name="registerRequest">The register request.</param>
         /// <returns>The RegisterWebCspUserReply recevied from FedEx.</returns>
-        public RegisterWebCspUserReply RegisterCspUser(RegisterWebCspUserRequest registerRequest)
+        public RegisterWebUserReply RegisterCspUser(RegisterWebUserRequest registerRequest)
         {
             try
             {
-                RegisterWebCspUserReply registerReply;
+                RegisterWebUserReply registerReply;
 
                 // This is where we actually communicate with FedEx, so it's okay to explicitly create the 
                 // RegistrationService object here (i.e. no more abstractions can be made)
@@ -333,7 +333,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                     // The request should already be configured at this point, so we just need to send
                     // it across the wire to FedEx
-                    registerReply = service.registerWebCspUser(registerRequest);
+                    registerReply = service.registerWebUser(registerRequest);
                 }
 
                 return registerReply;

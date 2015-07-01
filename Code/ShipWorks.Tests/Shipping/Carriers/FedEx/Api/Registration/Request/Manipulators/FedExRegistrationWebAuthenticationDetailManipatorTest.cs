@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private VersionCaptureRequest nativeVersionCapture;
 
         private Mock<CarrierRequest> registerCarrierRequest;
-        private RegisterWebCspUserRequest nativeRegister;
+        private RegisterWebUserRequest nativeRegister;
 
         private Mock<CarrierRequest> subscriptionCarrierRequest;
         private SubscriptionRequest nativeSubscription;
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             nativeVersionCapture = new VersionCaptureRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeVersionCapture);
 
-            nativeRegister = new RegisterWebCspUserRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
+            nativeRegister = new RegisterWebUserRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
             registerCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRegister);
 
             nativeSubscription = new SubscriptionRequest { ClientDetail = new ClientDetail() };
@@ -118,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
             testObject.Manipulate(registerCarrierRequest.Object);
 
-            WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
+            WebAuthenticationDetail detail = ((RegisterWebUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
             Assert.IsNotNull(detail);
         }
 
@@ -128,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(registerCarrierRequest.Object);
 
-            WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
+            WebAuthenticationDetail detail = ((RegisterWebUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
             Assert.IsNotNull(detail);
         }
 
@@ -138,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(registerCarrierRequest.Object);
 
-            WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
+            WebAuthenticationDetail detail = ((RegisterWebUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
             Assert.IsNull(detail.UserCredential);
         }
 

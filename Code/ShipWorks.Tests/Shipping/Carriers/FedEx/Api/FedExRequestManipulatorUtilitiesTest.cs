@@ -233,7 +233,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
-            Assert.AreEqual(detail.CspCredential.Key, settings.CspCredentialKey);
+            Assert.AreEqual(detail.ParentCredential.Key, settings.CspCredentialKey);
         }
 
         [TestMethod]
@@ -246,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.WebAuthenticationDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationWebAuthenticationDetail(settings);
 
-            Assert.AreEqual(detail.CspCredential.Password, settings.CspCredentialPassword);
+            Assert.AreEqual(detail.ParentCredential.Password, settings.CspCredentialPassword);
         }
 
         [TestMethod]
@@ -379,32 +379,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
 
             Assert.AreEqual(account.MeterNumber, detail.MeterNumber);
-        }
-
-        [TestMethod]
-        public void CreateRegistrationClientDetail_UsesClientProductIdFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
-
-            Assert.AreEqual(settings.ClientProductId, detail.ClientProductId);
-        }
-
-        [TestMethod]
-        public void CreateRegistrationClientDetail_UsesClientProductVersionFromSettings_Test()
-        {
-            FedExAccountEntity account = new FedExAccountEntity { MeterNumber = "987654321" };
-
-            Mock<ICarrierSettingsRepository> settingsRepository = new Mock<ICarrierSettingsRepository>();
-            FedExSettings settings = new FedExSettings(settingsRepository.Object);
-
-            ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration.ClientDetail detail = FedExRequestManipulatorUtilities.CreateRegistrationClientDetail(account);
-
-            Assert.AreEqual(settings.ClientProductVersion, detail.ClientProductVersion);
         }
 
         #endregion Registration Client Detail Tests
