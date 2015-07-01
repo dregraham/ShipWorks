@@ -1573,6 +1573,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         private string eMailAddressField;
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 0)]
         public string ContactId {
             get {
                 return this.contactIdField;
@@ -1583,6 +1584,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 1)]
         public string PersonName {
             get {
                 return this.personNameField;
@@ -1593,6 +1595,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 2)]
         public string Title {
             get {
                 return this.titleField;
@@ -1603,6 +1606,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 3)]
         public string CompanyName {
             get {
                 return this.companyNameField;
@@ -1613,6 +1617,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 4)]
         public string PhoneNumber {
             get {
                 return this.phoneNumberField;
@@ -1623,6 +1628,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 5)]
         public string PhoneExtension {
             get {
                 return this.phoneExtensionField;
@@ -1633,6 +1639,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 6)]
         public string TollFreePhoneNumber {
             get {
                 return this.tollFreePhoneNumberField;
@@ -1643,6 +1650,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 7)]
         public string PagerNumber {
             get {
                 return this.pagerNumberField;
@@ -1653,6 +1661,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 8)]
         public string FaxNumber {
             get {
                 return this.faxNumberField;
@@ -1663,6 +1672,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 9)]
         public string EMailAddress {
             get {
                 return this.eMailAddressField;
@@ -1700,7 +1710,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         private bool residentialFieldSpecified;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("StreetLines")]
+        [System.Xml.Serialization.XmlElementAttribute("StreetLines", Order = 0)]
         public string[] StreetLines {
             get {
                 return this.streetLinesField;
@@ -1711,6 +1721,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 1)]
         public string City {
             get {
                 return this.cityField;
@@ -1721,6 +1732,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 2)]
         public string StateOrProvinceCode {
             get {
                 return this.stateOrProvinceCodeField;
@@ -1731,6 +1743,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 3)]
         public string PostalCode {
             get {
                 return this.postalCodeField;
@@ -1741,6 +1754,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 4)]
         public string UrbanizationCode {
             get {
                 return this.urbanizationCodeField;
@@ -1751,6 +1765,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 5)]
         public string CountryCode {
             get {
                 return this.countryCodeField;
@@ -1761,6 +1776,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 6)]
         public string CountryName {
             get {
                 return this.countryNameField;
@@ -1771,6 +1787,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship {
         }
         
         /// <remarks/>
+        [XmlElementAttribute(Order = 7)]
         public bool Residential {
             get {
                 return this.residentialField;

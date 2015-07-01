@@ -28,6 +28,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             nativeRequest = new DeleteShipmentRequest { ClientDetail = new ClientDetail() };
             voidCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             voidCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
+
+            testObject = new FedExVoidClientDetailManipulator();
         }
 
         [TestMethod]
