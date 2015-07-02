@@ -521,7 +521,7 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
-            // If the operation was cancelled, rollback
+            // If the operation was canceled, rollback
             if (DialogResult != DialogResult.OK)
             {
                 store.RollbackChanges();
@@ -529,9 +529,9 @@ namespace ShipWorks.Stores.Management
         }
 
         /// <summary>
-        /// Called when the ClickDefaultFilters button is clicked.
+        /// Called when the createFiltersButton is clicked.
         /// </summary>
-        private void OnClickCreateDefaultFilters(object sender, EventArgs e)
+        private void OnCreateFiltersClick(object sender, EventArgs e)
         {
             // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
             FilterLayoutContext.PushScope();
@@ -542,14 +542,14 @@ namespace ShipWorks.Stores.Management
 
             if (!result.FolderCreated)
             {
-                MessageHelper.ShowWarning(this, string.Format("Could not create folder {0}. The folder already exists and its criteria don't match this store.", result.StoreFolderName));
+                MessageHelper.ShowWarning(this, string.Format("Could not create folder {0}. The folder already exists, and its criteria does not match this store.", result.StoreFolderName));
                 return;
             }
 
             StringBuilder sb = new StringBuilder();
             if (result.CreatedFilters.Any())
             {
-                sb.AppendFormat("The following filter were created in filter folder '{0}.'", result.StoreFolderName)
+                sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
                     .AppendLine();
 
                 result.CreatedFilters.ForEach(newFilter=>sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
