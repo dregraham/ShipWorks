@@ -42,8 +42,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
         private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
-            string certificationId = reply.TransactionDetail.CustomerTransactionId;
-
+            string certificationId = string.Empty;
+            
+            // This is only set if we are running a certification
+            if (reply.TransactionDetail != null)
+            {
+                certificationId = reply.TransactionDetail.CustomerTransactionId;
+            }
+            
             // Save the label iamges
             using (SqlAdapter adapter = new SqlAdapter())
             {
