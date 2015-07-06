@@ -719,14 +719,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             if (accountNumber.ToLower() == "please use shipper account number")
             {
                 // Return the fedex account number of our account
-                accountNumber = "224813333";
+                accountNumber = "607253064";
             }
             else
             {
                 if (accountNumber.ToLower() == "canadian test account number")
                 {
                     // Return the canadian fedex account number of our account
-                    accountNumber = "602611841";
+                    accountNumber = "607194785";
                 }
             }
 

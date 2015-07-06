@@ -9,7 +9,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
     [TestClass]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
-        private string fedExTestAccountNumber = "604589967"; // "603103343";
+        private string fedExTestAccountNumber = "607253064"; // "603103343";
         private const string ecodAccountNumber = "222326460";
 
         private bool justLabels = false;
