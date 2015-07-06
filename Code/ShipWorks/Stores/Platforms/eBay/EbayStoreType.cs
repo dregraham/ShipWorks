@@ -1156,16 +1156,5 @@ namespace ShipWorks.Stores.Platforms.Ebay
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
         }
-
-        /// <summary>
-        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
-        /// Online Status filter.
-        /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices()
-        {
-            IEnumerable<OrderStatusCodeType> enums = Enum.GetValues(typeof(OrderStatusCodeType)).Cast<OrderStatusCodeType>();
-
-            return enums.Select(status => EbayUtility.GetOrderStatusName(status)).Where(statusName => statusName != "Invalid").ToList();
-        }
     }
 }
