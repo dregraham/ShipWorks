@@ -132,6 +132,37 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Creates the definition shipped.
+        /// </summary>
+        public static FilterDefinition CreateDefinitionShipped()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            // Local Status = 'Shipped'
+            LocalStatusCondition statusCondition = new LocalStatusCondition();
+            statusCondition.Operator = StringOperator.Equals;
+            statusCondition.TargetValue = "Shipped";
+            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
+
+            // [Or]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.Or;
+
+            // If [All] of the following
+            definition.RootContainer.SecondGroup = new ConditionGroupContainer(new ConditionGroup());
+            definition.RootContainer.SecondGroup.FirstGroup.JoinType = ConditionJoinType.All;
+
+            // For any shipment, Processed = true
+            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
+            ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
+            processedCondition.Operator = EqualityOperator.Equals;
+            processedCondition.Value = ShipmentStatusType.Processed;
+            anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
+            definition.RootContainer.SecondGroup.FirstGroup.Conditions.Add(anyShipment);
+
+            return definition;
+        }
+
+        /// <summary>
         /// Create the filter definition for today's orders
         /// </summary>
         private static FilterDefinition CreateDefinitionTodaysOrders()

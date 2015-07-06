@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.Ebay.WebServices;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.WizardPages;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -165,11 +167,113 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
-            var ShippingStatuses = EnumHelper.GetEnumList<ChannelAdvisorShippingStatus>()
-                .Where(status => status.Value != ChannelAdvisorShippingStatus.NoChange && status.Value != ChannelAdvisorShippingStatus.Unknown)
-                .Select(statusEnumEntry => statusEnumEntry.Value)
-                .ToList();
-            return CreateInitialFilters<ChannelAdvisorShippingStatus, ChannelAdvisorShippingStatusCondition>(ShippingStatuses);
+            return new List<FilterEntity>
+                {
+                    CreateFilterReadyToShip(),
+                    CreateFilterShipped()
+                };
+        }
+
+        /// <summary>
+        /// Creates the filter shipped.
+        /// </summary>
+        private FilterEntity CreateFilterShipped()
+        {
+            // [All]
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // [AND]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;            
+            ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
+            definition.RootContainer.SecondGroup = shippedDefinition;
+
+            //      [Any]
+            shippedDefinition.FirstGroup = new ConditionGroup();
+            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+            
+            // ChannelAdvisor Shipping Status == Shipped
+            ChannelAdvisorShippingStatusCondition shippingStatus = new ChannelAdvisorShippingStatusCondition();
+            shippingStatus.Operator = EqualityOperator.Equals;
+            shippingStatus.Value = ChannelAdvisorShippingStatus.Shipped;
+            shippedDefinition.FirstGroup.Conditions.Add(shippingStatus);
+
+            // Is FBA
+            ForEveryItemCondition everyItem = new ForEveryItemCondition();
+            shippedDefinition.FirstGroup.Conditions.Add(everyItem);
+
+            ChannelAdvisorIsFBACondition isFbaCondition = new ChannelAdvisorIsFBACondition();
+            isFbaCondition.Operator = EqualityOperator.Equals;
+            isFbaCondition.Value = true;
+            everyItem.Container.FirstGroup.Conditions.Add(isFbaCondition);
+
+            // [OR]
+            shippedDefinition.JoinType = ConditionGroupJoinType.Or;
+
+            // Shipped within Shipworks
+            shippedDefinition.SecondGroup = InitialDataLoader.CreateDefinitionShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name = "Shipped",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
+        /// <summary>
+        /// Creates the filter ready to ship.
+        /// </summary>
+        /// <returns></returns>
+        private FilterEntity CreateFilterReadyToShip()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            // For this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // Channel advisor says it has to be unshipped
+            ChannelAdvisorShippingStatusCondition channelAdvisorShippingStatusCondition = new ChannelAdvisorShippingStatusCondition();
+            channelAdvisorShippingStatusCondition.Operator = EqualityOperator.Equals;
+            channelAdvisorShippingStatusCondition.Value = ChannelAdvisorShippingStatus.Unshipped;
+            definition.RootContainer.FirstGroup.Conditions.Add(channelAdvisorShippingStatusCondition);
+
+            // All the order items are not FBA
+            ForEveryItemCondition everyItem = new ForEveryItemCondition();
+            definition.RootContainer.FirstGroup.Conditions.Add(everyItem);
+
+            ChannelAdvisorIsFBACondition notFba = new ChannelAdvisorIsFBACondition();
+            notFba.Operator = EqualityOperator.Equals;
+            notFba.Value = false;
+            everyItem.Container.FirstGroup.Conditions.Add(notFba);
+  
+
+            ChannelAdvisorPaymentStatusCondition channelAdvisorPaymentStatus = new ChannelAdvisorPaymentStatusCondition();
+            channelAdvisorPaymentStatus.Operator = EqualityOperator.Equals;
+            channelAdvisorPaymentStatus.Value = ChannelAdvisorPaymentStatus.Cleared;
+            definition.RootContainer.FirstGroup.Conditions.Add(channelAdvisorPaymentStatus);
+
+            definition.RootContainer.SecondGroup = InitialDataLoader.CreateDefinitionNotShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name="Ready to Ship",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int) FilterTarget.Orders
+            };
         }
 
         /// <summary>

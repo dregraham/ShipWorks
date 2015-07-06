@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.AddressValidation;
-using ShipWorks.Data.Model.EntityClasses;
-using log4net;
-using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Amazon.WizardPages;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Stores.Content;
 using System.Data.SqlTypes;
-using ShipWorks.Data.Connection;
+using System.Linq;
+using Interapptive.Shared.Utility;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
-using ShipWorks.Data.Grid.Paging;
-using System.Windows.Forms;
-using ShipWorks.Templates.Processing.TemplateXml;
-using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Administration;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
+using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Actions;
-using ShipWorks.Actions.Tasks;
-using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Filters;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Grid;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
-using Interapptive.Shared.Utility;
+using ShipWorks.Stores.Platforms.Amazon.WizardPages;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.Amazon
 {
@@ -151,6 +147,127 @@ namespace ShipWorks.Stores.Platforms.Amazon
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
         {
             return new OnlineUpdateShipmentUpdateActionControl(typeof(AmazonShipmentUploadTask));
+        }
+
+        /// <summary>
+        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
+        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        /// </summary>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            return new List<FilterEntity>
+                {
+                    CreateFilterReadyToShip(),
+                    CreateFilterShipped(),
+                    CreateFilterFba()
+                };
+        }
+
+        /// <summary>
+        /// Creates the filter fba.
+        /// </summary>
+        private FilterEntity CreateFilterFba()
+        {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                //      [Store] == this store
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = Store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                // All the order items are not FBA
+                AmazonFulfillmentChannelCondition fullfillmentCondition = new AmazonFulfillmentChannelCondition();
+                fullfillmentCondition.Operator = EqualityOperator.Equals;
+                fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.AFN;
+                definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+
+                return new FilterEntity
+                {
+                    Name = "Fulfilled By Amazon",
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                };
+        }
+
+        /// <summary>
+        /// Creates the filter shipped.
+        /// </summary>
+        private FilterEntity CreateFilterShipped()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+
+            // [AND]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
+            definition.RootContainer.SecondGroup = shippedDefinition;
+
+            shippedDefinition.FirstGroup = new ConditionGroup();
+            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+
+            OnlineStatusCondition shippingStatus = new OnlineStatusCondition();
+            shippingStatus.Operator = StringOperator.Equals;
+            shippingStatus.TargetValue = "shipped";
+            shippedDefinition.FirstGroup.Conditions.Add(shippingStatus);
+
+            shippedDefinition.SecondGroup = InitialDataLoader.CreateDefinitionShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name = "Shipped",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
+        /// <summary>
+        /// Creates the filter ready to ship.
+        /// </summary>
+        /// <returns></returns>
+        private FilterEntity CreateFilterReadyToShip()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            // Channel advisor says it has to be unshipped
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
+            onlineStatus.Operator = StringOperator.Equals;
+            onlineStatus.TargetValue = "unshipped";
+            definition.RootContainer.FirstGroup.Conditions.Add(onlineStatus);
+
+            // All the order items are not FBA
+            AmazonFulfillmentChannelCondition fullfillmentCondition= new AmazonFulfillmentChannelCondition();
+            fullfillmentCondition.Operator = EqualityOperator.Equals;
+            fullfillmentCondition.Value = AmazonMwsFulfillmentChannel.MFN;
+            definition.RootContainer.FirstGroup.Conditions.Add(fullfillmentCondition);
+
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+            
+            definition.RootContainer.SecondGroup = InitialDataLoader.CreateDefinitionNotShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name = "Ready to Ship",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
         }
 
         /// <summary>
@@ -444,15 +561,6 @@ namespace ShipWorks.Stores.Platforms.Amazon
         protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
         {
             return AddressValidationStoreSettingType.ValidateAndNotify;
-        }
-
-        /// <summary>
-        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
-        /// Online Status filter.
-        /// </summary>
-        public override ICollection<string> GetOnlineStatusChoices()
-        {
-            return new[] { "Unshipped", "PartiallyShipped", "Shipped", "Canceled", "Unfulfillable" };
         }
     }
 }
