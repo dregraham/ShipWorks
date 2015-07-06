@@ -145,6 +145,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             personControl.SaveToEntity(new PersonAdapter(account, string.Empty));
 
+            account.Phone = new string(account.Phone.Where(char.IsDigit).ToArray());
+
             RequiredFieldChecker checker = new RequiredFieldChecker();
             checker.Check("Account", account.AccountNumber);
             checker.Check("Full Name", account.FirstName);
@@ -160,6 +162,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (!checker.Validate(this))
             {
                 e.NextPage = CurrentPage;
+                return;
+            }
+
+            if (account.Phone.Length != 10)
+            {
+                e.NextPage = CurrentPage;
+                MessageHelper.ShowError(this, "The phone number must be 10 digits.");
                 return;
             }
 
