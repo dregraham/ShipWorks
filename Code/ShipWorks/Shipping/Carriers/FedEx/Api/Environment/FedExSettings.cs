@@ -146,7 +146,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         /// <summary>
         /// Gets the ship version number.
         /// </summary>
-        public const string ShipVersionNumber = "15";
+        public const string ShipVersionNumber = "17";
 
         /// <summary>
         /// Gets the open ship version number.

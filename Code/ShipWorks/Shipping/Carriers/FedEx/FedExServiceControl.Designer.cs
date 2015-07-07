@@ -1774,7 +1774,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartHubID.Location = new System.Drawing.Point(87, 8);
             this.smartHubID.Name = "smartHubID";
             this.smartHubID.PromptText = "(Multiple Values)";
-            this.smartHubID.Size = new System.Drawing.Size(173, 21);
+            this.smartHubID.Size = new System.Drawing.Size(225, 21);
             this.smartHubID.TabIndex = 97;
             this.smartHubID.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
@@ -1807,7 +1807,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartEndorsement.Location = new System.Drawing.Point(87, 64);
             this.smartEndorsement.Name = "smartEndorsement";
             this.smartEndorsement.PromptText = "(Multiple Values)";
-            this.smartEndorsement.Size = new System.Drawing.Size(173, 21);
+            this.smartEndorsement.Size = new System.Drawing.Size(225, 21);
             this.smartEndorsement.TabIndex = 94;
             this.smartEndorsement.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             // 
@@ -1818,7 +1818,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartIndicia.Location = new System.Drawing.Point(87, 37);
             this.smartIndicia.Name = "smartIndicia";
             this.smartIndicia.PromptText = "(Multiple Values)";
-            this.smartIndicia.Size = new System.Drawing.Size(173, 21);
+            this.smartIndicia.Size = new System.Drawing.Size(225, 21);
             this.smartIndicia.TabIndex = 93;
             this.smartIndicia.SelectedIndexChanged += new System.EventHandler(this.OnChangeSmartPostIndicia);
             // 
