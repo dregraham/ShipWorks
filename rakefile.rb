@@ -308,16 +308,13 @@ namespace :db do
 		
 		print "Killing all connections and dropping database...\r\n"
 		dropSqlText = "
-			DECLARE @SQL varchar(max)
-
-			-- Build the SQL to kill the all connections to @DatbaseName (Kill 54;Kill 56;...)
-			SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
-			FROM MASTER..SysProcesses
-			WHERE DBId = DB_ID('{DBNAME}') AND SPId <> @@SPId
+			USE master;
+			go
+			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+			go
+			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
+			go
 			
-			EXEC (@SQL)
-			GO
-
 			-- Now it's safe to drop the database without any open connections
 			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
 				DROP DATABASE [{DBNAME}] "
