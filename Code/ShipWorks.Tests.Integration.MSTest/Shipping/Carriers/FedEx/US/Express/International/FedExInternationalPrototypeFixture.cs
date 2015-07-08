@@ -81,8 +81,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
 
             if (!string.IsNullOrEmpty(CustomsOptionType))
             {
-                // The only option type is Faulty item so just hard code the type here
-                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+                if (string.Equals(CustomsOptionType, "other", StringComparison.OrdinalIgnoreCase))
+                {
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+                }
+                else
+                {
+                    // The only other option type is Faulty item so just hard code the type here
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;   
+                }
+                
                 shipment.FedEx.CustomsOptionsDesription = CustomsOptionDescription;
             }
             else

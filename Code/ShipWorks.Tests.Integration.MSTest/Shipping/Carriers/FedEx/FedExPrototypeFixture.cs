@@ -587,6 +587,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ShipUnparsedName = ShipperPersonName;
 
 
+
                 shipment.OriginFirstName = RecipientPersonName;
                 shipment.OriginMiddleName = string.Empty;
                 shipment.OriginLastName = RecipientPersonName;
@@ -604,6 +605,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.OriginEmail = string.Empty;
                 shipment.OriginWebsite = string.Empty;
                 shipment.OriginFax = string.Empty;
+
+                var residentialStatus = shipment.FedEx.OriginResidentialDetermination;
+                shipment.FedEx.OriginResidentialDetermination = shipment.ResidentialDetermination;
+                shipment.ResidentialDetermination = residentialStatus;
             }
         }
         
