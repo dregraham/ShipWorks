@@ -3644,11 +3644,13 @@ CREATE TABLE [dbo].[UserSettings]
 [FilterInitialUseLastActive] [bit] NOT NULL,
 [FilterInitialSpecified] [bigint] NOT NULL,
 [FilterInitialSortType] [int] NOT NULL,
-[FilterLastActive] [bigint] NOT NULL,
-[FilterExpandedFolders] [xml] NULL,
+[OrderFilterLastActive] [bigint] NOT NULL,
+[OrderFilterExpandedFolders] [xml] NULL,
 [ShippingWeightFormat] [int] NOT NULL,
 [TemplateExpandedFolders] [xml] NULL,
-[TemplateLastSelected] [bigint] NOT NULL
+[TemplateLastSelected] [bigint] NOT NULL,
+[CustomerFilterLastActive] [bigint] NOT NULL,
+[CustomerFilterExpandedFolders] [xml] NULL
 )
 GO
 PRINT N'Creating primary key [PK_UserSetting_1] on [dbo].[UserSettings]'

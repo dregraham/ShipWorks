@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Threading;
 using System.Diagnostics;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.SqlServer.General;
 using ShipWorks.UI;
 using log4net;
 using ShipWorks.ApplicationCore.Appearance;
@@ -102,7 +103,14 @@ namespace ShipWorks.Data.Connection
             if (IsUIThread())
             {
                 log.Info("UI Thread is about to reconnect.");
-                bool connected = ConnectionLostDlg.Reconnect(con);
+                ReconnectResult result = ConnectionLostDlg.Reconnect(con);
+
+                if (result == ReconnectResult.Canceled)
+                {
+                    log.Warn("User has elected to exit ShipWorks");
+                    Program.MainForm.Close();                   
+                    return;
+                }
 
                 // out of the reconnect window, set global state
                 lock (connectionLock)
@@ -111,7 +119,7 @@ namespace ShipWorks.Data.Connection
                     attemptingReconnect = false;
 
                     // reconnect wasn't successful, the connection is lost
-                    if (!connected)
+                    if (result != ReconnectResult.Succeeded)
                     {
                         connectionLost = true;
                     }

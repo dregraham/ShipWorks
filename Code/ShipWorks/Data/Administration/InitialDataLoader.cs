@@ -314,7 +314,7 @@ namespace ShipWorks.Data.Administration
 
                     FilterEntity filter = new FilterEntity();
                     filter.FilterID = pkValue;
-                    filter.Name = EnumHelper.GetDescription(target);
+                    filter.Name = "All";
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = true;
                     filter.Definition = null;

@@ -9464,16 +9464,20 @@ namespace ShipWorks.Data.Model
 		FilterInitialSpecified,
 		///<summary>FilterInitialSortType. </summary>
 		FilterInitialSortType,
-		///<summary>FilterLastActive. </summary>
-		FilterLastActive,
-		///<summary>FilterExpandedFolders. </summary>
-		FilterExpandedFolders,
+		///<summary>OrderFilterLastActive. </summary>
+		OrderFilterLastActive,
+		///<summary>OrderFilterExpandedFolders. </summary>
+		OrderFilterExpandedFolders,
 		///<summary>ShippingWeightFormat. </summary>
 		ShippingWeightFormat,
 		///<summary>TemplateExpandedFolders. </summary>
 		TemplateExpandedFolders,
 		///<summary>TemplateLastSelected. </summary>
 		TemplateLastSelected,
+		///<summary>CustomerFilterLastActive. </summary>
+		CustomerFilterLastActive,
+		///<summary>CustomerFilterExpandedFolders. </summary>
+		CustomerFilterExpandedFolders,
 		/// <summary></summary>
 		AmountOfFields
 	}

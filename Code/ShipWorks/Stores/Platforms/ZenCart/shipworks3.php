@@ -56,7 +56,7 @@
          *
          */
 
-        $moduleVersion = "3.3.7.0";
+        $moduleVersion = "3.3.7.1";
         $schemaVersion = "1.0.0";
 
         header("Content-Type: text/xml;charset=utf-8");
@@ -147,7 +147,7 @@
         // Enforse SSL
         if (!$secure && REQUIRE_SECURE)
         {
-                outputError(10, 'A secure (https://) connection is required.');
+                outputError(10, "Invalid URL, HTTPS is required");
         }
         // Proceed
         else
@@ -167,7 +167,7 @@
                                         case 'getorders': Action_GetOrders(); break;
                                         case 'getstatuscodes': Action_GetStatusCodes(); break;
                                         case 'updatestatus': Action_UpdateStatus(); break;
-                                        default: outputError(60, "'$action' not supported");
+                                        default: outputError(20, "Invalid action '$action'");
                                 }
                         }
                 }
@@ -206,12 +206,12 @@
                         
                         if (!$loginOK)
                         {
-                                outputError(50, "The username or password is incorrect.");
+                                outputError(50, "Username or password is incorrect");
                         }
                 }
                 else
                 {
-                        outputError(60, "The username and password was not supplied.");
+                        outputError(30, "Username or password was not supplied");
                 }
 
                 return $loginOK;
@@ -757,7 +757,7 @@
 
                 if (!isset($_REQUEST['order']) || !isset($_REQUEST['status']) || !isset($_REQUEST['comments']))
                 {
-                        outputError(40, "Not all parameters supplied.");
+                        outputError(40, "Insufficient parameters");
                         return;
                 }
 

@@ -145,6 +145,7 @@ namespace ShipWorks.Tests.Core
                 "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.Post2xMigrationStep".ToUpperInvariant(),
                 "ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.Specialized.UpsNotificationUpgradeMigrationTask+NotificationTarget".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.ConnectionMonitorStatus".ToUpperInvariant(),
+                "ShipWorks.Data.Connection.ReconnectResult".ToUpperInvariant(),
                 "ShipWorks.Data.Connection.SqlSessionPermissionSet".ToUpperInvariant(),
                 "ShipWorks.Data.Controls.PersonEditStyle".ToUpperInvariant(),
                 "ShipWorks.Data.Controls.PersonFields".ToUpperInvariant(),

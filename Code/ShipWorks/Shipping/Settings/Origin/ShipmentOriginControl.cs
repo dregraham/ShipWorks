@@ -29,6 +29,11 @@ namespace ShipWorks.Shipping.Settings.Origin
         /// </summary>
         public event EventHandler OriginChanged;
 
+        /// <summary>
+        /// Raised when the destination of the origin changes
+        /// </summary>
+        public event EventHandler DestinationChanged;
+
         // The ShipmentType for which we are displaying data
         ShipmentType shipmentType;
 
@@ -210,6 +215,25 @@ namespace ShipWorks.Shipping.Settings.Origin
             if (OriginChanged != null)
             {
                 OriginChanged(this, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Destination in the person control have changed
+        /// </summary>
+        private void OnDestinationChanged(object sender, EventArgs e)
+        {
+            RaiseDestinationChange();
+        }
+
+        /// <summary>
+        /// Indicate that the destination of the origin data has changed
+        /// </summary>
+        private void RaiseDestinationChange()
+        {
+            if (DestinationChanged != null)
+            {
+                DestinationChanged(this, EventArgs.Empty);
             }
         }
 
