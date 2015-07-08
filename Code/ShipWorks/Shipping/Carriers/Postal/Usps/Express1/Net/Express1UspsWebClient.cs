@@ -943,7 +943,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             RateV14 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
-            rate.PrintLayout = "Normal";
+            rate.PrintLayout = "Normal4x6";
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
@@ -1003,7 +1003,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // For APO/FPO, we have to specifically ask for customs docs
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
-                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
+                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
             }
 
             if (shipment.ReturnShipment)

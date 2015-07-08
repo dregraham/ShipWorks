@@ -1,6 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
@@ -38,6 +41,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             Image imageCropped = null;
             bool usingOriginalImage = false;
 
+            string fileNameOriginal = GetFileName("ORIGINAL");
+            string fileNameFinal = GetFileName("FINAL");
+
+            try
+            {
+                originalImage.Save(fileNameOriginal, ImageFormat.Jpeg);
+            }
+            catch (Exception ex)
+            {
+                Debug.Assert(ex != null);
+            }
+
             try
             {
                 if (crop == Rectangle.Empty)
@@ -55,6 +70,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     imageCropped.Save(imageStream, ImageFormat.Png);
                     DataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
                 }
+
+
+                try
+                {
+                    imageCropped.Save(fileNameFinal, ImageFormat.Jpeg);
+                }
+                catch (Exception ex)
+                {
+                    Debug.Assert(ex != null);
+                }
             }
             finally
             {
@@ -64,6 +89,49 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
                     imageCropped.Dispose();
                 }
             }
+        }
+
+        private string GetFileName(string postFix)
+        {
+            int iteration = 0;
+
+            string fileNameFinal = string.Format(@"h:\labels\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
+                ShipmentEntity.ShipmentID,
+                (ThermalLanguage)this.ShipmentEntity.RequestedLabelFormat,
+                this.ShipmentEntity.ShipMilitaryAddress,
+                ShipmentEntity.ShipStateProvCode,
+                ShipmentEntity.ShipCountryCode,
+                ShipmentEntity.ReturnShipment,
+                ShipmentEntity.TotalWeight,
+                ShipmentEntity.CustomsValue,
+                ShipmentEntity.ShipPostalCode,
+                PostalUtility.GetCustomsForm(ShipmentEntity),
+                ShipmentEntity.CustomsItems.Count,
+                postFix,
+                string.Empty
+                );
+
+            while (File.Exists(fileNameFinal))
+            {
+                iteration++;
+                fileNameFinal = string.Format(@"h:\labels\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
+                 ShipmentEntity.ShipmentID,
+                 (ThermalLanguage)this.ShipmentEntity.RequestedLabelFormat,
+                 this.ShipmentEntity.ShipMilitaryAddress,
+                 ShipmentEntity.ShipStateProvCode,
+                 ShipmentEntity.ShipCountryCode,
+                 ShipmentEntity.ReturnShipment,
+                 ShipmentEntity.TotalWeight,
+                 ShipmentEntity.CustomsValue,
+                 ShipmentEntity.ShipPostalCode,
+                 PostalUtility.GetCustomsForm(ShipmentEntity),
+                 ShipmentEntity.CustomsItems.Count,
+                 postFix,
+                 iteration == 0 ? string.Empty : iteration.ToString()
+                 );
+            }
+
+            return fileNameFinal;
         }
 
         /// <summary>

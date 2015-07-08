@@ -21,7 +21,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public static Rectangle PrimaryCrop
         {
-            get { return new Rectangle(0, 0, 1600, 1010); }
+            //get { return new Rectangle(0, 0, 1600, 1010); }
+            get { return Rectangle.Empty;}
         }
 
         /// <summary>
@@ -29,7 +30,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public static Rectangle ContinuationCrop
         {
-            get { return new Rectangle(0, 1075, 1600, 1010); }
+            //get { return new Rectangle(0, 1075, 1600, 1010); }
+            get { return Rectangle.Empty;}
         }
 
         /// <summary>
@@ -38,7 +40,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public static Rectangle SingleInternationalCrop
         {
-            get { return new Rectangle(198, 123, 1202, 772); }
+            //get { return new Rectangle(198, 123, 1202, 772); }
+            get { return Rectangle.Empty;}
         }
 
         /// <summary>
@@ -46,7 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public static Rectangle MilitaryPrimaryCrop
         {
-            get { return new Rectangle(0, 0, 1597, 1005); }
+            //get { return new Rectangle(0, 0, 1597, 1005); }
+            get { return Rectangle.Empty;}
         }
 
         /// <summary>
@@ -54,7 +58,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public static Rectangle MilitaryContinuationCrop
         {
-            get { return new Rectangle(0, 1030, 1597, 1005); }
+            //get { return new Rectangle(0, 1030, 1597, 1005); }
+            get { return Rectangle.Empty;}
         }
     }
 }
