@@ -133,7 +133,14 @@ namespace ShipWorks.Filters.Controls
 
             if (currentFilterNode == null)
             {
-                log.Warn("Cannot update filter count, current filter node is null");
+                log.Warn("Cannot update filter count, no filter node is set");
+                return;
+            }
+
+            FilterEntity filter = filterNode.Filter;
+            if (filter == null)
+            {
+                log.Warn("Cannot update filter count, no filter is set");
                 return;
             }
 
@@ -144,7 +151,7 @@ namespace ShipWorks.Filters.Controls
                 RedrawNeeded();
             }
 
-            UpdateLayoutForSpeed();
+            UpdateLayoutForSpeed(filter, currentFilterNode, count);
         }
 
         /// <summary>
@@ -172,34 +179,31 @@ namespace ShipWorks.Filters.Controls
         /// milliseconds to calculate the filter; otherwise the standard filter image and filter 
         /// name is used.
         /// </summary>
-        private void UpdateLayoutForSpeed()
+        /// <remarks>This method uses arguments for the filter and filter node instead of using the properties to 
+        /// ensure that the null checks done earlier still apply</remarks>
+        private void UpdateLayoutForSpeed(FilterEntity filter, FilterNodeEntity currentFilterNode, FilterCount currentFilterCount)
         {
             // We want to flag the filter if it takes more than 10 seconds to complete
             const int WarningThresholdInMilliseconds = 10000;
             bool statusChangeWrittenToLog = false;
 
+            int filterCountCost = currentFilterCount == null ? 0 : currentFilterCount.CostInMilliseconds;
+
             foreach (GridCell cell in Cells)
             {
-                // A null reference error was being thrown.  Discoverred by Crash Reports.
-                // Let's figure out what is null....
-                if (!IsRowValid())
-                {
-                    throw new NullReferenceException("Could not update layout. Check log for warnings.");
-                }
-
                 // Make a note whether the filter was already flagged as a slow running filter
                 bool previousFlag = IsFlaggedAsSlowRunning;
 
-                if (FilterCount != null && FilterCount.CostInMilliseconds > WarningThresholdInMilliseconds)
+                if (filterCountCost > WarningThresholdInMilliseconds)
                 {
                     IsFlaggedAsSlowRunning = true;
                     cell.Image = Properties.Resources.funnel_warning;
-                    cell.Text = FilterNode.Filter.Name + " (slow)";
+                    cell.Text = filter.Name + " (slow)";
 
                     if (!previousFlag && !statusChangeWrittenToLog)
                     {
                         // Write an entry to the log when a filter goes from normal to slow
-                        log.InfoFormat("The {0} filter took {1} ms to complete and has been flagged as a slow running filter.", FilterNode.Filter.Name, FilterCount.CostInMilliseconds);
+                        log.InfoFormat("The {0} filter took {1} ms to complete and has been flagged as a slow running filter.", filter.Name, filterCountCost);
                         statusChangeWrittenToLog = true;
                     }
                 }
@@ -208,39 +212,17 @@ namespace ShipWorks.Filters.Controls
                     // The filter does not exceed the warning threshold, so set the 
                     // text and image to normal
                     IsFlaggedAsSlowRunning = false;
-                    cell.Image = FilterHelper.GetFilterImage(FilterNode, false);
-                    cell.Text = FilterNode.Filter.Name;
+                    cell.Image = FilterHelper.GetFilterImage(currentFilterNode, false);
+                    cell.Text = filter.Name;
 
                     if (previousFlag && !statusChangeWrittenToLog)
                     {
                         // Write an entry to the log when a filter goes from slow to normal
-                        log.InfoFormat("The {0} filter took {1} ms to complete and the slow running filter flag has been removed.", FilterNode.Filter.Name, FilterCount == null ? 0 : FilterCount.CostInMilliseconds);
+                        log.InfoFormat("The {0} filter took {1} ms to complete and the slow running filter flag has been removed.", filter.Name, filterCountCost);
                         statusChangeWrittenToLog = true;
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Gets whether the filter row is valid
-        /// </summary>
-        /// <remarks>This i</remarks>
-        /// <returns></returns>
-        private bool IsRowValid()
-        {
-            if (FilterNode == null)
-            {
-                log.Warn("FilterNode cannot be null");
-                return false;
-            }
-
-            if (FilterNode.Filter == null)
-            {
-                log.Warn("FilterNode.Filter cannot be null");
-                return false;
-            }
-
-            return true;
         }
 
         /// <summary>
@@ -259,8 +241,10 @@ namespace ShipWorks.Filters.Controls
         {
             get
             {
-                return IsRowValid() ?
-                    (FilterState)filterNode.Filter.State :
+                FilterEntity filter = filterNode.Filter;
+
+                return filter != null ? 
+                    (FilterState)filter.State : 
                     FilterState.Enabled;
             }
         }
