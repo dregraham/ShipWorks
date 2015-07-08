@@ -94,8 +94,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             bool anyRequireEntryFacility = false;
 
-            // Load the base
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
+            originControl.DestinationChanged += OnOriginDestinationChanged;
 
             // Load the origin
             originControl.LoadShipments(shipments);

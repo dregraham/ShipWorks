@@ -601,9 +601,15 @@ namespace ShipWorks.Shipping
             // For the one's that have been removed, ignore any concurrency\deleted errors
             SaveShipmentsToDatabase(removedNeedsSaved, false);
 
+            IEnumerable<EntityField2> fields = new[]
+            {
+                ShipmentFields.ShipStateProvCode, ShipmentFields.ShipCountryCode,
+                ShipmentFields.OriginStateProvCode, ShipmentFields.OriginCountryCode
+            };
+
             // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
             List<ShipmentEntity> destinationChangeNeedsSaved = uiDisplayedShipments.Except(removedNeedsSaved)
-                                                                                   .Where(s => s.Fields[ShipmentFields.ShipStateProvCode.FieldIndex].IsChanged || s.Fields[ShipmentFields.ShipCountryCode.FieldIndex].IsChanged).ToList();
+                                                                                   .Where(s => fields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any()).ToList();
 
             // We need to show the user if anything went wrong while doing that
             IDictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
@@ -1040,7 +1046,8 @@ namespace ShipWorks.Shipping
             // Finally, remove the old service control, or the blank panel we created
             if (oldServiceControl != null)
             {
-                oldServiceControl.RecipientDestinationChanged -= OnRecipientDestinationChanged;
+                oldServiceControl.RecipientDestinationChanged -= OnOriginOrDestinationChanged;
+                oldServiceControl.OriginDestinationChanged -= OnOriginOrDestinationChanged;
                 oldServiceControl.ShipmentServiceChanged -= OnShipmentServiceChanged;
                 oldServiceControl.RateCriteriaChanged -= OnRateCriteriaChanged;
                 oldServiceControl.ShipSenseFieldChanged -= OnShipSenseFieldChanged;
@@ -1069,7 +1076,8 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            newServiceControl.RecipientDestinationChanged += OnRecipientDestinationChanged;
+            newServiceControl.RecipientDestinationChanged += OnOriginOrDestinationChanged;
+            newServiceControl.OriginDestinationChanged += OnOriginOrDestinationChanged;
             newServiceControl.ShipmentServiceChanged += OnShipmentServiceChanged;
             newServiceControl.RateCriteriaChanged += OnRateCriteriaChanged;
             newServiceControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
@@ -1474,7 +1482,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The user has changed the selected destination country\state changed
         /// </summary>
-        private void OnRecipientDestinationChanged(object sender, EventArgs e)
+        private void OnOriginOrDestinationChanged(object sender, EventArgs e)
         {
             // Since this could change if customs needs generated, we need to save right now.
             bool success = SaveUIDisplayedShipments();

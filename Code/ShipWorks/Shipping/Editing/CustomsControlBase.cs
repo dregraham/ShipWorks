@@ -101,7 +101,6 @@ namespace ShipWorks.Shipping.Editing
             SuspendShipSenseFieldChangeEvent();
 
             this.enableEditing = enableEditing;
-            this.selectedRows.Clear();
 
             // Enable\disable the ContentPanels... not the groups themselves, so the groups can still be open\closed
             foreach (CollapsibleGroupControl group in Controls.OfType<CollapsibleGroupControl>())
@@ -246,25 +245,17 @@ namespace ShipWorks.Shipping.Editing
 
             // Make note of any rows that are selected in the grid, so we can re-select them
             // after loading the customs items
-            List<int> selectedIndexesInGrid = selectedRows.Select(r => r.IndexInGrid).ToList();
+            List<object> selectedtags = selectedRows.Select(r => r.Tag).ToList();
             LoadShipments(loadedShipments, loadedShipments.All(s => !s.Processed), false);
 
             // Select the rows that were originally selected. Even though the rows should not have
             // changed, we got an IndexOutOfRangeException after this was released. So we'll ensure
             // that the selected index still exists before trying to select it.
-            selectedIndexesInGrid.ForEach(i => 
+            selectedtags.ForEach(t =>
             {
-                if (sandGrid.Rows.Count > i)
-                {
-                    // Temporarily detach fro the SelectionChanged event, so controls aren't
-                    // refreshed (and the cursor isn't reset in any text boxes with focus)
-                    sandGrid.SelectionChanged -= OnChangeSelectedRow;
-
-                    selectedRows.Add(sandGrid.Rows[i]);
-                    sandGrid.Rows[i].Selected = true;   
-
-                    sandGrid.SelectionChanged += OnChangeSelectedRow;
-                }
+                sandGrid.SelectionChanged -= OnChangeSelectedRow;
+                SelectGridRowByTag((List<ShipmentCustomsItemEntity>) t);
+                sandGrid.SelectionChanged += OnChangeSelectedRow;
             });
         }
 
@@ -274,6 +265,7 @@ namespace ShipWorks.Shipping.Editing
         private void UpdateRowDescription(GridRow row, string description)
         {
             List<ShipmentCustomsItemEntity> customsItems = (List<ShipmentCustomsItemEntity>) row.Tag;
+
             if (customsItems.Count < loadedShipments.Count)
             {
                 description += string.Format(" ({0} shipment{1})", customsItems.Count, customsItems.Count > 1 ? "s" : "");
@@ -501,6 +493,8 @@ namespace ShipWorks.Shipping.Editing
                 UpdateRowDescription(row, description.Text);
             }
 
+            SaveValuesToSelectedEntities();
+            
             RaiseShipSenseFieldChanged();
         }
 
@@ -553,6 +547,8 @@ namespace ShipWorks.Shipping.Editing
         {
             Cursor.Current = Cursors.WaitCursor;
 
+            sandGrid.SelectedElements.Clear();
+            
             List<ShipmentCustomsItemEntity> createdList = new List<ShipmentCustomsItemEntity>();
 
             // Add to each shipment
@@ -568,11 +564,34 @@ namespace ShipWorks.Shipping.Editing
                 row.Tag = createdList;
 
                 sandGrid.Rows.Add(row);
-                sandGrid.SelectedElements.Clear();
-                row.Selected = true;
-            }
 
-            RaiseShipSenseFieldChanged();
+                RaiseShipSenseFieldChanged();
+
+                SelectGridRowByTag(createdList);
+                selectedRows = sandGrid.SelectedElements.Cast<GridRow>().ToList();
+            }
+            else
+            {
+                RaiseShipSenseFieldChanged();
+            }
+            
+        }
+
+        /// <summary>
+        /// Given a tag, select the first grid row that equals that tag.
+        /// </summary>
+        private void SelectGridRowByTag(List<ShipmentCustomsItemEntity> tag)
+        {
+            GridRow matchedRow = sandGrid.Rows.Cast<GridRow>().FirstOrDefault(r =>
+            {
+                List<ShipmentCustomsItemEntity> tagInGrid = ((List<ShipmentCustomsItemEntity>) r.Tag);
+                return tagInGrid.All(customsItemFromGrid => tag.Any(customsItem => customsItem == customsItemFromGrid));
+            });
+
+            if (matchedRow != null)
+            {
+                matchedRow.Selected = true;
+            }
         }
 
         /// <summary>

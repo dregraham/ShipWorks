@@ -1,1 +1,0 @@
-﻿CREATE NONCLUSTERED INDEX [IX_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])

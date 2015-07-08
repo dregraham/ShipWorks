@@ -53,10 +53,12 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             SuspendShipSenseFieldChangeEvent();
 
             RecipientDestinationChanged -= OnRecipientDestinationChanged;
+            originControl.DestinationChanged -= OnOriginDestinationChanged;
 
             base.LoadShipments(shipments, enableEditing, enableShippingAddress);
 
             RecipientDestinationChanged += OnRecipientDestinationChanged;
+            originControl.DestinationChanged += OnOriginDestinationChanged;
             
             LoadShipmentDetails();
             UpdateInsuranceDisplay();

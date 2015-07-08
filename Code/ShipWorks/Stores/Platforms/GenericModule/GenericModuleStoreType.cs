@@ -76,7 +76,7 @@ namespace ShipWorks.Stores.Platforms.GenericModule
             {
                 GenericModuleStoreEntity genericStore = (GenericModuleStoreEntity)Store;
 
-                Version currentSchemaVersion = new Version(genericStore.SchemaVersion);
+                Version currentSchemaVersion = GetSchemaVersion(genericStore);
 
                 string moduleUrl = genericStore.ModuleUrl;
 
@@ -103,7 +103,6 @@ namespace ShipWorks.Stores.Platforms.GenericModule
                         //Use the old version to remove files from the end of the url
                         identifier = Regex.Replace(identifier, "(admin/)?[^/]*(\\.)?[^/]+$", "", RegexOptions.IgnoreCase);
                     }
-
                 }
                 else
                 {
@@ -675,6 +674,27 @@ namespace ShipWorks.Stores.Platforms.GenericModule
         public virtual string GetOnlineOrderIdentifier(OrderEntity order)
         {
             return order.OrderNumberComplete.ToString();
+        }
+
+        /// <summary>
+        /// Get a Version object from the generic module SchemaVersion
+        /// </summary>
+        private static Version GetSchemaVersion(GenericModuleStoreEntity genericStore)
+        {
+            try
+            {
+                return new Version(genericStore.SchemaVersion);
+            }
+            catch (ArgumentException)
+            {
+                log.WarnFormat("Store has an invalid schema version of {0} for store {1}", genericStore.SchemaVersion, genericStore.ModuleOnlineStoreCode);
+            }
+            catch (FormatException)
+            {
+                log.WarnFormat("Store has an invalid schema version of {0} for store {1}", genericStore.SchemaVersion, genericStore.ModuleOnlineStoreCode);
+            }
+
+            return new Version();
         }
     }
 }

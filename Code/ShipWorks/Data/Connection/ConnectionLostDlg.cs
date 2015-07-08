@@ -157,16 +157,16 @@ namespace ShipWorks.Data.Connection
         /// <summary>
         /// Attempts to reconnect the specified connection.
         /// </summary>
-        public static bool Reconnect(IDbConnection connection)
+        public static ReconnectResult Reconnect(IDbConnection connection)
         {
             if (CrashWindow.IsApplicationCrashed)
             {
                 Debug.Fail("Not attempting reconnect due to already crashed.");
                 log.InfoFormat("Skipping reconnect due to crash.");
-                return false;
+                return ReconnectResult.Canceled;
             }
 
-            bool connected = false;
+            ReconnectResult connected = ReconnectResult.Failed;
 
             log.InfoFormat("About to show connection lost window (InvokeRequired = {0})", Program.MainForm.InvokeRequired.ToString());
 
@@ -181,7 +181,9 @@ namespace ShipWorks.Data.Connection
                         {
                             DialogResult result = dlg.ShowDialog(DisplayHelper.GetActiveForm());
 
-                            connected = (result == DialogResult.OK);
+                            connected = result == DialogResult.OK ? ReconnectResult.Succeeded : 
+                                result == DialogResult.Cancel ? ReconnectResult.Canceled :
+                                ReconnectResult.Failed;
                         }
                     }));
             }
