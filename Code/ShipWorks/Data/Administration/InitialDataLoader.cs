@@ -231,17 +231,6 @@ namespace ShipWorks.Data.Administration
             //Add it to the filter
             definition.RootContainer.FirstGroup.Conditions.Add(poCondition);
 
-            //Build the condition to exclude Military addresses
-            MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
-            {
-                AddressOperator = BillShipAddressOperator.Ship,
-                Operator = EqualityOperator.Equals,
-                Value = ValidationDetailStatusType.No
-            };
-
-            //Add it to the filter
-            definition.RootContainer.FirstGroup.Conditions.Add(militaryCondition);
-
             //Build the condition to exclude us territory addresses
             USTerritoryCondition territoryCondition = new USTerritoryCondition()
             {
@@ -252,6 +241,17 @@ namespace ShipWorks.Data.Administration
 
             //Add it to the filter
             definition.RootContainer.FirstGroup.Conditions.Add(territoryCondition);
+
+            //Build the condition to exclude Military addresses
+            MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.No
+            };
+
+            //Add it to the filter
+            definition.RootContainer.FirstGroup.Conditions.Add(militaryCondition);
 
             return definition;
         }
