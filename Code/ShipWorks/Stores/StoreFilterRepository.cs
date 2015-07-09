@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
@@ -15,14 +12,22 @@ namespace ShipWorks.Stores
     {
         private readonly StoreEntity store;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoreFilterRepository"/> class.
+        /// </summary>
+        /// <param name="store">The store filters are being created for.</param>
         public StoreFilterRepository(StoreEntity store)
         {
             this.store = store;
         }
 
+        /// <summary>
+        /// Uses the store provided in the constructor to save the store filters to the database.
+        /// </summary>
+        /// <param name="abortOnFolderNameCollision">if set to <c>true</c> [abort on folder name collision].</param>
+        /// <returns>StoreFilterRepositorySaveResult.</returns>
         public StoreFilterRepositorySaveResult Save(bool abortOnFolderNameCollision)
         {
-
             FilterEntity storeFilterFolder = CreateStoreFilterFolder();
 
             StoreFilterRepositorySaveResult result = new StoreFilterRepositorySaveResult
@@ -57,7 +62,7 @@ namespace ShipWorks.Stores
             // If there is a match, use this as the store node, else create a new store node
             FilterNodeEntity storeNode = foldersWithMatchingNameAndStoreCondition.Any() ?
                 foldersWithMatchingNameAndStoreCondition.First() : 
-                FilterLayoutContext.Current.AddFilter(storeFilterFolder, ordersNode, ordersNode.ChildNodes.Count)[0];
+                FilterLayoutContext.Current.AddFilter(storeFilterFolder, ordersNode, 0)[0];
             
             // Always create an "All Orders" filter so that the folder count show's the full store orders's count.  Otherwise our users would
             // likely be confused.

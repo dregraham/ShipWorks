@@ -81,13 +81,18 @@ namespace ShipWorks.Data.Administration
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
             FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 0)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 1);
 
             FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 1)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0);
+
+            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 1)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 7 days", CreateDefinitionOrdersAge(7)), ageNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 30 days", CreateDefinitionOrdersAge(30)), ageNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 90 days", CreateDefinitionOrdersAge(90)), ageNode, 3);
         }
 
         /// <summary>
@@ -171,6 +176,23 @@ namespace ShipWorks.Data.Administration
 
             OrderDateCondition dateCondition = new OrderDateCondition();
             dateCondition.Operator = DateOperator.Today;
+            definition.RootContainer.FirstGroup.Conditions.Add(dateCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for that last n days
+        /// </summary>
+        private static FilterDefinition CreateDefinitionOrdersAge(int days)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            OrderDateCondition dateCondition = new OrderDateCondition();
+            dateCondition.Operator = DateOperator.WithinTheLast;
+            dateCondition.WithinUnit = DateWithinUnit.Days;
+            dateCondition.WithinAmount = days;
+            
             definition.RootContainer.FirstGroup.Conditions.Add(dateCondition);
 
             return definition;
