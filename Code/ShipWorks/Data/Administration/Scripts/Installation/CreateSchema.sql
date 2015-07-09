@@ -665,6 +665,31 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo
 	[IsManual] ASC
 )
 GO
+PRINT N'Adding [Order].[IX_Order_DestinationResidential] Index'
+GO
+-- Intended to match the conditions on the US Residential filter in ShipWorks
+CREATE NONCLUSTERED INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
+(
+	[ShipResidentialStatus] ASC,
+	[ShipPOBox] ASC,
+	[ShipUSTerritory] ASC,
+	[ShipMilitaryAddress] ASC
+)
+WHERE ShipResidentialStatus = 1 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
+GO
+PRINT N'Adding [Order].[IX_Order_DestinationCommercial] Index'
+GO
+-- Intended to match the conditions on the US Commercial filter in ShipWorks
+CREATE NONCLUSTERED INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
+(
+	[ShipResidentialStatus] ASC,
+	[ShipPOBox] ASC,
+	[ShipUSTerritory] ASC,
+	[ShipMilitaryAddress] ASC
+)
+WHERE ShipResidentialStatus = 2 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
+GO
+
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
