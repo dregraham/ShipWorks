@@ -81,13 +81,6 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 0)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 0);
-
-            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 1)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0);
-
             FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 1)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("All U.S.", CreateDefinitionUS()), destinationNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Residential", CreateDefinitionResidential(true)), destinationNode, 1);
@@ -96,7 +89,8 @@ namespace ShipWorks.Data.Administration
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Territories", CreateDefinitionTerritory()), destinationNode, 4);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Military", CreateDefinitionMilitary()), destinationNode, 5);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), destinationNode, 6);
-            
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ambiguous", CreateAddressValidationDefinition(AddressValidationStatusType.HasSuggestions)), destinationNode, 7);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Invalid", CreateAddressValidationDefinition(AddressValidationStatusType.BadAddress)), destinationNode, 8);
 
             FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 2)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0);
@@ -352,6 +346,13 @@ namespace ShipWorks.Data.Administration
             definition.RootContainer.FirstGroup.Conditions.Add(countryCondition);
 
             return definition;
+        }
+        /// <summary>
+        /// Create the filter definition for orders that have Address Validation of a given status
+        /// </summary>
+        private static FilterDefinition CreateAddressValidationDefinition(AddressValidationStatusType Status)
+        {
+            return FilterHelper.CreateAddressValidationDefinition(new List<AddressValidationStatusType>() { Status });
         }
 
         /// <summary>
