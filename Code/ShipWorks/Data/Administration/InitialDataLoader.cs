@@ -81,7 +81,7 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 1)[0];
+            FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 0)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("All U.S.", CreateDefinitionUS()), destinationNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Residential", CreateDefinitionResidential(true)), destinationNode, 1);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Commercial", CreateDefinitionResidential(false)), destinationNode, 2);
@@ -92,7 +92,7 @@ namespace ShipWorks.Data.Administration
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ambiguous", CreateAddressValidationDefinition(AddressValidationStatusType.HasSuggestions)), destinationNode, 7);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Invalid", CreateAddressValidationDefinition(AddressValidationStatusType.BadAddress)), destinationNode, 8);
 
-            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 2)[0];
+            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 1)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 7 days", CreateDefinitionOrdersAge(7)), ageNode, 1);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 30 days", CreateDefinitionOrdersAge(30)), ageNode, 2);
