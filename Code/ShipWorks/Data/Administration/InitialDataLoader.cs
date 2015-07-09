@@ -356,30 +356,6 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
-        /// Create the filter definition for orders that have multiple line items
-        /// </summary>
-        private static FilterDefinition CreateDefinitionHasTax()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            ForAnyChargeCondition anyCharge = new ForAnyChargeCondition();
-            anyCharge.Container.FirstGroup.JoinType = ConditionJoinType.All;
-            definition.RootContainer.FirstGroup.Conditions.Add(anyCharge);
-
-            OrderChargeTypeCondition chargeType = new OrderChargeTypeCondition();
-            chargeType.Operator = StringOperator.Contains;
-            chargeType.TargetValue = "TAX";
-            anyCharge.Container.FirstGroup.Conditions.Add(chargeType);
-
-            OrderChargeAmountCondition chargeAmount = new OrderChargeAmountCondition();
-            chargeAmount.Operator = NumericOperator.GreaterThan;
-            chargeAmount.Value1 = 0;
-            anyCharge.Container.FirstGroup.Conditions.Add(chargeAmount);
-
-            return definition;
-        }
-
-        /// <summary>
         /// Create the definition for a customer that's spent $100 or more
         /// </summary>
         private static FilterDefinition CreateDefinitionSpent100()
