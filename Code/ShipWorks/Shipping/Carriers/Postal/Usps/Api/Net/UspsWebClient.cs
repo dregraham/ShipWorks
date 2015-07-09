@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
@@ -813,7 +814,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string mac_Unused;
             string postageHash;
-            byte[][] imageData;
+            byte[][] imageData = null;
             
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
@@ -874,7 +875,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                             NonDeliveryOption.Return, // return to sender
                             null, // redirectTo
                             null, // OriginalPostageHash 
-                            false, true, // returnImageData,
+                            true, true, // returnImageData,
                             null,
                             PaperSizeV1.Default,
                             null,
@@ -902,11 +903,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            string[] labelUrls = labelUrl.Split(' ');
-
-            using (new LoggedStopwatch(log, string.Format("ProcessShipmentInternal.Process SaveLabels for {0} urls", labelUrls.Count())))
+            int labelCount = (imageData != null && imageData.Length > 0) ? imageData.Length : 1;
+            using (new LoggedStopwatch(log, string.Format("ProcessShipmentInternal.Process SaveLabels for {0} urls", labelCount)))
             {
-                SaveLabels(shipment, labelUrls);
+                SaveLabels(shipment, imageData, labelUrl);
             }
         }
 
@@ -972,13 +972,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Uses the label URLs to saves the label(s) for the given shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="labelUrls">The URLs that labels need to be requested from.</param>
-        private void SaveLabels(ShipmentEntity shipment, IEnumerable<string> labelUrls)
+        /// <param name="imageData">The base 64 binary data of each label image.</param>
+        /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
+        private void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
         {
             List<Label> labels = new List<Label>();
+
             try
             {
-                labels = new LabelFactory().CreateLabels(shipment, labelUrls.ToList()).ToList();
+                LabelFactory labelFactory = new LabelFactory();
+
+                if (imageData != null && imageData.Length > 0)
+                {
+                    labels.AddRange(labelFactory.CreateLabels(shipment, imageData).ToList());
+                }
+
+                if (!string.IsNullOrWhiteSpace(labelUrl))
+                {
+                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl, CroppingStyles.None));
+                }
+
                 labels.ForEach(l => l.Save());
             }
             finally

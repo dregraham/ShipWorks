@@ -95,7 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         {
             int iteration = 0;
 
-            string fileNameFinal = string.Format(@"h:\labels\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
+            string fileNameFinal = string.Format(@"h:\labels\Original\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
                 ShipmentEntity.ShipmentID,
                 (ThermalLanguage)this.ShipmentEntity.RequestedLabelFormat,
                 this.ShipmentEntity.ShipMilitaryAddress,
@@ -114,7 +114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             while (File.Exists(fileNameFinal))
             {
                 iteration++;
-                fileNameFinal = string.Format(@"h:\labels\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
+                fileNameFinal = string.Format(@"h:\labels\Original\{0}_{1}_{2}_{3}_{4}_{5}_{6}_{7}_{8}_{9}_{10}_{11}{12}.jpg",
                  ShipmentEntity.ShipmentID,
                  (ThermalLanguage)this.ShipmentEntity.RequestedLabelFormat,
                  this.ShipmentEntity.ShipMilitaryAddress,
