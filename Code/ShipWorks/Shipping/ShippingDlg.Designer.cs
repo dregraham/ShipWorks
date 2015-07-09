@@ -61,6 +61,7 @@ namespace ShipWorks.Shipping
             this.insuranceTabControl = new ShipWorks.Shipping.Insurance.InsuranceTabControl();
             this.rateControl = new ShipWorks.Shipping.Editing.Rating.RateControl();
             this.labelRates = new System.Windows.Forms.Label();
+            this.requestedShipping = new System.Windows.Forms.Label();
             this.contextMenuProcess.SuspendLayout();
             this.contextMenuProfiles.SuspendLayout();
             this.panelEditButtons.SuspendLayout();
@@ -337,6 +338,7 @@ namespace ShipWorks.Shipping
             // 
             // tabPageService
             // 
+            this.tabPageService.Controls.Add(this.requestedShipping);
             this.tabPageService.Controls.Add(this.comboShipmentType);
             this.tabPageService.Controls.Add(this.labelService);
             this.tabPageService.Controls.Add(this.serviceControlArea);
@@ -563,8 +565,10 @@ namespace ShipWorks.Shipping
             this.rateControl.Margin = new System.Windows.Forms.Padding(3, 3, 0, 3);
             this.rateControl.Name = "rateControl";
             this.rateControl.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
+            this.rateControl.RestrictedRateCount = 5;
             this.rateControl.ShowAllRates = true;
-            this.rateControl.Size = new System.Drawing.Size(356, 135);
+            this.rateControl.ShowSingleRate = false;
+            this.rateControl.Size = new System.Drawing.Size(356, 134);
             this.rateControl.TabIndex = 0;
             this.rateControl.ReloadRatesRequired += new System.EventHandler(this.OnRateReloadRequired);
             // 
@@ -577,6 +581,15 @@ namespace ShipWorks.Shipping
             this.labelRates.Size = new System.Drawing.Size(40, 13);
             this.labelRates.TabIndex = 1;
             this.labelRates.Text = "Rates";
+            // 
+            // requestedShipping
+            // 
+            this.requestedShipping.AutoSize = true;
+            this.requestedShipping.Location = new System.Drawing.Point(264, 15);
+            this.requestedShipping.Name = "requestedShipping";
+            this.requestedShipping.Size = new System.Drawing.Size(35, 13);
+            this.requestedShipping.TabIndex = 3;
+            this.requestedShipping.Text = "label2";
             // 
             // ShippingDlg
             // 
@@ -673,5 +686,6 @@ namespace ShipWorks.Shipping
         private System.Windows.Forms.Label labelRates;
         private System.Windows.Forms.TabPage tabPageInsurance;
         private Insurance.InsuranceTabControl insuranceTabControl;
+        private System.Windows.Forms.Label requestedShipping;
     }
 }

@@ -304,6 +304,11 @@ namespace ShipWorks.Shipping
             Refresh();
         }
 
+        private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
+        {
+            requestedShipping.Text = GetRequestedShippingLabel(shipments);
+        }
+
         /// <summary>
         /// Load the shipment type combo with the available shipment types
         /// </summary>
@@ -719,6 +724,8 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
             
             UpdateComboShipmentType(shipmentType, enableEditing);
+
+            UpdateRequestedShipping(loadedShipmentEntities);
 
             // Update our list of shipments that are displayed in the UI
             uiDisplayedShipments = loadedShipmentEntities.ToList();
@@ -1895,6 +1902,34 @@ namespace ShipWorks.Shipping
             }
 
             return ShipmentTypeManager.GetType((ShipmentTypeCode) typeCode);
+        }
+
+        /// <summary>
+        /// Get the requested shipping text, (Multiple) displayed for multiple values
+        /// </summary>
+        private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        {
+            string label = "";
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+
+                // First one
+                if (String.IsNullOrEmpty(label))
+                {
+                    label = order.RequestedShipping;
+                }
+                else
+                {
+                    if (!label.Equals(order.RequestedShipping))
+                    {
+                        return "(Multiple)";
+                    }
+                }
+            }
+
+            return (label.Length > 60) ? String.Format("{0}{1}",label.Substring(0, 60),"...") : label;
         }
 
         /// <summary>
