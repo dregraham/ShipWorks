@@ -306,7 +306,16 @@ namespace ShipWorks.Shipping
 
         private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
         {
-            requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",GetRequestedShippingLabel(shipments));
+            string requestedShippingText = GetRequestedShippingLabel(shipments);
+
+            if (requestedShippingText.Length == 0)
+	        {
+		        requestedShipping.Visible = false;
+	        }else
+	        {
+                requestedShipping.Visible = true;
+		        requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",requestedShippingText);
+	        }
         }
 
         /// <summary>
@@ -1909,14 +1918,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
         {
-            string label = "";
+            string label = null;
 
             foreach (ShipmentEntity shipment in shipments)
             {
                 OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
 
                 // First one
-                if (String.IsNullOrEmpty(label))
+                if (label == null)
                 {
                     label = order.RequestedShipping;
                 }
@@ -1929,7 +1938,11 @@ namespace ShipWorks.Shipping
                 }
             }
 
-            if (label.Length == 0)
+
+            if (label == null)
+            {
+                return "";
+            }else if (label.Length == 0)
 	        {
 		        return "N/A";
 	        }else if (label.Length > 60)
