@@ -306,7 +306,7 @@ namespace ShipWorks.Shipping
 
         private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
         {
-            requestedShipping.Text = GetRequestedShippingLabel(shipments);
+            requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",GetRequestedShippingLabel(shipments));
         }
 
         /// <summary>
@@ -1929,7 +1929,16 @@ namespace ShipWorks.Shipping
                 }
             }
 
-            return (label.Length > 60) ? String.Format("{0}{1}",label.Substring(0, 60),"...") : label;
+            if (label.Length == 0)
+	        {
+		        return "N/A";
+	        }else if (label.Length > 60)
+	        {
+                return String.Format("{1}{2}", label.Substring(0, 60), "...");
+	        }else
+	        {
+                return label;
+	        }
         }
 
         /// <summary>
