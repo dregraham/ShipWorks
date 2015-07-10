@@ -723,53 +723,50 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// </summary>
         public void ProcessShipment(ShipmentEntity shipment)
         {
-            using (new LoggedStopwatch(log, "ProcessShipment using URLs"))
+            UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
+            if (account == null)
             {
-                UspsAccountEntity account = accountRepository.GetAccount(shipment.Postal.Usps.UspsAccountID);
-                if (account == null)
+                throw new UspsException("No USPS account is selected for the shipment.");
+            }
+
+            try
+            {
+                ExceptionWrapper(() =>
                 {
-                    throw new UspsException("No USPS account is selected for the shipment.");
+                    ProcessShipmentInternal(shipment, account);
+                    return true;
+                }, account);
+            }
+            catch (UspsApiException ex)
+            {
+                string errorMessageUpper = ex.Message.ToUpperInvariant();
+
+                if (errorMessageUpper.Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
+                {
+                    // Provide a little more context as to which user name/password was incorrect in the case
+                    // where there's multiple accounts or Express1 for USPS is being used to compare rates
+                    string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
+                        UspsAccountManager.GetResellerName(uspsResellerType),
+                        account.Username,
+                        Environment.NewLine);
+
+                    throw new UspsException(message, ex);
                 }
 
-                try
+                if (ex.Code == 5636353 ||
+                    errorMessageUpper.Contains("INSUFFICIENT FUNDS") || errorMessageUpper.Contains("not enough postage".ToUpperInvariant()) ||
+                    errorMessageUpper.Contains("Insufficient Postage".ToUpperInvariant()))
                 {
-                    ExceptionWrapper(() =>
-                    {
-                        ProcessShipmentInternal(shipment, account);
-                        return true;
-                    }, account);
+                    throw new UspsInsufficientFundsException(account, ex.Message);
                 }
-                catch (UspsApiException ex)
+
+                if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
                 {
-                    string errorMessageUpper = ex.Message.ToUpperInvariant();
-
-                    if (errorMessageUpper.Contains("THE USERNAME OR PASSWORD ENTERED IS NOT CORRECT"))
-                    {
-                        // Provide a little more context as to which user name/password was incorrect in the case
-                        // where there's multiple accounts or Express1 for USPS is being used to compare rates
-                        string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                            UspsAccountManager.GetResellerName(uspsResellerType),
-                            account.Username,
-                            Environment.NewLine);
-
-                        throw new UspsException(message, ex);
-                    }
-
-                    if (ex.Code == 5636353 ||
-                        errorMessageUpper.Contains("INSUFFICIENT FUNDS") || errorMessageUpper.Contains("not enough postage".ToUpperInvariant()) ||
-                        errorMessageUpper.Contains("Insufficient Postage".ToUpperInvariant()))
-                    {
-                        throw new UspsInsufficientFundsException(account, ex.Message);
-                    }
-
-                    if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
-                    {
-                        throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");
-                    }
-
-                    // This isn't an exception we can handle, so just throw the original exception
-                    throw;
+                    throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");
                 }
+
+                // This isn't an exception we can handle, so just throw the original exception
+                throw;
             }
         }
 
@@ -846,49 +843,46 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             else
             {
-                using (new LoggedStopwatch(log, "ProcessShipmentInternal.CreateIndicium using URLs"))
+                // Labels for all other package types other than envelope get created via the CreateIndicium method
+                using (SwsimV45 webService = CreateWebService("Process"))
                 {
-                    // Labels for all other package types other than envelope get created via the CreateIndicium method
-                    using (SwsimV45 webService = CreateWebService("Process"))
-                    {
-                        webService.CreateIndicium(GetCredentials(account), ref integratorGuid,
-                            ref tracking,
-                            ref rate,
-                            fromAddress,
-                            toAddress,
-                            null,
-                            customs,
-                            false,
-                            thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
-                            EltronPrinterDPIType.Default,
-                            UspsUtility.BuildMemoField(shipment.Postal), // Memo
-                            0, // Cost Code
-                            false, // delivery notify
-                            null, // shipment notification
-                            0, // Rotation
-                            null, false, // horizontal offset
-                            null, false, // vertical offset
-                            null, false, // print density
-                            null, false, // print memo 
-                            false, true, // print instructions
-                            false, // request postage hash
-                            NonDeliveryOption.Return, // return to sender
-                            null, // redirectTo
-                            null, // OriginalPostageHash 
-                            true, true, // returnImageData,
-                            null,
-                            PaperSizeV1.Default,
-                            null,
-                            false, //PayOnPrint
-                            null, //ReturnLabelExpirationDays
-                            false, //ReturnLabelExpirationDaysSpecified
-                            out uspsGuid,
-                            out labelUrl,
-                            out postageBalance,
-                            out mac_Unused,
-                            out postageHash,
-                            out imageData);
-                    }
+                    webService.CreateIndicium(GetCredentials(account), ref integratorGuid,
+                        ref tracking,
+                        ref rate,
+                        fromAddress,
+                        toAddress,
+                        null,
+                        customs,
+                        false,
+                        thermalType == null ? ImageType.Png : ((thermalType == ThermalLanguage.EPL) ? ImageType.Epl : ImageType.Zpl),
+                        EltronPrinterDPIType.Default,
+                        UspsUtility.BuildMemoField(shipment.Postal), // Memo
+                        0, // Cost Code
+                        false, // delivery notify
+                        null, // shipment notification
+                        0, // Rotation
+                        null, false, // horizontal offset
+                        null, false, // vertical offset
+                        null, false, // print density
+                        null, false, // print memo 
+                        false, true, // print instructions
+                        false, // request postage hash
+                        NonDeliveryOption.Return, // return to sender
+                        null, // redirectTo
+                        null, // OriginalPostageHash 
+                        true, true, // returnImageData,
+                        null,
+                        PaperSizeV1.Default,
+                        null,
+                        false, //PayOnPrint
+                        null, //ReturnLabelExpirationDays
+                        false, //ReturnLabelExpirationDaysSpecified
+                        out uspsGuid,
+                        out labelUrl,
+                        out postageBalance,
+                        out mac_Unused,
+                        out postageHash,
+                        out imageData);
                 }
             }
 
@@ -903,11 +897,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            int labelCount = (imageData != null && imageData.Length > 0) ? imageData.Length : 1;
-            using (new LoggedStopwatch(log, string.Format("ProcessShipmentInternal.Process SaveLabels for {0} urls", labelCount)))
-            {
-                SaveLabels(shipment, imageData, labelUrl);
-            }
+            SaveLabels(shipment, imageData, labelUrl);
         }
 
         /// <summary>
@@ -974,7 +964,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <param name="shipment">The shipment.</param>
         /// <param name="imageData">The base 64 binary data of each label image.</param>
         /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
-        private void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
+        private static void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
         {
             List<Label> labels = new List<Label>();
 
@@ -989,7 +979,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 if (!string.IsNullOrWhiteSpace(labelUrl))
                 {
-                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl, CroppingStyles.None));
+                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl));
                 }
 
                 labels.ForEach(l => l.Save());

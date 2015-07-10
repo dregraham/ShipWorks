@@ -766,10 +766,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            using (new LoggedStopwatch(log, string.Format("ProcessShipmentInternal.Process SaveLabels for {0} urls", imageData.Length)))
-            {
-                SaveLabels(shipment, imageData);
-            }
+            SaveLabels(shipment, imageData, labelUrl);
         }
 
         /// <summary>
@@ -800,13 +797,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="imageData">The base 64 binary data of each label image.</param>
-        private void SaveLabels(ShipmentEntity shipment, byte[][] imageData)
+        /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
+        private static void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
         {
             List<Label> labels = new List<Label>();
 
             try
             {
-                labels = new LabelFactory().CreateLabels(shipment, imageData).ToList();
+                LabelFactory labelFactory = new LabelFactory();
+
+                if (imageData != null && imageData.Length > 0)
+                {
+                    labels.AddRange(labelFactory.CreateLabels(shipment, imageData).ToList());
+                }
+
+                if (!string.IsNullOrWhiteSpace(labelUrl))
+                {
+                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl));
+                }
+
                 labels.ForEach(l => l.Save());
             }
             finally

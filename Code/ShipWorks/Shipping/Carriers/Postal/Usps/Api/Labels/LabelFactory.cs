@@ -37,7 +37,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
             for (int i = 0; i < imageData.Length; i++)
             {
                 string labelName = i == 0 ? "LabelPrimary" : string.Format("LabelPart{0}", i);
-                labels.Add(CreateLabel(shipment, labelName, imageData[i], CroppingStyles.None));
+                labels.Add(CreateLabel(shipment, labelName, imageData[i]));
             }
 
             return labels;
@@ -49,13 +49,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <param name="shipment">The shipment.</param>
         /// <param name="name">The name.</param>
         /// <param name="imageBytes">The binary byte array of the label image.</param>
-        /// <param name="crop">The crop.</param>
         /// <returns>A Label object that may be either a StandardLabel or ThermalLabel.</returns>
-        public Label CreateLabel(ShipmentEntity shipment, string name, byte[] imageBytes, Rectangle crop)
+        public Label CreateLabel(ShipmentEntity shipment, string name, byte[] imageBytes)
         {
             if (shipment.ActualLabelFormat == null)
             {
-                return CreateStandardLabel(shipment, name, imageBytes, crop);
+                return CreateStandardLabel(shipment, name, imageBytes);
             }
 
             // Must be a thermal label
@@ -80,14 +79,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <param name="shipment">The shipment.</param>
         /// <param name="name">The name.</param>
         /// <param name="imageBytes">The byte array of the label image data.</param>
-        /// <param name="crop">The crop.</param>
         /// <returns>An instance of a StandardLabel.</returns>
-        private StandardLabel CreateStandardLabel(ShipmentEntity shipment, string name, byte[] imageBytes, Rectangle crop)
+        private StandardLabel CreateStandardLabel(ShipmentEntity shipment, string name, byte[] imageBytes)
         {
-            MemoryStream imageBytesStream = new MemoryStream(imageBytes);
-            Image image = Image.FromStream(imageBytesStream);
+            Image image;
 
-            return new StandardLabel(shipment, name, image, crop);
+            using (MemoryStream imageBytesStream = new MemoryStream(imageBytes))
+            {
+                image = Image.FromStream(imageBytesStream);
+            }
+
+            return new StandardLabel(shipment, name, image);
         }
 
         /// <summary>
@@ -95,13 +97,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <param name="labelUrl">The label URL.</param>
-        /// <param name="crop">The crop.</param>
         /// <returns>A Label object that may be either a StandardLabel or ThermalLabel.</returns>
-        public Label CreateLabel(ShipmentEntity shipment, string labelUrl, Rectangle crop)
+        public Label CreateLabel(ShipmentEntity shipment, string labelUrl)
         {
             if (shipment.ActualLabelFormat == null)
             {
-                return CreateStandardLabel(shipment, "LabelPrimary", labelUrl, crop);
+                return CreateStandardLabel(shipment, "LabelPrimary", labelUrl);
             }
 
             // Must be a thermal label
@@ -132,12 +133,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <param name="shipment">The shipment.</param>
         /// <param name="name">The name.</param>
         /// <param name="labelUrl">The label URL.</param>
-        /// <param name="crop">The crop.</param>
         /// <returns>An instance of a StandardLabel.</returns>
-        private StandardLabel CreateStandardLabel(ShipmentEntity shipment, string name, string labelUrl, Rectangle crop)
+        private StandardLabel CreateStandardLabel(ShipmentEntity shipment, string name, string labelUrl)
         {
             Image image = DownloadLabelImage(labelUrl);
-            return new StandardLabel(shipment, name, image, crop);
+            return new StandardLabel(shipment, name, image);
         }
 
         /// <summary>
