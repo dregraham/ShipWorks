@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Interapptive.Shared.Utility;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
 using ShipWorks.UI;
@@ -215,7 +219,67 @@ namespace ShipWorks.Stores
         /// </summary>
         public virtual List<FilterEntity> CreateInitialFilters()
         {
-            return null;
+            ICollection<string> onlineStatusChoices = GetOnlineStatusChoices();
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (string onlineStatus in onlineStatusChoices)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                OnlineStatusCondition onlineStatusCondition = new OnlineStatusCondition();
+                onlineStatusCondition.Operator = StringOperator.Equals;
+                onlineStatusCondition.TargetValue = onlineStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(onlineStatusCondition);
+
+                filters.Add(new FilterEntity()
+                {
+                    Name = onlineStatus,
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
+        }
+
+        protected List<FilterEntity> CreateInitialFilters<TStatus, TCondition>(List<TStatus> statusesForFilters)
+            where TCondition : EnumCondition<TStatus>, new()
+            where TStatus : struct
+        {
+            List<FilterEntity> filters = new List<FilterEntity>();
+
+            foreach (TStatus shippingStatus in statusesForFilters)
+            {
+                FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+                definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+
+                TCondition shippingStatusCondition = new TCondition();
+                shippingStatusCondition.Operator = EqualityOperator.Equals;
+                shippingStatusCondition.Value = shippingStatus;
+                definition.RootContainer.FirstGroup.Conditions.Add(shippingStatusCondition);
+
+                StoreCondition storeCondition = new StoreCondition();
+                storeCondition.Operator = EqualityOperator.Equals;
+                storeCondition.Value = Store.StoreID;
+                definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+                filters.Add(new FilterEntity
+                {
+                    Name = EnumHelper.GetDescription((Enum)(object)shippingStatus),
+                    Definition = definition.GetXml(),
+                    IsFolder = false,
+                    FilterTarget = (int)FilterTarget.Orders
+                });
+            }
+
+            return filters;
         }
 
         /// <summary>
