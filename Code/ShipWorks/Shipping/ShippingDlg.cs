@@ -1907,7 +1907,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the requested shipping text, (Multiple) displayed for multiple values
         /// </summary>
-        private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
         {
             string label = "";
 
@@ -1934,7 +1934,7 @@ namespace ShipWorks.Shipping
 		        return "N/A";
 	        }else if (label.Length > 60)
 	        {
-                return String.Format("{1}{2}", label.Substring(0, 60), "...");
+                return String.Format("{0}{1}", label.Substring(0, 60), "...");
 	        }else
 	        {
                 return label;
