@@ -8167,12 +8167,16 @@ namespace ShipWorks.Data.Model
 		FedExInsuranceProvider,
 		///<summary>FedExInsurancePennyOne. </summary>
 		FedExInsurancePennyOne,
+		///<summary>FedExExcludedServiceTypes. </summary>
+		FedExExcludedServiceTypes,
 		///<summary>UpsAccessKey. </summary>
 		UpsAccessKey,
 		///<summary>UpsInsuranceProvider. </summary>
 		UpsInsuranceProvider,
 		///<summary>UpsInsurancePennyOne. </summary>
 		UpsInsurancePennyOne,
+		///<summary>UpsExcludedServiceTypes. </summary>
+		UpsExcludedServiceTypes,
 		///<summary>EndiciaCustomsCertify. </summary>
 		EndiciaCustomsCertify,
 		///<summary>EndiciaCustomsSigner. </summary>
@@ -8187,6 +8191,8 @@ namespace ShipWorks.Data.Model
 		EndiciaAutomaticExpress1Account,
 		///<summary>EndiciaInsuranceProvider. </summary>
 		EndiciaInsuranceProvider,
+		///<summary>EndiciaExcludedServiceTypes. </summary>
+		EndiciaExcludedServiceTypes,
 		///<summary>WorldShipLaunch. </summary>
 		WorldShipLaunch,
 		///<summary>UspsAutomaticExpress1. </summary>
@@ -8195,6 +8201,8 @@ namespace ShipWorks.Data.Model
 		UspsAutomaticExpress1Account,
 		///<summary>UspsInsuranceProvider. </summary>
 		UspsInsuranceProvider,
+		///<summary>UspsExcludedServiceTypes. </summary>
+		UspsExcludedServiceTypes,
 		///<summary>Express1EndiciaCustomsCertify. </summary>
 		Express1EndiciaCustomsCertify,
 		///<summary>Express1EndiciaCustomsSigner. </summary>
@@ -8205,22 +8213,32 @@ namespace ShipWorks.Data.Model
 		Express1EndiciaThermalDocTabType,
 		///<summary>Express1EndiciaSingleSource. </summary>
 		Express1EndiciaSingleSource,
+		///<summary>Express1EndiciaExcludedServiceTypes. </summary>
+		Express1EndiciaExcludedServiceTypes,
 		///<summary>OnTracInsuranceProvider. </summary>
 		OnTracInsuranceProvider,
 		///<summary>OnTracInsurancePennyOne. </summary>
 		OnTracInsurancePennyOne,
+		///<summary>OnTracExcludedServiceTypes. </summary>
+		OnTracExcludedServiceTypes,
 		///<summary>IParcelInsuranceProvider. </summary>
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
+		///<summary>IParcelExcludedServiceTypes. </summary>
+		IParcelExcludedServiceTypes,
 		///<summary>Express1UspsSingleSource. </summary>
 		Express1UspsSingleSource,
+		///<summary>Express1UspsExcludedServiceTypes. </summary>
+		Express1UspsExcludedServiceTypes,
 		///<summary>UpsMailInnovationsEnabled. </summary>
 		UpsMailInnovationsEnabled,
 		///<summary>WorldShipMailInnovationsEnabled. </summary>
 		WorldShipMailInnovationsEnabled,
 		///<summary>InternalBestRateExcludedShipmentTypes. </summary>
 		InternalBestRateExcludedShipmentTypes,
+		///<summary>WebToolsExcludedServiceTypes. </summary>
+		WebToolsExcludedServiceTypes,
 		///<summary>ShipSenseEnabled. </summary>
 		ShipSenseEnabled,
 		///<summary>ShipSenseUniquenessXml. </summary>

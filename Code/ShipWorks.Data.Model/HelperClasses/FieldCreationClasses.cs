@@ -17552,6 +17552,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExInsurancePennyOne);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.FedExExcludedServiceTypes field instance</summary>
+		public static EntityField2 FedExExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExExcludedServiceTypes);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.UpsAccessKey field instance</summary>
 		public static EntityField2 UpsAccessKey
 		{
@@ -17566,6 +17571,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UpsInsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsInsurancePennyOne);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.UpsExcludedServiceTypes field instance</summary>
+		public static EntityField2 UpsExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UpsExcludedServiceTypes);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.EndiciaCustomsCertify field instance</summary>
 		public static EntityField2 EndiciaCustomsCertify
@@ -17602,6 +17612,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaInsuranceProvider);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.EndiciaExcludedServiceTypes field instance</summary>
+		public static EntityField2 EndiciaExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.EndiciaExcludedServiceTypes);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.WorldShipLaunch field instance</summary>
 		public static EntityField2 WorldShipLaunch
 		{
@@ -17621,6 +17636,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 UspsInsuranceProvider
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsInsuranceProvider);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.UspsExcludedServiceTypes field instance</summary>
+		public static EntityField2 UspsExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.UspsExcludedServiceTypes);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaCustomsCertify field instance</summary>
 		public static EntityField2 Express1EndiciaCustomsCertify
@@ -17647,6 +17667,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaSingleSource);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1EndiciaExcludedServiceTypes field instance</summary>
+		public static EntityField2 Express1EndiciaExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1EndiciaExcludedServiceTypes);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.OnTracInsuranceProvider field instance</summary>
 		public static EntityField2 OnTracInsuranceProvider
 		{
@@ -17656,6 +17681,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 OnTracInsurancePennyOne
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.OnTracInsurancePennyOne);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.OnTracExcludedServiceTypes field instance</summary>
+		public static EntityField2 OnTracExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.OnTracExcludedServiceTypes);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.IParcelInsuranceProvider field instance</summary>
 		public static EntityField2 IParcelInsuranceProvider
@@ -17667,10 +17697,20 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
 		}
+		/// <summary>Creates a new ShippingSettingsEntity.IParcelExcludedServiceTypes field instance</summary>
+		public static EntityField2 IParcelExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelExcludedServiceTypes);}
+		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1UspsSingleSource field instance</summary>
 		public static EntityField2 Express1UspsSingleSource
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1UspsSingleSource);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.Express1UspsExcludedServiceTypes field instance</summary>
+		public static EntityField2 Express1UspsExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.Express1UspsExcludedServiceTypes);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.UpsMailInnovationsEnabled field instance</summary>
 		public static EntityField2 UpsMailInnovationsEnabled
@@ -17686,6 +17726,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 InternalBestRateExcludedShipmentTypes
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.WebToolsExcludedServiceTypes field instance</summary>
+		public static EntityField2 WebToolsExcludedServiceTypes
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.WebToolsExcludedServiceTypes);}
 		}
 		/// <summary>Creates a new ShippingSettingsEntity.ShipSenseEnabled field instance</summary>
 		public static EntityField2 ShipSenseEnabled

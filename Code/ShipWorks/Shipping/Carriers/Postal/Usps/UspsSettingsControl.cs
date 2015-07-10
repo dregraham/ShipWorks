@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -20,6 +22,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         readonly ShipmentTypeCode shipmentTypeCode;
         readonly UspsResellerType uspsResellerType;
 
+        private CarrierServicePickerControl<PostalServiceType> servicePicker;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,10 +38,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.UspsResellerType = uspsResellerType;
 
+            InitializeServicePicker();
+            
             // Update the Express1 controls now in addition to on visible changed because we were seeing crashes
             // where express1settings was null because save was being called before the controls got loaded.
             UpdateExpress1ControlDisplay();
             VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
+        }
+
+        /// <summary>
+        /// Initializes the service picker with Postal service types for the USPS carrier.
+        /// </summary>
+        private void InitializeServicePicker()
+        {
+            // Add carrier service picker control to the exclusions panel
+            servicePicker = new CarrierServicePickerControl<PostalServiceType>();
+            servicePicker.Dock = DockStyle.Fill;
+            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            
+            panelExclusionConfiguration.Controls.Add(servicePicker);
+            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>
@@ -60,7 +80,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelBottom.Top = optionsControl.Bottom;
             }
 
-            panelInsurance.Top = panelBottom.Bottom;
+            panelExclusionConfiguration.Top = panelBottom.Bottom;
+            panelInsurance.Top = panelExclusionConfiguration.Bottom;
         }
 
         /// <summary>
@@ -89,6 +110,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Doesn't make sense to show Stamps.com insurance choosing to Express1
                 panelInsurance.Visible = false;
             }
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes(settings).Select(exclusion => (PostalServiceType)exclusion).ToList();
+
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(shipmentTypeCode).Union(PostalUtility.GetInternationalServices(shipmentTypeCode)).ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -178,6 +205,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.InfoFormat("Saving insurance provider {0} {1} {2}", settings == null, insuranceProviderChooser == null, insuranceProviderChooser.InsuranceProvider);
                 settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
                 log.Info("Finished saving insurance provider");
+            }
+
+            if (shipmentTypeCode == ShipmentTypeCode.Usps)
+            {
+                settings.UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToArray();
+            }
+            else
+            {
+                settings.Express1UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToArray();
             }
         }
 

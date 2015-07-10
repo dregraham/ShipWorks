@@ -4550,6 +4550,9 @@ ALTER TABLE [dbo].[ShippingProviderRule] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Creating [dbo].[ShippingSettings]'
 GO
+
+PRINT N'Creating [dbo].[ShippingSettings]'
+GO
 CREATE TABLE [dbo].[ShippingSettings]
 (
 [ShippingSettingsID] [bit] NOT NULL,
@@ -4568,9 +4571,11 @@ CREATE TABLE [dbo].[ShippingSettings]
 [FedExThermalDocTabType] [int] NOT NULL,
 [FedExInsuranceProvider] [int] NOT NULL,
 [FedExInsurancePennyOne] [bit] NOT NULL,
+[FedExExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpsAccessKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [UpsInsuranceProvider] [int] NOT NULL,
 [UpsInsurancePennyOne] [bit] NOT NULL,
+[UpsExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EndiciaCustomsCertify] [bit] NOT NULL,
 [EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [EndiciaThermalDocTab] [bit] NOT NULL,
@@ -4578,23 +4583,30 @@ CREATE TABLE [dbo].[ShippingSettings]
 [EndiciaAutomaticExpress1] [bit] NOT NULL,
 [EndiciaAutomaticExpress1Account] [bigint] NOT NULL,
 [EndiciaInsuranceProvider] [int] NOT NULL,
+[EndiciaExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [WorldShipLaunch] [bit] NOT NULL,
 [UspsAutomaticExpress1] [bit] NOT NULL,
 [UspsAutomaticExpress1Account] [bigint] NOT NULL,
 [UspsInsuranceProvider] [int] NOT NULL,
+[UspsExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaCustomsCertify] [bit] NOT NULL,
 [Express1EndiciaCustomsSigner] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1EndiciaThermalDocTab] [bit] NOT NULL,
 [Express1EndiciaThermalDocTabType] [int] NOT NULL,
 [Express1EndiciaSingleSource] [bit] NOT NULL,
+[Express1EndiciaExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [OnTracInsuranceProvider] [int] NOT NULL,
 [OnTracInsurancePennyOne] [bit] NOT NULL,
+[OnTracExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [iParcelInsuranceProvider] [int] NOT NULL,
 [iParcelInsurancePennyOne] [bit] NOT NULL,
+[iParcelExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Express1UspsSingleSource] [bit] NOT NULL,
+[Express1UspsExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [UpsMailInnovationsEnabled] [bit] NOT NULL,
 [WorldShipMailInnovationsEnabled] [bit] NOT NULL,
 [BestRateExcludedShipmentTypes] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[WebToolsExcludedServiceTypes] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipSenseEnabled] [bit] NOT NULL,
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
@@ -4605,7 +4617,7 @@ GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'
 GO
 ALTER TABLE [dbo].[ShippingSettings] ADD CONSTRAINT [PK_ShippingSettings] PRIMARY KEY CLUSTERED  ([ShippingSettingsID])
-GO
+GOGO
 PRINT N'Creating [dbo].[ShipSenseKnowledgeBase]'
 GO
 CREATE TABLE [dbo].[ShipSenseKnowledgeBase]

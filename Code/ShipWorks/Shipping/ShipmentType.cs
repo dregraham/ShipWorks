@@ -319,6 +319,28 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets the service types that have been excluded for this shipment type. The integer 
+        /// values are intended to correspond to the appropriate enumeration values of the specific
+        /// shipment type (i.e. the integer values would correspond to PostalServiceType values 
+        /// for a UspsShipmentType)
+        /// </summary>
+        public virtual List<int> GetExcludedServiceTypes(ShippingSettingsEntity shippingSettings)
+        {
+            return new List<int>();
+        }
+
+        /// <summary>
+        /// Gets the service types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalServiceType values for a UspsShipmentType)
+        /// </summary>
+        public virtual List<int> GetAvailableServiceTypes(ShippingSettingsEntity shippingSettings)
+        {
+            return new List<int>();
+        }
+
+        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment);

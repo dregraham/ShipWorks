@@ -134,6 +134,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
             return new Express1UspsProfileControl();
         }
 
+        public override List<int> GetExcludedServiceTypes(ShippingSettingsEntity shippingSettings)
+        {
+            return shippingSettings.Express1UspsExcludedServiceTypesArray.Select(exclusion => exclusion).ToList();
+        }
+
         /// <summary>
         /// Update the dyamic data of the shipment
         /// </summary>

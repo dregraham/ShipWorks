@@ -481,6 +481,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("FedExInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("FedExExcludedServiceTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("UpsAccessKey", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -488,6 +491,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UpsInsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UpsExcludedServiceTypes", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("EndiciaCustomsCertify", fieldHashtable);
@@ -511,6 +517,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("EndiciaInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("EndiciaExcludedServiceTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("WorldShipLaunch", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -521,6 +530,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UspsInsuranceProvider", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("UspsExcludedServiceTypes", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("Express1EndiciaCustomsCertify", fieldHashtable);
@@ -538,10 +550,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("Express1EndiciaSingleSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("Express1EndiciaExcludedServiceTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("OnTracInsuranceProvider", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("OnTracInsurancePennyOne", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("OnTracExcludedServiceTypes", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("IParcelInsuranceProvider", fieldHashtable);
@@ -550,7 +568,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("IParcelExcludedServiceTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Express1UspsSingleSource", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Express1UspsExcludedServiceTypes", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("UpsMailInnovationsEnabled", fieldHashtable);
@@ -560,6 +584,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("InternalBestRateExcludedShipmentTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("WebToolsExcludedServiceTypes", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShipSenseEnabled", fieldHashtable);
@@ -816,6 +843,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExInsurancePennyOne, value); }
 		}
 
+		/// <summary> The FedExExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."FedExExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String FedExExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.FedExExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.FedExExcludedServiceTypes, value); }
+		}
+
 		/// <summary> The UpsAccessKey property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsAccessKey"<br/>
@@ -847,6 +885,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsInsurancePennyOne, value); }
+		}
+
+		/// <summary> The UpsExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UpsExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UpsExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.UpsExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UpsExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The EndiciaCustomsCertify property of the Entity ShippingSettings<br/><br/>
@@ -926,6 +975,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaInsuranceProvider, value); }
 		}
 
+		/// <summary> The EndiciaExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."EndiciaExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String EndiciaExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.EndiciaExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.EndiciaExcludedServiceTypes, value); }
+		}
+
 		/// <summary> The WorldShipLaunch property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."WorldShipLaunch"<br/>
@@ -968,6 +1028,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Int32)GetValue((int)ShippingSettingsFieldIndex.UspsInsuranceProvider, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsInsuranceProvider, value); }
+		}
+
+		/// <summary> The UspsExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."UspsExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String UspsExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.UspsExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.UspsExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The Express1EndiciaCustomsCertify property of the Entity ShippingSettings<br/><br/>
@@ -1025,6 +1096,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1EndiciaSingleSource, value); }
 		}
 
+		/// <summary> The Express1EndiciaExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1EndiciaExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Express1EndiciaExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.Express1EndiciaExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1EndiciaExcludedServiceTypes, value); }
+		}
+
 		/// <summary> The OnTracInsuranceProvider property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracInsuranceProvider"<br/>
@@ -1045,6 +1127,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.OnTracInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.OnTracInsurancePennyOne, value); }
+		}
+
+		/// <summary> The OnTracExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."OnTracExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String OnTracExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.OnTracExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.OnTracExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The IParcelInsuranceProvider property of the Entity ShippingSettings<br/><br/>
@@ -1069,6 +1162,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
 		}
 
+		/// <summary> The IParcelExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String IParcelExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.IParcelExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelExcludedServiceTypes, value); }
+		}
+
 		/// <summary> The Express1UspsSingleSource property of the Entity ShippingSettings<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1UspsSingleSource"<br/>
@@ -1078,6 +1182,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.Express1UspsSingleSource, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1UspsSingleSource, value); }
+		}
+
+		/// <summary> The Express1UspsExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."Express1UspsExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Express1UspsExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.Express1UspsExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.Express1UspsExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The UpsMailInnovationsEnabled property of the Entity ShippingSettings<br/><br/>
@@ -1111,6 +1226,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.InternalBestRateExcludedShipmentTypes, value); }
+		}
+
+		/// <summary> The WebToolsExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."WebToolsExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String WebToolsExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.WebToolsExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.WebToolsExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The ShipSenseEnabled property of the Entity ShippingSettings<br/><br/>

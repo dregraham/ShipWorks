@@ -5,6 +5,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Controls.Design;
 using ShipWorks.UI.Utility;
@@ -144,19 +145,26 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
 
+            List<PostalServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes(ShippingSettings.Fetch()).Select(s => (PostalServiceType)s).ToList();
+            
             // If they are all international we can load up all the international services
             if (allInternational)
             {
+                List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
+                
                 service.DataSource = ActiveEnumerationBindingSource
-                    .Create<PostalServiceType>(PostalUtility.GetInternationalServices(ShipmentTypeCode)
+                    .Create<PostalServiceType>(allInternationalServices.Intersect(availableServices)
                     .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
                     .ToList());
             }
             // If they are all domestic we can load up all the domestic services
             else if (allDomestic)
             {
-                service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(PostalUtility.GetDomesticServices(ShipmentTypeCode)
+                List<PostalServiceType> domesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
+
+                service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(domesticServices.Intersect(availableServices)
                     .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
+                    //.Where(kvp => !excludedServiceTypes.Contains(kvp.Value))
                     .ToList());
             }
             // Otherwise there is nothing to choose from
