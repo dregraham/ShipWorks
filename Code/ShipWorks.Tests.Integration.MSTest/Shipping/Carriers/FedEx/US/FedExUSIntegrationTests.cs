@@ -199,7 +199,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         public void Ship_FedExOneRate_Test()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
-
+            
             if (PopulateTestObject(testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
