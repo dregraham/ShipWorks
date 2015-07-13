@@ -51,7 +51,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExGroundDomesticAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExUSGroundAlcoholFixture();
             try
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExExpressInternationalAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             try
             {
@@ -154,7 +154,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExExpressDomesticAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExPrototypeFixture();
 
