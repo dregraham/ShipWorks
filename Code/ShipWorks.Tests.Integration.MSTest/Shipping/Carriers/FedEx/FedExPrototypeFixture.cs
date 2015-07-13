@@ -252,6 +252,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             }
         }
 
+        /// <summary>
+        /// Ships the shipment
+        /// </summary>
+        /// <returns></returns>
         public virtual bool Ship()
         {
             try
