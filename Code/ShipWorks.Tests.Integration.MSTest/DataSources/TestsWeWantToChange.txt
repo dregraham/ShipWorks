@@ -1,8 +1,11 @@
-﻿=================================================================================
-CHANGES (US Exp Dom)
+﻿Changes to all:
+Make sure all fields are text
+
+=================================================================================
+CHANGES (US Grn Dom)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-
+605634					11		CS			GROUND_HOME_DELIVERY FEDEX_GROUND							7/13/2015				Per FedEx
 	   
 =================================================================================
 CHANGES (US Exp Intl)
@@ -15,21 +18,25 @@ CHANGES (US Exp Intl)
 CHANGES (US Exp Dom - Alcohol)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-
+605766					7		BP								9012633035								7/13/2015				Error said missing phone number
 
 
 =================================================================================
 CHANGES (US Exp Intl)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
+413230					54		L			LB					KG										7/10/2015				Change based on FedEx error
+413299					44		CT			500					10										7/10/2015				Weight error from FedEx
 
 
 
 =================================================================================
-CHANGES (CA Exp Dom)
+CHANGES (CA Exp Intl)
 =================================================================================
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
-
+N/A						N/A		BJ			N/A					Added column permit number				7/13/2015				Needed by FedEx
+N/A						N/A		DB			N/A					Added column phone number				7/13/2015				Needed by FedEx
+					
 
 
 =================================================================================
