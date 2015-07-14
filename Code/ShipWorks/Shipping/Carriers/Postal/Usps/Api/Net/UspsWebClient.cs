@@ -16,7 +16,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
@@ -24,7 +23,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -1197,7 +1195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-                addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USADC});
+                addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
             }
             return addOns;
         }
@@ -1213,6 +1211,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+
+            // The following services support confirmation types.
+            if ((new [] { PostalServiceType.DhlBpmExpedited, PostalServiceType.DhlBpmGround, PostalServiceType.DhlMarketingGround, PostalServiceType.DhlMarketingExpedited }).Contains(serviceType))
+            {
+                return true;
+            }
+
+            // Other DHL shipments don't support confirmation types
             if (ShipmentTypeManager.IsDhl(serviceType))
             {
                 return false;
