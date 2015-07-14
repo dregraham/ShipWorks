@@ -27,8 +27,9 @@ CHANGES (US Exp Intl)
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 413230					54		L			LB					KG										7/10/2015				Change based on FedEx error
 413299					44		CT			500					10										7/10/2015				Weight error from FedEx
-
-
+N/a						N/A		EQ			n/a					n/a										7/14/2015				ETD error was thrown. this overrides and doesn't send ETD when not appropriate
+413235					59		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
+413236					60		AO			3/17/2015			3/17/2016								7/14/2015				fixed fedex error
 
 =================================================================================
 CHANGES (CA Exp Intl)
@@ -36,7 +37,6 @@ CHANGES (CA Exp Intl)
 [Customer Transaction]	[Row]	[Column]	[Original Value]	[New Value]								[Date Of Change]		[Reason]
 N/A						N/A		BJ			N/A					Added column permit number				7/13/2015				Needed by FedEx
 N/A						N/A		DB			N/A					Added column phone number				7/13/2015				Needed by FedEx
-					
 
 
 =================================================================================
