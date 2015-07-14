@@ -117,8 +117,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging.Log4Net1210">
-      <HintPath>..\..\Components\Common.Logging.Log4Net1210.dll</HintPath>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\Components\Common.Logging.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Log4Net1213">
+      <HintPath>..\..\Components\Common.Logging.Log4Net1213.dll</HintPath>
     </Reference>
     <Reference Include="ComponentFactory.Krypton.Toolkit, Version=2.8.5.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -667,6 +670,7 @@
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
+    <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
     <Compile Include="Filters\Content\Conditions\AddressValidationStatusCondition.cs" />
     <Compile Include="Data\Administration\Indexing\IIndexMonitor.cs" />
@@ -829,7 +833,6 @@
     <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\Label.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\LabelFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\StandardLabel.cs" />
@@ -1052,6 +1055,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
@@ -11062,6 +11066,9 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.0\4.0.3.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.1\4.1.1.1.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

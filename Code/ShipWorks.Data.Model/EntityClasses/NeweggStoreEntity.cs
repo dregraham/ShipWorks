@@ -482,6 +482,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ExcludeFulfilledByNewegg", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Channel", fieldHashtable);
 		}
 		#endregion
 
@@ -586,6 +589,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)NeweggStoreFieldIndex.ExcludeFulfilledByNewegg, true); }
 			set	{ SetValue((int)NeweggStoreFieldIndex.ExcludeFulfilledByNewegg, value); }
+		}
+
+		/// <summary> The Channel property of the Entity NeweggStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "NeweggStore"."Channel"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int32 Channel
+		{
+			get { return (System.Int32)GetValue((int)NeweggStoreFieldIndex.Channel, true); }
+			set	{ SetValue((int)NeweggStoreFieldIndex.Channel, value); }
 		}
 
 

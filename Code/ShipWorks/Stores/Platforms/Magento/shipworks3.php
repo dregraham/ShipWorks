@@ -18,7 +18,7 @@
 |
  */
 define('REQUIRE_SECURE', TRUE);
-$moduleVersion = "3.10.0.0";
+$moduleVersion = "3.10.0.1";
 $schemaVersion = "1.0.0";
 
 // include the Mage engine
@@ -168,7 +168,7 @@ try
 }
 catch (Mage_Core_Model_Store_Exception $e)
 {
-	outputError(100, "Invalid Store Code.");
+	outputError(100, "Invalid store code");
 	writeCloseTag("ShipWorks");
 	exit;
 }
@@ -176,7 +176,7 @@ catch (Mage_Core_Model_Store_Exception $e)
 // Enforse SSL
 if (!$secure && REQUIRE_SECURE)
 {
-	outputError(10, 'A secure (https://) connection is required.');
+	outputError(10, 'Invalid URL, HTTPS is required');
 }
 else
 {
@@ -193,7 +193,7 @@ else
 			case 'getstatuscodes': Action_GetStatusCodes(); break;
 			case 'updateorder': Action_UpdateOrder(); break;
 			default:
-				outputError(20, "'$action' is not supported.");
+				outputError(20, "Invalid action '$action'");
 		}
 	}
 }
@@ -221,7 +221,7 @@ function checkAdminLogin()
 
 	if (!$loginOK)
 	{
-		outputError(50, "The username or password is incorrect.");
+		outputError(50, "Username or password is incorrect");
 	}
 
 	return $loginOK;
@@ -846,7 +846,7 @@ function Action_UpdateOrder()
 	if (!isset($_REQUEST['order'])  || 
 		!isset($_REQUEST['command']) || !isset($_REQUEST['comments']))
 	{
-		outputError(40, "Not all parameters supplied.");
+		outputError(40, "Insufficient parameters");
 		return;
 	}
 
@@ -980,7 +980,7 @@ function ExecuteOrderCommand($order, $command, $comments, $carrierData, $trackin
 				$order->save();
 				break;
 			default:
-				outputError(80, "Unknown order command '$command'.");
+				outputError(80, "Unknown command '$command' for order update");
 				break;
 		}
 
@@ -990,7 +990,7 @@ function ExecuteOrderCommand($order, $command, $comments, $carrierData, $trackin
 	}
 	catch (Exception $ex)
 	{
-		outputError(90, "Error Executing Command. ".  $ex->getMessage());
+		outputError(90, "Unknown error while executing command: " . $ex->getMessage());
 	}
 }
 

@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping
                 ReplaceUnitedKingdomWithGreatBritain, ReplaceInternationalTerritoryCountryCodeWithUnitedStates);
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.Endicia, ShipmentTypeCode.Express1Endicia },
-                ReplaceCountryNameWithCountryCode, ReplaceUnitedKingdomWithGreatBritain);
+                ReplaceCountryNameWithCountryCode, ReplaceInternationalTerritoryCountryCodeWithUnitedStates, ReplaceUnitedKingdomWithGreatBritain);
 
             AddAdjustment(adjustments, new[] { ShipmentTypeCode.iParcel },
                 ReplaceUnitedKingdomWithGreatBritain);
