@@ -96,6 +96,33 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         }
 
         /// <summary>
+        /// Needed to be able to get the base 64 binary image data
+        /// </summary>
+        public override bool CanReadBinaryContent {
+            get
+            {
+                return true;
+                
+            }
+        }
+
+        /// <summary>
+        /// Needed to be able to get the base 64 binary image data
+        /// </summary>
+        public override int ReadContentAsBase64(byte[] buffer, int index, int count)
+        {
+            return wrappedReader.ReadContentAsBase64(buffer, index, count);
+        }
+
+        /// <summary>
+        /// Needed to be able to get the base 64 binary image data
+        /// </summary>
+        public override int ReadElementContentAsBase64(byte[] buffer, int index, int count)
+        {
+            return wrappedReader.ReadElementContentAsBase64(buffer, index, count);
+        }
+
+        /// <summary>
         /// Translates the current value.
         /// </summary>
         public override string Value
