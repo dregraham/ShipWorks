@@ -1056,7 +1056,6 @@
     <Compile Include="Shipping\Settings\CarrierServicePickerControl.Designer.cs">
       <DependentUpon>CarrierServicePickerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Settings\UserControlledServiceTypeConfiguration.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
