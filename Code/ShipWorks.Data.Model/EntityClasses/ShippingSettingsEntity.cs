@@ -550,6 +550,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("IParcelInsurancePennyOne", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("IParcelExcludedServiceTypes", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("Express1UspsSingleSource", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -1067,6 +1070,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, true); }
 			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelInsurancePennyOne, value); }
+		}
+
+		/// <summary> The IParcelExcludedServiceTypes property of the Entity ShippingSettings<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ShippingSettings"."iParcelExcludedServiceTypes"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String IParcelExcludedServiceTypes
+		{
+			get { return (System.String)GetValue((int)ShippingSettingsFieldIndex.IParcelExcludedServiceTypes, true); }
+			set	{ SetValue((int)ShippingSettingsFieldIndex.IParcelExcludedServiceTypes, value); }
 		}
 
 		/// <summary> The Express1UspsSingleSource property of the Entity ShippingSettings<br/><br/>

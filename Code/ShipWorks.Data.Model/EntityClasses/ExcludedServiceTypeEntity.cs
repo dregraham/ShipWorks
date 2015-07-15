@@ -26,7 +26,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 
 	/// <summary>
 	/// Entity class which represents the entity 'ExcludedServiceType'.<br/><br/>
@@ -35,8 +34,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 	[Serializable]
 	public partial class ExcludedServiceTypeEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
@@ -46,7 +44,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -91,6 +88,29 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 				
 
+		/// <summary> CTor</summary>
+		/// <param name="shipmentType">PK value for ExcludedServiceType which data should be fetched into this ExcludedServiceType object</param>
+		/// <param name="serviceType">PK value for ExcludedServiceType which data should be fetched into this ExcludedServiceType object</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public ExcludedServiceTypeEntity(System.Int32 shipmentType, System.Int32 serviceType):base("ExcludedServiceTypeEntity")
+		{
+			InitClassEmpty(null, CreateFields());
+			this.ShipmentType = shipmentType;
+			this.ServiceType = serviceType;
+		}
+
+		/// <summary> CTor</summary>
+		/// <param name="shipmentType">PK value for ExcludedServiceType which data should be fetched into this ExcludedServiceType object</param>
+		/// <param name="serviceType">PK value for ExcludedServiceType which data should be fetched into this ExcludedServiceType object</param>
+		/// <param name="validator">The custom validator object for this ExcludedServiceTypeEntity</param>
+		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
+		public ExcludedServiceTypeEntity(System.Int32 shipmentType, System.Int32 serviceType, IValidator validator):base("ExcludedServiceTypeEntity")
+		{
+			InitClassEmpty(validator, CreateFields());
+			this.ShipmentType = shipmentType;
+			this.ServiceType = serviceType;
+		}
+
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
@@ -108,7 +128,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -277,7 +296,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -406,7 +424,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -443,7 +460,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 		}
@@ -494,10 +510,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ExcludedServiceType"."ShipmentType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ShipmentType
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		public virtual System.Int32 ShipmentType
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ExcludedServiceTypeFieldIndex.ShipmentType, false); }
+			get { return (System.Int32)GetValue((int)ExcludedServiceTypeFieldIndex.ShipmentType, true); }
 			set	{ SetValue((int)ExcludedServiceTypeFieldIndex.ShipmentType, value); }
 		}
 
@@ -505,10 +521,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// </summary>
 		/// <remarks>Mapped on  table field: "ExcludedServiceType"."ServiceType"<br/>
 		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int32> ServiceType
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
+		public virtual System.Int32 ServiceType
 		{
-			get { return (Nullable<System.Int32>)GetValue((int)ExcludedServiceTypeFieldIndex.ServiceType, false); }
+			get { return (System.Int32)GetValue((int)ExcludedServiceTypeFieldIndex.ServiceType, true); }
 			set	{ SetValue((int)ExcludedServiceTypeFieldIndex.ServiceType, value); }
 		}
 
@@ -542,7 +558,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code

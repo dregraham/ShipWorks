@@ -175,30 +175,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsProfileControl();
         }
-
-        /// <summary>
-        /// Gets the service types that have been excluded for this shipment type. The integer
-        /// values are intended to correspond to the appropriate enumeration values of the specific
-        /// shipment type (i.e. the integer values would correspond to PostalServiceType values
-        /// for a UspsShipmentType)
-        /// </summary>
-        //public override List<int> GetExcludedServiceTypes()
-        //{
-
-
-        //    //return shippingSettings.UspsExcludedServiceTypesArray.Select(exclusion => exclusion).ToList();
-        //}
-
+        
         /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not 
         /// been excluded). The integer values are intended to correspond to the appropriate 
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes()
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int) service).ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes()).ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
         }
 
         /// <summary>
