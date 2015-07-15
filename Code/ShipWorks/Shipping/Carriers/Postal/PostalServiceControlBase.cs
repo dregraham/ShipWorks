@@ -152,19 +152,29 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 List<PostalServiceType> allInternationalServices = PostalUtility.GetInternationalServices(ShipmentTypeCode);
                 
+                // Bind the service drop down to the appropriate international services taking into account only the available 
+                // service types as well as the service type that the shipment is already configured with
                 service.DataSource = ActiveEnumerationBindingSource
-                    .Create<PostalServiceType>(allInternationalServices.Intersect(availableServices)
+                    .Create<PostalServiceType>(allInternationalServices
+                                                .Intersect(availableServices)
+                                                // Always include the service type that the shipment is currently configured with
+                                                .Union(allInternationalServices.Intersect(new List<PostalServiceType> {(PostalServiceType)LoadedShipments.First().Postal.Service}))
                     .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
                     .ToList());
             }
             // If they are all domestic we can load up all the domestic services
             else if (allDomestic)
             {
-                List<PostalServiceType> domesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
+                List<PostalServiceType> allDomesticServices = PostalUtility.GetDomesticServices(ShipmentTypeCode);
 
-                service.DataSource = ActiveEnumerationBindingSource.Create<PostalServiceType>(domesticServices.Intersect(availableServices)
+                // Bind the service drop down to the appropriate domestic services taking into account only the available 
+                // service types as well as the service type that the shipment is already configured with
+                service.DataSource = ActiveEnumerationBindingSource
+                    .Create<PostalServiceType>(allDomesticServices
+                                                .Intersect(availableServices)
+                                                // Always include the service type that the shipment is currently configured with
+                                                .Union(allDomesticServices.Intersect(new List<PostalServiceType> { (PostalServiceType)LoadedShipments.First().Postal.Service }))
                     .Select(type => new KeyValuePair<string, PostalServiceType>(PostalUtility.GetPostalServiceTypeDescription(type), type))
-                    //.Where(kvp => !excludedServiceTypes.Contains(kvp.Value))
                     .ToList());
             }
             // Otherwise there is nothing to choose from
