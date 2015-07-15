@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sandGrid
             // 
-            this.sandGrid.Size = new System.Drawing.Size(344, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(344, 116);
             // 
             // labelBrokerAccountHeading
             // 
