@@ -145,7 +145,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             service.SelectedIndexChanged -= new EventHandler(OnServiceChanged);
             confirmation.SelectedIndexChanged -= OnConfirmationChanged;
 
-            List<PostalServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes(ShippingSettings.Fetch()).Select(s => (PostalServiceType)s).ToList();
+            List<PostalServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();
             
             // If they are all international we can load up all the international services
             if (allInternational)

@@ -112,7 +112,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes(settings).Select(exclusion => (PostalServiceType)exclusion).ToList();
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
 
             List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(shipmentTypeCode).Union(PostalUtility.GetInternationalServices(shipmentTypeCode)).ToList();
             servicePicker.Initialize(postalServices, excludedServices);
@@ -207,14 +207,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.Info("Finished saving insurance provider");
             }
 
-            if (shipmentTypeCode == ShipmentTypeCode.Usps)
-            {
-                settings.UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToArray();
-            }
-            else
-            {
-                settings.Express1UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToArray();
-            }
+            //if (shipmentTypeCode == ShipmentTypeCode.Usps)
+            //{
+            //    settings.UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToArray();
+            //}
+            //else
+            //{
+            //    settings.Express1UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToArray();
+            //}
         }
 
         /// <summary>

@@ -72,35 +72,5 @@ namespace ShipWorks.Data.Model.EntityClasses
                 InternalBestRateExcludedShipmentTypes = ArrayUtility.FormatCommaSeparatedList(value);
             }
         }
-
-        /// <summary>
-        /// List of USPS services types that the user has elected to exclude from being displayed when shipping.
-        /// </summary>
-        public int[] UspsExcludedServiceTypesArray
-        {
-            get
-            {
-                return ArrayUtility.ParseCommaSeparatedList<int>(UspsExcludedServiceTypes);
-            }
-            set
-            {
-                UspsExcludedServiceTypes = ArrayUtility.FormatCommaSeparatedList(value);
-            }
-        }
-
-        /// <summary>
-        /// List of Express1/USPS services types that the user has elected to exclude from being displayed when shipping.
-        /// </summary>
-        public int[] Express1UspsExcludedServiceTypesArray
-        {
-            get
-            {
-                return ArrayUtility.ParseCommaSeparatedList<int>(Express1UspsExcludedServiceTypes);
-            }
-            set
-            {
-                Express1UspsExcludedServiceTypes = ArrayUtility.FormatCommaSeparatedList(value);
-            }
-        }
     }
 }

@@ -324,9 +324,11 @@ namespace ShipWorks.Shipping
         /// shipment type (i.e. the integer values would correspond to PostalServiceType values 
         /// for a UspsShipmentType)
         /// </summary>
-        public virtual List<int> GetExcludedServiceTypes(ShippingSettingsEntity shippingSettings)
+        public virtual List<int> GetExcludedServiceTypes()
         {
-            return new List<int>();
+            List <ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
+
+            return excludedServices.Where(s => s.ShipmentType == (int)ShipmentTypeCode).Select(s => (int)s.ServiceType).ToList();
         }
 
         /// <summary>
@@ -335,7 +337,7 @@ namespace ShipWorks.Shipping
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
-        public virtual List<int> GetAvailableServiceTypes(ShippingSettingsEntity shippingSettings)
+        public virtual List<int> GetAvailableServiceTypes()
         {
             return new List<int>();
         }

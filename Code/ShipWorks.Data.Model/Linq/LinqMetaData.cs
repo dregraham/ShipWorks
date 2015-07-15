@@ -193,6 +193,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.ExcludedServiceTypeEntity:
+					toReturn = this.ExcludedServiceType;
+					break;
 				case ShipWorks.Data.Model.EntityType.FedExAccountEntity:
 					toReturn = this.FedExAccount;
 					break;
@@ -825,6 +828,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<EtsyStoreEntity> EtsyStore
 		{
 			get { return new DataSource2<EtsyStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ExcludedServiceTypeEntity instances in the database.</summary>
+		public DataSource2<ExcludedServiceTypeEntity> ExcludedServiceType
+		{
+			get { return new DataSource2<ExcludedServiceTypeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting FedExAccountEntity instances in the database.</summary>

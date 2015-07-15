@@ -26,24 +26,27 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
+	
 
 	/// <summary>
-	/// Entity class which represents the entity 'UspsProfile'.<br/><br/>
+	/// Entity class which represents the entity 'ExcludedServiceType'.<br/><br/>
 	/// 
 	/// </summary>
 	[Serializable]
-	public partial class UspsProfileEntity : CommonEntityBase, ISerializable
+	public partial class ExcludedServiceTypeEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END	
+		// __LLBLGENPRO_USER_CODE_REGION_END
+			
 	{
 		#region Class Member Declarations
 
 
 
-		private PostalProfileEntity _postalProfile;
+
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Statics
@@ -56,19 +59,18 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			/// <summary>Member name PostalProfile</summary>
-			public static readonly string PostalProfile = "PostalProfile";
+
 		}
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static UspsProfileEntity()
+		static ExcludedServiceTypeEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 
 		/// <summary> CTor</summary>
-		public UspsProfileEntity():base("UspsProfileEntity")
+		public ExcludedServiceTypeEntity():base("ExcludedServiceTypeEntity")
 		{
 			InitClassEmpty(null, CreateFields());
 		}
@@ -76,59 +78,37 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public UspsProfileEntity(IEntityFields2 fields):base("UspsProfileEntity")
+		public ExcludedServiceTypeEntity(IEntityFields2 fields):base("ExcludedServiceTypeEntity")
 		{
 			InitClassEmpty(null, fields);
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this UspsProfileEntity</param>
-		public UspsProfileEntity(IValidator validator):base("UspsProfileEntity")
+		/// <param name="validator">The custom validator object for this ExcludedServiceTypeEntity</param>
+		public ExcludedServiceTypeEntity(IValidator validator):base("ExcludedServiceTypeEntity")
 		{
 			InitClassEmpty(validator, CreateFields());
 		}
 				
 
-		/// <summary> CTor</summary>
-		/// <param name="shippingProfileID">PK value for UspsProfile which data should be fetched into this UspsProfile object</param>
-		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public UspsProfileEntity(System.Int64 shippingProfileID):base("UspsProfileEntity")
-		{
-			InitClassEmpty(null, CreateFields());
-			this.ShippingProfileID = shippingProfileID;
-		}
-
-		/// <summary> CTor</summary>
-		/// <param name="shippingProfileID">PK value for UspsProfile which data should be fetched into this UspsProfile object</param>
-		/// <param name="validator">The custom validator object for this UspsProfileEntity</param>
-		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public UspsProfileEntity(System.Int64 shippingProfileID, IValidator validator):base("UspsProfileEntity")
-		{
-			InitClassEmpty(validator, CreateFields());
-			this.ShippingProfileID = shippingProfileID;
-		}
-
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected UspsProfileEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected ExcludedServiceTypeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
 
 
 
-				_postalProfile = (PostalProfileEntity)info.GetValue("_postalProfile", typeof(PostalProfileEntity));
-				if(_postalProfile!=null)
-				{
-					_postalProfile.AfterSave+=new EventHandler(OnEntityAfterSave);
-				}
+
 				base.FixupDeserialization(FieldInfoProviderSingleton.GetInstance());
 			}
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 		}
 
 		
@@ -136,11 +116,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((UspsProfileFieldIndex)fieldIndex)
+			switch((ExcludedServiceTypeFieldIndex)fieldIndex)
 			{
-				case UspsProfileFieldIndex.ShippingProfileID:
-					DesetupSyncPostalProfile(true, false);
-					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
 					break;
@@ -166,9 +143,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "PostalProfile":
-					this.PostalProfile = (PostalProfileEntity)entity;
-					break;
+
 				default:
 					break;
 			}
@@ -179,7 +154,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
 		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return UspsProfileEntity.GetRelationsForField(fieldName);
+			return ExcludedServiceTypeEntity.GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
@@ -193,9 +168,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				case "PostalProfile":
-					toReturn.Add(UspsProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID);
-					break;
+
 				default:
 
 					break;				
@@ -233,9 +206,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				case "PostalProfile":
-					SetupSyncPostalProfile(relatedEntity);
-					break;
+
 				default:
 					break;
 			}
@@ -252,9 +223,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-				case "PostalProfile":
-					DesetupSyncPostalProfile(false, true);
-					break;
+
 				default:
 					break;
 			}
@@ -266,7 +235,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 
-
 			return toReturn;
 		}
 		
@@ -277,10 +245,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 
-			if(_postalProfile!=null)
-			{
-				toReturn.Add(_postalProfile);
-			}
 
 			return toReturn;
 		}
@@ -308,11 +272,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-				info.AddValue("_postalProfile", (!this.MarkedForDeletion?_postalProfile:null));
+
 			}
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			base.GetObjectData(info, context);
 		}
 
@@ -320,7 +285,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
 		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(UspsProfileFieldIndex fieldIndex)
+		public bool TestOriginalFieldValueForNull(ExcludedServiceTypeFieldIndex fieldIndex)
 		{
 			return base.Fields[(int)fieldIndex].IsNull;
 		}
@@ -329,7 +294,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
 		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
 		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(UspsProfileFieldIndex fieldIndex)
+		public bool TestCurrentFieldValueForNull(ExcludedServiceTypeFieldIndex fieldIndex)
 		{
 			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
 		}
@@ -339,28 +304,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		public override List<IEntityRelation> GetAllRelations()
 		{
-			return new UspsProfileRelations().GetAllRelations();
+			return new ExcludedServiceTypeRelations().GetAllRelations();
 		}
 		
 
 
 
 
-		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
-		/// the related entity of type 'PostalProfile' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
-		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoPostalProfile()
-		{
-			IRelationPredicateBucket bucket = new RelationPredicateBucket();
-			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(PostalProfileFields.ShippingProfileID, null, ComparisonOperator.Equal, this.ShippingProfileID));
-			return bucket;
-		}
 	
 		
 		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
 		protected virtual IEntityFields2 CreateFields()
 		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.UspsProfileEntity);
+			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ExcludedServiceTypeEntity);
 		}
 
 		/// <summary>
@@ -375,7 +331,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(UspsProfileEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(ExcludedServiceTypeEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -425,7 +381,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			toReturn.Add("PostalProfile", _postalProfile);
+
 			return toReturn;
 		}
 		
@@ -435,10 +391,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			if(_postalProfile!=null)
-			{
-				_postalProfile.ActiveContext = base.ActiveContext;
-			}
+
 		}
 
 		/// <summary> Initializes the class members</summary>
@@ -448,11 +401,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-			_postalProfile = null;
+
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 			OnInitClassMembersComplete();
 		}
 
@@ -466,58 +420,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable = null;
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShippingProfileID", fieldHashtable);
+			_fieldsCustomProperties.Add("ShipmentType", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("UspsAccountID", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("HidePostage", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RequireFullAddressValidation", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
-			_fieldsCustomProperties.Add("RateShop", fieldHashtable);
+			_fieldsCustomProperties.Add("ServiceType", fieldHashtable);
 		}
 		#endregion
 
 
-		/// <summary> Removes the sync logic for member _postalProfile</summary>
-		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
-		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncPostalProfile(bool signalRelatedEntity, bool resetFKFields)
-		{
-			base.PerformDesetupSyncRelatedEntity( _postalProfile, new PropertyChangedEventHandler( OnPostalProfilePropertyChanged ), "PostalProfile", UspsProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID, true, signalRelatedEntity, "Usps", false, new int[] { (int)UspsProfileFieldIndex.ShippingProfileID } );
-			_postalProfile = null;
-		}
-		
-		/// <summary> setups the sync logic for member _postalProfile</summary>
-		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncPostalProfile(IEntity2 relatedEntity)
-		{
-			if(_postalProfile!=relatedEntity)
-			{
-				DesetupSyncPostalProfile(true, true);
-				_postalProfile = (PostalProfileEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _postalProfile, new PropertyChangedEventHandler( OnPostalProfilePropertyChanged ), "PostalProfile", UspsProfileEntity.Relations.PostalProfileEntityUsingShippingProfileID, true, new string[] {  } );
-			}
-		}
-		
-		/// <summary>Handles property change events of properties in a related entity.</summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnPostalProfilePropertyChanged( object sender, PropertyChangedEventArgs e )
-		{
-			switch( e.PropertyName )
-			{
-				default:
-					break;
-			}
-		}
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this UspsProfileEntity</param>
+		/// <param name="validator">The validator object for this ExcludedServiceTypeEntity</param>
 		/// <param name="fields">Fields of this entity</param>
 		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
@@ -530,15 +443,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
+			
 
 			OnInitialized();
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static UspsProfileRelations Relations
+		public  static ExcludedServiceTypeRelations Relations
 		{
-			get	{ return new UspsProfileRelations(); }
+			get	{ return new ExcludedServiceTypeRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
@@ -551,24 +465,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'PostalProfile' 
-		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
-		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathPostalProfile
-		{
-			get
-			{
-				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(PostalProfileEntityFactory))),
-					(IEntityRelation)GetRelationsForField("PostalProfile")[0], (int)ShipWorks.Data.Model.EntityType.UspsProfileEntity, (int)ShipWorks.Data.Model.EntityType.PostalProfileEntity, 0, null, null, null, null, "PostalProfile", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
-			}
-		}
 
 		/// <summary> The custom properties for the type of this entity instance.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return UspsProfileEntity.CustomProperties;}
+			get { return ExcludedServiceTypeEntity.CustomProperties;}
 		}
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
@@ -584,109 +487,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return UspsProfileEntity.FieldsCustomProperties;}
+			get { return ExcludedServiceTypeEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShippingProfileID property of the Entity UspsProfile<br/><br/>
+		/// <summary> The ShipmentType property of the Entity ExcludedServiceType<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."ShippingProfileID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int64 ShippingProfileID
-		{
-			get { return (System.Int64)GetValue((int)UspsProfileFieldIndex.ShippingProfileID, true); }
-			set	{ SetValue((int)UspsProfileFieldIndex.ShippingProfileID, value); }
-		}
-
-		/// <summary> The UspsAccountID property of the Entity UspsProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."UspsAccountID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "ExcludedServiceType"."ShipmentType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Int64> UspsAccountID
+		public virtual Nullable<System.Int32> ShipmentType
 		{
-			get { return (Nullable<System.Int64>)GetValue((int)UspsProfileFieldIndex.UspsAccountID, false); }
-			set	{ SetValue((int)UspsProfileFieldIndex.UspsAccountID, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)ExcludedServiceTypeFieldIndex.ShipmentType, false); }
+			set	{ SetValue((int)ExcludedServiceTypeFieldIndex.ShipmentType, value); }
 		}
 
-		/// <summary> The HidePostage property of the Entity UspsProfile<br/><br/>
+		/// <summary> The ServiceType property of the Entity ExcludedServiceType<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."HidePostage"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "ExcludedServiceType"."ServiceType"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> HidePostage
+		public virtual Nullable<System.Int32> ServiceType
 		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UspsProfileFieldIndex.HidePostage, false); }
-			set	{ SetValue((int)UspsProfileFieldIndex.HidePostage, value); }
-		}
-
-		/// <summary> The RequireFullAddressValidation property of the Entity UspsProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."RequireFullAddressValidation"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> RequireFullAddressValidation
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UspsProfileFieldIndex.RequireFullAddressValidation, false); }
-			set	{ SetValue((int)UspsProfileFieldIndex.RequireFullAddressValidation, value); }
-		}
-
-		/// <summary> The RateShop property of the Entity UspsProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "UspsProfile"."RateShop"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> RateShop
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)UspsProfileFieldIndex.RateShop, false); }
-			set	{ SetValue((int)UspsProfileFieldIndex.RateShop, value); }
+			get { return (Nullable<System.Int32>)GetValue((int)ExcludedServiceTypeFieldIndex.ServiceType, false); }
+			set	{ SetValue((int)ExcludedServiceTypeFieldIndex.ServiceType, value); }
 		}
 
 
 
 
-		/// <summary> Gets / sets related entity of type 'PostalProfileEntity' which has to be set using a fetch action earlier. If no related entity
-		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
-		[Browsable(false)]
-		public virtual PostalProfileEntity PostalProfile
-		{
-			get
-			{
-				return _postalProfile;
-			}
-			set
-			{
-				if(base.IsDeserializing)
-				{
-					SetupSyncPostalProfile(value);
-					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
-					{
-						value.SetRelatedEntity(this, "Usps");
-					}
-				}
-				else
-				{
-					if(value==null)
-					{
-						bool raisePropertyChanged = (_postalProfile !=null);
-						DesetupSyncPostalProfile(true, true);
-						if(raisePropertyChanged)
-						{
-							OnPropertyChanged("PostalProfile");
-						}
-					}
-					else
-					{
-						if(_postalProfile!=value)
-						{
-							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "Usps");
-							SetupSyncPostalProfile(relatedEntity);
-						}
-					}
-				}
-			}
-		}
 	
 		
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
@@ -705,7 +533,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.UspsProfileEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.ExcludedServiceTypeEntity; }
 		}
 		#endregion
 
@@ -714,6 +542,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
+		
 		#endregion
 
 		#region Included code

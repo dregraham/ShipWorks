@@ -182,10 +182,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// shipment type (i.e. the integer values would correspond to PostalServiceType values
         /// for a UspsShipmentType)
         /// </summary>
-        public override List<int> GetExcludedServiceTypes(ShippingSettingsEntity shippingSettings)
-        {
-            return shippingSettings.UspsExcludedServiceTypesArray.Select(exclusion => exclusion).ToList();
-        }
+        //public override List<int> GetExcludedServiceTypes()
+        //{
+
+
+        //    //return shippingSettings.UspsExcludedServiceTypesArray.Select(exclusion => exclusion).ToList();
+        //}
 
         /// <summary>
         /// Gets the service types that have been available for this shipment type (i.e have not 
@@ -193,10 +195,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes(ShippingSettingsEntity shippingSettings)
+        public override List<int> GetAvailableServiceTypes()
         {
             List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int) service).ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(shippingSettings)).ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes()).ToList();
         }
 
         /// <summary>
@@ -285,7 +287,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             List<RateResult> uspsRates = CreateWebClient().GetRates(shipment);
             uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
-            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes(ShippingSettings.Fetch()).Select(s => (PostalServiceType)s).ToList();
+            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();
 
             RateGroup rateGroup = new RateGroup(uspsRates.Where(r => r.Tag is UspsPostalRateSelection && availableServiceTypes.Contains(((UspsPostalRateSelection)r.Tag).ServiceType)));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
