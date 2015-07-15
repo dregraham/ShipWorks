@@ -119,25 +119,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
         
         /// <summary>
-        /// Creates the Express1/USPS settings control.
-        /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
-        {
-            return new UspsSettingsControl(ShipmentTypeCode);
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
         {
             return new Express1UspsProfileControl();
         }
-
-        //public override List<int> GetExcludedServiceTypes(ShippingSettingsEntity shippingSettings)
-        //{
-        //    return shippingSettings.Express1UspsExcludedServiceTypesArray.Select(exclusion => exclusion).ToList();
-        //}
 
         /// <summary>
         /// Update the dyamic data of the shipment

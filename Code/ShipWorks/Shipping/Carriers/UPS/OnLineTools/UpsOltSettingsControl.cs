@@ -72,5 +72,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
         }
 
+        public override List<ExcludedServiceTypeEntity> GetExcludededServices()
+        {
+            //List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+
+            List<ExcludedServiceTypeEntity> excludedServiceTypes = new List<ExcludedServiceTypeEntity>();
+
+            ExcludedServiceTypeEntity test = new ExcludedServiceTypeEntity()
+            {
+                ShipmentType = 1,
+                ServiceType = 9
+            };
+
+
+            excludedServiceTypes.Add(test);
+            return excludedServiceTypes;
+        }
+
     }
 }

@@ -808,7 +808,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
+						bool raisePropertyChanged = (_user !=null);
 						DesetupSyncUser(true, true);
+						if(raisePropertyChanged)
+						{
+							OnPropertyChanged("User");
+						}
 					}
 					else
 					{

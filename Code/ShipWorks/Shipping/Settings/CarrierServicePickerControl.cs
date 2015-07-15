@@ -42,7 +42,7 @@ namespace ShipWorks.Shipping.Settings
         {
             ClearSelections();
 
-            foreach (T serviceType in availableServiceTypes.OrderBy(s => EnumHelper.GetDescription(s as Enum)))
+            foreach (T serviceType in availableServiceTypes.Where(s => !EnumHelper.GetDeprecated(s as Enum)).OrderBy(s => EnumHelper.GetDescription(s as Enum)))
             {
                 CarrierServicePickerCheckBoxDataSource<T> checkBoxItem = new CarrierServicePickerCheckBoxDataSource<T>(serviceType);
 

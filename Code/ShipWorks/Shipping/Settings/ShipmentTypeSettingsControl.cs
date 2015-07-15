@@ -181,6 +181,19 @@ namespace ShipWorks.Shipping.Settings
             }
         }
 
+        public List<ExcludedServiceTypeEntity> GetExcludedServices()
+        {
+            List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
+
+            SettingsControlBase settingsControl = GeneralSettingsControl;
+            if (settingsControl != null)
+            {
+                excludedServices.AddRange(settingsControl.GetExcludededServices());
+            }
+
+            return excludedServices;
+        }
+
         /// <summary>
         /// Called to notify the settings control to refresh itself due to an outside change
         /// </summary>

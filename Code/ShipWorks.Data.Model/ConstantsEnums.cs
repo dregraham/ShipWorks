@@ -8228,8 +8228,6 @@ namespace ShipWorks.Data.Model
 		IParcelInsuranceProvider,
 		///<summary>IParcelInsurancePennyOne. </summary>
 		IParcelInsurancePennyOne,
-		///<summary>IParcelExcludedServiceTypes. </summary>
-		IParcelExcludedServiceTypes,
 		///<summary>Express1UspsSingleSource. </summary>
 		Express1UspsSingleSource,
 		///<summary>UpsMailInnovationsEnabled. </summary>

@@ -17682,11 +17682,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelInsurancePennyOne);}
 		}
-		/// <summary>Creates a new ShippingSettingsEntity.IParcelExcludedServiceTypes field instance</summary>
-		public static EntityField2 IParcelExcludedServiceTypes
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.IParcelExcludedServiceTypes);}
-		}
 		/// <summary>Creates a new ShippingSettingsEntity.Express1UspsSingleSource field instance</summary>
 		public static EntityField2 Express1UspsSingleSource
 		{

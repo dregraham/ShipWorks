@@ -19,7 +19,15 @@ namespace ShipWorks.Shipping.Settings
             // This will be a wipe and replace strategy based on the shipment types in the list
             // excludes service types
 
-            throw new NotImplementedException();
+            RelationPredicateBucket bucket = new RelationPredicateBucket();
+
+            using (EntityCollection<ExcludedServiceTypeEntity> collection = new EntityCollection<ExcludedServiceTypeEntity>(excludedServiceTypes))
+            using (SqlAdapter adapter = new SqlAdapter())
+            {
+                adapter.DeleteEntitiesDirectly(typeof(ExcludedServiceTypeEntity), bucket);
+
+                adapter.SaveEntityCollection(collection);
+            }
         }
 
         /// <summary>

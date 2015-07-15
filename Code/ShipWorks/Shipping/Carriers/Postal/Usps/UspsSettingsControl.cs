@@ -19,19 +19,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
-        readonly ShipmentTypeCode shipmentTypeCode;
-        readonly UspsResellerType uspsResellerType;
+        UspsResellerType uspsResellerType;
 
         private CarrierServicePickerControl<PostalServiceType> servicePicker;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsSettingsControl(ShipmentTypeCode shipmentTypeCode)
+        public UspsSettingsControl()
         {
             InitializeComponent();
 
-            this.shipmentTypeCode = shipmentTypeCode;
+        }
+
+        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            base.Initialize(shipmentTypeCode);
 
             uspsResellerType = PostalUtility.GetUspsResellerType(shipmentTypeCode);
 
@@ -39,7 +42,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             accountControl.UspsResellerType = uspsResellerType;
 
             InitializeServicePicker();
-            
+
             // Update the Express1 controls now in addition to on visible changed because we were seeing crashes
             // where express1settings was null because save was being called before the controls got loaded.
             UpdateExpress1ControlDisplay();
@@ -111,10 +114,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelInsurance.Visible = false;
             }
 
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(shipmentTypeCode);
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
             List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
 
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(shipmentTypeCode).Union(PostalUtility.GetInternationalServices(shipmentTypeCode)).ToList();
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
             servicePicker.Initialize(postalServices, excludedServices);
         }
 
@@ -123,8 +126,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void UpdateExpress1ControlDisplay()
         {
-            express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Usps;
-            express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
+            express1Options.Visible = ShipmentTypeCode == ShipmentTypeCode.Express1Usps;
+            express1SettingsControl.Visible = ShipmentTypeCode == ShipmentTypeCode.Usps;
 
             LoadExpress1Settings();
             PositionControls();
@@ -138,7 +141,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             express1Settings = new Express1UspsSettingsFacade(settings);
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 express1Options.LoadSettings(settings);
             }
@@ -187,7 +190,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.SaveSettings(settings);
             log.Info("Saved settings to UspsOptionsControl");
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 log.InfoFormat("Preparing to save Express1 options {0}", express1Options == null);
                 express1Options.SaveSettings(settings);
@@ -207,14 +210,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 log.Info("Finished saving insurance provider");
             }
 
-            //if (shipmentTypeCode == ShipmentTypeCode.Usps)
-            //{
-            //    settings.UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToArray();
-            //}
-            //else
-            //{
-            //    settings.Express1UspsExcludedServiceTypesArray = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToArray();
-            //}
+        }
+
+        public override List<ExcludedServiceTypeEntity> GetExcludededServices()
+        {
+            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+
+            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
+                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int)this.ShipmentTypeCode, ServiceType = serviceToExclude })
+                .ToList();
+            
+            return excludedServiceTypes;
         }
 
         /// <summary>

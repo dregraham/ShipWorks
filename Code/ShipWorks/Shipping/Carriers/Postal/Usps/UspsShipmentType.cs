@@ -144,7 +144,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new UspsSettingsControl(ShipmentTypeCode);
+            UspsSettingsControl control = new UspsSettingsControl();
+            control.Initialize(ShipmentTypeCode);
+
+            return control;
         }
 
         /// <summary>

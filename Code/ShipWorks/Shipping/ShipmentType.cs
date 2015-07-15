@@ -317,7 +317,7 @@ namespace ShipWorks.Shipping
         {
             return null;
         }
-
+        
         /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
         /// been excluded for this shipment type. The integer values are intended to correspond to 
