@@ -4617,6 +4617,13 @@ CREATE TABLE [dbo].[ShipSenseKnowledgeBase]
 [Entry] [varbinary] (max) NOT NULL
 )
 GO
+PRINT N'Creating [dbo].[ExcludedServiceType]'
+GO
+CREATE TABLE [dbo].[ExcludedServiceType](
+	[ShipmentType] [int] NULL,
+	[ServiceType] [int] NULL
+)
+GO
 PRINT N'Creating primary key [PK_ShipSenseKnowledgeBase] on [dbo].[ShipSenseKnowledgeBase]'
 GO
 ALTER TABLE [dbo].[ShipSenseKnowledgeBase] ADD CONSTRAINT [PK_ShipSenseKnowledgeBase] PRIMARY KEY CLUSTERED  ([Hash])
