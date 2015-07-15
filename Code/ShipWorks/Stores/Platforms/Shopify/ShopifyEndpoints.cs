@@ -97,6 +97,14 @@ namespace ShipWorks.Stores.Platforms.Shopify
         }
 
         /// <summary>
+        /// Gets the browser bypass URL.
+        /// </summary>
+        public string BrowserBypassUrl
+        {
+            get { return string.Format(ApiBaseUrl + "/unsupported_browser_bypass", shopUrlName); }
+        }
+
+        /// <summary>
         /// The base url used to request orders
         /// </summary>
         public string ApiGetOrdersUrl

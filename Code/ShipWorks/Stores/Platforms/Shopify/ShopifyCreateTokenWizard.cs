@@ -92,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         {
             if (browserDisplayedShopName != ShopUrlName)
             {
-                this.Cursor = Cursors.WaitCursor;
+                Cursor = Cursors.WaitCursor;
 
                 webBrowser.Visible = false;
                 browserDisplayedShopName = ShopUrlName;
@@ -108,9 +108,22 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// </summary>
         private void OnBrowserLogoutCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            this.Cursor = Cursors.WaitCursor;
+            Cursor = Cursors.WaitCursor;
 
             webBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(OnBrowserLogoutCompleted);
+
+            webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(OnBrowserBypassCompleted);
+            webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).BrowserBypassUrl);
+        }
+
+        /// <summary>
+        /// This page gives us a cookie that older versions of IE need.
+        /// </summary>
+        private void OnBrowserBypassCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            webBrowser.DocumentCompleted -= new WebBrowserDocumentCompletedEventHandler(OnBrowserBypassCompleted);
 
             webBrowser.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(OnBrowserDocumentCompleted);
             webBrowser.Navigate(new ShopifyEndpoints(ShopUrlName).GetApiAuthorizeUrl());
