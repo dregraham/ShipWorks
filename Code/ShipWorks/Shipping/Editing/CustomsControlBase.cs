@@ -290,6 +290,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void ClearValues()
         {
+            selectedRows.Clear();
+
             SuspendShipSenseFieldChangeEvent();
             description.TextChanged -= this.OnDescriptionChanged;
 
@@ -336,7 +338,6 @@ namespace ShipWorks.Shipping.Editing
             if (itemsGrid.SelectedElements.Count == 0)
             {
                 ClearValues();
-                selectedRows.Clear();
             }
             else
             {
