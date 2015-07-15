@@ -1362,5 +1362,27 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
             throw new Exception("Unrecognized payment type");
         }
+
+        protected void AddCustomsOptions(ShipmentEntity shipment, string customsOptionType, string customsOptionDescription)
+        {
+            if (!string.IsNullOrEmpty(customsOptionType))
+            {
+                if (string.Equals(customsOptionType, "other", StringComparison.OrdinalIgnoreCase))
+                {
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+                }
+                else
+                {
+                    // The only other option type is Faulty item so just hard code the type here
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+                }
+
+                shipment.FedEx.CustomsOptionsDesription = customsOptionDescription;
+            }
+            else
+            {
+                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
+            }
+        }
     }
 }
