@@ -518,7 +518,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>An iParcelSettingsControl object.</returns>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new iParcelSettingsControl();
+            iParcelSettingsControl settingsControl = new iParcelSettingsControl();
+            settingsControl.Initialize(ShipmentTypeCode);
+
+            return settingsControl;
         }
 
         /// <summary>
@@ -530,6 +533,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
             return new iParcelServiceControl(rateControl);
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int)e.Value).ToList();
+            return allServices.Except(GetExcludedServiceTypes(repository)).ToList();
         }
 
         /// <summary>
@@ -798,7 +814,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                                                             .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
                                                                                             .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
 
-                    foreach (iParcelServiceType serviceType in supportedServiceTypes)
+                    // Filter out the excluded service types before creating rate results
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(GetExcludedServiceTypes().Select(s => (iParcelServiceType)s)))
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
                         List<DataRow> serviceRows = costInfoTable.AsEnumerable()
