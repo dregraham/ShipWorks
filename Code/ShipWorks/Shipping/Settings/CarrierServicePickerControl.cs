@@ -38,16 +38,18 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         /// <param name="availableServiceTypes">All of the available service types.</param>
         /// <param name="excludedServiceTypes">The service types that have been excluded and will be unchecked.</param>
-        public void Initialize(IEnumerable<T> availableServiceTypes, List<T> excludedServiceTypes)
+        public void Initialize(IEnumerable<T> availableServiceTypes, IEnumerable<T> excludedServiceTypes)
         {
             ClearSelections();
+
+            List<T> excludedServiceTypeList = excludedServiceTypes.ToList();
 
             foreach (T serviceType in availableServiceTypes.Where(s => !EnumHelper.GetDeprecated(s as Enum)).OrderBy(s => EnumHelper.GetDescription(s as Enum)))
             {
                 CarrierServicePickerCheckBoxDataSource<T> checkBoxItem = new CarrierServicePickerCheckBoxDataSource<T>(serviceType);
 
                 // Mark the item as selected if it's not in the list of excluded service types
-                selectedServices.Items.Add(checkBoxItem, !excludedServiceTypes.ToList().Contains(serviceType));
+                selectedServices.Items.Add(checkBoxItem, !excludedServiceTypeList.Contains(serviceType));
                 allServiceTypes.Add(checkBoxItem);
             }
         }

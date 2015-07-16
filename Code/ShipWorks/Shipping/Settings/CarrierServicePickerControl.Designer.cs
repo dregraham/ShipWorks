@@ -35,6 +35,9 @@
             // 
             // selectedServices
             // 
+            this.selectedServices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.selectedServices.CheckOnClick = true;
             this.selectedServices.FormattingEnabled = true;
             this.selectedServices.Items.AddRange(new object[] {
@@ -46,14 +49,14 @@
             "International Priority",
             "International First",
             "International Express"});
-            this.selectedServices.Location = new System.Drawing.Point(13, 49);
+            this.selectedServices.Location = new System.Drawing.Point(18, 49);
             this.selectedServices.Name = "selectedServices";
-            this.selectedServices.Size = new System.Drawing.Size(340, 148);
+            this.selectedServices.Size = new System.Drawing.Size(358, 164);
             this.selectedServices.TabIndex = 0;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(10, 17);
+            this.label1.Location = new System.Drawing.Point(15, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(343, 27);
             this.label1.TabIndex = 2;

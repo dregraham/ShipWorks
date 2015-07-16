@@ -143,6 +143,24 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Get all service types
+        /// </summary>
+        public static IEnumerable<OnTracServiceType> ServiceTypes
+        {
+            get
+            {
+                return new[]
+                {
+                    OnTracServiceType.None,
+                    OnTracServiceType.Sunrise,
+                    OnTracServiceType.SunriseGold,
+                    OnTracServiceType.Ground,
+                    OnTracServiceType.PalletizedFreight
+                };
+            }
+        } 
+
+        /// <summary>
         /// Get the OnTrac shipment details
         /// </summary>
         public override ShipmentCommonDetail GetShipmentCommonDetail(ShipmentEntity shipment)

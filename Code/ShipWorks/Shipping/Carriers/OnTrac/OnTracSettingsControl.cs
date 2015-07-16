@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 
@@ -28,6 +32,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.OnTracInsuranceProvider;
             pennyOne.Checked = settings.OnTracInsurancePennyOne;
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            IEnumerable<OnTracServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Cast<OnTracServiceType>();
+
+            IEnumerable<OnTracServiceType> allServices = OnTracShipmentType.ServiceTypes
+                .Where(x => x != OnTracServiceType.None)
+                .OrderBy(x => EnumHelper.GetDescription(x));
+
+            excludedServiceControl.Initialize(allServices, excludedServices);
         }
 
         /// <summary>
@@ -39,6 +52,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             settings.OnTracInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
             settings.OnTracInsurancePennyOne = pennyOne.Checked;
+        }
+
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
+        {
+            List<int> servicesToExclude = excludedServiceControl.ExcludedServiceTypes.Select(type => (int)type).ToList();
+
+            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
+                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int)this.ShipmentTypeCode, ServiceType = serviceToExclude })
+                .ToList();
+
+            return excludedServiceTypes;
         }
 
         /// <summary>
@@ -59,5 +86,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 dlg.ShowDialog(this);
             }
         }
+    }
+
+    [CLSCompliant(false)]
+    public class OnTracServicePickerControl : CarrierServicePickerControl<OnTracServiceType>
+    {
+        
     }
 }
