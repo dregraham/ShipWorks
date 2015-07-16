@@ -27,7 +27,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltSettingsControl()
         {
             InitializeComponent();
+        }
 
+        /// <summary>
+        /// Initialize the ShipmentTypeCode from derived class
+        /// </summary>
+        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            base.Initialize(shipmentTypeCode);
             InitializeServicePicker();
         }
 
@@ -103,7 +110,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludededServices()
+        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
         {
             List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
 

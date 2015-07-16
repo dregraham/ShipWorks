@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Settings
         /// Can be overridden in derived classes to return list of excluded services
         /// in in the control
         /// </summary>
-        public virtual List<ExcludedServiceTypeEntity> GetExcludededServices()
+        public virtual List<ExcludedServiceTypeEntity> GetExcludedServices()
         {
             return new List<ExcludedServiceTypeEntity>();
         }
