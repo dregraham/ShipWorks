@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             List<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
             return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
