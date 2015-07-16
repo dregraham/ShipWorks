@@ -324,7 +324,7 @@ namespace ShipWorks.Shipping
         /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
         /// would correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
-        public List<int> GetExcludedServiceTypes()
+        public IEnumerable<int> GetExcludedServiceTypes()
         {
             return GetExcludedServiceTypes(new ExcludedServiceTypeRepository());
         }
@@ -336,10 +336,10 @@ namespace ShipWorks.Shipping
         /// for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the service types are fetched.</param>
-        public virtual List<int> GetExcludedServiceTypes(IExcludedServiceTypeRepository repository)
+        public virtual IEnumerable<int> GetExcludedServiceTypes(IExcludedServiceTypeRepository repository)
         {
             List<ExcludedServiceTypeEntity> excludedServiceTypes = repository.GetExcludedServiceTypes(this);
-            return excludedServiceTypes.Select(s => s.ServiceType).ToList();
+            return excludedServiceTypes.Select(s => s.ServiceType);
         }
 
         /// <summary>
@@ -348,11 +348,10 @@ namespace ShipWorks.Shipping
         /// intended to correspond to the appropriate enumeration values of the specific shipment type 
         /// (i.e. the integer values would correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
-        public List<int> GetAvailableServiceTypes()
+        public IEnumerable<int> GetAvailableServiceTypes()
         {
             return GetAvailableServiceTypes(new ExcludedServiceTypeRepository());
         }
-
 
         /// <summary>
         /// Gets the service types that are available for this shipment type (i.e have not
@@ -361,9 +360,9 @@ namespace ShipWorks.Shipping
         /// correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the service types are fetched.</param>
-        public virtual List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public virtual IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            return new List<int>();
+            return Enumerable.Empty<int>();
         }
 
         /// <summary>

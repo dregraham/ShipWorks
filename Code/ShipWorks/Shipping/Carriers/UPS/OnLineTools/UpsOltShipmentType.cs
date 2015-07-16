@@ -69,10 +69,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for a UspsShipmentType)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            List<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+            IEnumerable<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>
@@ -102,7 +102,6 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
             catch (UpsApiException ex)
             {
-
                 string message = ex.Message;
 
                 // find the "XML document is well formed but not valid" error

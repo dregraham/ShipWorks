@@ -73,10 +73,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for this shipment type)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int)service).ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+            IEnumerable<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode)
+                .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
+                .Select(service => (int)service);
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>

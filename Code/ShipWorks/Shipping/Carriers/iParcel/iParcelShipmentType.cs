@@ -542,10 +542,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the service types are fetched.</param>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
-            List<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int)e.Value).ToList();
-            return allServices.Except(GetExcludedServiceTypes(repository)).ToList();
+            IEnumerable<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int)e.Value);
+            return allServices.Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>

@@ -124,10 +124,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
         /// <param name="repository">The repository from which the service types are fetched.</param>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             IEnumerable<int> allServices = EnumHelper.GetEnumList<OnTracServiceType>().Select(x => x.Value).Cast<int>();
-            return allServices.Except(GetExcludedServiceTypes(repository)).ToList();
+            return allServices.Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>
