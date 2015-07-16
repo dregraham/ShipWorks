@@ -11,6 +11,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -19,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public partial class UpsOltSettingsControl : SettingsControlBase
     {
-        private CarrierServicePickerControl<PostalServiceType> servicePicker;
+        private CarrierServicePickerControl<UpsServiceType> servicePicker;
 
         /// <summary>
         /// Constructor
@@ -38,13 +39,20 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             InitializeServicePicker();
         }
 
+        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            base.Initialize(shipmentTypeCode);
+
+            
+        }
+
         /// <summary>
         /// Initializes the service picker with Ups service types for the USPS carrier.
         /// </summary>
         private void InitializeServicePicker()
         {
             // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<PostalServiceType>();
+            servicePicker = new CarrierServicePickerControl<UpsServiceType>();
             servicePicker.Dock = DockStyle.Fill;
             servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
@@ -67,12 +75,10 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             pennyOne.Checked = settings.UpsInsurancePennyOne;
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType)exclusion).ToList();
+            List<UpsServiceType> excludedServices = new List<UpsServiceType>();
 
-
-            //UpsUtility
-            //List<PostalServiceType> upsServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            //servicePicker.Initialize(postalServices, excludedServices);
+            List<UpsServiceType> upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>().ToList();
+            servicePicker.Initialize(upsServices, excludedServices);
         }
 
         /// <summary>
