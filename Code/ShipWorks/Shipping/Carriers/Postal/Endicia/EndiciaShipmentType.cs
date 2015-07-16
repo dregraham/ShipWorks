@@ -9,22 +9,17 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System;
 using System.Collections.Generic;
@@ -162,7 +157,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new EndiciaSettingsControl(EndiciaReseller);
+            EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
+            settingsControl.Initialize(ShipmentTypeCode);
+
+            return settingsControl;
         }
 
         /// <summary>
@@ -203,6 +201,19 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         public override bool SupportsReturns
         {
             get { return true; }
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int)service).ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
         }
 
         /// <summary>
@@ -566,7 +577,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     // Express1 wasn't used, so we want to promote USPS
-                    RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
+
+                    // Filter out any excluded services, but always include the service that the shipment is configured with
+                    List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
+                    RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)));
 
                     if (IsRateDiscountMessagingRestricted)
                     {
