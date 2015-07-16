@@ -279,7 +279,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
             List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();
 
-            RateGroup rateGroup = new RateGroup(uspsRates.Where(r => r.Tag is UspsPostalRateSelection && availableServiceTypes.Contains(((UspsPostalRateSelection)r.Tag).ServiceType)));
+            RateGroup rateGroup = new RateGroup(uspsRates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
 
             return rateGroup;
