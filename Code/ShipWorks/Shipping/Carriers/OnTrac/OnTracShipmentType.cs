@@ -399,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             OnTracRates rateRequest = new OnTracRates(account);
-            return rateRequest.GetRates(shipment, GetAvailableServiceTypes().Cast<OnTracServiceType>());
+            return rateRequest.GetRates(shipment, GetAvailableServiceTypes().Cast<OnTracServiceType>().Union(new List<OnTracServiceType> { (OnTracServiceType)shipment.OnTrac.Service }));
         }
 
         /// <summary>
