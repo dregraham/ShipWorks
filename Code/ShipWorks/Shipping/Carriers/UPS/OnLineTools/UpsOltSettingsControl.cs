@@ -129,7 +129,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Returns true if we should show the service. Else false.
         /// </summary>
-        private bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
+        private static bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
         {
             if (UpsUtility.IsUpsSurePostService(upsServiceType))
             {
