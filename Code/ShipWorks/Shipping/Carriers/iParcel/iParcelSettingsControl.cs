@@ -19,43 +19,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// </summary>
     public partial class iParcelSettingsControl : SettingsControlBase
     {
-
-        private CarrierServicePickerControl<iParcelServiceType> servicePicker;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelSettingsControl" /> class.
         /// </summary>
         public iParcelSettingsControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Initialize the ShipmentTypeCode from derived class
-        /// </summary>
-        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
-        {
-            base.Initialize(shipmentTypeCode); 
-            InitializeServicePicker();
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Postal service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<iParcelServiceType> { Dock = DockStyle.Fill, Anchor = AnchorStyles.Top | AnchorStyles.Left };
-
-            // Load up the service picker based on the excluded service types
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<iParcelServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (iParcelServiceType)exclusion).ToList();
-
-            List<iParcelServiceType> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => e.Value).ToList();
-            servicePicker.Initialize(allServices, excludedServices);
-
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>
@@ -72,7 +41,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.IParcelInsuranceProvider;
             pennyOne.Checked = settings.IParcelInsurancePennyOne;
 
-            insuranceProtectionPanel.Top = panelExclusionConfiguration.Bottom;
+            // Load up the service picker based on the excluded service types
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<iParcelServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (iParcelServiceType)exclusion).ToList();
+
+            List<iParcelServiceType> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => e.Value).ToList();
+            servicePicker.Initialize(allServices, excludedServices);
         }
 
         /// <summary>

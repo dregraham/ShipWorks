@@ -37,7 +37,7 @@
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.accountManager = new ShipWorks.Shipping.Carriers.iParcel.iParcelAccountManagerControl();
             this.managerLabel = new System.Windows.Forms.Label();
-            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.iParcel.iParcelServiceTypeServicePickerControl();
             this.insuranceProtectionPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,7 +56,7 @@
             this.insuranceProtectionPanel.Controls.Add(this.pennyOne);
             this.insuranceProtectionPanel.Controls.Add(this.labelShipmentProtection);
             this.insuranceProtectionPanel.Controls.Add(this.insuranceProviderChooser);
-            this.insuranceProtectionPanel.Location = new System.Drawing.Point(0, 483);
+            this.insuranceProtectionPanel.Location = new System.Drawing.Point(0, 487);
             this.insuranceProtectionPanel.Margin = new System.Windows.Forms.Padding(0);
             this.insuranceProtectionPanel.Name = "insuranceProtectionPanel";
             this.insuranceProtectionPanel.Size = new System.Drawing.Size(456, 106);
@@ -109,7 +109,7 @@
             this.insuranceProviderChooser.CarrierMessage = "";
             this.insuranceProviderChooser.CarrierProviderName = "i-parcel Insurance";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(27, 67);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 67);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 8;
@@ -133,18 +133,20 @@
             this.managerLabel.TabIndex = 20;
             this.managerLabel.Text = "i-parcel Accounts";
             // 
-            // panelExclusionConfiguration
+            // servicePicker
             // 
-            this.panelExclusionConfiguration.Location = new System.Drawing.Point(6, 275);
-            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
-            this.panelExclusionConfiguration.Size = new System.Drawing.Size(447, 200);
-            this.panelExclusionConfiguration.TabIndex = 21;
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 280);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(447, 200);
+            this.servicePicker.TabIndex = 21;
             // 
             // iParcelSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelExclusionConfiguration);
+            this.AutoScroll = true;
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.managerLabel);
             this.Controls.Add(this.accountManager);
             this.Controls.Add(this.insuranceProtectionPanel);
@@ -169,6 +171,6 @@
         private UI.Controls.LinkControl pennyOneLink;
         private System.Windows.Forms.Label labelShipWorksInsurance;
         private System.Windows.Forms.CheckBox pennyOne;
-        private System.Windows.Forms.Panel panelExclusionConfiguration;
+        private iParcelServiceTypeServicePickerControl servicePicker;
     }
 }
