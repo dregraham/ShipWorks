@@ -1503,31 +1503,31 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         private void ProcessFeedback(FeedbackDetailType feedback)
         {
-            EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
-            if (item == null)
-            {
-                return;
-            }
+            SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -5, string.Format("EbayDownloader.ProcessFeedback for feedback.OrderLineItemID {0}", feedback.OrderLineItemID));
+            sqlDeadlockRetry.ExecuteWithRetry(adapter => {
+                EbayOrderItemEntity item = FindItem(new EbayOrderIdentifier(feedback.OrderLineItemID));
 
-            log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
+                if (item == null)
+                {
+                    return;
+                }
 
-            // Feedback we've recieved
-            if (feedback.Role == TradingRoleCodeType.Seller)
-            {
-                item.FeedbackReceivedType = (int) feedback.CommentType;
-                item.FeedbackReceivedComments = feedback.CommentText;
-            }
-            else
-            {
-                item.FeedbackLeftType = (int) feedback.CommentType;
-                item.FeedbackLeftComments = feedback.CommentText;
-            }
+                log.DebugFormat("FEEDBACK: {0} - {1} - {2}", feedback.CommentTime, feedback.ItemID, feedback.CommentText);
 
-            // save the order item
-            using (SqlAdapter adapter = new SqlAdapter())
-            {
+                // Feedback we've recieved
+                if (feedback.Role == TradingRoleCodeType.Seller)
+                {
+                    item.FeedbackReceivedType = (int)feedback.CommentType;
+                    item.FeedbackReceivedComments = feedback.CommentText;
+                }
+                else
+                {
+                    item.FeedbackLeftType = (int)feedback.CommentType;
+                    item.FeedbackLeftComments = feedback.CommentText;
+                }
+
                 adapter.SaveEntity(item);
-            }
+            });
         }
 
         /// <summary>
