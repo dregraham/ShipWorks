@@ -81,10 +81,4 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
         }
     }
-
-    [CLSCompliant(false)]
-    public class OnTracServicePickerControl : CarrierServicePickerControl<OnTracServiceType>
-    {
-        
-    }
 }
