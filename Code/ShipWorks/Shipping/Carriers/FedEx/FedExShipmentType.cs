@@ -125,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// enumeration values of the specific shipment type (i.e. the integer values would 
         /// correspond to PostalServiceType values for this shipment type)
         /// </summary>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             List<int> allServiceTypes = Enum.GetValues(typeof(FedExServiceType)).Cast<int>().ToList();
             return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
