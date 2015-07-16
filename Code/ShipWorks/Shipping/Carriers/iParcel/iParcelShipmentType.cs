@@ -44,12 +44,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     {
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
         /// </summary>
         public iParcelShipmentType()
-            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway())
+            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway(), new ExcludedServiceTypeRepository())
         {
         }
 
@@ -58,10 +59,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="serviceGateway">The service gateway.</param>
-        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
+        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         {
             this.repository = repository;
             this.serviceGateway = serviceGateway;
+            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -815,7 +817,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                                                             .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
 
                     // Filter out the excluded service types before creating rate results
-                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(GetExcludedServiceTypes().Select(s => (iParcelServiceType)s)))
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(GetExcludedServiceTypes(excludedServiceTypeRepository).Select(s => (iParcelServiceType)s)))
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
                         List<DataRow> serviceRows = costInfoTable.AsEnumerable()
