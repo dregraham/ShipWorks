@@ -30,6 +30,7 @@
         {
             this.labelOriginInfo = new System.Windows.Forms.Label();
             this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
+            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // labelOriginInfo
@@ -50,14 +51,22 @@
             this.originManagerControl.Size = new System.Drawing.Size(452, 150);
             this.originManagerControl.TabIndex = 1;
             // 
+            // panelExclusionConfiguration
+            // 
+            this.panelExclusionConfiguration.Location = new System.Drawing.Point(4, 190);
+            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
+            this.panelExclusionConfiguration.Size = new System.Drawing.Size(486, 200);
+            this.panelExclusionConfiguration.TabIndex = 10;
+            // 
             // PostalWebSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelExclusionConfiguration);
             this.Controls.Add(this.labelOriginInfo);
             this.Controls.Add(this.originManagerControl);
             this.Name = "PostalWebSettingsControl";
-            this.Size = new System.Drawing.Size(495, 193);
+            this.Size = new System.Drawing.Size(495, 398);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -67,5 +76,6 @@
 
         private System.Windows.Forms.Label labelOriginInfo;
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
+        private System.Windows.Forms.Panel panelExclusionConfiguration;
     }
 }
