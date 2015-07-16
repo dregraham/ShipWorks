@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.panelInsurance = new System.Windows.Forms.Panel();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.labelShipmentProtection = new System.Windows.Forms.Label();
-            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
+            this.panelExclusionConfiguration = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
             this.panelBottom.SuspendLayout();
             this.panelInsurance.SuspendLayout();
             this.SuspendLayout();
@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // accountControl
             // 
             this.accountControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.accountControl.Location = new System.Drawing.Point(28, 21);
+            this.accountControl.Location = new System.Drawing.Point(19, 21);
             this.accountControl.Name = "accountControl";
             this.accountControl.Size = new System.Drawing.Size(459, 104);
             this.accountControl.TabIndex = 1;
@@ -102,7 +102,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             this.panelInsurance.Controls.Add(this.insuranceProviderChooser);
             this.panelInsurance.Controls.Add(this.labelShipmentProtection);
-            this.panelInsurance.Location = new System.Drawing.Point(5, 621);
+            this.panelInsurance.Location = new System.Drawing.Point(5, 618);
             this.panelInsurance.Name = "panelInsurance";
             this.panelInsurance.Size = new System.Drawing.Size(386, 50);
             this.panelInsurance.TabIndex = 8;
@@ -129,7 +129,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // panelExclusionConfiguration
             // 
-            this.panelExclusionConfiguration.Location = new System.Drawing.Point(5, 415);
+            this.panelExclusionConfiguration.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelExclusionConfiguration.Location = new System.Drawing.Point(9, 412);
             this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
             this.panelExclusionConfiguration.Size = new System.Drawing.Size(486, 200);
             this.panelExclusionConfiguration.TabIndex = 9;
@@ -165,6 +166,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.Panel panelInsurance;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.Label labelShipmentProtection;
-        private System.Windows.Forms.Panel panelExclusionConfiguration;
+        private PostalServiceTypeServicePickerControl panelExclusionConfiguration;
     }
 }

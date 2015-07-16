@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
         UspsResellerType uspsResellerType;
-        private CarrierServicePickerControl<PostalServiceType> servicePicker;
 
         /// <summary>
         /// Constructor
@@ -40,26 +39,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.ShipmentTypeCode = shipmentTypeCode;
             accountControl.UspsResellerType = uspsResellerType;
 
-            InitializeServicePicker();
-
             // Update the Express1 controls now in addition to on visible changed because we were seeing crashes
             // where express1settings was null because save was being called before the controls got loaded.
             UpdateExpress1ControlDisplay();
             VisibleChanged += (sender, args) => UpdateExpress1ControlDisplay();
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Postal service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<PostalServiceType>();
-            servicePicker.Dock = DockStyle.Fill;
-            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>
@@ -82,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelBottom.Top = optionsControl.Bottom;
             }
 
-            panelExclusionConfiguration.Top = panelBottom.Bottom;
+            panelExclusionConfiguration.Top = panelBottom.Bottom + 4;
             panelInsurance.Top = panelExclusionConfiguration.Bottom;
         }
 
@@ -117,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
 
             List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
+            panelExclusionConfiguration.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -215,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return panelExclusionConfiguration.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>
