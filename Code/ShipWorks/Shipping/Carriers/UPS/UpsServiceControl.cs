@@ -220,7 +220,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 {
                     // Always include the service type that the shipment is currently configured in the 
                     // event the shipment was configured prior to a service being excluded
-                    upsServiceTypesToLoad.AddRange(new List<UpsServiceType> { (UpsServiceType)LoadedShipments.First().Ups.Service });
+                    // Always include the service that the shipments are currently configured with
+                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service).Distinct();
+                    upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
                 }
 
                 List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypesToLoad

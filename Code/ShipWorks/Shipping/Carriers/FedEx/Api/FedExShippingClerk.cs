@@ -598,7 +598,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 overallResults.AddRange(GetSmartPostRates(shipment));
                 overallResults.AddRange(GetOneRateRates(shipment));
 
-                return new RateGroup(overallResults);
+                List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes().Select(s => (FedExServiceType)s).ToList();
+
+                RateGroup test = new RateGroup(overallResults.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection)r.Tag).ServiceType)));
+
+                return test;
             }
             catch (Exception ex)
             {

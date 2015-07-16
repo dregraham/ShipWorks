@@ -250,6 +250,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
+            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (FedExServiceType)s).ToList();
+
             // If they are all of the same service class, we can load the service classes
             if (allDomestic || allInternational || allCanada)
             {
@@ -258,7 +260,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
                 LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
 
-                service.DataSource = FedExUtility.GetValidServiceTypes(overriddenShipments)
+                List<FedExServiceType> fedexShipmentsToLoad = FedExUtility.GetValidServiceTypes(overriddenShipments).Intersect(availableServices).ToList();
+
+                if (LoadedShipments.Any())
+                {
+                    // Always include the service type that the shipment is currently configured in the 
+                    // event the shipment was configured prior to a service being excluded
+                    // Always include the service that the shipments are currently configured with
+                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Distinct();
+                    fedexShipmentsToLoad = fedexShipmentsToLoad.Union(loadedServices).ToList();
+                }
+
+                service.DataSource = fedexShipmentsToLoad
                        .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
             }
             else

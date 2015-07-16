@@ -35,6 +35,7 @@
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.pennyOne = new System.Windows.Forms.CheckBox();
             this.pennyOneLink = new ShipWorks.UI.Controls.LinkControl();
+            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // shippersControl
@@ -107,11 +108,19 @@
             this.pennyOneLink.Text = "(Learn why)";
             this.pennyOneLink.Click += new System.EventHandler(this.OnLinkPennyOne);
             // 
+            // panelExclusionConfiguration
+            // 
+            this.panelExclusionConfiguration.Location = new System.Drawing.Point(11, 406);
+            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
+            this.panelExclusionConfiguration.Size = new System.Drawing.Size(421, 200);
+            this.panelExclusionConfiguration.TabIndex = 13;
+            // 
             // FedExSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.panelExclusionConfiguration);
             this.Controls.Add(this.pennyOneLink);
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.insuranceProviderChooser);
@@ -120,7 +129,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(445, 411);
+            this.Size = new System.Drawing.Size(445, 619);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,5 +144,6 @@
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.CheckBox pennyOne;
         private UI.Controls.LinkControl pennyOneLink;
+        private System.Windows.Forms.Panel panelExclusionConfiguration;
     }
 }
