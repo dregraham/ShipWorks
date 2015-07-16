@@ -509,8 +509,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                                                 endiciaApiClient.GetRatesFast(shipment, this);
 
             // Filter out any excluded services, but always include the service that the shipment is configured with
-            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
-            List<RateResult> endiciaRates = allEndiciaRates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
+            List<RateResult> endiciaRates = FilterRatesByExcludedServices(shipment, allEndiciaRates);
 
 
             // For endicia, we want to either promote Express1 or show the Express1 savings
@@ -562,11 +561,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     }
 
                     // Filter out any excluded services, but always include the service that the shipment is configured with
-                    List<RateResult> finalRatesFilteredByAvailableServices = finalRates.Select(e =>
+                    List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
                     {
                         e.ShipmentType = ShipmentTypeCode.Endicia;
                         return e;
-                    }).Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
+                    }).ToList());
 
                     RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
@@ -588,7 +587,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     // Express1 wasn't used, so we want to promote USPS
 
                     // Filter out any excluded services, but always include the service that the shipment is configured with
-                    RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)));
+                    RateGroup finalEndiciaOnlyRates = new RateGroup(FilterRatesByExcludedServices(shipment, endiciaRates));
 
                     if (IsRateDiscountMessagingRestricted)
                     {
