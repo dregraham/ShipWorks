@@ -152,15 +152,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the excluded services based on the items in the service picker.
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
+        public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
-
-            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
-                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int)this.ShipmentTypeCode, ServiceType = serviceToExclude })
-                .ToList();
-
-            return excludedServiceTypes;
+            return servicePicker.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>

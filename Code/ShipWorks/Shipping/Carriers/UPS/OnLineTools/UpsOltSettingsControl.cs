@@ -111,16 +111,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// <summary>
         /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
+        public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
-
-            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
-                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int)this.ShipmentTypeCode, ServiceType = serviceToExclude })
-                .ToList();
-
-            return excludedServiceTypes;
+            return servicePicker.ExcludedServiceTypes.Cast<int>();
         }
-
     }
 }

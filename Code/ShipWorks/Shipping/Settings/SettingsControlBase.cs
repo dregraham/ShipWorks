@@ -27,9 +27,9 @@ namespace ShipWorks.Shipping.Settings
         /// Can be overridden in derived classes to return list of excluded services
         /// in in the control
         /// </summary>
-        public virtual List<ExcludedServiceTypeEntity> GetExcludedServices()
+        public virtual IEnumerable<int> GetExcludedServices()
         {
-            return new List<ExcludedServiceTypeEntity>();
+            return Enumerable.Empty<int>();
         }
 
         /// <summary>
@@ -40,6 +40,9 @@ namespace ShipWorks.Shipping.Settings
             ShipmentTypeCode = shipmentTypeCode;
         }
 
+        /// <summary>
+        /// Gets the code for the shipment type
+        /// </summary>
         protected ShipmentTypeCode ShipmentTypeCode
         {
             get;

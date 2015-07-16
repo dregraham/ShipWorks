@@ -184,17 +184,16 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Returns a list of ExcludedServiceTypeEntity from the SettingsControlBase
         /// </summary>
-        public List<ExcludedServiceTypeEntity> GetExcludedServices()
+        public IEnumerable<ExcludedServiceTypeEntity> GetExcludedServices()
         {
-            List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
-
             SettingsControlBase settingsControl = GeneralSettingsControl;
             if (settingsControl != null)
             {
-                excludedServices.AddRange(settingsControl.GetExcludedServices());
+                return settingsControl.GetExcludedServices()
+                    .Select(x => new ExcludedServiceTypeEntity {ShipmentType = (int) shipmentType.ShipmentTypeCode, ServiceType = x});
             }
 
-            return excludedServices;
+            return Enumerable.Empty<ExcludedServiceTypeEntity>();
         }
 
         /// <summary>
