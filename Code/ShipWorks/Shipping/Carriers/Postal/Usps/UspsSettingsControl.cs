@@ -65,8 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelBottom.Top = optionsControl.Bottom;
             }
 
-            panelExclusionConfiguration.Top = panelBottom.Bottom + 4;
-            panelInsurance.Top = panelExclusionConfiguration.Bottom;
+            servicePicker.Top = panelBottom.Bottom + 4;
+            panelInsurance.Top = servicePicker.Bottom;
         }
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
 
             List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            panelExclusionConfiguration.Initialize(postalServices, excludedServices);
+            servicePicker.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return panelExclusionConfiguration.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>

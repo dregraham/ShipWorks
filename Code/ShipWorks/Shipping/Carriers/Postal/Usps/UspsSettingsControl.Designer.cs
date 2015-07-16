@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.panelInsurance = new System.Windows.Forms.Panel();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.labelShipmentProtection = new System.Windows.Forms.Label();
-            this.panelExclusionConfiguration = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
             this.panelBottom.SuspendLayout();
             this.panelInsurance.SuspendLayout();
             this.SuspendLayout();
@@ -129,17 +129,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             // panelExclusionConfiguration
             // 
-            this.panelExclusionConfiguration.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panelExclusionConfiguration.Location = new System.Drawing.Point(9, 412);
-            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
-            this.panelExclusionConfiguration.Size = new System.Drawing.Size(486, 200);
-            this.panelExclusionConfiguration.TabIndex = 9;
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 412);
+            this.servicePicker.Name = "panelExclusionConfiguration";
+            this.servicePicker.Size = new System.Drawing.Size(486, 200);
+            this.servicePicker.TabIndex = 9;
             // 
             // UspsSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelExclusionConfiguration);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.panelInsurance);
             this.Controls.Add(this.express1SettingsControl);
             this.Controls.Add(this.panelBottom);
@@ -166,6 +166,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         private System.Windows.Forms.Panel panelInsurance;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.Label labelShipmentProtection;
-        private PostalServiceTypeServicePickerControl panelExclusionConfiguration;
+        private PostalServiceTypeServicePickerControl servicePicker;
     }
 }

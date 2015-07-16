@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
@@ -11,30 +9,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
     /// </summary>
     public partial class PostalWebSettingsControl : SettingsControlBase
     {
-        private CarrierServicePickerControl<PostalServiceType> servicePicker;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public PostalWebSettingsControl()
         {
             InitializeComponent();
-
-            InitializeServicePicker();
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Postal service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<PostalServiceType>();
-            servicePicker.Dock = DockStyle.Fill;
-            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>

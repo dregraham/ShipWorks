@@ -28,10 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
             this.labelOriginInfo = new System.Windows.Forms.Label();
             this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
-            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
             this.SuspendLayout();
+            // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 189);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(486, 200);
+            this.servicePicker.TabIndex = 10;
             // 
             // labelOriginInfo
             // 
@@ -51,18 +59,11 @@
             this.originManagerControl.Size = new System.Drawing.Size(452, 150);
             this.originManagerControl.TabIndex = 1;
             // 
-            // panelExclusionConfiguration
-            // 
-            this.panelExclusionConfiguration.Location = new System.Drawing.Point(4, 190);
-            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
-            this.panelExclusionConfiguration.Size = new System.Drawing.Size(486, 200);
-            this.panelExclusionConfiguration.TabIndex = 10;
-            // 
             // PostalWebSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panelExclusionConfiguration);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.labelOriginInfo);
             this.Controls.Add(this.originManagerControl);
             this.Name = "PostalWebSettingsControl";
@@ -76,6 +77,6 @@
 
         private System.Windows.Forms.Label labelOriginInfo;
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
-        private System.Windows.Forms.Panel panelExclusionConfiguration;
+        private PostalServiceTypeServicePickerControl servicePicker;
     }
 }
