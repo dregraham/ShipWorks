@@ -68,6 +68,18 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the service types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalServiceType values for this shipment type)
+        /// </summary>
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int)service).ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

@@ -205,19 +205,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Gets the service types that are available for this shipment type (i.e have not
-        /// been excluded). The integer values are intended to correspond to the appropriate
-        /// enumeration values of the specific shipment type (i.e. the integer values would
-        /// correspond to PostalServiceType values for a UspsShipmentType).
-        /// </summary>
-        /// <param name="repository">The repository from which the service types are fetched.</param>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
-        {
-            List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int)service).ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
-        }
-
-        /// <summary>
         /// Ensures that the USPS specific data for the shipment is loaded.  If the data already exists, nothing is done.  It is not refreshed.
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)

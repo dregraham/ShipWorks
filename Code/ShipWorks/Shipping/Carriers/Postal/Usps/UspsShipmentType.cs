@@ -180,18 +180,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         }
         
         /// <summary>
-        /// Gets the service types that have been available for this shipment type (i.e have not 
-        /// been excluded). The integer values are intended to correspond to the appropriate 
-        /// enumeration values of the specific shipment type (i.e. the integer values would 
-        /// correspond to PostalServiceType values for a UspsShipmentType)
-        /// </summary>
-        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
-        {
-            List<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).Select(service => (int) service).ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
-        }
-
-        /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
         /// </summary>

@@ -42,6 +42,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override void LoadSettings()
         {
+            Initialize(ShipmentTypeCode.PostalWebTools);
+
             base.LoadSettings();
 
             originManagerControl.Initialize();
@@ -66,15 +68,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// <summary>
         /// Gets the excludeded services.
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
+        public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToList();
-
-            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
-                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int) ShipmentTypeCode, ServiceType = serviceToExclude })
-                .ToList();
-
-            return excludedServiceTypes;
+            return servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToList();
         }
     }
 }
