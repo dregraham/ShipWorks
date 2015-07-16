@@ -10338,3 +10338,4 @@
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Shipping.Carriers.iParcel.iParcelSettingsControl.#InitializeServicePicker()")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Trac", Scope = "type", Target = "ShipWorks.Shipping.Carriers.OnTrac.OnTracServicePickerControl")]
 [assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Scope = "member", Target = "ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsOltShipmentType.#CreateSettingsControl()")]
+[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Scope = "type", Target = "ShipWorks.Shipping.Carriers.OnTrac.OnTracShipmentType")]

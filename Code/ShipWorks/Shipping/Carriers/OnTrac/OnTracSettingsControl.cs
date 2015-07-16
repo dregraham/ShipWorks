@@ -15,6 +15,8 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             InitializeComponent();
 
+            base.Initialize(ShipmentTypeCode.OnTrac);
+
             insuranceProviderChooser.ProviderChanged += OnInsuranceProviderChanged;
         }
 

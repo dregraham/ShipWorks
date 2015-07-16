@@ -161,7 +161,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             if (anyDomestic)
             {
-                EnumHelper.BindComboBox<OnTracServiceType>(service, serviceType => serviceType != OnTracServiceType.None);
+                List<OnTracServiceType> availableServices = new OnTracShipmentType().GetAvailableServiceTypes().Cast<OnTracServiceType>().ToList();
+
+                EnumHelper.BindComboBox<OnTracServiceType>(service, serviceType => serviceType != OnTracServiceType.None && availableServices.Contains(serviceType));
 
                 // Set back the previous value
                 if (previousMulti)
