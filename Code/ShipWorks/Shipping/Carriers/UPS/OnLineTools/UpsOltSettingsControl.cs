@@ -28,6 +28,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public UpsOltSettingsControl()
         {
             InitializeComponent();
+            InitializeServicePicker();
         }
 
         /// <summary>
@@ -36,15 +37,9 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         public override void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             base.Initialize(shipmentTypeCode);
-            InitializeServicePicker();
-        }
-
-        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
-        {
-            base.Initialize(shipmentTypeCode);
-
             
         }
+
 
         /// <summary>
         /// Initializes the service picker with Ups service types for the USPS carrier.
