@@ -21,37 +21,12 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public partial class UpsOltSettingsControl : SettingsControlBase
     {
-        private CarrierServicePickerControl<UpsServiceType> servicePicker;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsOltSettingsControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Initialize the ShipmentTypeCode from derived class
-        /// </summary>
-        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
-        {
-            base.Initialize(shipmentTypeCode);
-            InitializeServicePicker();
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Ups service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<UpsServiceType>();
-            servicePicker.Dock = DockStyle.Fill;
-            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>
