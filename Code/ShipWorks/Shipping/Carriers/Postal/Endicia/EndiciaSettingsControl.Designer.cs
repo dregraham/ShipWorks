@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.express1PostageDiscountSettingsControl = new ShipWorks.Shipping.Carriers.Postal.Express1.AutomaticExpress1ControlBase();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaSingleSourceControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaOptionsControl();
-            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
             this.panelBottom.SuspendLayout();
             this.panelInsurance.SuspendLayout();
             this.SuspendLayout();
@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.panelBottom.Controls.Add(this.accountControl);
             this.panelBottom.Location = new System.Drawing.Point(0, 357);
             this.panelBottom.Name = "panelBottom";
-            this.panelBottom.Size = new System.Drawing.Size(479, 148);
+            this.panelBottom.Size = new System.Drawing.Size(479, 140);
             this.panelBottom.TabIndex = 5;
             // 
             // labelAccountType
@@ -125,19 +125,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.optionsControl.Size = new System.Drawing.Size(454, 144);
             this.optionsControl.TabIndex = 0;
             // 
-            // panelExclusionConfiguration
+            // servicePicker
             // 
-            this.panelExclusionConfiguration.Location = new System.Drawing.Point(9, 511);
-            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
-            this.panelExclusionConfiguration.Size = new System.Drawing.Size(474, 200);
-            this.panelExclusionConfiguration.TabIndex = 10;
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 503);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(474, 200);
+            this.servicePicker.TabIndex = 10;
             // 
             // EndiciaSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.Controls.Add(this.panelExclusionConfiguration);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.panelInsurance);
             this.Controls.Add(this.express1PostageDiscountSettingsControl);
             this.Controls.Add(this.panelBottom);
@@ -164,6 +165,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private System.Windows.Forms.Label labelShipmentProtection;
         private System.Windows.Forms.Panel panelInsurance;
         private Postal.Express1.AutomaticExpress1ControlBase express1PostageDiscountSettingsControl;
-        private System.Windows.Forms.Panel panelExclusionConfiguration;
+        private PostalServiceTypeServicePickerControl servicePicker;
     }
 }

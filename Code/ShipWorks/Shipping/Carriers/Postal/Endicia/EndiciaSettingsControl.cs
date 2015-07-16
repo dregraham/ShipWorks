@@ -22,10 +22,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
     public partial class EndiciaSettingsControl : SettingsControlBase
     {
         bool loadedAccounts = false;
-        
+
         // the reseller type being worked with
         EndiciaReseller endiciaReseller = EndiciaReseller.None;
-        private CarrierServicePickerControl<PostalServiceType> servicePicker;
 
         private Express1EndiciaSettingsFacade settings;
 
@@ -40,34 +39,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         }
 
         /// <summary>
-        /// Initializes the control using the specified shipment type code.
-        /// </summary>
-        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
-        {
-            base.Initialize(shipmentTypeCode);
-            InitializeServicePicker();
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Postal service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<PostalServiceType> { Dock = DockStyle.Fill, Anchor = AnchorStyles.Top | AnchorStyles.Left };
-
-            // Load up the service picker based on the excluded service types
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
-
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
-
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
-        }
-
-        /// <summary>
         /// Load the settings into the control
         /// </summary>
         public override void LoadSettings()
@@ -79,14 +50,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             express1PostageDiscountSettingsControl.Visible = (endiciaReseller == EndiciaReseller.None);
             express1Options.Visible = (endiciaReseller == EndiciaReseller.Express1);
-            
+
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             LoadExpress1Settings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
             {
                 // Showing the insurance control is dependent on if its allowed in tango
-                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.EndiciaInsuranceProvider;
+                insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.EndiciaInsuranceProvider;
                 panelInsurance.Visible = (EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.EndiciaInsurance).Level == EditionRestrictionLevel.None);
             }
             else
@@ -95,8 +66,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 panelInsurance.Visible = false;
             }
 
-            panelExclusionConfiguration.Top = panelBottom.Bottom;
-            panelInsurance.Top = panelExclusionConfiguration.Bottom;
+            // Load up the service picker based on the excluded service types
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
+
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
+
+            servicePicker.Top = panelBottom.Bottom + 6;
+            panelInsurance.Top = servicePicker.Bottom;
         }
 
         /// <summary>
@@ -139,9 +117,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             optionsControl.SaveSettings(settings);
 
             if (endiciaReseller == EndiciaReseller.None)
-            {                
+            {
                 this.settings.SaveSettings(settings);
-                settings.EndiciaInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
+                settings.EndiciaInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
             }
             else
             {
