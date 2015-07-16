@@ -156,7 +156,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-            RateGroup rateGroup = new RateGroup(rateResults);
+            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
+            
+            RateGroup rateGroup = new RateGroup(rateResults.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)));
 
             if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
             {
