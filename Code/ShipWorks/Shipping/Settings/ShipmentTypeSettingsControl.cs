@@ -191,7 +191,7 @@ namespace ShipWorks.Shipping.Settings
             SettingsControlBase settingsControl = GeneralSettingsControl;
             if (settingsControl != null)
             {
-                excludedServices.AddRange(settingsControl.GetExcludededServices());
+                excludedServices.AddRange(settingsControl.GetExcludedServices());
             }
 
             return excludedServices;

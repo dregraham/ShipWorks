@@ -214,7 +214,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <summary>
         /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludededServices()
+        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
         {
             List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
 

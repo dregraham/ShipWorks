@@ -37,6 +37,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             InitializeComponent();
 
             this.endiciaReseller = endiciaReseller;
+        }
+
+        /// <summary>
+        /// Initializes the control using the specified shipment type code.
+        /// </summary>
+        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            base.Initialize(shipmentTypeCode);
             InitializeServicePicker();
         }
 
@@ -144,7 +152,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Gets the excluded services based on the items in the service picker.
         /// </summary>
-        public override List<ExcludedServiceTypeEntity> GetExcludededServices()
+        public override List<ExcludedServiceTypeEntity> GetExcludedServices()
         {
             List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
 
