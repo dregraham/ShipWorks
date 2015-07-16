@@ -23,11 +23,18 @@ namespace ShipWorks.Shipping.Settings
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Can be overridden in derived classes to return list of excluded services
+        /// in in the control
+        /// </summary>
         public virtual List<ExcludedServiceTypeEntity> GetExcludededServices()
         {
             return new List<ExcludedServiceTypeEntity>();
         }
 
+        /// <summary>
+        /// Initialize the ShipmentTypeCode from derived class
+        /// </summary>
         public virtual void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             ShipmentTypeCode = shipmentTypeCode;

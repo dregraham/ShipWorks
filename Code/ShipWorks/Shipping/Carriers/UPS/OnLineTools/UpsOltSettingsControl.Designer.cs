@@ -38,6 +38,7 @@
             this.upsMailInnovationsOptions = new ShipWorks.Shipping.Carriers.UPS.WorldShip.UpsMailInnovationsOptionsControl();
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.panelExclusionConfiguration = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // accountControl
@@ -137,10 +138,18 @@
             this.label2.TabIndex = 9;
             this.label2.Text = "UPS Services";
             // 
+            // panelExclusionConfiguration
+            // 
+            this.panelExclusionConfiguration.Location = new System.Drawing.Point(11, 404);
+            this.panelExclusionConfiguration.Name = "panelExclusionConfiguration";
+            this.panelExclusionConfiguration.Size = new System.Drawing.Size(421, 200);
+            this.panelExclusionConfiguration.TabIndex = 12;
+            // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.panelExclusionConfiguration);
             this.Controls.Add(this.upsMailInnovationsOptions);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.label2);
@@ -152,7 +161,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(440, 407);
+            this.Size = new System.Drawing.Size(440, 617);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,5 +179,6 @@
         private WorldShip.UpsMailInnovationsOptionsControl upsMailInnovationsOptions;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel panelExclusionConfiguration;
     }
 }

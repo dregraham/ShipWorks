@@ -181,6 +181,9 @@ namespace ShipWorks.Shipping.Settings
             }
         }
 
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity from the SettingsControlBase
+        /// </summary>
         public List<ExcludedServiceTypeEntity> GetExcludedServices()
         {
             List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();

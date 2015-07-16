@@ -20,7 +20,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
         UspsResellerType uspsResellerType;
-
         private CarrierServicePickerControl<PostalServiceType> servicePicker;
 
         /// <summary>
@@ -212,6 +211,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         }
 
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
         public override List<ExcludedServiceTypeEntity> GetExcludededServices()
         {
             List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();

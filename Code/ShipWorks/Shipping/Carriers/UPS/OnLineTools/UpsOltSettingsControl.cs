@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -17,12 +19,30 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// </summary>
     public partial class UpsOltSettingsControl : SettingsControlBase
     {
+        private CarrierServicePickerControl<PostalServiceType> servicePicker;
+
         /// <summary>
         /// Constructor
         /// </summary>
         public UpsOltSettingsControl()
         {
             InitializeComponent();
+
+            InitializeServicePicker();
+        }
+
+        /// <summary>
+        /// Initializes the service picker with Ups service types for the USPS carrier.
+        /// </summary>
+        private void InitializeServicePicker()
+        {
+            // Add carrier service picker control to the exclusions panel
+            servicePicker = new CarrierServicePickerControl<PostalServiceType>();
+            servicePicker.Dock = DockStyle.Fill;
+            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+
+            panelExclusionConfiguration.Controls.Add(servicePicker);
+            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
 
         /// <summary>
@@ -38,6 +58,14 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             upsMailInnovationsOptions.LoadSettings((UpsShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools));
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UpsInsuranceProvider;
             pennyOne.Checked = settings.UpsInsurancePennyOne;
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType)exclusion).ToList();
+
+
+            //UpsUtility
+            //List<PostalServiceType> upsServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
+            //servicePicker.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -72,20 +100,17 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
         }
 
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
         public override List<ExcludedServiceTypeEntity> GetExcludededServices()
         {
-            //List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
 
-            List<ExcludedServiceTypeEntity> excludedServiceTypes = new List<ExcludedServiceTypeEntity>();
+            List<ExcludedServiceTypeEntity> excludedServiceTypes = servicesToExclude
+                .Select(serviceToExclude => new ExcludedServiceTypeEntity { ShipmentType = (int)this.ShipmentTypeCode, ServiceType = serviceToExclude })
+                .ToList();
 
-            ExcludedServiceTypeEntity test = new ExcludedServiceTypeEntity()
-            {
-                ShipmentType = 1,
-                ServiceType = 9
-            };
-
-
-            excludedServiceTypes.Add(test);
             return excludedServiceTypes;
         }
 
