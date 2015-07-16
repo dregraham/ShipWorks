@@ -820,6 +820,9 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />

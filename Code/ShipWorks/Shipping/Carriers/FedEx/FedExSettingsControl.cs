@@ -18,23 +18,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// </summary>
     public partial class FedExSettingsControl : SettingsControlBase
     {
-        private CarrierServicePickerControl<FedExServiceType> servicePicker;
-
         /// <summary>
         /// Constructor
         /// </summary>
         public FedExSettingsControl()
         {
             InitializeComponent();
-        }
-
-        /// <summary>
-        /// Initialize the ShipmentTypeCode from derived class
-        /// </summary>
-        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
-        {
-            base.Initialize(shipmentTypeCode);
-            InitializeServicePicker();
         }
 
         /// <summary>
@@ -96,20 +85,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
 
             return servicesToExclude;
-        }
-
-        /// <summary>
-        /// Initializes the service picker with Ups service types for the USPS carrier.
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<FedExServiceType>();
-            servicePicker.Dock = DockStyle.Fill;
-            servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-            panelExclusionConfiguration.Controls.Add(servicePicker);
-            panelExclusionConfiguration.Height = servicePicker.Height + 10;
         }
     }
 }
