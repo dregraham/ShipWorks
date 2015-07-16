@@ -356,6 +356,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the service types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalServiceType values for a UspsShipmentType)
+        /// </summary>
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -961,8 +973,10 @@ namespace ShipWorks.Shipping.Carriers.UPS
                         rates.Add(new RateResult("* Rates reflect the service charge only. This does not include additional fees for returns.", ""));
                     }
                 }
+                
+                List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
 
-                return new RateGroup(rates);
+                return new RateGroup(rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))));
             }
             catch (InvalidPackageDimensionsException ex)
             {

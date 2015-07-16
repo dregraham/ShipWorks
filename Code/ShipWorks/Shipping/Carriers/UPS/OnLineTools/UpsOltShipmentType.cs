@@ -17,6 +17,7 @@ using ShipWorks.Data;
 using System.Drawing;
 using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -57,8 +58,22 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new UpsOltSettingsControl();
-        }        
+            UpsOltSettingsControl control = new UpsOltSettingsControl();
+            control.Initialize(ShipmentTypeCode);
+            return control;
+        }
+
+        /// <summary>
+        /// Gets the service types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalServiceType values for a UspsShipmentType)
+        /// </summary>
+        public override List<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<int> allServiceTypes = Enum.GetValues(typeof(UpsServiceType)).Cast<int>().ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+        }
 
         /// <summary>
         /// Creates the Returns control
