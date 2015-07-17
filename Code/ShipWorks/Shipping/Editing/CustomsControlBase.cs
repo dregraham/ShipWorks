@@ -121,9 +121,9 @@ namespace ShipWorks.Shipping.Editing
             }
 
             // Event handler suspended to prevent UI flash
-            sandGrid.SelectionChanged -= this.OnChangeSelectedRow;
-            sandGrid.Rows.Clear();
-            sandGrid.SelectionChanged += this.OnChangeSelectedRow;
+            itemsGrid.SelectionChanged -= this.OnItemsGridChangeSelectedRow;
+            itemsGrid.Rows.Clear();
+            itemsGrid.SelectionChanged += this.OnItemsGridChangeSelectedRow;
 
             // Each bucket represents a row that we will created.  if Description for a bucket is not null, it means EVERY shipment
             // so far has at least one content item with that description.  Number of buckets = MAX(CustomContents.Count) accross all shipments.
@@ -216,14 +216,14 @@ namespace ShipWorks.Shipping.Editing
 
                 UpdateRowDescription(row, bucket.Description ?? "(Multiple)");
 
-                sandGrid.Rows.Add(row);
+                itemsGrid.Rows.Add(row);
             }
 
-            if (sandGrid.Rows.Count > 0)
+            if (itemsGrid.Rows.Count > 0)
             {
                 if (resetSelection)
                 {
-                    sandGrid.Rows[0].Selected = true;
+                    itemsGrid.Rows[0].Selected = true;
                 }
             }
             else
@@ -253,9 +253,9 @@ namespace ShipWorks.Shipping.Editing
             // that the selected index still exists before trying to select it.
             selectedtags.ForEach(t =>
             {
-                sandGrid.SelectionChanged -= OnChangeSelectedRow;
+                itemsGrid.SelectionChanged -= OnItemsGridChangeSelectedRow;
                 SelectGridRowByTag((List<ShipmentCustomsItemEntity>) t);
-                sandGrid.SelectionChanged += OnChangeSelectedRow;
+                itemsGrid.SelectionChanged += OnItemsGridChangeSelectedRow;
             });
         }
 
@@ -279,7 +279,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void ClearUI()
         {
-            sandGrid.Rows.Clear();
+            itemsGrid.Rows.Clear();
 
             ClearValues();
             UpdateEnabledUI();
@@ -290,6 +290,8 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void ClearValues()
         {
+            selectedRows.Clear();
+
             SuspendShipSenseFieldChangeEvent();
             description.TextChanged -= this.OnDescriptionChanged;
 
@@ -312,20 +314,20 @@ namespace ShipWorks.Shipping.Editing
         private void UpdateEnabledUI()
         {
             add.Enabled = enableEditing && loadedShipments.Count > 0;
-            delete.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
+            delete.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
 
-            quantity.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
-            description.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
-            weight.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
-            value.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
-            harmonizedCode.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
-            countryOfOrigin.Enabled = enableEditing && sandGrid.SelectedElements.Count > 0;
+            quantity.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+            description.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+            weight.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+            value.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+            harmonizedCode.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
+            countryOfOrigin.Enabled = enableEditing && itemsGrid.SelectedElements.Count > 0;
         }
 
         /// <summary>
         /// Selected customs row has changed
         /// </summary>
-        private void OnChangeSelectedRow(object sender, SelectionChangedEventArgs e)
+        private void OnItemsGridChangeSelectedRow(object sender, SelectionChangedEventArgs e)
         {
             SuspendShipSenseFieldChangeEvent();
 
@@ -333,16 +335,15 @@ namespace ShipWorks.Shipping.Editing
 
             UpdateEnabledUI();
 
-            if (sandGrid.SelectedElements.Count == 0)
+            if (itemsGrid.SelectedElements.Count == 0)
             {
                 ClearValues();
-                selectedRows.Clear();
             }
             else
             {
                 description.TextChanged -= this.OnDescriptionChanged;
 
-                selectedRows = sandGrid.SelectedElements.Cast<GridRow>().ToList();
+                selectedRows = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
 
                 using (MultiValueScope scope = new MultiValueScope())
                 {
@@ -488,7 +489,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void OnDescriptionChanged(object sender, EventArgs e)
         {
-            foreach (GridRow row in sandGrid.SelectedElements)
+            foreach (GridRow row in itemsGrid.SelectedElements)
             {
                 UpdateRowDescription(row, description.Text);
             }
@@ -515,14 +516,14 @@ namespace ShipWorks.Shipping.Editing
             Dictionary<ShipmentEntity, bool> affectedShipments = new Dictionary<ShipmentEntity, bool>();
 
             // Capture the selected rows that will be removed
-            List<GridRow> rowsToRemove = sandGrid.SelectedElements.Cast<GridRow>().ToList();
+            List<GridRow> rowsToRemove = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
 
             // Capture customs items that are being removed (and eventually deleted)
             var customsItems = rowsToRemove.SelectMany(r => (List<ShipmentCustomsItemEntity>) r.Tag).ToList();
 
             // Clear the selection and remove each of the rows
-            sandGrid.SelectedElements.Clear();
-            rowsToRemove.ForEach(r => sandGrid.Rows.Remove(r));
+            itemsGrid.SelectedElements.Clear();
+            rowsToRemove.ForEach(r => itemsGrid.Rows.Remove(r));
 
             // Remove the customs items from each of their shipments
             foreach (var item in customsItems)
@@ -547,7 +548,7 @@ namespace ShipWorks.Shipping.Editing
         {
             Cursor.Current = Cursors.WaitCursor;
 
-            sandGrid.SelectedElements.Clear();
+            itemsGrid.SelectedElements.Clear();
             
             List<ShipmentCustomsItemEntity> createdList = new List<ShipmentCustomsItemEntity>();
 
@@ -563,12 +564,12 @@ namespace ShipWorks.Shipping.Editing
                 GridRow row = new GridRow(createdList[0].Description);
                 row.Tag = createdList;
 
-                sandGrid.Rows.Add(row);
+                itemsGrid.Rows.Add(row);
 
                 RaiseShipSenseFieldChanged();
 
                 SelectGridRowByTag(createdList);
-                selectedRows = sandGrid.SelectedElements.Cast<GridRow>().ToList();
+                selectedRows = itemsGrid.SelectedElements.Cast<GridRow>().ToList();
             }
             else
             {
@@ -582,7 +583,7 @@ namespace ShipWorks.Shipping.Editing
         /// </summary>
         private void SelectGridRowByTag(List<ShipmentCustomsItemEntity> tag)
         {
-            GridRow matchedRow = sandGrid.Rows.Cast<GridRow>().FirstOrDefault(r =>
+            GridRow matchedRow = itemsGrid.Rows.Cast<GridRow>().FirstOrDefault(r =>
             {
                 List<ShipmentCustomsItemEntity> tagInGrid = ((List<ShipmentCustomsItemEntity>) r.Tag);
                 return tagInGrid.All(customsItemFromGrid => tag.Any(customsItem => customsItem == customsItemFromGrid));
