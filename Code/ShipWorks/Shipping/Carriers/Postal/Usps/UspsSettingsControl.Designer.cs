@@ -127,11 +127,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             this.labelShipmentProtection.TabIndex = 9;
             this.labelShipmentProtection.Text = "Shipment Protection";
             // 
-            // panelExclusionConfiguration
+            // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.servicePicker.Location = new System.Drawing.Point(9, 412);
-            this.servicePicker.Name = "panelExclusionConfiguration";
+            this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(486, 200);
             this.servicePicker.TabIndex = 9;
             // 
@@ -139,6 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.panelInsurance);
             this.Controls.Add(this.express1SettingsControl);
