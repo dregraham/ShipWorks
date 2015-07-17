@@ -58,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (hubID.Text.Trim().Length > 0)
             {
-                if (!Regex.IsMatch(hubID.Text, @"^[0-9]{4}$"))
+                if (!Regex.IsMatch(hubID.Text.Trim(), @"^[0-9]{4}$"))
                 {
                     throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
                 }
@@ -68,11 +68,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             foreach (string hubLine in additionalHubs.Lines.Select(l => l.Trim()).Where(l => l.Length > 0))
             {
-                if (!Regex.IsMatch(hubLine, @"^[0-9]{4}$"))
+                if (!Regex.IsMatch(hubLine.Trim(), @"^[0-9]{4}$"))
                 {
                     throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
                 }
-                root.Add(new XElement("HubID", hubLine));
+                root.Add(new XElement("HubID", hubLine.Trim()));
             }
 
             account.SmartPostHubList = root.ToString();
