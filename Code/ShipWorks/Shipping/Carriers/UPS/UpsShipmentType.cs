@@ -976,7 +976,12 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 
                 List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
 
-                return new RateGroup(rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))));
+                // Filter out any excluded services, but always include the service that the shipment is configured with
+                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
+
+                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+
+                return finalGroup;
             }
             catch (InvalidPackageDimensionsException ex)
             {
@@ -984,6 +989,16 @@ namespace ShipWorks.Shipping.Carriers.UPS
             }
         }
 
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this ups shipment type.
+        /// </summary>
+        protected List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes()
+                .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service }).ToList();
+
+            return rates.Where(r => !(r.Tag is UpsServiceType) || availableServices.Contains(((UpsServiceType)r.Tag))).ToList();
+        }
 
         /// <summary>
         /// Get the number of days of transit it takes for the given service.  The transit time can be looked up in the given list.  If not present, then 
