@@ -39,7 +39,8 @@ namespace ShipWorks.Editions.Freemium
                     continue;
                 }
 
-                AddRestriction(EditionFeature.ShipmentType, shipmentType, EditionRestrictionLevel.RequiresUpgrade);
+                AddRestriction(EditionFeature.ShipmentType, shipmentType, 
+                    shipmentType == ShipmentTypeCode.BestRate ? EditionRestrictionLevel.Hidden : EditionRestrictionLevel.RequiresUpgrade);
             }
 
             AddRestriction(EditionFeature.ActionLimit, maxActions, EditionRestrictionLevel.RequiresUpgrade);

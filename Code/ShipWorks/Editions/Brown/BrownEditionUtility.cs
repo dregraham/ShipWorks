@@ -17,7 +17,7 @@ namespace ShipWorks.Editions.Brown
         public static bool IsShipmentTypeAllowed(ShipmentTypeCode shipmentType)
         {
             // UPS of course is allowed
-            if (shipmentType == ShipmentTypeCode.UpsOnLineTools || shipmentType == ShipmentTypeCode.UpsWorldShip || shipmentType == ShipmentTypeCode.BestRate)
+            if (shipmentType == ShipmentTypeCode.UpsOnLineTools || shipmentType == ShipmentTypeCode.UpsWorldShip)
             {
                 return true;
             }
