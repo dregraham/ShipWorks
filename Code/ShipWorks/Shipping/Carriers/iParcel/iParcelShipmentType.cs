@@ -816,8 +816,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                                                             .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
                                                                                             .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
 
+                    IEnumerable<iParcelServiceType> disabledServices = GetExcludedServiceTypes(excludedServiceTypeRepository)
+                        .Select(s => (iParcelServiceType)s);
+                    
+
                     // Filter out the excluded service types before creating rate results
-                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(GetExcludedServiceTypes(excludedServiceTypeRepository).Select(s => (iParcelServiceType)s)))
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => (iParcelServiceType)s != (iParcelServiceType)shipment.IParcel.Service)))
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
                         List<DataRow> serviceRows = costInfoTable.AsEnumerable()
