@@ -974,8 +974,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                     }
                 }
                 
-                List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
-
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, rates);
 
@@ -992,7 +990,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <summary>
         /// Gets the filtered rates based on any excluded services configured for this ups shipment type.
         /// </summary>
-        protected List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes()
                 .Select(s => (UpsServiceType)s).Union(new List<UpsServiceType> { (UpsServiceType)shipment.Ups.Service }).ToList();

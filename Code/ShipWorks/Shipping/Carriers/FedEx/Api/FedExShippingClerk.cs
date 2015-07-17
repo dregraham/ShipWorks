@@ -601,8 +601,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 overallResults.AddRange(GetSmartPostRates(shipment));
                 overallResults.AddRange(GetOneRateRates(shipment));
 
-                List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (FedExServiceType)s).ToList();
-
                 // Filter out any excluded services, but always include the service that the shipment is configured with
                 List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
 
@@ -619,7 +617,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Gets the filtered rates based on any excluded services configured for this fedex shipment type.
         /// </summary>
-        protected List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
         {
             List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
                 .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> {(FedExServiceType)shipment.FedEx.Service}).ToList();
