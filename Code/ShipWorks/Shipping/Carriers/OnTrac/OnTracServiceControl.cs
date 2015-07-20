@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(LoadedShipments);
+            UpdatePackageTypes(LoadedShipments);
 
             using (new MultiValueScope())
             {
@@ -143,6 +144,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Update the available choices for packages
+        /// </summary>
+        private void UpdatePackageTypes(List<ShipmentEntity> shipments)
+        {
+            List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
+
+            EnumHelper.BindComboBox<OnTracPackagingType>(service, availablePackages.Contains);
+
+        }
+
+        /// <summary>
         /// Update the available choices for services
         /// </summary>
         private void UpdateServiceTypes(IList<ShipmentEntity> shipments)
@@ -181,6 +193,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Disable it if its "None"
             service.Enabled = anyDomestic;
+        }
+
+        /// <summary>
+        /// Gets available packages
+        /// </summary>
+        private static List<OnTracPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new OnTracShipmentType()
+                .GetAvailablePackageTypes()
+                .Cast<OnTracPackagingType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracPackagingType) x.PackagingType))
+                .ToList();
         }
 
         /// <summary>

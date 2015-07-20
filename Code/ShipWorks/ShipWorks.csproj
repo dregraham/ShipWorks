@@ -833,6 +833,9 @@
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracPackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

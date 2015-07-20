@@ -36,6 +36,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             pennyOne.Checked = settings.OnTracInsurancePennyOne;
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            InitializeServicePicker(shipmentType);
+            InitializePackagePicker(shipmentType);
+        }
+
+        /// <summary>
+        /// Initialize the service picker control
+        /// </summary>
+        private void InitializeServicePicker(ShipmentType shipmentType)
+        {
             IEnumerable<OnTracServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Cast<OnTracServiceType>();
 
             IEnumerable<OnTracServiceType> allServices = OnTracShipmentType.ServiceTypes
@@ -43,6 +52,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 .OrderBy(x => EnumHelper.GetDescription(x));
 
             excludedServiceControl.Initialize(allServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Initialize the package picker control
+        /// </summary>
+        /// <param name="shipmentType"></param>
+        private void InitializePackagePicker(ShipmentType shipmentType)
+        {
+            IEnumerable<OnTracPackagingType> excludedPackages = shipmentType.GetExcludedPackageTypes().Cast<OnTracPackagingType>();
+
+            IEnumerable<OnTracPackagingType> allPackages = EnumHelper.GetEnumList<OnTracPackagingType>()
+                .Select(x => x.Value)
+                .OrderBy(x => EnumHelper.GetDescription(x));
+
+            excludedPackageControl.Initialize(allPackages, excludedPackages);
         }
 
         /// <summary>
@@ -62,6 +86,14 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         public override IEnumerable<int> GetExcludedServices()
         {
             return excludedServiceControl.ExcludedServiceTypes.Cast<int>();
+        }
+
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackages()
+        {
+            return excludedPackageControl.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>
