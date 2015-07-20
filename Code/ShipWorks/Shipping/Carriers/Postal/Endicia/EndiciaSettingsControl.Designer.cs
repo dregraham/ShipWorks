@@ -39,7 +39,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             this.express1PostageDiscountSettingsControl = new ShipWorks.Shipping.Carriers.Postal.Express1.AutomaticExpress1ControlBase();
             this.express1Options = new ShipWorks.Shipping.Carriers.Postal.Endicia.Express1.Express1EndiciaSingleSourceControl();
             this.optionsControl = new ShipWorks.Shipping.Carriers.Postal.Endicia.EndiciaOptionsControl();
-            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServicePickerControl();
             this.panelBottom.SuspendLayout();
             this.panelInsurance.SuspendLayout();
             this.SuspendLayout();
@@ -165,6 +165,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         private System.Windows.Forms.Label labelShipmentProtection;
         private System.Windows.Forms.Panel panelInsurance;
         private Postal.Express1.AutomaticExpress1ControlBase express1PostageDiscountSettingsControl;
-        private PostalServiceTypeServicePickerControl servicePicker;
+        private PostalServicePickerControl servicePicker;
     }
 }

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServicePickerControl();
             this.labelOriginInfo = new System.Windows.Forms.Label();
             this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
             this.SuspendLayout();
@@ -77,6 +77,6 @@
 
         private System.Windows.Forms.Label labelOriginInfo;
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
-        private PostalServiceTypeServicePickerControl servicePicker;
+        private PostalServicePickerControl servicePicker;
     }
 }

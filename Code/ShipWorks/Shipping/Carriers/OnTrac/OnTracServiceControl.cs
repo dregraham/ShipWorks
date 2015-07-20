@@ -150,7 +150,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
 
-            EnumHelper.BindComboBox<OnTracPackagingType>(packagingType, availablePackages.Contains);
+            packagingType.BindToEnumAndPreserveSelection<OnTracPackagingType>(availablePackages.Contains);
         }
 
         /// <summary>
@@ -162,28 +162,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // type needs to be updated for the loop to loop correctly
             bool anyDomestic = shipments.Any(shipment => shipment.ShipPerson.IsDomesticCountry());
 
-            bool previousMulti = service.MultiValued;
-            object previousValue = service.SelectedValue;
-
             if (anyDomestic)
             {
                 List<OnTracServiceType> availableServices = GetAvailableServices(shipments);
 
-                EnumHelper.BindComboBox<OnTracServiceType>(service, availableServices.Contains);
-
-                // Set back the previous value
-                if (previousMulti)
-                {
-                    service.MultiValued = true;
-                }
-                else if (previousValue != null)
-                {
-                    service.SelectedValue = previousValue;
-                    if (service.SelectedIndex == -1)
-                    {
-                        service.SelectedIndex = 0;
-                    }
-                }
+                service.BindToEnumAndPreserveSelection<OnTracServiceType>(availableServices.Contains);
             }
             else
             {

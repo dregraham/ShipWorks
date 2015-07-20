@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -27,9 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsSettingsControl()
         {
             InitializeComponent();
-
         }
 
+        /// <summary>
+        /// Initialize the settings control
+        /// </summary>
         public override void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             base.Initialize(shipmentTypeCode);
@@ -66,7 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             servicePicker.Top = panelBottom.Bottom + 4;
-            panelInsurance.Top = servicePicker.Bottom;
+            packagePicker.Top = servicePicker.Bottom + 10;
+            panelInsurance.Top = packagePicker.Bottom;
         }
 
         /// <summary>
@@ -96,10 +100,37 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelInsurance.Visible = false;
             }
 
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
+            InitializeServicePicker();
+            InitializePackagePicker();
+        }
 
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
+        /// <summary>
+        /// Initialize the package picker control
+        /// </summary>
+        private void InitializePackagePicker()
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
+                .Cast<PostalPackagingType>();
+
+            IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value);
+            packagePicker.Initialize(postalServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Initialize the service picker control
+        /// </summary>
+        private void InitializeServicePicker()
+        {
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes()
+                .Cast<PostalServiceType>()
+                .ToList();
+
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode)
+                .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
+                .ToList();
             servicePicker.Initialize(postalServices, excludedServices);
         }
 
@@ -199,6 +230,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public override IEnumerable<int> GetExcludedServices()
         {
             return servicePicker.ExcludedServiceTypes.Cast<int>();
+        }
+
+        /// <summary>
+        /// Returns a list of excluded package types
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackages()
+        {
+            return packagePicker.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>

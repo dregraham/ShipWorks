@@ -842,6 +842,9 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
@@ -855,7 +858,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.Designer.cs">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\PostalServiceTypeServicePickerControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\PostalServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
