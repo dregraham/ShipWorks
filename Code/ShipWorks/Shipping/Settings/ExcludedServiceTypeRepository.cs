@@ -9,6 +9,9 @@ using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Settings
 {
+    /// <summary>
+    /// Repository for excluded services
+    /// </summary>
     public class ExcludedServiceTypeRepository : IExcludedServiceTypeRepository
     {
         /// <summary>

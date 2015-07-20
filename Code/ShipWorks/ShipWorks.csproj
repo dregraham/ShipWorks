@@ -1070,7 +1070,9 @@
     <Compile Include="Shipping\Settings\CarrierServicePickerControl.Designer.cs">
       <DependentUpon>CarrierServicePickerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Settings\ExcludedPackageTypeRepository.cs" />
     <Compile Include="Shipping\Settings\ExcludedServiceTypeRepository.cs" />
+    <Compile Include="Shipping\Settings\IExcludedPackageTypeRepository.cs" />
     <Compile Include="Shipping\Settings\IExcludedServiceTypeRepository.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
