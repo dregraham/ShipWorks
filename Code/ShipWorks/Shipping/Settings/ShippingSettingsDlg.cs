@@ -304,6 +304,7 @@ namespace ShipWorks.Shipping.Settings
             {
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
                 settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int)x.ShipmentTypeCode).ToArray();
+                ExcludedServiceTypeRepository repository = new ExcludedServiceTypeRepository();
 
                 settings.BlankPhoneOption =
                     (int)
@@ -316,12 +317,16 @@ namespace ShipWorks.Shipping.Settings
                 providerRulesControl.SaveSettings(settings);
                 log.Info("Provider rules saved");
 
+                List<ExcludedServiceTypeEntity> excludedServices = new List<ExcludedServiceTypeEntity>();
+
                 // Save all the settings
                 foreach (ShipmentTypeSettingsControl settingsControl in settingsMap.Values)
                 {
-                    
                     settingsControl.SaveSettings(settings);
+                    excludedServices.AddRange(settingsControl.GetExcludedServices());
                 }
+
+                repository.Save(excludedServices);
 
                 ShippingSettings.Save(settings);
 

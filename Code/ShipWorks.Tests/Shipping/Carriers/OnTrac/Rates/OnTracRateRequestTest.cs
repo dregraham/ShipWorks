@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Common.Logging;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.OnTrac.Enums;
 using ShipWorks.Shipping.Carriers.OnTrac.Net.Rates;
 using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Rate;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ILog = log4net.ILog;
 
@@ -85,6 +84,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         }
 
         [TestMethod]
+        public void GetRates_RateIsNotIncluded_WhenServiceTypeHasBeenExcluded()
+        {
+            var rateGroup = RunSuccessfullGetRates(OnTracShipmentType.ServiceTypes.Where(x => x != OnTracServiceType.Ground));
+
+            Assert.AreEqual(0, rateGroup.Rates.Count);
+        }
+
+        [TestMethod]
         public void GetRates_ResponseLogged_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -118,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
-        RateGroup RunSuccessfullGetRates()
+        RateGroup RunSuccessfullGetRates(IEnumerable<OnTracServiceType> availableServiceTypes = null)
         {
             RateShipmentList rateShipmentList = new RateShipmentList
             {
@@ -143,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            RateGroup rateGroup = testObject.GetRates(shipment);
+            RateGroup rateGroup = testObject.GetRates(shipment, availableServiceTypes ?? OnTracShipmentType.ServiceTypes);
             return rateGroup;
         }
 
@@ -176,7 +183,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            RateGroup rateGroup = testObject.GetRates(shipment);
+            RateGroup rateGroup = testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
 
             Assert.IsTrue(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
@@ -212,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment);
+            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
         [TestMethod]
@@ -230,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment);
+            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
         [TestMethod]
@@ -247,7 +254,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment);
+            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
         [TestMethod]
@@ -280,7 +287,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment);
+            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
 
             log.Verify(l => l.Info(It.IsAny<string>(), It.IsAny<InvalidOperationException>()), Times.Once());
         }

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
@@ -28,9 +22,17 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override void LoadSettings()
         {
+            Initialize(ShipmentTypeCode.PostalWebTools);
+
             base.LoadSettings();
 
             originManagerControl.Initialize();
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType) exclusion).ToList();
+
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -41,6 +43,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             base.RefreshContent();
 
             originManagerControl.Initialize();
+        }
+
+        /// <summary>
+        /// Gets the excludeded services.
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            return servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToList();
         }
     }
 }

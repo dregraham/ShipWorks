@@ -99,13 +99,9 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             List<DimensionsAdapter> dimensions = new List<DimensionsAdapter>();
 
-            // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
-            // type needs to be updated for the loop to loop correctly
-            bool allInternational = LoadedShipments.Any(shipment => !shipment.ShipPerson.IsDomesticCountry());
-
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;
-            UpdateServiceTypes(!allInternational);
+            UpdateServiceTypes(LoadedShipments);
 
             using (new MultiValueScope())
             {
@@ -140,7 +136,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
             }
 
-
             service.SelectedValueChanged += OnServiceChanged;
 
             //Load the dimensions
@@ -150,18 +145,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Update the available choices for services
         /// </summary>
-        /// <param name="anyDomestic">
-        /// If any Domestic, enable service. If the previous value was set and is currently available,
-        /// set it.
-        /// </param>
-        private void UpdateServiceTypes(bool anyDomestic)
+        private void UpdateServiceTypes(IList<ShipmentEntity> shipments)
         {
+            // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
+            // type needs to be updated for the loop to loop correctly
+            bool anyDomestic = shipments.Any(shipment => shipment.ShipPerson.IsDomesticCountry());
+
             bool previousMulti = service.MultiValued;
             object previousValue = service.SelectedValue;
 
             if (anyDomestic)
             {
-                EnumHelper.BindComboBox<OnTracServiceType>(service, serviceType => serviceType != OnTracServiceType.None);
+                List<OnTracServiceType> availableServices = GetAvailableServices(shipments);
+
+                EnumHelper.BindComboBox<OnTracServiceType>(service, availableServices.Contains);
 
                 // Set back the previous value
                 if (previousMulti)
@@ -176,7 +173,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                         service.SelectedIndex = 0;
                     }
                 }
-
             }
             else
             {
@@ -185,6 +181,21 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Disable it if its "None"
             service.Enabled = anyDomestic;
+        }
+
+        /// <summary>
+        /// Gets available services
+        /// </summary>
+        private static List<OnTracServiceType> GetAvailableServices(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new OnTracShipmentType()
+                .GetAvailableServiceTypes()
+                .Cast<OnTracServiceType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracServiceType)x.Service))
+                .Where(x => x != OnTracServiceType.None)
+                .ToList();
         }
 
         /// <summary>

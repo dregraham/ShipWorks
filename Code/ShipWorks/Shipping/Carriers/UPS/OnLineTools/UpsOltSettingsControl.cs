@@ -9,6 +9,10 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.UPS.Enums;
+using Interapptive.Shared.Utility;
+using ShipWorks.Editions;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 {
@@ -35,9 +39,24 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
 
-            upsMailInnovationsOptions.LoadSettings((UpsShipmentType) ShipmentTypeManager.GetType(ShipmentTypeCode.UpsOnLineTools));
+            UpsShipmentType shipmentType = (UpsShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode);
+
+            upsMailInnovationsOptions.LoadSettings(shipmentType);
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UpsInsuranceProvider;
             pennyOne.Checked = settings.UpsInsurancePennyOne;
+
+            // Check if Mi is enabled
+            bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
+
+            // Check if SurePost is enabled
+            bool isSurePostAvailable = EditionManager.ActiveRestrictions.CheckRestriction(EditionFeature.UpsSurePost).Level == EditionRestrictionLevel.None;
+
+            List<UpsServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (UpsServiceType)exclusion).ToList();
+
+            List<UpsServiceType> upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>()
+                .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable)).ToList();
+
+            servicePicker.Initialize(upsServices, excludedServices);
         }
 
         /// <summary>
@@ -72,5 +91,32 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             }
         }
 
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+
+            return servicesToExclude;
+        }
+
+        /// <summary>
+        /// Returns true if we should show the service. Else false.
+        /// </summary>
+        private static bool ShowService(UpsServiceType upsServiceType, bool isMiAvailable, bool isSurePostAvailable)
+        {
+            if (UpsUtility.IsUpsSurePostService(upsServiceType))
+            {
+                return isSurePostAvailable;
+            }
+
+            if (UpsUtility.IsUpsMiService(upsServiceType))
+            {
+                return isMiAvailable;
+            }
+
+            return true;
+        }
     }
 }

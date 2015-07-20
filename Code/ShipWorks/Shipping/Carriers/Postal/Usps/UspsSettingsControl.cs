@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -17,17 +19,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
         bool loadedAccounts = false;
         Express1UspsSettingsFacade express1Settings;
-        readonly ShipmentTypeCode shipmentTypeCode;
-        readonly UspsResellerType uspsResellerType;
+        UspsResellerType uspsResellerType;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public UspsSettingsControl(ShipmentTypeCode shipmentTypeCode)
+        public UspsSettingsControl()
         {
             InitializeComponent();
 
-            this.shipmentTypeCode = shipmentTypeCode;
+        }
+
+        public override void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            base.Initialize(shipmentTypeCode);
 
             uspsResellerType = PostalUtility.GetUspsResellerType(shipmentTypeCode);
 
@@ -60,7 +65,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelBottom.Top = optionsControl.Bottom;
             }
 
-            panelInsurance.Top = panelBottom.Bottom;
+            servicePicker.Top = panelBottom.Bottom + 4;
+            panelInsurance.Top = servicePicker.Bottom;
         }
 
         /// <summary>
@@ -89,6 +95,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 // Doesn't make sense to show Stamps.com insurance choosing to Express1
                 panelInsurance.Visible = false;
             }
+
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
+
+            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
         }
 
         /// <summary>
@@ -96,8 +108,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         private void UpdateExpress1ControlDisplay()
         {
-            express1Options.Visible = shipmentTypeCode == ShipmentTypeCode.Express1Usps;
-            express1SettingsControl.Visible = shipmentTypeCode == ShipmentTypeCode.Usps;
+            express1Options.Visible = ShipmentTypeCode == ShipmentTypeCode.Express1Usps;
+            express1SettingsControl.Visible = ShipmentTypeCode == ShipmentTypeCode.Usps;
 
             LoadExpress1Settings();
             PositionControls();
@@ -111,7 +123,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             express1Settings = new Express1UspsSettingsFacade(settings);
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 express1Options.LoadSettings(settings);
             }
@@ -160,7 +172,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             optionsControl.SaveSettings(settings);
             log.Info("Saved settings to UspsOptionsControl");
 
-            if (shipmentTypeCode == ShipmentTypeCode.Express1Usps)
+            if (ShipmentTypeCode == ShipmentTypeCode.Express1Usps)
             {
                 log.InfoFormat("Preparing to save Express1 options {0}", express1Options == null);
                 express1Options.SaveSettings(settings);
@@ -179,6 +191,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 settings.UspsInsuranceProvider = (int)insuranceProviderChooser.InsuranceProvider;
                 log.Info("Finished saving insurance provider");
             }
+        }
+
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            return servicePicker.ExcludedServiceTypes.Cast<int>();
         }
 
         /// <summary>

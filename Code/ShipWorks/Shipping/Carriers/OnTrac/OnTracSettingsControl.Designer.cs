@@ -1,4 +1,7 @@
-﻿namespace ShipWorks.Shipping.Carriers.OnTrac
+﻿using ShipWorks.Shipping.Carriers.OnTrac.Enums;
+using ShipWorks.Shipping.Settings;
+
+namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     partial class OnTracSettingsControl
     {
@@ -35,6 +38,7 @@
             this.pennyOne = new System.Windows.Forms.CheckBox();
             this.labelShipmentProtection = new System.Windows.Forms.Label();
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
+            this.excludedServiceControl = new ShipWorks.Shipping.Carriers.OnTrac.OnTracServicePickerControl();
             this.SuspendLayout();
             // 
             // managerLabel
@@ -69,7 +73,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(323, 314);
+            this.pennyOneLink.Location = new System.Drawing.Point(323, 460);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 10;
@@ -79,7 +83,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 313);
+            this.pennyOne.Location = new System.Drawing.Point(27, 459);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 9;
@@ -90,7 +94,7 @@
             // 
             this.labelShipmentProtection.AutoSize = true;
             this.labelShipmentProtection.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelShipmentProtection.Location = new System.Drawing.Point(9, 262);
+            this.labelShipmentProtection.Location = new System.Drawing.Point(9, 408);
             this.labelShipmentProtection.Name = "labelShipmentProtection";
             this.labelShipmentProtection.Size = new System.Drawing.Size(123, 13);
             this.labelShipmentProtection.TabIndex = 12;
@@ -101,15 +105,24 @@
             this.insuranceProviderChooser.CarrierMessage = "(OnTrac Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "OnTrac Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 281);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 427);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 13;
+            // 
+            // excludedServices
+            // 
+            this.excludedServiceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.excludedServiceControl.Location = new System.Drawing.Point(9, 261);
+            this.excludedServiceControl.Name = "excludedServiceControl";
+            this.excludedServiceControl.Size = new System.Drawing.Size(422, 148);
+            this.excludedServiceControl.TabIndex = 14;
             // 
             // OnTracSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.excludedServiceControl);
             this.Controls.Add(this.insuranceProviderChooser);
             this.Controls.Add(this.labelShipmentProtection);
             this.Controls.Add(this.pennyOneLink);
@@ -118,7 +131,7 @@
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.optionsControl);
             this.Name = "OnTracSettingsControl";
-            this.Size = new System.Drawing.Size(456, 339);
+            this.Size = new System.Drawing.Size(456, 514);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -133,5 +146,6 @@
         private System.Windows.Forms.CheckBox pennyOne;
         private System.Windows.Forms.Label labelShipmentProtection;
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
+        private OnTracServicePickerControl excludedServiceControl;
     }
 }

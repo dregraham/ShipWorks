@@ -118,6 +118,19 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            IEnumerable<int> allServices = EnumHelper.GetEnumList<OnTracServiceType>().Select(x => x.Value).Cast<int>();
+            return allServices.Except(GetExcludedServiceTypes(repository));
+        }
+
+        /// <summary>
         /// Create OnTrac specific information
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
@@ -141,6 +154,17 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             return EnumHelper.GetDescription((OnTracServiceType)shipment.OnTrac.Service);
         }
+
+        /// <summary>
+        /// Get all service types
+        /// </summary>
+        public static IEnumerable<OnTracServiceType> ServiceTypes
+        {
+            get
+            {
+                return EnumHelper.GetEnumList<OnTracServiceType>().Select(x => x.Value);
+            }
+        } 
 
         /// <summary>
         /// Get the OnTrac shipment details
@@ -375,7 +399,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             }
 
             OnTracRates rateRequest = new OnTracRates(account);
-            return rateRequest.GetRates(shipment);
+            return rateRequest.GetRates(shipment, GetAvailableServiceTypes().Cast<OnTracServiceType>().Union(new List<OnTracServiceType> { (OnTracServiceType)shipment.OnTrac.Service }));
         }
 
         /// <summary>

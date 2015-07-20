@@ -206,10 +206,13 @@ namespace ShipWorks.Users
             settings.GridMenuLayout = null;
 
             settings.FilterInitialUseLastActive = false;
-            settings.FilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
-            settings.FilterInitialSpecified = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
+            settings.OrderFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Orders);
+            settings.FilterInitialSpecified = settings.OrderFilterLastActive;
             settings.FilterInitialSortType = (int) FilterInitialSortType.CurrentSort;
-            settings.FilterExpandedFolders = null;
+            settings.OrderFilterExpandedFolders = null;
+
+            settings.CustomerFilterLastActive = BuiltinFilter.GetTopLevelKey(FilterTarget.Customers);
+            settings.CustomerFilterExpandedFolders = null;
 
             settings.ShippingWeightFormat = (int) WeightDisplayFormat.FractionalPounds;
 

@@ -144,7 +144,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new UspsSettingsControl(ShipmentTypeCode);
+            UspsSettingsControl control = new UspsSettingsControl();
+            control.Initialize(ShipmentTypeCode);
+
+            return control;
         }
 
         /// <summary>
@@ -175,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             return new UspsProfileControl();
         }
-
+        
         /// <summary>
         /// Update the origin address based on the given originID value.  If the shipment has already been processed, nothing is done.  If
         /// the originID is no longer valid and the address could not be updated, false is returned.
@@ -262,9 +265,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             List<RateResult> uspsRates = CreateWebClient().GetRates(shipment);
             uspsRates.ForEach(r => r.ShipmentType = ShipmentTypeCode);
-
-            RateGroup rateGroup = new RateGroup(uspsRates);
+            
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, uspsRates));
             AddUspsRatePromotionFootnote(shipment, rateGroup);
+
             return rateGroup;
         }
 
@@ -277,7 +281,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // We are creating a new shipment type here so we can call get rates and not call Express1 Rates.
             // We thought of just turning off ShouldRetrieveExpress1Rates, but worried that might cause unexpected behavior
-            //   in a multi-threaded situation.
+            // in a multi-threaded situation.
             UspsShipmentType uspsShipmentTypeWithNoExpress1 = new UspsShipmentType() { ShouldRetrieveExpress1Rates = false };
 
             try

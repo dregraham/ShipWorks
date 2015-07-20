@@ -28,9 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.servicePicker = new ShipWorks.Shipping.Carriers.Postal.PostalServiceTypeServicePickerControl();
             this.labelOriginInfo = new System.Windows.Forms.Label();
             this.originManagerControl = new ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl();
             this.SuspendLayout();
+            // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 189);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(486, 200);
+            this.servicePicker.TabIndex = 10;
             // 
             // labelOriginInfo
             // 
@@ -54,10 +63,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.labelOriginInfo);
             this.Controls.Add(this.originManagerControl);
             this.Name = "PostalWebSettingsControl";
-            this.Size = new System.Drawing.Size(495, 193);
+            this.Size = new System.Drawing.Size(495, 398);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -67,5 +77,6 @@
 
         private System.Windows.Forms.Label labelOriginInfo;
         private ShipWorks.Shipping.Settings.Origin.ShippingOriginManagerControl originManagerControl;
+        private PostalServiceTypeServicePickerControl servicePicker;
     }
 }

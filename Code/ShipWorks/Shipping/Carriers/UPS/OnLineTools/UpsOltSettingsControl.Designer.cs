@@ -38,6 +38,7 @@
             this.upsMailInnovationsOptions = new ShipWorks.Shipping.Carriers.UPS.WorldShip.UpsMailInnovationsOptionsControl();
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
             this.SuspendLayout();
             // 
             // accountControl
@@ -137,10 +138,20 @@
             this.label2.TabIndex = 9;
             this.label2.Text = "UPS Services";
             // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 405);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(421, 200);
+            this.servicePicker.TabIndex = 12;
+            // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.upsMailInnovationsOptions);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.label2);
@@ -152,7 +163,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(440, 407);
+            this.Size = new System.Drawing.Size(440, 617);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,5 +181,6 @@
         private WorldShip.UpsMailInnovationsOptionsControl upsMailInnovationsOptions;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
+        private UpsServiceTypeServicePickerControl servicePicker;
     }
 }

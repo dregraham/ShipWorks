@@ -119,14 +119,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
         
         /// <summary>
-        /// Creates the Express1/USPS settings control.
-        /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
-        {
-            return new UspsSettingsControl(ShipmentTypeCode);
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
@@ -164,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-            RateGroup rateGroup = new RateGroup(rateResults);
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
 
             if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
             {

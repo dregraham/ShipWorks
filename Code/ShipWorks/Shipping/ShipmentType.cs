@@ -317,6 +317,53 @@ namespace ShipWorks.Shipping
         {
             return null;
         }
+        
+        /// <summary>
+        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
+        /// been excluded for this shipment type. The integer values are intended to correspond to 
+        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
+        /// would correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        public IEnumerable<int> GetExcludedServiceTypes()
+        {
+            return GetExcludedServiceTypes(new ExcludedServiceTypeRepository());
+        }
+
+        /// <summary>
+        /// Gets the service types that have been excluded for this shipment type. The integer 
+        /// values are intended to correspond to the appropriate enumeration values of the specific
+        /// shipment type (i.e. the integer values would correspond to PostalServiceType values 
+        /// for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public virtual IEnumerable<int> GetExcludedServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            List<ExcludedServiceTypeEntity> excludedServiceTypes = repository.GetExcludedServiceTypes(this);
+            return excludedServiceTypes.Select(s => s.ServiceType);
+        }
+
+        /// <summary>
+        /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
+        /// are available for this shipment type (i.e have not been excluded). The integer values are 
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type 
+        /// (i.e. the integer values would correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        public IEnumerable<int> GetAvailableServiceTypes()
+        {
+            return GetAvailableServiceTypes(new ExcludedServiceTypeRepository());
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public virtual IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            return Enumerable.Empty<int>();
+        }
 
         /// <summary>
         /// Gets the package adapter for the shipment.

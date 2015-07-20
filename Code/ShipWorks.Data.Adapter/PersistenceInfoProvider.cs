@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((165 + 0));
+			base.InitClass((166 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -100,6 +100,7 @@ namespace ShipWorks.Data.Adapter
 			InitEndiciaShipmentEntityMappings();
 			InitEtsyOrderEntityMappings();
 			InitEtsyStoreEntityMappings();
+			InitExcludedServiceTypeEntityMappings();
 			InitFedExAccountEntityMappings();
 			InitFedExEndOfDayCloseEntityMappings();
 			InitFedExPackageEntityMappings();
@@ -891,6 +892,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EtsyStoreEntity", "EtsyStoreName", "EtsyStoreName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "EtsyStoreEntity", "OAuthToken", "OAuthToken", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "EtsyStoreEntity", "OAuthTokenSecret", "OAuthTokenSecret", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 5 );
+		}
+		/// <summary>Inits ExcludedServiceTypeEntity's mappings</summary>
+		private void InitExcludedServiceTypeEntityMappings()
+		{
+			base.AddElementMapping( "ExcludedServiceTypeEntity", "ShipWorksLocal", @"dbo", "ExcludedServiceType", 2 );
+			base.AddElementFieldMapping( "ExcludedServiceTypeEntity", "ShipmentType", "ShipmentType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 0 );
+			base.AddElementFieldMapping( "ExcludedServiceTypeEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 		}
 		/// <summary>Inits FedExAccountEntity's mappings</summary>
 		private void InitFedExAccountEntityMappings()
@@ -2765,7 +2773,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits UserSettingsEntity's mappings</summary>
 		private void InitUserSettingsEntityMappings()
 		{
-			base.AddElementMapping( "UserSettingsEntity", "ShipWorksLocal", @"dbo", "UserSettings", 13 );
+			base.AddElementMapping( "UserSettingsEntity", "ShipWorksLocal", @"dbo", "UserSettings", 15 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "UserID", "UserID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "DisplayColorScheme", "DisplayColorScheme", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "DisplaySystemTray", "DisplaySystemTray", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 2 );
@@ -2774,11 +2782,13 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "UserSettingsEntity", "FilterInitialUseLastActive", "FilterInitialUseLastActive", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 5 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "FilterInitialSpecified", "FilterInitialSpecified", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 6 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "FilterInitialSortType", "FilterInitialSortType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 7 );
-			base.AddElementFieldMapping( "UserSettingsEntity", "FilterLastActive", "FilterLastActive", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
-			base.AddElementFieldMapping( "UserSettingsEntity", "FilterExpandedFolders", "FilterExpandedFolders", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "UserSettingsEntity", "OrderFilterLastActive", "OrderFilterLastActive", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 8 );
+			base.AddElementFieldMapping( "UserSettingsEntity", "OrderFilterExpandedFolders", "OrderFilterExpandedFolders", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 9 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "ShippingWeightFormat", "ShippingWeightFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 10 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "TemplateExpandedFolders", "TemplateExpandedFolders", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 11 );
 			base.AddElementFieldMapping( "UserSettingsEntity", "TemplateLastSelected", "TemplateLastSelected", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 12 );
+			base.AddElementFieldMapping( "UserSettingsEntity", "CustomerFilterLastActive", "CustomerFilterLastActive", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 13 );
+			base.AddElementFieldMapping( "UserSettingsEntity", "CustomerFilterExpandedFolders", "CustomerFilterExpandedFolders", true, (int)SqlDbType.Xml, 2147483647, 0, 0, false, "", null, typeof(System.String), 14 );
 		}
 		/// <summary>Inits UspsAccountEntity's mappings</summary>
 		private void InitUspsAccountEntityMappings()
