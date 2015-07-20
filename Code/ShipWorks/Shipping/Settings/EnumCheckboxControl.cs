@@ -11,15 +11,15 @@ namespace ShipWorks.Shipping.Settings
     /// </summary>
     /// <typeparam name="T">Since an enumeration cannot be specified for T, struct and IConvertible is the closest we can get.</typeparam>
     [CLSCompliant(false)]
-    public partial class CarrierServicePickerControl<T> : UserControl where T : struct, IConvertible
+    public partial class EnumCheckBoxControl<T> : UserControl where T : struct, IConvertible
     {
-        private readonly List<CarrierServicePickerCheckBoxDataSource<T>> allServiceTypes;
+        private readonly List<EnumCheckBoxDataSource<T>> allServiceTypes;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CarrierServicePickerControl{T}"/> class.
+        /// Initializes a new instance of the <see cref="EnumCheckBoxControl{T}"/> class.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">T must be an enumeration</exception>
-        public CarrierServicePickerControl()
+        public EnumCheckBoxControl()
         {
             if (!typeof (T).IsEnum)
             {
@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Settings
 
             InitializeComponent();
 
-            allServiceTypes = new List<CarrierServicePickerCheckBoxDataSource<T>>();
+            allServiceTypes = new List<EnumCheckBoxDataSource<T>>();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Settings
 
             foreach (T serviceType in availableServiceTypes.Where(s => !EnumHelper.GetDeprecated(s as Enum)).OrderBy(s => EnumHelper.GetDescription(s as Enum)))
             {
-                CarrierServicePickerCheckBoxDataSource<T> checkBoxItem = new CarrierServicePickerCheckBoxDataSource<T>(serviceType);
+                EnumCheckBoxDataSource<T> checkBoxItem = new EnumCheckBoxDataSource<T>(serviceType);
 
                 // Mark the item as selected if it's not in the list of excluded service types
                 selectedServices.Items.Add(checkBoxItem, !excludedServiceTypeList.Contains(serviceType));
@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Settings
         {
             get
             {                
-                IEnumerable<CarrierServicePickerCheckBoxDataSource<T>> selectedItems = selectedServices.CheckedItems.Cast<CarrierServicePickerCheckBoxDataSource<T>>();
+                IEnumerable<EnumCheckBoxDataSource<T>> selectedItems = selectedServices.CheckedItems.Cast<EnumCheckBoxDataSource<T>>();
                 return allServiceTypes.Except(selectedItems).Select(service => service.Value);
             }
         }

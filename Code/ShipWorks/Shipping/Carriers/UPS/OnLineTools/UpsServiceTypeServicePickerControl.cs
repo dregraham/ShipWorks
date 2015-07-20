@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// Simple implementation of the generic carrier service picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class UpsServiceTypeServicePickerControl : CarrierServicePickerControl<UpsServiceType>
+    public class UpsServiceTypeServicePickerControl : EnumCheckBoxControl<UpsServiceType>
     {
 
     }

@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     /// Simple implementation of the generic carrier service picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class iParcelServiceTypeServicePickerControl : CarrierServicePickerControl<iParcelServiceType>
+    public class iParcelServiceTypeServicePickerControl : EnumCheckBoxControl<iParcelServiceType>
     {
 
     }

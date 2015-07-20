@@ -4,9 +4,9 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.Shipping.Settings
 {
     [CLSCompliant(false)]
-    public class CarrierServicePickerCheckBoxDataSource<T> where T: struct, IConvertible
+    public class EnumCheckBoxDataSource<T> where T: struct, IConvertible
     {
-        public CarrierServicePickerCheckBoxDataSource(T serviceType)
+        public EnumCheckBoxDataSource(T serviceType)
         {
             if (!typeof(T).IsEnum)
             {

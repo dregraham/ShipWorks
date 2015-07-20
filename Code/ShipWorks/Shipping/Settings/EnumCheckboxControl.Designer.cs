@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.Settings
 {
-    partial class CarrierServicePickerControl<T>
+    partial class EnumCheckBoxControl<T>
     {
         /// <summary> 
         /// Required designer variable.
@@ -73,7 +73,7 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Available Services";
             // 
-            // CarrierServicePickerControl
+            // EnumCheckboxControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -81,7 +81,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.selectedServices);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Name = "CarrierServicePickerControl";
+            this.Name = "EnumCheckboxControl";
             this.Size = new System.Drawing.Size(379, 215);
             this.ResumeLayout(false);
             this.PerformLayout();

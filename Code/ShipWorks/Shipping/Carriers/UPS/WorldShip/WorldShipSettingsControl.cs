@@ -18,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public partial class WorldShipSettingsControl : SettingsControlBase
     {
-        private CarrierServicePickerControl<UpsServiceType> servicePicker;
+        private EnumCheckBoxControl<UpsServiceType> servicePicker;
 
         /// <summary>
         /// Constructor
@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private void InitializeServicePicker()
         {
             // Add carrier service picker control to the exclusions panel
-            servicePicker = new CarrierServicePickerControl<UpsServiceType>();
+            servicePicker = new EnumCheckBoxControl<UpsServiceType>();
             servicePicker.Dock = DockStyle.Fill;
             servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 

@@ -8,16 +8,16 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Tests.Shipping.Settings
 {
     [TestClass]
-    public class CarrierServicePickerControlTest
+    public class EnumCheckboxControlTest
     {
-        private CarrierServicePickerControl<FedExServiceType> testObject;
+        private EnumCheckBoxControl<FedExServiceType> testObject;
 
         private List<FedExServiceType> fedExServiceTypes;
             
         [TestInitialize]
         public void Initialize()
         {
-            testObject = new CarrierServicePickerControl<FedExServiceType>();
+            testObject = new EnumCheckBoxControl<FedExServiceType>();
 
             fedExServiceTypes = Enum.GetValues(typeof (FedExServiceType)).Cast<FedExServiceType>().ToList();
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType>());
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Settings
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenTypeProvidedIsNotEnum_Test()
         {
-            CarrierServicePickerControl<int> control = new CarrierServicePickerControl<int>();
+            EnumCheckBoxControl<int> control = new EnumCheckBoxControl<int>();
         }
         
         [TestMethod]

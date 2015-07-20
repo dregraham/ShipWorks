@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// Simple implementation of the generic carrier service picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class FedExServiceTypeServicePickerControl : CarrierServicePickerControl<FedExServiceType>
+    public class FedExServiceTypeServicePickerControl : EnumCheckBoxControl<FedExServiceType>
     {
 
     }
