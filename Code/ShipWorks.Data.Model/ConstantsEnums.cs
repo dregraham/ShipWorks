@@ -8231,6 +8231,12 @@ namespace ShipWorks.Data.Model
 		ShipSenseEndShipmentID,
 		///<summary>AutoCreateShipments. </summary>
 		AutoCreateShipments,
+		///<summary>FedExFimsEnabled. </summary>
+		FedExFimsEnabled,
+		///<summary>FedExFimsUsername. </summary>
+		FedExFimsUsername,
+		///<summary>FedExFimsPassword. </summary>
+		FedExFimsPassword,
 		/// <summary></summary>
 		AmountOfFields
 	}
