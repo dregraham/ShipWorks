@@ -146,12 +146,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Update the available choices for packages
         /// </summary>
-        private void UpdatePackageTypes(List<ShipmentEntity> shipments)
+        private void UpdatePackageTypes(IEnumerable<ShipmentEntity> shipments)
         {
             List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
 
-            EnumHelper.BindComboBox<OnTracPackagingType>(service, availablePackages.Contains);
-
+            EnumHelper.BindComboBox<OnTracPackagingType>(packagingType, availablePackages.Contains);
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Connection;
@@ -34,6 +35,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public List<ExcludedPackageTypeEntity> GetExcludedPackageTypes(ShipmentType shipmentType)
         {
+            MethodConditions.EnsureArgumentIsNotNull(shipmentType, "shipmentType");
             RelationPredicateBucket bucket = new RelationPredicateBucket(ExcludedPackageTypeFields.ShipmentType == (int)shipmentType.ShipmentTypeCode);
 
             using (ExcludedPackageTypeCollection excludedPackages = new ExcludedPackageTypeCollection())
