@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             try
             {
                 if (PopulateTestObject(testObject, FedExCanadaExpressInternationalMapping.Mapping) &&
-                    (testObject.IsSaveLabel || !justLabels))
+                    (testObject.IsSaveLabel || !justLabels) && testObject.CustomerTransactionId == "IF-1004")
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
                     Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));

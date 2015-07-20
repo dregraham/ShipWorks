@@ -812,7 +812,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
-            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT")
+            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" || PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
@@ -862,7 +862,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "dangerous_goods"))
                 
             {
-                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1";
+                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1" || DangerousGoodsCargoAircraftOnly.ToLower() == "true";
                 FedExDangerousGoodsAccessibilityType accessibility = GetFedExDangerousGoodsAccessibilityType();
 
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
