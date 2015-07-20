@@ -229,15 +229,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
         /// Returns a list of excluded package types
         /// </summary>
-        public override IEnumerable<int> GetExcludedPackages()
+        public override IEnumerable<int> GetExcludedPackageTypes()
         {
-            return packagePicker.ExcludedServiceTypes.Cast<int>();
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>

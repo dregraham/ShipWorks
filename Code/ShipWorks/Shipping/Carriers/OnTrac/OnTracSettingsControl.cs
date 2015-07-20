@@ -85,15 +85,15 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return excludedServiceControl.ExcludedServiceTypes.Cast<int>();
+            return excludedServiceControl.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
         /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
         /// </summary>
-        public override IEnumerable<int> GetExcludedPackages()
+        public override IEnumerable<int> GetExcludedPackageTypes()
         {
-            return excludedPackageControl.ExcludedServiceTypes.Cast<int>();
+            return excludedPackageControl.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>

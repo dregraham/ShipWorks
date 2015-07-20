@@ -82,7 +82,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+            List<int> servicesToExclude = servicePicker.ExcludedEnumValues.Select(type => (int)type).ToList();
 
             return servicesToExclude;
         }

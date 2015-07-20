@@ -50,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToList();
+            return servicePicker.ExcludedEnumValues.Select(type => (int) type).ToList();
         }
     }
 }

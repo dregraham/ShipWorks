@@ -7,13 +7,13 @@ using Interapptive.Shared.Utility;
 namespace ShipWorks.Shipping.Settings
 {
     /// <summary>
-    /// A generic control for picking the carrier services
+    /// A generic control for picking the enums from a checkbox list
     /// </summary>
     /// <typeparam name="T">Since an enumeration cannot be specified for T, struct and IConvertible is the closest we can get.</typeparam>
     [CLSCompliant(false)]
     public partial class EnumCheckBoxControl<T> : UserControl where T : struct, IConvertible
     {
-        private readonly List<EnumCheckBoxDataSource<T>> allServiceTypes;
+        private readonly List<EnumCheckBoxDataSource<T>> allEnums;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EnumCheckBoxControl{T}"/> class.
@@ -30,49 +30,54 @@ namespace ShipWorks.Shipping.Settings
 
             InitializeComponent();
 
-            allServiceTypes = new List<EnumCheckBoxDataSource<T>>();
+            allEnums = new List<EnumCheckBoxDataSource<T>>();
         }
 
         /// <summary>
-        /// Initializes the control with the available service types that and the service types that have been excluded.
+        /// Initializes the control with the available enums and the enums that have been excluded.
         /// </summary>
-        /// <param name="availableServiceTypes">All of the available service types.</param>
-        /// <param name="excludedServiceTypes">The service types that have been excluded and will be unchecked.</param>
-        public void Initialize(IEnumerable<T> availableServiceTypes, IEnumerable<T> excludedServiceTypes)
+        /// <param name="availableEnums">All of the available enum values.</param>
+        /// <param name="excludedEnums">The enum values that have been excluded and will be unchecked.</param>
+        /// <param name="title">Text to be displayed as the section title.  </param>
+        /// <param name="description">Text to be displayed as a description of the enums.</param>
+        public void Initialize(IEnumerable<T> availableEnums, IEnumerable<T> excludedEnums, string title, string description)
         {
+            this.title.Text = title;
+            this.description.Text = description;
+
             ClearSelections();
 
-            List<T> excludedServiceTypeList = excludedServiceTypes.ToList();
+            List<T> excludedEnumList = excludedEnums.ToList();
 
-            foreach (T serviceType in availableServiceTypes.Where(s => !EnumHelper.GetDeprecated(s as Enum)).OrderBy(s => EnumHelper.GetDescription(s as Enum)))
+            foreach (T enumValue in availableEnums.Where(s => !EnumHelper.GetDeprecated(s as Enum)).OrderBy(s => EnumHelper.GetDescription(s as Enum)))
             {
-                EnumCheckBoxDataSource<T> checkBoxItem = new EnumCheckBoxDataSource<T>(serviceType);
+                EnumCheckBoxDataSource<T> checkBoxItem = new EnumCheckBoxDataSource<T>(enumValue);
 
-                // Mark the item as selected if it's not in the list of excluded service types
-                selectedServices.Items.Add(checkBoxItem, !excludedServiceTypeList.Contains(serviceType));
-                allServiceTypes.Add(checkBoxItem);
+                // Mark the item as selected if it's not in the list of excluded enum values
+                selectedEnums.Items.Add(checkBoxItem, !excludedEnumList.Contains(enumValue));
+                allEnums.Add(checkBoxItem);
             }
         }
 
         /// <summary>
-        /// Gets the service types that have been unchecked (i.e. excluded).
+        /// Gets the enum values that have been unchecked (i.e. excluded).
         /// </summary>
-        public IEnumerable<T> ExcludedServiceTypes
+        public IEnumerable<T> ExcludedEnumValues
         {
             get
             {                
-                IEnumerable<EnumCheckBoxDataSource<T>> selectedItems = selectedServices.CheckedItems.Cast<EnumCheckBoxDataSource<T>>();
-                return allServiceTypes.Except(selectedItems).Select(service => service.Value);
+                IEnumerable<EnumCheckBoxDataSource<T>> selectedItems = selectedEnums.CheckedItems.Cast<EnumCheckBoxDataSource<T>>();
+                return allEnums.Except(selectedItems).Select(service => service.Value);
             }
         }
 
         /// <summary>
-        /// Clears the selections and the in memory list of all service types
+        /// Clears the selections and the in memory list of all enum values
         /// </summary>
         private void ClearSelections()
         {
-            selectedServices.Items.Clear();
-            allServiceTypes.Clear();
+            selectedEnums.Items.Clear();
+            allEnums.Clear();
         }
     }
 }

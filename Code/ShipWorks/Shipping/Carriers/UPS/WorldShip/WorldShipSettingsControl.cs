@@ -10,6 +10,7 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Editions;
+using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
 
 namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
 {
@@ -18,7 +19,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
     /// </summary>
     public partial class WorldShipSettingsControl : SettingsControlBase
     {
-        private EnumCheckBoxControl<UpsServiceType> servicePicker;
+        private UpsServiceTypeServicePickerControl servicePicker;
 
         /// <summary>
         /// Constructor
@@ -43,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         private void InitializeServicePicker()
         {
             // Add carrier service picker control to the exclusions panel
-            servicePicker = new EnumCheckBoxControl<UpsServiceType>();
+            servicePicker = new UpsServiceTypeServicePickerControl();
             servicePicker.Dock = DockStyle.Fill;
             servicePicker.Anchor = AnchorStyles.Top | AnchorStyles.Left;
 
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
             List<UpsServiceType> upsServices = Enum.GetValues(typeof(UpsServiceType)).Cast<UpsServiceType>()
                 .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable)).ToList();
 
-            servicePicker.Initialize(upsServices, excludedServices);
+            servicePicker.Initialize(upsServices, excludedServices); 
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WorldShip
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+            List<int> servicesToExclude = servicePicker.ExcludedEnumValues.Select(type => (int)type).ToList();
 
             return servicesToExclude;
         }

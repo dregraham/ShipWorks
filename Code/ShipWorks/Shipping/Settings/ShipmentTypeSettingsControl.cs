@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Settings
             SettingsControlBase settingsControl = GeneralSettingsControl;
             if (settingsControl != null)
             {
-                return settingsControl.GetExcludedPackages()
+                return settingsControl.GetExcludedPackageTypes()
                     .Select(x => new ExcludedPackageTypeEntity { ShipmentType = (int)shipmentType.ShipmentTypeCode, PackageType = x });
             }
 

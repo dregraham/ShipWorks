@@ -981,6 +981,9 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsPackagingTypeServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsServiceTypeServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

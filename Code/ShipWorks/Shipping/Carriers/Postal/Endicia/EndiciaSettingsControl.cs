@@ -160,15 +160,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
         /// Gets the excluded packages based on the items in the package picker.
         /// </summary>
-        public override IEnumerable<int> GetExcludedPackages()
+        public override IEnumerable<int> GetExcludedPackageTypes()
         {
-            return packagePicker.ExcludedServiceTypes.Cast<int>();
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
