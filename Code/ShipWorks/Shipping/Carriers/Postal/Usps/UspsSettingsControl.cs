@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             servicePicker.Top = panelBottom.Bottom + 4;
             packagePicker.Top = servicePicker.Bottom + 10;
-            panelInsurance.Top = packagePicker.Bottom;
+            panelInsurance.Top = packagePicker.Bottom + 5;
         }
 
         /// <summary>
