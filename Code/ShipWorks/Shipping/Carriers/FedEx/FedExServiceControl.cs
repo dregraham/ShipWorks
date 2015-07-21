@@ -1164,7 +1164,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// <summary>
         /// Gets the available package types
         /// </summary>
-        private IEnumerable<FedExPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        private static IEnumerable<FedExPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
         {
             return new FedExShipmentType()
                 .GetAvailablePackageTypes()
