@@ -39,7 +39,7 @@
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
-            this.upsPackagingTypeServicePickerControl = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypeServicePickerControl();
+            this.upsPackagingTypeServicePickerControl = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypePickerControl();
             this.SuspendLayout();
             // 
             // accountControl
@@ -192,6 +192,6 @@
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
         private UpsServiceTypeServicePickerControl servicePicker;
-        private UpsPackagingTypeServicePickerControl upsPackagingTypeServicePickerControl;
+        private UpsPackagingTypePickerControl upsPackagingTypeServicePickerControl;
     }
 }

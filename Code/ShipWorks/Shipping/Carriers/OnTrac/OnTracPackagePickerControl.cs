@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
     /// Simple implementation of the generic carrier package picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class OnTracPackagePickerControl : PackagePickerControl<OnTracPackagingType>
+    public class OnTracPackagePickerControl : PackageTypePickerControl<OnTracPackagingType>
     {
 
     }

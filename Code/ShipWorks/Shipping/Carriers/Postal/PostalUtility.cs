@@ -591,7 +591,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// Initialize the package picker control
         /// </summary>
         [CLSCompliant(false)]
-        public static void InitializePackagePicker(PackagePickerControl<PostalPackagingType> packagePicker, ShipmentType shipmentType)
+        public static void InitializePackagePicker(PackageTypePickerControl<PostalPackagingType> packagePicker, ShipmentType shipmentType)
         {
             IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
                 .Cast<PostalPackagingType>();

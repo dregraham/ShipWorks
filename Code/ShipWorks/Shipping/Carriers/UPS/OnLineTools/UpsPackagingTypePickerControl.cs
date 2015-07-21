@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
     /// UPS implementation of the generic carrier package type picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class UpsPackagingTypeServicePickerControl : PackagePickerControl<UpsPackagingType>
+    public class UpsPackagingTypePickerControl : PackageTypePickerControl<UpsPackagingType>
     {
 
     }
