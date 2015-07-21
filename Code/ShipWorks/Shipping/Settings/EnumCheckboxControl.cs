@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Settings
         /// <exception cref="System.InvalidOperationException">T must be an enumeration</exception>
         public EnumCheckBoxControl()
         {
-            if (!typeof (T).IsEnum)
+            if (!typeof(T).IsEnum)
             {
                 // This is to address the fact that a generic cannot be created specifically
                 // for an enumeration
@@ -38,13 +38,8 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         /// <param name="availableEnums">All of the available enum values.</param>
         /// <param name="excludedEnums">The enum values that have been excluded and will be unchecked.</param>
-        /// <param name="title">Text to be displayed as the section title.  </param>
-        /// <param name="description">Text to be displayed as a description of the enums.</param>
-        public void Initialize(IEnumerable<T> availableEnums, IEnumerable<T> excludedEnums, string title, string description)
+        public void Initialize(IEnumerable<T> availableEnums, IEnumerable<T> excludedEnums)
         {
-            this.title.Text = title;
-            this.description.Text = description;
-
             ClearSelections();
 
             List<T> excludedEnumList = excludedEnums.ToList();
@@ -65,9 +60,39 @@ namespace ShipWorks.Shipping.Settings
         public IEnumerable<T> ExcludedEnumValues
         {
             get
-            {                
+            {
                 IEnumerable<EnumCheckBoxDataSource<T>> selectedItems = selectedEnums.CheckedItems.Cast<EnumCheckBoxDataSource<T>>();
                 return allEnums.Except(selectedItems).Select(service => service.Value);
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the title of the control
+        /// </summary>
+        protected string Title
+        {
+            get
+            {
+                return title.Text;
+            }
+            set
+            {
+                title.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets and sets the description of the control
+        /// </summary>
+        protected string Description
+        {
+            get
+            {
+                return description.Text;
+            }
+            set
+            {
+                description.Text = value;
             }
         }
 

@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Settings
             testObject = new EnumCheckBoxControl<FedExServiceType>();
 
             fedExServiceTypes = Enum.GetValues(typeof (FedExServiceType)).Cast<FedExServiceType>().ToList();
-            testObject.Initialize(fedExServiceTypes, new List<FedExServiceType>(), "", "");
+            testObject.Initialize(fedExServiceTypes, new List<FedExServiceType>());
         }
 
         [TestMethod]
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Settings
         [TestMethod]
         public void Initialize_ExcludesSpecificServicesDefinedInExcludedList_Test()
         {
-            testObject.Initialize(fedExServiceTypes, new List<FedExServiceType> { FedExServiceType.FedEx1DayFreight, FedExServiceType.FedEx2DayFreight }, "", "");
+            testObject.Initialize(fedExServiceTypes, new List<FedExServiceType> { FedExServiceType.FedEx1DayFreight, FedExServiceType.FedEx2DayFreight });
 
             Assert.AreEqual(2, testObject.ExcludedEnumValues.Count());
             Assert.IsTrue(testObject.ExcludedEnumValues.Contains(FedExServiceType.FedEx1DayFreight));
