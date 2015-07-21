@@ -709,39 +709,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
-
-            bool previousMulti = packagingType.MultiValued;
-            FedExPackagingType? previousValue = (FedExPackagingType?) packagingType.SelectedValue;
+            
+            IEnumerable<FedExPackagingType> applicablePackageTypes;
 
             // If all the services are the same, then load up the valid packaging values
             if (serviceType != null)
             {
                 List<FedExPackagingType> validPackagingTypes = FedExUtility.GetValidPackagingTypes(serviceType.Value);
 
-                packagingType.DataSource = validPackagingTypes
+                applicablePackageTypes = validPackagingTypes
                     .Intersect(GetAvailablePackages(LoadedShipments))
-                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault())
-                    .Select(type => new KeyValuePair<string, FedExPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
+                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault());
             }
             else
             {
-                packagingType.DataSource = new KeyValuePair<string, FedExPackagingType>[] { 
-                    new KeyValuePair<string, FedExPackagingType>(EnumHelper.GetDescription(FedExPackagingType.Custom), FedExPackagingType.Custom) };
+                applicablePackageTypes = new[] { FedExPackagingType.Custom };
             }
 
-            if (previousMulti)
-            {
-                packagingType.MultiValued = true;
-            }
-            else if (previousValue != null)
-            {
-                packagingType.SelectedValue = previousValue.Value;
-
-                if (packagingType.SelectedIndex == -1)
-                {
-                    packagingType.SelectedIndex = 0;
-                }
-            }
+            packagingType.BindDataSourceAndPreserveSelection(applicablePackageTypes.ToDictionary(x => EnumHelper.GetDescription(x), x => x).ToList());
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
