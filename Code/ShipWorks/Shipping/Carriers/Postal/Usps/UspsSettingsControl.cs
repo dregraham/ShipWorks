@@ -100,38 +100,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 panelInsurance.Visible = false;
             }
 
-            InitializeServicePicker();
-            InitializePackagePicker();
-        }
-
-        /// <summary>
-        /// Initialize the package picker control
-        /// </summary>
-        private void InitializePackagePicker()
-        {
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
-                .Cast<PostalPackagingType>();
-
-            IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
-                .Select(x => x.Value);
-            packagePicker.Initialize(postalServices, excludedServices);
-        }
-
-        /// <summary>
-        /// Initialize the service picker control
-        /// </summary>
-        private void InitializeServicePicker()
-        {
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes()
-                .Cast<PostalServiceType>()
-                .ToList();
-
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode)
-                .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
-                .ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
+            PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
+            PostalUtility.InitializePackagePicker(packagePicker, shipmentType);
         }
 
         /// <summary>
