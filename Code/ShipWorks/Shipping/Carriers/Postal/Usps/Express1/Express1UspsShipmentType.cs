@@ -252,5 +252,24 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 PostalConfirmationType.AdultSignatureRestricted
             };
         }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
+        /// </summary>
+        protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();;
+
+            if (shipment.ShipmentType == (int) this.ShipmentTypeCode)
+            {
+                availableServiceTypes.Add((PostalServiceType)shipment.Postal.Service);
+            }
+
+            List<RateResult> rateResults = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
+
+            rateResults.ForEach(r=> r.ShipmentType = ShipmentTypeCode);
+
+            return rateResults;
+        }
     }
 }
