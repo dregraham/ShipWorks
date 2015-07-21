@@ -348,7 +348,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             // Start getting rates from Express1
             ShipmentEntity express1Shipment = CreateShipmentCopy(express1AutoRouteAccount, shipment);
-            express1Shipment.ShipmentType = (int) ShipmentTypeCode.Express1Usps;
 
             return Task.Factory.StartNew(() =>
             {
