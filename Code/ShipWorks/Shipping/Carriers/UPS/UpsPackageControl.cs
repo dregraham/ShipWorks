@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             packagingType.ValueMember = "Value";
 
             // Get valid packaging types
-            IEnumerable<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(x => (int) x);
+            List<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(x => (int) x).ToList();
             IEnumerable<int> excludedPackageTypes = ShipmentTypeManager.GetType(shipmentTypeCode).GetExcludedPackageTypes();
 
             // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
@@ -109,6 +109,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             {
                 IEnumerable<int> neededPackageTypes = loadedShipments.SelectMany(s => s.Ups.Packages.Select(p => p.PackagingType)).Distinct();
                 excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+                validPackageTypes.AddRange(neededPackageTypes);
             }
 
             List<UpsPackagingType> packagingTypes = validPackageTypes.Except(excludedPackageTypes).Cast<UpsPackagingType>().ToList();
