@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// Simple implementation of the generic carrier package picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class FedExPackagePickerControl : PackagePickerControl<FedExPackagingType>
+    public class FedExPackagePickerControl : PackageTypePickerControl<FedExPackagingType>
     {
 
     }
