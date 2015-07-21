@@ -53,6 +53,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
         public event EventHandler PackageCountChanged;
 
         /// <summary>
+        /// The ShipmentTypeCode currently being used.
+        /// </summary>
+        private ShipmentTypeCode shipmentTypeCode;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public UpsPackageControl()
@@ -66,6 +71,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
         /// <param name="shipmentTypeCode"></param>
         public void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
+            this.shipmentTypeCode = shipmentTypeCode;
+
             dimensionsControl.Initialize();
 
             List<KeyValuePair<string, int>> packageCountData = new List<KeyValuePair<string, int>>();
@@ -75,9 +82,6 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 packageCountData.Add(new KeyValuePair<string, int>(i.ToString(), i));
             }
 
-            packagingType.DisplayMember = "Key";
-            packagingType.ValueMember = "Value";
-
             packageCountCombo.Items.Clear();
             packageCountCombo.DisplayMember = "Key";
             packageCountCombo.ValueMember = "Value";
@@ -85,8 +89,31 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
             packageCountCombo.SelectedIndexChanged += this.OnChangePackageCount;
 
+            LoadPackagingTypes();
+        }
+
+        /// <summary>
+        /// Load the packaging type drop down with appropriate values
+        /// </summary>
+        private void LoadPackagingTypes()
+        {
+            packagingType.DisplayMember = "Key";
+            packagingType.ValueMember = "Value";
+
             // Get valid packaging types
-            List<KeyValuePair<string, UpsPackagingType>> packaging = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
+            IEnumerable<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(shipmentTypeCode).Select(x => (int) x);
+            IEnumerable<int> excludedPackageTypes = ShipmentTypeManager.GetType(shipmentTypeCode).GetExcludedPackageTypes();
+
+            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
+            if (loadedShipments != null && loadedShipments.Any())
+            {
+                IEnumerable<int> neededPackageTypes = loadedShipments.SelectMany(s => s.Ups.Packages.Select(p => p.PackagingType)).Distinct();
+                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+            }
+
+            List<UpsPackagingType> packagingTypes = validPackageTypes.Except(excludedPackageTypes).Cast<UpsPackagingType>().ToList();
+
+            List<KeyValuePair<string, UpsPackagingType>> packaging = packagingTypes.Select(type => new KeyValuePair<string, UpsPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
             packagingType.DataSource = packaging;
         }
 
@@ -114,6 +141,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Clear previous rows
             packagesGrid.Rows.Clear();
             selectedRows.Clear();
+
+            LoadPackagingTypes();
 
             List<List<UpsPackageEntity>> packageBuckets = new List<List<UpsPackageEntity>>();
 
