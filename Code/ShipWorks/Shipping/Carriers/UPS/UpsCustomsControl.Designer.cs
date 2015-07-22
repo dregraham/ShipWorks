@@ -101,7 +101,7 @@
             // 
             // sandGrid
             // 
-            this.sandGrid.Size = new System.Drawing.Size(469, 116);
+            this.itemsGrid.Size = new System.Drawing.Size(469, 116);
             // 
             // documentsOnly
             // 
