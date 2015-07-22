@@ -716,7 +716,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // If all the services are the same, then load up the valid packaging values
             if (serviceType != null)
             {
-                packagingType.DataSource = FedExUtility.GetValidPackagingTypes(serviceType.Value)
+                List<FedExPackagingType> validPackagingTypes = FedExUtility.GetValidPackagingTypes(serviceType.Value);
+
+                packagingType.DataSource = validPackagingTypes
+                    .Intersect(GetAvailablePackages(LoadedShipments))
+                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault())
                     .Select(type => new KeyValuePair<string, FedExPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
             }
             else
@@ -1158,6 +1162,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnNonStandardPackagingChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Gets the available package types
+        /// </summary>
+        private static IEnumerable<FedExPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new FedExShipmentType()
+                .GetAvailablePackageTypes()
+                .Union(shipments.Select(x => x.FedEx)
+                    .Where(x => x != null)
+                    .Select(x => x.PackagingType))
+                .Cast<FedExPackagingType>();
         }
     }
 }

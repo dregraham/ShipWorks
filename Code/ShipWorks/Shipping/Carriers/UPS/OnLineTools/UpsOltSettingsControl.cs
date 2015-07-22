@@ -45,6 +45,15 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.UpsInsuranceProvider;
             pennyOne.Checked = settings.UpsInsurancePennyOne;
 
+            InitializeServicePicker(shipmentType);
+            InitializePackagingTypePicker(shipmentType);
+        }
+
+        /// <summary>
+        /// Initialize the service picker
+        /// </summary>
+        private void InitializeServicePicker(UpsShipmentType shipmentType)
+        {
             // Check if Mi is enabled
             bool isMIAvailable = shipmentType.IsMailInnovationsEnabled();
 
@@ -57,6 +66,26 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
                 .Where(t => ShowService(t, isMIAvailable, isSurePostAvailable)).ToList();
 
             servicePicker.Initialize(upsServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Initialize the packaging type picker
+        /// </summary>
+        private void InitializePackagingTypePicker(UpsShipmentType shipmentType)
+        {
+            IEnumerable<UpsPackagingType> excluededPackagingTypes = shipmentType.GetExcludedPackageTypes().Cast<UpsPackagingType>();
+
+            IEnumerable<UpsPackagingType> allPackagingTypes = EnumHelper.GetEnumList<UpsPackagingType>().Select(x => x.Value).OrderBy(x => EnumHelper.GetDescription(x));
+
+            upsPackagingTypeServicePickerControl.Initialize(allPackagingTypes, excluededPackagingTypes);
+        }
+
+        /// <summary>
+        /// Return the excluded package types
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return upsPackagingTypeServicePickerControl.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>
@@ -96,7 +125,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            List<int> servicesToExclude = servicePicker.ExcludedServiceTypes.Select(type => (int)type).ToList();
+            List<int> servicesToExclude = servicePicker.ExcludedEnumValues.Select(type => (int)type).ToList();
 
             return servicesToExclude;
         }

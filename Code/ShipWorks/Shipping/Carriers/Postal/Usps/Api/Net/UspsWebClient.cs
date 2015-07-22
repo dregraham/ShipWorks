@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
@@ -15,7 +16,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
@@ -23,7 +23,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -730,7 +729,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             try
             {
-                ExceptionWrapper(() => { ProcessShipmentInternal(shipment, account); return true; }, account);
+                ExceptionWrapper(() =>
+                {
+                    ProcessShipmentInternal(shipment, account);
+                    return true;
+                }, account);
             }
             catch (UspsApiException ex)
             {
@@ -741,9 +744,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                     // Provide a little more context as to which user name/password was incorrect in the case
                     // where there's multiple accounts or Express1 for USPS is being used to compare rates
                     string message = string.Format("ShipWorks was unable to connect to {0} with account {1}.{2}{2}Check that your account credentials are correct.",
-                                    UspsAccountManager.GetResellerName(uspsResellerType),
-                                    account.Username,
-                                    Environment.NewLine);
+                        UspsAccountManager.GetResellerName(uspsResellerType),
+                        account.Username,
+                        Environment.NewLine);
 
                     throw new UspsException(message, ex);
                 }
@@ -757,7 +760,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                 if (errorMessageUpper.Contains("DHL") && errorMessageUpper.Contains("IS NOT ALLOWED"))
                 {
-                    throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");                    
+                    throw new UspsException("Your Stamps.com account has not been enabled to use the selected DHL service.");
                 }
 
                 // This isn't an exception we can handle, so just throw the original exception
@@ -806,7 +809,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             string mac_Unused;
             string postageHash;
-            byte[][] imageData;
+            byte[][] imageData = null;
             
             if (shipment.Postal.PackagingType == (int)PostalPackagingType.Envelope && shipment.Postal.Service != (int)PostalServiceType.InternationalFirst)
             {
@@ -854,18 +857,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                         UspsUtility.BuildMemoField(shipment.Postal), // Memo
                         0, // Cost Code
                         false, // delivery notify
-                        null,  // shipment notification
+                        null, // shipment notification
                         0, // Rotation
                         null, false, // horizontal offset
                         null, false, // vertical offset
                         null, false, // print density
                         null, false, // print memo 
-                        null, false, // print instructions
+                        false, true, // print instructions
                         false, // request postage hash
                         NonDeliveryOption.Return, // return to sender
                         null, // redirectTo
                         null, // OriginalPostageHash 
-                        null, false, // returnImageData,
+                        true, true, // returnImageData,
                         null,
                         PaperSizeV1.Default,
                         null,
@@ -892,8 +895,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            string[] labelUrls = labelUrl.Split(' ');
-            SaveLabels(shipment, labelUrls);
+            SaveLabels(shipment, imageData, labelUrl);
         }
 
         /// <summary>
@@ -958,13 +960,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// Uses the label URLs to saves the label(s) for the given shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="labelUrls">The URLs that labels need to be requested from.</param>
-        private void SaveLabels(ShipmentEntity shipment, IEnumerable<string> labelUrls)
+        /// <param name="imageData">The base 64 binary data of each label image.</param>
+        /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
+        private static void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
         {
             List<Label> labels = new List<Label>();
+
             try
             {
-                labels = new LabelFactory().CreateLabels(shipment, labelUrls.ToList()).ToList();
+                LabelFactory labelFactory = new LabelFactory();
+
+                if (imageData != null && imageData.Length > 0)
+                {
+                    labels.AddRange(labelFactory.CreateLabels(shipment, imageData).ToList());
+                }
+
+                if (!string.IsNullOrWhiteSpace(labelUrl))
+                {
+                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl));
+                }
+
                 labels.ForEach(l => l.Save());
             }
             finally
@@ -1099,7 +1114,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV17 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
-            rate.PrintLayout = "Normal";
+            rate.PrintLayout = "Normal4x6";
 
             // Get the confirmation type add ons
             List<AddOnV7> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
@@ -1134,7 +1149,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             // For APO/FPO, we have to specifically ask for customs docs
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
-                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
+                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
             }
 
             if (shipment.ReturnShipment)
@@ -1180,7 +1195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             else if (PostalUtility.IsFreeInternationalDeliveryConfirmation(shipment.ShipCountryCode, serviceType, packagingType))
             {
                 // Check for the new (as of 01/27/13) international delivery service.  In that case, we have to explicitly turn on DC
-                addOns.Add(new AddOnV7 {AddOnType = AddOnTypeV7.USADC});
+                addOns.Add(new AddOnV7 { AddOnType = AddOnTypeV7.USADC });
             }
             return addOns;
         }
@@ -1196,6 +1211,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             }
             
             PostalServiceType serviceType = (PostalServiceType) shipment.Postal.Service;
+
+            // The following services support confirmation types.
+            if ((new [] { PostalServiceType.DhlBpmExpedited, PostalServiceType.DhlBpmGround, PostalServiceType.DhlMarketingGround, PostalServiceType.DhlMarketingExpedited }).Contains(serviceType))
+            {
+                return true;
+            }
+
+            // Other DHL shipments don't support confirmation types
             if (ShipmentTypeManager.IsDhl(serviceType))
             {
                 return false;

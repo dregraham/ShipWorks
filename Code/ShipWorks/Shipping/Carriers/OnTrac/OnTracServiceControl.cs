@@ -102,6 +102,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;
             UpdateServiceTypes(LoadedShipments);
+            UpdatePackageTypes(LoadedShipments);
 
             using (new MultiValueScope())
             {
@@ -143,6 +144,16 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Update the available choices for packages
+        /// </summary>
+        private void UpdatePackageTypes(IEnumerable<ShipmentEntity> shipments)
+        {
+            List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
+
+            packagingType.BindToEnumAndPreserveSelection<OnTracPackagingType>(availablePackages.Contains);
+        }
+
+        /// <summary>
         /// Update the available choices for services
         /// </summary>
         private void UpdateServiceTypes(IList<ShipmentEntity> shipments)
@@ -151,28 +162,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
             // type needs to be updated for the loop to loop correctly
             bool anyDomestic = shipments.Any(shipment => shipment.ShipPerson.IsDomesticCountry());
 
-            bool previousMulti = service.MultiValued;
-            object previousValue = service.SelectedValue;
-
             if (anyDomestic)
             {
                 List<OnTracServiceType> availableServices = GetAvailableServices(shipments);
 
-                EnumHelper.BindComboBox<OnTracServiceType>(service, availableServices.Contains);
-
-                // Set back the previous value
-                if (previousMulti)
-                {
-                    service.MultiValued = true;
-                }
-                else if (previousValue != null)
-                {
-                    service.SelectedValue = previousValue;
-                    if (service.SelectedIndex == -1)
-                    {
-                        service.SelectedIndex = 0;
-                    }
-                }
+                service.BindToEnumAndPreserveSelection<OnTracServiceType>(availableServices.Contains);
             }
             else
             {
@@ -181,6 +175,20 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Disable it if its "None"
             service.Enabled = anyDomestic;
+        }
+
+        /// <summary>
+        /// Gets available packages
+        /// </summary>
+        private static List<OnTracPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new OnTracShipmentType()
+                .GetAvailablePackageTypes()
+                .Cast<OnTracPackagingType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracPackagingType) x.PackagingType))
+                .ToList();
         }
 
         /// <summary>

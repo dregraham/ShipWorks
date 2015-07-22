@@ -6,6 +6,7 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
 using Interapptive.Shared;
+using Interapptive.Shared.Utility;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.UI.Controls
@@ -179,6 +180,31 @@ namespace ShipWorks.UI.Controls
             base.OnLeave(e);
 
             Invalidate();
+        }
+
+        /// <summary>
+        /// Bind the combo box to an enum, preserving existing selection
+        /// </summary>
+        public void BindToEnumAndPreserveSelection<T>(Func<T, bool> includer) where T : struct
+        {
+            bool previousMulti = MultiValued;
+            object previousValue = SelectedValue;
+
+            EnumHelper.BindComboBox(this, includer);
+
+            // Set back the previous value
+            if (previousMulti)
+            {
+                MultiValued = true;
+            }
+            else if (previousValue != null)
+            {
+                SelectedValue = previousValue;
+                if (SelectedIndex == -1)
+                {
+                    SelectedIndex = 0;
+                }
+            }
         }
     }
 }

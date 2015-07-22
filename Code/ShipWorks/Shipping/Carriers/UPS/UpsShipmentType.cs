@@ -368,6 +368,18 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the package types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to UpsPackagingType values for a UpsShipmentType)
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            IEnumerable<int> allPackageTypes = Enum.GetValues(typeof(UpsPackagingType)).Cast<int>();
+            return allPackageTypes.Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

@@ -55,10 +55,27 @@ namespace ShipWorks.Shipping.Carriers.Postal
             confirmation.DisplayMember = "Key";
             confirmation.ValueMember = "Value";
 
+            UpdateAvailablePackageTypes(Enumerable.Empty<ShipmentEntity>());
+        }
+
+        /// <summary>
+        /// Update the list of available packaging types
+        /// </summary>
+        private void UpdateAvailablePackageTypes(IEnumerable<ShipmentEntity> shipments)
+        {
+            IEnumerable<PostalPackagingType> availablePackagingTypes = ShipmentTypeManager.GetType(ShipmentTypeCode)
+                .GetAvailablePackageTypes()
+                .Cast<PostalPackagingType>()
+                .Union(shipments.Select(x => x.Postal)
+                    .Where(x => x != null)
+                    .Select(x => (PostalPackagingType) x.PackagingType))
+                .ToList();
+
             // Only Express 1 Endicia should see the cubic packaging type
-            packagingType.SelectedIndexChanged -= this.OnChangePackaging;
-            EnumHelper.BindComboBox<PostalPackagingType>(packagingType, p => (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.Express1Endicia));
-            packagingType.SelectedIndexChanged += this.OnChangePackaging;
+            packagingType.SelectedIndexChanged -= OnChangePackaging;
+            packagingType.BindToEnumAndPreserveSelection<PostalPackagingType>(p => availablePackagingTypes.Contains(p) && 
+                (p != PostalPackagingType.Cubic || ShipmentTypeCode == ShipmentTypeCode.Express1Endicia));
+            packagingType.SelectedIndexChanged += OnChangePackaging;
         }
 
         /// <summary>
@@ -78,6 +95,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             dimensionsControl.ShipmentWeightBox = null;
 
             // Load shipment details
+            UpdateAvailablePackageTypes(shipments);
             LoadShipmentDetails();
 
             // Start the dimensiosn control listening to weight changes

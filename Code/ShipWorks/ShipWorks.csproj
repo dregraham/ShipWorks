@@ -820,7 +820,10 @@
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRatesBroker.cs" />
     <Compile Include="Shipping\Carriers\FedEx\BestRate\FedExCounterRateAccountRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\FedEx\FedExServiceTypeServicePickerControl.cs">
+    <Compile Include="Shipping\Carriers\FedEx\FedExPackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FedExServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
@@ -833,16 +836,21 @@
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\MissingCounterRatesCredentialException.cs" />
     <Compile Include="Shipping\Carriers\OnTrac\OnTracPackageAdapter.cs" />
+    <Compile Include="Shipping\Carriers\OnTrac\OnTracPackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalServicePackagingCombination.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Net\Express1UspsWebClient.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Net\IUspsWebClient.cs" />
-    <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\CroppingStyles.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\Label.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\LabelFactory.cs" />
     <Compile Include="Shipping\Carriers\Postal\Usps\Api\Labels\StandardLabel.cs" />
@@ -853,7 +861,7 @@
     <Compile Include="Shipping\Carriers\Postal\Usps\Express1\Express1UspsProfileControl.Designer.cs">
       <DependentUpon>Express1UspsProfileControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Postal\PostalServiceTypeServicePickerControl.cs">
+    <Compile Include="Shipping\Carriers\Postal\PostalServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\Postal\Usps\Registration\Promotion\EndiciaIntuishipRegistrationPromotion.cs" />
@@ -976,6 +984,9 @@
     <Compile Include="Shipping\Carriers\UPS\Enums\UpsYesNoType.cs" />
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\Api\ElementWriters\UpsRateSurePostPackageWeightWriter.cs" />
     <Compile Include="Shipping\Carriers\UPS\BestRate\UpsCounterRateSettingsRepository.cs" />
+    <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsPackagingTypePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Carriers\UPS\OnLineTools\UpsServiceTypeServicePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1064,15 +1075,23 @@
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />
-    <Compile Include="Shipping\Settings\CarrierServicePickerCheckBoxDataSource.cs" />
-    <Compile Include="Shipping\Settings\CarrierServicePickerControl.cs">
+    <Compile Include="Shipping\Settings\EnumCheckboxDataSource.cs" />
+    <Compile Include="Shipping\Settings\EnumCheckboxControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\Settings\CarrierServicePickerControl.Designer.cs">
-      <DependentUpon>CarrierServicePickerControl.cs</DependentUpon>
+    <Compile Include="Shipping\Settings\EnumCheckboxControl.Designer.cs">
+      <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Settings\ExcludedPackageTypeRepository.cs" />
     <Compile Include="Shipping\Settings\ExcludedServiceTypeRepository.cs" />
+    <Compile Include="Shipping\Settings\IExcludedPackageTypeRepository.cs" />
     <Compile Include="Shipping\Settings\IExcludedServiceTypeRepository.cs" />
+    <Compile Include="Shipping\Settings\ServicePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Settings\PackagePickerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
@@ -7752,8 +7771,8 @@
     <EmbeddedResource Include="Shipping\Insurance\InsuranceViewClaimControl.resx">
       <DependentUpon>InsuranceViewClaimControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Settings\CarrierServicePickerControl.resx">
-      <DependentUpon>CarrierServicePickerControl.cs</DependentUpon>
+    <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
+      <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ResizingRichTextBox.resx">
       <DependentUpon>ResizingRichTextBox.cs</DependentUpon>
@@ -11103,6 +11122,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />

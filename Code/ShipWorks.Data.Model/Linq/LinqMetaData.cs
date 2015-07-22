@@ -193,6 +193,9 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					toReturn = this.EtsyStore;
 					break;
+				case ShipWorks.Data.Model.EntityType.ExcludedPackageTypeEntity:
+					toReturn = this.ExcludedPackageType;
+					break;
 				case ShipWorks.Data.Model.EntityType.ExcludedServiceTypeEntity:
 					toReturn = this.ExcludedServiceType;
 					break;
@@ -828,6 +831,12 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<EtsyStoreEntity> EtsyStore
 		{
 			get { return new DataSource2<EtsyStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting ExcludedPackageTypeEntity instances in the database.</summary>
+		public DataSource2<ExcludedPackageTypeEntity> ExcludedPackageType
+		{
+			get { return new DataSource2<ExcludedPackageTypeEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting ExcludedServiceTypeEntity instances in the database.</summary>

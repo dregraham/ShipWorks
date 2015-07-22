@@ -29,10 +29,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
             originManagerControl.Initialize();
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType) exclusion).ToList();
-
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
+            PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
+            PostalUtility.InitializePackagePicker(packagePicker, shipmentType);
         }
 
         /// <summary>
@@ -50,7 +48,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Select(type => (int) type).ToList();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
+        }
+
+        /// <summary>
+        /// Gets the excludeded packages.
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
     }
 }

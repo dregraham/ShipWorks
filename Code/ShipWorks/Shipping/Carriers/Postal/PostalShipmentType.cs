@@ -82,6 +82,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the package types that have been available for this shipment type
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            return EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

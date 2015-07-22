@@ -366,6 +366,53 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
+        /// been excluded for this shipment type. The integer values are intended to correspond to 
+        /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
+        /// would correspond to PostalPackageType values for a UspsShipmentType).
+        /// </summary>
+        public IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return GetExcludedPackageTypes(new ExcludedPackageTypeRepository());
+        }
+
+        /// <summary>
+        /// Gets the Package types that have been excluded for this shipment type. The integer 
+        /// values are intended to correspond to the appropriate enumeration values of the specific
+        /// shipment type (i.e. the integer values would correspond to PostalPackageType values 
+        /// for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the Package types are fetched.</param>
+        public virtual IEnumerable<int> GetExcludedPackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            List<ExcludedPackageTypeEntity> excludedPackageTypes = repository.GetExcludedPackageTypes(this);
+            return excludedPackageTypes.Select(s => s.PackageType);
+        }
+
+        /// <summary>
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
+        /// are available for this shipment type (i.e have not been excluded). The integer values are 
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type 
+        /// (i.e. the integer values would correspond to PostalPackageType values for a UspsShipmentType).
+        /// </summary>
+        public IEnumerable<int> GetAvailablePackageTypes()
+        {
+            return GetAvailablePackageTypes(new ExcludedPackageTypeRepository());
+        }
+
+        /// <summary>
+        /// Gets the Package types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalPackageType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the Package types are fetched.</param>
+        public virtual IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            return Enumerable.Empty<int>();
+        }
+
+        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public abstract IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment);

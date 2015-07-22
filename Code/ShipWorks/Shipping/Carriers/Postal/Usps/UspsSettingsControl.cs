@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using log4net;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
@@ -27,9 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         public UspsSettingsControl()
         {
             InitializeComponent();
-
         }
 
+        /// <summary>
+        /// Initialize the settings control
+        /// </summary>
         public override void Initialize(ShipmentTypeCode shipmentTypeCode)
         {
             base.Initialize(shipmentTypeCode);
@@ -66,7 +69,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             servicePicker.Top = panelBottom.Bottom + 4;
-            panelInsurance.Top = servicePicker.Bottom;
+            packagePicker.Top = servicePicker.Bottom + 10;
+            panelInsurance.Top = packagePicker.Bottom + 5;
         }
 
         /// <summary>
@@ -97,10 +101,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             }
 
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
-
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
+            PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
+            PostalUtility.InitializePackagePicker(packagePicker, shipmentType);
         }
 
         /// <summary>
@@ -198,7 +200,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
+        }
+
+        /// <summary>
+        /// Returns a list of excluded package types
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>

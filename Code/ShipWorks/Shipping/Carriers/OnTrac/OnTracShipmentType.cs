@@ -131,6 +131,18 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Gets the Package types that are available for this shipment type
+        /// </summary>
+        /// <param name="repository">The repository from which the Package types are fetched.</param>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            return EnumHelper.GetEnumList<OnTracPackagingType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
         /// Create OnTrac specific information
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
@@ -339,6 +351,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             ShippingProfileUtility.ApplyProfileValue(accountID, onTracShipment, OnTracShipmentFields.OnTracAccountID);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.Service, onTracShipment, OnTracShipmentFields.Service);
+            ShippingProfileUtility.ApplyProfileValue(onTracProfile.PackagingType, onTracShipment, OnTracShipmentFields.PackagingType);
 
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SaturdayDelivery, onTracShipment, OnTracShipmentFields.SaturdayDelivery);
             ShippingProfileUtility.ApplyProfileValue(onTracProfile.SignatureRequired, onTracShipment, OnTracShipmentFields.SignatureRequired);

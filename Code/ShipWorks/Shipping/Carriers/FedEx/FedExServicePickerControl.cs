@@ -1,13 +1,14 @@
-using System;
+﻿using System;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.Postal
+namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
     /// Simple implementation of the generic carrier service picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class PostalServiceTypeServicePickerControl : CarrierServicePickerControl<PostalServiceType>
+    public class FedExServicePickerControl : ServicePickerControl<FedExServiceType>
     {
 
     }

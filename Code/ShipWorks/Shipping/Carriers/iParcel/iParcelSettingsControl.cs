@@ -67,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>

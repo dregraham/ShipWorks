@@ -164,6 +164,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.EtsyStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "EtsyStoreEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.ExcludedPackageTypeEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ExcludedPackageTypeEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.ExcludedServiceTypeEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "ExcludedServiceTypeEntity");
 					break;

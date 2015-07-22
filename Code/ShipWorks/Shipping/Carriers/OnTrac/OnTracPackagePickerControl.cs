@@ -5,10 +5,10 @@ using ShipWorks.Shipping.Settings;
 namespace ShipWorks.Shipping.Carriers.OnTrac
 {
     /// <summary>
-    /// Simple implementation of the generic carrier service picker control so it can be used in the designer
+    /// Simple implementation of the generic carrier package picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class OnTracServicePickerControl : ServicePickerControl<OnTracServiceType>
+    public class OnTracPackagePickerControl : PackageTypePickerControl<OnTracPackagingType>
     {
 
     }

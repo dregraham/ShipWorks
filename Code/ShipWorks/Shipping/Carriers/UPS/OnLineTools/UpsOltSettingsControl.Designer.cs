@@ -39,6 +39,7 @@
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
+            this.upsPackagingTypeServicePickerControl = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypePickerControl();
             this.SuspendLayout();
             // 
             // accountControl
@@ -146,11 +147,20 @@
             this.servicePicker.Size = new System.Drawing.Size(421, 200);
             this.servicePicker.TabIndex = 12;
             // 
+            // upsPackagingTypeServicePickerControl
+            // 
+            this.upsPackagingTypeServicePickerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.upsPackagingTypeServicePickerControl.Location = new System.Drawing.Point(9, 622);
+            this.upsPackagingTypeServicePickerControl.Name = "upsPackagingTypeServicePickerControl";
+            this.upsPackagingTypeServicePickerControl.Size = new System.Drawing.Size(421, 200);
+            this.upsPackagingTypeServicePickerControl.TabIndex = 13;
+            // 
             // UpsOltSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.upsPackagingTypeServicePickerControl);
             this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.upsMailInnovationsOptions);
             this.Controls.Add(this.labelInfo);
@@ -163,7 +173,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "UpsOltSettingsControl";
-            this.Size = new System.Drawing.Size(440, 617);
+            this.Size = new System.Drawing.Size(440, 844);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -182,5 +192,6 @@
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
         private UpsServiceTypeServicePickerControl servicePicker;
+        private UpsPackagingTypePickerControl upsPackagingTypeServicePickerControl;
     }
 }

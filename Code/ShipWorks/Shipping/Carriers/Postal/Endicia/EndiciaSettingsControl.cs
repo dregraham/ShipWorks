@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
@@ -66,15 +67,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 panelInsurance.Visible = false;
             }
 
-            // Load up the service picker based on the excluded service types
             ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
-            List<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (PostalServiceType)exclusion).ToList();
-
-            List<PostalServiceType> postalServices = PostalUtility.GetDomesticServices(ShipmentTypeCode).Union(PostalUtility.GetInternationalServices(ShipmentTypeCode)).ToList();
-            servicePicker.Initialize(postalServices, excludedServices);
+            PostalUtility.InitializeServicePicker(servicePicker, shipmentType);
+            PostalUtility.InitializePackagePicker(packagePicker, shipmentType);
 
             servicePicker.Top = panelBottom.Bottom + 6;
-            panelInsurance.Top = servicePicker.Bottom;
+            packagePicker.Top = servicePicker.Bottom + 10;
+            panelInsurance.Top = packagePicker.Bottom + 5;
         }
 
         /// <summary>
@@ -132,7 +131,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override IEnumerable<int> GetExcludedServices()
         {
-            return servicePicker.ExcludedServiceTypes.Cast<int>();
+            return servicePicker.ExcludedEnumValues.Cast<int>();
+        }
+
+        /// <summary>
+        /// Gets the excluded packages based on the items in the package picker.
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
 
         /// <summary>

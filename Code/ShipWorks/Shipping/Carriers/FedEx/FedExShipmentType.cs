@@ -128,7 +128,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
         {
             List<int> allServiceTypes = Enum.GetValues(typeof(FedExServiceType)).Cast<int>().ToList();
-            return allServiceTypes.Except(GetExcludedServiceTypes(repository)).ToList();
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
+        }
+
+        /// <summary>
+        /// Gets the Package types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalPackageType values for this shipment type)
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            List<int> allPackageTypes = Enum.GetValues(typeof(FedExPackagingType)).Cast<int>().ToList();
+            return allPackageTypes.Except(GetExcludedPackageTypes(repository));
         }
 
         /// <summary>

@@ -676,7 +676,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             string mac_Unused;
             string postageHash;
-            byte[][] imageData;
+            byte[][] imageData = null;
 
             // If we're using Express1, we don't want to use the SampleOnly flag since this will not
             // create shipments and cause subsequent calls (like SCAN form creation) to fail
@@ -736,12 +736,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                         null, false, // vertical offset
                         null, false, // print density
                         null, false, // print memo 
-                        null, false, // print instructions
+                        false, true, // print instructions
                         false, // request postage hash
                         NonDeliveryOption.Return, // return to sender
                         null, // redirectTo
                         null, // OriginalPostageHash 
-                        null, false, // returnImageData
+                        true, true, // returnImageData
                         null,
                         PaperSizeV1.Default, 
                         null,
@@ -766,8 +766,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // Interapptive users have an unprocess button.  If we are reprocessing we need to clear the old images
             ObjectReferenceManager.ClearReferences(shipment.ShipmentID);
 
-            string[] labelUrls = labelUrl.Split(' ');
-            SaveLabels(shipment, labelUrls);
+            SaveLabels(shipment, imageData, labelUrl);
         }
 
         /// <summary>
@@ -797,13 +796,26 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
         /// Uses the label URLs to saves the label(s) for the given shipment.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
-        /// <param name="labelUrls">The URLs that labels need to be requested from.</param>
-        private void SaveLabels(ShipmentEntity shipment, IEnumerable<string> labelUrls)
+        /// <param name="imageData">The base 64 binary data of each label image.</param>
+        /// <param name="labelUrl">For envelopes, we need the labelUrl</param>
+        private static void SaveLabels(ShipmentEntity shipment, byte[][] imageData, string labelUrl)
         {
             List<Label> labels = new List<Label>();
+
             try
             {
-                labels = new LabelFactory().CreateLabels(shipment, labelUrls.ToList()).ToList();
+                LabelFactory labelFactory = new LabelFactory();
+
+                if (imageData != null && imageData.Length > 0)
+                {
+                    labels.AddRange(labelFactory.CreateLabels(shipment, imageData).ToList());
+                }
+
+                if (!string.IsNullOrWhiteSpace(labelUrl))
+                {
+                    labels.Add(labelFactory.CreateLabel(shipment, labelUrl));
+                }
+
                 labels.ForEach(l => l.Save());
             }
             finally
@@ -943,7 +955,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
 
             RateV14 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = ConvertServiceType(UspsUtility.GetApiServiceType(serviceType));
-            rate.PrintLayout = "Normal";
+            rate.PrintLayout = "Normal4x6";
 
             List<AddOnV6> addOns = new List<AddOnV6>();
 
@@ -1003,7 +1015,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
             // For APO/FPO, we have to specifically ask for customs docs
             if (PostalUtility.IsMilitaryState(shipment.ShipStateProvCode) || ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
-                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "NormalCP72" : "NormalCN22";
+                rate.PrintLayout = (PostalUtility.GetCustomsForm(shipment) == PostalCustomsForm.CN72) ? "Normal4X6CP72" : "Normal4X6CN22";
             }
 
             if (shipment.ReturnShipment)

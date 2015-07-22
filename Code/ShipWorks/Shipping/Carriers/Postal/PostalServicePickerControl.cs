@@ -1,14 +1,13 @@
-﻿using System;
-using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using System;
 using ShipWorks.Shipping.Settings;
 
-namespace ShipWorks.Shipping.Carriers.iParcel
+namespace ShipWorks.Shipping.Carriers.Postal
 {
     /// <summary>
     /// Simple implementation of the generic carrier service picker control so it can be used in the designer
     /// </summary>
     [CLSCompliant(false)]
-    public class iParcelServiceTypeServicePickerControl : ServicePickerControl<iParcelServiceType>
+    public class PostalServicePickerControl : ServicePickerControl<PostalServiceType>
     {
 
     }

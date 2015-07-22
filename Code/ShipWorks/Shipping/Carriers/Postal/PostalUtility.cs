@@ -363,17 +363,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     return PostalCustomsForm.None;
                 }
 
-                return (shipment.TotalWeight >= 1 || shipment.CustomsValue >= 400) ?
+                return (shipment.TotalWeight >= 1 || shipment.CustomsValue >= 400 || shipment.CustomsItems.Count >= 6) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
             }
 
-            if (shipment.ShipPerson.IsDomesticCountry())
+            if (shipment.ShipPerson.IsDomesticCountry() && !ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
                 return PostalCustomsForm.None;
             }
 
-            return (shipment.CustomsValue >= 400) ?
+            return (shipment.CustomsValue >= 400 || shipment.CustomsItems.Count >= 6) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
         }
@@ -585,6 +585,36 @@ namespace ShipWorks.Shipping.Carriers.Postal
             {
                 return uspsConsolidatorServiceTypes.SelectMany(x => x.Value);   
             }
+        }
+
+        /// <summary>
+        /// Initialize the package picker control
+        /// </summary>
+        [CLSCompliant(false)]
+        public static void InitializePackagePicker(PackageTypePickerControl<PostalPackagingType> packagePicker, ShipmentType shipmentType)
+        {
+            IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
+                .Cast<PostalPackagingType>();
+
+            IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value);
+            packagePicker.Initialize(postalServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Initialize the service picker control
+        /// </summary>
+        [CLSCompliant(false)]
+        public static void InitializeServicePicker(ServicePickerControl<PostalServiceType> servicePicker, ShipmentType shipmentType)
+        {
+            IEnumerable<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes()
+                .Cast<PostalServiceType>()
+                .ToList();
+
+            IEnumerable<PostalServiceType> postalServices = GetDomesticServices(shipmentType.ShipmentTypeCode)
+                .Union(GetInternationalServices(shipmentType.ShipmentTypeCode))
+                .ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
         }
     }
 }
