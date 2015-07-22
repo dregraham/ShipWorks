@@ -14,6 +14,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -138,6 +139,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 // Ground service is allowed between US and CA
                 serviceTypes.Add(FedExServiceType.FedExGround);
+            }
+
+            // Add FIMS if enabled
+            if (ShippingSettings.Fetch().FedExFimsEnabled)
+            {
+                serviceTypes.Add(FedExServiceType.FedExFimsUnder4Lbs);
+                serviceTypes.Add(FedExServiceType.FedExFims4LbsAndOver);
             }
 
             return serviceTypes;
