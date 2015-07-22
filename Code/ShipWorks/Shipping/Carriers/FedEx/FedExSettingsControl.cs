@@ -37,6 +37,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.FedExInsuranceProvider;
             pennyOne.Checked = settings.FedExInsurancePennyOne;
+
+            enableFims.Checked = settings.FedExFimsEnabled;
+            fimsUsername.Text = settings.FedExFimsUsername;
+            fimsPassword.Text = settings.FedExFimsPassword;
+
+            SetFimsFieldsState();
         }
 
         /// <summary>
@@ -48,6 +54,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             settings.FedExInsuranceProvider = (int) insuranceProviderChooser.InsuranceProvider;
             settings.FedExInsurancePennyOne = pennyOne.Checked;
+
+            settings.FedExFimsEnabled = enableFims.Checked;
+            settings.FedExFimsUsername = fimsUsername.Text.Trim();
+            settings.FedExFimsPassword = fimsPassword.Text.Trim();
         }
 
         /// <summary>
@@ -68,5 +78,25 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 dlg.ShowDialog(this);
             }
         }
+
+        /// <summary>
+        /// Enables/disables the FIMS username and password textboxes based on the checked state of the
+        /// FIMS enabled checkbox
+        /// </summary>
+        private void OnEnableFimsCheckedChanged(object sender, EventArgs e)
+        {
+            SetFimsFieldsState();
+        }
+
+        /// <summary>
+        /// Enables/disables the FIMS username and password textboxes based on the checked state of the
+        /// FIMS enabled checkbox
+        /// </summary>
+        private void SetFimsFieldsState()
+        {
+            fimsUsername.Enabled = enableFims.Checked;
+            fimsPassword.Enabled = enableFims.Checked;
+        }
     }
 }
+
