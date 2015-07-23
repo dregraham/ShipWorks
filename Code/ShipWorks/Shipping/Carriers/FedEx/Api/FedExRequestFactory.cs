@@ -319,7 +319,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExRateCodOptionsManipulator(settingsRepository),
                 new FedExRateDryIceManipulator(settings),
                 new FedExRateBrokerManipulator(settings),
-                new FedExRateDangerousGoodsManipulator()
+                new FedExRateDangerousGoodsManipulator(),
+                new FedExRateHoldAtLocationManipulator()
             };
 
             if (specializedManipulators != null && specializedManipulators.Any())

@@ -809,6 +809,7 @@
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateHoldAtLocationManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDangerousGoodsManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateDryIceManipulator.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateCodOptionsManipulator.cs" />
