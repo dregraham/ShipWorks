@@ -23,40 +23,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
         /// </summary>
         /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
-        /// <param name="certificateInspector">The ICertificateInspector</param>
-        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICertificateInspector certificateInspector) 
-        {
-            return CreateShippingClerk(shipment, new FedExSettingsRepository(), certificateInspector);
-        }
-
-        /// <summary>
-        /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
-        /// </summary>
-        /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
         /// <param name="settingsRepository">The ICarrierSettingsRepository.</param>
-        /// <param name="certificateInspector">The ICertificateInspector</param>
-        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-        {
-            return CreateShippingClerk(shipment, settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository());
-        }
-
-        /// <summary>
-        /// Creates an IFedExShippingClerk with the specified shipment and ICertificateInspector.
-        /// </summary>
-        /// <param name="shipment">The shipment.  If this clerk should not need a shipment, like when doing a Close, just pass null.</param>
-        /// <param name="settingsRepository">The ICarrierSettingsRepository.</param>
-        /// <param name="certificateInspector">The ICertificateInspector</param>
-        /// <param name="requestFactory">The IFedExRequestFactory.  </param>
-        /// <param name="log">The ILog.</param>
-        /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
-        /// <param name="labelRepository">The ILabelRepository.</param>
-        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository)
+        public static IFedExShippingClerk CreateShippingClerk(ShipmentEntity shipment, ICarrierSettingsRepository settingsRepository)
         {
             IFedExShippingClerk fedExShippingClerk = null;
 
             if (!IsFimsShipment(shipment))
             {
-                fedExShippingClerk = new FedExShippingClerk(settingsRepository, certificateInspector, requestFactory, log, forceVersionCapture, labelRepository);
+                FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
+                {
+                    Inspector = new FedExShipmentType().CertificateInspector,
+                    ForceVersionCapture = false,
+                    LabelRepository = new FedExLabelRepository(),
+                    RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
+                    SettingsRepository = new FedExSettingsRepository(),
+                    Log = LogManager.GetLogger(typeof(FedExShippingClerk))
+                };
+
+                fedExShippingClerk = new FedExShippingClerk(parameters);
             }
             else
             {

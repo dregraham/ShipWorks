@@ -214,8 +214,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.FedEx.SmartPostHubID = "5571";
 
+            FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
+            {
+                Inspector = certificateInspector.Object,
+                SettingsRepository = settingsRepository.Object,
+                RequestFactory = requestFactory.Object,
+                Log = log.Object,
+                ForceVersionCapture = true,
+                LabelRepository = labelRepository.Object
+            };
+
             // Force our test object to perform version capture when called.
-            testObject = new FedExShippingClerk(settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, true, labelRepository.Object);
+            testObject = new FedExShippingClerk(parameters);
         }
         
         [TestMethod]

@@ -7,6 +7,7 @@ using Interapptive.Shared.Pdf;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 {
@@ -33,6 +34,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                     DataResourceManager.CreateFromPdf(pdf, ownerID, "LabelImage");
                 }
             }
+        }
+
+        /// <summary>
+        /// DO NOT USE FOR FIMS
+        /// </summary>
+        public void SaveLabels(ICarrierResponse response)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

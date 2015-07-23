@@ -66,95 +66,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [TestMethod]
         public void FedExShippingClerkReturned_WhenNullShipmentRequested_Test()
         {
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, certificateInspector.Object);
+            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, settingsRepository.Object);
 
             Assert.IsTrue(shippingClerk is FedExShippingClerk);
         }
 
         [TestMethod]
-        public void FedExShippingClerkReturned_WhenNullShipmentRequested_InSecondOverloadedConstructor_Test()
+        public void FakeFimsShippingClerkReturned_WhenUseTestServerAndFimsShipmentRequested_Test()
         {
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, settingsRepository.Object, certificateInspector.Object);
-
-            Assert.IsTrue(shippingClerk is FedExShippingClerk);
-        }
-
-        [TestMethod]
-        public void FedExShippingClerkReturned_WhenNullShipmentRequested_InThirdOverloadedConstructor_Test()
-        {
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, false, labelRepository.Object);
-
-            Assert.IsTrue(shippingClerk is FedExShippingClerk);
-        }
-
-        [TestMethod]
-        public void FimsShippingClerkReturned_WhenFimsShipmentRequested_Test()
-        {
+            settingsRepository.Setup(s => s.UseTestServer).Returns(true);
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFimsUnder4Lbs;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, certificateInspector.Object);
+            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
 
             Assert.IsTrue(shippingClerk is FimsShippingClerk);
 
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims4LbsAndOver;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, certificateInspector.Object);
-
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
-        }
-
-        [TestMethod]
-        public void NullReturned_WhenFimsShipmentRequested_InSecondOverloadedConstructor_Test()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFimsUnder4Lbs;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object);
-
-            Assert.IsNull(shippingClerk);
-
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims4LbsAndOver;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object);
-
-            Assert.IsNull(shippingClerk);
-        }
-
-        [TestMethod]
-        public void NullReturned_WhenFimsShipmentRequested_InThirdOverloadedConstructor_Test()
-        {
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFimsUnder4Lbs;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, false, labelRepository.Object);
-
-            Assert.IsNull(shippingClerk);
-
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims4LbsAndOver;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, false, labelRepository.Object);
-
-            Assert.IsNull(shippingClerk);
-        }
-
-        [TestMethod]
-        public void FimsShippingClerkReturned_WhenFimsShipmentRequested_InSecondOverloadedConstructor_Test()
-        {
-            settingsRepository.Setup(r => r.UseTestServer).Returns(true);
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFimsUnder4Lbs;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object);
-
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
-
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims4LbsAndOver;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object);
-
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
-        }
-
-        [TestMethod]
-        public void FimsShippingClerkReturned_WhenFimsShipmentRequested_InThirdOverloadedConstructor_Test()
-        {
-            settingsRepository.Setup(r => r.UseTestServer).Returns(true);
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFimsUnder4Lbs;
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, false, labelRepository.Object);
-
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
-
-            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims4LbsAndOver;
-            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object, certificateInspector.Object, requestFactory.Object, log.Object, false, labelRepository.Object);
+            shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
 
             Assert.IsTrue(shippingClerk is FimsShippingClerk);
         }

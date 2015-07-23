@@ -19,6 +19,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Connection;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Profiles;
 
@@ -176,7 +177,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                IShippingClerk clerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExShipmentType().CertificateInspector);
+                IShippingClerk clerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
                 clerk.RegisterAccount(account);
 
                 account.Description = FedExAccountManager.GetDefaultDescription(account);

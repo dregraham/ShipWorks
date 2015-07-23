@@ -7,6 +7,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -178,7 +179,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void RequestAddresses(object sender, DoWorkEventArgs e)
         {
-            IFedExShippingClerk fedExShippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExShipmentType().CertificateInspector);
+            IFedExShippingClerk fedExShippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExSettingsRepository());
 
             e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
         }

@@ -28,6 +28,8 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {   
@@ -269,7 +271,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 if (!MagicKeysDown)
                 {
 
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+                    FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
+                    {
+                        Inspector = new FedExShipmentType().CertificateInspector,
+                        SettingsRepository = new FedExSettingsRepository(),
+                        RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
+                        LabelRepository = new FedExLabelRepository(),
+                        Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
+                        ForceVersionCapture = false
+                    };
+                    FedExShippingClerk shippingClerk = new FedExShippingClerk(parameters);
 
                     shippingClerk.Ship(shipment);
 

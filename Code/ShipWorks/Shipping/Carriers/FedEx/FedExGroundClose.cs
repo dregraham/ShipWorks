@@ -11,6 +11,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Data;
 using ShipWorks.Common.IO.Hardware.Printers;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -25,7 +26,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         public static List<FedExEndOfDayCloseEntity> ProcessClose()
         {
             List<FedExEndOfDayCloseEntity> closings = new List<FedExEndOfDayCloseEntity>();
-            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExShipmentType().CertificateInspector);
+            
+            IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, new FedExSettingsRepository());
 
             if (FedExAccountManager.Accounts.Count > 0 && FedExAccountManager.Accounts.All(a => a.Is2xMigrationPending))
             {

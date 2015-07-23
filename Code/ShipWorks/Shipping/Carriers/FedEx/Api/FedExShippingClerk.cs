@@ -41,50 +41,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private static bool hasDoneVersionCapture;
         private readonly bool forceVersionCapture;
         private readonly ILabelRepository labelRepository;
-
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly ICertificateInspector certificateInspector;
-
         private readonly ILog log;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class with default
-        /// values for the "live" FedEx settings repository and FedEx request factory.
-        /// </summary>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        public FedExShippingClerk(ICertificateInspector certificateInspector)
-            : this(new FedExSettingsRepository(), certificateInspector)
-        {
-        }
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-            : this(settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+        public FedExShippingClerk(FedExShippingClerkParameters parameters)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        /// <param name="requestFactory">The request factory.</param>
-        /// <param name="log">The log.</param>
-        /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
-        /// <param name="labelRepository">Label repository for clearing old shipment references.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository)
-        {
-            this.settingsRepository = settingsRepository;
-            this.certificateInspector = certificateInspector;
-            this.forceVersionCapture = forceVersionCapture;
-            this.requestFactory = requestFactory;
-            this.log = log;
-            this.labelRepository = labelRepository;
+            settingsRepository = parameters.SettingsRepository;
+            certificateInspector = parameters.Inspector;
+            forceVersionCapture = parameters.ForceVersionCapture;
+            requestFactory = parameters.RequestFactory;
+            log = parameters.Log;
+            labelRepository = parameters.LabelRepository;
         }
 
         /// <summary>
