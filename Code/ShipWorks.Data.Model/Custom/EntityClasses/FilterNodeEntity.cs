@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.ComponentModel;
 
@@ -11,6 +12,8 @@ namespace ShipWorks.Data.Model.EntityClasses
     /// </summary>
     public partial class FilterNodeEntity
     {
+        static readonly ILog log = LogManager.GetLogger(typeof(FilterNodeEntity));
+
         /// <summary>
         /// The filter the FilterNode represents.
         /// </summary>
@@ -18,7 +21,7 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get
             {
-                return this.FilterSequence.Filter;
+                return FromFilterSequence(x => x.Filter);
             }
         }
 
@@ -29,8 +32,27 @@ namespace ShipWorks.Data.Model.EntityClasses
         {
             get
             {
-                return this.FilterSequence.FilterID;
+                return FromFilterSequence(x => x.FilterID);
             }
+        }
+
+        /// <summary>
+        /// Gets a property from the the FilterSequence property
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="retrievalAction"></param>
+        /// <returns></returns>
+        private T FromFilterSequence<T>(Func<FilterSequenceEntity, T> retrievalAction)
+        {
+            FilterSequenceEntity sequence = FilterSequence;
+
+            if (sequence != null)
+            {
+                return retrievalAction(sequence);
+            }
+            
+            log.Warn("FilterSequence is null");
+            return default(T);
         }
 
         /// <summary>

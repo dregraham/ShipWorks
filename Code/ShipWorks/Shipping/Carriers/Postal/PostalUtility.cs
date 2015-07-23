@@ -363,17 +363,17 @@ namespace ShipWorks.Shipping.Carriers.Postal
                     return PostalCustomsForm.None;
                 }
 
-                return (shipment.TotalWeight >= 1 || shipment.CustomsValue >= 400) ?
+                return (shipment.TotalWeight >= 1 || shipment.CustomsValue >= 400 || shipment.CustomsItems.Count >= 6) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
             }
 
-            if (shipment.ShipPerson.IsDomesticCountry())
+            if (shipment.ShipPerson.IsDomesticCountry() && !ShipmentTypeManager.GetType(shipment).IsCustomsRequired(shipment))
             {
                 return PostalCustomsForm.None;
             }
 
-            return (shipment.CustomsValue >= 400) ?
+            return (shipment.CustomsValue >= 400 || shipment.CustomsItems.Count >= 6) ?
                     PostalCustomsForm.CN72 :
                     PostalCustomsForm.CN22;
         }

@@ -304,6 +304,20 @@ namespace ShipWorks.Shipping
             Refresh();
         }
 
+        private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
+        {
+            string requestedShippingText = GetRequestedShippingLabel(shipments);
+
+            if (requestedShippingText.Length == 0)
+	        {
+		        requestedShipping.Visible = false;
+	        }else
+	        {
+                requestedShipping.Visible = true;
+		        requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",requestedShippingText);
+	        }
+        }
+
         /// <summary>
         /// Load the shipment type combo with the available shipment types
         /// </summary>
@@ -445,19 +459,26 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnChangeShipmentType(object sender, EventArgs e)
         {
-            // Shouldn't be able to be in the middle of loading and get that combo to change at the same time.
-            Debug.Assert(!loadingSelectedShipments);
+            try
+            {
+                // Shouldn't be able to be in the middle of loading and get that combo to change at the same time.
+                Debug.Assert(!loadingSelectedShipments);
 
-            // Save all changes from the UI to the previous entity selection
-            SaveUIDisplayedShipments();
+                // Save all changes from the UI to the previous entity selection
+                SaveUIDisplayedShipments();
 
-            // Synchronize to make sure the status is up to date in the case where dimensions
-            // have been manually altered across shipment types
-            shipSenseNeedsUpdated = true;
-            SynchronizeWithShipSense();
+                // Synchronize to make sure the status is up to date in the case where dimensions
+                // have been manually altered across shipment types
+                shipSenseNeedsUpdated = true;
+                SynchronizeWithShipSense();
             
-            // Reload the displayed shipments so that they show the new shipment type UI
-            LoadSelectedShipments(true);
+                // Reload the displayed shipments so that they show the new shipment type UI
+                LoadSelectedShipments(true);
+            }
+            catch (SqlForeignKeyException)
+            {
+                HandleSqlForeignKeyException();
+            }
         }
 
         /// <summary>
@@ -719,6 +740,8 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
             
             UpdateComboShipmentType(shipmentType, enableEditing);
+
+            UpdateRequestedShipping(loadedShipmentEntities);
 
             // Update our list of shipments that are displayed in the UI
             uiDisplayedShipments = loadedShipmentEntities.ToList();
@@ -1138,23 +1161,38 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnShipmentTypeChanged(object sender, EventArgs e)
         {
-            ShipmentEntity shipment = shipmentControl.SelectedShipments.First();
-            ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
-
-            // Check that the combo box has the shipment type in it
-            List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
-            if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
+            try
             {
-                // The combo box does not have the shipment type in it, so we need to reload 
-                // it; this is probably due to an account being created via best rate that
-                // was previously a globally excluded shipment type
-                LoadShipmentTypeCombo();
+                ShipmentEntity shipment = shipmentControl.SelectedShipments.First();
+                ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
+
+                // Check that the combo box has the shipment type in it
+                List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
+                if (dataSource.Select(d => d.Value).All(v => v != shipmentTypeCode))
+                {
+                    // The combo box does not have the shipment type in it, so we need to reload 
+                    // it; this is probably due to an account being created via best rate that
+                    // was previously a globally excluded shipment type
+                    LoadShipmentTypeCombo();
+                }
+
+                comboShipmentType.SelectedValue = shipmentTypeCode;
+
+                ClearRates(string.Empty);
+                GetRates();
             }
+            catch (SqlForeignKeyException)
+            {
+                HandleSqlForeignKeyException();
+            }
+        }
 
-            comboShipmentType.SelectedValue = shipmentTypeCode;
-
-            ClearRates(string.Empty);
-            GetRates();
+        /// <summary>
+        /// Handle exceptions where the underlying entity has been deleted.
+        /// </summary>
+        private void HandleSqlForeignKeyException()
+        {
+            LoadSelectedShipments(true);
         }
 
         /// <summary>
@@ -1895,6 +1933,47 @@ namespace ShipWorks.Shipping
             }
 
             return ShipmentTypeManager.GetType((ShipmentTypeCode) typeCode);
+        }
+
+        /// <summary>
+        /// Get the requested shipping text, (Multiple) displayed for multiple values
+        /// </summary>
+        static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        {
+            string label = null;
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+
+                // First one
+                if (label == null)
+                {
+                    label = order.RequestedShipping;
+                }
+                else
+                {
+                    if (!label.Equals(order.RequestedShipping))
+                    {
+                        return "(Multiple)";
+                    }
+                }
+            }
+
+
+            if (label == null)
+            {
+                return "";
+            }else if (label.Length == 0)
+	        {
+		        return "N/A";
+	        }else if (label.Length > 60)
+	        {
+                return String.Format("{0}{1}", label.Substring(0, 60), "...");
+	        }else
+	        {
+                return label;
+	        }
         }
 
         /// <summary>

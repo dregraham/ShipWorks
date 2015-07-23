@@ -1,6 +1,9 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.UI;
@@ -14,7 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
     public class StandardLabel : Label
     {
         private readonly Image originalImage;
-        private readonly Rectangle crop;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StandardLabel"/> class.
@@ -22,12 +24,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <param name="originalImage">The image.</param>
         /// <param name="name">The name.</param>
-        /// <param name="crop">The crop.</param>
-        public StandardLabel(ShipmentEntity shipmentEntity, string name, Image originalImage, Rectangle crop)
+        public StandardLabel(ShipmentEntity shipmentEntity, string name, Image originalImage)
             : base(shipmentEntity, name)
         {
             this.originalImage = originalImage;
-            this.crop = crop;
         }
 
         /// <summary>
@@ -35,34 +35,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Labels
         /// </summary>
         public override void Save()
         {
-            Image imageCropped = null;
-            bool usingOriginalImage = false;
-
-            try
+            using (MemoryStream imageStream = new MemoryStream())
             {
-                if (crop == Rectangle.Empty)
-                {
-                    imageCropped = originalImage;
-                    usingOriginalImage = true;
-                }
-                else
-                {
-                    imageCropped = DisplayHelper.CropImage(originalImage, crop.X, crop.Y, crop.Width, crop.Height);
-                }
-
-                using (MemoryStream imageStream = new MemoryStream())
-                {
-                    imageCropped.Save(imageStream, ImageFormat.Png);
-                    DataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
-                }
-            }
-            finally
-            {
-                if (!usingOriginalImage && imageCropped != null)
-                {
-                    // Make sure cropped get's disposed in case we created it.
-                    imageCropped.Dispose();
-                }
+                originalImage.Save(imageStream, ImageFormat.Png);
+                DataResourceManager.CreateFromBytes(imageStream.ToArray(), ShipmentEntity.ShipmentID, Name);
             }
         }
 

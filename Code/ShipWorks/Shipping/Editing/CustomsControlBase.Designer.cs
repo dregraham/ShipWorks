@@ -34,7 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.customsValue = new ShipWorks.UI.Controls.MoneyTextBox();
             this.sectionContents = new ShipWorks.UI.Controls.CollapsibleGroupControl();
-            this.sandGrid = new Divelements.SandGrid.SandGrid();
+            this.itemsGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnDescription = new Divelements.SandGrid.GridColumn();
             this.groupSelectedContent = new System.Windows.Forms.GroupBox();
             this.labelHarmonized = new System.Windows.Forms.Label();
@@ -110,7 +110,7 @@
             // 
             // sectionContents.ContentPanel
             // 
-            this.sectionContents.ContentPanel.Controls.Add(this.sandGrid);
+            this.sectionContents.ContentPanel.Controls.Add(this.itemsGrid);
             this.sectionContents.ContentPanel.Controls.Add(this.groupSelectedContent);
             this.sectionContents.ContentPanel.Controls.Add(this.delete);
             this.sectionContents.ContentPanel.Controls.Add(this.add);
@@ -124,16 +124,16 @@
             // 
             // sandGrid
             // 
-            this.sandGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.itemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.itemsGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnDescription});
-            this.sandGrid.Location = new System.Drawing.Point(8, 10);
-            this.sandGrid.Name = "sandGrid";
-            this.sandGrid.Renderer = windowsXPRenderer1;
-            this.sandGrid.Size = new System.Drawing.Size(486, 116);
-            this.sandGrid.TabIndex = 0;
-            this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnChangeSelectedRow);
+            this.itemsGrid.Location = new System.Drawing.Point(8, 10);
+            this.itemsGrid.Name = "itemsGrid";
+            this.itemsGrid.Renderer = windowsXPRenderer1;
+            this.itemsGrid.Size = new System.Drawing.Size(486, 116);
+            this.itemsGrid.TabIndex = 0;
+            this.itemsGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnItemsGridChangeSelectedRow);
             // 
             // gridColumnDescription
             // 
@@ -361,7 +361,7 @@
         protected System.Windows.Forms.GroupBox groupSelectedContent;
         protected System.Windows.Forms.Button add;
         protected System.Windows.Forms.Button delete;
-        protected Divelements.SandGrid.SandGrid sandGrid;
+        protected Divelements.SandGrid.SandGrid itemsGrid;
         protected ShipWorks.Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
     }
 }
