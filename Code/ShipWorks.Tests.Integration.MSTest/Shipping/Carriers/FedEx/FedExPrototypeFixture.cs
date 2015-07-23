@@ -862,7 +862,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "dangerous_goods"))
                 
             {
-                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1" || DangerousGoodsCargoAircraftOnly.ToLower() == "true";
+                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1" || (!string.IsNullOrEmpty(DangerousGoodsCargoAircraftOnly) && DangerousGoodsCargoAircraftOnly.ToLower() == "true");
                 FedExDangerousGoodsAccessibilityType accessibility = GetFedExDangerousGoodsAccessibilityType();
 
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
