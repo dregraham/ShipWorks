@@ -692,6 +692,13 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
                 using (cartAPI api = CreateApiWebService(string.Format("GetProducts ({0},{1},{2})", batchSize, startNumber, productId)))
                 {
                     productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, productId, string.Empty);
+                    
+                    // 3dcart seems to be double decoding the xml requests, so if we get back a not well-formed error, try the request again
+                    // but double encode the product id.  We end up sending &lt;![CDATA[foo&amp;bar]]&gt; instead of foo&amp;bar, which is what it should be
+                    if (ResponseIsNotWellFormedError(productsXml))
+                    {
+                        productsXml = api.getProduct(store.StoreDomain, store.ApiUserKey, batchSize, startNumber, string.Format("<![CDATA[{0}]]>", productId), string.Empty);
+                    }
                 }
             }
             catch (Exception ex)
@@ -710,6 +717,15 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
             getProductsCache[productCacheKey] = productsXml;
 
             return productsXml;
+        }
+
+        /// <summary>
+        /// Returns whether the xml contains a not well formed error
+        /// </summary>
+        private static bool ResponseIsNotWellFormedError(XmlNode productsXml)
+        {
+            XElement errorElement = productsXml.ToXElement().XPathSelectElement("//Error/Description");
+            return errorElement != null && errorElement.Value.ToLowerInvariant().Contains("not well-formed");
         }
 
         /// <summary>
