@@ -14,6 +14,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Ships a FIMS shipment
         /// </summary>
-        FimsShipResponse Ship(FimsShipRequest fimsShipRequest);
+        FimsShipResponse Ship(IFimsShipRequest fimsShipRequest);
     }
 }

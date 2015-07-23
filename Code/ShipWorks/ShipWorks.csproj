@@ -809,6 +809,7 @@
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsFakeWebClient.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipRequest.cs" />
@@ -8446,6 +8447,7 @@
     <EmbeddedResource Include="Data\Import\Xml\Schema\ShipWorksCore.xsd">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Shipping\Fakes\FakeFIMSLabel.pdf" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\AddressValidationService_v4.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\ASYNCService_v2.wsdl" />
     <None Include="Shipping\Carriers\FedEx\Api\Wsdl\CloseService_v4.wsdl" />
