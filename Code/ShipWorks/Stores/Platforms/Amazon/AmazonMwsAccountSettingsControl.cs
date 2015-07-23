@@ -40,6 +40,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         return "1025-5115-6476";
                     case "CA":
                         return "1025-5115-6476";
+                    case "MX":
+                        return "1025-5115-6476";
                     default:
                         return "2814-9468-9452";
                 }
@@ -59,6 +61,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         return "http://developer.amazonservices.com";
                     case "CA":
                         return "http://developer.amazonservices.ca";
+                    case "MX":
+                        return "http://developer.amazonservices.com";
                     default:
                         return "http://developer.amazonservices.co.uk";
                 }
