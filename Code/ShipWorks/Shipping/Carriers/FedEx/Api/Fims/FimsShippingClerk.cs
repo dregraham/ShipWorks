@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
                 IFimsShipResponse fimsShipResponse = webClient.Ship(fimsShipRequest);
 
-                labelRepository.SaveLabel(fimsShipResponse);
+                labelRepository.SaveLabel(fimsShipResponse, shipmentEntity.FedEx.Packages[0].FedExPackageID);
             }
             catch (Exception ex)
             {

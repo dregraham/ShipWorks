@@ -14,7 +14,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Responsible for saving retrieved FedEx FIMS Labels to Database
         /// </summary>
-        void SaveLabel(IFimsShipResponse fimsShipResponse);
+        void SaveLabel(IFimsShipResponse fimsShipResponse, long ownerID);
 
         /// <summary>
         /// If we had saved an image for this shipment previously, but the shipment errored out later (like for an MPS), then clear before

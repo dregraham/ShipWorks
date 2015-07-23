@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using Interapptive.Shared.Pdf;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,9 +18,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Responsible for saving retrieved FedEx FIMS Labels to Database
         /// </summary>
-        public void SaveLabel(IFimsShipResponse fimsShipResponse)
+        public void SaveLabel(IFimsShipResponse fimsShipResponse, long ownerID)
         {
-            // TODO: Implement
+            if (fimsShipResponse.LabelPdfData == null)
+            {
+                throw new ArgumentNullException("fimsShipResponse", "The FIMS Label data is required");
+            }
+
+            // Create a ShipWorks label from the PDF received from FIMS
+            using (MemoryStream pdfBytes = new MemoryStream(fimsShipResponse.LabelPdfData))
+            {
+                using (PdfDocument pdf = new PdfDocument(pdfBytes))
+                {
+                    DataResourceManager.CreateFromPdf(pdf, ownerID, "LabelImage");
+                }
+            }
         }
 
         /// <summary>
