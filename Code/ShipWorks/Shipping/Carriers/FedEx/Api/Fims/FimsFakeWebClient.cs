@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// To simulate a successfully request, use "success" as the Username.
         /// For a failed request, send "failure" as the Username.
         /// </summary>
-        public FimsShipResponse Ship(IFimsShipRequest fimsShipRequest)
+        public IFimsShipResponse Ship(IFimsShipRequest fimsShipRequest)
         {
             if (fimsShipRequest == null)
             {

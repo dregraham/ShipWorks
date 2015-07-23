@@ -12,7 +12,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
     /// </summary>
     public class FedExSettings
     {
-        // TODO: add the production URL when we receive it from FedEx
         private const string ProductionUrl = "https://ws.fedex.com:443/web-services/";
 
         private const string TestingUrl = "https://wsbeta.fedex.com:443/web-services/";
@@ -20,6 +19,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         private readonly ICarrierSettingsRepository settingsRepository;
 
         private readonly ShippingSettingsEntity shippingSettings;
+
+        private const string FimsMailViewShipUrl = "http://www.fimsform.com/pkgFedex/pkgFormService";
+        private const string FimsMailViewTrackUrlFormat = "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExSettings" /> class.
@@ -140,6 +142,50 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
             get
             {
                 return settingsRepository.UseTestServer ? TestingUrl : ProductionUrl;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS tracking endpoint URL to use
+        /// </summary>
+        public string FimsTrackEndpointUrlFormat
+        {
+            get
+            {
+                return FimsMailViewTrackUrlFormat;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS Ship endpoint URL to use
+        /// </summary>
+        public string FimsShipEndpointUrl
+        {
+            get
+            {
+                return FimsMailViewShipUrl;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS username to use
+        /// </summary>
+        public string FimsUsername
+        {
+            get
+            {
+                return shippingSettings.FedExFimsUsername;
+            }
+        }
+
+        /// <summary>
+        /// Get the FedEx FIMS password to use
+        /// </summary>
+        public string FimsPassword
+        {
+            get
+            {
+                return shippingSettings.FedExFimsPassword;
             }
         }
 

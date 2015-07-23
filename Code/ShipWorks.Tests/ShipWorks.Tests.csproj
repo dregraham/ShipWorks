@@ -195,6 +195,8 @@
     <Compile Include="Shipping\Carriers\BestRate\RateGroupFiltering\BestRateServiceTypeFilterTest.cs" />
     <Compile Include="Interapptive.Shared\Net\CertificateInspectorTest.cs" />
     <Compile Include="Shipping\Carriers\CarrierDescriptionTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkFactoryTest.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerkTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsFakeWebClientTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Rate\Request\Manipulators\FedExRateOneRateManipulatorTest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Shipping\Request\Manipulators\FedExOneRateManipulatorTest.cs" />

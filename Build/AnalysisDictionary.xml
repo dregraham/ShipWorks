@@ -56,7 +56,10 @@
       <Word>nafta</Word>
       <Word>ups</Word>
       <Word>username</Word>
+      <Word>Username</Word>
       <Word>MainForm</Word>
+      <Word>FIMS</Word>
+      <Word>Fims</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>

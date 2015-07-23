@@ -809,9 +809,13 @@
     <Compile Include="Shipping\Carriers\CarrierDescription.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExAddressValidationException.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\FedExOpenShipGateway.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\FedExShippingClerkFactory.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsFakeWebClient.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsLabelRepository.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShippingClerk.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\FimsShipResponse.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsLabelRepository.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipRequest.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsShipResponse.cs" />
     <Compile Include="Shipping\Carriers\FedEx\Api\Fims\IFimsWebClient.cs" />

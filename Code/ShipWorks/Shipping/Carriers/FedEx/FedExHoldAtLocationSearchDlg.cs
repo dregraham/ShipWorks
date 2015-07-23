@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void RequestAddresses(object sender, DoWorkEventArgs e)
         {
-            FedExShippingClerk fedExShippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+            IFedExShippingClerk fedExShippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, new FedExShipmentType().CertificateInspector);
 
             e.Result = fedExShippingClerk.PerformHoldAtLocationSearch(shipment);
         }

@@ -1002,7 +1002,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            return new FedExShippingClerk(SettingsRepository, CertificateInspector).GetRates(shipment);
+            return FedExShippingClerkFactory.CreateShippingClerk(shipment, SettingsRepository, CertificateInspector).GetRates(shipment);
         }
 
         /// <summary>
@@ -1012,7 +1012,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, CertificateInspector);
                 return shippingClerk.Track(shipment);
             }
             catch (FedExException ex)
@@ -1048,7 +1048,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Okay to "new up" the shipping clerk here, as this class is the root consumer 
                 // that drives the underlying FedEx API and outside of the current scope of unit testing,
                 // so there isn't a need to be able to specify the dependencies of the shipping clerk
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, CertificateInspector);
                 shippingClerk.Ship(shipment);
             }
             catch (FedExException ex)
@@ -1064,7 +1064,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             try
             {
-                IShippingClerk shippingClerk = new FedExShippingClerk(CertificateInspector);
+                IShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipment, CertificateInspector);
                 shippingClerk.Void(shipment);
             }
             catch (FedExException ex)
