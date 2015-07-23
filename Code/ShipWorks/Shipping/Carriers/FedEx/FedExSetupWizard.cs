@@ -206,8 +206,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 optionsControl.SaveSettings(settings);
                 ShippingSettings.Save(settings);
             }
-
-            accountSettingsControl.SaveToAccount(account);
+            
+            try
+            {
+                accountSettingsControl.SaveToAccount(account);
+            }
+            catch (CarrierException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+                e.NextPage = CurrentPage;
+            }
         }
 
         /// <summary>

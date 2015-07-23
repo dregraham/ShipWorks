@@ -25,6 +25,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             countries.Items.Add("France");
             countries.Items.Add("Germany");
             countries.Items.Add("Italy");
+            countries.Items.Add("Mexico");
             countries.Items.Add("Spain");
             countries.Items.Add("United Kingdom");
             countries.Items.Add("United States");

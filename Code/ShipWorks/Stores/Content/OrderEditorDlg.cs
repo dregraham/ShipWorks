@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,8 @@ using ShipWorks.Data.Controls;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Filters;
 using Interapptive.Shared.UI;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Data.Administration.Retry;
 
 namespace ShipWorks.Stores.Content
 {
@@ -338,15 +341,31 @@ namespace ShipWorks.Stores.Content
                 order.RequestedShipping = requestedShipping.Text;
                 shipBillControl.SavePendingChanges();
 
-                using (SqlAdapter adapter = new SqlAdapter())
+                SqlAdapterRetry<SqlException> sqlDeadlockRetry = new SqlAdapterRetry<SqlException>(5, -6, string.Format("OrderEditorDlg.OnClosing for OrderID {0}", order.OrderID));
+                sqlDeadlockRetry.ExecuteWithRetry(adapter =>
                 {
-                    adapter.SaveAndRefetch(order);
+                    try
+                    {
+                        adapter.SaveAndRefetch(order);
 
-                    // Everything has been set on the order, so calculate the hash key
-                    OrderUtility.PopulateOrderDetails(order, adapter);
-                    OrderUtility.UpdateShipSenseHashKey(order);
-                    adapter.SaveAndRefetch(order);
-                }
+                        // Everything has been set on the order, so calculate the hash key
+                        OrderUtility.PopulateOrderDetails(order, adapter);
+                        OrderUtility.UpdateShipSenseHashKey(order);
+                        adapter.SaveAndRefetch(order);
+                    }
+                    catch (SqlForeignKeyException)
+                    {
+                        MessageHelper.ShowWarning(this,
+                                                  "This order has already been edited or deleted by other users.\n\n" +
+                                                  "Your changes to this order were not saved.");
+                    }
+                    catch (ORMConcurrencyException)
+                    {
+                        MessageHelper.ShowWarning(this,
+                                                  "This order has already been edited or deleted by other users.\n\n" +
+                                                  "Your changes to this order were not saved.");
+                    }
+                });
             }
 
             invoiceControl.SaveState();

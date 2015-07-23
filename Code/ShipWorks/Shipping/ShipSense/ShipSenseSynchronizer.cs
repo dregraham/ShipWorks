@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="shipments">The shipments.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void Add(IEnumerable<ShipmentEntity> shipments)
         {
-            foreach (ShipmentEntity shipment in shipments)
+            foreach (ShipmentEntity shipment in shipments.Where(s => !s.DeletedFromDatabase))
             {
                 Add(shipment);
             }
@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.ShipSense
         /// <param name="shipment">The shipment.  Shipment.Order, OrderItems, and OrderItemAttributes MUST be populated for this to work correctly.</param>
         public void Add(ShipmentEntity shipment)
         {
-            if (shipment != null)
+            if (shipment != null && !shipment.DeletedFromDatabase)
             {
                 KnowledgebaseHashResult hashResult = GetHashResult(shipment);
 
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.ShipSense
             foreach (string key in shipmentDictionary.Keys)
             {
                 ShipmentEntity shipmentEntity = shipmentDictionary[key].FirstOrDefault();
-                if (shipmentEntity != null)
+                if (shipmentEntity != null && !shipmentEntity.DeletedFromDatabase)
                 {
                     AddKnowledgebaseEntryToDictionary(key, shipmentEntity);
                 }
@@ -149,10 +149,10 @@ namespace ShipWorks.Shipping.ShipSense
         {
             // Do some housekeeping and remove any shipments that have been processed, so we 
             // don't have to worry about excluding these later
-            List<ShipmentEntity> processedShipments = MonitoredShipments.Where(s => s.Processed).ToList();
-            foreach (ShipmentEntity processedShipment in processedShipments)
+            List<ShipmentEntity> processedOrDeletedShipments = MonitoredShipments.Where(s => s.Processed || s.DeletedFromDatabase).ToList();
+            foreach (ShipmentEntity processedOrDeletedShipment in processedOrDeletedShipments)
             {
-                Remove(processedShipment);
+                Remove(processedOrDeletedShipment);
             }
 
             // This shipment has had ShipSense applied previously, so we need to update the status

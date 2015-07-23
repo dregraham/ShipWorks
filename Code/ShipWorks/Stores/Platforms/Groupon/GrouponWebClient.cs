@@ -30,7 +30,7 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
-        /// Dwonload orders from Groupon
+        /// Download orders from Groupon
         /// </summary>
         public JToken GetOrders(DateTime start, int page)
         {

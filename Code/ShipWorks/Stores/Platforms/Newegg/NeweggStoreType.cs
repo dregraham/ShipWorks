@@ -1,29 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Stores.Platforms.GenericModule;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Logging;
+using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.UI.Wizard;
-using ShipWorks.Stores.Platforms.Miva.WizardPages;
 using ShipWorks.Stores.Communication;
-using Interapptive.Shared.Net;
 using ShipWorks.Stores.Management;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.Data.Model;
-using ShipWorks.Data;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Stores.Content;
-using ShipWorks.Filters.Content;
-using ShipWorks.Filters;
-using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Platforms.Newegg.WizardPages;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Stores.Platforms.Newegg
 {
@@ -260,6 +249,17 @@ namespace ShipWorks.Stores.Platforms.Newegg
                     issueAdder.Add(orderID, ex);
                 }
             }
-        }    
+        }
+
+        /// <summary>
+        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
+        /// Online Status filter.
+        /// </summary>
+        public override ICollection<string> GetOnlineStatusChoices()
+        {
+            IEnumerable<NeweggOrderStatus> enums = Enum.GetValues(typeof(NeweggOrderStatus)).Cast<NeweggOrderStatus>();
+
+            return enums.Select(s => Enum.GetName(typeof(NeweggOrderStatus), s)).ToList();
+        }
     }
 }

@@ -516,6 +516,10 @@ PRINT N'Creating index [IX_Auto_OnlineStatus] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_OnlineStatus] ON [dbo].[Order] ([OnlineStatus])
 GO
+PRINT N'Creating index [IX_Order_StoreIdOnlineStatus] on [dbo].[Order]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Order_StoreIdOnlineStatus] ON [dbo].[Order] ([StoreId], [OnlineStatus])
+GO
 PRINT N'Creating index [IX_Auto_RequestedShipping] on [dbo].[Order]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_RequestedShipping] ON [dbo].[Order] ([RequestedShipping])
@@ -661,6 +665,31 @@ CREATE UNIQUE NONCLUSTERED INDEX [IX_Store_OrderNumberComplete_IsManual] ON [dbo
 	[IsManual] ASC
 )
 GO
+PRINT N'Adding [Order].[IX_Order_DestinationResidential] Index'
+GO
+-- Intended to match the conditions on the US Residential filter in ShipWorks
+CREATE NONCLUSTERED INDEX [IX_Order_DestinationResidential] ON [dbo].[Order]
+(
+	[ShipResidentialStatus] ASC,
+	[ShipPOBox] ASC,
+	[ShipUSTerritory] ASC,
+	[ShipMilitaryAddress] ASC
+)
+WHERE ShipResidentialStatus = 1 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
+GO
+PRINT N'Adding [Order].[IX_Order_DestinationCommercial] Index'
+GO
+-- Intended to match the conditions on the US Commercial filter in ShipWorks
+CREATE NONCLUSTERED INDEX [IX_Order_DestinationCommercial] ON [dbo].[Order]
+(
+	[ShipResidentialStatus] ASC,
+	[ShipPOBox] ASC,
+	[ShipUSTerritory] ASC,
+	[ShipMilitaryAddress] ASC
+)
+WHERE ShipResidentialStatus = 2 AND ShipPOBox = 2 AND ShipUSTerritory = 2 AND ShipMilitaryAddress = 2
+GO
+
 ALTER TABLE [dbo].[Order] ENABLE CHANGE_TRACKING
 GO
 PRINT N'Altering [dbo].[Order]'
@@ -1186,6 +1215,10 @@ GO
 PRINT N'Creating primary key [PK_ChannelAdvisorOrder] on [dbo].[ChannelAdvisorOrder]'
 GO
 ALTER TABLE [dbo].[ChannelAdvisorOrder] ADD CONSTRAINT [PK_ChannelAdvisorOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_ChannelAdvisorOrder_OnlineStatus] on [dbo].[ChannelAdvisorOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_ChannelAdvisorOrder_OnlineShippingStatus] ON [dbo].[ChannelAdvisorOrder] ([OnlineShippingStatus])
 GO
 PRINT N'Creating [dbo].[ChannelAdvisorOrderItem]'
 GO
@@ -2702,6 +2735,10 @@ GO
 PRINT N'Creating primary key [PK_PayPalOrder] on [dbo].[PayPalOrder]'
 GO
 ALTER TABLE [dbo].[PayPalOrder] ADD CONSTRAINT [PK_PayPalOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_PayPalOrder_PaymentStatus] on [dbo].[PayPalOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_PayPalOrder_PaymentStatus] ON [dbo].[PayPalOrder] ([PaymentStatus])
 GO
 PRINT N'Creating [dbo].[PayPalStore]'
 GO
