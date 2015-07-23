@@ -20277,15 +20277,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.FilterInitialSortType);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.FilterLastActive field instance</summary>
-		public static EntityField2 FilterLastActive
+		/// <summary>Creates a new UserSettingsEntity.OrderFilterLastActive field instance</summary>
+		public static EntityField2 OrderFilterLastActive
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.FilterLastActive);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderFilterLastActive);}
 		}
-		/// <summary>Creates a new UserSettingsEntity.FilterExpandedFolders field instance</summary>
-		public static EntityField2 FilterExpandedFolders
+		/// <summary>Creates a new UserSettingsEntity.OrderFilterExpandedFolders field instance</summary>
+		public static EntityField2 OrderFilterExpandedFolders
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.FilterExpandedFolders);}
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.OrderFilterExpandedFolders);}
 		}
 		/// <summary>Creates a new UserSettingsEntity.ShippingWeightFormat field instance</summary>
 		public static EntityField2 ShippingWeightFormat
@@ -20301,6 +20301,16 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 TemplateLastSelected
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.TemplateLastSelected);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.CustomerFilterLastActive field instance</summary>
+		public static EntityField2 CustomerFilterLastActive
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterLastActive);}
+		}
+		/// <summary>Creates a new UserSettingsEntity.CustomerFilterExpandedFolders field instance</summary>
+		public static EntityField2 CustomerFilterExpandedFolders
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(UserSettingsFieldIndex.CustomerFilterExpandedFolders);}
 		}
 	}
 
