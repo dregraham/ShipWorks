@@ -236,13 +236,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionRecipient
             // 
-            // 
-            // sectionRecipient.ContentPanel
-            // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(504, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -263,6 +256,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // sectionReturns
             // 
             this.sectionReturns.Location = new System.Drawing.Point(3, 667);
+            this.sectionReturns.SectionName = "FedEx® Returns";
             this.sectionReturns.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionShipment
@@ -615,11 +609,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(-26, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(1094, 213);
+            this.packageControl.Size = new System.Drawing.Size(1213, 213);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
-            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             // 
             // packagingType
             // 
@@ -1573,7 +1566,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.ExtraText = "";
             this.sectionCOD.Location = new System.Drawing.Point(3, 638);
             this.sectionCOD.Name = "sectionCOD";
-            this.sectionCOD.SectionName = "C.O.D.";
+            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D";
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
             this.sectionCOD.Size = new System.Drawing.Size(504, 24);
             this.sectionCOD.TabIndex = 10;
