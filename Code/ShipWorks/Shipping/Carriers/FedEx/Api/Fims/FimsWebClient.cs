@@ -11,6 +11,8 @@ using System.Xml;
 using System.Xml.Linq;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Net;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
@@ -65,7 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// <summary>
         /// Build the label request to send.
         /// </summary>
-        private XElement BuildLabelRequest(IFimsShipRequest fimsShipRequest)
+        private static XElement BuildLabelRequest(IFimsShipRequest fimsShipRequest)
         {
             ShipmentEntity shipment = fimsShipRequest.Shipment;
             FedExShipmentEntity fedExShipment = fimsShipRequest.Shipment.FedEx;
@@ -158,12 +160,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         {
             byte[] response;
 
+            ApiLogEntry logger = new ApiLogEntry(ApiLogSource.FedExFims, "Ship");
+            logger.LogRequest(soapRequest, "xml");
+
             using (WebClient client = new WebClient())
             {
                 byte[] data = Encoding.UTF8.GetBytes(soapRequest);
 
                 response = client.UploadData(productionUri.AbsoluteUri, data);
             }
+
+            string responseText = ASCIIEncoding.Default.GetString(response);
+            logger.LogResponse(responseText, "txt");
 
             return response;
         }
