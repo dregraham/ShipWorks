@@ -609,7 +609,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(-26, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(1213, 213);
+            this.packageControl.Size = new System.Drawing.Size(1332, 213);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
@@ -1745,7 +1745,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.ExtraText = "";
             this.sectionSmartPost.Location = new System.Drawing.Point(3, 464);
             this.sectionSmartPost.Name = "sectionSmartPost";
-            this.sectionSmartPost.SectionName = "FedEx SmartPost";
+            this.sectionSmartPost.SectionName = "FedEx SmartPost®";
             this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
             this.sectionSmartPost.Size = new System.Drawing.Size(504, 24);
             this.sectionSmartPost.TabIndex = 17;
