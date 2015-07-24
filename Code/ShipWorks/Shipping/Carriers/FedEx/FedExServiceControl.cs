@@ -1076,7 +1076,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Express Saver®\n" +
                 "FedEx Ground®\n" +
 
-                "FedEx One Rate\u2120\n" +
+                "FedEx One Rate®\n" +
 
                 "FedEx Home Delivery®\n" +
                 "FedEx Ground® C.O.D.\n" +
@@ -1096,12 +1096,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" + 
-                "FedEx SmartPost Standard A\n" + 
-                "FedEx SmartPost Standard B\n" + 
+                "FedEx SmartPost Parcel Select Lightweight\n" + 
                 "FedEx SmartPost® Bound Printed Matter\n" + 
                 "FedEx SmartPost® Media\n" +
                 "FedEx SmartPost Parcel Select\n" + 
-                "FedEx ShipAlert® (Email ID)\n" +
+                "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 
                 "FedEx® Envelope\n" +
