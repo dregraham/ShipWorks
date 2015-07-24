@@ -1031,6 +1031,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     errorMessage = string.Format("{0}.", errorMessage);
                 }
 
+                if (errorMessage.Contains("ETD not allowed for origin or destination") &&
+                    shipment != null)
+                {
+                    errorMessage = "FedEx returned the following error: ETD not allowed for origin or destination. \n\nYou can disable ETD by unchecking “Create Commercial Invoice” on the customs tab.";
+                }
+
                 if (errorMessage.Contains("RETURN_SHIPMENT is not allowed") &&
                     shipment != null &&
                     FedExUtility.OneRateServiceTypes.Contains((FedExServiceType) shipment.FedEx.Service))
