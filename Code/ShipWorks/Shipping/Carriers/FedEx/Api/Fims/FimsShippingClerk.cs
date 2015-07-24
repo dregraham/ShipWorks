@@ -78,6 +78,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
 
                 IFimsShipResponse fimsShipResponse = webClient.Ship(fimsShipRequest);
 
+                shipmentEntity.TrackingNumber = fimsShipResponse.ParcelID;
+                shipmentEntity.FedEx.Packages[0].TrackingNumber = fimsShipResponse.ParcelID;
+                shipmentEntity.FedEx.MasterFormID = String.Empty;
+                shipmentEntity.ShipmentCost = 0;
+
                 labelRepository.SaveLabel(fimsShipResponse, shipmentEntity.FedEx.Packages[0].FedExPackageID);
             }
             catch (Exception ex)

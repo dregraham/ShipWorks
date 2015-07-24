@@ -49,6 +49,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 {
                     fedExShippingClerk = new FimsShippingClerk(new FimsFakeWebClient(), new FimsLabelRepository());
                 }
+                else
+                {
+                    fedExShippingClerk = new FimsShippingClerk(new FimsWebClient(), new FimsLabelRepository());
+                }
             }
 
             return fedExShippingClerk;
