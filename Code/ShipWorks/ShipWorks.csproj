@@ -836,6 +836,12 @@
     <Compile Include="Shipping\Carriers\FedEx\FedExPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\FedEx\FedExTemplateElementGenerator.cs" />
+    <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\FedEx\FimsOptionsControl.Designer.cs">
+      <DependentUpon>FimsOptionsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\ICredentialStore.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\iParcel\iParcelShipmentProcessingSynchronizer.cs" />
@@ -7526,6 +7532,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\FedExReturnsControl.resx">
       <DependentUpon>FedExReturnsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\FedEx\FimsOptionsControl.resx">
+      <DependentUpon>FimsOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\iParcel\iParcelAccountEditorDlg.resx">
       <DependentUpon>iParcelAccountEditorDlg.cs</DependentUpon>

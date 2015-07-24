@@ -264,6 +264,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
+        public static bool IsFimsService(FedExServiceType service)
+        {
+            return (service == FedExServiceType.FedExFimsUnder4Lbs ||
+                    service == FedExServiceType.FedExFims4LbsAndOver);
+        }
+
+        /// <summary>
         /// Indicates if the given service is a freight servce
         /// </summary>
         public static bool IsFreightService(FedExServiceType serviceType)
@@ -435,8 +444,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             string responseFilename = GetCertificationFileName(uniqueId, action, "Response", "xml", false);
             File.AppendAllText(responseFilename, rawSoap.ResponseXml);
-
-
+            
             // Write the request and response to a file that will be unique for each transaction for debugging purposes
             string debugRequestFilename = GetCertificationFileName(uniqueId, action, "Request", "xml", true);
             File.AppendAllText(debugRequestFilename, rawSoap.RequestXml);

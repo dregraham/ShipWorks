@@ -63,9 +63,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private static bool IsFimsShipment(ShipmentEntity shipment)
         {
-            return shipment != null &&
-                   (shipment.FedEx.Service == (int) FedExServiceType.FedExFimsUnder4Lbs ||
-                    shipment.FedEx.Service == (int) FedExServiceType.FedExFims4LbsAndOver);
+            return shipment != null && 
+                shipment.FedEx != null &&
+                FedExUtility.IsFimsService((FedExServiceType)shipment.FedEx.Service);
         }
     }
 }
