@@ -187,10 +187,26 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         public void BindToEnumAndPreserveSelection<T>(Func<T, bool> includer) where T : struct
         {
+            ApplyBindingAndPreserveSelection(() => EnumHelper.BindComboBox(this, includer));
+        }
+
+        /// <summary>
+        /// Update the data source, preserving existing selection
+        /// </summary>
+        public void BindDataSourceAndPreserveSelection<T>(IList<T> dataSource)
+        {
+            ApplyBindingAndPreserveSelection(() => DataSource = dataSource);
+        }
+
+        /// <summary>
+        /// Apply the specified binding, preserving the existing selection
+        /// </summary>
+        private void ApplyBindingAndPreserveSelection(Action bindingMethod)
+        {
             bool previousMulti = MultiValued;
             object previousValue = SelectedValue;
 
-            EnumHelper.BindComboBox(this, includer);
+            bindingMethod();
 
             // Set back the previous value
             if (previousMulti)
@@ -205,6 +221,7 @@ namespace ShipWorks.UI.Controls
                     SelectedIndex = 0;
                 }
             }
+
         }
     }
 }
