@@ -34,6 +34,8 @@
             this.upsMailInnovationsOptions = new ShipWorks.Shipping.Carriers.UPS.WorldShip.UpsMailInnovationsOptionsControl();
             this.labelInfo = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsServiceTypeServicePickerControl();
+            this.packagingTypePicker = new ShipWorks.Shipping.Carriers.UPS.OnLineTools.UpsPackagingTypePickerControl();
             this.SuspendLayout();
             // 
             // labelAccounts
@@ -68,7 +70,7 @@
             // 
             this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 447);
             this.upsMailInnovationsOptions.Name = "upsMailInnovationsOptions";
-            this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 46);
+            this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 23);
             this.upsMailInnovationsOptions.TabIndex = 14;
             // 
             // labelInfo
@@ -91,11 +93,33 @@
             this.label2.TabIndex = 12;
             this.label2.Text = "UPS Services";
             // 
+            // servicePicker
+            // 
+            this.servicePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(8, 477);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(379, 215);
+            this.servicePicker.TabIndex = 15;
+            // 
+            // packagingTypePicker
+            // 
+            this.packagingTypePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.packagingTypePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packagingTypePicker.Location = new System.Drawing.Point(8, 704);
+            this.packagingTypePicker.Name = "packagingTypePicker";
+            this.packagingTypePicker.Size = new System.Drawing.Size(379, 215);
+            this.packagingTypePicker.TabIndex = 16;
+            // 
             // WorldShipSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.packagingTypePicker);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.upsMailInnovationsOptions);
             this.Controls.Add(this.labelInfo);
             this.Controls.Add(this.label2);
@@ -103,7 +127,7 @@
             this.Controls.Add(this.labelAccounts);
             this.Controls.Add(this.accountControl);
             this.Name = "WorldShipSettingsControl";
-            this.Size = new System.Drawing.Size(468, 502);
+            this.Size = new System.Drawing.Size(468, 923);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,5 +141,7 @@
         private UpsMailInnovationsOptionsControl upsMailInnovationsOptions;
         private System.Windows.Forms.Label labelInfo;
         private System.Windows.Forms.Label label2;
+        private OnLineTools.UpsServiceTypeServicePickerControl servicePicker;
+        private OnLineTools.UpsPackagingTypePickerControl packagingTypePicker;
     }
 }

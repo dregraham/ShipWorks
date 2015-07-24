@@ -14,6 +14,8 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Settings.Origin;
+using ShipWorks.Shipping.Settings;
+using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
@@ -80,9 +82,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 			repository.Setup(r => r.SaveTrackingInfoToEntity(It.IsAny<ShipmentEntity>(), It.IsAny<DataSet>()));
 			repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
 
+            Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
+            excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
+                .Returns(new List<ExcludedServiceTypeEntity> 
+                { 
+                    new ExcludedServiceTypeEntity((int)ShipmentTypeCode.iParcel, (int)iParcelServiceType.Saver)
+                });
+            
+
             RateCache.Instance.Clear();
 
-			testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object);
+			testObject = new iParcelShipmentType(repository.Object, serviceGateway.Object, excludedServiceTypeRepository.Object);
 		}
 
         [TestMethod]

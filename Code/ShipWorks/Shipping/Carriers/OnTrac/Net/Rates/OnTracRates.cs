@@ -53,8 +53,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
         /// Get Rates from OnTrac
         /// </summary>
         /// <exception cref="OnTracException"></exception>
-        public RateGroup GetRates(ShipmentEntity shipment)
+        public RateGroup GetRates(ShipmentEntity shipment, IEnumerable<OnTracServiceType> availableServiceTypes)
         {
+            ILookup<OnTracServiceType, OnTracServiceType> availableServices = availableServiceTypes.ToLookup(x => x);
+
             RateShipment rateShipment = GetRatesFromOnTrac(shipment);
 
             List<RateResult> rates = new List<RateResult>();
@@ -65,6 +67,11 @@ namespace ShipWorks.Shipping.Carriers.OnTrac.Net.Rates
                 {
                     OnTracServiceType onTracServiceType =
                         EnumHelper.GetEnumByApiValue<OnTracServiceType>(rateQuote.Service);
+
+                    if (!availableServices.Contains(onTracServiceType))
+                    {
+                        continue;
+                    }
 
                     DateTime? expectedDeliveryDate = GetExpectedDeliveryDate(rateQuote);
                     string deliveryDateDescription = rateQuote.TransitDays.ToString();

@@ -24,6 +24,41 @@ namespace ShipWorks.Shipping.Settings
         }
 
         /// <summary>
+        /// Can be overridden in derived classes to return list of excluded services
+        /// in in the control
+        /// </summary>
+        public virtual IEnumerable<int> GetExcludedServices()
+        {
+            return Enumerable.Empty<int>();
+        }
+
+        /// <summary>
+        /// Can be overridden in derived classes to return list of excluded package types
+        /// in in the control
+        /// </summary>
+        public virtual IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return Enumerable.Empty<int>();
+        }
+
+        /// <summary>
+        /// Initialize the ShipmentTypeCode from derived class
+        /// </summary>
+        public virtual void Initialize(ShipmentTypeCode shipmentTypeCode)
+        {
+            ShipmentTypeCode = shipmentTypeCode;
+        }
+
+        /// <summary>
+        /// Gets the code for the shipment type
+        /// </summary>
+        protected ShipmentTypeCode ShipmentTypeCode
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Can be overridden in derived classes to load service settings
         /// </summary>
         public virtual void LoadSettings()

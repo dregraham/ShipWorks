@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.iParcel.Enums;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -38,6 +40,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
             insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.IParcelInsuranceProvider;
             pennyOne.Checked = settings.IParcelInsurancePennyOne;
+
+            // Load up the service picker based on the excluded service types
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            List<iParcelServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Select(exclusion => (iParcelServiceType)exclusion).ToList();
+
+            List<iParcelServiceType> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => e.Value).ToList();
+            servicePicker.Initialize(allServices, excludedServices);
         }
 
         /// <summary>
@@ -53,6 +62,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             settings.IParcelInsurancePennyOne = pennyOne.Checked;
         }
 
+        /// <summary>
+        /// Gets the excluded services based on the items in the service picker.
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            return servicePicker.ExcludedEnumValues.Cast<int>();
+        }
 
         /// <summary>
         /// Called when [insurance provider changed].
@@ -63,7 +79,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         {
             pennyOne.Enabled = (insuranceProviderChooser.InsuranceProvider == InsuranceProvider.ShipWorks);
         }
-
 
         /// <summary>
         /// Called when the penny one link is clicked.

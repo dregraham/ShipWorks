@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -34,9 +31,37 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             shippersControl.Initialize();
 
             ShippingSettingsEntity settings = ShippingSettings.Fetch();
+            FedExShipmentType shipmentType = (FedExShipmentType)ShipmentTypeManager.GetType(ShipmentTypeCode);
 
-            insuranceProviderChooser.InsuranceProvider = (InsuranceProvider) settings.FedExInsuranceProvider;
+            insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.FedExInsuranceProvider;
             pennyOne.Checked = settings.FedExInsurancePennyOne;
+
+            InitializeServicePicker(shipmentType);
+            InitializePackagePicker(shipmentType);
+        }
+
+        /// <summary>
+        /// Initialize the package picker
+        /// </summary>
+        private void InitializePackagePicker(FedExShipmentType shipmentType)
+        {
+            IEnumerable<FedExPackagingType> excludedPackages = shipmentType.GetExcludedPackageTypes().Cast<FedExPackagingType>();
+
+            IEnumerable<FedExPackagingType> upsPackages = Enum.GetValues(typeof(FedExPackagingType)).Cast<FedExPackagingType>().ToList();
+
+            packagePicker.Initialize(upsPackages, excludedPackages);
+        }
+
+        /// <summary>
+        /// Initialize the service picker
+        /// </summary>
+        private void InitializeServicePicker(FedExShipmentType shipmentType)
+        {
+            IEnumerable<FedExServiceType> excludedServices = shipmentType.GetExcludedServiceTypes().Cast<FedExServiceType>();
+
+            IEnumerable<FedExServiceType> upsServices = Enum.GetValues(typeof(FedExServiceType)).Cast<FedExServiceType>().ToList();
+
+            servicePicker.Initialize(upsServices, excludedServices);
         }
 
         /// <summary>
@@ -67,6 +92,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 dlg.ShowDialog(this);
             }
+        }
+
+        /// <summary>
+        /// Returns a list of ExcludedServiceTypeEntity based on the servicePicker control
+        /// </summary>
+        public override IEnumerable<int> GetExcludedServices()
+        {
+            return servicePicker.ExcludedEnumValues.Cast<int>();
+        }
+
+        /// <summary>
+        /// Returns a list of excluded package types
+        /// </summary>
+        public override IEnumerable<int> GetExcludedPackageTypes()
+        {
+            return packagePicker.ExcludedEnumValues.Cast<int>();
         }
     }
 }
