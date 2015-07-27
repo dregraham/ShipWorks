@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[CalculateInitialFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateInitialFilterCounts]", parameters);
 
 			return toReturn;
 		}
@@ -91,7 +91,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[CalculateInitialFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateInitialFilterCounts]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
@@ -129,7 +129,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
 
 			return toReturn;
 		}
@@ -164,7 +164,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[CalculateUpdateFilterCounts]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
@@ -202,7 +202,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[DeleteAbandonedFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[DeleteAbandonedFilterCounts]", parameters);
 
 			return toReturn;
 		}
@@ -237,7 +237,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[DeleteAbandonedFilterCounts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[DeleteAbandonedFilterCounts]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
@@ -275,7 +275,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ResetShipSense]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
 
 			return toReturn;
 		}
@@ -310,7 +310,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ResetShipSense]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ResetShipSense]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
@@ -353,7 +353,7 @@ namespace ShipWorks.Data.Adapter
 			parameters[0] = new SqlParameter("@hashKey", SqlDbType.NVarChar, 4000, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, hashKey);
 			parameters[1] = new SqlParameter("@excludedShipmentXml", SqlDbType.Xml, 2147483647, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, excludedShipmentXml);
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
 
 			return toReturn;
 		}
@@ -393,7 +393,7 @@ namespace ShipWorks.Data.Adapter
 			parameters[1] = new SqlParameter("@excludedShipmentXml", SqlDbType.Xml, 2147483647, ParameterDirection.Input, true, 0, 0, "",  DataRowVersion.Current, excludedShipmentXml);
 
 			parameters[2] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ShipmentShipSenseProcedure]", parameters);
 
 			
 			returnValue = (int)parameters[2].Value;
@@ -431,7 +431,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ValidateFilterLayouts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ValidateFilterLayouts]", parameters);
 
 			return toReturn;
 		}
@@ -466,7 +466,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ValidateFilterLayouts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ValidateFilterLayouts]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
@@ -504,7 +504,7 @@ namespace ShipWorks.Data.Adapter
 			SqlParameter[] parameters = new SqlParameter[0];
 
 
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ValidateGridLayouts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ValidateGridLayouts]", parameters);
 
 			return toReturn;
 		}
@@ -539,7 +539,7 @@ namespace ShipWorks.Data.Adapter
 
 
 			parameters[0] = new SqlParameter("RETURNVALUE", SqlDbType.Int, 0, ParameterDirection.ReturnValue, true, 10, 0, "",  DataRowVersion.Current, returnValue);
-			int toReturn = adapter.CallActionStoredProcedure("[ShipWorkslocal].[dbo].[ValidateGridLayouts]", parameters);
+			int toReturn = adapter.CallActionStoredProcedure("[ShipWorksLocal].[dbo].[ValidateGridLayouts]", parameters);
 
 			
 			returnValue = (int)parameters[0].Value;
