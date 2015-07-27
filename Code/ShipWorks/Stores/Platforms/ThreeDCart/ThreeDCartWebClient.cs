@@ -725,7 +725,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart
         private static bool ResponseIsNotWellFormedError(XmlNode productsXml)
         {
             XElement errorElement = productsXml.ToXElement().XPathSelectElement("//Error/Description");
-            return errorElement != null && errorElement.Value.ToLowerInvariant().Contains("not well-formed");
+            return errorElement != null && errorElement.Value.ToUpperInvariant().Contains("not well-formed");
         }
 
         /// <summary>
