@@ -306,7 +306,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                             uspsRate.DeliverDays.Replace("Days", ""))
                         {
                             Tag = new PostalRateSelection(serviceType, PostalConfirmationType.None),
-                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
                         };
                     }
                     else
@@ -317,7 +317,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net
                             uspsRate.Amount,
                             new PostalRateSelection(serviceType, PostalConfirmationType.None))
                         {
-                            ProviderLogo = EnumHelper.GetImage((ShipmentTypeCode)shipment.ShipmentType)
+                            ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.Express1Usps)
                         };
                     }
 

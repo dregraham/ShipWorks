@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             Divelements.SandGrid.Rendering.WindowsXPRenderer windowsXPRenderer1 = new Divelements.SandGrid.Rendering.WindowsXPRenderer();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RateControl));
-            this.sandGrid = new Divelements.SandGrid.SandGrid();
+            this.rateGrid = new Divelements.SandGrid.SandGrid();
             this.gridColumnProvider = new Divelements.SandGrid.Specialized.GridImageColumn();
             this.gridColumnService = new Divelements.SandGrid.GridColumn();
             this.gridColumnDays = new Divelements.SandGrid.GridColumn();
@@ -48,11 +48,11 @@ namespace ShipWorks.Shipping.Editing.Rating
             ((System.ComponentModel.ISupportInitialize)(this.loadingImage)).BeginInit();
             this.SuspendLayout();
             // 
-            // sandGrid
+            // rateGrid
             // 
-            this.sandGrid.AllowMultipleSelection = false;
-            this.sandGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.sandGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
+            this.rateGrid.AllowMultipleSelection = false;
+            this.rateGrid.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.rateGrid.Columns.AddRange(new Divelements.SandGrid.GridColumn[] {
             this.gridColumnProvider,
             this.gridColumnService,
             this.gridColumnDays,
@@ -61,18 +61,18 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.gridColumnDuty,
             this.gridColumnRate,
             this.gridColumnSelect});
-            this.sandGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sandGrid.EmptyTextForeColor = System.Drawing.Color.DimGray;
-            this.sandGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
-            this.sandGrid.ImageTextSeparation = 1;
-            this.sandGrid.Location = new System.Drawing.Point(0, 0);
-            this.sandGrid.Name = "sandGrid";
-            this.sandGrid.NullRepresentation = "";
-            this.sandGrid.PrimaryColumn = this.gridColumnService;
-            this.sandGrid.Renderer = windowsXPRenderer1;
-            this.sandGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
-            this.sandGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
-            this.sandGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
+            this.rateGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rateGrid.EmptyTextForeColor = System.Drawing.Color.DimGray;
+            this.rateGrid.GridLines = Divelements.SandGrid.GridLinesDisplayType.Both;
+            this.rateGrid.ImageTextSeparation = 1;
+            this.rateGrid.Location = new System.Drawing.Point(0, 0);
+            this.rateGrid.Name = "rateGrid";
+            this.rateGrid.NullRepresentation = "";
+            this.rateGrid.PrimaryColumn = this.gridColumnService;
+            this.rateGrid.Renderer = windowsXPRenderer1;
+            this.rateGrid.RowDragBehavior = Divelements.SandGrid.RowDragBehavior.None;
+            this.rateGrid.RowHighlightType = Divelements.SandGrid.RowHighlightType.Full;
+            this.rateGrid.Rows.AddRange(new Divelements.SandGrid.GridRow[] {
             new Divelements.SandGrid.GridRow(new Divelements.SandGrid.GridCell[] {
                         new Divelements.SandGrid.GridCell("USPS"),
                         new Divelements.SandGrid.GridCell("First Class"),
@@ -173,10 +173,10 @@ namespace ShipWorks.Shipping.Editing.Rating
                                         0,
                                         131072})))),
                         ((Divelements.SandGrid.GridCell)(new Divelements.SandGrid.Specialized.GridHyperlinkCell("Select")))})});
-            this.sandGrid.ShadeAlternateRows = true;
-            this.sandGrid.Size = new System.Drawing.Size(493, 94);
-            this.sandGrid.TabIndex = 1;
-            this.sandGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnSelectedRateChanged);
+            this.rateGrid.ShadeAlternateRows = true;
+            this.rateGrid.Size = new System.Drawing.Size(493, 94);
+            this.rateGrid.TabIndex = 1;
+            this.rateGrid.SelectionChanged += new Divelements.SandGrid.SelectionChangedEventHandler(this.OnSelectedRateChanged);
             // 
             // gridColumnProvider
             // 
@@ -301,7 +301,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.loadingRatesLabel);
             this.Controls.Add(this.loadingImage);
-            this.Controls.Add(this.sandGrid);
+            this.Controls.Add(this.rateGrid);
             this.Controls.Add(this.panelFootnote);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "RateControl";
@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping.Editing.Rating
 
         #endregion
 
-        private Divelements.SandGrid.SandGrid sandGrid;
+        private Divelements.SandGrid.SandGrid rateGrid;
         private Divelements.SandGrid.GridColumn gridColumnService;
         private Divelements.SandGrid.GridColumn gridColumnDays;
         private Divelements.SandGrid.Specialized.GridHyperlinkColumn gridColumnSelect;

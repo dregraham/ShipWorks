@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
+using ShipWorks.UI.Utility;
 
 namespace ShipWorks.Shipping.Carriers.iParcel
 {
@@ -38,8 +39,6 @@ namespace ShipWorks.Shipping.Carriers.iParcel
             originControl.Initialize(ShipmentTypeCode.iParcel);
 
             LoadAccounts();
-			
-            EnumHelper.BindComboBox<iParcelServiceType>(service);
 
             packageControl.Initialize();
 		}
@@ -123,6 +122,8 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private void LoadShipmentDetails()
         {
+            BindServiceDropdown();
+
             // Determine if all shipments will have the same destination service types
             using (new MultiValueScope())
             {
@@ -138,6 +139,27 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                     isDeliveryDutyPaid.ApplyMultiCheck(shipment.IParcel.IsDeliveryDutyPaid);
                 }
             }
+        }
+
+        /// <summary>
+        /// Binds the service drop down list based on service types that have been excluded.
+        /// </summary>
+        private void BindServiceDropdown()
+        {
+            iParcelShipmentType shipmentType = new iParcelShipmentType();
+            List<iParcelServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes().Select(s => (iParcelServiceType) s).ToList();
+
+            // Always include the service that the shipments are currently configured with
+            IEnumerable<iParcelServiceType> loadedServices = LoadedShipments.Select(s => (iParcelServiceType) s.IParcel.Service).Distinct();
+            availableServiceTypes = availableServiceTypes.Union(loadedServices).ToList();
+
+            service.DisplayMember = "Key";
+            service.ValueMember = "Value";
+
+            service.DataSource = ActiveEnumerationBindingSource.Create<iParcelServiceType>
+                (
+                    availableServiceTypes.Select(s => new KeyValuePair<string, iParcelServiceType>(EnumHelper.GetDescription(s), s)).ToList()
+                );
         }
 
         /// <summary>
