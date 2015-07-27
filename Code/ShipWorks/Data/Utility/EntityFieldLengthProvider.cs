@@ -355,6 +355,7 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.FedExCustomsAESEEI: return FedExShipmentFields.CustomsAESEEI;
                 case EntityFieldLengthSource.FedExRmaNumber: return FedExShipmentFields.RmaNumber;
                 case EntityFieldLengthSource.FedExRmaReason: return FedExShipmentFields.RmaReason;
+                case EntityFieldLengthSource.FedExShipmentFimsAirWaybill: return FedExShipmentFields.FimsAirWaybill;
 
                 case EntityFieldLengthSource.FedExSmartPostCustomerManifest: return FedExShipmentFields.SmartPostCustomerManifest;
                 case EntityFieldLengthSource.FedExPayorTransportName: return FedExShipmentFields.PayorTransportName;

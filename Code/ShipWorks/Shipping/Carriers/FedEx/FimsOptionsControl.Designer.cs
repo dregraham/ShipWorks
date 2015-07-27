@@ -1,5 +1,6 @@
 ﻿using System;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Utility;
 using ShipWorks.UI.Controls;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
@@ -32,8 +33,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.airWaybillLabel = new System.Windows.Forms.Label();
-            this.airWaybill = new MultiValueTextBox();
+            this.airWaybill = new ShipWorks.UI.Controls.MultiValueTextBox();
+            this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // airWaybillLabel
@@ -50,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.airWaybill.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.airWaybill.Location = new System.Drawing.Point(68, 3);
+            this.fieldLengthProvider.SetMaxLengthSource(this.airWaybill, ShipWorks.Data.Utility.EntityFieldLengthSource.FedExShipmentFimsAirWaybill);
             this.airWaybill.Name = "airWaybill";
             this.airWaybill.Size = new System.Drawing.Size(170, 20);
             this.airWaybill.TabIndex = 1;
@@ -62,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.airWaybillLabel);
             this.Name = "FimsOptionsControl";
             this.Size = new System.Drawing.Size(243, 33);
+            ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -71,5 +77,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
         private System.Windows.Forms.Label airWaybillLabel;
         private MultiValueTextBox airWaybill;
+        private EntityFieldLengthProvider fieldLengthProvider;
     }
 }

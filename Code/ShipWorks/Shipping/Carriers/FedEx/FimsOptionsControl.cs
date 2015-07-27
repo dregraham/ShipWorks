@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             foreach (ShipmentEntity shipment in shipments)
             {
-                airWaybill.ApplyMultiText(shipment.FedEx.FimsAirWaybill);
+                airWaybill.ApplyMultiText(shipment.FedEx.FimsAirWaybill ?? string.Empty);
             }
         }
 
