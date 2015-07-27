@@ -93,7 +93,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools
         /// </summary>
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
-            return new RateGroup(PostalWebClientRates.GetRates(shipment, new LogEntryFactory()));
+            List<RateResult> rates = PostalWebClientRates.GetRates(shipment, new LogEntryFactory());
+            return new RateGroup(FilterRatesByExcludedServices(shipment, rates));
         }
 
         /// <summary>

@@ -32,11 +32,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory16 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory17 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory18 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory19 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory20 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionHoldAtLocation = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fedExHoldAtLocationControl = new ShipWorks.Shipping.Carriers.FedEx.FedExHoldAtLocationControl();
             this.sectionBilling = new ShipWorks.UI.Controls.CollapsibleGroupControl();
@@ -241,6 +241,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionRecipient
             // 
+            // 
+            // sectionRecipient.ContentPanel
+            // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(504, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -260,7 +267,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 667);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 700);
+            this.sectionReturns.SectionName = "FedEx® Returns";
             this.sectionReturns.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionShipment
@@ -278,11 +286,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelPackaging);
             this.sectionShipment.Location = new System.Drawing.Point(3, 63);
-            this.sectionShipment.Size = new System.Drawing.Size(504, 338);
+            this.sectionShipment.Size = new System.Drawing.Size(504, 371);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 725);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 758);
             this.sectionLabelOptions.Size = new System.Drawing.Size(504, 24);
             // 
             // sectionHoldAtLocation
@@ -296,7 +304,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHoldAtLocation.ContentPanel.Controls.Add(this.fedExHoldAtLocationControl);
             this.sectionHoldAtLocation.ExpandedHeight = 176;
             this.sectionHoldAtLocation.ExtraText = "";
-            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 609);
+            this.sectionHoldAtLocation.Location = new System.Drawing.Point(3, 642);
             this.sectionHoldAtLocation.Name = "sectionHoldAtLocation";
             this.sectionHoldAtLocation.SectionName = "Hold at FedEx Location";
             this.sectionHoldAtLocation.SettingsKey = "{9b529fd1-0bfb-4d24-8aa8-a856c930e196}";
@@ -324,7 +332,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionBilling.ContentPanel.Controls.Add(this.panelPayorTransport);
             this.sectionBilling.ExpandedHeight = 149;
             this.sectionBilling.ExtraText = "";
-            this.sectionBilling.Location = new System.Drawing.Point(3, 493);
+            this.sectionBilling.Location = new System.Drawing.Point(3, 526);
             this.sectionBilling.Name = "sectionBilling";
             this.sectionBilling.SectionName = "Billing";
             this.sectionBilling.SettingsKey = "84780845-669f-4fb1-9ab1-cd2accdff93c";
@@ -613,7 +621,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(-26, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(634, 223);
+            this.packageControl.Size = new System.Drawing.Size(1332, 246);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
@@ -695,7 +703,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionHomeDelivery.ContentPanel.Controls.Add(this.labelHomeInstructions);
             this.sectionHomeDelivery.ExpandedHeight = 144;
             this.sectionHomeDelivery.ExtraText = "";
-            this.sectionHomeDelivery.Location = new System.Drawing.Point(3, 551);
+            this.sectionHomeDelivery.Location = new System.Drawing.Point(3, 584);
             this.sectionHomeDelivery.Name = "sectionHomeDelivery";
             this.sectionHomeDelivery.SectionName = "Home Delivery";
             this.sectionHomeDelivery.SettingsKey = "{93c6c394-09fb-4126-9c2e-a5129d9b5ec6}";
@@ -785,7 +793,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFreight.ContentPanel.Controls.Add(this.freightInsidePickup);
             this.sectionFreight.ExpandedHeight = 89;
             this.sectionFreight.ExtraText = "";
-            this.sectionFreight.Location = new System.Drawing.Point(3, 580);
+            this.sectionFreight.Location = new System.Drawing.Point(3, 613);
             this.sectionFreight.Name = "sectionFreight";
             this.sectionFreight.SectionName = "Freight";
             this.sectionFreight.SettingsKey = "{A7947F0F-9648-4443-A678-F67E7FCEE38C}";
@@ -869,7 +877,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionOptions.ContentPanel.Controls.Add(this.labelSignature);
             this.sectionOptions.ExpandedHeight = 172;
             this.sectionOptions.ExtraText = "";
-            this.sectionOptions.Location = new System.Drawing.Point(3, 435);
+            this.sectionOptions.Location = new System.Drawing.Point(3, 468);
             this.sectionOptions.Name = "sectionOptions";
             this.sectionOptions.SectionName = "Signature & Reference";
             this.sectionOptions.SettingsKey = "{2740f860-1d14-453e-a511-8f62ad1e7dcc}";
@@ -884,7 +892,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.referenceShipmentIntegrity.Name = "referenceShipmentIntegrity";
             this.referenceShipmentIntegrity.Size = new System.Drawing.Size(210, 21);
             this.referenceShipmentIntegrity.TabIndex = 9;
-            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory16;
+            this.referenceShipmentIntegrity.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelShipmentIntegrity
             // 
@@ -904,7 +912,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.referencePO.Name = "referencePO";
             this.referencePO.Size = new System.Drawing.Size(210, 21);
             this.referencePO.TabIndex = 7;
-            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory17;
+            this.referencePO.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelPO
             // 
@@ -924,7 +932,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.referenceInvoice.Name = "referenceInvoice";
             this.referenceInvoice.Size = new System.Drawing.Size(210, 21);
             this.referenceInvoice.TabIndex = 5;
-            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory18;
+            this.referenceInvoice.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelInvoice
             // 
@@ -944,7 +952,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.referenceCustomer.Name = "referenceCustomer";
             this.referenceCustomer.Size = new System.Drawing.Size(210, 21);
             this.referenceCustomer.TabIndex = 3;
-            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory19;
+            this.referenceCustomer.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // labelReference
             // 
@@ -1037,7 +1045,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionEmail.ContentPanel.Controls.Add(this.pictureBox1);
             this.sectionEmail.ExpandedHeight = 277;
             this.sectionEmail.ExtraText = "";
-            this.sectionEmail.Location = new System.Drawing.Point(3, 522);
+            this.sectionEmail.Location = new System.Drawing.Point(3, 555);
             this.sectionEmail.Name = "sectionEmail";
             this.sectionEmail.SectionName = "Email Notifications";
             this.sectionEmail.SettingsKey = "{2a314180-f0db-4a03-ba4c-dcc418010bca}";
@@ -1568,9 +1576,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionCOD.ContentPanel.Controls.Add(this.codEnabled);
             this.sectionCOD.ExpandedHeight = 543;
             this.sectionCOD.ExtraText = "";
-            this.sectionCOD.Location = new System.Drawing.Point(3, 638);
+            this.sectionCOD.Location = new System.Drawing.Point(3, 671);
             this.sectionCOD.Name = "sectionCOD";
-            this.sectionCOD.SectionName = "C.O.D.";
+            this.sectionCOD.SectionName = "FedEx® Collect on Delivery (C.O.D.) or FedEx Ground® C.O.D";
             this.sectionCOD.SettingsKey = "{c15e50fb-864c-415f-a752-ddfcc1c1e315}";
             this.sectionCOD.Size = new System.Drawing.Size(504, 24);
             this.sectionCOD.TabIndex = 10;
@@ -1724,7 +1732,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.smartManifestID.Name = "smartManifestID";
             this.smartManifestID.Size = new System.Drawing.Size(222, 21);
             this.smartManifestID.TabIndex = 88;
-            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory20;
+            this.smartManifestID.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // sectionSmartPost
             // 
@@ -1747,9 +1755,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionSmartPost.ContentPanel.Controls.Add(this.labelSmartManifestID);
             this.sectionSmartPost.ExpandedHeight = 174;
             this.sectionSmartPost.ExtraText = "";
-            this.sectionSmartPost.Location = new System.Drawing.Point(3, 464);
+            this.sectionSmartPost.Location = new System.Drawing.Point(3, 497);
             this.sectionSmartPost.Name = "sectionSmartPost";
-            this.sectionSmartPost.SectionName = "FedEx SmartPost";
+            this.sectionSmartPost.SectionName = "FedEx SmartPost®";
             this.sectionSmartPost.SettingsKey = "{37cbefe5-8feb-4b9c-945f-970382580a52}";
             this.sectionSmartPost.Size = new System.Drawing.Size(504, 24);
             this.sectionSmartPost.TabIndex = 17;
@@ -1870,7 +1878,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionPackageDetails.ContentPanel.Controls.Add(this.otherPackageHolder);
             this.sectionPackageDetails.ExpandedHeight = 774;
             this.sectionPackageDetails.ExtraText = "";
-            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 406);
+            this.sectionPackageDetails.Location = new System.Drawing.Point(3, 439);
             this.sectionPackageDetails.Name = "sectionPackageDetails";
             this.sectionPackageDetails.SectionName = "Other Package Details";
             this.sectionPackageDetails.SettingsKey = "{ce947713-e7de-463b-b583-9106a542cd24}";
@@ -1912,7 +1920,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.dropoffType);
             this.sectionServiceOptions.ExpandedHeight = 63;
             this.sectionServiceOptions.ExtraText = "";
-            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 696);
+            this.sectionServiceOptions.Location = new System.Drawing.Point(3, 729);
             this.sectionServiceOptions.Name = "sectionServiceOptions";
             this.sectionServiceOptions.SectionName = "Service Options";
             this.sectionServiceOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
@@ -1948,7 +1956,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
             this.sectionFimsOptions.ExtraText = "";
-            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 754);
+            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 787);
             this.sectionFimsOptions.Name = "sectionFimsOptions";
             this.sectionFimsOptions.SectionName = "FIMS Options";
             this.sectionFimsOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";

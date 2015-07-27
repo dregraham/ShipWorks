@@ -6,6 +6,7 @@ using Interapptive.Shared.Net;
 using log4net;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -21,6 +22,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private ICarrierSettingsRepository settingsRepository;
         private ICertificateInspector certificateInspector;
         private ILog log;
+        private IExcludedServiceTypeRepository excludedServiceTypeRepository;
         
         /// <summary>
         /// Notes if version capture has been done
@@ -83,6 +85,15 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         {
             get { return log; }
             set { log = value; }
+        }
+
+        /// <summary>
+        /// Excluded Service Type Repository for the shipping clerk
+        /// </summary>
+        public IExcludedServiceTypeRepository ExcludedServiceTypeRepository
+        {
+            get { return excludedServiceTypeRepository; }
+            set { excludedServiceTypeRepository = value; }
         }
     }
 }

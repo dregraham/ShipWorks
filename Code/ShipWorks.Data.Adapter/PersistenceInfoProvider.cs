@@ -55,7 +55,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Method which initializes the internal datastores with the structure of hierarchical types.</summary>
 		private void Init()
 		{
-			base.InitClass((165 + 0));
+			base.InitClass((167 + 0));
 			InitActionEntityMappings();
 			InitActionFilterTriggerEntityMappings();
 			InitActionQueueEntityMappings();
@@ -100,6 +100,8 @@ namespace ShipWorks.Data.Adapter
 			InitEndiciaShipmentEntityMappings();
 			InitEtsyOrderEntityMappings();
 			InitEtsyStoreEntityMappings();
+			InitExcludedPackageTypeEntityMappings();
+			InitExcludedServiceTypeEntityMappings();
 			InitFedExAccountEntityMappings();
 			InitFedExEndOfDayCloseEntityMappings();
 			InitFedExPackageEntityMappings();
@@ -891,6 +893,20 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "EtsyStoreEntity", "EtsyStoreName", "EtsyStoreName", false, (int)SqlDbType.NVarChar, 255, 0, 0, false, "", null, typeof(System.String), 3 );
 			base.AddElementFieldMapping( "EtsyStoreEntity", "OAuthToken", "OAuthToken", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
 			base.AddElementFieldMapping( "EtsyStoreEntity", "OAuthTokenSecret", "OAuthTokenSecret", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 5 );
+		}
+		/// <summary>Inits ExcludedPackageTypeEntity's mappings</summary>
+		private void InitExcludedPackageTypeEntityMappings()
+		{
+			base.AddElementMapping( "ExcludedPackageTypeEntity", "ShipWorksLocal", @"dbo", "ExcludedPackageType", 2 );
+			base.AddElementFieldMapping( "ExcludedPackageTypeEntity", "ShipmentType", "ShipmentType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 0 );
+			base.AddElementFieldMapping( "ExcludedPackageTypeEntity", "PackageType", "PackageType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
+		}
+		/// <summary>Inits ExcludedServiceTypeEntity's mappings</summary>
+		private void InitExcludedServiceTypeEntityMappings()
+		{
+			base.AddElementMapping( "ExcludedServiceTypeEntity", "ShipWorksLocal", @"dbo", "ExcludedServiceType", 2 );
+			base.AddElementFieldMapping( "ExcludedServiceTypeEntity", "ShipmentType", "ShipmentType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 0 );
+			base.AddElementFieldMapping( "ExcludedServiceTypeEntity", "ServiceType", "ServiceType", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 1 );
 		}
 		/// <summary>Inits FedExAccountEntity's mappings</summary>
 		private void InitFedExAccountEntityMappings()

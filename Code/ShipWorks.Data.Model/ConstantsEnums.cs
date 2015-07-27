@@ -2868,6 +2868,36 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedPackageType.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ExcludedPackageTypeFieldIndex:int
+	{
+		///<summary>ShipmentType. </summary>
+		ShipmentType,
+		///<summary>PackageType. </summary>
+		PackageType,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: ExcludedServiceType.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum ExcludedServiceTypeFieldIndex:int
+	{
+		///<summary>ShipmentType. </summary>
+		ShipmentType,
+		///<summary>ServiceType. </summary>
+		ServiceType,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: FedExAccount.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -10499,6 +10529,10 @@ namespace ShipWorks.Data.Model
 		EtsyOrderEntity,
 		///<summary>EtsyStore</summary>
 		EtsyStoreEntity,
+		///<summary>ExcludedPackageType</summary>
+		ExcludedPackageTypeEntity,
+		///<summary>ExcludedServiceType</summary>
+		ExcludedServiceTypeEntity,
 		///<summary>FedExAccount</summary>
 		FedExAccountEntity,
 		///<summary>FedExEndOfDayClose</summary>

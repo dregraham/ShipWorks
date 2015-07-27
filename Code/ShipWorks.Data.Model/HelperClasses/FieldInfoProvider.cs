@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (165 + 0));
+			base.InitClass( (167 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitEndiciaShipmentEntityInfos();
 			InitEtsyOrderEntityInfos();
 			InitEtsyStoreEntityInfos();
+			InitExcludedPackageTypeEntityInfos();
+			InitExcludedServiceTypeEntityInfos();
 			InitFedExAccountEntityInfos();
 			InitFedExEndOfDayCloseEntityInfos();
 			InitFedExPackageEntityInfos();
@@ -848,6 +850,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EtsyStoreEntity", "EtsyStoreName", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.EtsyStoreName, 255, 0, 0);
 			base.AddElementFieldInfo("EtsyStoreEntity", "OAuthToken", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthToken, 50, 0, 0);
 			base.AddElementFieldInfo("EtsyStoreEntity", "OAuthTokenSecret", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthTokenSecret, 50, 0, 0);
+		}
+		/// <summary>Inits ExcludedPackageTypeEntity's FieldInfo objects</summary>
+		private void InitExcludedPackageTypeEntityInfos()
+		{
+			base.AddElementFieldInfo("ExcludedPackageTypeEntity", "ShipmentType", typeof(System.Int32), true, false, false, false,  (int)ExcludedPackageTypeFieldIndex.ShipmentType, 0, 0, 10);
+			base.AddElementFieldInfo("ExcludedPackageTypeEntity", "PackageType", typeof(System.Int32), true, false, false, false,  (int)ExcludedPackageTypeFieldIndex.PackageType, 0, 0, 10);
+		}
+		/// <summary>Inits ExcludedServiceTypeEntity's FieldInfo objects</summary>
+		private void InitExcludedServiceTypeEntityInfos()
+		{
+			base.AddElementFieldInfo("ExcludedServiceTypeEntity", "ShipmentType", typeof(System.Int32), true, false, false, false,  (int)ExcludedServiceTypeFieldIndex.ShipmentType, 0, 0, 10);
+			base.AddElementFieldInfo("ExcludedServiceTypeEntity", "ServiceType", typeof(System.Int32), true, false, false, false,  (int)ExcludedServiceTypeFieldIndex.ServiceType, 0, 0, 10);
 		}
 		/// <summary>Inits FedExAccountEntity's FieldInfo objects</summary>
 		private void InitFedExAccountEntityInfos()

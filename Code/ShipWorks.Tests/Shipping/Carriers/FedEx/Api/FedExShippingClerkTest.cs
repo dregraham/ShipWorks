@@ -24,6 +24,10 @@ using log4net;
 using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 using Interapptive.Shared.Net;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
@@ -66,6 +70,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<ILabelRepository> labelRepository;
 
         private ShipmentEntity shipmentEntity;
+
+        private Mock<IExcludedServiceTypeRepository> excludedServiceTypeRepository;
 
         [TestInitialize]
         public void Initialize()
@@ -214,6 +220,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.FedEx.SmartPostHubID = "5571";
 
+            excludedServiceTypeRepository = new Mock<IExcludedServiceTypeRepository>();
+            excludedServiceTypeRepository.Setup(x => x.GetExcludedServiceTypes(It.IsAny<ShipmentType>()))
+                .Returns(new List<ExcludedServiceTypeEntity> { new ExcludedServiceTypeEntity((int)ShipmentTypeCode.FedEx, (int)FedExServiceType.FedExGround) });
+
             FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
             {
                 Inspector = certificateInspector.Object,
@@ -221,9 +231,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
                 RequestFactory = requestFactory.Object,
                 Log = log.Object,
                 ForceVersionCapture = true,
-                LabelRepository = labelRepository.Object
+                LabelRepository = labelRepository.Object,
+                ExcludedServiceTypeRepository = excludedServiceTypeRepository.Object
             };
-
+            
             // Force our test object to perform version capture when called.
             testObject = new FedExShippingClerk(parameters);
         }

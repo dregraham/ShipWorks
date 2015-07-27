@@ -6159,6 +6159,36 @@ namespace ShipWorks.Data.Model.HelperClasses
 		}
 	}
 
+	/// <summary>Field Creation Class for entity ExcludedPackageTypeEntity</summary>
+	public partial class ExcludedPackageTypeFields
+	{
+		/// <summary>Creates a new ExcludedPackageTypeEntity.ShipmentType field instance</summary>
+		public static EntityField2 ShipmentType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ExcludedPackageTypeFieldIndex.ShipmentType);}
+		}
+		/// <summary>Creates a new ExcludedPackageTypeEntity.PackageType field instance</summary>
+		public static EntityField2 PackageType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ExcludedPackageTypeFieldIndex.PackageType);}
+		}
+	}
+
+	/// <summary>Field Creation Class for entity ExcludedServiceTypeEntity</summary>
+	public partial class ExcludedServiceTypeFields
+	{
+		/// <summary>Creates a new ExcludedServiceTypeEntity.ShipmentType field instance</summary>
+		public static EntityField2 ShipmentType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ExcludedServiceTypeFieldIndex.ShipmentType);}
+		}
+		/// <summary>Creates a new ExcludedServiceTypeEntity.ServiceType field instance</summary>
+		public static EntityField2 ServiceType
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ExcludedServiceTypeFieldIndex.ServiceType);}
+		}
+	}
+
 	/// <summary>Field Creation Class for entity FedExAccountEntity</summary>
 	public partial class FedExAccountFields
 	{

@@ -2,8 +2,15 @@
 GO
 SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDENTIFIER, ANSI_NULLS ON
 GO
-PRINT N'Altering [dbo].[FedExShipment]'
+PRINT N'Creating [dbo].[ExcludedPackageType]'
 GO
-ALTER TABLE [dbo].[FedExShipment] ADD
-[FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+CREATE TABLE [dbo].[ExcludedPackageType](
+	[ShipmentType] [int] NOT NULL,
+	[PackageType] [int] NOT NULL,
+ CONSTRAINT [PK_ExcludedPackageType] PRIMARY KEY CLUSTERED 
+(
+	[ShipmentType] ASC,
+	[PackageType] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
 GO

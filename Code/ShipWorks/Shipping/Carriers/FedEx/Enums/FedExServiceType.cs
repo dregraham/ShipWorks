@@ -70,25 +70,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx First Overnight® Freight")]
         FirstFreight = 19,
 
-        [Description("FedEx One Rate (First Overnight)")]
+        [Description("FedEx One Rate® (First Overnight)")]
         OneRateFirstOvernight = 20,
 
-        [Description("FedEx One Rate (Priority Overnight)")]
+        [Description("FedEx One Rate® (Priority Overnight)")]
         OneRatePriorityOvernight = 21,
 
-        [Description("FedEx One Rate (Standard Overnight)")]
+        [Description("FedEx One Rate® (Standard Overnight)")]
         OneRateStandardOvernight = 22,
 
-        [Description("FedEx One Rate (2Day)")]
+        [Description("FedEx One Rate® (2Day)")]
         OneRate2Day = 23,
 
-        [Description("FedEx One Rate (2Day A.M.)")]
+        [Description("FedEx One Rate® (2Day A.M.)")]
         OneRate2DayAM = 24,
 
-        [Description("FedEx One Rate (Express Saver)")]
+        [Description("FedEx One Rate® (Express Saver)")]
         OneRateExpressSaver = 25,
 
+        [Description("FedEx Economy")]
+        FedExEconomyCanada = 26,
+
         [Description("FedEx FIMS")]
-        FedExFims = 26,
+        FedExFims = 27,
     }
 }

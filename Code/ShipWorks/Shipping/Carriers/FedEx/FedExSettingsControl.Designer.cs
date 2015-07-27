@@ -36,6 +36,8 @@
             this.pennyOne = new System.Windows.Forms.CheckBox();
             this.pennyOneLink = new ShipWorks.UI.Controls.LinkControl();
             this.fimsLabel = new System.Windows.Forms.Label();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.FedEx.FedExServicePickerControl();
+            this.packagePicker = new ShipWorks.Shipping.Carriers.FedEx.FedExPackagePickerControl();
             this.enableFims = new System.Windows.Forms.CheckBox();
             this.fimsUsernameLabel = new System.Windows.Forms.Label();
             this.fimsUsername = new System.Windows.Forms.TextBox();
@@ -123,6 +125,22 @@
             this.fimsLabel.TabIndex = 7;
             this.fimsLabel.Text = "FIMS (FedEx International MailService)";
             // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 432);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(421, 200);
+            this.servicePicker.TabIndex = 13;
+            // 
+            // packagePicker
+            // 
+            this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packagePicker.Location = new System.Drawing.Point(9, 642);
+            this.packagePicker.Name = "packagePicker";
+            this.packagePicker.Size = new System.Drawing.Size(421, 200);
+            this.packagePicker.TabIndex = 14;
+            // 
             // enableFims
             // 
             this.enableFims.AutoSize = true;
@@ -173,6 +191,8 @@
             this.AutoScroll = true;
             this.Controls.Add(this.fimsPassword);
             this.Controls.Add(this.fimsPasswordLabel);
+            this.Controls.Add(this.packagePicker);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.fimsUsername);
             this.Controls.Add(this.fimsUsernameLabel);
             this.Controls.Add(this.enableFims);
@@ -185,7 +205,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(445, 512);
+            this.Size = new System.Drawing.Size(428, 394);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,6 +221,8 @@
         private System.Windows.Forms.CheckBox pennyOne;
         private UI.Controls.LinkControl pennyOneLink;
         private System.Windows.Forms.Label fimsLabel;
+        private FedExServicePickerControl servicePicker;
+        private FedExPackagePickerControl packagePicker;
         private System.Windows.Forms.CheckBox enableFims;
         private System.Windows.Forms.Label fimsUsernameLabel;
         private System.Windows.Forms.TextBox fimsUsername;

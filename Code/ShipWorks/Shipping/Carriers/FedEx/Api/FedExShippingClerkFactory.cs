@@ -11,6 +11,7 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -37,7 +38,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                     LabelRepository = new FedExLabelRepository(),
                     RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
                     SettingsRepository = new FedExSettingsRepository(),
-                    Log = LogManager.GetLogger(typeof(FedExShippingClerk))
+                    Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
+                    ExcludedServiceTypeRepository = new ExcludedServiceTypeRepository()
                 };
 
                 fedExShippingClerk = new FedExShippingClerk(parameters);

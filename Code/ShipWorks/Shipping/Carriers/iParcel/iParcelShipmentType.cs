@@ -44,12 +44,13 @@ namespace ShipWorks.Shipping.Carriers.iParcel
     {
         private readonly IiParcelRepository repository;
         private readonly IiParcelServiceGateway serviceGateway;
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="iParcelShipmentType" /> class.
         /// </summary>
         public iParcelShipmentType()
-            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway())
+            : this(new iParcelDatabaseRepository(), new iParcelServiceGateway(), new ExcludedServiceTypeRepository())
         {
         }
 
@@ -58,10 +59,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         /// <param name="repository">The repository.</param>
         /// <param name="serviceGateway">The service gateway.</param>
-        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway)
+        public iParcelShipmentType(IiParcelRepository repository, IiParcelServiceGateway serviceGateway, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         {
             this.repository = repository;
             this.serviceGateway = serviceGateway;
+            this.excludedServiceTypeRepository = excludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -518,7 +520,10 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <returns>An iParcelSettingsControl object.</returns>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new iParcelSettingsControl();
+            iParcelSettingsControl settingsControl = new iParcelSettingsControl();
+            settingsControl.Initialize(ShipmentTypeCode);
+
+            return settingsControl;
         }
 
         /// <summary>
@@ -530,6 +535,19 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
             return new iParcelServiceControl(rateControl);
+        }
+
+        /// <summary>
+        /// Gets the service types that are available for this shipment type (i.e have not
+        /// been excluded). The integer values are intended to correspond to the appropriate
+        /// enumeration values of the specific shipment type (i.e. the integer values would
+        /// correspond to PostalServiceType values for a UspsShipmentType).
+        /// </summary>
+        /// <param name="repository">The repository from which the service types are fetched.</param>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            IEnumerable<int> allServices = EnumHelper.GetEnumList<iParcelServiceType>().Select(e => (int)e.Value);
+            return allServices.Except(GetExcludedServiceTypes(repository));
         }
 
         /// <summary>
@@ -798,7 +816,12 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                                                                                             .Where(grp => grp.Count() == shipment.IParcel.Packages.Count)
                                                                                             .Select(grp => EnumHelper.GetEnumByApiValue<iParcelServiceType>(grp.Key.ToString()));
 
-                    foreach (iParcelServiceType serviceType in supportedServiceTypes)
+                    IEnumerable<iParcelServiceType> disabledServices = GetExcludedServiceTypes(excludedServiceTypeRepository)
+                        .Select(s => (iParcelServiceType)s);
+                    
+
+                    // Filter out the excluded service types before creating rate results
+                    foreach (iParcelServiceType serviceType in supportedServiceTypes.Except(disabledServices.Where(s => (iParcelServiceType)s != (iParcelServiceType)shipment.IParcel.Service)))
                     {
                         // Calculate the total shipment cost for all the package rates for the service type
                         List<DataRow> serviceRows = costInfoTable.AsEnumerable()

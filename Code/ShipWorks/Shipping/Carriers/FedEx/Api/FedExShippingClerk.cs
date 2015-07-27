@@ -30,6 +30,7 @@ using ReturnedRateType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Retu
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
 using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -44,6 +45,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly ICertificateInspector certificateInspector;
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
         private readonly ILog log;
 
         /// <summary>
@@ -57,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             requestFactory = parameters.RequestFactory;
             log = parameters.Log;
             labelRepository = parameters.LabelRepository;
+            excludedServiceTypeRepository = parameters.ExcludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -168,6 +171,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
+                case FedExServiceType.FedExEconomyCanada:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -570,12 +574,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 overallResults.AddRange(GetSmartPostRates(shipment));
                 overallResults.AddRange(GetOneRateRates(shipment));
 
-                return new RateGroup(overallResults);
+                // Filter out any excluded services, but always include the service that the shipment is configured with
+                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
+
+                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+
+                return finalGroup;
             }
             catch (Exception ex)
             {
                 throw (HandleException(ex));
             }
+        }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this fedex shipment type.
+        /// </summary>
+        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
+                .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> {(FedExServiceType)shipment.FedEx.Service}).ToList();
+
+            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection)r.Tag).ServiceType)).ToList();
         }
 
         /// <summary>
@@ -712,7 +732,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 FedExServiceType serviceType;
 
-                serviceType = GetFedExServiceType(rateDetail);
+                serviceType = GetFedExServiceType(rateDetail, shipment);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
@@ -826,6 +846,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                     return ServiceLevelType.ThreeDays;
 
                 case FedExServiceType.InternationalEconomy:
@@ -877,7 +898,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
             {
@@ -908,6 +929,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_EXPRESS_SAVER:
                 {
+                    // In canada fedex express saver is called FedEx Economy
+                    if (shipment.OriginCountryCode == "CA")
+                    {
+                        return FedExServiceType.FedExEconomyCanada;
+                    }
+
                     return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
                 }
 

@@ -233,6 +233,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
+            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (FedExServiceType)s).ToList();
+
             // If they are all of the same service class, we can load the service classes
             if (allDomestic || allInternational || allCanada)
             {
@@ -241,7 +243,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
                 LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
 
-                service.DataSource = FedExUtility.GetValidServiceTypes(overriddenShipments)
+                List<FedExServiceType> fedexShipmentsToLoad = FedExUtility.GetValidServiceTypes(overriddenShipments).Intersect(availableServices).ToList();
+
+                if (LoadedShipments.Any())
+                {
+                    // Always include the service type that the shipment is currently configured in the 
+                    // event the shipment was configured prior to a service being excluded
+                    // Always include the service that the shipments are currently configured with
+                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Distinct();
+                    fedexShipmentsToLoad = fedexShipmentsToLoad.Union(loadedServices).ToList();
+                }
+
+                service.DataSource = fedexShipmentsToLoad
                        .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
             }
             else
@@ -672,35 +685,24 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             SuspendRateCriteriaChangeEvent();
             SuspendShipSenseFieldChangeEvent();
-
-            bool previousMulti = packagingType.MultiValued;
-            FedExPackagingType? previousValue = (FedExPackagingType?) packagingType.SelectedValue;
+            
+            IEnumerable<FedExPackagingType> applicablePackageTypes;
 
             // If all the services are the same, then load up the valid packaging values
             if (serviceType != null)
             {
-                packagingType.DataSource = FedExUtility.GetValidPackagingTypes(serviceType.Value)
-                    .Select(type => new KeyValuePair<string, FedExPackagingType>(EnumHelper.GetDescription(type), type)).ToList();
+                List<FedExPackagingType> validPackagingTypes = FedExUtility.GetValidPackagingTypes(serviceType.Value);
+
+                applicablePackageTypes = validPackagingTypes
+                    .Intersect(GetAvailablePackages(LoadedShipments))
+                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault());
             }
             else
             {
-                packagingType.DataSource = new KeyValuePair<string, FedExPackagingType>[] { 
-                    new KeyValuePair<string, FedExPackagingType>(EnumHelper.GetDescription(FedExPackagingType.Custom), FedExPackagingType.Custom) };
+                applicablePackageTypes = new[] { FedExPackagingType.Custom };
             }
 
-            if (previousMulti)
-            {
-                packagingType.MultiValued = true;
-            }
-            else if (previousValue != null)
-            {
-                packagingType.SelectedValue = previousValue.Value;
-
-                if (packagingType.SelectedIndex == -1)
-                {
-                    packagingType.SelectedIndex = 0;
-                }
-            }
+            packagingType.BindDataSourceAndPreserveSelection(applicablePackageTypes.ToDictionary(x => EnumHelper.GetDescription(x), x => x).ToList());
 
             ResumeRateCriteriaChangeEvent();
             ResumeShipSenseFieldChangeEvent();
@@ -1044,7 +1046,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Express Saver®\n" +
                 "FedEx Ground®\n" +
 
-                "FedEx One Rate\u2120\n" +
+                "FedEx One Rate®\n" +
 
                 "FedEx Home Delivery®\n" +
                 "FedEx Ground® C.O.D.\n" +
@@ -1064,12 +1066,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 "FedEx Evening Home Delivery®\n" +
                 "FedEx Appointment Home Delivery®\n" +
                 "FedEx SmartPost®\n" + 
-                "FedEx SmartPost Standard A\n" + 
-                "FedEx SmartPost Standard B\n" + 
+                "FedEx SmartPost Parcel Select Lightweight\n" + 
                 "FedEx SmartPost® Bound Printed Matter\n" + 
                 "FedEx SmartPost® Media\n" +
                 "FedEx SmartPost Parcel Select\n" + 
-                "FedEx ShipAlert® (Email ID)\n" +
+                "FedEx ShipAlert®\n" +
                 "FedEx Priority Alert Plus™\n\n" +
 
                 "FedEx® Envelope\n" +
@@ -1113,6 +1114,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnNonStandardPackagingChanged(object sender, EventArgs e)
         {
             RaiseRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Gets the available package types
+        /// </summary>
+        private static IEnumerable<FedExPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new FedExShipmentType()
+                .GetAvailablePackageTypes()
+                .Union(shipments.Select(x => x.FedEx)
+                    .Where(x => x != null)
+                    .Select(x => x.PackagingType))
+                .Cast<FedExPackagingType>();
         }
     }
 }
