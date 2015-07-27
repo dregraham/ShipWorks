@@ -3466,6 +3466,8 @@ namespace ShipWorks.Data.Model
 		LinearUnitType,
 		///<summary>RequestedLabelFormat. </summary>
 		RequestedLabelFormat,
+		///<summary>FimsAirWaybill. </summary>
+		FimsAirWaybill,
 		/// <summary></summary>
 		AmountOfFields
 	}

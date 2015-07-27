@@ -254,10 +254,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             // Make it visible if any of them have saturday dates
             saturdayDelivery.Visible = anySaturday;
-
-            // Only show home delivery section if they are all home delivery
-            //sectionHomeDelivery.Visible = allServicesSame && serviceType == FedExServiceType.GroundHomeDelivery;
-
+            
             // Show freight if there are all freight
             freightInsidePickup.Visible = anyDomestic;
             freightInsideDelivery.Visible = anyDomestic;
@@ -327,6 +324,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 fedExHoldAtLocationControl.LoadFromShipment(LoadedShipments);
+                fimsOptionsControl.LoadFromShipment(LoadedShipments);
             }
             
             OnChangeService(this, EventArgs.Empty);
@@ -550,6 +548,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 SaveEmailNotificationSettings(shipment.FedEx);
                 fedExHoldAtLocationControl.SaveToShipment(shipment);
+                fimsOptionsControl.SaveToShipment(shipment);
             }
 
             ResumeRateCriteriaChangeEvent();

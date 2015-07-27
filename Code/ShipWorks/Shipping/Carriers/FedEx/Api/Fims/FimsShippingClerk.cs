@@ -96,8 +96,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         private static void ValidateShipment(ShipmentEntity shipmentEntity)
         {
-            if (shipmentEntity.FedEx.Service != (int)FedExServiceType.FedExFimsUnder4Lbs &&
-                shipmentEntity.FedEx.Service != (int)FedExServiceType.FedExFims4LbsAndOver)
+            if (FedExUtility.IsFimsService((FedExServiceType) shipmentEntity.FedEx.Service))
             {
                 throw new FedExException("FedEX FIMS shipments require selecting a FIMS service type.");
             }

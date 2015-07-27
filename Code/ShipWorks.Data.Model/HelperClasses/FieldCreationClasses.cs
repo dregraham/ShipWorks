@@ -7532,6 +7532,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.RequestedLabelFormat);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.FimsAirWaybill field instance</summary>
+		public static EntityField2 FimsAirWaybill
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FimsAirWaybill);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>

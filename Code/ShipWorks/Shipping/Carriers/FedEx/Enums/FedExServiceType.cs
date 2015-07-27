@@ -88,10 +88,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         [Description("FedEx One Rate (Express Saver)")]
         OneRateExpressSaver = 25,
 
-        [Description("FedEx FIMS Under 4 lbs")]
-        FedExFimsUnder4Lbs = 26,
-
-        [Description("FedEx FIMS 4 lbs and Over")]
-        FedExFims4LbsAndOver = 27,
+        [Description("FedEx FIMS")]
+        FedExFims = 26,
     }
 }

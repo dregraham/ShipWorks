@@ -144,8 +144,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Add FIMS if enabled
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
-                serviceTypes.Add(FedExServiceType.FedExFimsUnder4Lbs);
-                serviceTypes.Add(FedExServiceType.FedExFims4LbsAndOver);
+                serviceTypes.Add(FedExServiceType.FedExFims);
             }
 
             return serviceTypes;
@@ -268,8 +267,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         public static bool IsFimsService(FedExServiceType service)
         {
-            return (service == FedExServiceType.FedExFimsUnder4Lbs ||
-                    service == FedExServiceType.FedExFims4LbsAndOver);
+            return service == FedExServiceType.FedExFims;
         }
 
         /// <summary>
