@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Web.Services.Description;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
@@ -90,7 +91,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 FedExServiceType.FirstOvernight,
                 FedExServiceType.PriorityOvernight,
                 FedExServiceType.FedEx2Day,
-                FedExServiceType.FedExExpressSaver,
                 FedExServiceType.FedEx1DayFreight,
                 FedExServiceType.FedEx2DayAM
             };
@@ -98,6 +98,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Since all shipments are going to the same country, just pick out the first one
             if (shipments.Count > 0 && shipments.First().AdjustedShipCountryCode() == "US")
             {
+                serviceTypes.Add(FedExServiceType.FedExExpressSaver);
+
                 // Add additional service types for US domestic
                 serviceTypes.Add(FedExServiceType.GroundHomeDelivery);
                 serviceTypes.Add(FedExServiceType.SmartPost);
@@ -112,6 +114,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.OneRateExpressSaver);
                 serviceTypes.Add(FedExServiceType.OneRate2Day);
                 serviceTypes.Add(FedExServiceType.OneRate2DayAM);
+            }
+            else if (shipments.Count > 0 && shipments.First().AdjustedShipCountryCode() == "CA")
+            {
+                serviceTypes.Add(FedExServiceType.FedExEconomyCanada);
             }
 
             return serviceTypes;
@@ -157,6 +163,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FirstOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.InternationalPriority:
                 case FedExServiceType.InternationalEconomy:
                 case FedExServiceType.InternationalFirst:
@@ -168,7 +175,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     types.Add(FedExPackagingType.Tube);
 
                     break;
-                }                    
+                }
             }
 
             switch (service)
@@ -285,6 +292,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.StandardOvernight:
                 case FedExServiceType.FedEx2Day:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                 case FedExServiceType.FirstFreight:
                 case FedExServiceType.FedEx1DayFreight:
                 case FedExServiceType.FedEx2DayFreight:

@@ -147,6 +147,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
                 case FedExServiceType.FedExExpressSaver:
                 case FedExServiceType.OneRateExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                     return ServiceType.FEDEX_EXPRESS_SAVER;
                 
                 case FedExServiceType.InternationalPriority: return ServiceType.INTERNATIONAL_PRIORITY;

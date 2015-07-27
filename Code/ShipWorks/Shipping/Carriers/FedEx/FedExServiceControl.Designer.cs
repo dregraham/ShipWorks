@@ -236,6 +236,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionRecipient
             // 
+            // 
+            // sectionRecipient.ContentPanel
+            // 
+            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
+            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(504, 24);
             this.sectionRecipient.TabIndex = 1;
@@ -613,6 +620,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
+            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             // 
             // packagingType
             // 

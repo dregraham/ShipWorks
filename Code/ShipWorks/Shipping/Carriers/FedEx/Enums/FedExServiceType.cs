@@ -86,6 +86,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
         OneRate2DayAM = 24,
 
         [Description("FedEx One Rate® (Express Saver)")]
-        OneRateExpressSaver = 25
+        OneRateExpressSaver = 25, 
+
+        [Description("FedEx Economy")]
+        FedExEconomyCanada = 26
     }
 }

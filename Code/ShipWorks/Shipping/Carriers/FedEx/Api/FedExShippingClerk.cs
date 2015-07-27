@@ -196,6 +196,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedExGround:
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
+                case FedExServiceType.FedExEconomyCanada:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -740,7 +741,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             {
                 FedExServiceType serviceType;
 
-                serviceType = GetFedExServiceType(rateDetail);
+                serviceType = GetFedExServiceType(rateDetail, shipment);
 
                 int transitDays = 0;
                 DateTime? deliveryDate = null;
@@ -854,6 +855,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.FedExExpressSaver:
+                case FedExServiceType.FedExEconomyCanada:
                     return ServiceLevelType.ThreeDays;
 
                 case FedExServiceType.InternationalEconomy:
@@ -905,7 +907,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Get our own FedExServiceType value for the given rate detail
         /// </summary>
-        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail)
+        private static FedExServiceType GetFedExServiceType(RateReplyDetail rateDetail, ShipmentEntity shipment)
         {
             switch (rateDetail.ServiceType)
             {
@@ -936,6 +938,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 case ServiceType.FEDEX_EXPRESS_SAVER:
                 {
+                    // In canada fedex express saver is called FedEx Economy
+                    if (shipment.OriginCountryCode == "CA")
+                    {
+                        return FedExServiceType.FedExEconomyCanada;
+                    }
+
                     return IsOneRateResult(rateDetail) ? FedExServiceType.OneRateExpressSaver : FedExServiceType.FedExExpressSaver;
                 }
 
