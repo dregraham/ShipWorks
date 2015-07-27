@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
         [TestInitialize]
         public void Initialize()
         {
-            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456, StoreID = 1005 };
+            orderEntity = new ChannelAdvisorOrderEntity { OrderNumber = 123456};
             storeEntity = new ChannelAdvisorStoreEntity();
             storeEntity.ConsolidatorAsUsps = false;
             fedExEntity = new FedExShipmentEntity { Service = (int)FedExServiceType.FedExGround };
