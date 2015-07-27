@@ -2922,6 +2922,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AttributesToDownload);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ConsolidatorAsUsps field instance</summary>
+		public static EntityField2 ConsolidatorAsUsps
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>

@@ -79,6 +79,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             caStore.AccountKey = "";
             caStore.ProfileID = 0;
             caStore.AttributesToDownload = "<Attributes></Attributes>";
+            caStore.ConsolidatorAsUsps = false;
 
             return caStore; 
         }
@@ -170,7 +171,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
         /// </summary>
         public override StoreSettingsControlBase CreateStoreSettingsControl()
         {
-            return new ChannelAdvisorStoreSettingsControl();
+            return new ChannelAdvisorSettingsControl();
         }
 
         /// <summary>

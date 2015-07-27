@@ -345,7 +345,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     if (ShipmentTypeManager.IsConsolidator(postalServiceType))
                     {
-                        return "CONSOLIDATOR";
+                        ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+                        return store.ConsolidatorAsUsps ? "IECONOMY" : "CONSOLIDATOR";
                     }
 
                     if (ShipmentTypeManager.IsDhl(postalServiceType))
@@ -396,7 +397,8 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
                     {
-                        return "Consolidator";
+                        ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+                        return store.ConsolidatorAsUsps ? "USPS" : "Consolidator";
                     }
                     else
                     {
