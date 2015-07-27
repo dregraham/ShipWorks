@@ -108,6 +108,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                         BuildCustoms(shipment)
             );
 
+            if (!string.IsNullOrEmpty(shipment.FedEx.FimsAirWaybill))
+            {
+                fimsRequestXml.Add(new XElement("airWaybill", shipment.FedEx.FimsAirWaybill));
+            }
+
             return fimsRequestXml;
         }
 

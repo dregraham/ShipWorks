@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         private static void ValidateShipment(ShipmentEntity shipmentEntity)
         {
-            if (FedExUtility.IsFimsService((FedExServiceType) shipmentEntity.FedEx.Service))
+            if (!FedExUtility.IsFimsService((FedExServiceType) shipmentEntity.FedEx.Service))
             {
                 throw new FedExException("FedEX FIMS shipments require selecting a FIMS service type.");
             }
