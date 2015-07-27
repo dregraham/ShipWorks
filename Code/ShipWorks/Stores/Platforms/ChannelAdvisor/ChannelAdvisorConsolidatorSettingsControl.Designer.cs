@@ -47,19 +47,19 @@
             // 
             this.labelAttributeInstructions.Location = new System.Drawing.Point(2, 23);
             this.labelAttributeInstructions.Name = "labelAttributeInstructions";
-            this.labelAttributeInstructions.Size = new System.Drawing.Size(500, 30);
+            this.labelAttributeInstructions.Size = new System.Drawing.Size(553, 30);
             this.labelAttributeInstructions.TabIndex = 18;
-            this.labelAttributeInstructions.Text = "This will upload ChannelAdvisor orders shipped using a consolidator as USPS inste" +
-    "ad of Consolidator";
+            this.labelAttributeInstructions.Text = "Select the check box below if you want orders shipped using a consolidator to be " +
+    "uploaded as USPS.";
             // 
             // consolidatorAsUsps
             // 
             this.consolidatorAsUsps.AutoSize = true;
             this.consolidatorAsUsps.Location = new System.Drawing.Point(22, 48);
             this.consolidatorAsUsps.Name = "consolidatorAsUsps";
-            this.consolidatorAsUsps.Size = new System.Drawing.Size(217, 17);
+            this.consolidatorAsUsps.Size = new System.Drawing.Size(276, 17);
             this.consolidatorAsUsps.TabIndex = 19;
-            this.consolidatorAsUsps.Text = "Upload Consolidator shipments as USPS";
+            this.consolidatorAsUsps.Text = "Upload consolidator shipments as USPS IECONOMY";
             this.consolidatorAsUsps.UseVisualStyleBackColor = true;
             // 
             // ChannelAdvisorConsolidatorSettingsControl
