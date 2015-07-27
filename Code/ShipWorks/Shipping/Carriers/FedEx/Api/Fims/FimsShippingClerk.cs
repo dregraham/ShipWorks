@@ -199,7 +199,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
         /// </summary>
         public TrackingResult Track(ShipmentEntity shipmentEntity)
         {
-            throw new NotImplementedException();
+            TrackingResult trackingResult = new TrackingResult();
+
+            FedExSettings fedExSettings = new FedExSettings(settingsRepository);
+
+            string link = string.Format(fedExSettings.FimsTrackEndpointUrlFormat, shipmentEntity.TrackingNumber);
+
+            // By default, the anchor tag gets a blue background.  We want a transparent background and blue font color instead.
+            string trackingLink = string.Format("Click <a href=\"{0}\" style='background-color: transparent; color:Blue;'>here</a> to view tracking information.", link);
+
+            trackingResult.Summary = trackingLink;
+
+            return trackingResult;
         }
 
         /// <summary>

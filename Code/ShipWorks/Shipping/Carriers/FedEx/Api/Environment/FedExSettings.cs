@@ -21,7 +21,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Environment
         private readonly ShippingSettingsEntity shippingSettings;
 
         private const string FimsMailViewShipUrl = "http://www.fimsform.com/pkgFedex/pkgFormService";
-        private const string FimsMailViewTrackUrlFormat = "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID=";
+        private const string FimsMailViewTrackUrlFormat = "http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={0}";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExSettings" /> class.
