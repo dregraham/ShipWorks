@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Enums;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
@@ -639,10 +640,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
                 RaiseRateCriteriaChanged();
                 SyncSelectedRate();
+
+                Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
             }
             else
             {
                 UpdatePackagingChoices(null);
+
+                sectionOptions.Visible = true;
+                sectionBilling.Visible = true;
+                sectionEmail.Visible = true;
+                sectionServiceOptions.Visible = true;
+                sectionLabelOptions.Visible = true;
 
                 // Don't show any selection when multiple services are selected
                 RateControl.ClearSelection();
