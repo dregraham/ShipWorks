@@ -494,7 +494,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
 
             // See if there is an original address and if it matches the downloaded address.
             List<ValidatedAddressEntity> validatedAddressEntities = ValidatedAddressManager.GetSuggestedAddresses(SqlAdapter.Default, order.OrderID, "Ship");
-            ValidatedAddressEntity originalAddress = validatedAddressEntities.SingleOrDefault(entity => entity.IsOriginal);
+            ValidatedAddressEntity originalAddress = validatedAddressEntities.Where(entity => entity.IsOriginal)
+                .OrderByDescending(entity => entity.ValidatedAddressID).FirstOrDefault();
             if (originalAddress != null)
             {
                 AddressAdapter originalAddressAdapter = new AddressAdapter(originalAddress, "");
