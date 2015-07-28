@@ -85,7 +85,7 @@ namespace ShipWorks.Stores
         /// </summary>
         protected virtual AddressValidationStoreSettingType GetDefaultValidationSetting()
         {
-            return AddressValidationStoreSettingType.ValidateAndNotify;
+            return AddressValidationStoreSettingType.ValidateAndApply;
         }
 
         /// <summary>

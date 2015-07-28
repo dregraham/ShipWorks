@@ -181,8 +181,6 @@ namespace ShipWorks.Stores.Management
             UserSession.Security.DemandPermission(PermissionType.ManageStores);
 
             LoadStoreTypes();
-            
-            EnumHelper.BindComboBox<AddressValidationStoreSettingType>(addressValidationSetting);
 
             isFreemiumMode = FreemiumFreeEdition.IsActive;
 
@@ -537,22 +535,6 @@ namespace ShipWorks.Stores.Management
             bool downloadSettings = PrepareSettingsInitialDownloadUI(e);
             bool uploadSettings = PrepareSettingsActionUI(e);
 
-            addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
-
-            // Update the location of the address validation panel control based on which upload and download controls are shown
-            if (!uploadSettings && !downloadSettings)
-            {
-                panelAddressValidation.Top = panelDownloadSettings.Top;
-            }
-            else if (!uploadSettings)
-            {
-                panelAddressValidation.Top = panelDownloadSettings.Bottom + 7;
-            }
-            else
-            {
-                panelAddressValidation.Top = panelUploadSettings.Bottom + 7;
-            }
-
             // We can't skip this screen anymore since all stores will have the option of auto validating addresses
             e.Skip = false;
             e.RaiseStepEventWhenSkipping = false;
@@ -695,7 +677,6 @@ namespace ShipWorks.Stores.Management
             panelEditDownloadRange.Height = panelDateRange.Bottom;
             panelDownloadSettings.Height = panelEditDownloadRange.Bottom;
 
-            panelAddressValidation.Top += panelEditDownloadRange.Bottom - panelViewDownloadRange.Bottom;
         }
 
         /// <summary>
@@ -717,8 +698,6 @@ namespace ShipWorks.Stores.Management
                 e.NextPage = CurrentPage;
                 return;
             }
-
-            store.AddressValidationSetting = (int) addressValidationSetting.SelectedValue;
 			
 			if (!SaveSettingsActions())
             {
