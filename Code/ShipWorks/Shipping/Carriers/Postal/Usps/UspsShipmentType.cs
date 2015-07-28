@@ -644,7 +644,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     shipment.Postal.Usps.Fields[UspsShipmentFields.UspsAccountID.FieldIndex],
                     shipment.Postal.Usps.Fields[UspsShipmentFields.OriginalUspsAccountID.FieldIndex],
-                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex]
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex],
+                    shipment.Postal.Fields[PostalShipmentFields.NoPostage.FieldIndex]
                 }
             );
 
