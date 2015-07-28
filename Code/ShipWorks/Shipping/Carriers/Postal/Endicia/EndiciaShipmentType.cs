@@ -236,7 +236,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             endicia.EndiciaAccountID = Accounts.Count > 0 ? Accounts[0].EndiciaAccountID : 0;
             endicia.StealthPostage = true;
-            endicia.NoPostage = false;
             endicia.ReferenceID = "{//Order/Number}";
             endicia.ScanBasedReturn = false;
         }
@@ -256,7 +255,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.EndiciaAccountID, endiciaShipment, EndiciaShipmentFields.EndiciaAccountID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.StealthPostage, endiciaShipment, EndiciaShipmentFields.StealthPostage);
-                ShippingProfileUtility.ApplyProfileValue(endiciaProfile.NoPostage, endiciaShipment, EndiciaShipmentFields.NoPostage);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ReferenceID, endiciaShipment, EndiciaShipmentFields.ReferenceID);
                 ShippingProfileUtility.ApplyProfileValue(endiciaProfile.ScanBasedReturn, endiciaShipment, EndiciaShipmentFields.ScanBasedReturn);
             }
