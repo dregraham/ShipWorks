@@ -44,13 +44,13 @@
 
 
       <xsl:when test="ShipmentType = 'FedEx'">
-        <xsl:if test="not(contains(ServiceUsed, 'DHL SM'))">
-          <a href="http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={TrackingNumber}">
+        <xsl:if test="contains(ServiceUsed, 'FIMS')">
+          <a href="http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={TrackingNumber}">
             <xsl:value-of select="TrackingNumber" />
           </a>
         </xsl:if>
-        <xsl:if test="contains(ServiceUsed, 'FIMS')">
-          <a href="http://mailviewrecipient.fedex.com/recip_package_summary.aspx?PostalID={TrackingNumber}">
+        <xsl:if test="not(contains(ServiceUsed, 'DHL SM'))">
+          <a href="http://www.fedex.com/Tracking?language=english&amp;cntry_code=us&amp;tracknumbers={TrackingNumber}">
             <xsl:value-of select="TrackingNumber" />
           </a>
         </xsl:if>
