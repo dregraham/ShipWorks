@@ -4,6 +4,7 @@ using System.Web.Services.Protocols;
 using Interapptive.Shared.Net;
 using log4net;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
@@ -82,6 +83,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 shipmentEntity.FedEx.Packages[0].TrackingNumber = fimsShipResponse.ParcelID;
                 shipmentEntity.FedEx.MasterFormID = String.Empty;
                 shipmentEntity.ShipmentCost = 0;
+
+                shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+                shipmentEntity.ActualLabelFormat = (int)ThermalLanguage.None;
+                shipmentEntity.FedEx.RequestedLabelFormat = (int)ThermalLanguage.None;
 
                 labelRepository.SaveLabel(fimsShipResponse, shipmentEntity.FedEx.Packages[0].FedExPackageID);
             }
