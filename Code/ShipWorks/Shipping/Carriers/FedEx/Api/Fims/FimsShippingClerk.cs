@@ -85,7 +85,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Fims
                 shipmentEntity.ShipmentCost = 0;
 
                 shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
-                shipmentEntity.ActualLabelFormat = (int)ThermalLanguage.None;
+                shipmentEntity.ActualLabelFormat = null;
                 shipmentEntity.FedEx.RequestedLabelFormat = (int)ThermalLanguage.None;
 
                 labelRepository.SaveLabel(fimsShipResponse, shipmentEntity.FedEx.Packages[0].FedExPackageID);
