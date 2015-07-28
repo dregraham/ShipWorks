@@ -443,7 +443,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
         /// </summary>
         protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
         {
-            return AddressValidationStoreSettingType.ValidationDisabled;
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }

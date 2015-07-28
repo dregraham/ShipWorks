@@ -1154,7 +1154,7 @@ namespace ShipWorks.Stores.Platforms.Ebay
         /// </summary>
         protected override AddressValidationStoreSettingType GetDefaultValidationSetting()
         {
-            return AddressValidationStoreSettingType.ValidationDisabled;
+            return AddressValidationStoreSettingType.ValidateAndNotify;
         }
     }
 }
