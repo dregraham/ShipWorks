@@ -784,7 +784,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV17 rate = CreateRateForProcessing(shipment, account);
             CustomsV3 customs = CreateCustoms(shipment);
-            Usps.WebServices.PostageBalance postageBalance;
+            WebServices.PostageBalance postageBalance;
 
             // USPS requires that the address in the Rate match that of the request.  Makes sense - but could be different if they auto-cleansed the address.
             rate.ToState = toAddress.State;    
