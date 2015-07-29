@@ -167,7 +167,10 @@ namespace ShipWorks.Stores
         {
             lock (storeSynchronizer)
             {
-                return EntityUtility.CloneEntityCollection(storeSynchronizer.EntityCollection.Where(s => s.SetupComplete));
+                List<StoreEntity> collectionToClone = storeSynchronizer.EntityCollection.ToList();
+
+                List<StoreEntity> stores = EntityUtility.CloneEntityCollection(collectionToClone).Where(s => s.SetupComplete).ToList();
+                return stores;
             }
         }
 
