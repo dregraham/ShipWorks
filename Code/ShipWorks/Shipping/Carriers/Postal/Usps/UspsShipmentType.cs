@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
 
-            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
+            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ? 
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
                 CreateEmptyExpress1RatesTask();
         }
