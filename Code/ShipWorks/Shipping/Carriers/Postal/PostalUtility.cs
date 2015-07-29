@@ -596,8 +596,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
                 .Cast<PostalPackagingType>();
 
-            IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
-                .Select(x => x.Value);
+            IEnumerable<PostalPackagingType> postalServices = shipmentType.GetAvailablePackageTypes().Cast<PostalPackagingType>();
+
             packagePicker.Initialize(postalServices, excludedServices);
         }
 
