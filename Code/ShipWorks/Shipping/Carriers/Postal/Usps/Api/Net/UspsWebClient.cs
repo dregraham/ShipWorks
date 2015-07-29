@@ -1115,7 +1115,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             RateV17 rate = CreateRateForRating(shipment, account);
             rate.ServiceType = UspsUtility.GetApiServiceType(serviceType);
-            rate.PrintLayout = "Normal4x6";
+            rate.PrintLayout = "Normal4X6";
 
             // Get the confirmation type add ons
             List<AddOnV7> addOns = AddConfirmationTypeAddOnsForProcessing(shipment, serviceType, packagingType);
