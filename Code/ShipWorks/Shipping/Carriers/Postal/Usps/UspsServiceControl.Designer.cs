@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.sectionFrom = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.originControl = new ShipWorks.Shipping.Settings.Origin.ShipmentOriginControl();
             this.panelTop = new System.Windows.Forms.Panel();
@@ -297,7 +297,7 @@
             this.memo1.Name = "memo1";
             this.memo1.Size = new System.Drawing.Size(210, 21);
             this.memo1.TabIndex = 14;
-            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
+            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
             // 
             // labelMemo1
             // 
@@ -316,7 +316,7 @@
             this.memo3.Name = "memo3";
             this.memo3.Size = new System.Drawing.Size(210, 21);
             this.memo3.TabIndex = 18;
-            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
+            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
             // 
             // labelMemo3
             // 
@@ -335,7 +335,7 @@
             this.memo2.Name = "memo2";
             this.memo2.Size = new System.Drawing.Size(210, 21);
             this.memo2.TabIndex = 16;
-            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
+            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
             // 
             // labelMemo2
             // 
@@ -377,6 +377,7 @@
             this.noPostage.TabIndex = 60;
             this.noPostage.Text = "Generate label that is not postage-paid";
             this.noPostage.UseVisualStyleBackColor = false;
+            this.noPostage.CheckedChanged += new System.EventHandler(this.OnNoPostageChanged);
             // 
             // labelNoPostage
             // 

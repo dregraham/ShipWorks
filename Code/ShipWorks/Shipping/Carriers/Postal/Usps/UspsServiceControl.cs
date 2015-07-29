@@ -289,5 +289,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             // Disable the hide postage option should for first class envelopes
             hidePostage.Enabled = !disableHiddenPostage;
         }
+
+        /// <summary>
+        /// Handle NoPostage checkbox changing
+        /// </summary>
+        private void OnNoPostageChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
+        }
     }
 }
