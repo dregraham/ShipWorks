@@ -901,26 +901,8 @@ namespace ShipWorks.Stores.Management
                     CreateDefaultStatusPreset(store, StatusPresetTarget.Order, adapter);
                     CreateDefaultStatusPreset(store, StatusPresetTarget.OrderItem, adapter);
 
-                    // See if the store has needs to create any store-specific filters
-                    List<FilterEntity> storeFilters = StoreTypeManager.GetType(store).CreateInitialFilters();
-                    if (storeFilters != null && storeFilters.Count > 0)
-                    {
-                        // Find the root orders node
-                        FilterNodeEntity ordersNode = FilterLayoutContext.Current.FindNode(BuiltinFilter.GetTopLevelKey(FilterTarget.Orders));
-
-                        // Create the child stores node
-                        FilterNodeEntity storeNode = FilterLayoutContext.Current.AddFilter(CreateStoreFilterFolder(), ordersNode, ordersNode.ChildNodes.Count)[0];
-
-                        // Always create an "All Orders" filter so that the folder count show's the full store orders's count.  Otherwise our users would
-                        // likely be confused.
-                        FilterLayoutContext.Current.AddFilter(CreateStoreFilterAllOrders(), storeNode, 0);
-
-                        // Create each filter under the store node
-                        for (int i = 0; i < storeFilters.Count; i++)
-                        {
-                            FilterLayoutContext.Current.AddFilter(storeFilters[i], storeNode, i + 1);
-                        }
-                    }
+                    StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+                    storeFilterRepository.Save(true);
 
                     // Adjust the default shipment type based on edition
                     if (storeCount == 0)
@@ -981,40 +963,6 @@ namespace ShipWorks.Stores.Management
             preset.IsDefault = true;
 
             adapter.SaveEntity(preset);
-        }
-
-        /// <summary>
-        /// Create a filter folder entity that has a definition that filters for orders only in the current store
-        /// </summary>
-        private FilterEntity CreateStoreFilterFolder()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-            definition.RootContainer.FirstGroup.Conditions.Add(new StoreCondition { Operator = EqualityOperator.Equals, Value = store.StoreID });
-
-            FilterEntity folder = new FilterEntity();
-            folder.Name = string.Format("{0} ({1})", StoreTypeManager.GetType(store).StoreTypeName, store.StoreName);
-            folder.FilterTarget = (int) FilterTarget.Orders;
-            folder.IsFolder = true;
-            folder.Definition = definition.GetXml();
-
-            return folder;
-        }
-
-        /// <summary>
-        /// Create a filter that filter's for all orders of this store
-        /// </summary>
-        private FilterEntity CreateStoreFilterAllOrders()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-            definition.RootContainer.FirstGroup.Conditions.Add(new StoreCondition { Operator = EqualityOperator.Equals, Value = store.StoreID });
-
-            FilterEntity filter = new FilterEntity();
-            filter.Name = "All Orders";
-            filter.FilterTarget = (int) FilterTarget.Orders;
-            filter.IsFolder = false;
-            filter.Definition = definition.GetXml();
-
-            return filter;
         }
 
         /// <summary>

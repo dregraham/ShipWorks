@@ -424,6 +424,7 @@
     <Compile Include="Shipping\ScanForms\ScanFormBatchTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormTest.cs" />
     <Compile Include="Shipping\ScanForms\ScanFormUtilityTest.cs" />
+    <Compile Include="Shipping\Settings\CarrierServicePickerControlTest.cs" />
     <Compile Include="Shipping\ShipmentTypeTest.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensionsTest.cs" />
     <Compile Include="Shipping\ShippingManagerTest.cs" />

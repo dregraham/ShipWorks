@@ -35,6 +35,8 @@
             this.insuranceProviderChooser = new ShipWorks.Shipping.Insurance.InsuranceProviderChooser();
             this.pennyOne = new System.Windows.Forms.CheckBox();
             this.pennyOneLink = new ShipWorks.UI.Controls.LinkControl();
+            this.servicePicker = new ShipWorks.Shipping.Carriers.FedEx.FedExServicePickerControl();
+            this.packagePicker = new ShipWorks.Shipping.Carriers.FedEx.FedExPackagePickerControl();
             this.SuspendLayout();
             // 
             // shippersControl
@@ -107,11 +109,29 @@
             this.pennyOneLink.Text = "(Learn why)";
             this.pennyOneLink.Click += new System.EventHandler(this.OnLinkPennyOne);
             // 
+            // servicePicker
+            // 
+            this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.servicePicker.Location = new System.Drawing.Point(9, 410);
+            this.servicePicker.Name = "servicePicker";
+            this.servicePicker.Size = new System.Drawing.Size(421, 200);
+            this.servicePicker.TabIndex = 13;
+            // 
+            // fedExServiceTypeServicePickerControl1
+            // 
+            this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.packagePicker.Location = new System.Drawing.Point(9, 620);
+            this.packagePicker.Name = "fedExServiceTypeServicePickerControl1";
+            this.packagePicker.Size = new System.Drawing.Size(421, 200);
+            this.packagePicker.TabIndex = 14;
+            // 
             // FedExSettingsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.packagePicker);
+            this.Controls.Add(this.servicePicker);
             this.Controls.Add(this.pennyOneLink);
             this.Controls.Add(this.pennyOne);
             this.Controls.Add(this.insuranceProviderChooser);
@@ -120,7 +140,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(445, 411);
+            this.Size = new System.Drawing.Size(445, 830);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -135,5 +155,7 @@
         private Insurance.InsuranceProviderChooser insuranceProviderChooser;
         private System.Windows.Forms.CheckBox pennyOne;
         private UI.Controls.LinkControl pennyOneLink;
+        private FedExServicePickerControl servicePicker;
+        private FedExPackagePickerControl packagePicker;
     }
 }

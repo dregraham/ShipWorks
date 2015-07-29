@@ -8,6 +8,9 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Xml.Linq;
+using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Api;
+using System.Text.RegularExpressions;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -55,12 +58,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (hubID.Text.Trim().Length > 0)
             {
+                if (!Regex.IsMatch(hubID.Text.Trim(), @"^[0-9]{4}$"))
+                {
+                    throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
+                }
+                
                 root.Add(new XElement("HubID", hubID.Text.Trim()));
             }
 
             foreach (string hubLine in additionalHubs.Lines.Select(l => l.Trim()).Where(l => l.Length > 0))
             {
-                root.Add(new XElement("HubID", hubLine));
+                if (!Regex.IsMatch(hubLine.Trim(), @"^[0-9]{4}$"))
+                {
+                    throw new CarrierException("Please enter a Hub ID of 4 numbers with no alpha characters.");
+                }
+                root.Add(new XElement("HubID", hubLine.Trim()));
             }
 
             account.SmartPostHubList = root.ToString();

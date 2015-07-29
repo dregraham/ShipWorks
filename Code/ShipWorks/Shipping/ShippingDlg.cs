@@ -304,6 +304,20 @@ namespace ShipWorks.Shipping
             Refresh();
         }
 
+        private void UpdateRequestedShipping(IEnumerable<ShipmentEntity> shipments)
+        {
+            string requestedShippingText = GetRequestedShippingLabel(shipments);
+
+            if (requestedShippingText.Length == 0)
+	        {
+		        requestedShipping.Visible = false;
+	        }else
+	        {
+                requestedShipping.Visible = true;
+		        requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",requestedShippingText);
+	        }
+        }
+
         /// <summary>
         /// Load the shipment type combo with the available shipment types
         /// </summary>
@@ -726,6 +740,8 @@ namespace ShipWorks.Shipping
             ShipmentType shipmentType = loadedShipmentEntities.Any() ? GetShipmentType(loadedShipmentEntities) : null;
             
             UpdateComboShipmentType(shipmentType, enableEditing);
+
+            UpdateRequestedShipping(loadedShipmentEntities);
 
             // Update our list of shipments that are displayed in the UI
             uiDisplayedShipments = loadedShipmentEntities.ToList();
@@ -1917,6 +1933,47 @@ namespace ShipWorks.Shipping
             }
 
             return ShipmentTypeManager.GetType((ShipmentTypeCode) typeCode);
+        }
+
+        /// <summary>
+        /// Get the requested shipping text, (Multiple) displayed for multiple values
+        /// </summary>
+        static private string GetRequestedShippingLabel(IEnumerable<ShipmentEntity> shipments)
+        {
+            string label = null;
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                OrderEntity order = DataProvider.GetEntity(shipment.OrderID) as OrderEntity;
+
+                // First one
+                if (label == null)
+                {
+                    label = order.RequestedShipping;
+                }
+                else
+                {
+                    if (!label.Equals(order.RequestedShipping))
+                    {
+                        return "(Multiple)";
+                    }
+                }
+            }
+
+
+            if (label == null)
+            {
+                return "";
+            }else if (label.Length == 0)
+	        {
+		        return "N/A";
+	        }else if (label.Length > 60)
+	        {
+                return String.Format("{0}{1}", label.Substring(0, 60), "...");
+	        }else
+	        {
+                return label;
+	        }
         }
 
         /// <summary>
