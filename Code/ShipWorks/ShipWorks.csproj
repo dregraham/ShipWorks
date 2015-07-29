@@ -8808,7 +8808,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV2.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV4.datasource">
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\ShipmentV5.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StatusCodes1.datasource">
@@ -8817,7 +8817,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StoreShippingMethodOption1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv43.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv46.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\TrackingEvent1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -12760,10 +12760,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv45.wsdl">
+    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv46.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
-      <UpdateFromURL>D:\Projects\ShipWorks\ShipWorks3x\Branches\Master\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv45.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv46.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>
