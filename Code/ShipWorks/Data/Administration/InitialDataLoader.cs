@@ -18,6 +18,7 @@ using ShipWorks.Filters.Content.Conditions.Orders.Address;
 using ShipWorks.Filters.Content.Conditions.OrderCharges;
 using ShipWorks.Filters.Content.Conditions.Customers;
 using ShipWorks.Templates;
+using ShipWorks.Filters.Content.Editors.ValueEditors;
 
 namespace ShipWorks.Data.Administration
 {
@@ -80,17 +81,22 @@ namespace ShipWorks.Data.Administration
         /// </summary>
         private static void CreateOrderFilters(FilterNodeEntity ordersNode)
         {
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Shipped", CreateDefinitionShipped()), ordersNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Shipped", CreateDefinitionNotShipped()), ordersNode, 1);
+            FilterNodeEntity destinationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Destination", FilterTarget.Orders), ordersNode, 0)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("All U.S.", CreateDefinitionUS()), destinationNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Residential", CreateDefinitionResidential(true)), destinationNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Commercial", CreateDefinitionResidential(false)), destinationNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. PO Box", CreateDefinitionPOBox()), destinationNode, 3);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Territories", CreateDefinitionTerritory()), destinationNode, 4);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("U.S. Military", CreateDefinitionMilitary()), destinationNode, 5);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), destinationNode, 6);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ambiguous", CreateAddressValidationDefinition(AddressValidationStatusType.HasSuggestions)), destinationNode, 7);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Invalid", CreateAddressValidationDefinition(AddressValidationStatusType.BadAddress)), destinationNode, 8);
 
-            FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Orders), ordersNode, 2)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today's Orders", CreateDefinitionTodaysOrders()), examplesNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("International", CreateDefinitionInternational()), examplesNode, 1);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Has Tax", CreateDefinitionHasTax()), examplesNode, 2);
-
-            FilterNodeEntity addressValidationNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Address Validation", FilterTarget.Orders), examplesNode, 3)[0];
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Ready to Go", FilterHelper.CreateAddressValidationDefinition(AddressSelector.ReadyToShip)), addressValidationNode, 0);
-            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Not Validated", FilterHelper.CreateAddressValidationDefinition(AddressSelector.NotValidated)), addressValidationNode, 0);
+            FilterNodeEntity ageNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Age", FilterTarget.Orders), ordersNode, 1)[0];
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Today", CreateDefinitionTodaysOrders()), ageNode, 0);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 7 days", CreateDefinitionOrdersAge(7)), ageNode, 1);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 30 days", CreateDefinitionOrdersAge(30)), ageNode, 2);
+            FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Last 90 days", CreateDefinitionOrdersAge(90)), ageNode, 3);
         }
 
         /// <summary>
@@ -101,33 +107,6 @@ namespace ShipWorks.Data.Administration
             FilterNodeEntity examplesNode = FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterFolderEntity("Examples", FilterTarget.Customers), customersNode, 0)[0];
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Spent $100 or more", CreateDefinitionSpent100()), examplesNode, 0);
             FilterLayoutContext.Current.AddFilter(FilterHelper.CreateFilterEntity("Returning customer", CreateDefinitionMultipleOrders()), examplesNode, 1);
-        }
-
-        /// <summary>
-        /// Create the definition for the "Shipped" order filter
-        /// </summary>
-        private static FilterDefinition CreateDefinitionShipped()
-        {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            // If [Any]
-            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.Any;
-
-            // Local Status = 'Shipped'
-            LocalStatusCondition statusCondition = new LocalStatusCondition();
-            statusCondition.Operator = StringOperator.Equals;
-            statusCondition.TargetValue = "Shipped";
-            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
-
-            // For any shipment, Processed = true
-            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
-            ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
-            processedCondition.Operator = EqualityOperator.Equals;
-            processedCondition.Value = ShipmentStatusType.Processed;
-            anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
-            definition.RootContainer.FirstGroup.Conditions.Add(anyShipment);
-
-            return definition;
         }
 
         /// <summary>
@@ -162,6 +141,37 @@ namespace ShipWorks.Data.Administration
         }
 
         /// <summary>
+        /// Creates the definition shipped.
+        /// </summary>
+        public static FilterDefinition CreateDefinitionShipped()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            // Local Status = 'Shipped'
+            LocalStatusCondition statusCondition = new LocalStatusCondition();
+            statusCondition.Operator = StringOperator.Equals;
+            statusCondition.TargetValue = "Shipped";
+            definition.RootContainer.FirstGroup.Conditions.Add(statusCondition);
+
+            // [Or]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.Or;
+
+            // If [All] of the following
+            definition.RootContainer.SecondGroup = new ConditionGroupContainer(new ConditionGroup());
+            definition.RootContainer.SecondGroup.FirstGroup.JoinType = ConditionJoinType.All;
+
+            // For any shipment, Processed = true
+            ForAnyShipmentCondition anyShipment = new ForAnyShipmentCondition();
+            ShipmentStatusCondition processedCondition = new ShipmentStatusCondition();
+            processedCondition.Operator = EqualityOperator.Equals;
+            processedCondition.Value = ShipmentStatusType.Processed;
+            anyShipment.Container.FirstGroup.Conditions.Add(processedCondition);
+            definition.RootContainer.SecondGroup.FirstGroup.Conditions.Add(anyShipment);
+
+            return definition;
+        }
+
+        /// <summary>
         /// Create the filter definition for today's orders
         /// </summary>
         private static FilterDefinition CreateDefinitionTodaysOrders()
@@ -171,6 +181,153 @@ namespace ShipWorks.Data.Administration
             OrderDateCondition dateCondition = new OrderDateCondition();
             dateCondition.Operator = DateOperator.Today;
             definition.RootContainer.FirstGroup.Conditions.Add(dateCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for that last n days
+        /// </summary>
+        private static FilterDefinition CreateDefinitionOrdersAge(int days)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            OrderDateCondition dateCondition = new OrderDateCondition();
+            dateCondition.Operator = DateOperator.WithinTheLast;
+            dateCondition.WithinUnit = DateWithinUnit.Days;
+            dateCondition.WithinAmount = days;
+            
+            definition.RootContainer.FirstGroup.Conditions.Add(dateCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for US Residential
+        /// </summary>
+        private static FilterDefinition CreateDefinitionResidential(bool Residential)
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            //Build the residential condition
+            ResidentialStatusCondition residentialCondition = new ResidentialStatusCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = Residential ? ValidationDetailStatusType.Yes : ValidationDetailStatusType.No
+            };
+
+            //Add it to the filter
+            definition.RootContainer.FirstGroup.Conditions.Add(residentialCondition);
+
+            //Build the condition to exclude PO Box
+            POBoxCondition poCondition = new POBoxCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.No,
+            };
+
+            //Add it to the filter
+            definition.RootContainer.FirstGroup.Conditions.Add(poCondition);
+
+            //Build the condition to exclude us territory addresses
+            USTerritoryCondition territoryCondition = new USTerritoryCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.No
+            };
+
+            //Add it to the filter
+            definition.RootContainer.FirstGroup.Conditions.Add(territoryCondition);
+
+            //Build the condition to exclude Military addresses
+            MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.No
+            };
+
+            //Add it to the filter
+            definition.RootContainer.FirstGroup.Conditions.Add(militaryCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for US PO BOX orders
+        /// </summary>
+        private static FilterDefinition CreateDefinitionPOBox()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            POBoxCondition poCondition = new POBoxCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.Yes
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(poCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for Territory
+        /// </summary>
+        private static FilterDefinition CreateDefinitionTerritory()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            USTerritoryCondition territoryCondition = new USTerritoryCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.Yes
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(territoryCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for Military
+        /// </summary>
+        private static FilterDefinition CreateDefinitionMilitary()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            MilitaryAddressCondition militaryCondition = new MilitaryAddressCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = EqualityOperator.Equals,
+                Value = ValidationDetailStatusType.Yes
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(militaryCondition);
+
+            return definition;
+        }
+
+        /// <summary>
+        /// Create the filter definition for US orders
+        /// </summary>
+        private static FilterDefinition CreateDefinitionUS()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+
+            OrderAddressCountryCondition countryCondition = new OrderAddressCountryCondition()
+            {
+                AddressOperator = BillShipAddressOperator.Ship,
+                Operator = StringOperator.Equals,
+                TargetValue = "US"
+            };
+
+            definition.RootContainer.FirstGroup.Conditions.Add(countryCondition);
 
             return definition;
         }
@@ -190,29 +347,12 @@ namespace ShipWorks.Data.Administration
 
             return definition;
         }
-
         /// <summary>
-        /// Create the filter definition for orders that have multiple line items
+        /// Create the filter definition for orders that have Address Validation of a given status
         /// </summary>
-        private static FilterDefinition CreateDefinitionHasTax()
+        private static FilterDefinition CreateAddressValidationDefinition(AddressValidationStatusType Status)
         {
-            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
-
-            ForAnyChargeCondition anyCharge = new ForAnyChargeCondition();
-            anyCharge.Container.FirstGroup.JoinType = ConditionJoinType.All;
-            definition.RootContainer.FirstGroup.Conditions.Add(anyCharge);
-
-            OrderChargeTypeCondition chargeType = new OrderChargeTypeCondition();
-            chargeType.Operator = StringOperator.Contains;
-            chargeType.TargetValue = "TAX";
-            anyCharge.Container.FirstGroup.Conditions.Add(chargeType);
-
-            OrderChargeAmountCondition chargeAmount = new OrderChargeAmountCondition();
-            chargeAmount.Operator = NumericOperator.GreaterThan;
-            chargeAmount.Value1 = 0;
-            anyCharge.Container.FirstGroup.Conditions.Add(chargeAmount);
-
-            return definition;
+            return FilterHelper.CreateAddressValidationDefinition(new List<AddressValidationStatusType>() { Status });
         }
 
         /// <summary>
@@ -313,7 +453,7 @@ namespace ShipWorks.Data.Administration
 
                     FilterEntity filter = new FilterEntity();
                     filter.FilterID = pkValue;
-                    filter.Name = EnumHelper.GetDescription(target);
+                    filter.Name = "All";
                     filter.FilterTarget = (int) target;
                     filter.IsFolder = true;
                     filter.Definition = null;

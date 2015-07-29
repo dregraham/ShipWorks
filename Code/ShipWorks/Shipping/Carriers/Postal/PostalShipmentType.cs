@@ -68,6 +68,31 @@ namespace ShipWorks.Shipping.Carriers.Postal
         }
 
         /// <summary>
+        /// Gets the service types that have been available for this shipment type (i.e have not 
+        /// been excluded). The integer values are intended to correspond to the appropriate 
+        /// enumeration values of the specific shipment type (i.e. the integer values would 
+        /// correspond to PostalServiceType values for this shipment type)
+        /// </summary>
+        public override IEnumerable<int> GetAvailableServiceTypes(IExcludedServiceTypeRepository repository)
+        {
+            IEnumerable<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode)
+                .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
+                .Select(service => (int)service);
+            return allServiceTypes.Except(GetExcludedServiceTypes(repository));
+        }
+
+        /// <summary>
+        /// Gets the package types that have been available for this shipment type
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            return EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)
@@ -485,6 +510,15 @@ namespace ShipWorks.Shipping.Carriers.Postal
             });
 
             return new RateGroup(validExpress1Rates);
+        }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
+        /// </summary>
+        protected virtual List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).Union(new List<PostalServiceType> { (PostalServiceType)shipment.Postal.Service }).ToList();
+            return rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection) r.Tag).ServiceType)).ToList();
         }
 
         /// <summary>

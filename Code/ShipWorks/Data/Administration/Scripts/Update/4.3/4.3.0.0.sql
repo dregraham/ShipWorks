@@ -11,7 +11,7 @@ GO
 PRINT N'Altering [dbo].[PostalProfile]'
 GO
 ALTER TABLE [dbo].[PostalProfile] ADD
-[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalProfile_NoPostage] DEFAULT ((0))
+[NoPostage] [bit] NULL
 GO
 UPDATE PostalShipment
 	SET PostalShipment.NoPostage = EndiciaShipment.NoPostage

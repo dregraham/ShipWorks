@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Interapptive.Shared.Utility;
@@ -12,6 +13,7 @@ using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Filters;
 using ShipWorks.UI;
 using ShipWorks.Data;
 using ShipWorks.UI.Controls;
@@ -252,6 +254,8 @@ namespace ShipWorks.Stores.Management
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
             addressValidationSetting.SelectedValue = (AddressValidationStoreSettingType)store.AddressValidationSetting;
 
+            panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
+
             // Download on\off
             comboAllowDownload.SelectedValue = downloadPolicy.GetComputerAllowed(UserSession.Computer.ComputerID);
 
@@ -278,6 +282,7 @@ namespace ShipWorks.Stores.Management
         {
             panelStoreStatus.Top = control.Bottom + 8;
             panelAddressValidation.Top = panelStoreStatus.Bottom + 8;
+            panelDefaultFilters.Top = panelAddressValidation.Bottom + 8;
         }
 
         /// <summary>
@@ -516,11 +521,55 @@ namespace ShipWorks.Stores.Management
         /// </summary>
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
-            // If the operation was cancelled, rollback
+            // If the operation was canceled, rollback
             if (DialogResult != DialogResult.OK)
             {
                 store.RollbackChanges();
             }
+        }
+
+        /// <summary>
+        /// Called when the createFiltersButton is clicked.
+        /// </summary>
+        private void OnCreateFiltersClick(object sender, EventArgs e)
+        {
+            // Make sure we have a fresh up-to-date layout context in case we need to create store-specific filters
+            FilterLayoutContext.PushScope();
+
+            StoreFilterRepository storeFilterRepository = new StoreFilterRepository(store);
+            StoreFilterRepositorySaveResult result = storeFilterRepository.Save(false);
+            FilterLayoutContext.PopScope();
+
+            if (!result.FolderCreated)
+            {
+                MessageHelper.ShowWarning(this, string.Format("Could not create folder {0}. The folder already exists, and its criteria does not match this store.", result.StoreFolderName));
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if (result.CreatedFilters.Any())
+            {
+                sb.AppendFormat("The following filters were created in filter folder '{0}.'", result.StoreFolderName)
+                    .AppendLine();
+
+                result.CreatedFilters.ForEach(newFilter=>sb.AppendFormat(" - {0}", newFilter.Name).AppendLine());
+            }
+            if (result.CollisionFilters.Any())
+            {
+                if (sb.Length>0)
+                {
+                    sb.AppendLine();
+                }
+
+                sb.AppendFormat("Filters already existed in '{0}.'", result.StoreFolderName)
+                    .AppendLine()
+                    .AppendLine("These filters remained unchanged:");
+
+                result.CollisionFilters
+                    .ForEach(collisionFilter => sb.AppendFormat(" - {0}",collisionFilter.Name).AppendLine());
+            }
+
+            MessageHelper.ShowWarning(this, sb.ToString());
         }
     }
 }

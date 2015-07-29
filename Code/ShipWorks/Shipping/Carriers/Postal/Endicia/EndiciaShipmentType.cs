@@ -9,27 +9,23 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Editions;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Properties;
 using ShipWorks.Shipping.Carriers.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Account;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.RateFootnotes.Promotion;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.Settings.Origin;
-using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
+using System.Runtime.InteropServices;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Endicia
@@ -162,7 +158,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public override SettingsControlBase CreateSettingsControl()
         {
-            return new EndiciaSettingsControl(EndiciaReseller);
+            EndiciaSettingsControl settingsControl = new EndiciaSettingsControl(EndiciaReseller);
+            settingsControl.Initialize(ShipmentTypeCode);
+
+            return settingsControl;
         }
 
         /// <summary>
@@ -490,9 +489,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
             EndiciaApiClient endiciaApiClient = new EndiciaApiClient(AccountRepository, LogEntryFactory, CertificateInspector);
 
-            List<RateResult> endiciaRates = (InterapptiveOnly.MagicKeysDown) ?
+            List<RateResult> allEndiciaRates = (InterapptiveOnly.MagicKeysDown) ?
                                                 endiciaApiClient.GetRatesSlow(shipment, this) :
                                                 endiciaApiClient.GetRatesFast(shipment, this);
+
+            // Filter out any excluded services, but always include the service that the shipment is configured with
+            List<RateResult> endiciaRates = FilterRatesByExcludedServices(shipment, allEndiciaRates);
+
 
             // For endicia, we want to either promote Express1 or show the Express1 savings
             if (shipment.ShipmentType == (int) ShipmentTypeCode.Endicia)
@@ -542,11 +545,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                         }
                     }
 
-                    RateGroup finalGroup = new RateGroup(finalRates.Select(e =>
+                    // Filter out any excluded services, but always include the service that the shipment is configured with
+                    List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, finalRates.Select(e =>
                     {
                         e.ShipmentType = ShipmentTypeCode.Endicia;
                         return e;
                     }).ToList());
+
+                    RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
 
                     // As it pertains to Endicia, restricting discounted rate messaging means we're no longer obligated to promote
                     // Express1 with Endicia and can show promotion for USPS shipping. So when discount rate
@@ -564,7 +570,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 else
                 {
                     // Express1 wasn't used, so we want to promote USPS
-                    RateGroup finalEndiciaOnlyRates = new RateGroup(endiciaRates);
+
+                    // Filter out any excluded services, but always include the service that the shipment is configured with
+                    RateGroup finalEndiciaOnlyRates = new RateGroup(FilterRatesByExcludedServices(shipment, endiciaRates));
 
                     if (IsRateDiscountMessagingRestricted)
                     {

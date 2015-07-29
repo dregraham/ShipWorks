@@ -265,5 +265,14 @@ namespace ShipWorks.Stores.Platforms.Sears
                 }
             }
         }
+
+        /// <summary>
+        /// Return all the Online Status options that apply to this store. This is used to populate the drop-down in the
+        /// Online Status filter.
+        /// </summary>
+        public override ICollection<string> GetOnlineStatusChoices()
+        {
+            return new[] { "New", "Open", "Closed", "Overdue" };
+        }
     }
 }

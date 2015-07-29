@@ -201,6 +201,8 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
+            List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
+
             // If a distinct on country code only returns a count of 1, all countries are the same
             bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.AdjustedShipCountryCode(), s.AdjustedOriginCountryCode())).Distinct().Count() == 1;
 
@@ -211,9 +213,19 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
                 IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
-                List<UpsServiceType> upsServiceTypes = carrierServiceManager.GetServices(overriddenShipment).Select(s => s.UpsServiceType).ToList();
+                List<UpsServiceType> upsServiceTypesToLoad = carrierServiceManager.GetServices(overriddenShipment)
+                    .Select(s => s.UpsServiceType).Intersect(availableServices).ToList();
 
-                List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypes
+                if (LoadedShipments.Any())
+                {
+                    // Always include the service type that the shipment is currently configured in the 
+                    // event the shipment was configured prior to a service being excluded
+                    // Always include the service that the shipments are currently configured with
+                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service).Distinct();
+                    upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
+                }
+
+                List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypesToLoad
                     .Select(type => new KeyValuePair<string, UpsServiceType>(EnumHelper.GetDescription(type), (UpsServiceType) type))
                     .ToList();
 

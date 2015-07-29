@@ -56,7 +56,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 		/// <summary>Method which initializes the internal datastores.</summary>
 		private void Init()
 		{
-			base.InitClass( (165 + 0));
+			base.InitClass( (167 + 0));
 			InitActionEntityInfos();
 			InitActionFilterTriggerEntityInfos();
 			InitActionQueueEntityInfos();
@@ -101,6 +101,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			InitEndiciaShipmentEntityInfos();
 			InitEtsyOrderEntityInfos();
 			InitEtsyStoreEntityInfos();
+			InitExcludedPackageTypeEntityInfos();
+			InitExcludedServiceTypeEntityInfos();
 			InitFedExAccountEntityInfos();
 			InitFedExEndOfDayCloseEntityInfos();
 			InitFedExPackageEntityInfos();
@@ -846,6 +848,18 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("EtsyStoreEntity", "EtsyStoreName", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.EtsyStoreName, 255, 0, 0);
 			base.AddElementFieldInfo("EtsyStoreEntity", "OAuthToken", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthToken, 50, 0, 0);
 			base.AddElementFieldInfo("EtsyStoreEntity", "OAuthTokenSecret", typeof(System.String), false, false, false, false,  (int)EtsyStoreFieldIndex.OAuthTokenSecret, 50, 0, 0);
+		}
+		/// <summary>Inits ExcludedPackageTypeEntity's FieldInfo objects</summary>
+		private void InitExcludedPackageTypeEntityInfos()
+		{
+			base.AddElementFieldInfo("ExcludedPackageTypeEntity", "ShipmentType", typeof(System.Int32), true, false, false, false,  (int)ExcludedPackageTypeFieldIndex.ShipmentType, 0, 0, 10);
+			base.AddElementFieldInfo("ExcludedPackageTypeEntity", "PackageType", typeof(System.Int32), true, false, false, false,  (int)ExcludedPackageTypeFieldIndex.PackageType, 0, 0, 10);
+		}
+		/// <summary>Inits ExcludedServiceTypeEntity's FieldInfo objects</summary>
+		private void InitExcludedServiceTypeEntityInfos()
+		{
+			base.AddElementFieldInfo("ExcludedServiceTypeEntity", "ShipmentType", typeof(System.Int32), true, false, false, false,  (int)ExcludedServiceTypeFieldIndex.ShipmentType, 0, 0, 10);
+			base.AddElementFieldInfo("ExcludedServiceTypeEntity", "ServiceType", typeof(System.Int32), true, false, false, false,  (int)ExcludedServiceTypeFieldIndex.ServiceType, 0, 0, 10);
 		}
 		/// <summary>Inits FedExAccountEntity's FieldInfo objects</summary>
 		private void InitFedExAccountEntityInfos()
@@ -2625,11 +2639,13 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialUseLastActive", typeof(System.Boolean), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialUseLastActive, 0, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialSpecified", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialSpecified, 0, 0, 19);
 			base.AddElementFieldInfo("UserSettingsEntity", "FilterInitialSortType", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.FilterInitialSortType, 0, 0, 10);
-			base.AddElementFieldInfo("UserSettingsEntity", "FilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.FilterLastActive, 0, 0, 19);
-			base.AddElementFieldInfo("UserSettingsEntity", "FilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.FilterExpandedFolders, 2147483647, 0, 0);
+			base.AddElementFieldInfo("UserSettingsEntity", "OrderFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.OrderFilterLastActive, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "OrderFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.OrderFilterExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "ShippingWeightFormat", typeof(System.Int32), false, false, false, false,  (int)UserSettingsFieldIndex.ShippingWeightFormat, 0, 0, 10);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.TemplateExpandedFolders, 2147483647, 0, 0);
 			base.AddElementFieldInfo("UserSettingsEntity", "TemplateLastSelected", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.TemplateLastSelected, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterLastActive", typeof(System.Int64), false, false, false, false,  (int)UserSettingsFieldIndex.CustomerFilterLastActive, 0, 0, 19);
+			base.AddElementFieldInfo("UserSettingsEntity", "CustomerFilterExpandedFolders", typeof(System.String), false, false, false, true,  (int)UserSettingsFieldIndex.CustomerFilterExpandedFolders, 2147483647, 0, 0);
 		}
 		/// <summary>Inits UspsAccountEntity's FieldInfo objects</summary>
 		private void InitUspsAccountEntityInfos()

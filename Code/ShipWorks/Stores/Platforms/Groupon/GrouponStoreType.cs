@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Management;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.UI.Wizard;
@@ -140,6 +145,19 @@ namespace ShipWorks.Stores.Platforms.Groupon
         }
 
         /// <summary>
+        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        /// </summary>
+        public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
+        {
+            if (column == OnlineGridColumnSupport.OnlineStatus || column == OnlineGridColumnSupport.LastModified)
+            {
+                return true;
+            }
+
+            return base.GridOnlineColumnSupported(column);
+        }
+
+        /// <summary>
         /// Creates the order downloader
         /// </summary>
         public override StoreDownloader CreateDownloader()
@@ -233,6 +251,97 @@ namespace ShipWorks.Stores.Platforms.Groupon
         public static string AccountSettingsHelpUrl
         {
             get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
+        }
+
+        /// <summary>
+        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
+        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        /// </summary>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            return new List<FilterEntity>
+            {
+                CreateFilterReadyToShip(),
+                CreateFilterShipped()
+            };
+        }
+
+        /// <summary>
+        /// Creates the filter shipped.
+        /// </summary>
+        private FilterEntity CreateFilterShipped()
+        {
+            // [All]
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            //      [Store] == this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // [AND]
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            ConditionGroupContainer shippedDefinition = new ConditionGroupContainer();
+            definition.RootContainer.SecondGroup = shippedDefinition;
+
+            //      [Any]
+            shippedDefinition.FirstGroup = new ConditionGroup();
+            shippedDefinition.FirstGroup.JoinType = ConditionJoinType.Any;
+
+            // ChannelAdvisor Shipping Status == Shipped
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
+            onlineStatus.Operator = StringOperator.Equals;
+            onlineStatus.TargetValue = "Shipped";
+            shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
+
+            // [OR]
+            shippedDefinition.JoinType = ConditionGroupJoinType.Or;
+
+            // Shipped within Shipworks
+            shippedDefinition.SecondGroup = InitialDataLoader.CreateDefinitionShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name = "Shipped",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
+        }
+
+        /// <summary>
+        /// Creates the filter ready to ship.
+        /// </summary>
+        /// <returns></returns>
+        private FilterEntity CreateFilterReadyToShip()
+        {
+            FilterDefinition definition = new FilterDefinition(FilterTarget.Orders);
+            definition.RootContainer.JoinType = ConditionGroupJoinType.And;
+            definition.RootContainer.FirstGroup.JoinType = ConditionJoinType.All;
+
+            // For this store
+            StoreCondition storeCondition = new StoreCondition();
+            storeCondition.Operator = EqualityOperator.Equals;
+            storeCondition.Value = Store.StoreID;
+            definition.RootContainer.FirstGroup.Conditions.Add(storeCondition);
+
+            // Channel advisor says it has to be unshipped
+            OnlineStatusCondition onlineStatus = new OnlineStatusCondition();
+            onlineStatus.Operator = StringOperator.Equals;
+            onlineStatus.TargetValue = "open";
+            definition.RootContainer.FirstGroup.Conditions.Add(onlineStatus);
+
+            definition.RootContainer.SecondGroup = InitialDataLoader.CreateDefinitionNotShipped().RootContainer;
+
+            return new FilterEntity
+            {
+                Name = "Ready to Ship",
+                Definition = definition.GetXml(),
+                IsFolder = false,
+                FilterTarget = (int)FilterTarget.Orders
+            };
         }
     }
 }

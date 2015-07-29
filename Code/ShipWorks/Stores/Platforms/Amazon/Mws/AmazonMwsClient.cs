@@ -45,10 +45,17 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get 
             {
-                return 
-                    Store.AmazonApiRegion == "CA" ? "https://mws.amazonservices.ca" :
-                    IsNorthAmericanStore ? "https://mws.amazonservices.com" : 
-                    "https://mws.amazonservices.co.uk";
+                switch (Store.AmazonApiRegion)
+                {
+                    case "US":
+                        return "https://mws.amazonservices.com";
+                    case "CA":
+                        return "https://mws.amazonservices.ca";
+                    case "MX":
+                        return "https://mws.amazonservices.com.mx";
+                    default:
+                        return "https://mws.amazonservices.co.uk";
+                }
             }
         }
 
@@ -85,7 +92,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get 
             { 
-                return Store.AmazonApiRegion == "US" || Store.AmazonApiRegion == "CA"; 
+                return Store.AmazonApiRegion == "US" || Store.AmazonApiRegion == "CA" || Store.AmazonApiRegion == "MX"; 
             }
         }
 

@@ -586,5 +586,35 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 return uspsConsolidatorServiceTypes.SelectMany(x => x.Value);   
             }
         }
+
+        /// <summary>
+        /// Initialize the package picker control
+        /// </summary>
+        [CLSCompliant(false)]
+        public static void InitializePackagePicker(PackageTypePickerControl<PostalPackagingType> packagePicker, ShipmentType shipmentType)
+        {
+            IEnumerable<PostalPackagingType> excludedServices = shipmentType.GetExcludedPackageTypes()
+                .Cast<PostalPackagingType>();
+
+            IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value);
+            packagePicker.Initialize(postalServices, excludedServices);
+        }
+
+        /// <summary>
+        /// Initialize the service picker control
+        /// </summary>
+        [CLSCompliant(false)]
+        public static void InitializeServicePicker(ServicePickerControl<PostalServiceType> servicePicker, ShipmentType shipmentType)
+        {
+            IEnumerable<PostalServiceType> excludedServices = shipmentType.GetExcludedServiceTypes()
+                .Cast<PostalServiceType>()
+                .ToList();
+
+            IEnumerable<PostalServiceType> postalServices = GetDomesticServices(shipmentType.ShipmentTypeCode)
+                .Union(GetInternationalServices(shipmentType.ShipmentTypeCode))
+                .ToList();
+            servicePicker.Initialize(postalServices, excludedServices);
+        }
     }
 }

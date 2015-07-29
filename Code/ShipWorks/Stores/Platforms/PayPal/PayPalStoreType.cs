@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Content;
+using ShipWorks.Filters.Content.Conditions;
+using ShipWorks.Filters.Content.Conditions.Orders;
 using ShipWorks.Stores.Content;
 using ShipWorks.Stores.Communication;
+using ShipWorks.Stores.Platforms.PayPal.CoreExtensions.Filters;
 using ShipWorks.UI.Wizard;
 using System.Data.SqlTypes;
 using ShipWorks.Templates.Processing.TemplateXml;
@@ -44,6 +49,21 @@ namespace ShipWorks.Stores.Platforms.PayPal
         {
             get { return ((PayPalStoreEntity)Store).ApiUserName; }
         }
+
+        /// <summary>
+        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
+        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        /// </summary>
+        public override List<FilterEntity> CreateInitialFilters()
+        {
+            List<PayPalPaymentStatus> ShippingStatuses = EnumHelper.GetEnumList<PayPalPaymentStatus>()
+              .Select(statusEnumEntry => statusEnumEntry.Value)
+              .ToList();
+
+            return CreateInitialFilters<PayPalPaymentStatus, PayPalPaymentStatusCondition>(ShippingStatuses);
+        }
+
+
 
         /// <summary>
         /// Store settings control

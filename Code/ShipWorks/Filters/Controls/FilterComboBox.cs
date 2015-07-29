@@ -81,7 +81,7 @@ namespace ShipWorks.Filters.Controls
             filterTree.LoadLayouts(targets);
             filterTree.SelectedFilterNodeChanged += new EventHandler(OnFilterSelected);
 
-            filterTree.ApplyFolderState(new FolderExpansionState(UserSession.User.Settings.FilterExpandedFolders));
+            filterTree.ApplyFolderState(new FolderExpansionState(UserSession.User.Settings.OrderFilterExpandedFolders));
         }
 
         /// <summary>
@@ -350,7 +350,7 @@ namespace ShipWorks.Filters.Controls
             // Save the folder state (could have crashed with it open - check to be sure)
             if (UserSession.IsLoggedOn)
             {
-                UserSession.User.Settings.FilterExpandedFolders = filterTree.GetFolderState().GetState();
+                UserSession.User.Settings.OrderFilterExpandedFolders = filterTree.GetFolderState().GetState();
 
                 // If what we think is the selected node is no longer present in the tree then the user removed
                 // it from the tree but never selected a new one.

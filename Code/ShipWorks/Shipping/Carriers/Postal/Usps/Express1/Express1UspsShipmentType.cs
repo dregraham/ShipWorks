@@ -119,14 +119,6 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         }
         
         /// <summary>
-        /// Creates the Express1/USPS settings control.
-        /// </summary>
-        public override SettingsControlBase CreateSettingsControl()
-        {
-            return new UspsSettingsControl(ShipmentTypeCode);
-        }
-
-        /// <summary>
         /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
         public override ShippingProfileControlBase CreateProfileControl()
@@ -164,7 +156,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
         private RateGroup GetRatesFromApi(ShipmentEntity shipment)
         {
             List<RateResult> rateResults = CreateWebClient().GetRates(shipment);
-            RateGroup rateGroup = new RateGroup(rateResults);
+            RateGroup rateGroup = new RateGroup(FilterRatesByExcludedServices(shipment, rateResults));
 
             if (UspsAccountManager.UspsAccounts.All(a => a.ContractType != (int) UspsAccountContractType.Reseller))
             {
@@ -259,6 +251,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
                 PostalConfirmationType.AdultSignatureRequired,
                 PostalConfirmationType.AdultSignatureRestricted
             };
+        }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this postal shipment type.
+        /// </summary>
+        protected override List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<PostalServiceType> availableServiceTypes = GetAvailableServiceTypes().Select(s => (PostalServiceType)s).ToList();;
+
+            if (shipment.ShipmentType == (int) this.ShipmentTypeCode)
+            {
+                availableServiceTypes.Add((PostalServiceType)shipment.Postal.Service);
+            }
+
+            List<RateResult> rateResults = rates.Where(r => r.Tag is PostalRateSelection && availableServiceTypes.Contains(((PostalRateSelection)r.Tag).ServiceType)).ToList();
+
+            rateResults.ForEach(r=> r.ShipmentType = ShipmentTypeCode);
+
+            return rateResults;
         }
     }
 }

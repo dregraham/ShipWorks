@@ -99,13 +99,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             List<DimensionsAdapter> dimensions = new List<DimensionsAdapter>();
 
-            // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
-            // type needs to be updated for the loop to loop correctly
-            bool allInternational = LoadedShipments.Any(shipment => !shipment.ShipPerson.IsDomesticCountry());
-
             // Update the service types
             service.SelectedValueChanged -= OnServiceChanged;
-            UpdateServiceTypes(!allInternational);
+            UpdateServiceTypes(LoadedShipments);
+            UpdatePackageTypes(LoadedShipments);
 
             using (new MultiValueScope())
             {
@@ -140,7 +137,6 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
                 }
             }
 
-
             service.SelectedValueChanged += OnServiceChanged;
 
             //Load the dimensions
@@ -148,35 +144,29 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         }
 
         /// <summary>
+        /// Update the available choices for packages
+        /// </summary>
+        private void UpdatePackageTypes(IEnumerable<ShipmentEntity> shipments)
+        {
+            List<OnTracPackagingType> availablePackages = GetAvailablePackages(shipments);
+
+            packagingType.BindToEnumAndPreserveSelection<OnTracPackagingType>(availablePackages.Contains);
+        }
+
+        /// <summary>
         /// Update the available choices for services
         /// </summary>
-        /// <param name="anyDomestic">
-        /// If any Domestic, enable service. If the previous value was set and is currently available,
-        /// set it.
-        /// </param>
-        private void UpdateServiceTypes(bool anyDomestic)
+        private void UpdateServiceTypes(IList<ShipmentEntity> shipments)
         {
-            bool previousMulti = service.MultiValued;
-            object previousValue = service.SelectedValue;
+            // Are there any international shipments? - This is outside of the next loop because allInternational is needed for UpdateServiceTypes and service
+            // type needs to be updated for the loop to loop correctly
+            bool anyDomestic = shipments.Any(shipment => shipment.ShipPerson.IsDomesticCountry());
 
             if (anyDomestic)
             {
-                EnumHelper.BindComboBox<OnTracServiceType>(service, serviceType => serviceType != OnTracServiceType.None);
+                List<OnTracServiceType> availableServices = GetAvailableServices(shipments);
 
-                // Set back the previous value
-                if (previousMulti)
-                {
-                    service.MultiValued = true;
-                }
-                else if (previousValue != null)
-                {
-                    service.SelectedValue = previousValue;
-                    if (service.SelectedIndex == -1)
-                    {
-                        service.SelectedIndex = 0;
-                    }
-                }
-
+                service.BindToEnumAndPreserveSelection<OnTracServiceType>(availableServices.Contains);
             }
             else
             {
@@ -185,6 +175,35 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
 
             // Disable it if its "None"
             service.Enabled = anyDomestic;
+        }
+
+        /// <summary>
+        /// Gets available packages
+        /// </summary>
+        private static List<OnTracPackagingType> GetAvailablePackages(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new OnTracShipmentType()
+                .GetAvailablePackageTypes()
+                .Cast<OnTracPackagingType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracPackagingType) x.PackagingType))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Gets available services
+        /// </summary>
+        private static List<OnTracServiceType> GetAvailableServices(IEnumerable<ShipmentEntity> shipments)
+        {
+            return new OnTracShipmentType()
+                .GetAvailableServiceTypes()
+                .Cast<OnTracServiceType>()
+                .Union(shipments.Select(x => x.OnTrac)
+                    .Where(x => x != null)
+                    .Select(x => (OnTracServiceType)x.Service))
+                .Where(x => x != OnTracServiceType.None)
+                .ToList();
         }
 
         /// <summary>

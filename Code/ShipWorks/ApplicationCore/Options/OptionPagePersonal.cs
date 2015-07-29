@@ -12,6 +12,7 @@ using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Grid.Columns;
 using Interapptive.Shared.Utility;
+using ShipWorks.Data;
 using ShipWorks.UI.Controls;
 using ShipWorks.Filters.Grid;
 
@@ -101,8 +102,9 @@ namespace ShipWorks.ApplicationCore.Options
                 data.ShowQatBelowRibbon = showQatBelowRibbon.Checked;
 
                 settings.FilterInitialUseLastActive = radioInitialFilterRecent.Checked;
-                settings.FilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
                 settings.FilterInitialSortType = (int) filterInitialSort.SelectedValue;
+
+                settings.FilterInitialSpecified = filterComboBox.SelectedFilterNode.FilterNodeID;
 
                 settings.ShippingWeightFormat = (int) comboWeightFormat.SelectedValue;
             }
