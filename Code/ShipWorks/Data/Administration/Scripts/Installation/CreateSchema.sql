@@ -1805,7 +1805,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [IntlExportDetailLicenseOrPermitExpirationDate] [datetime] NULL,
 [WeightUnitType] [int] NOT NULL,
 [LinearUnitType] [int] NOT NULL,
-[RequestedLabelFormat] [int] NOT NULL
+[RequestedLabelFormat] [int] NOT NULL,
+[FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'
@@ -4603,7 +4604,10 @@ CREATE TABLE [dbo].[ShippingSettings]
 [ShipSenseUniquenessXml] [xml] NOT NULL,
 [ShipSenseProcessedShipmentID] [bigint] NOT NULL,
 [ShipSenseEndShipmentID] [bigint] NOT NULL,
-[AutoCreateShipments] [bit] NOT NULL
+[AutoCreateShipments] [bit] NOT NULL,
+[FedExFimsEnabled] [bit] NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsEnabled] DEFAULT ((0)),
+[FedExFimsUsername] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsUsername] DEFAULT (''),
+[FedExFimsPassword] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_ShippingSettings_FedExFimsPassword] DEFAULT ('')
 )
 GO
 PRINT N'Creating primary key [PK_ShippingSettings] on [dbo].[ShippingSettings]'

@@ -177,9 +177,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionPackageDetails = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.otherPackageHolder = new System.Windows.Forms.Panel();
             this.packageDetailsControl = new ShipWorks.Shipping.Carriers.FedEx.FedExPackageDetailControl();
+            this.sectionServiceOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.labelDropoffType = new System.Windows.Forms.Label();
             this.dropoffType = new ShipWorks.UI.Controls.MultiValueComboBox();
-            this.sectionServiceOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.sectionFimsOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
+            this.fimsOptionsControl = new ShipWorks.Shipping.Carriers.FedEx.FimsOptionsControl();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -232,6 +234,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions.ContentPanel)).BeginInit();
             this.sectionServiceOptions.ContentPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions.ContentPanel)).BeginInit();
+            this.sectionFimsOptions.ContentPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // sectionRecipient
@@ -616,11 +621,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageControl.Location = new System.Drawing.Point(-26, 86);
             this.packageControl.Name = "packageControl";
             this.packageControl.PackageCountChanged = null;
-            this.packageControl.Size = new System.Drawing.Size(1451, 256);
+            this.packageControl.Size = new System.Drawing.Size(1332, 246);
             this.packageControl.TabIndex = 8;
             this.packageControl.RateCriteriaChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageControl.SizeChanged += new System.EventHandler(this.OnPackageControlSizeChanged);
-            this.packageControl.ShipSenseFieldChanged += OnShipSenseFieldChanged;
             // 
             // packagingType
             // 
@@ -1904,27 +1908,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.packageDetailsControl.PackageDetailsChanged += new System.EventHandler(this.OnRateCriteriaChanged);
             this.packageDetailsControl.Resize += new System.EventHandler(this.OnPackageDetailsResize);
             // 
-            // labelDropoffType
-            // 
-            this.labelDropoffType.AutoSize = true;
-            this.labelDropoffType.BackColor = System.Drawing.Color.Transparent;
-            this.labelDropoffType.Location = new System.Drawing.Point(30, 9);
-            this.labelDropoffType.Name = "labelDropoffType";
-            this.labelDropoffType.Size = new System.Drawing.Size(48, 13);
-            this.labelDropoffType.TabIndex = 61;
-            this.labelDropoffType.Text = "Dropoff:";
-            // 
-            // dropoffType
-            // 
-            this.dropoffType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.dropoffType.FormattingEnabled = true;
-            this.dropoffType.Location = new System.Drawing.Point(84, 6);
-            this.dropoffType.Name = "dropoffType";
-            this.dropoffType.PromptText = "(Multiple Values)";
-            this.dropoffType.Size = new System.Drawing.Size(175, 21);
-            this.dropoffType.TabIndex = 60;
-            this.dropoffType.SelectedIndexChanged += new System.EventHandler(this.OnRateCriteriaChanged);
-            // 
             // sectionServiceOptions
             // 
             this.sectionServiceOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1944,6 +1927,51 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.Size = new System.Drawing.Size(504, 24);
             this.sectionServiceOptions.TabIndex = 20;
             // 
+            // labelDropoffType
+            // 
+            this.labelDropoffType.AutoSize = true;
+            this.labelDropoffType.BackColor = System.Drawing.Color.Transparent;
+            this.labelDropoffType.Location = new System.Drawing.Point(30, 9);
+            this.labelDropoffType.Name = "labelDropoffType";
+            this.labelDropoffType.Size = new System.Drawing.Size(48, 13);
+            this.labelDropoffType.TabIndex = 63;
+            this.labelDropoffType.Text = "Dropoff:";
+            // 
+            // dropoffType
+            // 
+            this.dropoffType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.dropoffType.FormattingEnabled = true;
+            this.dropoffType.Location = new System.Drawing.Point(84, 6);
+            this.dropoffType.Name = "dropoffType";
+            this.dropoffType.PromptText = "(Multiple Values)";
+            this.dropoffType.Size = new System.Drawing.Size(175, 21);
+            this.dropoffType.TabIndex = 62;
+            // 
+            // sectionFimsOptions
+            // 
+            this.sectionFimsOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            // 
+            // sectionFimsOptions.ContentPanel
+            // 
+            this.sectionFimsOptions.ContentPanel.Controls.Add(this.fimsOptionsControl);
+            this.sectionFimsOptions.ExtraText = "";
+            this.sectionFimsOptions.Location = new System.Drawing.Point(3, 787);
+            this.sectionFimsOptions.Name = "sectionFimsOptions";
+            this.sectionFimsOptions.SectionName = "FIMS Options";
+            this.sectionFimsOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
+            this.sectionFimsOptions.Size = new System.Drawing.Size(504, 64);
+            this.sectionFimsOptions.TabIndex = 21;
+            // 
+            // fimsOptionsControl
+            // 
+            this.fimsOptionsControl.AutoSize = true;
+            this.fimsOptionsControl.BackColor = System.Drawing.Color.Transparent;
+            this.fimsOptionsControl.Location = new System.Drawing.Point(27, 5);
+            this.fimsOptionsControl.Name = "fimsOptionsControl";
+            this.fimsOptionsControl.Size = new System.Drawing.Size(252, 29);
+            this.fimsOptionsControl.TabIndex = 0;
+            // 
             // FedExServiceControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1961,8 +1989,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.sectionHoldAtLocation);
             this.Controls.Add(this.sectionCOD);
             this.Controls.Add(this.sectionServiceOptions);
+            this.Controls.Add(this.sectionFimsOptions);
             this.Name = "FedExServiceControl";
             this.Size = new System.Drawing.Size(510, 1134);
+            this.Controls.SetChildIndex(this.sectionFimsOptions, 0);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionServiceOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
@@ -2047,6 +2077,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionServiceOptions.ContentPanel.ResumeLayout(false);
             this.sectionServiceOptions.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionServiceOptions)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions.ContentPanel)).EndInit();
+            this.sectionFimsOptions.ContentPanel.ResumeLayout(false);
+            this.sectionFimsOptions.ContentPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sectionFimsOptions)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2197,5 +2231,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private CollapsibleGroupControl sectionServiceOptions;
         private Label labelDropoffType;
         private MultiValueComboBox dropoffType;
+        private CollapsibleGroupControl sectionFimsOptions;
+        private FimsOptionsControl fimsOptionsControl;
     }
 }

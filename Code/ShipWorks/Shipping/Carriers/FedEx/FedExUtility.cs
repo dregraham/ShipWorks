@@ -15,6 +15,7 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -146,6 +147,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 serviceTypes.Add(FedExServiceType.FedExGround);
             }
 
+            // Add FIMS if enabled
+            if (ShippingSettings.Fetch().FedExFimsEnabled)
+            {
+                serviceTypes.Add(FedExServiceType.FedExFims);
+            }
+
             return serviceTypes;
         }
 
@@ -260,6 +267,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             package.HazardousMaterialQuantityValue = 0;
 
             return package;
+        }
+
+        /// <summary>
+        /// Determines if the shipment is a FIMS shipment.
+        /// </summary>
+        public static bool IsFimsService(FedExServiceType service)
+        {
+            return service == FedExServiceType.FedExFims;
         }
 
         /// <summary>
@@ -435,8 +450,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             string responseFilename = GetCertificationFileName(uniqueId, action, "Response", "xml", false);
             File.AppendAllText(responseFilename, rawSoap.ResponseXml);
-
-
+            
             // Write the request and response to a file that will be unique for each transaction for debugging purposes
             string debugRequestFilename = GetCertificationFileName(uniqueId, action, "Request", "xml", true);
             File.AppendAllText(debugRequestFilename, rawSoap.RequestXml);

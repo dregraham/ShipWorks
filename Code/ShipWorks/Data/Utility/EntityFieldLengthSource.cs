@@ -155,6 +155,7 @@ namespace ShipWorks.Data.Utility
         FedExCustomsAESEEI,
         FedExRmaNumber,
         FedExRmaReason,
+        FedExShipmentFimsAirWaybill,
 
         OnTracReference1,
         OnTracReference2,

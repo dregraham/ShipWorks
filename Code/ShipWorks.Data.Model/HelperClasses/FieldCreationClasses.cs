@@ -7557,6 +7557,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.RequestedLabelFormat);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.FimsAirWaybill field instance</summary>
+		public static EntityField2 FimsAirWaybill
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FimsAirWaybill);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>
@@ -17746,6 +17751,21 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 AutoCreateShipments
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.AutoCreateShipments);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.FedExFimsEnabled field instance</summary>
+		public static EntityField2 FedExFimsEnabled
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExFimsEnabled);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.FedExFimsUsername field instance</summary>
+		public static EntityField2 FedExFimsUsername
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExFimsUsername);}
+		}
+		/// <summary>Creates a new ShippingSettingsEntity.FedExFimsPassword field instance</summary>
+		public static EntityField2 FedExFimsPassword
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ShippingSettingsFieldIndex.FedExFimsPassword);}
 		}
 	}
 

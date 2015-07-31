@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         private string fedExTestAccountNumber = "607253064"; // "603103343";
         private const string ecodAccountNumber = "222326460";
 
-        private bool justLabels = false;
+        private bool justLabels = true;
 
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
