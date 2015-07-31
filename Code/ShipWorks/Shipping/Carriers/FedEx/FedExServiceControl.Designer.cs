@@ -1959,7 +1959,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.sectionFimsOptions.Location = new System.Drawing.Point(3, 787);
             this.sectionFimsOptions.Name = "sectionFimsOptions";
             this.sectionFimsOptions.SectionName = "FIMS Options";
-            this.sectionFimsOptions.SettingsKey = "{e4ccd963-eb98-4d6a-880f-1a3e236ce413}";
+            this.sectionFimsOptions.SettingsKey = "{e87cbd40-e049-4cdf-adbd-d2daa1720fcf}";
             this.sectionFimsOptions.Size = new System.Drawing.Size(504, 64);
             this.sectionFimsOptions.TabIndex = 21;
             // 

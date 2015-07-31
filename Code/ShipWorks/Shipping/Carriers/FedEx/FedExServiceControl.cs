@@ -593,6 +593,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         void OnChangeService(object sender, EventArgs e)
         {
+            SuspendLayout();
+
             if (!service.MultiValued && service.SelectedValue != null)
             {
                 FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
@@ -656,6 +658,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 // Don't show any selection when multiple services are selected
                 RateControl.ClearSelection();
             }
+
+            ResumeLayout();
+            PerformLayout();
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
