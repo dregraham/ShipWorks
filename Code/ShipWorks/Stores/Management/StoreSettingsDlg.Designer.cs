@@ -387,21 +387,17 @@ namespace ShipWorks.Stores.Management
             // 
             // sectionAutoDownloads
             // 
-            this.sectionAutoDownloads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionAutoDownloads.Location = new System.Drawing.Point(15, 15);
             this.sectionAutoDownloads.Name = "sectionAutoDownloads";
-            this.sectionAutoDownloads.Size = new System.Drawing.Size(377, 22);
+            this.sectionAutoDownloads.Size = new System.Drawing.Size(564, 22);
             this.sectionAutoDownloads.TabIndex = 3;
             this.sectionAutoDownloads.Text = "Downloading";
             // 
             // sectionTitleManualOrders
             // 
-            this.sectionTitleManualOrders.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.sectionTitleManualOrders.Location = new System.Drawing.Point(15, 129);
             this.sectionTitleManualOrders.Name = "sectionTitleManualOrders";
-            this.sectionTitleManualOrders.Size = new System.Drawing.Size(377, 22);
+            this.sectionTitleManualOrders.Size = new System.Drawing.Size(564, 22);
             this.sectionTitleManualOrders.TabIndex = 2;
             this.sectionTitleManualOrders.Text = "Manual Orders";
             // 
