@@ -148,11 +148,21 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             serviceClass = tempServiceClass;
         }
 
-        /// <summary>
+                /// <summary>
         /// Gets the CA shipment Class code
         /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
         /// </summary>
         public static string GetShipmentClassCode(ShipmentEntity shipment)
+        {
+            ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+            return GetShipmentClassCode(shipment, store);
+        }
+
+        /// <summary>
+        /// Gets the CA shipment Class code
+        /// http://ssc.channeladvisor.com/howto/account-shipping-carrier-options
+        /// </summary>
+        public static string GetShipmentClassCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
             {
@@ -345,7 +355,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
 
                     if (ShipmentTypeManager.IsConsolidator(postalServiceType))
                     {
-                        return "CONSOLIDATOR";
+                        return store.ConsolidatorAsUsps ? "IECONOMY" : "CONSOLIDATOR";
                     }
 
                     if (ShipmentTypeManager.IsDhl(postalServiceType))
@@ -362,10 +372,19 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
             return "NONE";
         }
 
-        /// <summary>
+                /// <summary>
         /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.
         /// </summary>
         public static string GetCarrierCode(ShipmentEntity shipment)
+        {
+            ChannelAdvisorStoreEntity store = StoreManager.GetStore(shipment.Order.StoreID) as ChannelAdvisorStoreEntity;
+            return GetCarrierCode(shipment, store);
+        }
+
+        /// <summary>
+        /// Gets the CA shipment Carrier code.  The values are user-customizable in the CA admin site.
+        /// </summary>
+        public static string GetCarrierCode(ShipmentEntity shipment, ChannelAdvisorStoreEntity store)
         {
             if (!shipment.Processed)
             {
@@ -396,7 +415,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     }
                     else if (ShipmentTypeManager.IsConsolidator(service))
                     {
-                        return "Consolidator";
+                        return store.ConsolidatorAsUsps ? "USPS" : "Consolidator";
                     }
                     else
                     {

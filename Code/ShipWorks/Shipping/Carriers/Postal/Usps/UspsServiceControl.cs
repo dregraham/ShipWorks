@@ -132,6 +132,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     memo1.ApplyMultiText(shipment.Postal.Memo1);
                     memo2.ApplyMultiText(shipment.Postal.Memo2);
                     memo3.ApplyMultiText(shipment.Postal.Memo3);
+                    noPostage.ApplyMultiCheck(shipment.Postal.NoPostage);
                     LoadAccountValue(scope);
                 }
             }
@@ -187,6 +188,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 memo1.ReadMultiText(t => shipment.Postal.Memo1 = t);
                 memo2.ReadMultiText(t => shipment.Postal.Memo2 = t);
                 memo3.ReadMultiText(t => shipment.Postal.Memo3 = t);
+                noPostage.ReadMultiCheck(x => shipment.Postal.NoPostage = x);
             }
 
             ResumeRateCriteriaChangeEvent();
@@ -286,6 +288,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
             // Disable the hide postage option should for first class envelopes
             hidePostage.Enabled = !disableHiddenPostage;
+        }
+
+        /// <summary>
+        /// Handle NoPostage checkbox changing
+        /// </summary>
+        private void OnNoPostageChanged(object sender, EventArgs e)
+        {
+            RaiseRateCriteriaChanged();
         }
     }
 }

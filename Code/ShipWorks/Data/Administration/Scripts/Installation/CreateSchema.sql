@@ -1255,7 +1255,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [StoreID] [bigint] NOT NULL,
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ProfileID] [int] NOT NULL,
-[AttributesToDownload] [xml] NOT NULL
+[AttributesToDownload] [xml] NOT NULL,
+[ConsolidatorAsUsps] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1517,7 +1518,8 @@ CREATE TABLE [dbo].[PostalProfile]
 [EntryFacility] [int] NULL,
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NoPostage] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1531,7 +1533,6 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [ShippingProfileID] [bigint] NOT NULL,
 [EndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NULL,
-[NoPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ScanBasedReturn] [bit] NULL
 )
@@ -1595,7 +1596,8 @@ CREATE TABLE [dbo].[PostalShipment]
 [EntryFacility] [int] NOT NULL,
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalProfile_NoPostage] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1610,7 +1612,6 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [EndiciaAccountID] [bigint] NOT NULL,
 [OriginalEndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NOT NULL,
-[NoPostage] [bit] NOT NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
