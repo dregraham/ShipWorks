@@ -597,66 +597,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             if (!service.MultiValued && service.SelectedValue != null)
             {
-                FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
-                
-                UpdatePackagingChoices(serviceType);
-
-                UpdatePayorChoices(serviceType == FedExServiceType.FedExGround || serviceType == FedExServiceType.GroundHomeDelivery, null);
-                UpdateBillingSectionDisplay();
-
-                // Only show home delivery section if they are all home delivery
-                sectionHomeDelivery.Visible = serviceType == FedExServiceType.GroundHomeDelivery;
-
-                bool isSmartPost = serviceType == FedExServiceType.SmartPost;
-                bool isFims = FedExUtility.IsFimsService(serviceType);
-
-                // Only show smartpost if they are all smart post
-                sectionSmartPost.Visible = isSmartPost;
-
-                // Update the smartpost ui
-                sectionPackageDetails.Visible = !isSmartPost && !isFims;
-
-                // Hide Hold At Location if we are SmartPost
-                sectionHoldAtLocation.Visible = !isSmartPost && !isFims;
-
-                // Only show freight if its a freight service
-                sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
-
-                // Update the packges\skids ui
-                packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
-
-                // Show COD only if applicable
-                sectionCOD.Visible = FedExUtility.IsCodAvailable(serviceType);
-
-                // Only show non-standard for a ground (home or not)
-                nonStandardPackaging.Visible =
-                    serviceType == FedExServiceType.GroundHomeDelivery ||
-                    serviceType == FedExServiceType.FedExGround;
-
-                sectionFimsOptions.Visible = isFims;
-                sectionOptions.Visible = !isFims;
-                sectionBilling.Visible = !isFims;
-                sectionEmail.Visible = !isFims;
-                sectionServiceOptions.Visible = !isFims;
-                sectionLabelOptions.Visible = !isFims;
-
-                RaiseRateCriteriaChanged();
-                SyncSelectedRate();
-
-                Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
+                UpdateLayoutForSingleService();
             }
             else
             {
-                UpdatePackagingChoices(null);
-
-                sectionOptions.Visible = true;
-                sectionBilling.Visible = true;
-                sectionEmail.Visible = true;
-                sectionServiceOptions.Visible = true;
-                sectionLabelOptions.Visible = true;
-
-                // Don't show any selection when multiple services are selected
-                RateControl.ClearSelection();
+                UpdateLayoutForMultipleServices();
             }
 
             ResumeLayout();
@@ -664,6 +609,82 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+        }
+
+        /// <summary>
+        /// Update the service control for multiple services
+        /// </summary>
+        private void UpdateLayoutForMultipleServices()
+        {
+            UpdatePackagingChoices(null);
+
+            SetStandardControlVisibility(true);
+
+            // Don't show any selection when multiple services are selected
+            RateControl.ClearSelection();
+        }
+
+        /// <summary>
+        /// Update the service control for a single service
+        /// </summary>
+        private void UpdateLayoutForSingleService()
+        {
+            FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
+
+            UpdatePackagingChoices(serviceType);
+
+            UpdatePayorChoices(serviceType == FedExServiceType.FedExGround || serviceType == FedExServiceType.GroundHomeDelivery, null);
+            UpdateBillingSectionDisplay();
+
+            // Only show home delivery section if they are all home delivery
+            sectionHomeDelivery.Visible = serviceType == FedExServiceType.GroundHomeDelivery;
+
+            bool isSmartPost = serviceType == FedExServiceType.SmartPost;
+            bool isFims = FedExUtility.IsFimsService(serviceType);
+
+            // Only show smartpost if they are all smart post
+            sectionSmartPost.Visible = isSmartPost;
+
+            // Update the smartpost ui
+            sectionPackageDetails.Visible = !isSmartPost && !isFims;
+
+            // Hide Hold At Location if we are SmartPost
+            sectionHoldAtLocation.Visible = !isSmartPost && !isFims;
+
+            // Only show freight if its a freight service
+            sectionFreight.Visible = FedExUtility.IsFreightService(serviceType) && !isFims;
+
+            // Update the packges\skids ui
+            packageDetailsControl.UpdateFreightUI(sectionFreight.Visible);
+
+            // Show COD only if applicable
+            sectionCOD.Visible = FedExUtility.IsCodAvailable(serviceType);
+
+            // Only show non-standard for a ground (home or not)
+            nonStandardPackaging.Visible =
+                serviceType == FedExServiceType.GroundHomeDelivery ||
+                serviceType == FedExServiceType.FedExGround;
+
+            sectionFimsOptions.Visible = isFims;
+
+            SetStandardControlVisibility(!isFims);
+
+            RaiseRateCriteriaChanged();
+            SyncSelectedRate();
+
+            Messenger.Current.Send(new FedExServiceTypeChangedMessage(this, serviceType));
+        }
+
+        /// <summary>
+        /// Set visibility of the standard service control panels
+        /// </summary>
+        private void SetStandardControlVisibility(bool visible)
+        {
+            sectionOptions.Visible = visible;
+            sectionBilling.Visible = visible;
+            sectionEmail.Visible = visible;
+            sectionServiceOptions.Visible = visible;
+            sectionLabelOptions.Visible = visible;
         }
 
         /// <summary>
