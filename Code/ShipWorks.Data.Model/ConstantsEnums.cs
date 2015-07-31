@@ -1379,6 +1379,8 @@ namespace ShipWorks.Data.Model
 		ProfileID,
 		///<summary>AttributesToDownload. </summary>
 		AttributesToDownload,
+		///<summary>ConsolidatorAsUsps. </summary>
+		ConsolidatorAsUsps,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -88,6 +88,18 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Express1
         }
 
         /// <summary>
+        /// Gets the package types that have been available for this shipment type
+        /// </summary>
+        public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
+        {
+            // All package types including cubic are available to Express1/Endicia
+            return EnumHelper.GetEnumList<PostalPackagingType>()
+                .Select(x => x.Value)
+                .Cast<int>()
+                .Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
         /// Gets counter rates for a postal shipment
         /// </summary>
         /// <param name="shipment">Shipment for which to retrieve rates</param>
