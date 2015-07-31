@@ -21,6 +21,7 @@ using ShipWorks.UI;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model;
+using log4net;
 
 namespace ShipWorks.Shipping.Editing
 {
@@ -29,6 +30,9 @@ namespace ShipWorks.Shipping.Editing
     /// </summary>
     public partial class CustomsControlBase : UserControl
     {
+        // Logger 
+        static readonly ILog log = LogManager.GetLogger(typeof(CustomsControlBase));
+
         // If enableEditing was specified in LoadShipments
         bool enableEditing;
 
@@ -446,11 +450,11 @@ namespace ShipWorks.Shipping.Editing
                     }
                 });
             }
-            catch (ORMEntityIsDeletedException)
+            catch (ORMEntityIsDeletedException ex)
             {
                 // shipsense sync might delete the original customs item
                 // i think. 
-                
+                log.Error(String.Format("Error saving customs item", ex.Message, "{0}: {1}"));
             }
             harmonizedCode.ReadMultiText(s => customsItem.HarmonizedCode = s);
             countryOfOrigin.ReadMultiText(s => customsItem.CountryOfOrigin = Geography.GetCountryCode(s));
