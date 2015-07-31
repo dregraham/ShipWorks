@@ -1,29 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.Services.Protocols;
-using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
-using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.PackageMovement.Response;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 using log4net;
-using Notification = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Notification;
-using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
-using Interapptive.Shared.Net;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Fims;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
@@ -37,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Fims
         private Mock<IFimsWebClient> webClient;
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private Mock<ILog> log;
-        private Mock<IFimsShipRequest> shippingRequest;
+
         private Mock<IFimsShipResponse> shipResponse;
         private Mock<IFimsLabelRepository> labelRepository;
         private ShipmentEntity shipmentEntity;

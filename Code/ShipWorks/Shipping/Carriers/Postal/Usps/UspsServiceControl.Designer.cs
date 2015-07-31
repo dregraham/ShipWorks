@@ -51,6 +51,8 @@
             this.labelMemo2 = new System.Windows.Forms.Label();
             this.pictureBoxMemoWarning = new System.Windows.Forms.PictureBox();
             this.labelMemoWarning = new System.Windows.Forms.Label();
+            this.noPostage = new System.Windows.Forms.CheckBox();
+            this.labelNoPostage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionExpress.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
@@ -61,7 +63,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment.ContentPanel)).BeginInit();
             this.sectionShipment.ContentPanel.SuspendLayout();
-            this.sectionShipment.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom)).BeginInit();
@@ -73,12 +74,12 @@
             // 
             // insuranceControl
             // 
-            this.insuranceControl.Location = new System.Drawing.Point(21, 372);
+            this.insuranceControl.Location = new System.Drawing.Point(21, 385);
             this.insuranceControl.Size = new System.Drawing.Size(376, 50);
             // 
             // sectionExpress
             // 
-            this.sectionExpress.Location = new System.Drawing.Point(3, 488);
+            this.sectionExpress.Location = new System.Drawing.Point(3, 533);
             this.sectionExpress.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionRecipient
@@ -86,13 +87,10 @@
             // 
             // sectionRecipient.ContentPanel
             // 
-            this.sectionRecipient.ContentPanel.Controls.Add(this.residentialDetermination);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
-            this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelUspsValidation);
             this.sectionRecipient.ContentPanel.Controls.Add(this.requireFullAddressValidation);
             this.sectionRecipient.ExpandedHeight = 459;
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(378, 24);
             this.sectionRecipient.TabIndex = 1;
             // 
@@ -114,7 +112,7 @@
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 517);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 562);
             this.sectionReturns.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionShipment
@@ -123,8 +121,8 @@
             // 
             // sectionShipment.ContentPanel
             // 
-            this.sectionShipment.ContentPanel.Controls.Add(this.insuranceControl);
-            this.sectionShipment.ContentPanel.Controls.Add(this.service);
+            this.sectionShipment.ContentPanel.Controls.Add(this.noPostage);
+            this.sectionShipment.ContentPanel.Controls.Add(this.labelNoPostage);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo2);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo2);
             this.sectionShipment.ContentPanel.Controls.Add(this.memo3);
@@ -135,11 +133,12 @@
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemo1);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelMemoWarning);
             this.sectionShipment.ContentPanel.Controls.Add(this.pictureBoxMemoWarning);
-            this.sectionShipment.Size = new System.Drawing.Size(378, 449);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
+            this.sectionShipment.Size = new System.Drawing.Size(378, 465);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 546);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 591);
             this.sectionLabelOptions.Size = new System.Drawing.Size(378, 24);
             // 
             // sectionFrom
@@ -154,7 +153,7 @@
             this.sectionFrom.ContentPanel.Controls.Add(this.panelTop);
             this.sectionFrom.ExpandedHeight = 541;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 575);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -361,12 +360,34 @@
             // labelMemoWarning
             // 
             this.labelMemoWarning.AutoSize = true;
+            this.labelMemoWarning.ForeColor = System.Drawing.Color.DimGray;
             this.labelMemoWarning.Location = new System.Drawing.Point(56, 321);
             this.labelMemoWarning.Name = "labelMemoWarning";
-            this.labelMemoWarning.ForeColor = System.Drawing.Color.DimGray;
             this.labelMemoWarning.Size = new System.Drawing.Size(315, 13);
             this.labelMemoWarning.TabIndex = 7;
             this.labelMemoWarning.Text = "Express Mail and International labels do not display memo fields.";
+            // 
+            // noPostage
+            // 
+            this.noPostage.AutoSize = true;
+            this.noPostage.BackColor = System.Drawing.Color.White;
+            this.noPostage.Location = new System.Drawing.Point(90, 367);
+            this.noPostage.Name = "noPostage";
+            this.noPostage.Size = new System.Drawing.Size(214, 17);
+            this.noPostage.TabIndex = 60;
+            this.noPostage.Text = "Generate label that is not postage-paid";
+            this.noPostage.UseVisualStyleBackColor = false;
+            this.noPostage.CheckedChanged += new System.EventHandler(this.OnNoPostageChanged);
+            // 
+            // labelNoPostage
+            // 
+            this.labelNoPostage.AutoSize = true;
+            this.labelNoPostage.BackColor = System.Drawing.Color.White;
+            this.labelNoPostage.Location = new System.Drawing.Point(17, 368);
+            this.labelNoPostage.Name = "labelNoPostage";
+            this.labelNoPostage.Size = new System.Drawing.Size(66, 13);
+            this.labelNoPostage.TabIndex = 59;
+            this.labelNoPostage.Text = "No Postage:";
             // 
             // UspsServiceControl
             // 
@@ -375,7 +396,7 @@
             this.AutoScroll = true;
             this.Controls.Add(this.sectionFrom);
             this.Name = "UspsServiceControl";
-            this.Size = new System.Drawing.Size(384, 633);
+            this.Size = new System.Drawing.Size(384, 637);
             this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
             this.Controls.SetChildIndex(this.sectionReturns, 0);
             this.Controls.SetChildIndex(this.sectionExpress, 0);
@@ -394,8 +415,6 @@
             this.sectionShipment.ContentPanel.ResumeLayout(false);
             this.sectionShipment.ContentPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionShipment)).EndInit();
-            this.sectionShipment.ResumeLayout(false);
-            this.sectionShipment.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions.ContentPanel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionLabelOptions)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionFrom.ContentPanel)).EndInit();
@@ -430,5 +449,7 @@
         private System.Windows.Forms.Label labelMemo3;
         private System.Windows.Forms.PictureBox pictureBoxMemoWarning;
         private System.Windows.Forms.Label labelMemoWarning;
+        private System.Windows.Forms.CheckBox noPostage;
+        private System.Windows.Forms.Label labelNoPostage;
     }
 }

@@ -482,6 +482,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("AttributesToDownload", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ConsolidatorAsUsps", fieldHashtable);
 		}
 		#endregion
 
@@ -586,6 +589,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, true); }
 			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.AttributesToDownload, value); }
+		}
+
+		/// <summary> The ConsolidatorAsUsps property of the Entity ChannelAdvisorStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "ChannelAdvisorStore"."ConsolidatorAsUsps"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ConsolidatorAsUsps
+		{
+			get { return (System.Boolean)GetValue((int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, true); }
+			set	{ SetValue((int)ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps, value); }
 		}
 
 
