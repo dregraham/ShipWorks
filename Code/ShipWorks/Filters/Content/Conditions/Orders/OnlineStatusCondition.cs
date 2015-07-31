@@ -13,7 +13,7 @@ namespace ShipWorks.Filters.Content.Conditions.Orders
     /// <summary>
     /// Condition that compares against the online status of an order
     /// </summary>
-    [ConditionElement("Online Status", "Order.OnlineStatus", ApplicableTest = "IsApplicable") ]
+    [ConditionElement("Store Status", "Order.OnlineStatus", ApplicableTest = "IsApplicable") ]
     public class OnlineStatusCondition : StringCondition
     {
         /// <summary>
