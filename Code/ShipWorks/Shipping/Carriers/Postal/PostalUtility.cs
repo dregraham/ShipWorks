@@ -597,7 +597,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 .Cast<PostalPackagingType>();
 
             IEnumerable<PostalPackagingType> postalServices = EnumHelper.GetEnumList<PostalPackagingType>()
-                .Select(x => x.Value);
+                .Select(p => p.Value)
+                .Where(p => p != PostalPackagingType.Cubic || shipmentType.ShipmentTypeCode == ShipmentTypeCode.Express1Endicia);
+
             packagePicker.Initialize(postalServices, excludedServices);
         }
 
