@@ -78,6 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
             IEnumerable<int> allServiceTypes = PostalUtility.GetDomesticServices(ShipmentTypeCode)
                 .Union(PostalUtility.GetInternationalServices(ShipmentTypeCode))
                 .Select(service => (int)service);
+
             return allServiceTypes.Except(GetExcludedServiceTypes(repository));
         }
 
@@ -86,10 +87,12 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// </summary>
         public override IEnumerable<int> GetAvailablePackageTypes(IExcludedPackageTypeRepository repository)
         {
-            return EnumHelper.GetEnumList<PostalPackagingType>()
+            IEnumerable<PostalPackagingType> packageTypes = EnumHelper.GetEnumList<PostalPackagingType>()
                 .Select(x => x.Value)
-                .Cast<int>()
-                .Except(GetExcludedPackageTypes(repository));
+                .Except(GetExcludedPackageTypes(repository).Cast<PostalPackagingType>());
+            
+            // The cubic packaging type is only used by Express1/Endicia
+            return packageTypes.Except(new List<PostalPackagingType> { PostalPackagingType.Cubic }).Cast<int>();
         }
 
         /// <summary>
