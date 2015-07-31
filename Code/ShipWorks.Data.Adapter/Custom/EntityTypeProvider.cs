@@ -185,8 +185,8 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "GrouponOrderEntity": return EntityType.GrouponOrderEntity;
 				case "GrouponOrderItemEntity": return EntityType.GrouponOrderItemEntity;
 				case "GrouponStoreEntity": return EntityType.GrouponStoreEntity;
-				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
+				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));

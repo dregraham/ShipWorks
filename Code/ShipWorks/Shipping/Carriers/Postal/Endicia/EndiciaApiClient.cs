@@ -422,7 +422,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             request.Machinable = postal.NonMachinable ? "FALSE" : "TRUE";
 
             // Hidden postage
-            request.IncludePostage = postal.Endicia.NoPostage ? "FALSE" : "TRUE";
+            request.IncludePostage = postal.NoPostage ? "FALSE" : "TRUE";
             request.Stealth = postal.Endicia.StealthPostage ? "TRUE" : "FALSE";
 
             // Service options
@@ -623,7 +623,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
 
                     // Tracking and cost
                     shipment.TrackingNumber = response.TrackingNumber;
-                    shipment.ShipmentCost = postal.Endicia.NoPostage ? 0 : response.FinalPostage;
+                    shipment.ShipmentCost = postal.NoPostage ? 0 : response.FinalPostage;
                     shipment.Postal.Endicia.TransactionID = response.TransactionID;
 
                     SaveLabelImages(shipment, response);
