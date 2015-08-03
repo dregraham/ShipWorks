@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.CoreExtensions.Actions
     /// <summary>
     /// Task for updating online order status for NetworkSolutions
     /// </summary>
-    [ActionTask("Update online status", "NetworkSolutionsOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "NetworkSolutionsOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class NetworkSolutionsOrderUpdateTask : StoreInstanceTaskBase
     {
         long statusCode = -1;

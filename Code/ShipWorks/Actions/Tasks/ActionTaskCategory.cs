@@ -28,7 +28,7 @@ namespace ShipWorks.Actions.Tasks
         /// <summary>
         /// For tasks that push things back to online stores
         /// </summary>
-        [Description("Update Online")]
+        [Description("Update Store")]
         UpdateOnline,
 
         /// <summary>

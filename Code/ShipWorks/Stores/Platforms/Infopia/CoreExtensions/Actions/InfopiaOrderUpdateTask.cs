@@ -16,7 +16,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.CoreExtensions.Actions
     /// <summary>
     /// Task editor for updating a Generic Store's online order with a status code
     /// </summary>
-    [ActionTask("Update online status", "InfopiaOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "InfopiaOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class InfopiaOrderUpdateTask : StoreInstanceTaskBase
     {
         string status = null;
