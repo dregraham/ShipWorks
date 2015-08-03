@@ -1,15 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using Interapptive.Shared.Utility;
 using ShipWorks.Common.Threading;
 using System.Reflection;
-using ShipWorks.Properties;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -23,9 +17,6 @@ namespace ShipWorks.ApplicationCore
         // Ensures we don't return from the show function until the splash screen is ready
         static ManualResetEvent createdEvent = new ManualResetEvent(false);
 
-        // For sync
-        static object splashLock = new object();
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -34,13 +25,6 @@ namespace ShipWorks.ApplicationCore
             InitializeComponent();
 
             Region = new Region(new Rectangle(1, 1, Width - 2, Height - 2));
-
-            if (DateTime.Today == new DateTime(2014, 4, 1))
-            {
-                BackgroundImage = Resources.splash_april;
-                labelReleaseInfo.ForeColor = Color.White;
-                status.ForeColor = Color.White;
-            }
         }
 
         /// <summary>
@@ -57,9 +41,9 @@ namespace ShipWorks.ApplicationCore
             thread.Name = "Splash";
             thread.IsBackground = true;
             thread.Start();
-           
+
             // Don't return from this function until the splash screen is ready.
-            createdEvent.WaitOne();
+            createdEvent.WaitOne(5000);
         }
 
         /// <summary>
@@ -67,10 +51,8 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private static void SplashThread()
         {
-            // Create the SplashScreen and get it going
             splash = new SplashScreen();
 
-            // Show it
             Application.Run(splash);
         }
 
@@ -81,7 +63,7 @@ namespace ShipWorks.ApplicationCore
         {
             base.OnShown(e);
 
-            AppDomain.CurrentDomain.AssemblyLoad += new AssemblyLoadEventHandler(OnAssemblyLoad);
+            AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoad;
 
             createdEvent.Set();
         }
@@ -91,16 +73,11 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public static void CloseSplash()
         {
-            lock (splashLock)
+            InvokeOnSplashThread(x =>
             {
-                if (splash != null)
-                {
-                    SplashScreen tempSplash = splash;
-                    splash = null;
-
-                    tempSplash.BeginInvoke(new MethodInvoker(tempSplash.Close));
-                }
-            }
+                splash = null;
+                x.Close();
+            });
         }
 
         /// <summary>
@@ -116,12 +93,9 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         private void OnClosing(object sender, FormClosingEventArgs e)
         {
-            lock (splashLock)
+            if (splash != null)
             {
-                if (splash != null)
-                {
-                    e.Cancel = true;
-                }
+                e.Cancel = true;
             }
         }
 
@@ -132,14 +106,14 @@ namespace ShipWorks.ApplicationCore
         {
             base.OnClosed(e);
 
-            AppDomain.CurrentDomain.AssemblyLoad -= new AssemblyLoadEventHandler(OnAssemblyLoad);
+            AppDomain.CurrentDomain.AssemblyLoad -= OnAssemblyLoad;
             createdEvent = null;
         }
 
         /// <summary>
         /// An assembly has been loaded into the AppDomain
         /// </summary>
-        void OnAssemblyLoad(object sender, AssemblyLoadEventArgs e)
+        static void OnAssemblyLoad(object sender, AssemblyLoadEventArgs e)
         {
             Status = string.Format("Loading {0}.dll...", e.LoadedAssembly.GetName().Name);
         }
@@ -149,28 +123,21 @@ namespace ShipWorks.ApplicationCore
         /// </summary>
         public static string Status
         {
-            get
-            {
-                lock (splashLock)
-                {
-                    if (splash == null)
-                    {
-                        return "";
-                    }
-
-                    return splash.status.Text;
-                }
-            }
             set
             {
-                lock (splashLock)
-                {
-                    if (splash != null)
-                    {
-                        // Get it on the right thread
-                        splash.Invoke(new MethodInvoker(delegate { splash.status.Text = value; }));
-                    }
-                }
+                InvokeOnSplashThread(x => x.status.Text = value);
+            }
+        }
+
+        /// <summary>
+        /// Invoke the specified method on the splash screen UI thread
+        /// </summary>
+        private static void InvokeOnSplashThread(Action<SplashScreen> methodToInvoke)
+        {
+            SplashScreen tempSplash = splash;
+            if (tempSplash != null && tempSplash.IsHandleCreated)
+            {
+                tempSplash.Invoke(methodToInvoke, tempSplash);
             }
         }
     }
