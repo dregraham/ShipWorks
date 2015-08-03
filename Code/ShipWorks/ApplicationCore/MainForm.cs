@@ -2245,7 +2245,7 @@ namespace ShipWorks
             }
             else
             {
-                 customerFilterTree.SelectInitialFilter(settings);
+                customerFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.SelectInitialFilter(settings);
                 orderFilterTree.Focus();
             }
