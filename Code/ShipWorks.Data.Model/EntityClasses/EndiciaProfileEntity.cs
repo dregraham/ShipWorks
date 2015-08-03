@@ -475,9 +475,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("StealthPostage", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("NoPostage", fieldHashtable);
-			fieldHashtable = new Dictionary<string, string>();
-
 			_fieldsCustomProperties.Add("ReferenceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -621,17 +618,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (Nullable<System.Boolean>)GetValue((int)EndiciaProfileFieldIndex.StealthPostage, false); }
 			set	{ SetValue((int)EndiciaProfileFieldIndex.StealthPostage, value); }
-		}
-
-		/// <summary> The NoPostage property of the Entity EndiciaProfile<br/><br/>
-		/// </summary>
-		/// <remarks>Mapped on  table field: "EndiciaProfile"."NoPostage"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
-		public virtual Nullable<System.Boolean> NoPostage
-		{
-			get { return (Nullable<System.Boolean>)GetValue((int)EndiciaProfileFieldIndex.NoPostage, false); }
-			set	{ SetValue((int)EndiciaProfileFieldIndex.NoPostage, value); }
 		}
 
 		/// <summary> The ReferenceID property of the Entity EndiciaProfile<br/><br/>

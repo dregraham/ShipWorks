@@ -325,7 +325,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         {
             UspsAccountEntity express1AutoRouteAccount = GetExpress1AutoRouteAccount((PostalPackagingType)shipment.Postal.PackagingType);
 
-            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null ? 
+            return ShouldRetrieveExpress1Rates && express1AutoRouteAccount != null && !shipment.Postal.NoPostage ? 
                 BeginRetrievingExpress1Rates(shipment, express1AutoRouteAccount) : 
                 CreateEmptyExpress1RatesTask();
         }
@@ -647,7 +647,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 {
                     shipment.Postal.Usps.Fields[UspsShipmentFields.UspsAccountID.FieldIndex],
                     shipment.Postal.Usps.Fields[UspsShipmentFields.OriginalUspsAccountID.FieldIndex],
-                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex]
+                    shipment.Postal.Usps.Fields[UspsShipmentFields.RateShop.FieldIndex],
+                    shipment.Postal.Fields[PostalShipmentFields.NoPostage.FieldIndex]
                 }
             );
 

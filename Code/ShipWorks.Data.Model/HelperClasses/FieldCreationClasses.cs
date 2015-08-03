@@ -2922,6 +2922,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.AttributesToDownload);}
 		}
+		/// <summary>Creates a new ChannelAdvisorStoreEntity.ConsolidatorAsUsps field instance</summary>
+		public static EntityField2 ConsolidatorAsUsps
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(ChannelAdvisorStoreFieldIndex.ConsolidatorAsUsps);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity ClickCartProOrderEntity</summary>
@@ -5472,11 +5477,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.StealthPostage);}
 		}
-		/// <summary>Creates a new EndiciaProfileEntity.NoPostage field instance</summary>
-		public static EntityField2 NoPostage
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaProfileFieldIndex.NoPostage);}
-		}
 		/// <summary>Creates a new EndiciaProfileEntity.ReferenceID field instance</summary>
 		public static EntityField2 ReferenceID
 		{
@@ -5551,11 +5551,6 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 StealthPostage
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.StealthPostage);}
-		}
-		/// <summary>Creates a new EndiciaShipmentEntity.NoPostage field instance</summary>
-		public static EntityField2 NoPostage
-		{
-			get { return (EntityField2)EntityFieldFactory.Create(EndiciaShipmentFieldIndex.NoPostage);}
 		}
 		/// <summary>Creates a new EndiciaShipmentEntity.ReferenceID field instance</summary>
 		public static EntityField2 ReferenceID
@@ -14987,6 +14982,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.Memo3);}
 		}
+		/// <summary>Creates a new PostalProfileEntity.NoPostage field instance</summary>
+		public static EntityField2 NoPostage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalProfileFieldIndex.NoPostage);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity PostalShipmentEntity</summary>
@@ -15096,6 +15096,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 Memo3
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.Memo3);}
+		}
+		/// <summary>Creates a new PostalShipmentEntity.NoPostage field instance</summary>
+		public static EntityField2 NoPostage
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(PostalShipmentFieldIndex.NoPostage);}
 		}
 	}
 

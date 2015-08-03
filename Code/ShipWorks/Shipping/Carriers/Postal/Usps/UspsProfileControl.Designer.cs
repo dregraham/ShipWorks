@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory3 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory2 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
-            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory1 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory4 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory5 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
+            ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory commonTokenSuggestionsFactory6 = new ShipWorks.Templates.Tokens.CommonTokenSuggestionsFactory();
             this.labelAccount = new System.Windows.Forms.Label();
             this.uspsAccount = new System.Windows.Forms.ComboBox();
             this.stateAccount = new System.Windows.Forms.CheckBox();
@@ -58,6 +58,9 @@
             this.labelMemo3 = new System.Windows.Forms.Label();
             this.stateMemo2 = new System.Windows.Forms.CheckBox();
             this.stateMemo3 = new System.Windows.Forms.CheckBox();
+            this.stateNoPostage = new System.Windows.Forms.CheckBox();
+            this.noPostage = new System.Windows.Forms.CheckBox();
+            this.labelNoPostage = new System.Windows.Forms.Label();
             this.groupBoxFrom.SuspendLayout();
             this.groupShipment.SuspendLayout();
             this.tabPage.SuspendLayout();
@@ -90,6 +93,9 @@
             // 
             // groupShipment
             // 
+            this.groupShipment.Controls.Add(this.stateNoPostage);
+            this.groupShipment.Controls.Add(this.noPostage);
+            this.groupShipment.Controls.Add(this.labelNoPostage);
             this.groupShipment.Controls.Add(this.stateMemo3);
             this.groupShipment.Controls.Add(this.stateMemo2);
             this.groupShipment.Controls.Add(this.memo3);
@@ -103,7 +109,7 @@
             this.groupShipment.Controls.Add(this.labelStealth);
             this.groupShipment.Controls.Add(this.stateStealth);
             this.groupShipment.Location = new System.Drawing.Point(8, 166);
-            this.groupShipment.Size = new System.Drawing.Size(400, 332);
+            this.groupShipment.Size = new System.Drawing.Size(400, 350);
             this.groupShipment.Controls.SetChildIndex(this.kryptonBorderEdge, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateStealth, 0);
             this.groupShipment.Controls.SetChildIndex(this.labelStealth, 0);
@@ -117,6 +123,9 @@
             this.groupShipment.Controls.SetChildIndex(this.memo3, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateMemo2, 0);
             this.groupShipment.Controls.SetChildIndex(this.stateMemo3, 0);
+            this.groupShipment.Controls.SetChildIndex(this.labelNoPostage, 0);
+            this.groupShipment.Controls.SetChildIndex(this.noPostage, 0);
+            this.groupShipment.Controls.SetChildIndex(this.stateNoPostage, 0);
             // 
             // senderState
             // 
@@ -132,13 +141,13 @@
             // 
             // groupBoxCustoms
             // 
-            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 653);
+            this.groupBoxCustoms.Location = new System.Drawing.Point(8, 673);
             // 
             // tabPage
             // 
             this.tabPage.Controls.Add(this.groupTo);
             this.tabPage.Controls.Add(this.groupLabels);
-            this.tabPage.Size = new System.Drawing.Size(431, 833);
+            this.tabPage.Size = new System.Drawing.Size(431, 858);
             this.tabPage.Controls.SetChildIndex(this.groupExpressMail, 0);
             this.tabPage.Controls.SetChildIndex(this.groupInsurance, 0);
             this.tabPage.Controls.SetChildIndex(this.groupLabels, 0);
@@ -150,16 +159,16 @@
             // 
             // groupReturns
             // 
-            this.groupReturns.Location = new System.Drawing.Point(8, 774);
+            this.groupReturns.Location = new System.Drawing.Point(8, 794);
             this.groupReturns.Size = new System.Drawing.Size(400, 53);
             // 
             // groupInsurance
             // 
-            this.groupInsurance.Location = new System.Drawing.Point(8, 565);
+            this.groupInsurance.Location = new System.Drawing.Point(8, 585);
             // 
             // groupExpressMail
             // 
-            this.groupExpressMail.Location = new System.Drawing.Point(8, 714);
+            this.groupExpressMail.Location = new System.Drawing.Point(8, 734);
             // 
             // kryptonBorderEdge1
             // 
@@ -167,7 +176,7 @@
             // 
             // kryptonBorderEdge
             // 
-            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 300);
+            this.kryptonBorderEdge.Size = new System.Drawing.Size(1, 318);
             // 
             // labelAccount
             // 
@@ -293,12 +302,12 @@
             // 
             // memo1
             // 
-            this.memo1.Location = new System.Drawing.Point(107, 236);
+            this.memo1.Location = new System.Drawing.Point(110, 236);
             this.memo1.MaxLength = 32767;
             this.memo1.Name = "memo1";
             this.memo1.Size = new System.Drawing.Size(210, 21);
             this.memo1.TabIndex = 71;
-            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory3;
+            this.memo1.TokenSuggestionFactory = commonTokenSuggestionsFactory4;
             // 
             // stateMemo1
             // 
@@ -318,7 +327,7 @@
             this.groupLabels.Controls.Add(this.requestedLabelFormat);
             this.groupLabels.Controls.Add(this.requestedLabelFormatState);
             this.groupLabels.Controls.Add(this.kryptonBorderEdge11);
-            this.groupLabels.Location = new System.Drawing.Point(8, 502);
+            this.groupLabels.Location = new System.Drawing.Point(8, 522);
             this.groupLabels.Name = "groupLabels";
             this.groupLabels.Size = new System.Drawing.Size(400, 58);
             this.groupLabels.TabIndex = 13;
@@ -386,12 +395,12 @@
             // 
             // memo2
             // 
-            this.memo2.Location = new System.Drawing.Point(107, 263);
+            this.memo2.Location = new System.Drawing.Point(110, 263);
             this.memo2.MaxLength = 32767;
             this.memo2.Name = "memo2";
             this.memo2.Size = new System.Drawing.Size(210, 21);
             this.memo2.TabIndex = 74;
-            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory2;
+            this.memo2.TokenSuggestionFactory = commonTokenSuggestionsFactory5;
             // 
             // labelMemo2
             // 
@@ -404,12 +413,12 @@
             // 
             // memo3
             // 
-            this.memo3.Location = new System.Drawing.Point(107, 290);
+            this.memo3.Location = new System.Drawing.Point(110, 290);
             this.memo3.MaxLength = 32767;
             this.memo3.Name = "memo3";
             this.memo3.Size = new System.Drawing.Size(210, 21);
             this.memo3.TabIndex = 76;
-            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory1;
+            this.memo3.TokenSuggestionFactory = commonTokenSuggestionsFactory6;
             // 
             // labelMemo3
             // 
@@ -442,12 +451,42 @@
             this.stateMemo3.TabIndex = 78;
             this.stateMemo3.UseVisualStyleBackColor = true;
             // 
+            // stateNoPostage
+            // 
+            this.stateNoPostage.AutoSize = true;
+            this.stateNoPostage.Location = new System.Drawing.Point(9, 321);
+            this.stateNoPostage.Name = "stateNoPostage";
+            this.stateNoPostage.Size = new System.Drawing.Size(15, 14);
+            this.stateNoPostage.TabIndex = 80;
+            this.stateNoPostage.UseVisualStyleBackColor = true;
+            // 
+            // noPostage
+            // 
+            this.noPostage.AutoSize = true;
+            this.noPostage.BackColor = System.Drawing.Color.Transparent;
+            this.noPostage.Location = new System.Drawing.Point(110, 320);
+            this.noPostage.Name = "noPostage";
+            this.noPostage.Size = new System.Drawing.Size(214, 17);
+            this.noPostage.TabIndex = 81;
+            this.noPostage.Text = "Generate label that is not postage-paid";
+            this.noPostage.UseVisualStyleBackColor = false;
+            // 
+            // labelNoPostage
+            // 
+            this.labelNoPostage.AutoSize = true;
+            this.labelNoPostage.BackColor = System.Drawing.Color.Transparent;
+            this.labelNoPostage.Location = new System.Drawing.Point(38, 321);
+            this.labelNoPostage.Name = "labelNoPostage";
+            this.labelNoPostage.Size = new System.Drawing.Size(66, 13);
+            this.labelNoPostage.TabIndex = 79;
+            this.labelNoPostage.Text = "No Postage:";
+            // 
             // UspsProfileControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Name = "UspsProfileControl";
-            this.Size = new System.Drawing.Size(439, 859);
+            this.Size = new System.Drawing.Size(439, 884);
             this.groupBoxFrom.ResumeLayout(false);
             this.groupBoxFrom.PerformLayout();
             this.groupShipment.ResumeLayout(false);
@@ -497,5 +536,8 @@
         private System.Windows.Forms.Label labelMemo2;
         private System.Windows.Forms.CheckBox stateMemo3;
         private System.Windows.Forms.CheckBox stateMemo2;
+        private System.Windows.Forms.CheckBox stateNoPostage;
+        private System.Windows.Forms.CheckBox noPostage;
+        private System.Windows.Forms.Label labelNoPostage;
     }
 }
