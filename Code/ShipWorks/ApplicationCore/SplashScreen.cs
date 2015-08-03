@@ -14,9 +14,6 @@ namespace ShipWorks.ApplicationCore
     {
         static SplashScreen splash;
 
-        // Ensures we don't return from the show function until the splash screen is ready
-        static ManualResetEvent createdEvent = new ManualResetEvent(false);
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -41,9 +38,6 @@ namespace ShipWorks.ApplicationCore
             thread.Name = "Splash";
             thread.IsBackground = true;
             thread.Start();
-
-            // Don't return from this function until the splash screen is ready.
-            createdEvent.WaitOne(5000);
         }
 
         /// <summary>
@@ -64,8 +58,6 @@ namespace ShipWorks.ApplicationCore
             base.OnShown(e);
 
             AppDomain.CurrentDomain.AssemblyLoad += OnAssemblyLoad;
-
-            createdEvent.Set();
         }
 
         /// <summary>
@@ -107,7 +99,6 @@ namespace ShipWorks.ApplicationCore
             base.OnClosed(e);
 
             AppDomain.CurrentDomain.AssemblyLoad -= OnAssemblyLoad;
-            createdEvent = null;
         }
 
         /// <summary>
