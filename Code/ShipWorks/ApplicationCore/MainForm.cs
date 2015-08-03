@@ -2225,10 +2225,10 @@ namespace ShipWorks
             {
                 long initialID = settings.FilterInitialSpecified;
 
-                if (initialID != 0)
-                {
-                    FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
+                FilterNodeEntity filterNode = FilterLayoutContext.Current.FindNode(initialID);
 
+                if (filterNode != null)
+                {
                     if (filterNode.Filter.FilterTarget == (int) FilterTarget.Customers)
                     {
                         customerFilterTree.SelectInitialFilter(settings);
