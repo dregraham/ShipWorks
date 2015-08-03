@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.CoreExtensions.Actions
     /// <summary>
     /// Task for updating online order status for AmeriCommerce
     /// </summary>
-    [ActionTask("Update online status", "AmeriCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "AmeriCommerceOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class AmeriCommerceOrderUpdateTask : StoreInstanceTaskBase
     {
         int statusCode = -1;

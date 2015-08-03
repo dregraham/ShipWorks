@@ -835,7 +835,7 @@ namespace ShipWorks.Stores.Management
                 {
                     // Setup the basic action
                     ActionEntity action = new ActionEntity();
-                    action.Name = "Online Update";
+                    action.Name = "Store Update";
                     action.Enabled = true;
 
                     action.ComputerLimitedType = (int) ComputerLimitedType.TriggeringComputer;

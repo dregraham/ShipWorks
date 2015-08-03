@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.CoreExtensions.Actions
     /// <summary>
     /// Task for updating online order status for ThreeDCart
     /// </summary>
-    [ActionTask("Update online status", "ThreeDCartOrderUpdate", ActionTaskCategory.UpdateOnline)]
+    [ActionTask("Update store status", "ThreeDCartOrderUpdate", ActionTaskCategory.UpdateOnline)]
     public class ThreeDCartOrderUpdateTask : StoreInstanceTaskBase
     {
         int statusCode = -1;
