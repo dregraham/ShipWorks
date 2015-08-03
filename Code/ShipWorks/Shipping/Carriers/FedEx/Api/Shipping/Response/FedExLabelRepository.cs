@@ -42,14 +42,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
         /// <param name="shipment">Shipment whose entity information we sent to FedEx </param>
         private void SavePackageLabels(IFedExNativeShipmentReply reply, ShipmentEntity shipment)
         {
-            string certificationId = string.Empty;
-            
-            // This is only set if we are running a certification
-            if (reply.TransactionDetail != null)
-            {
-                certificationId = reply.TransactionDetail.CustomerTransactionId;
-            }
-            
+            string certificationId = GetCertificationId(reply);
+
             // Save the label iamges
             using (SqlAdapter adapter = new SqlAdapter())
             {
@@ -112,7 +106,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     foreach (ShippingDocument document in reply.CompletedShipmentDetail.ShipmentDocuments
                                                                .Where(d => d.Type != ReturnedShippingDocumentType.TERMS_AND_CONDITIONS))
                     {
-                        SaveLabel("Document" + GetLabelName(document.Type), document, shipment.ShipmentID, reply.TransactionDetail.CustomerTransactionId);
+                        SaveLabel("Document" + GetLabelName(document.Type), document, shipment.ShipmentID, GetCertificationId(reply));
                     }
                 }
             }
@@ -132,7 +126,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     foreach (AssociatedShipmentDetail associatedShipment in reply.CompletedShipmentDetail.AssociatedShipments
                                                                                  .Where(a => a.Label != null && a.Label.Type == ReturnedShippingDocumentType.COD_RETURN_LABEL))
                     {
-                        SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, reply.TransactionDetail.CustomerTransactionId);
+                        SaveLabel("COD", associatedShipment.Label, shipment.ShipmentID, GetCertificationId(reply));
                     }
             }
         }
@@ -220,6 +214,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response
                     ObjectReferenceManager.ClearReferences(package.FedExPackageID);
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the certification id from the given reply
+        /// </summary>
+        private static string GetCertificationId(IFedExNativeShipmentReply reply)
+        {
+            return reply.TransactionDetail != null ?
+                reply.TransactionDetail.CustomerTransactionId :
+                string.Empty;
         }
     }
 }

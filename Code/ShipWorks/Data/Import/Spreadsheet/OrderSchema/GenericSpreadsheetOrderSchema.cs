@@ -95,7 +95,7 @@ namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema
                     new GenericSpreadsheetTargetField("Order.Date",                 "Order Date",             typeof(DateTime)),
                     new GenericSpreadsheetTargetField("Order.Time",                 "Order Time",             typeof(TimeSpan)),
                     new GenericSpreadsheetTargetField("Order.LocalStatus",          "Local Status",           typeof(string)),
-                    new GenericSpreadsheetTargetField("Order.OnlineStatus",         "Online Status",          typeof(string)),
+                    new GenericSpreadsheetTargetField("Order.OnlineStatus",         "Store Status",          typeof(string)),
                     new GenericSpreadsheetTargetField("Order.RequestedShipping",    "Requested Shipping",     typeof(string)),
                     new GenericSpreadsheetTargetField("Order.CustomerNumber",       "Customer Number",        typeof(string)),
                     new GenericSpreadsheetTargetField("Order.NoteInternal",         "Note (Internal)",        typeof(string)),
