@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             InitializeComponent();
 
             RateGroup = new RateGroup(new List<RateResult>());
-            sandGrid.Rows.Clear();
+            rateGrid.Rows.Clear();
 
             gridColumnSelect.ButtonClicked += OnConfigureRateClicked;
 
@@ -68,7 +68,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             ShowSpinner = false;
             RestrictedRateCount = 5;
 
-            sandGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
+            rateGrid.Renderer = AppearanceHelper.CreateWindowsRenderer();
             hasMoreLinkBeenClicked = false;
         }
 
@@ -178,7 +178,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 // Acquire the lock so the grid isn't reloaded while trying to find the selected rate
                 lock (syncLock)
                 {
-                    IEnumerable<GridRow> selectedRows = sandGrid.SelectedElements.OfType<GridRow>().ToList();
+                    IEnumerable<GridRow> selectedRows = rateGrid.SelectedElements.OfType<GridRow>().ToList();
                     if (selectedRows.Any())
                     {
                         selectedRate = selectedRows.Select(s => s.Tag as RateResult).ToList().FirstOrDefault(f => f.Selectable);
@@ -209,13 +209,13 @@ namespace ShipWorks.Shipping.Editing.Rating
         {
             lock (syncLock)
             {
-                Debug.Assert(sandGrid.EmptyText != null, "sandGrid.EmptyText != null");
+                Debug.Assert(rateGrid.EmptyText != null, "rateGrid.EmptyText != null");
 
-                sandGrid.EmptyText = emptyReason;
+                rateGrid.EmptyText = emptyReason;
 
-                if (sandGrid.Rows.Count > 0)
+                if (rateGrid.Rows.Count > 0)
                 {
-                    sandGrid.Rows.Clear();
+                    rateGrid.Rows.Clear();
                 }
 
                 UpdateFootnotes(rateGroup);
@@ -273,7 +273,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             lock (syncLock)
             {
                 RateGroup = rateGroup;
-                sandGrid.Rows.Clear();
+                rateGrid.Rows.Clear();
 
                 gridColumnSelect.Visible = ActionLinkVisible;
 
@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         row.Cells.Add(new GridHyperlinkCell(actionLinkText));
                     }
 
-                    sandGrid.Rows.Add(row);
+                    rateGrid.Rows.Add(row);
                 }
 
                 SetRateDetailsVisibility(ratesToShow);
@@ -310,11 +310,11 @@ namespace ShipWorks.Shipping.Editing.Rating
                 {
                     if (CurrentFootnotes.Count == 0)
                     {
-                        sandGrid.EmptyText = "ShipWorks could not get rates for this shipment.";
+                        rateGrid.EmptyText = "ShipWorks could not get rates for this shipment.";
                     }
                     else
                     {
-                        sandGrid.EmptyText = "";
+                        rateGrid.EmptyText = "";
                     }
                 }
             }
@@ -405,7 +405,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                         new GridHyperlinkCell("More...")
                     }) { Tag = showMoreRatesRateResult };
 
-                    sandGrid.Rows.Add(row);
+                    rateGrid.Rows.Add(row);
                 }
             }
         }
@@ -419,15 +419,15 @@ namespace ShipWorks.Shipping.Editing.Rating
             {
                 int height = 5;
 
-                if (sandGrid.Rows.Count == 0)
+                if (rateGrid.Rows.Count == 0)
                 {
                     // This was causing a crash when length was 0. 
-                    if (sandGrid.Columns.DisplayColumns.Length > 0)
+                    if (rateGrid.Columns.DisplayColumns.Length > 0)
                     {
-                        height += sandGrid.Columns.DisplayColumns[0].Bounds.Bottom;
+                        height += rateGrid.Columns.DisplayColumns[0].Bounds.Bottom;
                     }
 
-                    if (!string.IsNullOrEmpty(sandGrid.EmptyText))
+                    if (!string.IsNullOrEmpty(rateGrid.EmptyText))
                     {
                         height += 18;
                     }
@@ -435,12 +435,12 @@ namespace ShipWorks.Shipping.Editing.Rating
                 else
                 {
                     // Make sure the grid has updated its row layout, and knows where they all are
-                    if (sandGrid.IsHandleCreated)
+                    if (rateGrid.IsHandleCreated)
                     {
-                        sandGrid.PerformElementLayout();
+                        rateGrid.PerformElementLayout();
                     }
 
-                    height += sandGrid.Rows[sandGrid.Rows.Count - 1].Bounds.Bottom;
+                    height += rateGrid.Rows[rateGrid.Rows.Count - 1].Bounds.Bottom;
                 }
 
                 if (panelFootnote.Visible)
@@ -465,9 +465,9 @@ namespace ShipWorks.Shipping.Editing.Rating
                 ClearSelection();
 
                 int rateIndex = RateGroup.Rates.IndexOf(rate);
-                if (rateIndex >= 0 && sandGrid.Rows.Count > rateIndex)
+                if (rateIndex >= 0 && rateGrid.Rows.Count > rateIndex)
                 {
-                    GridRow selectedRow = sandGrid.Rows[rateIndex];
+                    GridRow selectedRow = rateGrid.Rows[rateIndex];
                     selectedRow.EnsureVisible();
 
                     selectedRow.Selected = true;
@@ -481,7 +481,7 @@ namespace ShipWorks.Shipping.Editing.Rating
         public void ClearSelection()
         {
             // Remove any highlighting from previously selected rows
-            foreach (GridRow row in sandGrid.Rows)
+            foreach (GridRow row in rateGrid.Rows)
             {
                 foreach (GridCell cell in row.Cells)
                 {
@@ -489,7 +489,7 @@ namespace ShipWorks.Shipping.Editing.Rating
                 }
             }
 
-            sandGrid.SelectedElements.Clear();
+            rateGrid.SelectedElements.Clear();
         }
 
         
@@ -595,9 +595,9 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
             else
             {
-                sandGrid.SelectionChanged -= OnSelectedRateChanged;
+                rateGrid.SelectionChanged -= OnSelectedRateChanged;
                 ClearSelection();
-                sandGrid.SelectionChanged += OnSelectedRateChanged;
+                rateGrid.SelectionChanged += OnSelectedRateChanged;
             }
         }
     }

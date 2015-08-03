@@ -1,5 +1,9 @@
+using System.Windows.Forms;
+using ShipWorks.Filters;
+using ShipWorks.Filters.Controls;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Stores.Content.Panels;
+using TD.SandDock;
 
 namespace ShipWorks
 {
@@ -111,15 +115,10 @@ namespace ShipWorks
             this.panelPrinted = new ShipWorks.Stores.Content.Panels.PrintResultsPanel();
             this.sandDockManager = new TD.SandDock.SandDockManager();
             this.dockContainer = new TD.SandDock.DockContainer();
-            this.dockableWindowFilters = new TD.SandDock.DockableWindow();
-            this.filterTree = new ShipWorks.Filters.Controls.FilterTree();
-            this.contextMenuFilterTree = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menuItemEditFilter = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemEditFilterSep = new System.Windows.Forms.ToolStripSeparator();
-            this.meuItemNewFilter = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuItemNewFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.menuItemOrganizeFilters = new System.Windows.Forms.ToolStripMenuItem();
+            this.dockableWindowOrderFilters = new TD.SandDock.DockableWindow();
+            this.dockableWindowCustomerFilters = new TD.SandDock.DockableWindow();
+            this.orderFilterTree = new ShipWorks.Filters.Controls.FilterTree();
+            this.customerFilterTree = new ShipWorks.Filters.Controls.FilterTree();
             this.dockableWindowNotes = new TD.SandDock.DockableWindow();
             this.panelNotes = new ShipWorks.Stores.Content.Panels.NotesPanel();
             this.ribbonManager = new Divelements.SandRibbon.RibbonManager(this.components);
@@ -317,8 +316,8 @@ namespace ShipWorks
             this.dockableWindowEmail.SuspendLayout();
             this.dockableWindowPrinted.SuspendLayout();
             this.dockContainer.SuspendLayout();
-            this.dockableWindowFilters.SuspendLayout();
-            this.contextMenuFilterTree.SuspendLayout();
+            this.dockableWindowOrderFilters.SuspendLayout();
+            this.dockableWindowCustomerFilters.SuspendLayout();
             this.dockableWindowNotes.SuspendLayout();
             this.notifyIconMenuStrip.SuspendLayout();
             this.contextMenuOrderGrid.SuspendLayout();
@@ -1080,16 +1079,19 @@ namespace ShipWorks
             this.sandDockManager.OwnerForm = this;
             this.sandDockManager.Renderer = new TD.SandDock.Rendering.Office2007Renderer();
             this.sandDockManager.DockControlActivated += new TD.SandDock.DockControlEventHandler(this.OnDockControlActivated);
+            this.sandDockManager.DockControlClosing += OnDockControlClosing;
             // 
             // dockContainer
             // 
             this.dockContainer.ContentSize = 214;
-            this.dockContainer.Controls.Add(this.dockableWindowFilters);
+            this.dockContainer.Controls.Add(this.dockableWindowOrderFilters);
+            this.dockContainer.Controls.Add(this.dockableWindowCustomerFilters);
             this.dockContainer.Controls.Add(this.dockableWindowNotes);
             this.dockContainer.Dock = System.Windows.Forms.DockStyle.Left;
             this.dockContainer.LayoutSystem = new TD.SandDock.SplitLayoutSystem(new System.Drawing.SizeF(250F, 400F), System.Windows.Forms.Orientation.Horizontal, new TD.SandDock.LayoutSystemBase[] {
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(250F, 406.0914F), new TD.SandDock.DockControl[] {
-                        ((TD.SandDock.DockControl)(this.dockableWindowFilters))}, this.dockableWindowFilters))),
+                        ((TD.SandDock.DockControl)(this.dockableWindowOrderFilters)),
+                        ((TD.SandDock.DockControl)(this.dockableWindowCustomerFilters))}, this.dockableWindowOrderFilters))),
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(156.6059F, 393.9086F), new TD.SandDock.DockControl[] {
                         ((TD.SandDock.DockControl)(this.dockableWindowNotes))}, this.dockableWindowNotes)))});
             this.dockContainer.Location = new System.Drawing.Point(2, 0);
@@ -1098,88 +1100,59 @@ namespace ShipWorks
             this.dockContainer.Size = new System.Drawing.Size(218, 547);
             this.dockContainer.TabIndex = 6;
             // 
-            // dockableWindowFilters
+            // dockableWindowOrderFilters
             // 
-            this.dockableWindowFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
-            this.dockableWindowFilters.Controls.Add(this.filterTree);
-            this.dockableWindowFilters.Guid = new System.Guid("14a0dd81-b0e7-475b-aa54-aef3c97eb515");
-            this.dockableWindowFilters.Location = new System.Drawing.Point(0, 21);
-            this.dockableWindowFilters.Name = "dockableWindowFilters";
-            this.dockableWindowFilters.ShowOptions = false;
-            this.dockableWindowFilters.Size = new System.Drawing.Size(214, 231);
-            this.dockableWindowFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
-            this.dockableWindowFilters.TabIndex = 0;
-            this.dockableWindowFilters.Text = "Filters";
+            this.dockableWindowOrderFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
+            this.dockableWindowOrderFilters.Controls.Add(this.orderFilterTree);
+            this.dockableWindowOrderFilters.Guid = new System.Guid("14a0dd81-b0e7-475b-aa54-aef3c97eb515");
+            this.dockableWindowOrderFilters.Location = new System.Drawing.Point(0, 21);
+            this.dockableWindowOrderFilters.Name = "dockableWindowOrderFilters";
+            this.dockableWindowOrderFilters.ShowOptions = false;
+            this.dockableWindowOrderFilters.Size = new System.Drawing.Size(214, 231);
+            this.dockableWindowOrderFilters.TabImage = global::ShipWorks.Properties.Resources.filter;
+            this.dockableWindowOrderFilters.TabIndex = 0;
+            this.dockableWindowOrderFilters.Text = "Orders";
+            this.dockableWindowOrderFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
             // 
-            // filterTree
+            // dockableWindowCustomerFilters
             // 
-            this.filterTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.filterTree.ContextMenuStrip = this.contextMenuFilterTree;
-            this.filterTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.filterTree.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.filterTree.HotTrackNode = null;
-            this.filterTree.Location = new System.Drawing.Point(1, 1);
-            this.filterTree.Name = "filterTree";
-            this.filterTree.Size = new System.Drawing.Size(212, 229);
-            this.filterTree.TabIndex = 0;
-            this.filterTree.HideDisabledFilters = true;
-            this.filterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
+            this.dockableWindowCustomerFilters.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
+            this.dockableWindowCustomerFilters.Controls.Add(this.customerFilterTree);
+            this.dockableWindowCustomerFilters.Guid = new System.Guid("5F3097BE-C6E4-4F85-B9FF-24844749AE44");
+            this.dockableWindowCustomerFilters.Location = new System.Drawing.Point(0, 21);
+            this.dockableWindowCustomerFilters.Name = "dockableWindowCustomerFilters";
+            this.dockableWindowCustomerFilters.ShowOptions = false;
+            this.dockableWindowCustomerFilters.Size = new System.Drawing.Size(214, 231);
+            this.dockableWindowCustomerFilters.TabImage = global::ShipWorks.Properties.Resources.customer16;
+            this.dockableWindowCustomerFilters.TabIndex = 0;
+            this.dockableWindowCustomerFilters.Text = "Customers";
+            dockableWindowCustomerFilters.VisibleChanged += OnFilterDockableWindowVisibleChanged;
             // 
-            // contextMenuFilterTree
+            // orderFilterTree
             // 
-            this.contextMenuFilterTree.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.contextMenuFilterTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItemEditFilter,
-            this.menuItemEditFilterSep,
-            this.meuItemNewFilter,
-            this.menuItemNewFolder,
-            this.toolStripSeparator1,
-            this.menuItemOrganizeFilters});
-            this.contextMenuFilterTree.Name = "contextMenuTree";
-            this.contextMenuFilterTree.Size = new System.Drawing.Size(152, 104);
-            this.contextMenuFilterTree.Opening += new System.ComponentModel.CancelEventHandler(this.OnFilterTreeContextMenuOpening);
+            this.orderFilterTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.orderFilterTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.orderFilterTree.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.orderFilterTree.HotTrackNode = null;
+            this.orderFilterTree.Location = new System.Drawing.Point(1, 1);
+            this.orderFilterTree.Name = "orderFilterTree";
+            this.orderFilterTree.Size = new System.Drawing.Size(212, 229);
+            this.orderFilterTree.TabIndex = 0;
+            this.orderFilterTree.HideDisabledFilters = true;
+            this.orderFilterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
             // 
-            // menuItemEditFilter
+            // customerFilterTree
             // 
-            this.menuItemEditFilter.Image = global::ShipWorks.Properties.Resources.edit16;
-            this.menuItemEditFilter.Name = "menuItemEditFilter";
-            this.menuItemEditFilter.Size = new System.Drawing.Size(151, 22);
-            this.menuItemEditFilter.Text = "Edit";
-            this.menuItemEditFilter.Click += new System.EventHandler(this.OnEditFilter);
-            // 
-            // menuItemEditFilterSep
-            // 
-            this.menuItemEditFilterSep.Name = "menuItemEditFilterSep";
-            this.menuItemEditFilterSep.Size = new System.Drawing.Size(148, 6);
-            // 
-            // meuItemNewFilter
-            // 
-            this.meuItemNewFilter.Image = global::ShipWorks.Properties.Resources.filter_add;
-            this.meuItemNewFilter.Name = "meuItemNewFilter";
-            this.meuItemNewFilter.Size = new System.Drawing.Size(151, 22);
-            this.meuItemNewFilter.Text = "New Filter";
-            this.meuItemNewFilter.Click += new System.EventHandler(this.OnNewFilter);
-            // 
-            // menuItemNewFolder
-            // 
-            this.menuItemNewFolder.Image = global::ShipWorks.Properties.Resources.folderclosed_add;
-            this.menuItemNewFolder.Name = "menuItemNewFolder";
-            this.menuItemNewFolder.Size = new System.Drawing.Size(151, 22);
-            this.menuItemNewFolder.Text = "New Folder";
-            this.menuItemNewFolder.Click += new System.EventHandler(this.OnNewFolder);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(148, 6);
-            // 
-            // menuItemOrganizeFilters
-            // 
-            this.menuItemOrganizeFilters.Image = global::ShipWorks.Properties.Resources.funnel_properties_16;
-            this.menuItemOrganizeFilters.Name = "menuItemOrganizeFilters";
-            this.menuItemOrganizeFilters.Size = new System.Drawing.Size(151, 22);
-            this.menuItemOrganizeFilters.Text = "Manage Filters";
-            this.menuItemOrganizeFilters.Click += new System.EventHandler(this.OnManageFilters);
+            this.customerFilterTree.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.customerFilterTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.customerFilterTree.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.customerFilterTree.HotTrackNode = null;
+            this.customerFilterTree.Location = new System.Drawing.Point(1, 1);
+            this.customerFilterTree.Name = "customerFilterTree";
+            this.customerFilterTree.Size = new System.Drawing.Size(212, 229);
+            this.customerFilterTree.TabIndex = 0;
+            this.customerFilterTree.HideDisabledFilters = true;
+            this.customerFilterTree.SelectedFilterNodeChanged += new System.EventHandler(this.OnSelectedFilterNodeChanged);
             // 
             // dockableWindowNotes
             // 
@@ -2784,11 +2757,12 @@ namespace ShipWorks
             this.dockableWindowEmail.ResumeLayout(false);
             this.dockableWindowPrinted.ResumeLayout(false);
             this.dockContainer.ResumeLayout(false);
-            this.dockableWindowFilters.ResumeLayout(false);
-            this.contextMenuFilterTree.ResumeLayout(false);
+            this.dockableWindowOrderFilters.ResumeLayout(false);
+            this.dockableWindowCustomerFilters.ResumeLayout(false);
             this.dockableWindowNotes.ResumeLayout(false);
             this.notifyIconMenuStrip.ResumeLayout(false);
             this.contextMenuOrderGrid.ResumeLayout(false);
+            this.contextMenuCustomerGrid.ResumeLayout(false);
             this.contextMenuTemplatesPlaceholder.ResumeLayout(false);
             this.contextMenuCustomerGrid.ResumeLayout(false);
             this.ribbon.ResumeLayout(false);
@@ -2799,7 +2773,7 @@ namespace ShipWorks
             this.ResumeLayout(false);
 
         }
-
+        
         #endregion
 
         private Divelements.SandRibbon.RibbonManager ribbonManager;
@@ -2833,15 +2807,9 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonSetupDatabase;
         private Divelements.SandRibbon.Button buttonChangeConnection;
         private Divelements.SandRibbon.Button buttonManageUsers;
-        private ShipWorks.Filters.Controls.FilterTree filterTree;
+        private ShipWorks.Filters.Controls.FilterTree orderFilterTree;
+        private ShipWorks.Filters.Controls.FilterTree customerFilterTree;
         private Divelements.SandRibbon.Button buttonFirewall;
-        private System.Windows.Forms.ContextMenuStrip contextMenuFilterTree;
-        private System.Windows.Forms.ToolStripMenuItem menuItemEditFilter;
-        private System.Windows.Forms.ToolStripSeparator menuItemEditFilterSep;
-        private System.Windows.Forms.ToolStripMenuItem meuItemNewFilter;
-        private System.Windows.Forms.ToolStripMenuItem menuItemNewFolder;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem menuItemOrganizeFilters;
         private ShipWorks.ApplicationCore.MainGridControl gridControl;
         private Divelements.SandRibbon.Label labelStatusTotal;
         private Divelements.SandRibbon.Label labelStatusSelected;
@@ -2891,7 +2859,8 @@ namespace ShipWorks
         private Divelements.SandRibbon.Button buttonShipOrders;
         private Divelements.SandRibbon.Button buttonTrackOrders;
         private Divelements.SandRibbon.Button buttonOptions;
-        private TD.SandDock.DockableWindow dockableWindowFilters;
+        private TD.SandDock.DockableWindow dockableWindowOrderFilters;
+        private TD.SandDock.DockableWindow dockableWindowCustomerFilters;
         private TD.SandDock.SandDockManager sandDockManager;
         private TD.SandDock.DockContainer dockContainer;
         private System.Windows.Forms.ContextMenuStrip contextMenuOrderGrid;

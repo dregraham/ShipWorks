@@ -24,7 +24,7 @@ namespace ShipWorks.Stores.Platforms.Sears
     {
         static readonly ILog log = LogManager.GetLogger(typeof(SearsWebClient));
 
-        const string searsOrdersUrl = "https://seller.marketplace.sears.com/SellerPortal/api/oms/purchaseorder/v3";
+        const string searsOrdersUrl = "https://seller.marketplace.sears.com/SellerPortal/api/oms/purchaseorder/v11";
         const string searsUpdateUrl = "https://seller.marketplace.sears.com/SellerPortal/api/oms/asn/v5";
 
         SearsStoreEntity searsStore;

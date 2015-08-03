@@ -54,7 +54,7 @@
             this.labelInfo2.Size = new System.Drawing.Size(448, 34);
             this.labelInfo2.TabIndex = 1;
             this.labelInfo2.Text = "To keep order numbers unique, ShipWorks can add a prefix and\\or postfix to each m" +
-                "anual order number:";
+    "anual order number:";
             // 
             // labelPrefix
             // 
@@ -121,9 +121,9 @@
             this.Controls.Add(this.labelPrefix);
             this.Controls.Add(this.labelInfo2);
             this.Controls.Add(this.labelInfo1);
-            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "ManualOrderSettingsControl";
-            this.Size = new System.Drawing.Size(455, 172);
+            this.Size = new System.Drawing.Size(564, 172);
             this.ResumeLayout(false);
             this.PerformLayout();
 

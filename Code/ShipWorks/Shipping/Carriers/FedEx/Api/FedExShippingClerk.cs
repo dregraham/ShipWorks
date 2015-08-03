@@ -30,6 +30,7 @@ using ReturnedRateType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.Retu
 using ServiceType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.ServiceType;
 using SpecialRatingAppliedType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.SpecialRatingAppliedType;
 using TransitTimeType = ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate.TransitTimeType;
+using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -45,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         private readonly IFedExRequestFactory requestFactory;
         private readonly ICarrierSettingsRepository settingsRepository;
         private readonly ICertificateInspector certificateInspector;
+        private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
 
         private readonly ILog log;
 
@@ -64,7 +66,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="settingsRepository">The settings repository.</param>
         /// <param name="certificateInspector">The certificate inspector.</param>
         public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector)
-            : this(settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository())
+            : this(settingsRepository, certificateInspector, new FedExRequestFactory(settingsRepository), LogManager.GetLogger(typeof(FedExShippingClerk)), false, new FedExLabelRepository(), new ExcludedServiceTypeRepository())
         {
         }
 
@@ -77,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="log">The log.</param>
         /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
         /// <param name="labelRepository">Label repository for clearing old shipment references.</param>
-        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository)
+        public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         {
             this.settingsRepository = settingsRepository;
             this.certificateInspector = certificateInspector;
@@ -85,6 +87,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             this.requestFactory = requestFactory;
             this.log = log;
             this.labelRepository = labelRepository;
+            this.excludedServiceTypeRepository =  excludedServiceTypeRepository;
         }
 
         /// <summary>
@@ -598,12 +601,28 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 overallResults.AddRange(GetSmartPostRates(shipment));
                 overallResults.AddRange(GetOneRateRates(shipment));
 
-                return new RateGroup(overallResults);
+                // Filter out any excluded services, but always include the service that the shipment is configured with
+                List<RateResult> finalRatesFilteredByAvailableServices = FilterRatesByExcludedServices(shipment, overallResults);
+
+                RateGroup finalGroup = new RateGroup(finalRatesFilteredByAvailableServices);
+
+                return finalGroup;
             }
             catch (Exception ex)
             {
                 throw (HandleException(ex));
             }
+        }
+
+        /// <summary>
+        /// Gets the filtered rates based on any excluded services configured for this fedex shipment type.
+        /// </summary>
+        private List<RateResult> FilterRatesByExcludedServices(ShipmentEntity shipment, List<RateResult> rates)
+        {
+            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).GetAvailableServiceTypes(excludedServiceTypeRepository)
+                .Select(s => (FedExServiceType)s).Union(new List<FedExServiceType> {(FedExServiceType)shipment.FedEx.Service}).ToList();
+
+            return rates.Where(r => r.Tag is FedExRateSelection && availableServices.Contains(((FedExRateSelection)r.Tag).ServiceType)).ToList();
         }
 
         /// <summary>
@@ -1010,6 +1029,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 if (!errorMessage.EndsWith("."))
                 {
                     errorMessage = string.Format("{0}.", errorMessage);
+                }
+
+                if (errorMessage.Contains("ETD not allowed for origin or destination") &&
+                    shipment != null)
+                {
+                    errorMessage = "FedEx returned the following error: ETD not allowed for origin or destination. \n\nYou can disable ETD by unchecking “Create Commercial Invoice” on the customs tab.";
                 }
 
                 if (errorMessage.Contains("RETURN_SHIPMENT is not allowed") &&

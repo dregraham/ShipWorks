@@ -13,6 +13,7 @@ using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.UI;
+using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -67,7 +68,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private void OnOK(object sender, EventArgs e)
         {
             personControl.SaveToEntity();
-            settingsControl.SaveToAccount(account);
+
+            try
+            {
+                settingsControl.SaveToAccount(account);
+            }
+            catch (CarrierException ex)
+            {
+                MessageHelper.ShowError(this, ex.Message);
+                return;
+            }
 
             if (account.FirstName.Length == 0 || account.LastName.Length == 0)
             {
