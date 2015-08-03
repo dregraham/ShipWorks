@@ -75,7 +75,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(8, 433);
+            this.label1.Location = new System.Drawing.Point(8, 846);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 3;
@@ -86,7 +86,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(FedEx Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "FedEx Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 452);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 865);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 4;
@@ -95,7 +95,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 485);
+            this.pennyOne.Location = new System.Drawing.Point(27, 898);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 5;
@@ -108,7 +108,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(319, 486);
+            this.pennyOneLink.Location = new System.Drawing.Point(319, 899);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 6;
@@ -128,7 +128,7 @@
             // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 432);
+            this.servicePicker.Location = new System.Drawing.Point(9, 429);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(421, 200);
             this.servicePicker.TabIndex = 13;
@@ -136,7 +136,7 @@
             // packagePicker
             // 
             this.packagePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.packagePicker.Location = new System.Drawing.Point(9, 642);
+            this.packagePicker.Location = new System.Drawing.Point(9, 639);
             this.packagePicker.Name = "packagePicker";
             this.packagePicker.Size = new System.Drawing.Size(421, 200);
             this.packagePicker.TabIndex = 14;
@@ -205,7 +205,7 @@
             this.Controls.Add(this.optionsControl);
             this.Controls.Add(this.shippersControl);
             this.Name = "FedExSettingsControl";
-            this.Size = new System.Drawing.Size(428, 394);
+            this.Size = new System.Drawing.Size(452, 922);
             this.ResumeLayout(false);
             this.PerformLayout();
 

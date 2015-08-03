@@ -73,7 +73,7 @@
             this.insuranceProviderChooser.CarrierMessage = "(UPS Declared Value is not insurance)";
             this.insuranceProviderChooser.CarrierProviderName = "UPS Declared Value";
             this.insuranceProviderChooser.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 280);
+            this.insuranceProviderChooser.Location = new System.Drawing.Point(26, 768);
             this.insuranceProviderChooser.Name = "insuranceProviderChooser";
             this.insuranceProviderChooser.Size = new System.Drawing.Size(407, 30);
             this.insuranceProviderChooser.TabIndex = 6;
@@ -83,7 +83,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(9, 261);
+            this.label1.Location = new System.Drawing.Point(9, 749);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(123, 13);
             this.label1.TabIndex = 5;
@@ -95,7 +95,7 @@
             this.pennyOneLink.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pennyOneLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
             this.pennyOneLink.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.pennyOneLink.Location = new System.Drawing.Point(319, 312);
+            this.pennyOneLink.Location = new System.Drawing.Point(319, 800);
             this.pennyOneLink.Name = "pennyOneLink";
             this.pennyOneLink.Size = new System.Drawing.Size(65, 13);
             this.pennyOneLink.TabIndex = 8;
@@ -105,7 +105,7 @@
             // pennyOne
             // 
             this.pennyOne.AutoSize = true;
-            this.pennyOne.Location = new System.Drawing.Point(27, 311);
+            this.pennyOne.Location = new System.Drawing.Point(27, 799);
             this.pennyOne.Name = "pennyOne";
             this.pennyOne.Size = new System.Drawing.Size(298, 17);
             this.pennyOne.TabIndex = 7;
@@ -114,7 +114,7 @@
             // 
             // upsMailInnovationsOptions
             // 
-            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 375);
+            this.upsMailInnovationsOptions.Location = new System.Drawing.Point(24, 292);
             this.upsMailInnovationsOptions.Name = "upsMailInnovationsOptions";
             this.upsMailInnovationsOptions.Size = new System.Drawing.Size(150, 23);
             this.upsMailInnovationsOptions.TabIndex = 11;
@@ -123,7 +123,7 @@
             // 
             this.labelInfo.AutoSize = true;
             this.labelInfo.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelInfo.Location = new System.Drawing.Point(9, 354);
+            this.labelInfo.Location = new System.Drawing.Point(9, 271);
             this.labelInfo.Name = "labelInfo";
             this.labelInfo.Size = new System.Drawing.Size(292, 13);
             this.labelInfo.TabIndex = 10;
@@ -133,7 +133,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(8, 339);
+            this.label2.Location = new System.Drawing.Point(8, 256);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(80, 13);
             this.label2.TabIndex = 9;
@@ -142,7 +142,7 @@
             // servicePicker
             // 
             this.servicePicker.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.servicePicker.Location = new System.Drawing.Point(9, 405);
+            this.servicePicker.Location = new System.Drawing.Point(9, 322);
             this.servicePicker.Name = "servicePicker";
             this.servicePicker.Size = new System.Drawing.Size(421, 200);
             this.servicePicker.TabIndex = 12;
@@ -150,7 +150,7 @@
             // upsPackagingTypeServicePickerControl
             // 
             this.upsPackagingTypeServicePickerControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.upsPackagingTypeServicePickerControl.Location = new System.Drawing.Point(9, 622);
+            this.upsPackagingTypeServicePickerControl.Location = new System.Drawing.Point(9, 539);
             this.upsPackagingTypeServicePickerControl.Name = "upsPackagingTypeServicePickerControl";
             this.upsPackagingTypeServicePickerControl.Size = new System.Drawing.Size(421, 200);
             this.upsPackagingTypeServicePickerControl.TabIndex = 13;
