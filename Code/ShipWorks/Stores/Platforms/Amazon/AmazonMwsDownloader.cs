@@ -178,7 +178,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             DateTime latestShipDate;
             if (DateTime.TryParse(XPathUtility.Evaluate(xpath, "amz:LatestShipDate", ""), out latestShipDate))
             {
-                order.EarliestExpectedDeliveryDate = latestShipDate.ToUniversalTime();
+                order.LatestExpectedDeliveryDate = latestShipDate.ToUniversalTime();
             }
             
             // set the status

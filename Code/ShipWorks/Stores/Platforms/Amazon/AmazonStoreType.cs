@@ -438,6 +438,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             outline.AddElement("Commission", () => order.Value.AmazonCommission);
             outline.AddElement("FulfilledBy", () => EnumHelper.GetDescription((AmazonMwsFulfillmentChannel) order.Value.FulfillmentChannel));
             outline.AddElement("Prime", () => EnumHelper.GetDescription((AmazonMwsIsPrime)order.Value.IsPrime));
+            outline.AddElement("LatestShipDate", () => order.Value.LatestExpectedDeliveryDate);
+            outline.AddElement("EarliestDeliveryDate", () => order.Value.EarliestExpectedDeliveryDate);
         }
 
         /// <summary>
