@@ -169,17 +169,8 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:PurchaseDate", "")).ToUniversalTime();
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:LastUpdateDate", "")).ToUniversalTime();
 
-            DateTime earliestDeliveryDate;
-            if (DateTime.TryParse(XPathUtility.Evaluate(xpath, "amz:EarliestDeliveryDate", ""), out earliestDeliveryDate))
-            {
-                order.EarliestExpectedDeliveryDate = earliestDeliveryDate.ToUniversalTime();    
-            }
-
-            DateTime latestShipDate;
-            if (DateTime.TryParse(XPathUtility.Evaluate(xpath, "amz:LatestShipDate", ""), out latestShipDate))
-            {
-                order.LatestExpectedDeliveryDate = latestShipDate.ToUniversalTime();
-            }
+            order.EarliestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:EarliestDeliveryDate", ""));
+            order.LatestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:LatestShipDate", ""));
             
             // set the status
             order.OnlineStatus = orderStatus;
@@ -508,5 +499,19 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
             }
         }
+
+        /// <summary>
+        /// Sets delivery date from string, returns null if parse failed
+        /// </summary>
+        private static DateTime? ParseDeliveryDate(string date)
+        {
+            DateTime parsedDate;
+            if (DateTime.TryParse(date, out parsedDate))
+            {
+                return parsedDate.ToUniversalTime();
+            }
+
+            return null;
+        } 
     }
 }
