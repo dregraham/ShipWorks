@@ -1,0 +1,194 @@
+﻿namespace ShipWorks.Shipping.Carriers.Amazon
+{
+    partial class AmazonShipmentSetupWizard
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.wizardPageCredentials = new ShipWorks.UI.Wizard.WizardPage();
+            this.merchantId = new System.Windows.Forms.TextBox();
+            this.authToken = new System.Windows.Forms.TextBox();
+            this.labelAuthToken = new System.Windows.Forms.Label();
+            this.labelMerchantId = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.wizardPageWelcome = new ShipWorks.UI.Wizard.WizardPage();
+            this.labelInfo1 = new System.Windows.Forms.Label();
+            this.mainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
+            this.topPanel.SuspendLayout();
+            this.wizardPageCredentials.SuspendLayout();
+            this.wizardPageWelcome.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // next
+            // 
+            this.next.Location = new System.Drawing.Point(389, 509);
+            // 
+            // cancel
+            // 
+            this.cancel.Location = new System.Drawing.Point(470, 509);
+            // 
+            // back
+            // 
+            this.back.Location = new System.Drawing.Point(308, 509);
+            // 
+            // mainPanel
+            // 
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
+            this.mainPanel.Size = new System.Drawing.Size(557, 437);
+            // 
+            // etchBottom
+            // 
+            this.etchBottom.Location = new System.Drawing.Point(0, 499);
+            this.etchBottom.Size = new System.Drawing.Size(561, 2);
+            // 
+            // pictureBox
+            // 
+            this.pictureBox.Location = new System.Drawing.Point(504, 3);
+            // 
+            // topPanel
+            // 
+            this.topPanel.Size = new System.Drawing.Size(557, 56);
+            // 
+            // wizardPageCredentials
+            // 
+            this.wizardPageCredentials.Controls.Add(this.merchantId);
+            this.wizardPageCredentials.Controls.Add(this.authToken);
+            this.wizardPageCredentials.Controls.Add(this.labelAuthToken);
+            this.wizardPageCredentials.Controls.Add(this.labelMerchantId);
+            this.wizardPageCredentials.Controls.Add(this.label1);
+            this.wizardPageCredentials.Description = "Enter your Amazon merchant id and auth token.";
+            this.wizardPageCredentials.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageCredentials.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageCredentials.Name = "wizardPageCredentials";
+            this.wizardPageCredentials.Size = new System.Drawing.Size(557, 437);
+            this.wizardPageCredentials.TabIndex = 0;
+            this.wizardPageCredentials.Title = "Amazon Credentials";
+            this.wizardPageCredentials.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnNextStepCredentials);
+            // 
+            // merchantId
+            // 
+            this.merchantId.Location = new System.Drawing.Point(118, 33);
+            this.merchantId.Name = "merchantId";
+            this.merchantId.Size = new System.Drawing.Size(162, 21);
+            this.merchantId.TabIndex = 167;
+            // 
+            // authToken
+            // 
+            this.authToken.Location = new System.Drawing.Point(118, 59);
+            this.authToken.MaxLength = 50;
+            this.authToken.Name = "authToken";
+            this.authToken.Size = new System.Drawing.Size(162, 21);
+            this.authToken.TabIndex = 168;
+            this.authToken.UseSystemPasswordChar = true;
+            // 
+            // labelAuthToken
+            // 
+            this.labelAuthToken.AutoSize = true;
+            this.labelAuthToken.Location = new System.Drawing.Point(46, 62);
+            this.labelAuthToken.Name = "labelAuthToken";
+            this.labelAuthToken.Size = new System.Drawing.Size(66, 13);
+            this.labelAuthToken.TabIndex = 170;
+            this.labelAuthToken.Text = "Auth Token:";
+            // 
+            // labelMerchantId
+            // 
+            this.labelMerchantId.AutoSize = true;
+            this.labelMerchantId.Location = new System.Drawing.Point(43, 36);
+            this.labelMerchantId.Name = "labelMerchantId";
+            this.labelMerchantId.Size = new System.Drawing.Size(69, 13);
+            this.labelMerchantId.TabIndex = 169;
+            this.labelMerchantId.Text = "Merchant Id:";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(22, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(292, 13);
+            this.label1.TabIndex = 166;
+            this.label1.Text = "Enter the merchant id and auth token provided by Amazon.";
+            // 
+            // wizardPageWelcome
+            // 
+            this.wizardPageWelcome.Controls.Add(this.labelInfo1);
+            this.wizardPageWelcome.Description = "Setup ShipWorks to work with your Amazon account.";
+            this.wizardPageWelcome.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.wizardPageWelcome.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.wizardPageWelcome.Location = new System.Drawing.Point(0, 0);
+            this.wizardPageWelcome.Name = "wizardPageWelcome";
+            this.wizardPageWelcome.Size = new System.Drawing.Size(557, 437);
+            this.wizardPageWelcome.TabIndex = 0;
+            this.wizardPageWelcome.Title = "Setup Amazon Shipping";
+            // 
+            // labelInfo1
+            // 
+            this.labelInfo1.Location = new System.Drawing.Point(20, 9);
+            this.labelInfo1.Name = "labelInfo1";
+            this.labelInfo1.Size = new System.Drawing.Size(454, 47);
+            this.labelInfo1.TabIndex = 4;
+            this.labelInfo1.Text = "This wizard will assist you in configuring your Amazon account for use with ShipW" +
+    "orks. This enables you to begin shipping, tracking, and printing labels with you" +
+    "r Amazon account.";
+            // 
+            // AmazonShipmentSetupWizard
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(557, 544);
+            this.ControlBox = false;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Name = "AmazonShipmentSetupWizard";
+            this.NextVisible = true;
+            this.Pages.AddRange(new ShipWorks.UI.Wizard.WizardPage[] {
+            this.wizardPageWelcome,
+            this.wizardPageCredentials});
+            this.Text = "Amazon Setup Wizard";
+            this.Load += new System.EventHandler(this.OnLoad);
+            this.mainPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
+            this.topPanel.ResumeLayout(false);
+            this.topPanel.PerformLayout();
+            this.wizardPageCredentials.ResumeLayout(false);
+            this.wizardPageCredentials.PerformLayout();
+            this.wizardPageWelcome.ResumeLayout(false);
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private UI.Wizard.WizardPage wizardPageCredentials;
+        private ShipWorks.UI.Wizard.WizardPage wizardPageWelcome;
+        private System.Windows.Forms.TextBox merchantId;
+        private System.Windows.Forms.TextBox authToken;
+        private System.Windows.Forms.Label labelAuthToken;
+        private System.Windows.Forms.Label labelMerchantId;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelInfo1;
+    }
+}

@@ -31,6 +31,9 @@ namespace ShipWorks.ApplicationCore
             var builder = new ContainerBuilder();
 
             builder.RegisterAssemblyTypes(typeof(IoC).Assembly).ExternallyOwned();
+            builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+                .AsImplementedInterfaces()
+                .ExternallyOwned();
 
             builder.RegisterType<AmazonShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)

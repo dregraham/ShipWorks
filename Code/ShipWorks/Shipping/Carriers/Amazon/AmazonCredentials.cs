@@ -79,7 +79,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             else
             {
                 Success = false;
-                Message = "MerchantId and AuthToken is required";
+                Message = "MerchantId and AuthToken are required";
             }
         }
 

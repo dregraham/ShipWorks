@@ -777,7 +777,14 @@
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonCredentials.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\AmazonValidateCredentialsResponse.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
@@ -1130,7 +1137,6 @@
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
     <Compile Include="Stores\Platforms\RevolutionParts\RevolutionPartsStoreType.cs" />
-    <Compile Include="Stores\StoreComponentRegistration.cs" />
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Stores\StoreManagerWrapper.cs" />
@@ -7534,6 +7540,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.resx">
+      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>

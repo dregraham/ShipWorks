@@ -186,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.Validate();
 
                 webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-                Assert.AreEqual("MerchantId and AuthToken is required", testObject.Message);
+                Assert.AreEqual("MerchantId and AuthToken are required", testObject.Message);
                 Assert.AreEqual(false, testObject.Success);
             }
         }
@@ -205,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.Validate();
 
                 webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-                Assert.AreEqual("MerchantId and AuthToken is required", testObject.Message);
+                Assert.AreEqual("MerchantId and AuthToken are required", testObject.Message);
                 Assert.AreEqual(false, testObject.Success);
             }
         }

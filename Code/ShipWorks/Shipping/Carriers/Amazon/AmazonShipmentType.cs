@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
@@ -22,6 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 return ShipmentTypeCode.Amazon;
             }
+        }
+
+        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
+        {
+            return IoC.Current.Resolve<AmazonShipmentSetupWizard>();
         }
 
         /// <summary>
