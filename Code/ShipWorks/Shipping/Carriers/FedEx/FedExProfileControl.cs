@@ -362,9 +362,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             {
                 FedExServiceType serviceType = (FedExServiceType) service.SelectedValue;
 
-                okService =
-                    serviceType == FedExServiceType.GroundHomeDelivery ||
-                    serviceType == FedExServiceType.FedExGround;
+                okService = FedExUtility.IsGroundService(serviceType);
             }
 
             // No packaging selected

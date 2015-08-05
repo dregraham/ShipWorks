@@ -200,7 +200,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 }
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
-                if (thisService == FedExServiceType.GroundHomeDelivery || thisService == FedExServiceType.FedExGround)
+                if (FedExUtility.IsGroundService(thisService))
                 {
                     anyGround = true;
                 }
@@ -633,7 +633,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdatePackagingChoices(serviceType);
 
-            UpdatePayorChoices(serviceType == FedExServiceType.FedExGround || serviceType == FedExServiceType.GroundHomeDelivery, null);
+            UpdatePayorChoices(FedExUtility.IsGroundService(serviceType), null);
             UpdateBillingSectionDisplay();
 
             // Only show home delivery section if they are all home delivery
@@ -661,9 +661,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             sectionCOD.Visible = FedExUtility.IsCodAvailable(serviceType);
 
             // Only show non-standard for a ground (home or not)
-            nonStandardPackaging.Visible =
-                serviceType == FedExServiceType.GroundHomeDelivery ||
-                serviceType == FedExServiceType.FedExGround;
+            nonStandardPackaging.Visible = FedExUtility.IsGroundService(serviceType);
 
             sectionFimsOptions.Visible = isFims;
 

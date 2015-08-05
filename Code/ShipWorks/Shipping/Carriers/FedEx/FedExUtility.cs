@@ -144,7 +144,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 (s.AdjustedOriginCountryCode() == "CA" && s.AdjustedShipCountryCode() == "US")))
             {
                 // Ground service is allowed between US and CA
-                serviceTypes.Add(FedExServiceType.FedExGround);
+                serviceTypes.Add(FedExServiceType.FedExInternationalGround);
             }
 
             // Add FIMS if enabled
@@ -313,6 +313,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 case FedExServiceType.FedEx2DayFreight:
                 case FedExServiceType.FedEx3DayFreight:
                 case FedExServiceType.FedExGround:
+                case FedExServiceType.FedExInternationalGround:
                     return true;
             }
 
@@ -525,6 +526,20 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
 
             return trackingNumber;
+        }
+
+        /// <summary>
+        /// Determines whether shipment service is a ground service
+        /// </summary>
+        public static bool IsGroundService(FedExServiceType service)
+        {
+            return
+                (new List<FedExServiceType>
+                {
+                    FedExServiceType.FedExGround,
+                    FedExServiceType.GroundHomeDelivery,
+                    FedExServiceType.FedExInternationalGround
+                }).Contains(service);
         }
     }
 }

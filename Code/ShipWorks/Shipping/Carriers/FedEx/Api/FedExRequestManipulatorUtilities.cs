@@ -193,7 +193,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.FedEx1DayFreight: return WebServices.Ship.ServiceType.FEDEX_1_DAY_FREIGHT;
                 case FedExServiceType.FedEx2DayFreight: return WebServices.Ship.ServiceType.FEDEX_2_DAY_FREIGHT;
                 case FedExServiceType.FedEx3DayFreight: return WebServices.Ship.ServiceType.FEDEX_3_DAY_FREIGHT;
-                case FedExServiceType.FedExGround: return WebServices.Ship.ServiceType.FEDEX_GROUND;
+                
+                case FedExServiceType.FedExGround: 
+                case FedExServiceType.FedExInternationalGround:
+                    return WebServices.Ship.ServiceType.FEDEX_GROUND;
+                
                 case FedExServiceType.GroundHomeDelivery: return WebServices.Ship.ServiceType.GROUND_HOME_DELIVERY;
                 case FedExServiceType.InternationalPriorityFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_PRIORITY_FREIGHT;
                 case FedExServiceType.InternationalEconomyFreight: return WebServices.Ship.ServiceType.INTERNATIONAL_ECONOMY_FREIGHT;

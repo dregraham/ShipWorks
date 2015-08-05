@@ -201,6 +201,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     {
                         case FedExServiceType.FedExGround:
                         case FedExServiceType.GroundHomeDelivery:
+                        case FedExServiceType.FedExInternationalGround:
                             return "GROUND";
 
                         case FedExServiceType.FedEx2Day:

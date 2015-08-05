@@ -54,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
             switch (fedExService)
             {
                 case FedExServiceType.FedExGround:
+                case FedExServiceType.FedExInternationalGround:
                     return SupportedRedirectToHoldServiceType.FEDEX_GROUND;
                 case FedExServiceType.GroundHomeDelivery:
                     return SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY;
