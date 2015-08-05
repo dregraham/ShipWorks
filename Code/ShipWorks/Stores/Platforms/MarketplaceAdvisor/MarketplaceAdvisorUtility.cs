@@ -163,9 +163,12 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor
 
                             case FedExServiceType.InternationalPriority: return 65544;
                             case FedExServiceType.InternationalEconomy: return 65543;
-                            case FedExServiceType.InternationalFirst: return 65557;
-                            case FedExServiceType.FedExGround: return 65527;
-                            case FedExServiceType.GroundHomeDelivery: return 65527;
+
+                            case FedExServiceType.InternationalFirst: 
+                            case FedExServiceType.FedExGround: 
+                            case FedExServiceType.GroundHomeDelivery: 
+                            case FedExServiceType.FedExInternationalGround:
+                                return 65527;
                         }
 
                         break;

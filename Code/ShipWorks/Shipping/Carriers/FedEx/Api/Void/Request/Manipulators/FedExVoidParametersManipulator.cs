@@ -24,8 +24,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             TrackingIdType trackingIdType;
 
             FedExServiceType serviceType = (FedExServiceType)shipment.FedEx.Service;
-            if (   serviceType == FedExServiceType.FedExGround 
-                || serviceType == FedExServiceType.GroundHomeDelivery)
+            if (FedExUtility.IsGroundService(serviceType))
             {
                 trackingIdType = TrackingIdType.GROUND;
             }

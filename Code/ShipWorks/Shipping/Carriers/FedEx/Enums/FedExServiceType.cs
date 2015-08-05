@@ -93,5 +93,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Enums
 
         [Description("FedEx FIMS")]
         FedExFims = 27,
+
+        [Description("FedEx International Ground®")]
+        FedExInternationalGround = 28
     }
 }

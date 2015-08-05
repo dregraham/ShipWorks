@@ -79,8 +79,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         /// <exception cref="FedExException">Hazardous materials can only be shipped with the FedEx Ground service.</exception>
         private static void ConfigureHazardousMaterials(CarrierRequest request, DangerousGoodsDetail dangerousGoods, FedExPackageEntity package)
         {
+            FedExServiceType serviceType = (FedExServiceType) request.ShipmentEntity.FedEx.Service;
             // HazMat can only be used with the ground service
-            if (request.ShipmentEntity.FedEx.Service != (int)FedExServiceType.FedExGround)
+            if (serviceType != FedExServiceType.FedExGround && serviceType != FedExServiceType.FedExInternationalGround)
             {
                 // The check and exception is thrown here since the FedEx error doesn't indicate this is the
                 // the reason for the error.

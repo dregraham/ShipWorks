@@ -172,6 +172,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.GroundHomeDelivery:
                 case FedExServiceType.FedExEuropeFirstInternationalPriority:
                 case FedExServiceType.FedExEconomyCanada:
+                case FedExServiceType.FedExInternationalGround:
                     CleanShipmentForNonFreight(fedExShipmentEntity);
                     CleanShipmentForNonSmartPost(fedExShipmentEntity);
                     break;
@@ -859,6 +860,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case FedExServiceType.InternationalPriorityFreight:
                 case FedExServiceType.InternationalEconomyFreight:
                 case FedExServiceType.SmartPost:
+                case FedExServiceType.FedExInternationalGround:
                     return ShippingManager.GetServiceLevel(transitDays);
             }
         }
@@ -944,7 +946,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 case ServiceType.FEDEX_1_DAY_FREIGHT: return FedExServiceType.FedEx1DayFreight;
                 case ServiceType.FEDEX_2_DAY_FREIGHT: return FedExServiceType.FedEx2DayFreight;
                 case ServiceType.FEDEX_3_DAY_FREIGHT: return FedExServiceType.FedEx3DayFreight;
-                case ServiceType.FEDEX_GROUND: return FedExServiceType.FedExGround;
+
+                case ServiceType.FEDEX_GROUND:
+                    return ShipmentTypeManager.GetType(shipment).IsDomestic(shipment) ? FedExServiceType.FedExGround : FedExServiceType.FedExInternationalGround;
+                
                 case ServiceType.GROUND_HOME_DELIVERY: return FedExServiceType.GroundHomeDelivery;
                 case ServiceType.INTERNATIONAL_PRIORITY_FREIGHT: return FedExServiceType.InternationalPriorityFreight;
                 case ServiceType.INTERNATIONAL_ECONOMY_FREIGHT: return FedExServiceType.InternationalEconomyFreight;
