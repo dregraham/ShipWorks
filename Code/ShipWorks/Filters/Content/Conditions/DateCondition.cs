@@ -280,7 +280,7 @@ namespace ShipWorks.Filters.Content.Conditions
         /// Adds the specified date unit to the supplied date
         /// </summary>
         /// <returns></returns>
-        private DateTime addDateUnit(DateTime date, DateWithinUnit unit, int value)
+        private static DateTime addDateUnit(DateTime date, DateWithinUnit unit, int value)
         {
             switch (unit)
             {
