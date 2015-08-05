@@ -151,6 +151,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 CreditCardType = CreditCardType.Visa,
                 ExpirationDate = DateTime.Now.AddYears(3)
             };
+            registration.FirstCodewordType = CodewordType2.MothersMaidenName;
+            registration.FirstCodewordValue = "mom";
+            registration.SecondCodewordType = CodewordType2.PetsName;
+            registration.SecondCodewordValue = "Max";
             registration.Email = "some.one@shipworks.com";
             registration.MachineInfo = new MachineInfo() { IPAddress = "127.0.0.1" };
             registration.MailingAddress = registration.CreditCard.BillingAddress;
