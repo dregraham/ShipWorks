@@ -114,7 +114,8 @@ namespace ShipWorks.Filters.Content.Editors.ValueEditors
             }
             else
             {
-                if (op == DateOperator.WithinTheLast)
+                if (op == DateOperator.WithinTheLast ||
+                    op == DateOperator.Next)
                 {
                     visiblePanel = withinPanel;
                     withinPanel.Width = withinRangeType.Right + errorSpace;
