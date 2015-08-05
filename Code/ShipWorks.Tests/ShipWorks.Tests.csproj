@@ -42,6 +42,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.Attributed, Version=3.3.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.Extras.Attributed.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.Moq">
+      <HintPath>..\..\Components\Autofac.Extras.Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mef, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Autofac.Integration.Mef.dll</HintPath>
+    </Reference>
     <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Common.Logging.dll</HintPath>
@@ -176,6 +191,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresherTest.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
@@ -598,6 +614,7 @@
     <EmbeddedResource Include="Resources\SinglePagePdf.pdf" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="Shipping\AdjustedCountryCodeData_Endicia.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
