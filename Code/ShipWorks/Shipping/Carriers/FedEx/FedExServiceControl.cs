@@ -260,14 +260,19 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
                 LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
 
-                List<FedExServiceType> fedexShipmentsToLoad = FedExUtility.GetValidServiceTypes(overriddenShipments).Intersect(availableServices).ToList();
+                // Get a list of all valid service types for the shipments
+                List<FedExServiceType> validServiceTypes = FedExUtility.GetValidServiceTypes(overriddenShipments);
+
+                // load shipment types that are valid and enabled (avaialbeServices)
+                List<FedExServiceType> fedexShipmentsToLoad = validServiceTypes.Intersect(availableServices).ToList();
 
                 if (LoadedShipments.Any())
                 {
                     // Always include the service type that the shipment is currently configured in the 
                     // event the shipment was configured prior to a service being excluded
                     // Always include the service that the shipments are currently configured with
-                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Distinct();
+                    // Only if the service type is a validServiceType
+                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes);
                     fedexShipmentsToLoad = fedexShipmentsToLoad.Union(loadedServices).ToList();
                 }
 
