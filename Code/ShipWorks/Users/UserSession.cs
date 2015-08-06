@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -22,6 +23,7 @@ using ShipWorks.Filters;
 using ShipWorks.Filters.Grid;
 using ShipWorks.Filters.Search;
 using ShipWorks.Shipping;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -169,6 +171,7 @@ namespace ShipWorks.Users
             ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
+            IoC.Current.Resolve<IAmazonAccountManager>().InitializeForCurrentSession();
         }
 
         /// <summary>

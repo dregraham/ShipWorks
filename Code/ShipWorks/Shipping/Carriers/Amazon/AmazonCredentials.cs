@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
@@ -81,6 +82,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 Success = false;
                 Message = "MerchantId and AuthToken are required";
             }
+        }
+
+        /// <summary>
+        /// Populate the given account with the credential data
+        /// </summary>
+        public void PopulateAccount(AmazonAccountEntity account)
+        {
+            if (!Success)
+            {
+                throw new InvalidOperationException("Cannot update account before credentials are validated");
+            }
+
+            account.MerchantID = MerchantId;
+            account.AuthToken = AuthToken;
         }
 
         /// <summary>

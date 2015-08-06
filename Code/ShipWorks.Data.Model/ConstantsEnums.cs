@@ -208,6 +208,53 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonAccount.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AmazonAccountFieldIndex:int
+	{
+		///<summary>AmazonAccountID. </summary>
+		AmazonAccountID,
+		///<summary>RowVersion. </summary>
+		RowVersion,
+		///<summary>MerchantID. </summary>
+		MerchantID,
+		///<summary>AuthToken. </summary>
+		AuthToken,
+		///<summary>FirstName. </summary>
+		FirstName,
+		///<summary>MiddleName. </summary>
+		MiddleName,
+		///<summary>LastName. </summary>
+		LastName,
+		///<summary>Company. </summary>
+		Company,
+		///<summary>Street1. </summary>
+		Street1,
+		///<summary>Street2. </summary>
+		Street2,
+		///<summary>Street3. </summary>
+		Street3,
+		///<summary>City. </summary>
+		City,
+		///<summary>StateProvCode. </summary>
+		StateProvCode,
+		///<summary>PostalCode. </summary>
+		PostalCode,
+		///<summary>CountryCode. </summary>
+		CountryCode,
+		///<summary>Phone. </summary>
+		Phone,
+		///<summary>Email. </summary>
+		Email,
+		///<summary>Website. </summary>
+		Website,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -10451,6 +10498,8 @@ namespace ShipWorks.Data.Model
 		ActionQueueStepEntity,
 		///<summary>ActionTask</summary>
 		ActionTaskEntity,
+		///<summary>AmazonAccount</summary>
+		AmazonAccountEntity,
 		///<summary>AmazonASIN</summary>
 		AmazonASINEntity,
 		///<summary>AmazonOrder</summary>

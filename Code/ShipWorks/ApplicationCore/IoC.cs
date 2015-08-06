@@ -39,6 +39,10 @@ namespace ShipWorks.ApplicationCore
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
                 .ExternallyOwned();
 
+            builder.RegisterType<AmazonAccountManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
             return builder.Build();
         }
     }

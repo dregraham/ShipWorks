@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Autofac.Extras.Moq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -247,6 +248,49 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 Assert.AreEqual("Error message", testObject.Message);
                 Assert.AreEqual(false, testObject.Success);
+            }
+        }
+
+        [TestMethod]
+        public void PopulateAccount_SetsCredentials_WhenValidated()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                AmazonAccountEntity account = new AmazonAccountEntity();
+
+                AmazonCredentials testObject = mock.Create<AmazonCredentials>();
+
+                testObject.MerchantId = "Foo";
+                testObject.AuthToken = "Bar";
+                testObject.Success = true;
+
+                testObject.PopulateAccount(account);
+
+                Assert.AreEqual("Foo", account.MerchantID);
+                Assert.AreEqual("Bar", account.AuthToken);
+            }
+        }
+
+        [TestMethod]
+        public void PopulateAccount_ThrowsInvalidOperationException_WhenNotValid()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                AmazonCredentials testObject = mock.Create<AmazonCredentials>();
+
+                testObject.MerchantId = "Foo";
+                testObject.AuthToken = "Bar";
+                testObject.Success = false;
+
+                try
+                {
+                    testObject.PopulateAccount(new AmazonAccountEntity());
+                    Assert.Fail();
+                }
+                catch (InvalidOperationException)
+                {
+                    // Pass
+                }
             }
         }
     }
