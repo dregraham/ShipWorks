@@ -702,7 +702,9 @@ CREATE TABLE [dbo].[AmazonOrder]
 [AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonCommission] [money] NOT NULL,
 [FulfillmentChannel] [int] NOT NULL,
-[IsPrime] [int] NOT NULL
+[IsPrime] [int] NOT NULL,
+[EarliestExpectedDeliveryDate] [datetime] NULL,
+[LatestExpectedDeliveryDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
@@ -720,6 +722,14 @@ GO
 PRINT N'Creating index [IX_Auto_IsPrime] on [dbo].[AmazonOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
+GO
+PRINT N'Creating index [IX_Auto_EarliestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_EarliestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([EarliestExpectedDeliveryDate])
+GO
+PRINT N'Creating index [IX_Auto_LatestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_LatestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([LatestExpectedDeliveryDate])
 GO
 PRINT N'Creating [dbo].[OrderItem]'
 GO

@@ -1095,6 +1095,8 @@
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
+    <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
+    <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
@@ -11143,6 +11145,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
