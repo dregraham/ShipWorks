@@ -272,7 +272,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     // event the shipment was configured prior to a service being excluded
                     // Always include the service that the shipments are currently configured with
                     // Only if the service type is a validServiceType
-                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes);
+                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes).Distinct();
                     fedexShipmentsToLoad = fedexShipmentsToLoad.Union(loadedServices).ToList();
                 }
 
