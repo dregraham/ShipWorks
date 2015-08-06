@@ -1,6 +1,10 @@
 ﻿using Autofac;
+using Autofac.Core.Activators.Reflection;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Shipping.Carriers.Amazon.Api;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -30,16 +34,35 @@ namespace ShipWorks.ApplicationCore
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterAssemblyTypes(typeof(IoC).Assembly).ExternallyOwned();
-            builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+            //builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
+            //    .AsSelf()
+            //    .AsImplementedInterfaces()
+            //    .InstancePerLifetimeScope();
+            
+            builder.RegisterType<AmazonShippingWebClient>()
                 .AsImplementedInterfaces()
-                .ExternallyOwned();
+                .SingleInstance();
+
+            builder.RegisterType<StoreManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<AmazonCredentials>();
+
+            builder.RegisterType<AmazonShipmentSetupWizard>()
+                .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<AmazonShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
-                .ExternallyOwned();
+                .SingleInstance();
 
             builder.RegisterType<AmazonAccountManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

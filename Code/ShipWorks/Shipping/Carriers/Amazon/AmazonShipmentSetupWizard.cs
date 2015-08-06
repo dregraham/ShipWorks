@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor to be used by Visual Studio designer
         /// </summary>
-        public AmazonShipmentSetupWizard()
+        protected AmazonShipmentSetupWizard()
         {
             InitializeComponent();
         }
@@ -51,14 +51,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             merchantId.DataBindings.Add(ObjectUtility.Nameof(() => merchantId.Text), credentialViewModel, ObjectUtility.Nameof(() => credentialViewModel.MerchantId));
             authToken.DataBindings.Add(ObjectUtility.Nameof(() => authToken.Text), credentialViewModel, ObjectUtility.Nameof(() => credentialViewModel.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
 
-            var shippingWizardPageFinish = new ShippingWizardPageFinish(shipmentType);
-
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
-            Pages.Add(shippingWizardPageFinish);
+            Pages.Add(CreateFinishPage());
+        }
 
+        /// <summary>
+        /// Create the finish wizard page
+        /// </summary>
+        private WizardPage CreateFinishPage()
+        {
+            var shippingWizardPageFinish = new ShippingWizardPageFinish(shipmentType);
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
+            return shippingWizardPageFinish;
         }
 
         /// <summary>

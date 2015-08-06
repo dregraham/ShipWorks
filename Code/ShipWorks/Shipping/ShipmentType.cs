@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -230,6 +232,19 @@ namespace ShipWorks.Shipping
         public virtual ShipmentTypeSetupWizardForm CreateSetupWizard()
         {
             return null;
+        }
+
+        /// <summary>
+        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
+        /// null if the shipment type does not require setup
+        /// </summary>
+        /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
+        /// If it is not, it will fall back to the other version of this method</remarks>
+        public virtual ShipmentTypeSetupWizardForm CreateSetupWizard(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode) :
+                CreateSetupWizard();
         }
 
         /// <summary>

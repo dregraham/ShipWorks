@@ -104,6 +104,14 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
         {
+            return GetType(typeCode, IoC.Current);
+        }
+
+        /// <summary>
+        /// Get the ShipmentType based on the given type code
+        /// </summary>
+        public static ShipmentType GetType(ShipmentTypeCode typeCode, ILifetimeScope lifetimeScope)
+        {
             switch (typeCode)
             {
                 case ShipmentTypeCode.UpsOnLineTools:
@@ -146,9 +154,9 @@ namespace ShipWorks.Shipping
                     return new UspsShipmentType();
             }
 
-            if (IoC.Current.IsRegisteredWithKey<ShipmentType>(typeCode))
+            if (lifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))
             {
-                return IoC.Current.ResolveKeyed<ShipmentType>(typeCode);
+                return lifetimeScope.ResolveKeyed<ShipmentType>(typeCode);
             }
 
             throw new InvalidOperationException("Invalid shipment type.");
