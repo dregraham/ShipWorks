@@ -454,7 +454,7 @@ namespace ShipWorks.Shipping.Editing
             {
                 // shipsense sync might delete the original customs item
                 // i think. 
-                log.Error(String.Format("Error saving customs item", ex.Message, "{0}: {1}"));
+                log.Error(String.Format("Error saving customs item: {0}", ex.Message));
             }
             harmonizedCode.ReadMultiText(s => customsItem.HarmonizedCode = s);
             countryOfOrigin.ReadMultiText(s => customsItem.CountryOfOrigin = Geography.GetCountryCode(s));
