@@ -105,11 +105,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnEdit(object sender, EventArgs e)
         {
-            AmazonAccountEntity shipper = (AmazonAccountEntity)sandGrid.SelectedElements[0].Tag;
-            initialShipperID = shipper.AmazonAccountID;
-
-
-            LoadShippers();
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -143,8 +139,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             if (result == DialogResult.OK)
             {
-                AmazonAccountManager manager = new AmazonAccountManager();
-                manager.DeleteAccount(shipper);
+                AccountManager.DeleteAccount(shipper);
                 LoadShippers();
             }
         }
