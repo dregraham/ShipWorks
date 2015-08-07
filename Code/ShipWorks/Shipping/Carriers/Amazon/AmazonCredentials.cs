@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Linq.Expressions;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
@@ -10,8 +9,12 @@ using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
-    public class AmazonCredentials : INotifyPropertyChanged
+    /// <summary>
+    /// Model for working with Amazon shipping credentials
+    /// </summary>
+    public class AmazonCredentials : IAmazonCredentials, INotifyPropertyChanged
     {
+        private readonly PropertyChangedHandler handler;
         private readonly IAmazonShippingWebClient webClient;
         private readonly IStoreManager storeManager;
 
@@ -23,6 +26,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonCredentials(IAmazonShippingWebClient webClient, IStoreManager storeManager)
         {
+            handler = new PropertyChangedHandler(PropertyChanged);
+
             this.webClient = webClient;
             this.storeManager = storeManager;
         }
@@ -30,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Initialize the class
         /// </summary>
-        public void Initialize()
+        public void PopulateFromStore()
         {
             List<AmazonStoreEntity> stores = storeManager.GetAllStores()
                 .OfType<AmazonStoreEntity>()
@@ -56,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string MerchantId
         {
             get { return merchantId; }
-            set { Set(() => MerchantId, ref merchantId, value); }
+            set { handler.Set(() => MerchantId, ref merchantId, value); }
         }
 
         /// <summary>
@@ -65,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string AuthToken
         {
             get { return authToken; }
-            set { Set(() => AuthToken, ref authToken, value); }
+            set { handler.Set(() => AuthToken, ref authToken, value); }
         }
 
         /// <summary>
@@ -102,6 +107,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void PopulateAccount(AmazonAccountEntity account)
         {
+            MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+
             if (!Success)
             {
                 throw new InvalidOperationException("Cannot update account before credentials are validated");
@@ -109,32 +116,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             account.MerchantID = MerchantId;
             account.AuthToken = AuthToken;
-        }
-
-        /// <summary>
-        /// Raise the property changed event
-        /// </summary>
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        /// <summary>
-        /// Set the value of a field in a property
-        /// </summary>
-        private void Set<T>(Expression<Func<T>> func, ref T field, T value)
-        {
-            if (Equals(field, value))
-            {
-                return;
-            }
-
-            field = value;
-            OnPropertyChanged(ObjectUtility.Nameof(func));
         }
     }
 }

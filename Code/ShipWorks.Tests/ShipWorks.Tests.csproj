@@ -193,6 +193,7 @@
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresherTest.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonCredentialsTest.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorViewModelTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />

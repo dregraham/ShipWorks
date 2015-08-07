@@ -19,6 +19,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly AmazonCredentials credentialViewModel;
         private readonly IAmazonAccountManager accountManager;
         private readonly IShippingSettings shippingSettings;
+        private ShippingWizardPageFinish shippingWizardPageFinish;
 
         /// <summary>
         /// Constructor to be used by Visual Studio designer
@@ -56,7 +57,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(CreateFinishPage());
 
-            credentialViewModel.Initialize();
+            credentialViewModel.PopulateFromStore();
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private WizardPage CreateFinishPage()
         {
-            var shippingWizardPageFinish = new ShippingWizardPageFinish(shipmentType);
+            shippingWizardPageFinish = new ShippingWizardPageFinish(shipmentType);
             shippingWizardPageFinish.SteppingInto += OnSteppingIntoFinish;
             return shippingWizardPageFinish;
         }

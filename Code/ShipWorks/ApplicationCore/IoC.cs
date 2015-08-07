@@ -47,11 +47,16 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<AmazonCredentials>();
+            builder.RegisterType<AmazonCredentials>()
+                .AsSelf()
+                .As<IAmazonCredentials>();
 
             builder.RegisterType<AmazonShipmentSetupWizard>()
                 .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<AmazonAccountEditorDlg>();
+            builder.RegisterType<AmazonAccountEditorViewModel>();
 
             builder.RegisterType<AmazonShipmentType>()
                 .AsSelf()

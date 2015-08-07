@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             {
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual(string.Empty, testObject.MerchantId);
                 Assert.AreEqual(string.Empty, testObject.AuthToken);
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual(string.Empty, testObject.MerchantId);
                 Assert.AreEqual(string.Empty, testObject.AuthToken);
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual(string.Empty, testObject.MerchantId);
                 Assert.AreEqual(string.Empty, testObject.AuthToken);
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual("Foo", testObject.MerchantId);
                 Assert.AreEqual("Bar", testObject.AuthToken);
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual("Foo", testObject.MerchantId);
                 Assert.AreEqual("Bar", testObject.AuthToken);
@@ -127,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual("Foo", testObject.MerchantId);
                 Assert.AreEqual("Bar", testObject.AuthToken);
@@ -149,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                testObject.Initialize();
+                testObject.PopulateFromStore();
 
                 Assert.AreEqual(string.Empty, testObject.MerchantId);
                 Assert.AreEqual(string.Empty, testObject.AuthToken);
@@ -288,6 +288,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                     Assert.Fail();
                 }
                 catch (InvalidOperationException)
+                {
+                    // Pass
+                }
+            }
+        }
+
+        [TestMethod]
+        public void PopulateAccount_ThrowsArgumentNullException_WhenAccountIsNull()
+        {
+            using (var mock = AutoMock.GetLoose())
+            {
+                AmazonCredentials testObject = mock.Create<AmazonCredentials>();
+
+                try
+                {
+                    testObject.PopulateAccount(null);
+                    Assert.Fail();
+                }
+                catch (ArgumentNullException)
                 {
                     // Pass
                 }
