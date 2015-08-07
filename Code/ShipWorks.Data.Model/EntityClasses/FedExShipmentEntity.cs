@@ -938,6 +938,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("FimsAirWaybill", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
 		}
 		#endregion
 
@@ -2705,6 +2708,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)FedExShipmentFieldIndex.FimsAirWaybill, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.FimsAirWaybill, value); }
+		}
+
+		/// <summary> The ReturnsClearance property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."ReturnsClearance"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Bit, 0, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Boolean ReturnsClearance
+		{
+			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.ReturnsClearance, true); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.ReturnsClearance, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'.

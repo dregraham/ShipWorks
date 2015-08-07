@@ -3120,6 +3120,8 @@ namespace ShipWorks.Data.Model
 		RmaReason,
 		///<summary>ReturnSaturdayPickup. </summary>
 		ReturnSaturdayPickup,
+		///<summary>ReturnsClearance. </summary>
+		ReturnsClearance,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -3496,6 +3498,8 @@ namespace ShipWorks.Data.Model
 		RequestedLabelFormat,
 		///<summary>FimsAirWaybill. </summary>
 		FimsAirWaybill,
+		///<summary>ReturnsClearance. </summary>
+		ReturnsClearance,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -6667,6 +6667,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReturnSaturdayPickup);}
 		}
+		/// <summary>Creates a new FedExProfileEntity.ReturnsClearance field instance</summary>
+		public static EntityField2 ReturnsClearance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExProfileFieldIndex.ReturnsClearance);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FedExProfilePackageEntity</summary>
@@ -7561,6 +7566,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		public static EntityField2 FimsAirWaybill
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.FimsAirWaybill);}
+		}
+		/// <summary>Creates a new FedExShipmentEntity.ReturnsClearance field instance</summary>
+		public static EntityField2 ReturnsClearance
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReturnsClearance);}
 		}
 	}
 
