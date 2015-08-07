@@ -58,6 +58,10 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<AmazonAccountEditorDlg>();
             builder.RegisterType<AmazonAccountEditorViewModel>();
 
+            builder.RegisterType<AmazonSettingsControl>()
+                .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AmazonShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
