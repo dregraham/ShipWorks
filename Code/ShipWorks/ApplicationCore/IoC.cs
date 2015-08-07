@@ -53,6 +53,10 @@ namespace ShipWorks.ApplicationCore
                 .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<AmazonSettingsControl>()
+                .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<AmazonShipmentType>()
                 .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
