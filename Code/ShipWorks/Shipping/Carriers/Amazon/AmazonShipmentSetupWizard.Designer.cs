@@ -48,9 +48,7 @@
             // 
             // next
             // 
-            this.next.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.next.Location = new System.Drawing.Point(389, 509);
-            this.next.Text = "Finish";
             // 
             // cancel
             // 
@@ -62,7 +60,7 @@
             // 
             // mainPanel
             // 
-            this.mainPanel.Controls.Add(this.wizardPageContactInfo);
+            this.mainPanel.Controls.Add(this.wizardPageWelcome);
             this.mainPanel.Size = new System.Drawing.Size(557, 437);
             // 
             // etchBottom
@@ -72,7 +70,10 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Location = new System.Drawing.Point(504, 3);
+            this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
+            this.pictureBox.Location = new System.Drawing.Point(389, 3);
+            this.pictureBox.Size = new System.Drawing.Size(165, 50);
+            this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             // 
             // topPanel
             // 
@@ -200,7 +201,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(557, 544);
-            this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AmazonShipmentSetupWizard";
             this.NextVisible = true;
