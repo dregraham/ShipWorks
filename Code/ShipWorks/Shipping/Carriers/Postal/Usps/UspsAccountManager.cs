@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
@@ -202,9 +204,12 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     throw new ArgumentOutOfRangeException("uspsResellerType");
             }
 
-            using (Form dlg = shipmentType.CreateSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
             {
-                return (dlg.ShowDialog(owner) == DialogResult.OK);
+                using (Form dlg = shipmentType.CreateSetupWizard(lifetimeScope))
+                {
+                    return (dlg.ShowDialog(owner) == DialogResult.OK);
+                }
             }
         }
 

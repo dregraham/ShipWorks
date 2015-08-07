@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Autofac;
 using ShipWorks.Data.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model;
@@ -52,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
             {
                 if (synchronizer.Synchronize())
                 {
-                    synchronizer.EntityCollection.Sort((int) EndiciaAccountFieldIndex.Description, ListSortDirection.Ascending);
+                    synchronizer.EntityCollection.Sort((int)EndiciaAccountFieldIndex.Description, ListSortDirection.Ascending);
                 }
 
                 needCheckForChanges = false;
@@ -194,16 +195,13 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static bool DisplaySetupWizard(IWin32Window owner, EndiciaReseller endiciaReseller)
         {
-            if (endiciaReseller == EndiciaReseller.Express1)
+            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
             {
-                using (Form dlg = new Express1EndiciaShipmentType().CreateSetupWizard())
-                {
-                    return (dlg.ShowDialog(owner) == DialogResult.OK);
-                }
-            }
-            else
-            {
-                using (EndiciaSetupWizard dlg = new EndiciaSetupWizard())
+                ShipmentType shipmentType = endiciaReseller == EndiciaReseller.Express1 ?
+                    new Express1EndiciaShipmentType() :
+                    new EndiciaShipmentType();
+
+                using (Form dlg = shipmentType.CreateSetupWizard(lifetimeScope))
                 {
                     return (dlg.ShowDialog(owner) == DialogResult.OK);
                 }

@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Autofac;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Settings;
 
@@ -24,13 +25,16 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         {
             if (HostForm != null)
             {
-                UspsShipmentType shipmentType = new UspsShipmentType();
-                using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
+                using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
                 {
-                    DialogResult result = setupWizard.ShowDialog(HostForm);
-                    HostForm.DialogResult = result;
+                    UspsShipmentType shipmentType = new UspsShipmentType();
+                    using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
+                    {
+                        DialogResult result = setupWizard.ShowDialog(HostForm);
+                        HostForm.DialogResult = result;
 
-                    Option.Result = result == DialogResult.OK ? "Created USPS account" : "Declined to create a USPS account";
+                        Option.Result = result == DialogResult.OK ? "Created USPS account" : "Declined to create a USPS account";
+                    }
                 }
             }
 

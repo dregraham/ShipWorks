@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Connection;
@@ -68,18 +70,21 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnConfigureClick(object sender, EventArgs e)
         {
-            // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
-            // if they canceled before getting there endicia account# emailed to them.
-
-            // There wasn't an Express1 for USPS in ShipWorks 2x, so we can explicitly call out the Express1 for Endicia 
-            // shipment type here
-            using (Form wizard = new Express1EndiciaShipmentType().CreateSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
-                {
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
+                // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
+                // if they canceled before getting there endicia account# emailed to them.
 
-                    Wizard.MoveNext();
+                // There wasn't an Express1 for USPS in ShipWorks 2x, so we can explicitly call out the Express1 for Endicia 
+                // shipment type here
+                using (Form wizard = new Express1EndiciaShipmentType().CreateSetupWizard(lifetimeScope))
+                {
+                    if (wizard.ShowDialog(this) == DialogResult.OK)
+                    {
+                        ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Express1Endicia);
+
+                        Wizard.MoveNext();
+                    }
                 }
             }
         }

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.UI;
@@ -2642,26 +2643,29 @@ namespace ShipWorks.Shipping
                     }
                     else
                     {
-                        using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard())
+                        using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
                         {
-                            result = setupWizard.ShowDialog(this);
-
-                            if (result == DialogResult.OK)
+                            using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
                             {
-                                ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
+                                result = setupWizard.ShowDialog(this);
 
-                                // Make sure we've got the latest data for the shipment since the requested label format may have changed
-                                ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
+                                if (result == DialogResult.OK)
+                                {
+                                    ShippingSettings.MarkAsConfigured(shipmentType.ShipmentTypeCode);
 
-                                ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
-                                ServiceControl.SaveToShipments();
-                                ServiceControl.LoadAccounts();
-                            }
-                            else
-                            {
-                                // User canceled out of the setup wizard for this batch, so don't show
-                                // any setup wizard for the rest of this batch
-                                cancelProcessing = true;
+                                    // Make sure we've got the latest data for the shipment since the requested label format may have changed
+                                    ShippingManager.RefreshShipment(counterRatesProcessingArgs.Shipment);
+
+                                    ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
+                                    ServiceControl.SaveToShipments();
+                                    ServiceControl.LoadAccounts();
+                                }
+                                else
+                                {
+                                    // User canceled out of the setup wizard for this batch, so don't show
+                                    // any setup wizard for the rest of this batch
+                                    cancelProcessing = true;
+                                }
                             }
                         }
                     }
