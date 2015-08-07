@@ -324,6 +324,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonAccountEntity", "RowVersion", typeof(System.Byte[]), false, false, true, false,  (int)AmazonAccountFieldIndex.RowVersion, 0, 0, 0);
 			base.AddElementFieldInfo("AmazonAccountEntity", "MerchantID", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.MerchantID, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonAccountEntity", "AuthToken", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.AuthToken, 100, 0, 0);
+			base.AddElementFieldInfo("AmazonAccountEntity", "Description", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.Description, 50, 0, 0);
 			base.AddElementFieldInfo("AmazonAccountEntity", "FirstName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.FirstName, 30, 0, 0);
 			base.AddElementFieldInfo("AmazonAccountEntity", "MiddleName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.MiddleName, 30, 0, 0);
 			base.AddElementFieldInfo("AmazonAccountEntity", "LastName", typeof(System.String), false, false, false, false,  (int)AmazonAccountFieldIndex.LastName, 30, 0, 0);

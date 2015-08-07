@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using ShipWorks.UI;
@@ -105,7 +107,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnEdit(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (sandGrid.SelectedElements.Count != 1)
+            {
+                return;
+            }
+
+            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            {
+                using (AmazonAccountEditorDlg dialog = lifetimeScope.Resolve<AmazonAccountEditorDlg>())
+                {
+                    dialog.LoadAccount(sandGrid.SelectedElements[0].Tag as AmazonAccountEntity);
+                    dialog.ShowDialog();
+                }
+            }
         }
 
         /// <summary>

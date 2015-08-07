@@ -41,8 +41,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void OnLoad(object sender, EventArgs e)
         {
             merchantId.DataBindings.Add(ObjectUtility.Nameof(() => merchantId.Text), viewModel.Credentials, ObjectUtility.Nameof(() => viewModel.Credentials.MerchantId));
-            authToken.DataBindings.Add(ObjectUtility.Nameof(() => authToken.Text), viewModel.Credentials, ObjectUtility.Nameof(() => viewModel.Credentials.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
+            authToken.DataBindings.Add(ObjectUtility.Nameof(() => authToken.Text), viewModel.Credentials, ObjectUtility.Nameof(() => viewModel.Credentials.AuthToken));
 
+            description.PromptText = viewModel.DescriptionPrompt;
+            description.Text = viewModel.Description;
+
+            //description.DataBindings.Add(ObjectUtility.Nameof(() => description.PromptText), viewModel, ObjectUtility.Nameof(() => viewModel.DescriptionPrompt));
+            //description.DataBindings.Add(ObjectUtility.Nameof(() => description.Text), viewModel, ObjectUtility.Nameof(() => viewModel.Description));
 
             //accountNumber.Text = account.AccountNumber.ToString();
             //password.Text = SecureText.Decrypt(account.Password, account.AccountNumber.ToString());
@@ -72,6 +77,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnOK(object sender, EventArgs e)
         {
+            viewModel.Description = description.Text;
+
             contactInformation.SaveToEntity(viewModel.Person);
             viewModel.Save(account);
 

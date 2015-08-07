@@ -10,12 +10,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Model for the Amazon account editor
     /// </summary>
-    public class AmazonAccountEditorViewModel
+    public class AmazonAccountEditorViewModel : INotifyPropertyChanged
     {
+        private readonly PropertyChangedHandler handler;
         private readonly IAmazonAccountManager accountManager;
+        private string descriptionPrompt;
+        private string description;
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public AmazonAccountEditorViewModel(IAmazonCredentials credentials, IAmazonAccountManager accountManager)
         {
+            handler = new PropertyChangedHandler(PropertyChanged);
+
             this.accountManager = accountManager;
 
             Credentials = credentials;
@@ -28,6 +38,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public void Load(AmazonAccountEntity account)
         {
             MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+            
+            DescriptionPrompt = accountManager.GetDefaultDescription(account);
+            Description = account.Description != DescriptionPrompt ? account.Description : null;
 
             Credentials.MerchantId = account.MerchantID;
             Credentials.AuthToken = account.AuthToken;
@@ -63,6 +76,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             Credentials.PopulateAccount(account);
             PersonAdapter.Copy(Person, new PersonAdapter(account, string.Empty));
+            account.Description = string.IsNullOrEmpty(Description) ? 
+                accountManager.GetDefaultDescription(account) : 
+                Description.Trim();
 
             try
             {
@@ -87,5 +103,23 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Message that was the result of the save operation
         /// </summary>
         public string Message { get; set; }
+
+        /// <summary>
+        /// Default description of the account
+        /// </summary>
+        public string DescriptionPrompt 
+        {
+            get { return descriptionPrompt; }
+            set { handler.Set(() => DescriptionPrompt, ref descriptionPrompt, value); }
+        }
+
+        /// <summary>
+        /// Description of the account
+        /// </summary>
+        public string Description
+        {
+            get { return description; }
+            set { handler.Set(() => Description, ref description, value); }
+        }
     }
 }

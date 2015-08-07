@@ -387,6 +387,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonAccountFieldIndex.AuthToken);}
 		}
+		/// <summary>Creates a new AmazonAccountEntity.Description field instance</summary>
+		public static EntityField2 Description
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonAccountFieldIndex.Description);}
+		}
 		/// <summary>Creates a new AmazonAccountEntity.FirstName field instance</summary>
 		public static EntityField2 FirstName
 		{

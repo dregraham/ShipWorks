@@ -325,25 +325,26 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits AmazonAccountEntity's mappings</summary>
 		private void InitAmazonAccountEntityMappings()
 		{
-			base.AddElementMapping( "AmazonAccountEntity", "ShipWorksLocal", @"dbo", "AmazonAccount", 18 );
+			base.AddElementMapping( "AmazonAccountEntity", "ShipWorksLocal", @"dbo", "AmazonAccount", 19 );
 			base.AddElementFieldMapping( "AmazonAccountEntity", "AmazonAccountID", "AmazonAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, true, "SCOPE_IDENTITY()", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "AmazonAccountEntity", "RowVersion", "RowVersion", false, (int)SqlDbType.Timestamp, 0, 0, 0, false, "", null, typeof(System.Byte[]), 1 );
 			base.AddElementFieldMapping( "AmazonAccountEntity", "MerchantID", "MerchantID", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 2 );
 			base.AddElementFieldMapping( "AmazonAccountEntity", "AuthToken", "AuthToken", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 3 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "FirstName", "FirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 4 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "MiddleName", "MiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "LastName", "LastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 6 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Company", "Company", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 8 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 9 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 10 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 11 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 13 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 14 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Phone", "Phone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 15 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 16 );
-			base.AddElementFieldMapping( "AmazonAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 17 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Description", "Description", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 4 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "FirstName", "FirstName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 5 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "MiddleName", "MiddleName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 6 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "LastName", "LastName", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 7 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Company", "Company", false, (int)SqlDbType.NVarChar, 30, 0, 0, false, "", null, typeof(System.String), 8 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Street1", "Street1", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 9 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Street2", "Street2", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 10 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Street3", "Street3", false, (int)SqlDbType.NVarChar, 60, 0, 0, false, "", null, typeof(System.String), 11 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "City", "City", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 12 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "StateProvCode", "StateProvCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 13 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "PostalCode", "PostalCode", false, (int)SqlDbType.NVarChar, 20, 0, 0, false, "", null, typeof(System.String), 14 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "CountryCode", "CountryCode", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 15 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Phone", "Phone", false, (int)SqlDbType.NVarChar, 25, 0, 0, false, "", null, typeof(System.String), 16 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Email", "Email", false, (int)SqlDbType.NVarChar, 100, 0, 0, false, "", null, typeof(System.String), 17 );
+			base.AddElementFieldMapping( "AmazonAccountEntity", "Website", "Website", false, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 18 );
 		}
 		/// <summary>Inits AmazonASINEntity's mappings</summary>
 		private void InitAmazonASINEntityMappings()

@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.labelOptional = new System.Windows.Forms.Label();
             this.description = new ShipWorks.UI.Controls.PromptTextBox();
             this.contactInformation = new ShipWorks.Data.Controls.PersonControl();
-            this.merchantId = new ShipWorks.UI.Controls.NumericTextBox();
+            this.merchantId = new System.Windows.Forms.TextBox();
             this.authToken = new System.Windows.Forms.TextBox();
             this.fieldLengthProvider = new ShipWorks.Data.Utility.EntityFieldLengthProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.fieldLengthProvider)).BeginInit();
@@ -166,7 +166,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.authToken.Name = "authToken";
             this.authToken.Size = new System.Drawing.Size(265, 21);
             this.authToken.TabIndex = 170;
-            this.authToken.UseSystemPasswordChar = true;
             // 
             // AmazonAccountEditorDlg
             // 
@@ -212,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private Data.Controls.PersonControl contactInformation;
         private System.Windows.Forms.Label labelAmazonAccount;
         private Data.Utility.EntityFieldLengthProvider fieldLengthProvider;
-        private NumericTextBox merchantId;
+        private System.Windows.Forms.TextBox merchantId;
         private System.Windows.Forms.Label labelDescription;
         private PromptTextBox description;
         private System.Windows.Forms.Label labelOptional;

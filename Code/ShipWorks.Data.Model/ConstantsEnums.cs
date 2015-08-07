@@ -221,6 +221,8 @@ namespace ShipWorks.Data.Model
 		MerchantID,
 		///<summary>AuthToken. </summary>
 		AuthToken,
+		///<summary>Description. </summary>
+		Description,
 		///<summary>FirstName. </summary>
 		FirstName,
 		///<summary>MiddleName. </summary>

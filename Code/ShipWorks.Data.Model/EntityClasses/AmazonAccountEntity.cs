@@ -445,6 +445,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("AuthToken", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("Description", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("FirstName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
@@ -592,6 +595,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.String)GetValue((int)AmazonAccountFieldIndex.AuthToken, true); }
 			set	{ SetValue((int)AmazonAccountFieldIndex.AuthToken, value); }
+		}
+
+		/// <summary> The Description property of the Entity AmazonAccount<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonAccount"."Description"<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Description
+		{
+			get { return (System.String)GetValue((int)AmazonAccountFieldIndex.Description, true); }
+			set	{ SetValue((int)AmazonAccountFieldIndex.Description, value); }
 		}
 
 		/// <summary> The FirstName property of the Entity AmazonAccount<br/><br/>

@@ -27,6 +27,7 @@ namespace ShipWorks.UI.Controls
 
         [Category("Appearance")]
         [DefaultValue("")]
+        [Bindable(true)]
         [Description("The prompt text to display when there is nothing in the Text property.")]
         public string PromptText
         {
