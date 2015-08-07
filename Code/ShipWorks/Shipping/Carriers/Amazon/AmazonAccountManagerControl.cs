@@ -10,6 +10,7 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.UI;
 using Interapptive.Shared.UI;
 
@@ -135,7 +136,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+
+            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            {
+                using (ShipmentTypeSetupWizardForm dlg = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon))
+                {
+                    if (dlg.ShowDialog(this) == DialogResult.OK)
+                    {
+                        LoadShippers();
+                    }
+                }
+            }
         }
 
         /// <summary>

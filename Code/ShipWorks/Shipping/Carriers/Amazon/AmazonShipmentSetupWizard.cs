@@ -100,7 +100,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Finish thesdfa
+        /// Finish the wizard
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -109,6 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             AmazonAccountEntity account = new AmazonAccountEntity();
             credentialViewModel.PopulateAccount(account);
             contactInformation.SaveToEntity(new PersonAdapter(account, string.Empty));
+            account.Description = accountManager.GetDefaultDescription(account);
 
             accountManager.SaveAccount(account);
 
