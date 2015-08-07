@@ -55,6 +55,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));
             Pages.Add(new ShippingWizardPageAutomation(shipmentType));
             Pages.Add(CreateFinishPage());
+
+            credentialViewModel.Initialize();
         }
 
         /// <summary>

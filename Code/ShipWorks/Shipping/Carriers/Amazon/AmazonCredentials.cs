@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
+using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Stores;
@@ -12,6 +14,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly IAmazonShippingWebClient webClient;
         private readonly IStoreManager storeManager;
+
+        private string merchantId;
+        private string authToken;
 
         /// <summary>
         /// Constructor
@@ -48,12 +53,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Amazon account merchant id
         /// </summary>
-        public string MerchantId { get; set; }
+        public string MerchantId
+        {
+            get { return merchantId; }
+            set { Set(() => MerchantId, ref merchantId, value); }
+        }
 
         /// <summary>
         /// Amazon account authentication token
         /// </summary>
-        public string AuthToken { get; set; }
+        public string AuthToken
+        {
+            get { return authToken; }
+            set { Set(() => AuthToken, ref authToken, value); }
+        }
 
         /// <summary>
         /// Was the validation successful
@@ -108,6 +121,20 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        /// <summary>
+        /// Set the value of a field in a property
+        /// </summary>
+        private void Set<T>(Expression<Func<T>> func, ref T field, T value)
+        {
+            if (Equals(field, value))
+            {
+                return;
+            }
+
+            field = value;
+            OnPropertyChanged(ObjectUtility.Nameof(func));
         }
     }
 }
