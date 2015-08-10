@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq.Expressions;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace Interapptive.Shared.Utility
 {
