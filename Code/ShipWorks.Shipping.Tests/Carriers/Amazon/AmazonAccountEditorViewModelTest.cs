@@ -6,7 +6,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 
-namespace ShipWorks.Tests.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
     [TestClass]
     public class AmazonAccountEditorViewModelTest

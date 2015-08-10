@@ -150,9 +150,9 @@
       <Project>{DFCF14EA-6596-4B9C-B743-D7CE9E5F4348}</Project>
       <Name>ShipWorks.Shared</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks\ShipWorks.csproj">
-      <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
-      <Name>ShipWorks</Name>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

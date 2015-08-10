@@ -552,9 +552,9 @@
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ShipWorks\ShipWorks.csproj">
-      <Project>{02653371-C0DC-4D70-949D-60D37C69F781}</Project>
-      <Name>ShipWorks</Name>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
