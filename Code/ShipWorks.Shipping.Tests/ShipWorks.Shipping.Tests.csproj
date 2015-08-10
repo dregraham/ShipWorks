@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{816C5A4D-FA09-4E79-8B50-8BD375532460}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.Shipping.Tests</RootNamespace>
+    <AssemblyName>ShipWorks.Shipping.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\..\Components\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.Moq">
+      <HintPath>..\..\Components\Autofac.Extras.Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Moq">
+      <HintPath>..\..\Components\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModelTest.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCredentialsTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shipping\ShipWorks.Shipping.csproj">
+      <Project>{a5eb7a6b-1600-4be2-aed6-3284c4e7987c}</Project>
+      <Name>ShipWorks.Shipping</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
