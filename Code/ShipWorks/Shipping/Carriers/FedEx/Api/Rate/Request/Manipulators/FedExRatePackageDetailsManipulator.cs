@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using Interapptive.Shared.Enums;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -86,9 +87,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
                     {
                         Units = GetApiLinearUnit(request.ShipmentEntity),
                         UnitsSpecified = true,
-                        Length = ((int)fedExPackage.DimsLength).ToString(),
-                        Height = ((int)fedExPackage.DimsHeight).ToString(),
-                        Width = ((int)fedExPackage.DimsWidth).ToString()
+                        Length = Math.Round(fedExPackage.DimsLength, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                        Height = Math.Round(fedExPackage.DimsHeight, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                        Width = Math.Round(fedExPackage.DimsWidth, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture)
                     };
                 }
             }
