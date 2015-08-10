@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping.Insurance;
-using ShipWorks.Data.Model.EntityClasses;
 
-namespace ShipWorks.Shipping.Carriers.Amazon
+namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
     public partial class AmazonSettingsControl : SettingsControlBase
     {

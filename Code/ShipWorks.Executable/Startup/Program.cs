@@ -1,4 +1,6 @@
 ﻿using System;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Shipping.UI;
 
 namespace ShipWorks.Startup
 {
@@ -10,6 +12,8 @@ namespace ShipWorks.Startup
         [STAThread]
         static void Main()
         {
+            IoC.Initialize(typeof(ShippingModule).Assembly);
+
             ShipWorks.Program.Main();
         }
     }

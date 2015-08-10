@@ -80,7 +80,7 @@
             // 
             // pictureBox
             // 
-            this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
+            //this.pictureBox.Image = global::ShipWorks.Properties.Resources.amazon_large;
             this.pictureBox.Location = new System.Drawing.Point(389, 3);
             this.pictureBox.Size = new System.Drawing.Size(165, 50);
             this.pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -236,7 +236,7 @@
 
         #endregion
 
-        private UI.Wizard.WizardPage wizardPageCredentials;
+        private ShipWorks.UI.Wizard.WizardPage wizardPageCredentials;
         private ShipWorks.UI.Wizard.WizardPage wizardPageWelcome;
         private System.Windows.Forms.TextBox merchantId;
         private System.Windows.Forms.TextBox authToken;
@@ -244,7 +244,7 @@
         private System.Windows.Forms.Label labelMerchantId;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label labelInfo1;
-        private UI.Wizard.WizardPage wizardPageContactInfo;
+        private ShipWorks.UI.Wizard.WizardPage wizardPageContactInfo;
         private Data.Controls.AutofillPersonControl contactInformation;
     }
 }

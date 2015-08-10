@@ -1,5 +1,4 @@
 ﻿using System;
-using NAudio.Wave.SampleProviders;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {

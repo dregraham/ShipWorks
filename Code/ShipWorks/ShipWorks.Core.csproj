@@ -567,6 +567,7 @@
     <Compile Include="ApplicationCore\ExecutionMode\ExecutionMode.cs" />
     <Compile Include="ApplicationCore\Heartbeat.cs" />
     <Compile Include="ApplicationCore\HeartbeatPace.cs" />
+    <Compile Include="ApplicationCore\IInitializeForCurrentSession.cs" />
     <Compile Include="ApplicationCore\IoC.cs" />
     <Compile Include="ApplicationCore\Licensing\FakeTangoWebClient.cs" />
     <Compile Include="ApplicationCore\Licensing\ITangoWebClient.cs" />
@@ -780,46 +781,6 @@
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\CarrierConfiguredMessage.cs" />
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountManager.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonOptionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonOptionsControl.Designer.cs">
-      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonSettingsControl.Designer.cs">
-      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonCredentials.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.Designer.cs">
-      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\Api\OperationResponse.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountManagerControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountManagerControl.Designer.cs">
-      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\IAmazonAccountManager.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorDlg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorDlg.Designer.cs">
-      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Amazon\IAmazonCredentials.cs" />
-    <Compile Include="Shipping\Carriers\Amazon\PropertyChangedHandler.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateException.cs" />
@@ -7563,7 +7524,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -7575,21 +7536,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
       <LastGenOutput>ShippingIcons.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonOptionsControl.resx">
-      <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonSettingsControl.resx">
-      <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonShipmentSetupWizard.resx">
-      <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonAccountManagerControl.resx">
-      <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonAccountEditorDlg.resx">
-      <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>

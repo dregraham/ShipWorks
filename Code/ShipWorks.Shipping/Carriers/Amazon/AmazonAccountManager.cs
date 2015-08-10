@@ -1,4 +1,5 @@
 using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -7,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// Manager for working with Amazon accounts
     /// </summary>
-    public class AmazonAccountManager : AccountManagerBase<AmazonAccountEntity>, IAmazonAccountManager
+    public class AmazonAccountManager : AccountManagerBase<AmazonAccountEntity>, IAmazonAccountManager, IInitializeForCurrentSession
     {
         /// <summary>
         /// Get the default description for the given account

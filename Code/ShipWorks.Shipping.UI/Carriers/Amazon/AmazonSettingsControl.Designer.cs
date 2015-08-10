@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping.Carriers.Amazon
+﻿using ShipWorks.Shipping.Carriers.Amazon;
+
+namespace ShipWorks.Shipping.UI.Carriers.Amazon
 {
     partial class AmazonSettingsControl
     {
