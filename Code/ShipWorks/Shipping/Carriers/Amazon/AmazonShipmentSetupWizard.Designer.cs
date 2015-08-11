@@ -120,7 +120,6 @@
             this.authToken.Name = "authToken";
             this.authToken.Size = new System.Drawing.Size(162, 21);
             this.authToken.TabIndex = 168;
-            this.authToken.UseSystemPasswordChar = true;
             // 
             // labelAuthToken
             // 
