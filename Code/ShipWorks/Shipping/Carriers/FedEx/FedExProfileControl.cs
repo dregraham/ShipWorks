@@ -113,9 +113,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             AddValueMapping(fedex, FedExProfileFields.RmaNumber, rmaNumberState, rmaNumber, labelRmaNumber);
             AddValueMapping(fedex, FedExProfileFields.RmaReason, rmaReasonState, rmaReason, labelRmaReason);
             AddValueMapping(fedex, FedExProfileFields.ReturnSaturdayPickup, saturdayReturnState, saturdayReturn);
-            AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance);
 
             AddValueMapping(fedex, FedExProfileFields.SaturdayDelivery, saturdayState, saturdayDelivery, labelSaturday);
+            AddValueMapping(fedex, FedExProfileFields.ReturnsClearance, returnsClearanceState, returnsClearance, labelReturnsClearance);
+
 
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderShip, labelEmailSender);
             AddEnabledStateMapping(fedex, FedExProfileFields.EmailNotifySender, emailNotifySenderState, emailNotifySenderException);

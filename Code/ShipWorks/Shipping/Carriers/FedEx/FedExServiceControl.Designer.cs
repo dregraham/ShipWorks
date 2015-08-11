@@ -182,6 +182,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.dropoffType = new ShipWorks.UI.Controls.MultiValueComboBox();
             this.sectionFimsOptions = new ShipWorks.UI.Controls.CollapsibleGroupControl();
             this.fimsOptionsControl = new ShipWorks.Shipping.Carriers.FedEx.FimsOptionsControl();
+            this.returnsClearance = new System.Windows.Forms.CheckBox();
+            this.returnsClearanceLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).BeginInit();
             this.sectionRecipient.ContentPanel.SuspendLayout();
@@ -1916,9 +1918,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             // sectionServiceOptions.ContentPanel
             // 
+            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearance);
+            this.sectionServiceOptions.ContentPanel.Controls.Add(this.returnsClearanceLabel);
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.labelDropoffType);
             this.sectionServiceOptions.ContentPanel.Controls.Add(this.dropoffType);
-            this.sectionServiceOptions.ExpandedHeight = 63;
+            this.sectionServiceOptions.ExpandedHeight = 89;
             this.sectionServiceOptions.ExtraText = "";
             this.sectionServiceOptions.Location = new System.Drawing.Point(3, 729);
             this.sectionServiceOptions.Name = "sectionServiceOptions";
@@ -1971,6 +1975,27 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.fimsOptionsControl.Name = "fimsOptionsControl";
             this.fimsOptionsControl.Size = new System.Drawing.Size(252, 29);
             this.fimsOptionsControl.TabIndex = 0;
+            // 
+            // returnsClearance
+            // 
+            this.returnsClearance.AutoSize = true;
+            this.returnsClearance.BackColor = System.Drawing.Color.Transparent;
+            this.returnsClearance.Location = new System.Drawing.Point(106, 33);
+            this.returnsClearance.Name = "returnsClearance";
+            this.returnsClearance.Size = new System.Drawing.Size(115, 17);
+            this.returnsClearance.TabIndex = 65;
+            this.returnsClearance.Text = "Returns Clearance";
+            this.returnsClearance.UseVisualStyleBackColor = false;
+            // 
+            // returnsClearanceLabel
+            // 
+            this.returnsClearanceLabel.AutoSize = true;
+            this.returnsClearanceLabel.BackColor = System.Drawing.Color.Transparent;
+            this.returnsClearanceLabel.Location = new System.Drawing.Point(2, 33);
+            this.returnsClearanceLabel.Name = "returnsClearanceLabel";
+            this.returnsClearanceLabel.Size = new System.Drawing.Size(100, 13);
+            this.returnsClearanceLabel.TabIndex = 64;
+            this.returnsClearanceLabel.Text = "Returns Clearance:";
             // 
             // FedExServiceControl
             // 
@@ -2233,5 +2258,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private MultiValueComboBox dropoffType;
         private CollapsibleGroupControl sectionFimsOptions;
         private FimsOptionsControl fimsOptionsControl;
+        private CheckBox returnsClearance;
+        private Label returnsClearanceLabel;
     }
 }

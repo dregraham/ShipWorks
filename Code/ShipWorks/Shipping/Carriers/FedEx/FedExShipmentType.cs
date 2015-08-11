@@ -670,6 +670,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             ShippingProfileUtility.ApplyProfileValue(source.Service, fedex, FedExShipmentFields.Service);
             ShippingProfileUtility.ApplyProfileValue(source.PackagingType, fedex, FedExShipmentFields.PackagingType);
             ShippingProfileUtility.ApplyProfileValue(source.DropoffType, fedex, FedExShipmentFields.DropoffType);
+            ShippingProfileUtility.ApplyProfileValue(source.ReturnsClearance, fedex, FedExShipmentFields.ReturnsClearance);
             ShippingProfileUtility.ApplyProfileValue(source.NonStandardContainer, fedex, FedExShipmentFields.NonStandardContainer);
             ShippingProfileUtility.ApplyProfileValue(source.OriginResidentialDetermination, fedex, FedExShipmentFields.OriginResidentialDetermination);
 
