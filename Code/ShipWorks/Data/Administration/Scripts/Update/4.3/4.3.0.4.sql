@@ -10,5 +10,6 @@ GO
 PRINT N'Altering [dbo].[FedExProfile]'
 GO
 ALTER TABLE [dbo].[FedExProfile] ADD
-[ReturnsClearance] [bit] NULL DEFAULT((0))
+[ReturnsClearance] [bit]
 GO
+UPDATE TABLE fp
