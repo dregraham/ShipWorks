@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.BestRate;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    [TestClass]
     public class BestRateUpsRestrictionShippingPolicyTest
     {
         private IShippingPolicy testObject;
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             shipmentTypeCodes = new List<ShipmentTypeCode>();
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsTrue_RestrictedAndTargetIsListOfBrokers()
         {
             testObject.Configure("true");
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsTrue(testObject.IsApplicable(brokers), "Expected IsApplicable to be true.");
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsTrue_RestrictedAndTargetIsListOfShipmentTypeCodes()
         {
             testObject.Configure("true");
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsTrue(testObject.IsApplicable(shipmentTypeCodes), "Expected IsApplicable to be true.");
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsFalse_NotRestrictedAndTargetIsListOfBrokers()
         {
             testObject.Configure("false");
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsFalse(testObject.IsApplicable(brokers), "Expected IsApplicable to be false.");
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsFalse_RestrictedAndTargetIsNotListOfBrokers()
         {
             testObject.Configure("true");
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsFalse(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsFalse_ConfiguredNotCalledAndTargetIsListOfBrokers()
         {
             testObject.Configure("true");
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsFalse(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_DoesNotFilterBrokers_NotRestricted()
         {
             testObject.Configure("false");
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(initialBrokerCount, brokers.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_FiltersBrokers_Restricted()
         {
             testObject.Configure("true");
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(initialBrokerCount - 3, brokers.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AddsUpsOnlineToolsAndUpsWorldShipToTarget_Restricted()
         {
             testObject.Configure("true");
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsTrue(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsWorldShip));
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_TargetRemainsEmpty_NotRestricted()
         {
             testObject.Configure("false");

@@ -1,15 +1,14 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Tests.Shipping
 {
-    [TestClass]
     public class AdjustedAddressExtensionsTest
     {
         public TestContext TestContext { get; set; }
 
-        [TestMethod]
+        [Fact]
         public void AdjustedShipCountryCode_OriginalShipmentIsNotChanged()
         {
             ShipmentEntity shipment = new ShipmentEntity
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual("PR", shipment.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdjustedShipCountryCode_ReturnsCountryCodeInUppercase_WhenAdjustmentIsDone()
         {
             ShipmentEntity shipment = new ShipmentEntity
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual("FR", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdjustedShipCountryCode_ReturnsCountryCodeInUppercase_WhenAdjustmentIsNotDone()
         {
             ShipmentEntity shipment = new ShipmentEntity
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual("FR", result);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_FedEx.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_FedEx.csv", 
             "AdjustedCountryCodeData_FedEx#csv", DataAccessMethod.Sequential)]
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.FedEx);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Ups.csv",
             "AdjustedCountryCodeData_Ups#csv", DataAccessMethod.Sequential)]
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.UpsOnLineTools);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Ups.csv",
             "AdjustedCountryCodeData_Ups#csv", DataAccessMethod.Sequential)]
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.UpsWorldShip);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Usps.csv",
             "AdjustedCountryCodeData_Usps#csv", DataAccessMethod.Sequential)]
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.Usps);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Usps.csv",
             "AdjustedCountryCodeData_Usps#csv", DataAccessMethod.Sequential)]
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.Express1Usps);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Endicia.csv",
             "AdjustedCountryCodeData_Endicia#csv", DataAccessMethod.Sequential)]
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.Endicia);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Endicia.csv",
             "AdjustedCountryCodeData_Endicia#csv", DataAccessMethod.Sequential)]
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.Express1Endicia);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_iParcel.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_iParcel.csv",
             "AdjustedCountryCodeData_iParcel#csv", DataAccessMethod.Sequential)]
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedShipCountryCode(ShipmentTypeCode.iParcel);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_FedEx.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_FedEx.csv",
             "AdjustedCountryCodeData_FedEx#csv", DataAccessMethod.Sequential)]
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.FedEx);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Ups.csv",
             "AdjustedCountryCodeData_Ups#csv", DataAccessMethod.Sequential)]
@@ -141,7 +140,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.UpsOnLineTools);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Ups.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Ups.csv",
             "AdjustedCountryCodeData_Ups#csv", DataAccessMethod.Sequential)]
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.UpsWorldShip);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Usps.csv",
             "AdjustedCountryCodeData_Usps#csv", DataAccessMethod.Sequential)]
@@ -159,7 +158,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Usps);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Usps.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Usps.csv",
             "AdjustedCountryCodeData_Usps#csv", DataAccessMethod.Sequential)]
@@ -168,7 +167,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Express1Usps);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Endicia.csv",
             "AdjustedCountryCodeData_Endicia#csv", DataAccessMethod.Sequential)]
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Endicia);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_Endicia.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_Endicia.csv",
             "AdjustedCountryCodeData_Endicia#csv", DataAccessMethod.Sequential)]
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.Shipping
             TestAdjustedOriginCountryCode(ShipmentTypeCode.Express1Endicia);
         }
 
-        [TestMethod]
+        [Fact]
         [DeploymentItem(@"Shipping\AdjustedCountryCodeData_iParcel.csv")]
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\AdjustedCountryCodeData_iParcel.csv",
             "AdjustedCountryCodeData_iParcel#csv", DataAccessMethod.Sequential)]

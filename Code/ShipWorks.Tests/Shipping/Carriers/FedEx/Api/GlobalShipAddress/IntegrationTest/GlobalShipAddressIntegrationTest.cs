@@ -1,5 +1,5 @@
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,11 +11,10 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.IntegrationTest
 {
-    [TestClass]
     public class GlobalShipAddressIntegrationTest
     {
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SearchLocation_ActuallyCallsFedEx_IntegrationTest()
         {

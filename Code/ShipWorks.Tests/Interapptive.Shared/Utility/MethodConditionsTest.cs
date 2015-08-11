@@ -1,19 +1,18 @@
 ﻿using System;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Utility
 {
-    [TestClass]
     public class MethodConditionsTest
     {
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void EnsureArgumentIsNotNull_ThrowsArgumentNullException_WhenObjectIsNull()
         {
             MethodConditions.EnsureArgumentIsNotNull((object)null, "null");
         }
 
-        [TestMethod]
+        [Fact]
         public void EnsureArgumentIsNotNull_SpecifiesNameOfArgument_WhenObjectIsNull()
         {
             try
@@ -26,21 +25,21 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EnsureArgumentIsNotNull_ReturnsObject_WhenObjectIsNotNull()
         {
             object test = new object();
             object result = MethodConditions.EnsureArgumentIsNotNull(test, "null");
             Assert.AreEqual(test, result);
         }
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void EnsureArgumentIsNotNull_WithExpressionThrowsArgumentNullException_WhenObjectIsNull()
         {
             string value = "";
             MethodConditions.EnsureArgumentIsNotNull((object)null, () => value);
         }
 
-        [TestMethod]
+        [Fact]
         public void EnsureArgumentIsNotNull_WithExpressionSpecifiesNameOfArgument_WhenObjectIsNull()
         {
             try
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EnsureArgumentIsNotNull_WithExpressionReturnsObject_WhenObjectIsNotNull()
         {
             object test = new object();

@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.AddressValidation;
 using ShipWorks.AddressValidation.Predicates;
 using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Tests.AddressValidation.Predicates
 {
-    [TestClass]
     public class UnprocessedShipmentsWithShipValidationStatusPredicateTest
     {
         private UnprocessedErrorShipmentsPredicate predicate;
@@ -19,7 +18,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
             predicate = new UnprocessedErrorShipmentsPredicate();
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AddsShipValidationStatusToExpression()
         {
             predicate.Apply(pred);
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
             Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error));
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AddsProcessedToExpression()
         {
             predicate.Apply(pred);
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
             Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.Processed == false));
         }
 
-        [TestMethod]
+        [Fact]
         public void MaximumRows_ReturnsLimitOf50()
         {
             int result = predicate.MaximumRows;

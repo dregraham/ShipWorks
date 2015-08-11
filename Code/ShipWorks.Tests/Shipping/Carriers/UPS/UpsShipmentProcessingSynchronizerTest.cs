@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
-    [TestClass]
     public class UpsShipmentProcessingSynchronizerTest
     {
         private UpsShipmentProcessingSynchronizer testObject;
@@ -22,14 +21,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             testObject = new UpsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_DelegatesToRepository_Test()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
             List<UpsAccountEntity> UpsAccounts = new List<UpsAccountEntity>()
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(123, shipment.Ups.UpsAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsException))]
         public void SaveAccountToShipment_ThrowsUpsException_WhenNoAccounts_Test()
         {
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(123, shipment.Ups.UpsAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<UpsAccountEntity> accounts = new List<UpsAccountEntity>()

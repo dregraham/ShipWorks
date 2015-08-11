@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using System.Collections.Generic;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Net;
@@ -11,7 +11,6 @@ using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class RemoveItemRequestTest
     {
         private INeweggRequest errorRequest;
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             failedRequest = new Mocked.MockedNeweggRequest(failureResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]
         public void RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]
         public void RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse_Test()
         {
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
         }
 
-        [TestMethod]
+        [Fact]
         public void RemoveItems_ReturnsItemRemovalResult_WithItemsRemoved_WhenIsSuccessfulIsTrue_Test()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(sellerPartNumberToRemove, result.Details.Order.ItemResult.ItemsRemoved[0].SellerPartNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void RemoveItems_ReturnsItemRemovalResult_WithOrderNumber_WhenIsSuccessfulIsTrue_Test()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(orderNumberToRemoveFrom, result.Details.Order.OrderNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void RemoveItems_UsesPutRequestMethod_Test()
         {
             testObject = new RemoveItemRequest(credentials, successfulRequest);
@@ -131,7 +130,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(HttpVerb.Put, ((Mocked.MockedNeweggRequest)successfulRequest).Method);
         }
 
-        [TestMethod]
+        [Fact]
         public void RemoveItems_FormatsUrlWithOrderNumberAndSellerId_Test()
         {
             string expectedUrl = string.Format("https://api.newegg.com/marketplace/ordermgmt/killitem/orders/{0}/?sellerid={1}", orderNumberToRemoveFrom, sellerId);
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedUrl, ((Mocked.MockedNeweggRequest)successfulRequest).Url);
         }
 
-        [TestMethod]
+        [Fact]
         public void RemoveItems_BuildsRequestBody_WithSellerPartNumbersOfItemsToRemove_Test()
         {
             // Note: this is brittle as it requires the string to be in the exact same

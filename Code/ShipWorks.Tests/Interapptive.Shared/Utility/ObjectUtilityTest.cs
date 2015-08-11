@@ -1,12 +1,11 @@
 ﻿using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Utility
 {
-    [TestClass]
     public class ObjectUtilityTest
     {
-        [TestMethod]
+        [Fact]
         public void Nameof_ReturnsName_WithProperty()
         {
             string testObject = "foo";
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             Assert.AreEqual("Length", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Nameof_ReturnsName_WithMethodInvocation()
         {
             string testObject = "foo";
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             Assert.AreEqual("ToLower", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Nameof_ReturnsName_WithPropertyOfNullObject()
         {
             string result = ObjectUtility.Nameof(() => ((string)null).Length);

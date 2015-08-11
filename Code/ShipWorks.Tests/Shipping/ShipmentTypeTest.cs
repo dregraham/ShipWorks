@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Tests.Shipping
 {
-    [TestClass]
     public class ShipmentTypeTest
     {
-        [TestMethod]
+        [Fact]
         public void IsPuertoRicoAddress_ReturnsTrue_WhenCountryIsPR()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "PR" };
@@ -15,7 +14,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsPuertoRicoAddress_ReturnsTrue_WhenCountryIsUSButStateIsPR()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR"};
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsPuertoRicoAddress_ReturnsFalse_WhenCountryIsUSAndStateIsNotPR()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "MO" };
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsPuertoRicoAddress_ReturnsFalse_WhenCountryIsNotUSOrPR()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "FR" };
@@ -65,14 +64,14 @@ namespace ShipWorks.Tests.Shipping
                 string.Format("Between {0}, {1} and {2}, {3}", destinationState, destinationCountry, sourceState, sourceCountry));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsShipmentBetweenUnitedStatesAndPuertoRico_ReturnsTrue_WhenShipmentIsBetweenUSAndPR()
         {
             TestIsShipmentBetweenUnitedStatesAndPuertoRicoInBothDirections("US", "MO", "PR", "PR", true);
             TestIsShipmentBetweenUnitedStatesAndPuertoRicoInBothDirections("US", "MO", "US", "PR", true);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsShipmentBetweenUnitedStatesAndPuertoRico_ReturnsFalse_WhenShipmentIsNotBetweenUSAndPR()
         {
             TestIsShipmentBetweenUnitedStatesAndPuertoRicoInBothDirections("US", "MO", "US", "IL", false);

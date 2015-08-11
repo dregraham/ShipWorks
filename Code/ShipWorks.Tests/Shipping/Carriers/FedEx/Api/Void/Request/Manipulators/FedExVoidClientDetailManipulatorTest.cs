@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
 {
-    [TestClass]
     public class FedExVoidClientDetailManipulatorTest
     {
         private FedExVoidClientDetailManipulator testObject;
@@ -37,14 +36,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject = new FedExVoidClientDetailManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(voidCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequest_AndIsNotVoidRequest_Test()
         {
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(voidCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_ForVoid_Test()
         {
             testObject.Manipulate(voidCarrierRequest.Object);
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             voidCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNull_ForVoid_Test()
         {
             // Only setup is  to set the detail to null value
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNotNull_ForVoid_Test()
         {
             // No additional setup since everything is in the Initialize method

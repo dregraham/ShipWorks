@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
-    [TestClass]
     public class InsureShipSettingsTest
     {
         InsureShipSettings testObject = new InsureShipSettings();
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.UseTestServer = initialUseTestServer;
         }
 
-        [TestMethod]
+        [Fact]
         public void UseTestServer_SavesAsTrue()
         {
             testObject.UseTestServer = false;
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.IsTrue(testObject.UseTestServer);
         }
 
-        [TestMethod]
+        [Fact]
         public void UseTestServer_SavesAsFalse()
         {
             testObject.UseTestServer = true;
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.IsFalse(testObject.UseTestServer);
         }
 
-        [TestMethod]
+        [Fact]
         public void Username_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("shipworks", testObject.Username);
         }
 
-        [TestMethod]
+        [Fact]
         public void Username_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("shipworks", testObject.Username);
         }
 
-        [TestMethod]
+        [Fact]
         public void Password_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("shipworks123", testObject.Password);
         }
 
-        [TestMethod]
+        [Fact]
         public void Password_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("624c55cb00f588f0fe1a79", testObject.Password);
         }
 
-        [TestMethod]
+        [Fact]
         public void DistributorID_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("D00050", testObject.DistributorID);
         }
 
-        [TestMethod]
+        [Fact]
         public void DistributorID_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("D00050", testObject.DistributorID);
         }
 
-        [TestMethod]
+        [Fact]
         public void Url_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = true;
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
-        [TestMethod]
+        [Fact]
         public void Url_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
@@ -109,13 +108,13 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
-        [TestMethod]
+        [Fact]
         public void SubmitClaimDelayTimespan_IsSevenDays_Test()
         {
             Assert.AreEqual(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
         }
 		
-        [TestMethod]
+        [Fact]
         public void VoidPolicyMaximumAge_IsCorrect_WhenUsingProductionServer()
         {
             testObject.UseTestServer = false;
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
         }
 
-        [TestMethod]
+        [Fact]
         public void VoidPolicyMaximumAge_IsCorrect_WhenUsingTestServer()
         {
             testObject.UseTestServer = false;

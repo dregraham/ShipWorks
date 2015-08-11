@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
 {
-    [TestClass]
     public class FedExPackageMovementResponseTest
     {
         FedExPackageMovementResponse testObject;
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LocationIdWillBeSet_ReplyWillShowSuccessAndLocation_Test()
         {
             testObject.Process();
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
             Assert.AreEqual(reply.ExpressDescription.LocationId, testObject.LocationID);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ExceptionWillBeThrown_ReplyWillContainErrorInHighestSeverity_Test()
         {

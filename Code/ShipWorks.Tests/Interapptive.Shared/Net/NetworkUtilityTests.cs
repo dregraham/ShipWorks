@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using log4net;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
-     [TestClass]
     public class NetworkUtilityTests
     {
          Mock<ILog> logger;
@@ -25,7 +24,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
              testObject = new NetworkUtility(logger.Object);
          }
 
-         [TestMethod]
+         [Fact]
          public void GetIPAddress_LogsIPAddress_Test()
          {
              testObject.GetIPAddress();

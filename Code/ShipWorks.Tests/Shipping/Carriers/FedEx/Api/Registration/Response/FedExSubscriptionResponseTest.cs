@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
-    [TestClass]
     public class FedExSubscriptionResponseTest
     {
         private FedExSubscriptionResponse testObject;
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject = new FedExSubscriptionResponse(nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException((typeof(FedExApiCarrierException)))]
         public void Process_ThrowsFedExApiException_WhenSeverityIsError_Test()
         {
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException((typeof(FedExApiCarrierException)))]
         public void Process_ThrowsFedExApiException_WhenSeverityIsFailure_Test()
         {
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_GetsAccountFromRequest_Test()
         {
             testObject.Process();
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             carrierRequest.Verify(r =>r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsMeterNumberOfAccountFromRequest_Test()
         {
             testObject.Process();

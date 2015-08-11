@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
@@ -25,7 +25,6 @@ using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
 {
-    [TestClass]
     public class ServiceStatusManagerTest
     {
         private readonly Mock<ExecutionMode> executionMode;
@@ -112,7 +111,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
             return instance;
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("ApplicationCore")]
         [TestCategory("ContinuousIntegration")]
         public void CheckIn_DoesNotThrowORMEntityOutOfSyncException_WhenDatabaseValuesHaveChanged()

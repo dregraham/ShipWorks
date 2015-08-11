@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
-    [TestClass]
     public class FedExPickupCarrierManipulatorTest
     {
         private FedExPickupCarrierManipulator testObject;
@@ -26,14 +25,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject = new FedExPickupCarrierManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSmartPostCloseRequest_Test()
         {
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsPickupCarrierToFXSP_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual(CarrierCodeType.FXSP, nativeRequest.PickUpCarrier);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PickupCarrierIsSpecified_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

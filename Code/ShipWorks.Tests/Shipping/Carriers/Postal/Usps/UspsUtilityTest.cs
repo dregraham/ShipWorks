@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsUtilityTest
     {
         PostalShipmentEntity postalShipment = new PostalShipmentEntity();
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             postalShipment.Memo3 = "memo3";
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_StartsWithMultilineChar_WhenOneMemoFieldHasContent_Test()
         {
             postalShipment.Memo1 = "";
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Debug.Assert(Regex.Matches(apiMemoText, "\x09").Count == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_StartsWithMultilineChar_WhenTwoMemoFieldsHaveContent_Test()
         {
             postalShipment.Memo1 = "";
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Debug.Assert(Regex.Matches(apiMemoText, "\x09").Count == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_StartsWithMultilineChar_WhenThreeMemoFieldsHaveContent_Test()
         {
             string apiMemoText = UspsUtility.BuildMemoField(postalShipment);
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Debug.Assert(Regex.Matches(apiMemoText, "\x09").Count == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_ReturnsTwoWrapChars_WhenThreeMemoFieldsHaveContent_Test()
         {
             string apiMemoText = UspsUtility.BuildMemoField(postalShipment);
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Debug.Assert(Regex.Matches(apiMemoText, "\r\n").Count == 2);
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_ReturnsTwoWrapChars_WhenOnlyMemo3FieldHasContent_Test()
         {
             postalShipment.Memo1 = "";
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Debug.Assert(Regex.Matches(apiMemoText, "\r\n").Count == 2);
         }
 
-        [TestMethod]
+        [Fact]
         public void BuildMemoField_ReturnsOnlyUpTo200Chars_WhenMemoFieldsGreaterThan200CharsEach_Test()
         {
             postalShipment.Memo1 = "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789_____";

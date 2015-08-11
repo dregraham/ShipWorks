@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +16,6 @@ namespace ShipWorks.Tests.Stores.Newegg
     /// <summary>
     /// Summary description for NeweggWebClientTest
     /// </summary>
-    [TestClass]
     public class NeweggWebClientTest
     {
         private IRequestFactory requestFactory;
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject = new NeweggWebClient(store, requestFactory);
         }
         
-        [TestMethod]
+        [Fact]
         public void AreCredentialsValid_ReturnsTrue_WhenAValidResponseIsReceived_Test()
         {
             // The initialization method has configured our test object (NeweggWebClient)
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsTrue(testObject.AreCredentialsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void AreCredentialsValid_ReturnsFalse_WhenAnInvalidResponseIsReceived_Test()
         {
             // We're going to override the default configuration that was setup in the 
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsFalse(testObject.AreCredentialsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("USPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("Consolidator", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClass_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -128,7 +127,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("USPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsSpecifiedCarrier_WhenOtherShipmentType_Test()
         {
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Other);
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(otherShipmentEntity.Carrier, carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUps_WhenUpsAndGround_Test()
         {
             shipmentEntity.Ups = upsEntity;
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual("UPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUpsMi_WhenUpsAndUpsMiService_Test()
         {
             upsEntity.Service = (int) UpsServiceType.UpsMailInnovationsFirstClass;

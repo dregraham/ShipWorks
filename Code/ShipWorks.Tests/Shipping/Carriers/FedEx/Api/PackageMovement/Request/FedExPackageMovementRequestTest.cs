@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
 {
-    [TestClass]
     public class FedExPackageMovementRequestTest
     {
         private FedExPackageMovementRequest testObject;
@@ -48,19 +47,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
             testObject = new FedExPackageMovementRequest(manipulators, new ShipmentEntity(), account, mockService.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
             Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
             Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_FedExPackageMovementResponseReturned_MakesValidRequest_Test()
         {
             FedExPackageMovementResponse response = (FedExPackageMovementResponse)testObject.Submit();
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_PostalAndCountryCodesArePopulatedInNativeRequest_CodesPopulatedInAccount_Test()
         {
             testObject.Submit();
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
             Assert.AreEqual(postalCodeInquiryRequest.CountryCode, account.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()

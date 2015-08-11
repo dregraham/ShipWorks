@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
-    [TestClass]
     public class FedExTrackingClientDetailManipulatorTest
     {
         private FedExTrackingClientDetailManipulator testObject;
@@ -37,14 +36,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject = new FedExTrackingClientDetailManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(trackingCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequest_AndIsNotTrackingRequest_Test()
         {
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(trackingCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_ForTracking_Test()
         {
             testObject.Manipulate(trackingCarrierRequest.Object);
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             trackingCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNull_ForTracking_Test()
         {
             // Only setup is  to set the detail to null value
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNotNull_ForTracking_Test()
         {
             // No additional setup since everything is in the Initialize method

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -14,10 +14,9 @@ using ShipWorks.Shipping.Carriers.UPS.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
 {
-    [TestClass]
     public class PostalCounterBrokerFilterTest
     {
-        [TestMethod]
+        [Fact]
         public void Filter_WithMultipleUspsBrokers_ReturnsFirst_Test()
         {
             var testBroker1 = new UspsCounterRatesBroker(new Mock<ICarrierAccountRepository<UspsAccountEntity>>().Object);
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
             Assert.AreEqual(testBroker1, results.Single());
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_WithNoPostalBrokers_ReturnsCopyOfOriginalList_Test()
         {
             var testBroker1 = new UpsBestRateBroker();

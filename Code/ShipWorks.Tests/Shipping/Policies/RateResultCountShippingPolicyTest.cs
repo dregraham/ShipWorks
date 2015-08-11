@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    [TestClass]
     public class RateResultCountShippingPolicyTest
     {
         private readonly RateResultCountShippingPolicy testObject;
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             rateControl = new RateControl();
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_QuantityIsOne_WhenDataIsEmptyString_Test()
         {
             testObject.Configure(string.Empty);
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_QuantityIsOne_WhenDataIsDecimalFormat_Test()
         {
             testObject.Configure("3.3");
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_QuantityIsOne_WhenDataHasAlphaCharacters_Test()
         {
             testObject.Configure("3ABC");
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_QuantityIsOne_WhenDataContainsUnTrimmableWhitespace_Test()
         {
             testObject.Configure("3 4");
@@ -54,21 +53,21 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_AssignsQuantity_WhenDataIsInteger_Test()
         {
             testObject.Configure("34");
             Assert.AreEqual(34, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_AssignsQuantity_WhenDataIsInteger_AndContainsTrimmableWhitespace_Test()
         {
             testObject.Configure(" 34 ");
             Assert.AreEqual(34, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_RetainsGreatestQuantity_WhenPolicyIsConfiguredMultipleTimes_Test()
         {
             testObject.Configure("12");
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(16, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_QuantityIsOne_WhenDataIsIntegerLessThanOne_Test()
         {
             testObject.Configure("0");
@@ -87,19 +86,19 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(1, testObject.RateResultQuantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsFalse_WhenTargetIsNotRateControl_Test()
         {
             testObject.IsApplicable("a string");
         }
 
-        [TestMethod]
+        [Fact]
         public void IsApplicable_ReturnsTrue_WhenTargetIsRateControl_Test()
         {
             testObject.IsApplicable(rateControl);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AssignsShowAllRatesToFalse_Test()
         {
             testObject.Apply(rateControl);
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsFalse(rateControl.ShowAllRates);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AssignsRateResultQuantity_ToRateControlRestrictedRateCount_Test()
         {
             testObject.Configure("400");
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreEqual(testObject.RateResultQuantity, rateControl.RestrictedRateCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AssignsShowSingleRateToFalse_WhenConfiguredQuantityIsNotOne_Test()
         {
             testObject.Configure("3");
@@ -125,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsFalse(rateControl.ShowSingleRate);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_AssignsShowSingleRateToTrue_WhenConfiguredQuantityIsOne_Test()
         {
             testObject.Configure("1");
@@ -134,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsTrue(rateControl.ShowSingleRate);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_DoesNotThrowException_WhenTargetIsNotRateControl_Test()
         {
             testObject.Apply("not a rate control");

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class CounterRatesInvalidStoreAddressFootnoteFilterTest
     {
         private CounterRatesInvalidStoreAddressFootnoteFilter testObject;
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new CounterRatesInvalidStoreAddressFootnoteFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesDuplicateCounterRatesInvalidStoreAddressFootnoteFactory_Test()
         {            
             rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsOtherFootnotes_WhenDuplicateCounterRatesInvalidStoreAddressFootnoteFactoryAreRemoved_Test()
         {
             rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(3, filteredRateGroup.FootnoteFactories.Count(f => f.GetType() != typeof(CounterRatesInvalidStoreAddressFootnoteFactory)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsCounterRatesInvalidStoreAddressFootnoteFactory_WhenOnlyOneExists_Test()
         {
             rateGroup.AddFootnoteFactory(new CounterRatesInvalidStoreAddressFootnoteFactory(shipmentType.Object));
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsOtherFootnoteFactories_WhenThereAreNotAnyCounterRatesInvalidStoreAddressFootnoteFactories_Test()
         {
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);

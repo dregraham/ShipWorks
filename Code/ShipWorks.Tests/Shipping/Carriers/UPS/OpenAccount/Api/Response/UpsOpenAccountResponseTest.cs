@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -16,7 +16,6 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 {
-    [TestClass]
     public class UpsOpenAccountResponseTest
     {
         private UpsOpenAccountResponse testObject;
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             };
         }
         
-        [TestMethod]
+        [Fact]
         [ExpectedException((typeof(UpsOpenAccountResponseException)))]
         public void Process_UpsOpenAccountResponseException_WhenResponseStatusIsFailure_Test()
         {
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
         {
             testObject.Process();
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereAreMultipleManipulators_Test()
         {
             // Add a second manipulator to the list

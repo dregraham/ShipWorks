@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateNonExistentShipmentTypeFootnoteFilterTest
     {
         private BestRateNonExistentShipmentTypeFootnoteFilter testObject;
@@ -25,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateNonExistentShipmentTypeFootnoteFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesFootnoteFactories_ForShipmentTypesNotInRates_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsFootnoteFactories_ForShipmentTypesInRates_Test()
         {
             List<RateResult> rates = new List<RateResult>

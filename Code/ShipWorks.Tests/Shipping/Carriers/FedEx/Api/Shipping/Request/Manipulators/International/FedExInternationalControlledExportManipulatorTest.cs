@@ -1,5 +1,5 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
-    [TestClass]
     public class FedExInternationalControlledExportManipulatorTest
     {
         private FedExInternationalControlledExportManipulator testObject;
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_InternationalControlledExportIsNull_WhenInternationalControlledExportDetailTypeIsNone_Test()
         {
             shipRequest.ShipmentEntity.FedEx.IntlExportDetailType =
@@ -56,14 +55,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(processShipmentRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ICEDTypeIsCorrect_WhenConverted_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -139,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 "FromForeignTradeZone did not match manipulated InternationalControlledExportDetail Type");
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ForeignTradeZoneCodeMatches_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.ForeignTradeZoneCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EntryNumberMatches_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -167,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.EntryNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LicenseOrPermitNumberMatches_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -181,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.LicenseOrPermitNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateMatches_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -200,7 +199,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateSpecifiedIsFalse_WhenNoExpirationDateProvided_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -216,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LicenseOrPermitExpirationDateSpecifiedIsTrue_WhenNoExpirationDateProvided_Test()
         {
             ProcessShipmentRequest processShipmentRequest;
@@ -235,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA236_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA036_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -269,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDEA486_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -286,7 +285,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP05_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -303,7 +302,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP61_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -320,7 +319,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP73_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -337,7 +336,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP85_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -354,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSP94_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -371,7 +370,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsDSPLicenseAgreement_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -388,7 +387,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsForeignTradeZone_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -405,7 +404,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsControlledExportOption_WhenExportTypeIsWarehouseWithdrawal_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;
@@ -422,7 +421,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddControlledExportOption_WhenExportTypeIsNone_Test()
         {
             FedExShipmentEntity fedExEntity = shipRequest.ShipmentEntity.FedEx;

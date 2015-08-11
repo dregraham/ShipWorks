@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Licensing;
 using ShipWorks.Shipping;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
-    [TestClass]
     public class PostageBalanceTests
     {
         private PostageBalance testObject;
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             testObject = new PostageBalance(postageWebClient.Object, tangoWebClient.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Purchase_CallsPostageWebClientGetBalance_Test()
         {
             testObject.Purchase(5);
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             postageWebClient.Verify(p => p.GetBalance(), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void Purchase_CallsPurchaseWithAmount_Test()
         {
             testObject.Purchase(6);
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             postageWebClient.Verify(p => p.Purchase(6), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void Purchase_LogsPostageEventToTango_Test()
         {
             Task result = testObject.Purchase(7);
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             tangoWebClient.Verify(t => t.LogPostageEvent(balance, 7, ShipmentTypeCode.Express1Endicia, accountIdentifier), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void Purchase_PurchasePostageDespiteTangoError_Test()
         {
             testObject.Purchase(7);
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             postageWebClient.Verify(p => p.Purchase(7), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void Value_LogsPostageEventToTango_Test()
         {
             decimal testValue = testObject.Value;
@@ -96,13 +95,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             
         }
 
-        [TestMethod]
+        [Fact]
         public void Value_ValueIsCorrect_Test()
         {
             Assert.AreEqual(balance, testObject.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Value_ValueIsCorrectDespiteLoggingError_Test()
         {
             tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>())).Throws(new TangoException());

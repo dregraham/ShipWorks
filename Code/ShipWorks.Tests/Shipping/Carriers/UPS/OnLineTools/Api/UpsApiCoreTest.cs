@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -14,7 +14,6 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
 {
-    [TestClass]
     public class UpsApiCoreTest
     {
 
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
         {
         }
 
-        [TestMethod]
+        [Fact]
         public void GetUspsEndorsementTypeCode_ReturnsCorrectValue_Test()
         {
             Dictionary<UspsEndorsementType, string> testList = new Dictionary<UspsEndorsementType, string>();
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void WritePackagesXml_WritesAdditionalHandlingIndicator_Test()
         {
             var shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.AreEqual(1, additionalHandlings.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WritePackagesXml_DoesNotWriteAdditionalHandlingIndicator_WhenNotSelectedOnPackage_Test()
         {
             var shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.AreEqual(0, additionalHandlings.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesArePuertoRico()
         {
             var shipment = new ShipmentEntity {OriginCountryCode = "PR", ShipCountryCode = "PR"};
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUS()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "US" };
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUSAndBothStatesArePuertoRico()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR", ShipCountryCode = "US", ShipStateProvCode = "PR" };
@@ -112,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsTrue_WhenBothCountriesAreUSAndBothStatesAreContinental()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "MO", ShipCountryCode = "US", ShipStateProvCode = "IL" };
@@ -120,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenGoingFromPuertoRicoToUS()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "PR", ShipCountryCode = "US" };
@@ -128,7 +127,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenGoingFromUSToPuertoRico()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "PR" };
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenBothCountriesAreUSButOriginStateIsPuertoRico()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR", ShipCountryCode = "US" };
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDomesticUsOrPuertoRico_ReturnsFalse_WhenBothCountriesAreUSButDestinationStateIsPuertoRico()
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", ShipCountryCode = "US", ShipStateProvCode = "PR" };

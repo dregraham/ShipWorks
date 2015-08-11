@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateOneRateManipulatorTest
     {
         private FedExRateOneRateManipulator testObject;
@@ -43,14 +42,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateOneRateManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
         
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenSpecialServiceTypeArrayIsEmpty_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_AndRetainsExistingSpecialServices_WhenSpecialServiceTypeArrayIsEmpty_Test()
         {
             nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes = new ShipmentSpecialServiceType[1] { ShipmentSpecialServiceType.COD };

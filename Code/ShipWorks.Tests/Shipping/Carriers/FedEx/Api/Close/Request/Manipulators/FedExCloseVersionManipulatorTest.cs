@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
-    [TestClass]
     public class FedExCloseVersionManipulatorTest
     {
         private FedExCloseVersionManipulator testObject;
@@ -32,14 +31,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject = new FedExCloseVersionManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSmartPostCloseRequestOrGroundCloseRequest_Test()
         {
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToClos_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual("clos", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo3_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual(3, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo0_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCarrierRequest.Object);
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToClos_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual("clos", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo3_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual(3, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);
@@ -124,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             Assert.AreEqual(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo0_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCarrierRequest.Object);

@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 {
-    [TestClass]
     public class UpsInvoiceRegistrationResponseTest
     {
         private UpsInvoiceRegistrationResponse testObject;
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
                 carrierRequest.Object,manipulators.Select(x=>x.Object).ToList());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
         {
             testObject.Process();
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
             }
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsApiException))]
         public void Process_UpsApiException_WhenResponseStatusIsFailure_Test()
         {

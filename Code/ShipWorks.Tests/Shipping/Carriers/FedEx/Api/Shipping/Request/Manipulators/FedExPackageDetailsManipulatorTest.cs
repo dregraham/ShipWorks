@@ -1,5 +1,5 @@
 using Interapptive.Shared.Enums;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExPackageDetailsManipulatorTest
     {
         private FedExPackageDetailsManipulator testObject;
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExPackageDetailsManipulator(new FedExSettings(settingsRepository.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PackageCountIsTwo_TwoPacakgesInShipment_Test()
         {
             testObject.Manipulate(request);
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(processShipmentRequest.RequestedShipment.PackageCount, "2");
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndLinearUnitsIsInchesTest()
         {
             request.ShipmentEntity.FedEx.LinearUnitType = (int) FedExLinearUnitOfMeasure.IN;
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndLinearUnitsIsCentimetersTest()
         {
             request.ShipmentEntity.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.CM;
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsPounds_Test()
         {
             request.ShipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             ValidateWeight(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_WeightSetProperly_TwoPackagesWithWeightInShipment_AndWieghtUnitsIsKilograms_Test()
         {
             request.ShipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             ValidateWeight(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_InsuredValueSetProperly_TwoPacakgesWithInsuredValue_Test()
         {
             testObject.Manipulate(request);
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AssignsSequenceNumber_Test()
         {
             request.SequenceNumber = 0;

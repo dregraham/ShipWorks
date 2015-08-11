@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -10,7 +10,6 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateRecipientManipulatorTest
     {
         private FedExRateRecipientManipulator testObject;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateRecipientManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExRecipientManipulator_ReturnsRequestedShipment_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsValidStreetLines_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExRecipientManipulator_ReturnsValidRequestedShipmentRecipient_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

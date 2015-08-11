@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -13,7 +13,6 @@ namespace ShipWorks.Tests.Stores.Etsy
     /// <summary>
     /// Summary description for NeweggWebClientTest
     /// </summary>
-    [TestClass]
     public class EtsyOnlineUpdaterTest
     {
         private EtsyOrderEntity orderEntity;
@@ -28,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Etsy
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEtsyCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Stores.Etsy
             Assert.AreEqual("dhl", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEtsyCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Etsy
             Assert.AreEqual("dhl", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEtsyCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Stores.Etsy
             Assert.AreEqual("usps", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEtsyCarrierCode_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Stores.Etsy
             Assert.AreEqual("usps", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEtsyCarrierCode_ReturnsUsps_WhenOther_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;

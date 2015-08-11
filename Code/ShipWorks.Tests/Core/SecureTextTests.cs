@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Interapptive.Shared;
 using System.Security.Cryptography;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class SecureTextTests
     {
-        [TestMethod]
+        [Fact]
         public void EncryptDecrypt()
         {
             string original = "Abcd Efgh 12345 $%^*(";
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(original, decrypted);
         }
 
-        [TestMethod]
+        [Fact]
         public void EncryptDecryptDifferentSalt()
         {
             string original = "Abcd Efgh 12345 $%^*(";
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(string.Empty, decrypted);
         }
 
-        [TestMethod]
+        [Fact]
         public void EncryptDecryptEmptySalt()
         {
             string original = "asdf $%^*(";
@@ -56,28 +55,28 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(original, decrypted);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void EncryptNullSalt()
         {
             SecureText.Encrypt("", null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void EncryptNullValue()
         {
             SecureText.Encrypt(null, "");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void DecryptNullSalt()
         {
             SecureText.Decrypt("", null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void DecryptNullValue()
         {

@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Net;
@@ -8,7 +8,6 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
 {
-    [TestClass]
     public class iParcelValidationElementTest
     {
         private iParcelValidationElement testObject;
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             testObject = new iParcelValidationElement(credentials);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsValidationElement_Test()
         {
             XElement element = testObject.Build();
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             Assert.AreEqual("Validation", element.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsUsernameElement_Test()
         {
             XElement element = testObject.Build();
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             Assert.AreEqual(credentials.Username, usernameElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsPasswordElement_Test()
         {
             XElement element = testObject.Build();
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             Assert.AreEqual(credentials.DecryptedPassword, passwordElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsAgreeTermsElement_Test()
         {
             XElement element = testObject.Build();
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             Assert.AreEqual("1", termsElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsSDNDPLCheckedElement_Test()
         {
             XElement element = testObject.Build();
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             Assert.AreEqual("1", checkedElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsExportLicenseCheckedElement_Test()
         {
             XElement element = testObject.Build();

@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeOptionTest
     {
         private NudgeOption testObject;
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.None);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsNone_Test()
         {
             NudgeOptionButton button = testObject.CreateButton();
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.IsInstanceOfType(button, typeof(AcknowledgeNudgeOptionButton));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsShutDown_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.Shutdown);
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.IsInstanceOfType(button, typeof(ShutdownNudgeOptionButton));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_ReturnsAcknowledgeNudgeOptionButton_WhenActionTypeIsRegisterUspsAccount_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, NudgeOptionActionType.RegisterUspsAccount);
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.IsInstanceOfType(button, typeof(RegisterUspsAccountNudgeOptionButton));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
         {
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             testObject.CreateButton();
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButton_SetsButtonTextToOptionText_Test()
         {
             NudgeOptionButton button = testObject.CreateButton();

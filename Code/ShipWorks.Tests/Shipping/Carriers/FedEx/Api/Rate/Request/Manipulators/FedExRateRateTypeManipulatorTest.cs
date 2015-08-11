@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateRateTypeManipulatorTest
     {
         private FedExRateRateTypeManipulator testObject;
@@ -38,14 +37,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateRateTypeManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToSettingsRepository_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             settingsRepository.Verify(r => r.UseListRates, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsListRate_WhenUseListRatesIsTrue_Test()
         {
             // The mocked repository was setup to use list rates in the Initialize() method, so no additional
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(RateRequestType.LIST, rateTypes[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsAccountRate_WhenUseListRatesIsFalse_Test()
         {
             // Setup gthe the repository to return false

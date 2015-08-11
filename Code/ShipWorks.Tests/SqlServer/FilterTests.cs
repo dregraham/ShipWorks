@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.SqlServer.Filters.DirtyCounts;
 using System.Collections;
 
 namespace ShipWorks.Tests.SqlServer
 {
-    [TestClass]
     public class FilterTests
     {
-        [TestMethod]
+        [Fact]
         public void EmptyMask()
         {
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(new byte[0], FilterNodeColumnMaskTable.Order);
@@ -19,7 +18,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsFalse(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithHigherTableSet()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsFalse(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithLowerTableSet()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsFalse(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithMatchingFirstBitSet1()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsTrue(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithMatchingFirstBitSet2()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsTrue(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithMatchingLastBitSet1()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.SqlServer
             Assert.IsTrue(set);
         }
 
-        [TestMethod]
+        [Fact]
         public void MaskWithMatchingLastBitSet2()
         {
             BitArray mask = new BitArray(FilterNodeColumnMaskUtility.TotalBytes * 8);

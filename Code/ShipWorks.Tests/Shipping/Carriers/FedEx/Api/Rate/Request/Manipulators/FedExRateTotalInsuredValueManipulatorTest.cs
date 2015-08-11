@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateTotalInsuredValueManipulatorTest
     {
         private FedExRateTotalInsuredValueManipulator testObject;
@@ -52,14 +51,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateTotalInsuredValueManipulator(new FedExSettings(settingsRepository.Object));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCurrencyToUSD_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual("USD", totalInsuredValue.Currency);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAmount_Test()
         {
             // // Add some packages for the sum test
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(expectedTotal, totalInsuredValue.Amount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAmountSpecified_Test()
         {
             shipmentEntity.FedEx.Packages.Add(new FedExPackageEntity() { DeclaredValue = 100.01m });

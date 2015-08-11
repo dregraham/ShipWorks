@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Common.Net;
 using System.IO;
 using System.Reflection;
@@ -14,7 +14,6 @@ namespace ShipWorks.Tests.Core.Certificates
     /// <summary>
     /// Fixture for exercising SSL client certificate mangement and conversions.
     /// </summary>
-    [TestClass]
     public class ClientCertificateTests
     {
         delegate void TestBodyDelegate(string certificateFile);
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Core.Certificates
         }
 
 
-        [TestMethod]
+        [Fact]
         public void FromPemFile()
         {
             UsingTestCertificate(pemFile =>
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Core.Certificates
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void AddToStore()
         {
             UsingTestCertificate(pemFile =>
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Core.Certificates
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializationTest()
         {
             UsingTestCertificate(pemFile =>
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Core.Certificates
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void PrivateKeyImportExportSuccessTest()
         {
             UsingTestCertificate(pemFile =>

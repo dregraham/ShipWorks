@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExMasterTrackingManipulatorTest
     {
         private FedExMasterTrackingManipulator testObject;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExMasterTrackingManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasNoMasterInformation_SequenceNumberIsZero_Test()
         {
             request.SequenceNumber = 0;
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(requestedShipment.MasterTrackingId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasMasterInformation_SequenceNumberIsOne_Test()
         {
             request.SequenceNumber = 1;
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(requestedShipment.MasterTrackingId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CorrectFormIdSet_FormIdIsXyz_Test()
         {
             request.SequenceNumber = 1;
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(request.ShipmentEntity.FedEx.MasterFormID, requestedShipment.MasterTrackingId.FormId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CorrectTrackingIdSet_TrackingNumberIsAbc_Test()
         {
             request.SequenceNumber = 1;

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateReturnTransitManipulatorTest
     {
         private FedExRateReturnTransitManipulator testObject;
@@ -26,14 +25,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateReturnTransitManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
@@ -53,14 +52,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ReturnTransitAndCommitIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
             Assert.IsTrue(nativeRequest.ReturnTransitAndCommit);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ReturnTransitAndCommitSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

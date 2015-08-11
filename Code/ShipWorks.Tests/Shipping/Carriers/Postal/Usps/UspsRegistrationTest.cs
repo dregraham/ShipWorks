@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsRegistrationTest
     {
         UspsRegistration testObject;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             testObject = new UspsRegistration(mockedValidator.Object, mockedGateway.Object, promotion.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToValidator_Test()
         {
             testObject.Submit();
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             mockedValidator.Verify(v => v.Validate(testObject), Times.Once());
         }
         
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsRegistrationException_WhenValidationFails_Test()
         {
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             testObject.Submit();
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToGateway_WhenValidationPasses_Test()
         {
             // Using a mocked validator, so there shouldn't be any validation errors
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             mockedGateway.Verify(g => g.Register(It.IsAny<UspsRegistration>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DoesNotDelegateToGateway_WhenValidationFails_Test()
         {
             // Setup our mocked validator to return two errors
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             mockedGateway.Verify(g => g.Register(It.IsAny<UspsRegistration>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsUspsException_WhenRegistrationGatewayThrowsException_Test()
         {
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Constructor_AssignsVersion4IPAddress_Test()
         {
             //Constructor was called in initialize method, so just need to verify log

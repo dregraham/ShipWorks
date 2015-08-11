@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
 {
-    [TestClass]
     public class FedExGroundCloseResponseTest
     {
         private FedExGroundCloseResponse testObject;
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             testObject = new FedExGroundCloseResponse(manipulators, nativeGroundResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Request_ReturnsCarrierRequest_Test()
         {
             CarrierRequest request = testObject.Request;
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             Assert.AreEqual(carrierRequest.Object, request);
         }
 
-        [TestMethod]
+        [Fact]
         public void NativeResponse_ReturnsGroundCloseReply_Test()
         {
             object nativeRespose = testObject.NativeResponse;
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             Assert.AreEqual(nativeRespose, nativeGroundResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
         {
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
         {
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenNotificationsIsNull_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             secondManipulator.Verify(m => m.Manipulate(testObject, It.IsAny<FedExEndOfDayCloseEntity>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             secondManipulator.Verify(m => m.Manipulate(testObject, It.IsAny<FedExEndOfDayCloseEntity>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             secondManipulator.Verify(m => m.Manipulate(testObject, It.IsAny<FedExEndOfDayCloseEntity>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_CloseEntityIsNotNull_WhenCloseIsSuccessful_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -130,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             Assert.IsNotNull(testObject.CloseEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_CloseEntityIsNull_WhenNotificationsContainsCode9804_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -142,7 +141,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             Assert.IsNull(testObject.CloseEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_CloseEntityIsNotNull_WhenNotificationsIsNull_Test()
         {
             nativeGroundResponse.HighestSeverity = NotificationSeverityType.SUCCESS;

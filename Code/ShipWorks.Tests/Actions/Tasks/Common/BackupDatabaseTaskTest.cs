@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class BackupDatabaseTaskTest
     {
-        [TestMethod]
+        [Fact]
         public void Initialize_DeserializesXmlCorrectly_Test()
         {
             // Create a new purge database task to serialize

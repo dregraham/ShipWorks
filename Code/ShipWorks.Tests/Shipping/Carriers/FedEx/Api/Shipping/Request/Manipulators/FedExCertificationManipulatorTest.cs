@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExCertificationManipulatorTest
     {
         private FedExCertificationManipulator testObject;
@@ -60,14 +59,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExCertificationManipulator(tokenProcessor.Object, settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullTransactionDetail_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.TransactionDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToSettingsRepository_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             settingsRepository.Verify(r=> r.IsInterapptiveUser, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToTokenProcessor_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             tokenProcessor.Verify(p => p.ProcessTokens(shipmentEntity.FedEx.ReferencePO, shipmentEntity), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AssignsTransactionId_WhenIsInterapptiveUserIsTrue_AndReferencePOIsNonEmptyString_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual("Processed Token", transactionDetail.CustomerTransactionId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAssignTransactionId_WhenIsInterapptiveUserIsFalse_Test()
         {
             // Setup the repository to say the user is not an interapptive user
@@ -139,7 +138,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(transactionDetail.CustomerTransactionId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsEmptyString_Test()
         {
             // Setup the shipment's reference PO
@@ -151,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(transactionDetail.CustomerTransactionId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAssignTransactionId_WhenReferencePOIsNull_Test()
         {
             // Setup the shipment's reference PO to be a null value

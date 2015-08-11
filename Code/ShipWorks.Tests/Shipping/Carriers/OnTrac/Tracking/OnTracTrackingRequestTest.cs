@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 {
-    [TestClass]
     public class OnTracTrackingRequestTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_ResultDeserializedProperly_WhenParametersAndResultsAreValid_Test()
         {
             var trackingResult = RunSuccessfullRequestTracking();
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
                 "<b>First Event Desc</b> on 1/01/2012 2:30 AM ");
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_RequestLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_ResponseLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_UriInCorrectFormat_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
                 mockedSubmitter.Object.Uri.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_RequestUsingHttpVerbGet_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -138,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             return trackingResult;
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void RequestTracking_ThrowsException_WhenReturnedXmlIsInvalid_Test()
         {
@@ -151,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             testObject.GetTrackingResults("123456");
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_GetsTrackingInfo_WhenPackageNotDelivered_Test()
         {
             validOnTracResponse.Shipments[0].Delivered = false;
@@ -171,7 +170,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
                 "<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>");
         }
 
-        [TestMethod]
+        [Fact]
         public void TrackShipment_GetsTrackingInfoWithSignature_WhenPackageSignedAndDelivered_Test()
         {
             validOnTracResponse.Shipments[0].POD = "Bob";
@@ -190,7 +189,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
                 "<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracApiErrorException))]
         public void TrackShipment_ThrowsException_WhenError_Test()
         {
@@ -203,7 +202,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             testObject.GetTrackingResults("123456");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void TrackShipment_ThrowsException_WhenNoShipments_Test()
         {
@@ -216,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             testObject.GetTrackingResults("123456");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void TrackShipment_ThrowsException_WhenNoEvents_Test()
         {

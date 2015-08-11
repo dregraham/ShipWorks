@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Net.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
 {
-    [TestClass]
     public class iParcelTrackRequestTest
     {
         private iParcelTrackRequest testObject;
@@ -68,25 +67,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
             testObject = new iParcelTrackRequest(credentials, shipment.IParcel.Packages[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void OperationName_Test()
         {
             Assert.AreEqual("Track", testObject.OperationName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RootElementName_Test()
         {
             Assert.AreEqual("iparcelTrackingRequest", testObject.RootElementName);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainOneItems_Test()
         {
             Assert.AreEqual(1, testObject.RequestElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestElements_ContainsTrackingNumberElement_Test()
         {
             Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));

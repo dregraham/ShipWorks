@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.BestRate;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 {
-    [TestClass]
     public class UpsWorldShipBrokerFilterTest
     {
         private UpsWorldShipBrokerFilter testObject;
@@ -20,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject = new UpsWorldShipBrokerFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesWorldShipBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.AreEqual(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_KeepsUpsBroker_WhenListContainsUpsBrokerAndWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_DoesNotRemoveWorldShipBroker_WhenListOnlyContainsWorldShipBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_KeepsUpsBroker_WhenListOnlyContainsUpsBroker_Test()
         {
             List<IBestRateShippingBroker> brokers = new List<IBestRateShippingBroker>

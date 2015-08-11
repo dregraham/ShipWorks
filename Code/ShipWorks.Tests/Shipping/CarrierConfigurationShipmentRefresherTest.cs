@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Messaging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Profiles;
 
 namespace ShipWorks.Tests.Shipping
 {
-    [TestClass]
     public class CarrierConfigurationShipmentRefresherTest
     {
         MockRepository mockRepository;
@@ -52,45 +51,45 @@ namespace ShipWorks.Tests.Shipping
             shippingProfileManagerMock.Setup(x => x.GetDefaultProfile(It.IsAny<ShipmentTypeCode>())).Returns(profile);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_ThrowsArgumentNullException_WhenMessengerIsNull()
         {
             new CarrierConfigurationShipmentRefresher(null, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_ThrowsArgumentNullException_WhenShipmentDialogIsNull()
         {
             new CarrierConfigurationShipmentRefresher(messengerMock.Object, null, shippingProfileManagerMock.Object, shippingManagerMock.Object);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_ThrowsArgumentNullException_WhenShippingProfileManagerIsNull()
         {
             new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, null, shippingManagerMock.Object);
         }
 
-        [TestMethod, ExpectedException(typeof(ArgumentNullException))]
+        [Fact, ExpectedException(typeof(ArgumentNullException))]
         public void Constructor_ThrowsArgumentNullException_WhenShippingManagerIsNull()
         {
             new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, shippingProfileManagerMock.Object, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Constructor_RegistersConfiguringCarrierMessageHandler()
         {
             CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
             messengerMock.Verify(x => x.Handle(refresher, It.IsAny<Action<ConfiguringCarrierMessage>>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void Constructor_RegistersCarrierConfiguredMessageHandler()
         {
             CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
             messengerMock.Verify(x => x.Handle(refresher, It.IsAny<Action<CarrierConfiguredMessage>>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleConfiguringCarrier_DelegatesSavingAllShipments()
         {
             TestMessenger messenger = new TestMessenger();
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(shipments, true));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleConfiguringCarrier_DoesNotSaveProcessedShipments()
         {
             shipment2.Processed = true;
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleConfiguringCarrier_DoesNotSetShipmentError_WhenNoErrorsAreReturned()
         {
             TestMessenger messenger = new TestMessenger();
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(It.IsAny<long>(), It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleConfiguringCarrier_SetsErrorDescription_WhenErrorsAreReturned()
         {
             Exception exception1 = new Exception();
@@ -148,7 +147,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.SetShipmentErrorMessage(2, It.IsAny<Exception>(), It.IsAny<string>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleConfiguringCarrier_DoesNotSaveShipments_WhenProcessing()
         {
             TestMessenger messenger = new TestMessenger();
@@ -162,7 +161,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.SaveShipmentsToDatabase(expectedShipments, true));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_GetShipmentsFromControl()
         {
             TestMessenger messenger = new TestMessenger();
@@ -173,7 +172,7 @@ namespace ShipWorks.Tests.Shipping
             shippingDialogMock.Verify(x => x.FetchShipmentsFromShipmentControl());
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_GetsDefaultProfile_ForSpecifiedCarrierType()
         {
             TestMessenger messenger = new TestMessenger();
@@ -184,7 +183,7 @@ namespace ShipWorks.Tests.Shipping
             shippingProfileManagerMock.Verify(x => x.GetDefaultProfile(ShipmentTypeCode.Usps));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_RefreshesShipments()
         {
             TestMessenger messenger = new TestMessenger();
@@ -197,7 +196,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment3));
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_SetsRequestedLabelFormat()
         {
             TestMessenger messenger = new TestMessenger();
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual(1, shipment3.RequestedLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotRefreshShipments_WhenProfileLabelFormatIsNull()
         {
             profile.RequestedLabelFormat = null;
@@ -223,7 +222,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(It.IsAny<ShipmentEntity>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotSetRequestedLabelFormat_WhenProfileLabelFormatIsNull()
         {
             profile.RequestedLabelFormat = null;
@@ -238,7 +237,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual(0, shipment3.RequestedLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentHasErrors()
         {
             shippingDialogMock.Setup(x => x.ShipmentHasError(shipment2.ShipmentID)).Returns(true);
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentIsProcessed()
         {
             shipment2.Processed = true;
@@ -266,7 +265,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentIsDifferentType()
         {
             shipment2.ShipmentType = (int) ShipmentTypeCode.FedEx;
@@ -280,7 +279,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenProcessing()
         {
             TestMessenger messenger = new TestMessenger();
@@ -294,7 +293,7 @@ namespace ShipWorks.Tests.Shipping
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_ModifiesProcessingShipments_WhenProcessing()
         {
             TestMessenger messenger = new TestMessenger();
@@ -308,7 +307,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual(1, processingShipment.RequestedLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenProcessingOtherShipmentType()
         {
             TestMessenger messenger = new TestMessenger();
@@ -322,7 +321,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual(0, processingShipment.RequestedLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void Dispose_UnregistersConfiguringCarrierMessageHandler()
         {
             MessengerToken token = new MessengerToken();
@@ -332,7 +331,7 @@ namespace ShipWorks.Tests.Shipping
             messengerMock.Verify(x => x.Remove(token));
         }
 
-        [TestMethod]
+        [Fact]
         public void Dispose_UnregistersCarrierConfiguredMessageHandler()
         {
             MessengerToken token = new MessengerToken();

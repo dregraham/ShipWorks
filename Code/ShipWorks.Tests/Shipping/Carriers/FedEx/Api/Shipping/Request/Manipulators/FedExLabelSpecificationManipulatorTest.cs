@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
@@ -13,7 +13,6 @@ using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExLabelSpecificationManipulatorTest
     {
         private FedExLabelSpecificationManipulator testObject;
@@ -62,14 +61,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExLabelSpecificationManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullLabelSpecification_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.LabelSpecification);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullFedExEntity_Test()
         {
             // Setup the test by configuring the shipment entity to have a null FedEx property and re-initialize
@@ -131,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(shipmentEntity.FedEx);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullFedExShipment_Test()
         {
             // Setup the test by configuring the shipment entity to have a null FedEx.Shipment property and re-initialize
@@ -145,14 +144,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(shipmentEntity.FedEx.Shipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToSettingsRepository_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
             settingsRepository.Verify(r => r.GetShippingSettings(), Times.AtLeastOnce());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SpecifiesCommon2DFormat_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -161,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(LabelFormatType.COMMON2D, labelSpecification.LabelFormatType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_MasksAccountNumber_WhenFedExMaskAccountSettingIsTrue_AndShipmentIsDomestic_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -173,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_MasksAccountNumber_WhenFedExMaskAccountSettingIsTrue_AndShipmentIsInternational_Test()
         {
             shipmentEntity.ShipCountryCode = "UK";
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ConfiguresShipmentEntityThermalLabel_WithEPL_WhenFexExThermalSettingIsTrueAndConfiguredWithEPL_Test()
         {
             // No setup needed - shipping settings already initialized to EPL
@@ -201,7 +200,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual((int)ThermalLanguage.EPL, shipmentEntity.ActualLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ConfiguresShipmentEntityThermalLabel_WithZPL_WhenFexExThermalSettingIsTrueAndConfiguredWithZPL_Test()
         {
             // Setup
@@ -212,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual((int)ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof (InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenUnknownThermalType_Test()
         {
@@ -224,7 +223,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsLabelStockTypeForThermalLabel_WithoutDocTab_Test()
         {
             shippingSettings.FedExThermalDocTab = false;
@@ -235,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(LabelStockType.STOCK_4X6, labelSpecification.LabelStockType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsLabelStockTypeForThermalLabel_WithDocTabAndLeadingTabType_Test()
         {
             shippingSettings.FedExThermalDocTabType = (int)ThermalDocTabType.Leading;
@@ -246,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(LabelStockType.STOCK_4X675_LEADING_DOC_TAB, labelSpecification.LabelStockType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsLabelStockTypeForThermalLabel_WithDocTabAndTrailingTabType_Test()
         {
             shippingSettings.FedExThermalDocTabType = (int)ThermalDocTabType.Trailing;
@@ -257,7 +256,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(LabelStockType.STOCK_4X675_TRAILING_DOC_TAB, labelSpecification.LabelStockType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsShipmentEntityThermalType_ForImageLabel_Test()
         {
             // Setup to generate an image label
@@ -269,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(shipmentEntity.FedEx.Shipment.ActualLabelFormat);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsImageTypeToPng_ForImageLabel_Test()
         {
             // Setup to generate an image label
@@ -281,7 +280,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(ShippingDocumentImageType.PNG, labelSpecification.ImageType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsPaper4x6StockLabel_ForImageLabel_Test()
         {
             // Setup to generate an image label

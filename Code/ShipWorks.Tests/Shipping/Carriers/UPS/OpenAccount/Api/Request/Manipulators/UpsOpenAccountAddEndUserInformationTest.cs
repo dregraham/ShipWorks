@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipulators
 {
-    [TestClass]
     public class UpsOpenAccountAddEndUserInformationTest
     {
         private Mock<INetworkUtility> networkUtility;
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
             request = mockRequest.Object;
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IPAddressIsSet_Test()
         {
             string ipAddress = "192.168.42.1";
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
             Assert.AreEqual(ipAddress, openAccountRequest.EndUserInformation.EndUserIPAddress);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsOpenAccountException))]
         public void Manipulate_ThrowsUpsOpenAccountException_Test()
         {

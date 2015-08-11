@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
 using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateFilterFactoryTest
     {
         private readonly BestRateFilterFactory testObject;
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFilters_ReturnsFiveFilters_Test()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(5, filters.Count());
         }
         
-        [TestMethod]
+        [Fact]
         public void CreateFilters_ContainsExpress1PromotionFootnoteFilter_Test()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(1, filters.OfType<BestRateExpress1PromotionFootnoteFilter>().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFilters_ContainsBestRateNonExistentShipmentTypeFootnoteFilter_Test()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(1, filters.OfType<BestRateNonExistentShipmentTypeFootnoteFilter>().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFilters_Express1PromoFilter_IsAfterNonExistentFootnoteFilter_Test()
         {
             List<IRateGroupFilter> filters = testObject.CreateFilters(shipment).ToList();
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.IsTrue(nonExistentFilterIndex < promoFilterIndex);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFilters_ContainsCounterRatesInvalidStoreAddressFootnoteFilter_Test()
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);

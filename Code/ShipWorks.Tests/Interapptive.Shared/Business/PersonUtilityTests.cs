@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Business
 {
-    [TestClass]
     public class PersonUtilityTests
     {
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits10_RemovesLeading1_Test()
         {
             string result = PersonUtility.GetPhoneDigits10("13145551212");
@@ -19,7 +18,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(10, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits10_LeavesLeading0_Test()
         {
             string result = PersonUtility.GetPhoneDigits10("03145551212");
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(10, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits10_ReturnsFullValue_WhenLengthLessThan10_Test()
         {
             string result = PersonUtility.GetPhoneDigits10("1551212");
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(7, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits10_ReturnsOnlyDigits_WhenNonAlphasInTest_Test()
         {
             string result = PersonUtility.GetPhoneDigits10("!1~5#5$1%2^&1*2())");
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(7, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits10_ConvertsKeypadAlphasToDigits_Test()
         {
             string result = PersonUtility.GetPhoneDigits10("1jk1a1a");
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(7, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits_RemovesLeading1_Test()
         {
             string result = PersonUtility.GetPhoneDigits("13145551212", 10, false);
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
             Assert.AreEqual(10, result.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPhoneDigits_Returns15Characters_WhenOver15Requested_Test()
         {
             string result = PersonUtility.GetPhoneDigits("01234567890123456789", 15, false);

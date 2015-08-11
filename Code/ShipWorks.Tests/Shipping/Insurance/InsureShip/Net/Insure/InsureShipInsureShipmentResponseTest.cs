@@ -3,14 +3,13 @@ using System.Net;
 using ShipWorks.Shipping.Insurance.InsureShip.Net;
 using ShipWorks.Shipping.Insurance.InsureShip.Net.Insure;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
 {
-    [TestClass]
     public class InsureShipInsureShipmentResponseTest
     {
         private InsureShipInsureShipmentResponse testObject;
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject = new InsureShipInsureShipmentResponse(request.Object, log.Object);
         }
 
-        [TestMethod]        
+        [Fact]        
         public void Process_UsesRawResponse_FromRequest_Test()
         {
             testObject.Process();
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             request.Verify(r => r.ResponseStatusCode, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject.Process();
         }
 
-        [TestMethod]        
+        [Fact]        
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             log.Verify(l => l.Error("An unknown response code was received from the InsureShip API for shipment 100031: 302"));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with the InsureShip API: 419"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with the InsureShip API: 409"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SuccessfulResponse_Test()
         {
             // Response code of 204 is success
@@ -138,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_CreatedWithApiIsFalse_OnNonSuccessfulResponse()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             Assert.IsFalse(shipment.InsurancePolicy.CreatedWithApi);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_CreatedWithApiIsTrue_OnSuccessfulResponse()
         {
             testObject.Process();

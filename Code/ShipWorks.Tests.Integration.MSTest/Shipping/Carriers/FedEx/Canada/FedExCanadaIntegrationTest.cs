@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada.Ground;
@@ -7,7 +7,6 @@ using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Inte
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
 {
-    [TestClass]
     public class FedExCanadaIntegrationTest : DataDrivenIntegrationTestBase
     {
         private const string fedExTestAccountNumber = "604601185";
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
         [DataSource("DataSource_Ship_FedExCanadaExpressDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestCategory("FedEx")]
-        [TestMethod]
+        [Fact]
         public void Ship_FedExCanadaExpressDomestic()
         {
             try
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
         [DataSource("DataSource_Ship_FedExCanadaGroundDomIntl")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestCategory("FedEx")]
-        [TestMethod]
+        [Fact]
         public void Ship_FedExCanadaGroundDomIntl()
         {
             FedExCAGroundDomesticInternationalFixture testObject = new FedExCAGroundDomesticInternationalFixture();
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
         [DataSource("DataSource_Ship_FedExCanadaExpressInternational")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestCategory("FedEx")]
-        [TestMethod]
+        [Fact]
         public void Ship_FedExCanadaExpressInternational()
         {
             FedExUSExpressInternationalFixture testObject = new FedExUSExpressInternationalFixture();

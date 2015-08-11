@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
@@ -7,13 +7,12 @@ using ShipWorks.Shipping.Editing.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
-    [TestClass]
     public class UpsServiceLevelConverterTest
     {
         private UpsServiceRate serviceRate;
         private UpsTransitTime upsTransitTime;
 
-        [TestMethod]
+        [Fact]
         public void GetServiceLevel_ReturnsThreeDays_WhenPassedUps3DaySelect_Test()
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.Ups3DaySelect, null);
@@ -21,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(ServiceLevelType.ThreeDays, serviceLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceLevel_ReturnsAnytime_WhenPassedUpsGroundAndNegativeOneDays_Test()
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.UpsGround, -1);
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(ServiceLevelType.Anytime, serviceLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceLevel_ReturnsTwoDays_WhenPassedUps2DayAirAMAndNull_Test()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.Ups2DayAirAM, 1, false, 5);
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndServiceRateDefines2Days_Test()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, 2);
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceLevel_ReturnsTwoDays_WhenPassedUpsGroundAndTransitTimeDefines2Days_Test()
         {
             serviceRate = new UpsServiceRate(UpsServiceType.UpsGround, 1, false, null);

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExShipmentSpecialServiceTypeManipulatorTest
     {
         private FedExShipmentSpecialServiceTypeManipulator testObject;
@@ -52,14 +51,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExShipmentSpecialServiceTypeManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullSpecialServicesRequested_Test()
         {
             // Setup the test by configuring the native request to have a null special services requested 
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullSpecialServiceTypesArray_Test()
         {
             // Setup the test by configuring the native request to have a null special service types requested 
@@ -124,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsFutureDayShipment_WhenShipmentIsNotToday_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddFutureDayShipment_WhenShipmentIsToday_Test()
         {
             // Setup the test by adjusting the ship date to be today
@@ -151,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.FUTURE_DAY_SHIPMENT));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsSaturdayPickup_WhenShipmentIsSaturday_Test()
         {
             // Setup the test by adjusting the ship date to be a Saturday
@@ -167,7 +166,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsSaturdayAndDropoffTypeIsNotRegularPickup_Test()
         {
             // Setup the test by adjusting the ship date to be a Saturday
@@ -183,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipmentIsNotSaturday_Test()
         {
             // Setup the test by making sure the ship date isn't Saturday
@@ -202,7 +201,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsSaturdayDelivery_WhenSaturdayDeliveryIsAvailable_Test()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
@@ -224,7 +223,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddSaturdayDelivery_WhenSaturdayDeliveryIsNotAvailable_Test()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 
@@ -247,7 +246,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_DELIVERY));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsFutureShipmentAndSaturdayPickup_WhenShipDateIsSaturdayInFuture_Test()
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
@@ -264,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddSaturdayPickup_WhenShipDateIsSaturdayAndDropoffTypeIsNotRegularPickup_Test()
         {
             // Setup the test by adjusting the ship date to be a Saturday at least a week away
@@ -281,7 +280,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(serviceTypes.Contains(ShipmentSpecialServiceType.SATURDAY_PICKUP));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsFutureShipmentAndSaturdayDelivery_WhenFutureSaturdayDeliveryRequested_Test()
         {
             // A little tricky because we have to setup the test by making sure that the shipment 

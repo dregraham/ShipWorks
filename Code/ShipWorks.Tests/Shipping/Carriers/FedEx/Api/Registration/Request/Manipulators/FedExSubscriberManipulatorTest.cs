@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExSubscriberManipulatorTest
     {
         private FedExSubscriberManipulator testObject;
@@ -49,14 +48,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject = new FedExSubscriberManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSubscriptionRequest_Test()
         {
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenAccountIsNull_Test()
         {
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_GetsAccountFromRequest_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             carrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SubscriberIsNotNull_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(nativeRequest.Subscriber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAccountNumber_WithFedExAccount_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -108,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.AreEqual(account.AccountNumber, nativeRequest.Subscriber.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(nativeRequest.Subscriber.Address);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberContact_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(nativeRequest.Subscriber.Contact);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSubscriberAccountShippingAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(nativeRequest.AccountShippingAddress);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCspSolutionId_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsFalse(string.IsNullOrEmpty(nativeRequest.CspSolutionId));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCspType_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -152,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.AreEqual(CspType.CERTIFIED_SOLUTION_PROVIDER, nativeRequest.CspType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CspTypeSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

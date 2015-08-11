@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExFreightManipulatorTest
     {
         private FedExFreightManipulator testObject;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExFreightManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExFreightManipulator_ReturnsRequestedShipment_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExFreightManipulator_ReturnsNoExpressFreight_WhenServiceIsNotFreight_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExFreightManipulator_ReturnsRequestedUSValues_Test()
         {
             shipmentEntity.ShipCountryCode = "US";
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.INSIDE_PICKUP));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExFreightManipulator_ReturnsRequestedCAValues_Test()
         {
             shipmentEntity.ShipCountryCode = "CA";
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(0, specialServiceTypes.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExFreightManipulator_ContainsShippingDocumentType_Test()
         {
             FedExShipmentEntity fedEx = shipmentEntity.FedEx;

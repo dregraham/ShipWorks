@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
-    [TestClass]
     public class InsureShipAffiliateProviderTest
     {
         InsureShipAffiliateProvider testObject;
 
-        [TestMethod]
+        [Fact]
         public void AddNewInsureShipAffiliate_Succeeds_WithValidParams()
         {
             testObject = new InsureShipAffiliateProvider();
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("storeID", insureShipAffiliate.InsureShipStoreID);
         }
 
-        [TestMethod]
+        [Fact]
         public void AddExistingInsureShipAffiliate_Succeeds_WhenSameValuesAlreadyExistInProvider()
         {
             testObject = new InsureShipAffiliateProvider();
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.Add(1, new InsureShipAffiliate("storeID", "customerID"));
         }
 
-        [TestMethod]
+        [Fact]
         public void AddExistingInsureShipAffiliate_UpdatesPreviousVersionInProvider_WhenKeyUsed()
         {
             testObject = new InsureShipAffiliateProvider();
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             Assert.AreEqual("SWdifferentCustomerID", insureShipAffiliate.InsureShipPolicyID);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsureShipAffiliate_ReturnsNull_WhenMissingKeyIsUsed()
         {
             testObject = new InsureShipAffiliateProvider();

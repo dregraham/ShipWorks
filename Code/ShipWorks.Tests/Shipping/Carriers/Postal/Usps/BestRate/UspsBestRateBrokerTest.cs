@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,7 +18,6 @@ using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 {
-    [TestClass]
     public class UspsBestRateBrokerTest
     {
         private UspsAccountEntity account;
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_DelegatesToAccountRepository_Test()
         {
             bool hasAccounts = testObject.HasAccounts;
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             genericRepositoryMock.Verify(r => r.Accounts, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_ReturnsTrue_WhenRepositoryHasMoreThanZeroAccounts_Test()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsTrue(hasAccounts);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_ReturnsFalse_WhenRepositoryHasZeroAccounts_Test()
         {
             genericRepositoryMock.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsFalse(hasAccounts);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_CallsConfigureNewShipmentForProfileAccount()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
@@ -121,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             genericShipmentTypeMock.Verify(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()), Times.Exactly(1));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_CallsGetRatesForProfileAccount()
         {
             testObject.GetBestRates(testShipment, new List<BrokerException>());
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsAllRates_WithNoFilter()
         {
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
@@ -146,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsTrue(rates.Rates.Any(r => r.RateID == rate3.RateID));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevelAndPrice()
         {
             rateGroup.Rates.Clear();
@@ -163,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsTwoRate_WhenTwoRatesHaveSameTypeLevel()
         {
             rateGroup.Rates.Clear();
@@ -180,7 +179,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameTypeAndPriceButDifferentLevels()
         {
             rateGroup.Rates.Clear();
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsBothRates_WhenTwoRatesHaveSameLevelAndPriceButDifferentType()
         {
             rateGroup.Rates.Clear();
@@ -216,7 +215,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_DoesNotReturnNonSelectableRates()
         {
             rateGroup.Rates.Clear();
@@ -234,19 +233,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(1, rates.Rates.Count);
         }
 
-        //[TestMethod]
+        //[Fact]
         //public void GetBestRates_DoesNotIncludeMediaMail()
         //{
         //    TestServiceTypeIsExcluded(PostalServiceType.MediaMail);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void GetBestRates_DoesNotIncludeLibrayMail()
         //{
         //    TestServiceTypeIsExcluded(PostalServiceType.LibraryMail);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void GetBestRates_DoesNotIncludeBPM()
         //{
         //    TestServiceTypeIsExcluded(PostalServiceType.BoundPrintedMatter);
@@ -254,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
 
         [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\GetBestRates_DoesNotIncludeTypes.csv", "Usps_GetBestRates_DoesNotIncludeTypes#csv", DataAccessMethod.Sequential)]
         [DeploymentItem(@"Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv")]
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ExcludesVariousTypes()
         {
             PostalServiceType excludedServiceType = (PostalServiceType)Enum.Parse(typeof (PostalServiceType), TestContext.DataRow[0].ToString());
@@ -281,7 +280,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(1, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_UpdatesDescriptionWhenPartOfRateGroup()
         {
             rateGroup.Rates.Clear();
@@ -305,7 +304,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual("3", bestRates.Rates.Single(r => r.RateID == result4.RateID).Days);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_OriginalUspsShipmentDetailsAreRestoredAfterCall()
         {
             PostalShipmentEntity UspsShipment = new PostalShipmentEntity();
@@ -315,7 +314,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(UspsShipment, testShipment.Postal);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_NoRatesAreReturned_WhenShippingExceptionIsThrown()
         {
             genericShipmentTypeMock.Setup(x => x.GetRates(It.IsAny<ShipmentEntity>())).Throws<ShippingException>();
@@ -325,7 +324,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(0, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_CallsHandler_WhenShippingExceptionIsThrown()
         {
             ShippingException exception = new ShippingException();
@@ -338,7 +337,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsTrue(brokerExceptions.Any(e=>e.InnerException.Equals(exception)));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsPackageDetails()
         {
             testShipment.BestRate.DimsHeight = 3;
@@ -357,7 +356,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_OverridesProfileServiceAndPackagingType()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -376,7 +375,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_OverridesProfileAccount()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -391,7 +390,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsFalse(getRatesShipments.Any(x => x.Postal.Usps.UspsAccountID == 999));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_OverridesProfileWeight()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -408,7 +407,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_OverridesDimsAddWeight_Test()
         {
             genericShipmentTypeMock.Setup(x => x.ConfigureNewShipment(It.IsAny<ShipmentEntity>()))
@@ -425,7 +424,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsTagToBestRateResultTag()
         {
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
@@ -445,7 +444,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsTagResultKeyToPostalAndServiceType()
         {
             rateGroup.Rates.Clear();
@@ -464,7 +463,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.IsTrue(resultKeys.Contains("PostalStandard Post"));
         }
 
-       [TestMethod]
+       [Fact]
         public void GetBestRates_AddsUspsToDescription_WhenItDoesNotAlreadyExist()
         {
             rateGroup.Rates.Clear();
@@ -482,7 +481,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(2, rates.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_WhenUsingShipWorksInsurance_Test()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int)InsuranceProvider.ShipWorks };
@@ -490,7 +489,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(shippingSettings));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_WhenUsingCarrierInsurance_Test()
         {
             ShippingSettingsEntity shippingSettings = new ShippingSettingsEntity { UspsInsuranceProvider = (int) InsuranceProvider.Carrier };
@@ -498,7 +497,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(shippingSettings));
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_ShouldNotCallCheckExpress1RatesOnSettings_WithShipmentType()
         {
             var brokerSettings = new Mock<IBestRateBrokerSettings>();
@@ -508,13 +507,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             brokerSettings.Verify(x => x.CheckExpress1Rates(testObject.ShipmentType), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsTrue()
         {
             Configure_ShouldRetrieveExpress1RatesTest(true);
         }
 
-        [TestMethod]
+        [Fact]
         public void Configure_SetsRetrieveExpress1RatesToFalse_WhenConfigurationIsFalse()
         {
             Configure_ShouldRetrieveExpress1RatesTest(false);
@@ -531,7 +530,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             Assert.AreEqual(false, ((UspsShipmentType)testObject.ShipmentType).ShouldRetrieveExpress1Rates);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_ReturnsNoRates_WhenShipmentTotalWeightTooHeavy()
         {
             testShipment.TotalWeight = 70.1;

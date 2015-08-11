@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Data;
 using ShipWorks.Templates;
@@ -19,7 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Templates.Processing
 {
-    [TestClass]
     public class XPathTreeGeneration
     {
         [TestInitialize]
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Templates.Processing
             DatabaseManager.Cleanup();
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectTrackingNumber()
         {
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Templates.Processing
         }
 
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectGenerated()
         {
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectTemplateContentHeight()
         {
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectUsername()
         {
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreName()
         {
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreLastDownloaded()
         {
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreCity()
         {
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectCustomerCity()
         {
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderNumber()
         {
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectSumOrderCharges()
         {
@@ -137,7 +136,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectUsernameTest()
         {
@@ -148,7 +147,7 @@ namespace ShipWorks.Tests.Templates.Processing
         }
 
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderDate()
         {
@@ -158,7 +157,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectMivaAdd1()
         {
@@ -168,7 +167,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemCode2()
         {
@@ -178,7 +177,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemCodes()
         {
@@ -188,7 +187,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderStoreName()
         {
@@ -199,7 +198,7 @@ namespace ShipWorks.Tests.Templates.Processing
         }
 
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemName()
         {
@@ -209,7 +208,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderEmail()
         {
@@ -219,7 +218,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectCustomerNotes()
         {
@@ -229,7 +228,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectCustomer2xNotes()
         {
@@ -239,7 +238,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectReference()
         {
@@ -249,7 +248,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemAttributeDescription()
         {
@@ -259,7 +258,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderChargeDescription()
         {
@@ -269,7 +268,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderChargeAmounts()
         {
@@ -279,7 +278,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderPaymentCCExpiration()
         {
@@ -289,7 +288,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderNotesCount()
         {
@@ -299,7 +298,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderNoteText()
         {
@@ -309,7 +308,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderItemTotal()
         {
@@ -319,7 +318,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderItemPayPalTransaction()
         {
@@ -329,7 +328,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderItemFeedbackBuyerLeft()
         {
@@ -339,7 +338,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderItemSellingRecord()
         {
@@ -349,7 +348,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderBuyer()
         {
@@ -359,7 +358,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderFeedbackBuyerLeft()
         {
@@ -369,7 +368,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectEbayOrderPayPalTransaction()
         {
@@ -379,7 +378,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectShipmentTrackingNumber()
         {
@@ -389,7 +388,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectShipmentCustomsItem()
         {
@@ -399,7 +398,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectShipmentStandardLabels()
         {
@@ -409,7 +408,7 @@ namespace ShipWorks.Tests.Templates.Processing
             Debug.WriteLine("RESULT: " + result.ReadResult());
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectStoreSpecifics()
         {

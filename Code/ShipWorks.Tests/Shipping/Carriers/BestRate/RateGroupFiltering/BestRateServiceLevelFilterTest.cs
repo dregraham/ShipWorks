@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -12,12 +12,11 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateServiceLevelFilterTest
     {
         private BestRateServiceLevelFilter testObject;
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesAreOrderedFromCheapestToMostExpensive_Test()
         {
             // Setup the broker to return specific rates
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates[0], filteredRates[2]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_AreOrderedByServiceLevel_Test()
         {
             // Setup the broker to return specific rates
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates[1], filteredRates[4]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable_Test()
         {
             // Setup the broker to return specific rates
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates.Count, filteredRates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
         {
 
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates[5], filteredRates[4]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
         {
             // Setup the broker to return specific rates
@@ -145,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates[3], filteredRates[4]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
         {
             // Setup the broker to return specific rates

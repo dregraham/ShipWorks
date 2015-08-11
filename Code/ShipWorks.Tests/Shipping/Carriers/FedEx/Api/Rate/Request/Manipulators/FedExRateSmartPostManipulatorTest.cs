@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRateSmartPostManipulatorTest
     {
         private FedExRateSmartPostManipulator testObject;
@@ -45,14 +44,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRateSmartPostManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the native request to have a null requested shipment
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullPackageLineItems_Test()
         {
             // Setup the native request to have a null array of line items
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(0, nativeRequest.RequestedShipment.RequestedPackageLineItems.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullTotalInsuredValue_Test()
         {
             // Setup the native request to have a null total insured value
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNotNull(nativeRequest.RequestedShipment.TotalInsuredValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AssignsSmartPostDetail_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNotNull(nativeRequest.RequestedShipment.SmartPostDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SmartPostDetailIsNull_WhenHubIdIsNull_Test()
         {
             // This should set the smart post hub ID to a null value
@@ -125,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNull(nativeRequest.RequestedShipment.SmartPostDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SmartPostDetailIsNull_WhenFedExShipmentIsNull_Test()
         {
             shipmentEntity.FedEx = null;
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNull(nativeRequest.RequestedShipment.SmartPostDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SmartPostDetailIsNull_WhenShipmentIsNull_Test()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), null, nativeRequest);
@@ -145,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsNull(nativeRequest.RequestedShipment.SmartPostDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsSmartHubId_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -155,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsFalse(string.IsNullOrEmpty(nativeRequest.RequestedShipment.SmartPostDetail.HubId));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IndiciaTypeIsParcelSelect_Test()
         {
             shipmentEntity.FedEx.SmartPostIndicia = (int) FedExSmartPostIndicia.ParcelSelect;
@@ -165,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostIndiciaType.PARCEL_SELECT, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IndiciaTypeIsMediaMail_Test()
         {
             shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.MediaMail;
@@ -175,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostIndiciaType.MEDIA_MAIL, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IndiciaTypeIsPresortedBoundPrintedMatter_Test()
         {
             shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.BoundPrintedMatter;
@@ -185,7 +184,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostIndiciaType.PRESORTED_BOUND_PRINTED_MATTER, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IndiciaTypeIsPresortedStandard_Test()
         {
             shipmentEntity.FedEx.SmartPostIndicia = (int)FedExSmartPostIndicia.PresortedStandard;
@@ -195,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostIndiciaType.PRESORTED_STANDARD, nativeRequest.RequestedShipment.SmartPostDetail.Indicia);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenUnrecognizedIndiciaTypeIsProvided_Test()
         {
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IndiciaSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -212,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.IndiciaSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementIsAddressCorrection_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int) FedExSmartPostEndorsement.AddressCorrection;
@@ -222,7 +221,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostAncillaryEndorsementType.ADDRESS_CORRECTION, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsTrue_WhenEndorsementTypeIsAddressCorrection_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.AddressCorrection;
@@ -232,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementIsChangeService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ChangeService;
@@ -242,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostAncillaryEndorsementType.CHANGE_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsTrue_WhenEndorsementTypeIsChangeService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ChangeService;
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementIsForwardingService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ForwardingService;
@@ -262,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostAncillaryEndorsementType.FORWARDING_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsTrue_WhenEndorsementTypeIsForwardingService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ForwardingService;
@@ -272,7 +271,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementIsLeaveIfNoResponse_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.LeaveIfNoResponse;
@@ -282,7 +281,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostAncillaryEndorsementType.CARRIER_LEAVE_IF_NO_RESPONSE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsTrue_WhenEndorsementTypeIsLeaveIfNoResponse_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.LeaveIfNoResponse;
@@ -292,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementIsReturnService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ReturnService;
@@ -302,7 +301,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(SmartPostAncillaryEndorsementType.RETURN_SERVICE, nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsTrue_WhenEndorsementTypeIsReturnService_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ReturnService;
@@ -312,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsTrue(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
         
-        [TestMethod]
+        [Fact]
         public void Manipulate_AncillaryEndorsementSpecifiedIsFalse_WhenEndorsementTypeIsNone_Test()
         {
             shipmentEntity.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.None;
@@ -322,7 +321,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.IsFalse(nativeRequest.RequestedShipment.SmartPostDetail.AncillaryEndorsementSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenUnrecognizedEndorsementIsProvided_Test()
         {
@@ -331,7 +330,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShipmentTotalInsuredValueIsZero_Test()
         {
             // Set the amount to 43 to prove that it gets set back to 0
@@ -342,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(0, nativeRequest.RequestedShipment.TotalInsuredValue.Amount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EachPackageTotalInsuredAmountIsZero_Test()
         {
             // Create a few packages in the FedEx shipment to work with
@@ -358,7 +357,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ServiceTypeIsSmartPost_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -366,7 +365,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             Assert.AreEqual(ServiceType.SMART_POST, nativeRequest.RequestedShipment.ServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ServiceTypeSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.International
 {
-    [TestClass]
     public class FedExTrafficInArmsManipulatorTest
     {
         private FedExTrafficInArmsManipulator testObject;
@@ -39,14 +38,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // setup the test by setting the requested shipment to null
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullSpecialServicesRequested_WhenLicencseNumberIsProvided_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullSpecialServiceTypes_WhenLicencseNumberIsProvided_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForEmptySpecialServiceTypes_WhenLicencseNumberIsProvided_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(1, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsEmptyString_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = string.Empty;
@@ -130,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(0, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_OptionIsNotAddedToSpecialServiceTypes_WhenLicencseNumberIsNull_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = null;
@@ -143,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(0, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ArmsDetailIsNotNull_WhenLicencseNumberIsProvided_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";
@@ -156,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.InternationalTrafficInArmsRegulationsDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LicenseNumberIsAssigned_WhenLicencseNumberIsProvided_Test()
         {
             shipmentEntity.FedEx.TrafficInArmsLicenseNumber = "123456";

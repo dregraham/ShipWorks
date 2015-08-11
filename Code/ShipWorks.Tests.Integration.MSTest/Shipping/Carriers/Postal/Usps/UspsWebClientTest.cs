@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsWebClientTest
     {
         private readonly UspsWebClient testObject;
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
         {           
             AccountInfo info = testObject.GetAccountInfo(account) as AccountInfo;
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void CreateScanForm_Connectivity_Test()
         {
             try
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
             UspsRegistration registration = CreateRegistrationWithoutUsername();
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_IsSuccessful_Test()
         {
             UspsRegistration registration = CreateRegistrationWithoutUsername();
@@ -163,7 +162,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void GetContract_Connectivity_Test()
         {
             UspsAccountContractType contractType = testObject.GetContractType(account);
@@ -173,7 +172,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
         [TestCategory("USPS")]
         [TestCategory("ContinuousIntegration")]
-        [TestMethod]
+        [Fact]
         public void ChangeToExpeditedPlan_Connectivity_Test()
         {
             // We just need to make sure we can connect and submit the request without

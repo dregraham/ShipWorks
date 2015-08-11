@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Email;
 
 namespace ShipWorks.Tests.Email
 {
-    [TestClass]
     public class EmailExceptionTest
     {
-        [TestMethod]
+        [Fact]
         public void RetryAllowed_ReturnsTrue_WhenDefaultConstructor()
         {
             EmailException ex = new EmailException();
             Assert.IsTrue(ex.RetryAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void RetryAllowed_ReturnsTrue_ForSpecificValues()
         {
             EmailException ex = new EmailException("test true", EmailExceptionErrorNumber.None);
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Email
             Assert.IsTrue(ex.RetryAllowed, "EmailAccountChanged should return true.");
         }
 
-        [TestMethod]
+        [Fact]
         public void RetryAllowed_ReturnsFalse_ForSpecificValues()
         {
             EmailException ex = new EmailException("test true", EmailExceptionErrorNumber.MissingToField);

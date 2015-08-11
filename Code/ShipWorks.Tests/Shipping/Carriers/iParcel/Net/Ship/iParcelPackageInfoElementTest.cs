@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Xml.XPath;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel.Enums;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Carriers.iParcel;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 {
-    [TestClass]
     public class iParcelPackageInfoElementTest
     {
         private iParcelPackageInfoElement testObject;
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, false, false);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsPackagesElement_Test()
         {
             XElement element = testObject.Build();
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Packages", element.Name.LocalName);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsPackageInfoElement_Test()
         {
             XElement element = testObject.Build();
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.IsNotNull(element.XPathSelectElement("/PackageInfo"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoPackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
         #region Package Info Tests
         
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoPackageNum_WithMultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsGeneralNode_Test()
         {
             XElement element = testObject.Build();
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(1, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsGeneralNode_WithMultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(2, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsShipperNode_Test()
         {
             XElement element = testObject.Build();
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(1, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsShipperNode_WithMultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -156,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(2, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsConsigneeNode_Test()
         {
             XElement element = testObject.Build();
@@ -165,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(1, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsConsigneeNode_WithMultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(2, queriedElements.Count);
         }
         
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsContentsNode_Test()
         {
             XElement element = testObject.Build();
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(1, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_PackageInfoContainsContentsNode_WithMultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
         #region General Node Tests
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_PaymentCurrency_Test()
         {
             XElement element = testObject.Build();
@@ -214,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("USD", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_DDPIsOne_WhenDeliveryDutyPaidIsTrue_Test()
         {
             shipment.IParcel.IsDeliveryDutyPaid = true;
@@ -226,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_DDPIsZero_WhenDeliveryDutyPaidIsFalse_Test()
         {
             shipment.IParcel.IsDeliveryDutyPaid = false;
@@ -238,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
         
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_PackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -248,7 +247,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_PackageNum_WithMultiplePackage_Test()
         {
             // Setup the test by adding another package
@@ -262,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Service_Test()
         {
             XElement element = testObject.Build();
@@ -272,7 +271,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(1, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_ServiceIsZero_WhenUsedForRatesIsTrue_Test()
         {
             testObject = new iParcelPackageInfoElement(shipment, tokenProcessor.Object, true, true);
@@ -284,7 +283,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Reference_Test()
         {
             shipment.IParcel.Reference = "Some reference";
@@ -297,7 +296,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Some reference", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Reference_ProcessesTokens_Test()
         {
             shipment.IParcel.Reference = "Some reference";
@@ -307,7 +306,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             tokenProcessor.Verify(t => t.Process(shipment.IParcel.Reference, shipment), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_ContainsCustomsValueNode_ForInternationalShipment_Test()
         {
             shipment.IParcel.Packages[0].DeclaredValue = 4.23M;
@@ -320,7 +319,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("4.23", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_DoesNotContainCustomsValueCurrencyNode_ForDomesticShipment_Test()
         {
             shipment.CustomsValue = 4.23M;
@@ -332,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(0, queriedElements.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational_Test()
         {
             shipment.IParcel.Packages[0].DeclaredValue = 100M;
@@ -345,7 +344,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("100", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_ContainsCustomsValueNode_WhenShipmentIsInternational_MultiplePackages_Test()
         {
             // Setup the test by adding another package
@@ -362,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("120", queriedElements[1].Value);
         }
         
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_SalePrice_Test()
         {
             shipment.Order.OrderTotal = 100.43M;
@@ -374,7 +373,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("100.43", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Items_Test()
         {
             // Two items were already added in the Initialize method
@@ -386,7 +385,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_WeightUnits_Test()
         {
             XElement element = testObject.Build();
@@ -396,7 +395,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("LBS", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Weight_Test()
         {
             // Package weight was set in the Initialize method
@@ -407,7 +406,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0.77", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_MeasureUnits_Test()
         {
             XElement element = testObject.Build();
@@ -417,7 +416,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("IN", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Length_Test()
         {
             // Package length was set in the Initialize method
@@ -428,7 +427,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("4", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Width_Test()
         {
             // Package width was set in the Initialize method
@@ -439,7 +438,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("6", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_Height_Test()
         {
             // Package height was set in the Initialize method
@@ -450,7 +449,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("10", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_TrackingBarCode_Test()
         {
             XElement element = testObject.Build();
@@ -461,7 +460,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(string.Empty, queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_GeneralDescription_Test()
         {
             XElement element = testObject.Build();
@@ -472,7 +471,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual(string.Empty, queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsTrueAndProviderIsShipWorks_Test()
         {
             shipment.InsuranceProvider = (int) InsuranceProvider.ShipWorks;
@@ -485,7 +484,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsTrueAndProviderIsInvalidTest()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Invalid;
@@ -498,7 +497,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsCarrierAndPackageValueGreaterThan100_Test()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
@@ -512,7 +511,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsShipWorksAndPackageValueGreaterThan100_Test()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.ShipWorks;
@@ -526,7 +525,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_InsuranceNodeIsZero_WhenInsuranceIsFalseAndProviderIsInvalidAndPackageValueGreaterThan100_Test()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Invalid;
@@ -540,7 +539,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
         
-        [TestMethod]
+        [Fact]
         public void Build_GeneralNode_ContainsInsuranceNode_WhenInsuranceIsTrueAndProviderIsCarrierAndPackageValueGreaterThan100_Test()
         {
             shipment.InsuranceProvider = (int)InsuranceProvider.Carrier;
@@ -559,7 +558,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
         #region Shipper Tests
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_PackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -569,7 +568,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_PackageNum_WithMultiplePackage_Test()
         {
             // Setup the test by adding another package
@@ -583,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_Name_Test()
         {
             XElement element = testObject.Build();
@@ -593,7 +592,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Bill Lumbergh", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_Address1_Test()
         {
             XElement element = testObject.Build();
@@ -603,7 +602,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("500 First Street", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_Address2_Test()
         {
             XElement element = testObject.Build();
@@ -613,7 +612,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Suite 200", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_City_Test()
         {
             XElement element = testObject.Build();
@@ -623,7 +622,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Chicago", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_StateProvince_Test()
         {
             XElement element = testObject.Build();
@@ -633,7 +632,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("IL", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_PostCode_Test()
         {
             XElement element = testObject.Build();
@@ -643,7 +642,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("66666", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_CountryCode_Test()
         {
             XElement element = testObject.Build();
@@ -653,7 +652,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("RU", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ShipperNode_CountryCodeIsAdjustedForUK_Test()
         {
             shipment.OriginCountryCode = "UK";
@@ -672,7 +671,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
         #region Consignee Tests
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_PackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -682,7 +681,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_PackageNum_WithMultiplePackage_Test()
         {
             // Setup the test by adding another package
@@ -696,7 +695,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_Name_Test()
         {
             XElement element = testObject.Build();
@@ -706,7 +705,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Peter Gibbons", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_Address1_Test()
         {
             XElement element = testObject.Build();
@@ -716,7 +715,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1 Main Street", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_Address2_Test()
         {
             XElement element = testObject.Build();
@@ -726,7 +725,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("Suite 500", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_City_Test()
         {
             XElement element = testObject.Build();
@@ -736,7 +735,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("St. Louis", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_StateProvince_Test()
         {
             XElement element = testObject.Build();
@@ -746,7 +745,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("MO", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_PostCode_Test()
         {
             XElement element = testObject.Build();
@@ -756,7 +755,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("63102", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_CountryCode_Test()
         {
             XElement element = testObject.Build();
@@ -766,7 +765,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("US", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_CountryCodeIsAdjustedForUK_Test()
         {
             shipment.ShipCountryCode = "UK";
@@ -777,7 +776,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("GB", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_Phone_Test()
         {
             XElement element = testObject.Build();
@@ -787,7 +786,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("555-555-5555", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_Email_Test()
         {
             XElement element = testObject.Build();
@@ -797,7 +796,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("someone@nowhere.com", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_TrackBySMSIsOne_WhenTrackBySMSIsTrue_Test()
         {
             shipment.IParcel.TrackBySMS = true;
@@ -809,7 +808,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_TrackBySMSIsZero_WhenTrackBySMSIsFalse_Test()
         {
             shipment.IParcel.TrackBySMS = false;
@@ -821,7 +820,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_TrackByEmailIsOne_WhenTrackByEmailIsTrue_Test()
         {
             shipment.IParcel.TrackByEmail = true;
@@ -833,7 +832,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ConsigneeNode_TrackByEmailIsZero_WhenTrackByEmailIsFalse_Test()
         {
             shipment.IParcel.TrackByEmail = false;
@@ -851,7 +850,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
         #region Contents Tests
 
-        [TestMethod]
+        [Fact]
         public void Build_ContentsNode_PackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -861,7 +860,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ContentsNode_PackageNum_WithMultiplePackage_Test()
         {
             // Setup the test by adding another package
@@ -877,7 +876,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 
 
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_PackageNum_Test()
         {
             XElement element = testObject.Build();
@@ -888,7 +887,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", queriedElements[0].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_PackageNum_WithMultiplePackage_Test()
         {
             // Setup the test by adding another package
@@ -903,7 +902,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("2", queriedElements[2].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_Description_Test()
         {
             XElement element = testObject.Build();
@@ -914,7 +913,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("111111", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_Quantity_Test()
         {
             XElement element = testObject.Build();
@@ -925,7 +924,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("6", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_Weight_Test()
         {
             XElement element = testObject.Build();
@@ -937,7 +936,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_Value_Test()
         {
             XElement element = testObject.Build();
@@ -948,7 +947,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("0", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_HSCode_Test()
         {
             XElement element = testObject.Build();
@@ -962,7 +961,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_SKU_Test()
         {
             XElement element = testObject.Build();
@@ -973,7 +972,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("111111", queriedElements[1].Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_CountryOfManufacture_Test()
         {
             XElement element = testObject.Build();
@@ -987,7 +986,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ItemNode_ContentInfo_SinglePackage_Test()
         {
             XElement element = testObject.Build();

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExPriorityAlertManipulatorTest
     {
         private FedExPriorityAlertManipulator testObject;
@@ -58,14 +57,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedShipment_Test()
         {
             // Setup the test by configuring the native request to have a null requested shipment property and re-initialize
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullRequestedPackageLineItems_Test()
         {
             // Setup the test by configuring the native request to have a null requested package line items
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForEmptyRequestedPackageLineItems_Test()
         {
             // Setup the test by configuring the native request to have an empty arrary for the requested 
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(1, nativeRequest.RequestedShipment.RequestedPackageLineItems.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountsForNullSpecialServicesRequested_Test()
         {
             // Setup the test by configuring the native request to a null value for the customer references
@@ -141,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EnhancementTypeArrayIsNull_WhenShipmentWithSinglePackage_HasEnhancementTypeOfNone_Test()
         {
             // Setup only includes clearing out the package list and add one with none as enhancment type
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EnhancementTypeArrayIsNull_WhenShipmentWithMultiplePackages_HavingEnhancementTypeOfNone_Test()
         {
             // No additional setup needed
@@ -163,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(0, lineItems.Count(l => l.SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes != null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EnhancementTypeArrayIsAssigned_WhenShipment_WithSinglePackage_HasEnhancementTypeOfAlertPlus_Test()
         {
             // Setup only includes clearing out the package list and add one with priorty alert plus
@@ -183,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(PriorityAlertEnhancementType.PRIORITY_ALERT_PLUS, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.EnhancementTypes[0]);
         }
         
-        [TestMethod]
+        [Fact]
         public void Manipulate_ContentLengthIsOne_WhenEnhancementTypeIsPriorityPlus_Test()
         {
             // Setup only includes clearing out the package list and add one with the priorty alert plus enhancment types
@@ -206,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(1, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.Content.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsContent_WhenEnhancementTypeIsPriorityPlus_Test()
         {
             // Setup only includes clearing out the package list and add one with the priorty alert plus enhancment types
@@ -229,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(shipmentEntity.FedEx.Packages[0].PriorityAlertDetailContent, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.Content[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ContentIsNotNull_WhenEnhancementTypeIsNone_Test()
         {
             // Setup only includes clearing out the package list and add one with the priorty alert plus enhancment types
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.PriorityAlertDetail.Content);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SpecialServiceTypesIsCorrect_WhenEnhancementTypeIsNoneButPriorityAlertIsTrue_Test()
         {
             // Setup only includes clearing out the package list and add one with the priorty alert plus enhancment types

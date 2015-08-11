@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    [TestClass]
     public class ShippingPoliciesTest
     {
         private ShippingPolicies policies;
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_DelegatesToIsApplicable()
         {
             object testObject = new object();
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bestRateNonApplicablePolicy.Verify(x => x.IsApplicable(testObject));
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_CallsApplyOnPolicies_WhenShippingTypesMatchAndIsApplicable()
         {
             object testObject = new object();
@@ -120,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bestRateApplicablePolicy2.Verify(x => x.Apply(testObject));
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_DoesNotCallApplyOnPolicies_WhenShippingTypesAreNotApplicable()
         {
             object testObject = new object();
@@ -131,27 +130,27 @@ namespace ShipWorks.Tests.Shipping.Policies
             uspsNonApplicablePolicy.Verify(x => x.Apply(It.IsAny<object>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_DoesNotCrash_WhenCalledWithShipmentTypeThatHasNoPolicies()
         {
             policies.Apply(ShipmentTypeCode.None, new object());
         }
 
-        [TestMethod]
+        [Fact]
         public void Apply_WithNoPolicies_DoesNotThrow()
         {
             policies = new ShippingPolicies(new List<KeyValuePair<ShipmentTypeCode, IShippingPolicy>>());
             policies.Apply(ShipmentTypeCode.BestRate, new object());
         }
 
-        [TestMethod]
+        [Fact]
         public void Constructor_DoesNotThrow_WhenParameterIsEmpty()
         {
             policies = new ShippingPolicies(null);
             policies.Apply(ShipmentTypeCode.BestRate, new object());
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_UpdatesCurrent()
         {
             policies = ShippingPolicies.Current;
@@ -159,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.AreNotSame(policies, ShippingPolicies.Current);
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_DelegatesToFactory_ToCreateShippingPolicies()
         {
             ShippingPolicies.Load(0, features, policyFactoryMock.Object);
@@ -169,7 +168,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             policyFactoryMock.Verify(x => x.Create(It.IsAny<ShipmentTypeCode>(), "Baz"), Times.Once);
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_DelegatesConfigurationToPolicy()
         {
             List<Mock<IShippingPolicy>> fooPolicies = CreateAndRegisterFactoryMocks("Foo", 1);
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bazPolicies[0].Verify(x => x.Configure("1"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_IncludePolicyOfExistingStore_WhenLoadingNewStore()
         {
             features.Remove(ShipmentTypeCode.BestRate);
@@ -209,7 +208,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bazPolicies[1].Verify(x => x.Configure("3"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_ReplacePolicyOfExistingStore_WhenLoadingExistingStore()
         {
             features.Remove(ShipmentTypeCode.BestRate);
@@ -229,7 +228,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bazPolicies[0].Verify(x => x.Configure("3"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Unload_ExcludePolicyOfUnloadedStore()
         {
             // Load multiple stores
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             bazPolicies[0].Verify(x => x.Configure("3"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Unload_DoesNotUpdateCurrentPolicies_WhenStoreDoesNotExist()
         {
             var currentPolicies = ShippingPolicies.Current;

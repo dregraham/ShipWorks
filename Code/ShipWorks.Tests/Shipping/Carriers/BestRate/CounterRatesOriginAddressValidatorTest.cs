@@ -1,14 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 {
-    [TestClass]
     public class CounterRatesOriginAddressValidatorTest
     {
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenOriginStreet1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenOriginCityIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenOriginStateIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenOriginPostalCode1IsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsFalse_WhenOriginCountryCodeIsEmpty_Test()
         {
             ShipmentEntity shipment = CreateShipment();
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValid_ReturnsTrue_WhenOriginAddressIsComplete_Test()
         {
             ShipmentEntity shipment = CreateShipment();

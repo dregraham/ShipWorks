@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
 {
-    [TestClass]
     public class Express1UspsShipmentTypeTest
     {
         private Express1UspsShipmentType testObject;
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
             LoadAllPostalServicePackageTypes();
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRestricted_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsNotReturned_WhenUspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
         {
             foreach (PostalServicePackagingCombination combo in allCombinations.Except(adultSignatureCombinationsAllowed))

@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using System;
 using System.Reflection;
 using System.IO;
@@ -13,7 +13,6 @@ using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class DownloadOrdersRequestTest
     {
         private Credentials credentials;
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             return xml;
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]
         public void GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived_Test()
         {
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_ReturnsDownloadInfo_WhenSuccessfulResponseReceived_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsInstanceOfType(info, typeof(DownloadInfo));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_ReturnsDownloadInfoWithTotalOrders_WhenSuccessfulResponseReceived_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(42, info.TotalOrders);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_ReturnsDownloadInfoWithStartDate_WhenSuccessfulResponseReceived_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(fromDate, info.StartDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_ReturnsDownloadInfoWithEndDate_WhenSuccessfulResponseReceived_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_PageCountIsZero_WhenZeroOrdersToDownload_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, zeroOrdersRequest);
@@ -128,7 +127,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(0, info.PageCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_PageCountIsOne_WhenFortyTwoOrdersToDownload_Test()
         {
             // A test case for total orders not being evenly divided by max page size - page count 
@@ -142,7 +141,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(1, info.PageCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_PageCountIsTwo_WhenTwoHundredOrdersToDownload_Test()
         {
             // A test case for total orders being evenly divided by the max page size
@@ -155,7 +154,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(2, info.PageCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_FindsStartDate_FromListOfOrders_Test()
         {
             DateTime expectedStartDateInPST = TimeZoneInfo.ConvertTime(DateTime.Parse("1/5/2011 4:32:02 AM"), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
@@ -181,7 +180,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedStartDateInUtc, info.StartDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_FindsEndDate_FromListOfOrders_Test()
         {
             DateTime expectedEndDateInPST = TimeZoneInfo.ConvertTime(DateTime.Parse("12/1/2012 4:29:19 PM"), TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
@@ -207,7 +206,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedEndDateInUtc, info.EndDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_FindsTotalOrders_FromListOfOrders_Test()
         {
             List<Order> orders = new List<Order>
@@ -229,7 +228,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(orders.Count, info.TotalOrders);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenFortyTwoOrders_Test()
         {
             List<Order> orders = new List<Order>();
@@ -244,7 +243,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(1, info.PageCount);
         }
         
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenZeroOrders_Test()
         {
             List<Order> orders = new List<Order>();
@@ -255,7 +254,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(0, info.PageCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_StartDateIsNow_FromListOfOrders_WhenZeroOrders_Test()
         {
             DateTime utcNowForComparison = DateTime.UtcNow;
@@ -267,7 +266,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsTrue(utcNowForComparison <= info.StartDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_EndDateIsNow_FromListOfOrders_WhenZeroOrders_Test()
         {
             DateTime utcNowForComparison = DateTime.UtcNow;
@@ -279,7 +278,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsTrue(utcNowForComparison <= info.EndDate);
         }
         
-        [TestMethod]
+        [Fact]
         public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenTwoHundredOrders_Test()
         {
             List<Order> orders = new List<Order>();
@@ -294,7 +293,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(2, info.PageCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Download_RequestBodyContainsOrderNumberNodes_WhenDownloadingSpecificOrders_Test()
         {
             List<Order> ordersToDownload = new List<Order>

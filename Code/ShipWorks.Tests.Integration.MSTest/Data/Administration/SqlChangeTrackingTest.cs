@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Data;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.Data.Administration;
@@ -13,7 +13,6 @@ using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 {
-    [TestClass]
     public class SqlChangeTrackingTest
     {
         private SqlChangeTracking testObject;
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             }
         }
         
-        [TestMethod]
+        [Fact]
         [TestCategory("ContinuousIntegration")]
         public void TablesRequiringChangeTracking_CountMatchesNumberOfTablesWithChangeTrackingInDatabase_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             Assert.AreEqual(GetTablesWithChangeTrackingEnabledFromDatabase().Count, testObject.TablesRequiringChangeTracking.Count);
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("ContinuousIntegration")]
         public void TablesRequiringChangeTracking_MatchesTableNamesWithChangeTrackingInDatabase_Test()
         {
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             }
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("ContinuousIntegration")]
         public void Enable_TurnsOnChangeTrackingForDatabase_Test()
         {
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             Assert.IsTrue(IsDatabaseChangeTrackingEnabled());
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("ContinuousIntegration")]
         public void Enable_TurnsOnChangeTrackingForAllTables_Test()
         {

@@ -7,12 +7,11 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Excel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
-    [TestClass]
     public class DataDrivenIntegrationTestBase
     {
         private TestContext testContextInstance;

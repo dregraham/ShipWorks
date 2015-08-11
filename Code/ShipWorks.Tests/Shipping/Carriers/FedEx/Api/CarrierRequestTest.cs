@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.Api;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
-    [TestClass]
     public class CarrierRequestTest
     {
         // A little unique here in that we need a class to test/expose a protected method on the 
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             testObject = new CarrierRequestToTestProtectedMethod(manipulators, new ShipmentEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void ApplyManipulators_DelegatesToAllManipulators_Test()
         {
             testObject.ApplyManipulators();

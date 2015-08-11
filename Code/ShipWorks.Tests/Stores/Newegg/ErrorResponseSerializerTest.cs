@@ -2,13 +2,12 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors;
 using ShipWorks.Stores.Platforms.Newegg.Net.Errors.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class ErrorResponseSerializerTest
     {
         private string errorXml;
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ReturnsErrorResult_WhenDeserializingErrorXml_Test()
         {
             object result = serializer.Deserialize(errorXml);
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsInstanceOfType(result, typeof(ErrorResult));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingNonErrorXml_Test()
         {

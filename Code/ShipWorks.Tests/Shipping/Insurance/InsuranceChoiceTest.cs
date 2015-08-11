@@ -2,41 +2,40 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Insurance
 {
-    [TestClass]
     public class InsuranceChoiceTest
     {
-        [TestMethod]
+        [Fact]
         public void AllFedExShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreFedEx_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllFedExShipments(BuildMatchingChoices(ShipmentTypeCode.FedEx)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllFedExShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreFedEx_Test()
         {
             Assert.IsFalse(InsuranceChoice.AllFedExShipments(BuildMixedShipmentTypeChoices()));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUpsExShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreUpsOnLineTools_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllUpsShipments(BuildMatchingChoices(ShipmentTypeCode.UpsOnLineTools)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUpsExShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreUpsWorldShip_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllUpsShipments(BuildMatchingChoices(ShipmentTypeCode.UpsWorldShip)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUpsExShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreUpsWorldShipOrUpsOnlineTools_Test()
         {
             List<InsuranceChoice> choices = new List<InsuranceChoice>();
@@ -46,55 +45,55 @@ namespace ShipWorks.Tests.Shipping.Insurance
             Assert.IsTrue(InsuranceChoice.AllUpsShipments(choices));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUpsShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreUps_Test()
         {
             Assert.IsFalse(InsuranceChoice.AllUpsShipments(BuildMixedShipmentTypeChoices()));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllOnTracShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreOnTrac_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllOnTracShipments(BuildMatchingChoices(ShipmentTypeCode.OnTrac)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllOnTracShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreOnTrac_Test()
         {
             Assert.IsFalse(InsuranceChoice.AllOnTracShipments(BuildMixedShipmentTypeChoices()));
         }
 
-        [TestMethod]
+        [Fact]
         public void AlliParcelShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreiParcel_Test()
         {
             Assert.IsTrue(InsuranceChoice.AlliParcelShipments(BuildMatchingChoices(ShipmentTypeCode.iParcel)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AlliParcelShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreiParcel_Test()
         {
             Assert.IsFalse(InsuranceChoice.AlliParcelShipments(BuildMixedShipmentTypeChoices()));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllEndiciaShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreEndicia_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllEndiciaShipments(BuildMatchingChoices(ShipmentTypeCode.Endicia)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllEndiciaShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreEndicia_Test()
         {
             Assert.IsFalse(InsuranceChoice.AllEndiciaShipments(BuildMixedShipmentTypeChoices()));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUspsShipments_ReturnsTrue_WhenAllShipmentTypeCodesAreUsps_Test()
         {
             Assert.IsTrue(InsuranceChoice.AllUspsShipments(BuildMatchingChoices(ShipmentTypeCode.Usps)));
         }
 
-        [TestMethod]
+        [Fact]
         public void AllUspsShipments_ReturnsFalse_WhenNotAllShipmentTypeCodesAreUsps_Test()
         {
             Assert.IsFalse(InsuranceChoice.AllUspsShipments(BuildMixedShipmentTypeChoices()));

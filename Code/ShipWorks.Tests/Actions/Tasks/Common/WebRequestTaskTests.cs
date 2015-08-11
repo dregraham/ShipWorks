@@ -1,11 +1,10 @@
 ﻿using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Tasks.Common;
 using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class WebRequestTaskTests
     {
         WebRequestTask testObject;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject.SetPassword("password");
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_ShouldDeserializeCorrectly()
         {
             string serializedObject = testObject.SerializeSettings();

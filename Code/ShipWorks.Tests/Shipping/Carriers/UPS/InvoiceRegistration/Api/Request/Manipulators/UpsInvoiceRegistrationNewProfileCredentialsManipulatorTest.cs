@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators
 {
-    [TestClass]
     public class UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest
     {
         UpsInvoiceRegistrationNewProfileCredentialsManipulator testObject;
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             testObject = new UpsInvoiceRegistrationNewProfileCredentialsManipulator();           
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_UsernameIsPopulated_Test()
         {
             testObject.Manipulate(request);
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.IsFalse(string.IsNullOrWhiteSpace(registerRequest.Username));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PasswordIsPopulated_Test()
         {
             testObject.Manipulate(request);
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.IsFalse(string.IsNullOrWhiteSpace(registerRequest.Password));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SuggestUserNameIndicatorCorrect_Test()
         {
             testObject.Manipulate(request);
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual("N", registerRequest.SuggestUsernameIndicator);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_NotificationCodeCorrect_Test()
         {
             testObject.Manipulate(request);
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual("00", registerRequest.NotificationCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_UsernameIsDifferentAfterSecondCall_Test()
         {
             testObject.Manipulate(request);

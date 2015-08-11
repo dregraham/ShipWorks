@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 {
-    [TestClass]
     public class FedExBestRateBrokerTest
     {
 
@@ -28,13 +27,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_FedExSettingSpecfiesShipWorks_Test()
         {
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_FedExSettingSpecfiesCarrier_Test()
         {
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.Carrier }));

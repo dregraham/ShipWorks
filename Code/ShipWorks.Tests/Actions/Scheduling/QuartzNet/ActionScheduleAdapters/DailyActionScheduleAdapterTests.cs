@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
 using System;
@@ -8,7 +8,6 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
-    [TestClass]
     public class DailyActionScheduleAdapterTests
     {
         DailyActionScheduleAdapter target;
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         }
 
 
-        [TestMethod]
+        [Fact]
         public void FiresAtStartTime()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { StartDateTimeInUtc = DateTime.UtcNow };
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.AreEqual(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.UtcNow };
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.IsTrue(intervals.All(x => x.TotalDays == schedule.FrequencyInDays));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstEnds()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("10/27/2015").AddHours(4).ToUniversalTime() };
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency_WhenDstStarts()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 3, StartDateTimeInUtc = DateTime.Parse("3/4/2015").AddHours(4).ToUniversalTime() };
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.IsTrue(intervals[3] == ThreeDays);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresOnceWhenHourRepeats_WhenDstEnds()
         {
             DailyActionSchedule schedule = new DailyActionSchedule { FrequencyInDays = 1, StartDateTimeInUtc = DateTime.Parse("10/30/2015 02:30:00 AM").ToUniversalTime() };

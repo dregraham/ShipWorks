@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.ShipSense.Customs;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Tests.Shipping.ShipSense.Customs
 {
-    [TestClass]
     public class KnowledgebaseCustomsItemXmlWriterTest
     {
         private KnowledgebaseCustomsItemXmlWriter testObject;
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             changeSetElement = new XElement("ChangeSet");
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AddsCustomsItemsNodeToChangeSet_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             Assert.AreEqual(1, changeSetElement.Descendants("CustomsItems").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AddsBeforeAfterNodesToCustomsItems_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             Assert.AreEqual(1, changeSetElement.Descendants("After").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_BeforeItemsMatchXml_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AfterItemsMatchXml_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_DoesNotWriteAnyHash_Test()
         {
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);

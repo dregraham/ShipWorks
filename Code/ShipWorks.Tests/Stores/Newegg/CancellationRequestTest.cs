@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
@@ -9,7 +9,6 @@ using ShipWorks.Stores.Platforms.Newegg.Net.Orders.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class CancellationRequestTest
     {
         private INeweggRequest successfulRequest;
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             successfulRequest = new Mocked.MockedNeweggRequest(successResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]        
         public void Cancel_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Cancel(orderToCancel, CancellationReason.OutOfStock);
         }
 
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithOrderNumber_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithVoidStatus_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedCancelledOrderStatus, result.Detail.OrderStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Cancel_ReturnsResultWithSellerId_WhenCancellingAnOrder_Test()
         {
             testObject = new CancelOrderRequest(credentials, successfulRequest);
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedCancelledSellerId, result.Detail.SellerId);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Cancel_ReturnsCancellationResults_WhenCancellingAnOrderWithNeweggAPI_IntegrationTest()
         {
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.Inconclusive("Need an unshipped order to run this integration test.");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]
         [Ignore]
         public void Cancel_ThrowsNeweggException_WhenCancellingAnInvoicedOrder_WithNeweggAPI_IntegrationTest()

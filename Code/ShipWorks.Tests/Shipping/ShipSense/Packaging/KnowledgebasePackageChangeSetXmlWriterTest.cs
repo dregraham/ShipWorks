@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.ShipSense.Packaging;
 
 namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
 {
-    [TestClass]
     public class KnowledgebasePackageChangeSetXmlWriterTest
     {
         private KnowledgebasePackageChangeSetXmlWriter testObject;
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             changeSetElement = new XElement("ChangeSet");
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AddsPackagesNodeToChangeSet_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             Assert.AreEqual(1, changeSetElement.Descendants("Packages").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AddsBeforeNodeToPackages_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             Assert.AreEqual(1, changeSetElement.Descendants("Packages").Descendants("Before").Count());
         }
         
-        [TestMethod]
+        [Fact]
         public void Write_PackageNodesInBeforeNode_MatchNumberOfElementsInBeforeList_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             Assert.AreEqual(beforePackages.Count, changeSetElement.Descendants("Packages").Descendants("Before").Descendants("Package").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageWeight_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageHeight_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageWidth_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageLength_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -121,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageAdditionalWeight_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageApplyAdditionalWeight_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_DoesNotWritePackageHash_OfEachBeforePackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -163,7 +162,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_AddsAfterNodeToPackages_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -172,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             Assert.AreEqual(1, changeSetElement.Descendants("Packages").Descendants("After").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_PackageNodesIAfterNode_MatchNumberOfElementsInAfterList_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -181,7 +180,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             Assert.AreEqual(afterPackages.Count, changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageWeight_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -195,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageHeight_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -209,7 +208,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageWidth_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -223,7 +222,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageLength_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -237,7 +236,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageAdditionalWeight_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -251,7 +250,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_WritesPackageApplyAdditionalWeight_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
@@ -265,7 +264,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Write_DoesNotWritePackageHash_OfEachAfterPackage_Test()
         {
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);

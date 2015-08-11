@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
@@ -20,7 +20,6 @@ namespace ShipWorks.Tests.Stores.eBay
     /// <summary>
     /// Summary description for EbayOnlineUpdater
     /// </summary>
-    [TestClass]
     public class EbayOnlineUpdaterTest
     {
         private EbayOrderItemEntity itemEntity;
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Stores.eBay
             orderEntity.OrderItems.AddRange(new List<OrderItemEntity>() {itemEntity});
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsFedEx_Test()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.FedEx;
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsFedEx_WhenOtherCarrierIsFedEx_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUps_WhenOtherCarrierIsUps_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenOtherCarrierIsUsps_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenOtherCarrierIsDhl_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsOther_WhenOtherCarrierIsOther_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUps_WhenUpsAndServiceIsGround_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
@@ -125,7 +124,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsOther_WhenUpsAndMiServiceAndNoUspsTrackingNumber_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.UpsOnLineTools;
@@ -140,7 +139,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClassService_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlService_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.Stores.eBay
             CheckCarrierCodeAndTrackingNumber();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsOther_WhenUspsAndConsolidatorService_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;

@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using ShipWorks.Shipping;
 using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shipping.ScanForms
-{
-    [TestClass]    
+{    
     public class ScanFormTest
     {
         private Mock<IScanFormPrinter> printer;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanForm(carrierAccount.Object, 1000, string.Empty);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ShippingException))]
         public void Print_ThrowsShippingException_WhenCarrierAccountIsNull_Test()
         {
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject.Print(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Print_DelegatesToCarrerAccount_ForPrinter_Test()
         {
             testObject.Print(new Form());
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             carrierAccount.Verify(c => c.GetPrinter(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Print_DelegatesToScanFormPrinter_Test()
         {
             // The owner doesn't matter since the carrier's printer is mocked
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             printer.Verify(p => p.Print(owner, testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Print_ReturnsTrue_WhenPrintingIsSuccessful_Test()
         {
             // The test object is already setup with the success path
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.IsTrue(success);
         }
 
-        [TestMethod]
+        [Fact]
         public void Print_ReturnsFalse_WhenPrintingFails_Test()
         {
             // Setup our mock printer to return a false value to simulate the printer failing

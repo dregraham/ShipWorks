@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Data.Model.EntityClasses;
 using Moq;
@@ -11,7 +11,6 @@ using ShipWorks.Templates.Tokens;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelTokenSuggestionFactoryTest
     {
         private iParcelTokenSuggestionFactory testObject;
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject = new iParcelTokenSuggestionFactory(shipments, repository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsOne_Test()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsGreaterThanOne_Test()
         {
             shipments.Add(new ShipmentEntity());
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_AddsDefaultSuggestion_WhenShipmentCountIsZero_Test()
         {
             shipments.RemoveAt(0);
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_DelegatesToRepository_WhenShipmentCountIsOne_Test()
         {
             testObject.GetSuggestions(TokenUsage.Generic);
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsGreaterThanOne_Test()
         {
             shipments.Add(new ShipmentEntity());
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             repository.Verify(r => r.PopulateOrderDetails(shipments[0]), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_DoesNotDelegateToRepository_WhenShipmentCountIsZero_Test()
         {
             shipments.RemoveAt(0);
@@ -125,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             repository.Verify(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_AddsSuggestionForEachOrderItem_WhenShipmentCountIsOne_Test()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(2, itemSpecificSuggestions.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_OrderItemSuggestionsIsCommaDelimited_WhenShipmentCountIsOne_Test()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
@@ -151,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetSuggestions_OrderItemSuggestionsXSL_WhenShipmentCountIsOne_Test()
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
@@ -166,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             }
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void GetSuggestions_ThrowsiParcelException_WhenExceptionOccurs_Test()
         {

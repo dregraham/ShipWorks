@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
 {
-    [TestClass]
     public class FedExVoidResponseTest
     {
         private FedExVoidResponse testObject;
@@ -25,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             testObject = new FedExVoidResponse(nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Request_ReturnsCarrierRequest_Test()
         {
             CarrierRequest request = testObject.Request;
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             Assert.AreEqual(carrierRequest.Object, request);
         }
 
-        [TestMethod]
+        [Fact]
         public void NativeResponse_ReturnsVoidReply_Test()
         {
             object nativeRespose = testObject.NativeResponse;
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             Assert.AreEqual(nativeRespose, nativeResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
         {
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
         {
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenNotificationsIsNull_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             //secondManipulator.Verify(m => m.Manipulate(testObject, voidEntity), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenNotificationsDoesNotContainCode9804_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
             //secondManipulator.Verify(m => m.Manipulate(testObject, voidEntity), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DoesNotDelegatesToManipulators_WhenNotificationsContainsCode9804_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.SUCCESS;

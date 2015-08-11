@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExShipperManipulatorTest
     {
         private FedExShipperManipulator testObject;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExShipperManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsRequestedShipment_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExShipperManipulator_ReturnsValidRequestedShipmentShipper_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Contact.PhoneNumber, shipmentEntity.OriginPhone);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResidentialSpecifiedIsTrue_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsNull_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyIsEmpty_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsFalse_WhenCommercialIfCompanyTypeIsSpecified_AndCompanyHasValue_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.CommercialIfCompany;
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified_Test()
         {
@@ -120,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddressAddedToRecipeint_RequestedShipmentIsReturn_Test()
         {
             shipmentEntity.ReturnShipment = true;

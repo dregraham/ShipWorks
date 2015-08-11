@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
@@ -9,7 +9,6 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class XPathUtilityTests
     {
         static XmlDocument xmlDocument;
@@ -40,21 +39,21 @@ namespace ShipWorks.Tests.Core
             xpath = xmlDocument.CreateNavigator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void EvaluateNullXpath()
         {
             XPathUtility.Evaluate(null, "Whatever", "Nothing");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void EvaluateNullNodePath()
         {
             XPathUtility.Evaluate(xpath, null, "Nothing");
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Car/Color", "Black");
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual("Blue", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingString()
         {
             string result = XPathUtility.Evaluate(xpath, "//EmptyString", "NonEmtpy");
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDefaultString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Does/Not/Exist", "MyDefault");
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual("MyDefault", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateNodeSetString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Color", "Multiple");
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual("Blue", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateInt()
         {
             int result = XPathUtility.Evaluate(xpath, "//Truck/Wheels", 2);
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(18, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingInt()
         {
             int result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 4);
@@ -103,14 +102,14 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(4, result);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void EvaluateNonInt()
         {
             XPathUtility.Evaluate(xpath, "//Car/Color", 12);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDecimal()
         {
             decimal result = XPathUtility.Evaluate(xpath, "//Car/MPG", 1.25m);
@@ -118,14 +117,14 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(31.34m, result);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void EvaluateNonDecimal()
         {
             XPathUtility.Evaluate(xpath, "//Car/Color", 12.5m);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingDecimal()
         {
             decimal result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 4.5m);
@@ -133,14 +132,14 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(4.5m, result);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void EvaluateDecimalAsInt()
         {
             int result = XPathUtility.Evaluate(xpath, "//Car/MPG", 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDouble()
         {
             double result = XPathUtility.Evaluate(xpath, "//Truck/MPG", 1.25);
@@ -148,14 +147,14 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(12.25, result);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void EvaluateNonDouble()
         {
             XPathUtility.Evaluate(xpath, "//Car/Color", 12.5);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingDouble()
         {
             double result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 8.98);
@@ -163,7 +162,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(8.98, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateBool()
         {
             bool result = XPathUtility.Evaluate(xpath, "//Truck/Diesel", false);
@@ -171,14 +170,14 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(true, result);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void EvaluateNonBool()
         {
             XPathUtility.Evaluate(xpath, "//Car/Color", true);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingBool()
         {
             bool result = XPathUtility.Evaluate(xpath, "//Van/Nothing", true);

@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipulators
 {
-    [TestClass]
     public class FedExTrackingResponseManipulatorTest
     {
         private FedExTrackingResponseManipulator testObject;
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             testObject = new FedExTrackingResponseManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsError_Test()
         {
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             testObject.Manipulate(fedExTrackingResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsFailure_Test()
         {
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             testObject.Manipulate(fedExTrackingResponse);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsNull_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = null;
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             Assert.AreEqual("Unknown", fedExTrackingResponse.TrackingResult.Summary);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsEmpty_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = new TrackDetail[0];
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             Assert.AreEqual("Unknown", fedExTrackingResponse.TrackingResult.Summary);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResultSummaryIsNoTrackingInfoReturned_WhenTrackDetailsStatusDescriptionIsEmpty_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].StatusDetail.Description = string.Empty;
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             Assert.AreEqual("No tracking information was returned.", fedExTrackingResponse.TrackingResult.Summary);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LocationContainsCountryName_ForInternationalShipments_Test()
         {
             // Setup the shipment to be international
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             Assert.IsTrue(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_LocationDoesNotContainCountryName_ForDomesticShipments_Test()
         {
             // Setup the shipment to be a domestic Canadian shipment
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
             Assert.IsFalse(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DetailIsEmpty_WhenTrackingEventsIsNull_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].Events = null;

@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Tests.Shipping.Carriers
 {
-    [TestClass]
     public class CarrierDescriptionTest
     {
         private readonly string[] upsNames = {"UPS", "ups", "u p s", "   UP s "};
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
         private readonly string[] fedExNames = { "FedEx", "fedex", "f e d E X", "   Fed e x " };
         private readonly string[] dhlNames = { "DHL", "dhl", "d h l", "   DH l " };
 
-        [TestMethod]
+        [Fact]
         public void OtherCarrier_AllAttributesAreFalse_WhenCarrierTypeIsUnknown()
         {
             ShipmentEntity shipment = CreateOtherShipment("Foo", "Bar");
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             Assert.IsFalse(description.IsDHL);
         }
 
-        [TestMethod]
+        [Fact]
         public void OtherCarrier_NameIsCarrier_WhenCarrierTypeIsUnknown()
         {
             ShipmentEntity shipment = CreateOtherShipment("Foo", "Bar");
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             Assert.AreEqual("Foo", description.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void Name_ReturnsUPS_WhenOtherCarrierContainsUPS()
         {
             foreach (string carrierName in upsNames)
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Name_ReturnsUsps_WhenOtherCarrierContainsUsps()
         {
             foreach (string carrierName in uspsNames)
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Name_ReturnsFedEx_WhenOtherCarrierContainsFedEx()
         {
             foreach (string carrierName in fedExNames)
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Name_ReturnsDHL_WhenOtherCarrierContainsDHL()
         {
             foreach (string carrierName in dhlNames)
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUps_ReturnsTrue_WhenOtherCarrierContainsUPS()
         {
             foreach (string carrierName in upsNames)
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void IsUsps_ReturnsTrue_WhenOtherCarrierContainsUSPS()
         {
             foreach (string carrierName in uspsNames)
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void IsFedEx_ReturnsTrue_WhenOtherCarrierContainsFedEx()
         {
             foreach (string carrierName in fedExNames)
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void IsDHL_ReturnsTrue_WhenOtherCarrierContainsDHL()
         {
             foreach (string carrierName in dhlNames)

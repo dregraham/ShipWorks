@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Utility
 {
     /// <summary>
     /// Test class to verify that the WeightUtility method(s) work correctly.
     /// </summary>
-    [TestClass]
     public class WeightUtilityTest
     {
         // Verify that a one to one conversion works correctly
-        [TestMethod]
+        [Fact]
         public void Convert_OneToOne_ConvertsCorrectly_Test()
         {
             // Grams to X
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         }
 
         // Verify no rounding errors occur for a double greater than 1.0
-        [TestMethod]
+        [Fact]
         public void Convert_MultipleOfDoubleGreaterThan1_ConvertsCorrectly_Test()
         {
             double multiplier = 3.291773;
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         }
 
         // Verify no rounding errors occur for a double less than 1.0
-        [TestMethod]
+        [Fact]
         public void Convert_MultipleOfDoubleLessThan1_ConvertsCorrectly_Test()
         {
             double multiplier = 0.137529;

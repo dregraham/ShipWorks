@@ -1,12 +1,11 @@
 ﻿using ShipWorks.Actions.Triggers;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Actions.Triggers
 {
-    [TestClass]
     public class ActionTriggerFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsOrderDownloadedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.OrderDownloaded, null);
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(trigger, typeof(OrderDownloadedTrigger));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsDownloadFinishedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.DownloadFinished, null);
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(trigger, typeof(DownloadFinishedTrigger));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsShipmentProcessedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentProcessed, null);
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(trigger, typeof(ShipmentProcessedTrigger));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsShipmentVoidedTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentVoided, null);
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(trigger, typeof(ShipmentVoidedTrigger));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsFilterContentTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.FilterContentChanged, null);
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(trigger, typeof(FilterContentTrigger));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateTrigger_ReturnsScheduledTrigger_Test()
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, null);

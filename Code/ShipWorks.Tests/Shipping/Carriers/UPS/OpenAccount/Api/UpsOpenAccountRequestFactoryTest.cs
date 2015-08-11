@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
 {
-    [TestClass]
     public class UpsOpenAccountRequestFactoryTest
     {
         private UpsOpenAccountRequestFactory testObject;
@@ -20,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
             testObject = new UpsOpenAccountRequestFactory(new UpsAccountEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_ReturnsUpsOpenAccountRequest_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest());
@@ -28,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
             Assert.IsInstanceOfType(request, typeof(UpsOpenAccountRequest));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
             Assert.AreEqual(1, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_AddsUpsOpenAccountAddEndUserInformation_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;

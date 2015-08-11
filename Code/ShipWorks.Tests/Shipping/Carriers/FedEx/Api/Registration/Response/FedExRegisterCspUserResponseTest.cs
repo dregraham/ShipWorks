@@ -1,5 +1,5 @@
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
-    [TestClass]
     public class FedExRegisterCspUserResponseTest
     {
         private FedExRegisterCspUserResponse testObject;
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject = new FedExRegisterCspUserResponse(nativeResponse, carrierRequest.Object, settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsFedExUserName_ToCredentialKey_Test()
         {
             testObject.Process();
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             Assert.AreEqual(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SetsFedExPassword_Test()
         {
             testObject.Process();
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             Assert.IsFalse(string.IsNullOrEmpty(shippingSettings.FedExPassword));
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_EncryptsPassword_Test()
         {
             testObject.Process();
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             Assert.AreEqual(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToRepository_ToGetShippingSettings_Test()
         {
             testObject.Process();
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             settingsRepository.Verify(r => r.GetShippingSettings(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToRepository_ToSaveShippingSettings_Test()
         {
             testObject.Process();
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             settingsRepository.Verify(r => r.SaveShippingSettings(shippingSettings), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReceivingErrorSeverity_Test()
         {
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReceivingFailureSeverity_Test()
         {

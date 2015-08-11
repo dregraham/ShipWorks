@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
@@ -8,10 +8,9 @@ using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class MonthlyActionScheduleTests
     {
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact, ExpectedException(typeof(SchedulingException))]
         public void DayMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_Validate_SucceedsWhenValid()
         {
             var target = new MonthlyActionSchedule
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
 
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact, ExpectedException(typeof(SchedulingException))]
         public void DateMode_Validate_AtLeastOneDayIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             }
         }
 
-        [TestMethod, ExpectedException(typeof(SchedulingException))]
+        [Fact, ExpectedException(typeof(SchedulingException))]
         public void DateMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DateMode_Validate_SucceedsWhenValid()
         {
             var target = new MonthlyActionSchedule

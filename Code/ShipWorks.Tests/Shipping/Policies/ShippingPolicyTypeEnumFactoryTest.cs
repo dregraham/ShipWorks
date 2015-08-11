@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Shipping.Policies
 {
-    [TestClass]
     public class ShippingPolicyTypeEnumFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void Create_CreatesRateResultCountPolicy_WithRateResultCountString_WhenShipmentTypeIsBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsInstanceOfType(policy, typeof(RateResultCountShippingPolicy));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesNullShippingPolicy_WhenShipmentTypeIsNotBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsInstanceOfType(policy, typeof(NonRestrictedRateCountShippingPolicy));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_CreatesBestRateUpsRestrictionPolicy_WithBestRateUpsRestrictionString_WhenShipmentTypeIsNotBestRate_Test()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Create_ThrowsInvalidOperationException_WhenPolicyTypeIsUnknown()
         {

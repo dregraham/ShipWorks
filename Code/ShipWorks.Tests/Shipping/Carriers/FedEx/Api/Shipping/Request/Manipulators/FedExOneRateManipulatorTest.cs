@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExOneRateManipulatorTest
     {
         private FedExOneRateManipulator testObject;
@@ -44,14 +43,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExOneRateManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotIFedExNativeShipmentRequest_Test()
         {
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DoesNotAddOneRateSpecialServiceType_WhenServiceTypeIsNotOneRate_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(0, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count(t => t == ShipmentSpecialServiceType.FEDEX_ONE_RATE));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRateExpressSaver_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRateExpressSaver;
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRate2Day_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRate2Day;
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRate2DayAM_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRate2DayAM;
@@ -108,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRateFirstOvernight_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRateFirstOvernight;
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRatePriorityOvernight_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRatePriorityOvernight;
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_WhenServiceTypeIsOneRateStandardOvernight_AndSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRateStandardOvernight;
@@ -135,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0], ShipmentSpecialServiceType.FEDEX_ONE_RATE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddsOneRateSpecialServiceType_AndRetainsExistingSpecialServices_WhenSpecialServiceTypeArrayIsEmpty_Test()
         {
             shipmentEntity.FedEx.Service = (int)FedExServiceType.OneRateExpressSaver;

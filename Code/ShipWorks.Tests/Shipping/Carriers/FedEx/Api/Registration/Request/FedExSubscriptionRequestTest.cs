@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 {
-    [TestClass]
     public class FedExSubscriptionRequestTest
     {
         private FedExSubscriptionRequest testObject;
@@ -52,19 +51,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             testObject = new FedExSubscriptionRequest(manipulators, fedExService.Object, responseFactory.Object, account);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
             Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
             Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToFedExService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             fedExService.Verify(s => s.SubscribeShipper(testObject.NativeRequest as SubscriptionRequest), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingGroundCloseResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +16,6 @@ using ILog = log4net.ILog;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 {
-    [TestClass]
     public class OnTracRateRequestTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RatesRetrieved_ValidResponse_Test()
         {
             var rateGroup = RunSuccessfullGetRates();
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             Assert.AreEqual(OnTracServiceType.Ground, (OnTracServiceType)rateGroup.Rates.First().Tag);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RateIsNotIncluded_WhenServiceTypeHasBeenExcluded()
         {
             var rateGroup = RunSuccessfullGetRates(OnTracShipmentType.ServiceTypes.Where(x => x != OnTracServiceType.Ground));
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             Assert.AreEqual(0, rateGroup.Rates.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_ResponseLogged_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestLogged_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_UrlInCorrectFormat_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
                     "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;15;1X2X3;"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestUsedGetMethod_ValidResponse_Test()
         {
             RunSuccessfullGetRates();
@@ -154,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             return rateGroup;
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_RequestedWeightIsZero_PackageTypeIsLetter()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracApiErrorException))]
         public void GetRates_ThrowsOnTracException_WhenErrorInShipment_Test()
         {
@@ -222,7 +221,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned_Test()
         {
@@ -240,7 +239,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracApiErrorException))]
         public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned_Test()
         {
@@ -257,7 +256,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetRates_LogsUnknownRateType_WhenUnknownRateTypeReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList

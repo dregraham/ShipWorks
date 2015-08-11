@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
 {
-    [TestClass]
     public class FedExSmartPostCloseRequestTest
     {
         private FedExSmartPostCloseRequest testObject;
@@ -56,19 +55,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
             Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
             Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToFedExService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request
             fedExService.Verify(s => s.Close(testObject.NativeRequest as SmartPostCloseRequest), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingSmartPostCloseResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()

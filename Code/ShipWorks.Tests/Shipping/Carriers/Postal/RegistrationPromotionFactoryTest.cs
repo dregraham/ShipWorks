@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Contracts;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
-    [TestClass]
     public class RegistrationPromotionFactoryTest
     {
         MockRepository mockRepository;
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             endiciaExpress1Repository = CreateEmptyRepository<EndiciaAccountEntity>();
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsNewPostalCustomerRegistrationPromotion_WhenNoPostalAccountsExist()
         {
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(NewPostalCustomerRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenOnlyUspsExpress1Exists()
         {
             uspsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenOnlyEndiciaExpress1Exists()
         {
             endiciaExpress1Repository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsExpress1OnlyRegistrationPromotion_WhenBothUspsAndEndiciaExpress1Exists()
         {
             uspsExpress1Repository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsEndiciaRegistrationPromotion_WhenOnlyEndiciaAccountsExist()
         {
             endiciaRepository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion)); 
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsEndiciaRegistrationPromotion_WhenEndiciaAndEndiciaExpress1AccountsExist()
         {
             endiciaRepository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsEndiciaRegistrationPromotion_WhenEndiciaAndUspsExpress1AccountsExist()
         {
             endiciaRepository = CreateRepositoryWithAccounts(new List<EndiciaAccountEntity> { new EndiciaAccountEntity() });
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsEndiciaCbpRegistrationPromotion_WhenEndiciaAccountAndUspsResellerAccountsExist()
         {
             uspsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity>
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(EndiciaCbpRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsUspsIntuishipRegistrationPromotion_WhenOnlyNonResellerUspsAccountsExist()
         {
             uspsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             Assert.IsInstanceOfType(promotion, typeof(UspsIntuishipRegistrationPromotion));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegistrationPromotion_ReturnsUspsCbpRegistrationPromotion_WhenOnlyUspsAccountsExistAndIncludesReseller()
         {
             uspsRepository = CreateRepositoryWithAccounts(new List<UspsAccountEntity>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.BestRate.Footnote;
@@ -12,19 +12,18 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
 {
-    [TestClass]
     public class BrokerExceptionsFootnoteFactoryTest
     {
         private BrokerExceptionsRateFootnoteFactory testObject;
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty_Test()
         {
             testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), new List<BrokerException>());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl_Test()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
             Assert.IsInstanceOfType(footnote, typeof(BrokerExceptionsRateFootnoteControl));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateFootnote_ReturnsBrokerExceptionsRateFootnoteControl_WithBrokerExceptions_Test()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>

@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
 {
-    [TestClass]
     public class FedExWebServiceReferenceTest
     {
-        [TestMethod]
+        [Fact]
         public void DataTypeOfGlobalShipAddressDistanceValue_IsDouble_Test()
         {
             // The Distance.Value is a decimal datatype in the original reference that gets generated from 

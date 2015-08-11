@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExHoldAtLocationManipulatorTest
     {
         private FedExHoldAtLocationManipulator testObject;
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExHoldAtLocationManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailIsNull_WhenShipmentEntityHoldAtLocationIsNull_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailIsNotCreated_WhenShipmentEntityHoldAtLocationEnabledisFalse_Test()
         {
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailIsNotNull_ShipmentEntityHoldAtLocationIsFullyPopulated_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailValuesMatchShipmentEntity_ShipmentEntityHoldAtLocationIsFullyPopulated_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(shipmentEntity.ShipPhone, holdAtLocationDetail.PhoneNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailLocationTypeNull_HoldAtLocationDetailLocationTypeSpecifiedIsFalse_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(false, holdAtLocationDetail.LocationTypeSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailLocationTypeIsNotNull_HoldAtLocationDetailLocationTypeSpecifiedIsTrue_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
@@ -130,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(true, holdAtLocationDetail.LocationTypeSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailResidentialNull_HoldAtLocationDetailResidentialSpecifiedIsFalse_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();
@@ -147,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             Assert.AreEqual(false, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HoldAtLocationDetailResidentialIsNotNull_HoldAtLocationDetailResidentialSpecifiedIsTrue_Test()
         {
             shipmentEntity.FedEx = GetFedExShipmentWithFullHoldAtLocationEntity();

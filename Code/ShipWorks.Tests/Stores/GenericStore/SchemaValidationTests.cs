@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Reflection;
 using System.IO;
 using ShipWorks.Stores.Platforms.GenericModule;
@@ -17,13 +17,12 @@ namespace ShipWorks.Tests.Stores.GenericStore
     /// <summary>
     /// Test cases to ensure the ShipWorks Module Schema is validating.
     /// </summary>
-    [TestClass]
     public class SchemaValidationTests
     {
         /// <summary>
         /// Ensures the ShipWorks.xsd is a well-formed schema 
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void IsValidSchema()
         {
             using (Stream stream = Assembly.GetAssembly(typeof(GenericStoreWebClient)).GetManifestResourceStream(@"ShipWorks.Data.Import.Xml.Schema.ShipWorksModule.xsd"))
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Stores.GenericStore
         /// <summary>
         /// Tests the validity of the collection of sample xml files
         /// </summary>
-        [TestMethod]
+        [Fact]
         public void TestSampleXml()
         {
             Dictionary<string, bool> fileMap = new Dictionary<string, bool>();

@@ -1,11 +1,10 @@
 ﻿using System.Net;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
-    [TestClass]
     public class TrustingCertificateInspectorTest
     {
         private readonly TrustingCertificateInspector testObject;
@@ -15,13 +14,13 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             testObject = new TrustingCertificateInspector();
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenRequestIsNull_Test()
         {
             Assert.AreEqual(CertificateSecurityLevel.Trusted, testObject.Inspect(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenRequestIsNotNull_Test()
         {
             Mock<ICertificateRequest> request = new Mock<ICertificateRequest>();

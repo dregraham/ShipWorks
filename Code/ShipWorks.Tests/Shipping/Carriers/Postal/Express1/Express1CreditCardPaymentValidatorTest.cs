@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -17,7 +17,6 @@ using log4net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 {
-    [TestClass]
     public class Express1CreditCardPaymentValidatorTest
     {
         private Express1CreditCardPaymentValidator testObject;
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
                 };
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsNoErrors_WhenValuesValid_Test()
         {
             testObject = new Express1CreditCardPaymentValidator();
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual(errors.Count(), 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressMissing_Test()
         {
             paymentInfo.CreditCardBillingAddress = null;
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.MissingCreditCardBillingAddress));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressFirstNameIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors; 
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressFirstName));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressLastNameIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressLastName));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressCityIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressCity));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressCountryCodeIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressCountryCode));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressPostalCodeIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressPostalCode));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressStateProvCodeIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -231,7 +230,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressStateProvince));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenBillingAddressStreet1IsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -258,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardBillingAddressStreet));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenCardAccountNumberIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -285,7 +284,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardAccountNumber));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenNameOnCardIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -312,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardNameOnCard));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenCardExpirationDateIsInvalid_Test()
         {
             IEnumerable<Express1ValidationError> errors;
@@ -325,7 +324,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsTrue(errors.Any(e => e.Message == Express1CreditCardPaymentValidator.InvalidCreditCardExpirationDate));
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_DoesNotReturnError_WhenCardExpirationDateIsThisMonth_Test()
         {
             // CardExpirationDate is today
@@ -336,7 +335,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsFalse(errors.Any());
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_DoesNotReturnError_WhenCardExpirationDateIsFirstDayOfThisMonth_Test()
         {
             // CardExpirationDate is the first day of the current month
@@ -348,7 +347,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.IsFalse(errors.Any());
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_ReturnsError_WhenPaymentTypeIsInvalid_Test()
         {
             // PaymentType is ACH

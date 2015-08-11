@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.Enums;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -13,7 +13,6 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
 {
-    [TestClass]
     public class UpsRatePackageServiceOptionsElementWriterTests
     {
         UpsShipmentEntity shipment;
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             return element;
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteDryIce_Test()
         {
             package.DryIceEnabled = true;

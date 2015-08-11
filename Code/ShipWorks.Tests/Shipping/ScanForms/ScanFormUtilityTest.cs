@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.ScanForms;
 using Moq;
 using SandRibbon = Divelements.SandRibbon;
@@ -10,7 +10,6 @@ using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shipping.ScanForms
 {
-    [TestClass]
     public class ScanFormUtilityTest
     {
         private Mock<IScanFormAccountRepository> accountRepository;
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
         #region CreateScanFormMenu Tests
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_DelegatesToAccountRepository_Test()
         {
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
@@ -71,21 +70,21 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             accountRepository.Verify(r => r.GetAccounts(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_HasZeroChildElments_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
             Assert.AreEqual(0, createSandMenuItem.Items.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_MenuTextEndsWithEllipsis_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
             Assert.AreEqual("...", createSandMenuItem.Text.Substring(createSandMenuItem.Text.Length - 3, 3));
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_MenuContainsChildMenu_WhenMoreThanOneAccount_Test()
         {
             // Add another repository to our list to run this test
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.IsInstanceOfType(createSandMenuItem.Items[0], typeof(SandRibbon.Menu));
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_SubMenuChildItemsEqualsAccounts_WhenMoreThanOneAccount_Test()
         {
             // Add another repository to our list to run this test
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(repositories.Count, childMenu.Items.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateCreateScanFormMenu_SubMenuChildItemsTextDoNotEndWithEllipsis_WhenMoreThanOneAccount_Test()
         {
             // Add another repository to our list to run this test
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         #endregion CreateScanFormMenu Tests
 
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_DelegatesToAccountRepository_Test()
         {
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
@@ -137,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             accountRepository.Verify(r => r.GetAccounts(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_HasZeroChildElments_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
@@ -145,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_MenuTextContainsLocalTimeAndShipmentCount_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
@@ -157,7 +156,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(expectedString, childMenuItem.Text);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_ChildMenuItemsEqualNumberOfAccounts_WhenMoreThanOneAccount_Test()
         {
             // Add another repository to our list to run this test
@@ -168,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(repositories.Count, printMenu.Items.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_FormMenuItemsOrderedDescending_WhenMoreThanOneBatch_Test()
         {
             // Add another form to our list of existing forms
@@ -193,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual(expectedString, childMenuItem.Text);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_MenuItemText_Test()
         {
             // Make our lives easier and order the forms by create date so we don't have to figure it out in the assertions
@@ -219,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             }
         }
         
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_SubMenuChildItemIsNotEnabled_WhenNoScanFormBatchesForAccount_Test()
         {
             carrierAccount.Setup(c => c.GetExistingScanFormBatches()).Returns(new List<ScanFormBatch>());
@@ -230,7 +229,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.IsFalse(childMenuItem.Enabled);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_SubMenuChildItemTextIsNone_WhenNoScanFormBatchesForAccount_Test()
         {
             carrierAccount.Setup(c => c.GetExistingScanFormBatches()).Returns(new List<ScanFormBatch>());
@@ -241,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             Assert.AreEqual("(none)", childMenuItem.Text);
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulatePrintScanFormMenu_MenuItemTextIsNone_WhenAccountCountIsZero_Test()
         {
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, new List<IScanFormAccountRepository>());

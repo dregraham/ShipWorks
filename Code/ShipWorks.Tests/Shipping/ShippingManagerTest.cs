@@ -1,13 +1,12 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Tests.Shipping
 {
-    [TestClass]
     public class ShippingManagerTest
     {
-        [TestMethod]
+        [Fact]
         public void CalculateExpectedDeliveryDate_Returns2DaysFromNow_Ship2DayOnAMonday_Test()
         {
             DateTime aMonday = new DateTime(2013, 11, 11);
@@ -16,7 +15,7 @@ namespace ShipWorks.Tests.Shipping
             Assert.AreEqual(aMonday.AddDays(2), deliveryDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void CalculateExpectedDeliveryDate_Returns4DaysFromNow_Ship2DayOnAFriday_Test()
         {
             DateTime aFriday = new DateTime(2013, 11, 15);

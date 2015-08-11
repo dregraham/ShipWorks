@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
-    [TestClass]
     public class UpsUtilityTest
     {
-        [TestMethod]
+        [Fact]
         public void CorrectSmartPickupError_ChangesStToSaint_WhenCityStartsWithSt_Test()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St Louis");
@@ -18,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual("Saint Louis", fixedCity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CorrectSmartPickupError_ChangesSteToSaint_WhenCityStartsWithSte_Test()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Ste Genevieve");
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual("Saint Genevieve", fixedCity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CorrectSmartPickupError_ChangesStPeriodToSaint_WhenCityStartsWithStPeriod_Test()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St. Paul");
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             Assert.AreEqual("Saint Paul", fixedCity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CorrectSmartPickupError_ChangesSaintToSt_WhenCityStartsWithSaint_Test()
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Saint Paul");

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Data.Model.EntityClasses;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS
 {
-    [TestClass]
     public class UpsResponseFactoryTest
     {
         private UpsResponseFactory testObject;
@@ -27,14 +26,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         }
 
         #region CreateRegisterUserResponse Tests
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
         {
             testObject.CreateRegisterUserResponse(null, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
             testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterUserResponse_ReturnsUpsRegisterUserResponse_Test()
         {
             RegisterResponse validType = new RegisterResponse();

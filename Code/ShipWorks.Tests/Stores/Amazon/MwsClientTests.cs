@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Utility;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Tests.Stores.Amazon
 {
-    [TestClass]
     public class MwsClientTests
     {
         private ShipmentEntity shipmentEntity;
@@ -28,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow, ShipmentType = (int)ShipmentTypeCode.Usps, Postal = postalShipmentEntity };
         }
 
-        [TestMethod]
+        [Fact]
         public void ClockSyncTest()
         {
             using (AmazonMwsClient client = new AmazonMwsClient(new AmazonStoreEntity {AmazonApiRegion = "US"}))
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidateSigning()
         {
             string stringToSign = "POST\nmws.amazonservices.com\n/Orders/2011-01-01\nAWSAccessKeyId=AKIAJU465C2O2U6WNQTA&Action=ListOrderItems&AmazonOrderId=SHIPWORKS_CONNECT_ATTEMPT&SellerId=A2OIXR4TA6XKOD&SignatureMethod=HmacSHA256&SignatureVersion=2&Timestamp=2011-08-19T15%3A55%3A39Z&Version=2011-01-01";
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual(signature, signed);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsUsps_WhenUspsAndFirstClass_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual("USPS", carrierName);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual("USPS", carrierName);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsDhlGlobalMail_WhenEndiciaAndDhl_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual("DHL Global Mail", carrierName);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsDhlGlobalMail_WhenUspsAndDhl_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual("DHL Global Mail", carrierName);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
         {
             shipmentEntity.ShipmentType = (int) ShipmentTypeCode.Endicia;
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             Assert.AreEqual("Consolidator", carrierName);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierName_ReturnsOtherCarrierDesc_WhenOther_Test()
         {
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Other;

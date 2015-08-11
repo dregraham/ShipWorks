@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
-    [TestClass]
     public class FedExGlobalShipAddressAddressManipulatorTest
     {
         private FedExGlobalShipAddressAddressManipulator testObject;
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject = new FedExGlobalShipAddressAddressManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasAddress_AddressInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.IsNotNull(request.Address);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_HasAddressStreetLines_AddressStreetLinesInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(2, request.Address.StreetLines.Length);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_StreetLinesMatchRequest_AddressStreetLinesInShipment_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ShipStreet2, request.Address.StreetLines[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CityCorrect_AddressInRequestHasCity_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ShipCity, request.Address.City);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_StateCorrect_AddressInRequestHasState_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ShipStateProvCode, request.Address.StateOrProvinceCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ZipCorrect_AddressInRequestHasZip_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ShipPostalCode, request.Address.PostalCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CountryCorrect_AddressInRequestHasCountry_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ShipCountryCode, request.Address.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ResidentialCorrect_AddressInRequestHasResidentialResult_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(shipmentEntity.ResidentialResult, request.Address.Residential);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_OtherCriteriaCorrect_ShipmentValid_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.IsTrue(request.LocationsSearchCriterionSpecified);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WrongRequestType_Test()
         {

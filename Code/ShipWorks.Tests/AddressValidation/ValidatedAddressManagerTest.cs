@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Business;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -8,7 +8,6 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.AddressValidation
 {
-    [TestClass]
     public class ValidatedAddressManagerTest
     {
         private OrderEntity testOrder;
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.AddressValidation
                 .Returns(new List<ValidatedAddressEntity> {addressForOrder});
         }
 
-        [TestMethod]
+        [Fact]
         public void PropogateAddressChangesToShipments_DoesNotQueryShipments_WhenAddressHasNotChanged()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, originalAddress);
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.GetUnprocessedShipmentsForOrder(It.IsAny<long>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropogateAddressChangesToShipments_UpdatesAddress_OnlyOnShipmentWithIdenticalAddress()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreNotEqual(newAddress.Street1, shipmentIsProcessed.ShipStreet1);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropogateAddressChangesToShipments_UpdatesValidationProperties_OnlyOnShipmentWithIdenticalAddress()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(newAddress.AddressValidationSuggestionCount, shipmentWithOrderAddress.ShipAddressValidationSuggestionCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropogateAddressChangesToShipments_CallsSave_OnlyOnShipmentWithIdenticalAddress()
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
@@ -130,7 +129,7 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.SaveEntity(shipmentIsProcessed), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropagateAddressChangesToShipments_ClonesOrderValidatedAddresses()
         {
             List<ValidatedAddressEntity> savedAddresses = new List<ValidatedAddressEntity>();
@@ -143,7 +142,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(shipmentWithOrderAddress.ShipmentID, savedAddresses[0].ConsumerID);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeleteExistingAddresses_CallsDelete_OnlyOnAddressesAssociatedWithOrder()
         {
             ValidatedAddressManager.DeleteExistingAddresses(dataAccess.Object, testOrder.OrderID, "Ship");
@@ -152,7 +151,7 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.DeleteEntity(addressForOtherOrder), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveValidatedOrder_CallsDelete_OnlyOnAddressesAssociatedWithOrder()
         {
             ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, null, new List<ValidatedAddressEntity>(), new AddressAdapter());
@@ -162,7 +161,7 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.DeleteEntity(addressForOtherOrder), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveValidatedOrder_CallsSaveOnEnteredAddress()
         {
             ValidatedAddressEntity orderAddress = new ValidatedAddressEntity { IsOriginal = true };
@@ -176,7 +175,7 @@ namespace ShipWorks.Tests.AddressValidation
             AssertSavedAddress(savedAddresses, orderAddress, true);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveValidatedOrder_CallsSaveOnAddressSuggestions()
         {
             ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
@@ -195,7 +194,7 @@ namespace ShipWorks.Tests.AddressValidation
             AssertSavedAddress(savedAddresses, suggestion2, false);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveValidatedOrder_SavesOrder()
         {
             ValidatedOrderShipAddress validatedOrderAddress = new ValidatedOrderShipAddress(testOrder, null, new List<ValidatedAddressEntity>(), originalAddress);
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.SaveEntity(testOrder));
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveValidatedOrder_PropagatesAddressChanges_OnlyOnShipmentWithIdenticalAddress()
         {
             testOrder.ShipStreet1 = "999 Main";
@@ -218,14 +217,14 @@ namespace ShipWorks.Tests.AddressValidation
             dataAccess.Verify(x => x.SaveEntity(shipmentIsProcessed), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveOrderAddress_DoesNotCallSave_WhenAddressIsNull()
         {
             ValidatedAddressManager.SaveEntityAddress(dataAccess.Object, testOrder.OrderID, null);
             dataAccess.Verify(x => x.SaveEntity(It.IsAny<ValidatedAddressEntity>()), Times.Never);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveOrderAddress_CallsSave_WhenAddressIsNotNull()
         {
             ValidatedAddressEntity testAddress = new ValidatedAddressEntity();

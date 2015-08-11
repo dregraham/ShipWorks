@@ -1,11 +1,10 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 
 
 namespace ShipWorks.ApplicationCore.Services.Tests
 {
-    [TestClass]
     public class ServiceStatusEntityExtensionsTests
     {
         ServiceStatusEntity target;
@@ -17,13 +16,13 @@ namespace ShipWorks.ApplicationCore.Services.Tests
         }
 
 
-        [TestMethod]
+        [Fact]
         public void StatusIsNeverStartedWhenStartTimeIsNull()
         {
             Assert.AreEqual(ServiceStatus.NeverStarted, target.GetStatus());
         }
 
-        [TestMethod]
+        [Fact]
         public void StatusIsStoppedWhenStopTimeIsAfterStartTime()
         {
             target.LastStartDateTime = DateTime.UtcNow;
@@ -32,7 +31,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             Assert.AreEqual(ServiceStatus.Stopped, target.GetStatus());
         }
 
-        [TestMethod]
+        [Fact]
         public void StatusIsRunningWhenStopTimeIsNull()
         {
             target.LastStartDateTime = DateTime.UtcNow;
@@ -41,7 +40,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             Assert.AreEqual(ServiceStatus.Running, target.GetStatus());
         }
 
-        [TestMethod]
+        [Fact]
         public void StatusIsRunningWhenStopTimeIsBeforeStartTime()
         {
             target.LastStartDateTime = DateTime.UtcNow;
@@ -51,7 +50,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             Assert.AreEqual(ServiceStatus.Running, target.GetStatus());
         }
 
-        [TestMethod]
+        [Fact]
         public void StatusIsNotRespondingWhenCheckInTimeIsBeyondThreshold()
         {
             target.LastCheckInDateTime = DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan);

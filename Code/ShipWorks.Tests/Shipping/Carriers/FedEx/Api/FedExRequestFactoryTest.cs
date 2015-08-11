@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -20,7 +20,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
-    [TestClass]
     public class FedExRequestFactoryTest
     {
         private Mock<IFedExServiceGateway> fedExService;
@@ -51,14 +50,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateShipRequest Tests
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void CreateShipRequest_ThrowsArgumentNullException_WhenShipmentEntityIsNull_Test()
         {
             testObject.CreateShipRequest(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_ReturnsFedexShipRequest_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment);
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsInstanceOfType(request, typeof(FedExShipRequest));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(36, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsShipperManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShipperManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsRecipientManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRecipientManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsShipmentSpecialServiceTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShipmentSpecialServiceTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsRateTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -108,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsLabelSpecificationManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExLabelSpecificationManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsTotalWeightManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -124,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExTotalWeightManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsTotalInsuredValueManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExTotalInsuredValueManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsFedExShippingChargesManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -140,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShippingChargesManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_AddsFedExCertificationManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -148,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCertificationManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExPackagingTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -156,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPackagingTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExPickupManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -164,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPickupManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExServiceTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -172,7 +171,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExServiceTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExPackageSpecialServicesManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -180,7 +179,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPackageSpecialServicesManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_WebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -188,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShippingWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExShippingClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -196,7 +195,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShippingClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExShippingVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExShippingVersionManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExReferenceManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -212,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExReferenceManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExPackageDetailsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -220,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPackageDetailsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExEmailNotificationsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -228,7 +227,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExEmailNotificationsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExDryIceManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -236,7 +235,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExDryIceManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExPriorityAlertManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -244,7 +243,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPriorityAlertManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExMasterTrackingManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -252,7 +251,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExMasterTrackingManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExCodOptionsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -260,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCodOptionsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExCustomsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -268,7 +267,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCustomsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExAdmissibilityManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -276,7 +275,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExAdmissibilityManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExBrokerManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -284,7 +283,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExBrokerManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExCommercialInvoiceManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -292,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCommercialInvoiceManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExHomeDeliveryManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -300,7 +299,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExHomeDeliveryManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExHoldAtLocationManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -308,7 +307,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExHoldAtLocationManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExFreightManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -316,7 +315,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExFreightManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExDangerousGoodsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -324,7 +323,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExDangerousGoodsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExReturnsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -332,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExReturnsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExTrafficInArmsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -340,7 +339,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExTrafficInArmsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateShipRequest_FedExOneRateManipulator_Test()
         {
             CarrierRequest request = testObject.CreateShipRequest(fedExShipment) as FedExShipRequest;
@@ -352,7 +351,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateVersionCaptureRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateVersionCaptureRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
@@ -362,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(3, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateVersionCaptureRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
@@ -370,7 +369,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateVersionCaptureRequest_FedExRegistrationClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
@@ -378,7 +377,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateVersionCaptureRequest_FedExRegistrationVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateVersionCaptureRequest(fedExShipment, string.Empty, new FedExAccountEntity());
@@ -390,7 +389,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreatePackageMovementRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreatePackageMovementRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
@@ -400,7 +399,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(3, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreatePackageMovementRequest_WebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
@@ -408,7 +407,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPackageMovementWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreatePackageMovementRequest_FedExPackageMovementClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(fedExShipment, new FedExAccountEntity());
@@ -416,7 +415,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExPackageMovementClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreatePackageMovementRequest_FedExPackageMovementVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreatePackageMovementRequest(new ShipmentEntity(), new FedExAccountEntity());
@@ -428,7 +427,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateGroundCloseRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
@@ -438,7 +437,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(4, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseRequest_WebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
@@ -446,7 +445,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseRequest_FedExPackageMovementClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
@@ -454,7 +453,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseRequest_FedExPackageMovementVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
@@ -462,7 +461,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseVersionManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateGroundCloseRequest_FedExCloseDateManipulator_Test()
         {
             CarrierRequest request = testObject.CreateGroundCloseRequest(new FedExAccountEntity());
@@ -474,7 +473,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateSmartPostCloseRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
@@ -484,7 +483,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(4, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseRequest_WebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
@@ -492,7 +491,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseRequest_FedExPackageMovementClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
@@ -500,7 +499,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseRequest_FedExPackageMovementVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
@@ -508,7 +507,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExCloseVersionManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSmartPostCloseRequest_FedExCloseDateManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSmartPostCloseRequest(new FedExAccountEntity());
@@ -520,7 +519,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateRegisterCspUserRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
@@ -530,7 +529,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(4, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
@@ -538,7 +537,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserRequest_FedExRegistrationClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
@@ -546,7 +545,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserRequest_FedExRegistrationVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
@@ -554,7 +553,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationVersionManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRegisterCspUserRequest_FedExCspContactManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRegisterCspUserRequest(new FedExAccountEntity());
@@ -566,7 +565,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateSubscriptionRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
@@ -576,7 +575,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(4, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionRequest_FedExRegistrationWebAuthenticationDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
@@ -584,7 +583,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationWebAuthenticationDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionRequest_FedExRegistrationClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
@@ -592,7 +591,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionRequest_FedExRegistrationVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
@@ -600,7 +599,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRegistrationVersionManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateSubscriptionRequest_FedExSubscriberManipulator_Test()
         {
             CarrierRequest request = testObject.CreateSubscriptionRequest(new FedExAccountEntity());
@@ -612,7 +611,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateRateRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -620,7 +619,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(17, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_PopulatesManipulators_WithSpecializedManipulators_Test()
         {
             var specializedManipulator1 = new Mock<ICarrierRequestManipulator>();
@@ -637,7 +636,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(19, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_PopulatesManipulators_WhenSpecializedManipulatorsIsEmpty_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), new List<ICarrierRequestManipulator>());
@@ -645,7 +644,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(17, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_ReturnsFedExRateRequest_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -653,7 +652,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsInstanceOfType(request, typeof(FedExRateRequest));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExReturnTransitManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -661,7 +660,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateReturnTransitManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExShipperManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -669,7 +668,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateShipperManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExRecipientManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -677,7 +676,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateRecipientManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExShipmentSpecialServiceTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -685,7 +684,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateShipmentSpecialServiceTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExTotalInsuredValueManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -693,7 +692,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateTotalInsuredValueManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExTotalWeightManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -701,7 +700,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateTotalWeightManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExRateTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -709,7 +708,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateRateTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExPickupManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -717,7 +716,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePickupManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExPackageDetailsManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -725,7 +724,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackageDetailsManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExPackageSpecialServicesManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -733,7 +732,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackageSpecialServicesManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExPackagingTypeManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -741,7 +740,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRatePackagingTypeManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExRateClientDetailManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -749,7 +748,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateClientDetailManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExRateWebAuthenticationManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -757,7 +756,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(FedExRateWebAuthenticationManipulator)) == 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateRateRequest_FedExRateVersionManipulator_Test()
         {
             CarrierRequest request = testObject.CreateRateRequest(new ShipmentEntity(), null);
@@ -769,7 +768,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region CreateCertificateRequest Tests
 
-        [TestMethod]
+        [Fact]
         public void CreateCertificateRequest_ReturnsCertficateReqeust_Test()
         {
             Mock<ICertificateInspector> inspector = new Mock<ICertificateInspector>();
@@ -782,7 +781,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 
         #region ChooseFedExServiceGateway Tests
 
-        [TestMethod]
+        [Fact]
         public void ChooseFedExServiceGateway_ReturnsShipGateway_PrintReturn()
         {
             fedExShipment.ReturnShipment = true;
@@ -793,7 +792,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(fedExService.Object, chosenGateway);
         }
 
-        [TestMethod]
+        [Fact]
         public void ChooseFedExServiceGateway_ReturnsShipGateway_NotReturnButEmailReturnLabelReturnType()
         {
             fedExShipment.ReturnShipment = false;
@@ -804,7 +803,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             Assert.AreEqual(fedExService.Object, chosenGateway);
         }
 
-        [TestMethod]
+        [Fact]
         public void ChooseFedExServiceGateway_ReturnsOpenShipGateway_EmailReturn()
         {
             fedExShipment.ReturnShipment = true;

@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Interapptive.Shared;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class PersonNameTests
     {
-        [TestMethod]
+        [Fact]
         public void SmallArmsShopTest()
         {
             PersonName name = PersonName.Parse("Small Arms Shop");
@@ -21,7 +20,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual("Shop", name.Last);
         }
 
-        [TestMethod]
+        [Fact]
         public void SeargentName()
         {
             PersonName name = PersonName.Parse("Sgt John Doe");
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.FullName, "Sgt John Doe");
         }
 
-        [TestMethod]
+        [Fact]
         public void DrFullName()
         {
             PersonName name = PersonName.Parse("Dr. John Smith");
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.FullName, "Dr. John Smith");
         }
 
-        [TestMethod]
+        [Fact]
         public void DisplayFirstLast()
         {
             PersonName name = new PersonName();
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.FullName, "Joe Smith");
         }
 
-        [TestMethod]
+        [Fact]
         public void DisplayFirstLastMiddle()
         {
             PersonName name = new PersonName();
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.FullName, "Joe Wonderball Smith");
         }
 
-        [TestMethod]
+        [Fact]
         public void DisplayFirstLastSuffix()
         {
             PersonName name = new PersonName();
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Core
            Assert.AreEqual(name.FullName, "Joe Smith Jr.");
         }
 
-        [TestMethod]
+        [Fact]
         public void DisplayFirstLastMiddleSuffix()
         {
             PersonName name = new PersonName();
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.FullName, "Joe Marco Smith Jr.");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseFirstLast()
         {
             PersonName name = PersonName.Parse("John D'oe");
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, string.Empty);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseFirstLastMiddle()
         {
             PersonName name = PersonName.Parse("John Randolph D'oe");
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, string.Empty);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseFirstLastMiddleSuffix()
         {
             PersonName name = PersonName.Parse("John Randolph D'oe III");
@@ -121,7 +120,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, "III");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseFirstLastSuffix()
         {
             PersonName name = PersonName.Parse("John D'oe Jr");
@@ -133,7 +132,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, "Jr");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParsePrefixFirstLast()
         {
             PersonName name = PersonName.Parse("Mr. John D'oe");
@@ -145,7 +144,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, string.Empty);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParsePrefixFirstLastMiddle()
         {
             PersonName name = PersonName.Parse("dr John Randolph D'oe");
@@ -157,7 +156,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, string.Empty);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParsePrefixFirstLastMiddleSuffix()
         {
             PersonName name = PersonName.Parse("Miss John Randolph D'oe, ii");
@@ -169,7 +168,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(name.Suffix, "ii");
         }
 
-        [TestMethod]
+        [Fact]
         public void ParsePrefixFirstLastSuffix()
         {
             PersonName name = PersonName.Parse("Ms. John D'oe - M.D.");

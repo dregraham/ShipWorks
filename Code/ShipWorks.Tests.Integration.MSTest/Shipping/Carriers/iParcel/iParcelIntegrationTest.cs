@@ -1,14 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelIntegrationTest : DataDrivenIntegrationTestBase
     {
         [DataSource("DataSource_Ship_iParcel")]
         [DeploymentItem("DataSources\\iParcel.xlsx")]
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Ship_iParcel()
         {

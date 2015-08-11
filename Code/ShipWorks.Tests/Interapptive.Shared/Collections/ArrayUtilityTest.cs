@@ -1,20 +1,19 @@
 ﻿using System.Linq;
 using Interapptive.Shared.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Collections
 {
-    [TestClass]
     public class ArrayUtilityTest
     {
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithEmptyList_ReturnsEmptyList()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("");
             Assert.IsFalse(result.Any());
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithOneItemInList_ReturnsSingleItemList()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("6");
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(6, result[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithTwoItemsInList_ReturnsTwoItemList()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("6,9");
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(9, result[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithTwoItemsInListAndSpaceBetweenItems_ReturnsTwoItemList()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("6 , 9");
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(9, result[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithEmptyItemInList_SkipsEmptyItem()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("6,,9");
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(9, result[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void ParseCommaSeparatedList_WithBadItemInList_SkipsEmptyItem()
         {
             var result = ArrayUtility.ParseCommaSeparatedList<int>("6,foo,9");

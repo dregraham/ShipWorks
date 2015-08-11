@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class HourlyActionScheduleTest
     {
         private readonly HourlyActionSchedule testObject;
@@ -16,13 +15,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             testObject = new HourlyActionSchedule();
         }
         
-        [TestMethod]
+        [Fact]
         public void ScheduleType_ReturnsHourly_Test()
         {
             Assert.AreEqual(ActionScheduleType.Hourly, testObject.ScheduleType);
         }
 
-        [TestMethod]
+        [Fact]
         public void FrequencyInHours_ChangesTo1_WhenSettingValueToZero_Test()
         {
             testObject.FrequencyInHours = 0;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             Assert.AreEqual(1, testObject.FrequencyInHours);
         }
 
-        [TestMethod]
+        [Fact]
         public void FrequencyInHours_ChangesTo1_WhenSettingValueToNegativeValue_Test()
         {
             testObject.FrequencyInHours = -1;
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             Assert.AreEqual(1, testObject.FrequencyInHours);
         }
 
-        [TestMethod]
+        [Fact]
         public void FrequencyInHours_ChangesTo23_WhenSettingValueGreaterThan23_Test()
         {
             testObject.FrequencyInHours = 24;
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             Assert.AreEqual(23, testObject.FrequencyInHours);
         }
 
-        [TestMethod]
+        [Fact]
         public void FrequencyInHours_AllowsPositiveValue_Test()
         {
             // Prove that a positive number sets property correctly
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             Assert.AreEqual(1, testObject.FrequencyInHours);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateEditor_ReturnsHourlyActionScheduleEditor_Test()
         {
             Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(HourlyActionScheduleEditor));

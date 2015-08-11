@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Adapter.Custom;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Diagnostics;
@@ -23,10 +23,9 @@ using System.Text.RegularExpressions;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class GeneralTests
     {
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void DropAssemblies()
         {
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void DeployAssemblies()
         {

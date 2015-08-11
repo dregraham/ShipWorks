@@ -1,11 +1,10 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {
-    [TestClass]
     public class MessengerTest
     {
         private Messenger messenger;
@@ -16,13 +15,13 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger = new Messenger();
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallAnything_WhenNoHandlersAreSetup()
         {
             messenger.Send(new TestMessage());
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallHandler_WhenHandlerIsForDifferentMessage()
         {
             bool wasCalled = false;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             Assert.IsFalse(wasCalled);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_GetsCalled_OnMessageSend()
         {
             bool wasCalled = false;
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             Assert.IsTrue(wasCalled);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithTwoHandlers_BothGetCalled()
         {
             bool wasCalled1 = false;
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             Assert.IsTrue(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithExistingHandler_ReturnsExistingToken()
         {
             using (DisposableHandler handler = new DisposableHandler())
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithExistingHandler_CallsHandlerOnceOnSend()
         {
             using (DisposableHandler handler = new DisposableHandler())
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_HandlerDoesNotGetCalled_WhenRemoved()
         {
             bool wasCalled1 = false;
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             Assert.IsTrue(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_HandlerDoesNotGetCalled_WhenRemovedByReference()
         {
             bool wasCalled1 = false;
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             Assert.IsTrue(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger.Send(new TestMessage());
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallMethod_WhenObjectHasBeenCollected()
         {
             bool wasCalled = false;

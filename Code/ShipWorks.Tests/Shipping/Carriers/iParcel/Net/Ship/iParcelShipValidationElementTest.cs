@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.iParcel;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
 {
-    [TestClass]
     public class iParcelShipValidationElementTest
     {
         private iParcelShipValidationElement testObject;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             testObject = new iParcelShipValidationElement(credentials, true, true);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsRequestTypeElement_WhenNotUsedForRates_Test()
         {
             testObject = new iParcelShipValidationElement(credentials, true, false);
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("LIVE", requestTypeElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsRequestTypeElement_WhenUsedForRates_Test()
         {
             testObject = new iParcelShipValidationElement(credentials, true, true);
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("TEST", requestTypeElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsReturnInfoElement_Test()
         {
             XElement element = testObject.Build();
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("ALL", returnElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsDomesticShippingElement_Test()
         {
             XElement element = testObject.Build();
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.IsNotNull(domesticElement);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_DomesticShippingElementIsOne_WhenDomesticShippingIsTrue_Test()
         {
             XElement element = testObject.Build();
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             Assert.AreEqual("1", domesticElement.Value);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_ValidationElement_ContainsDomesticShippingElementIsZero_WhenDomesticShippingIsFalse_Test()
         {
             testObject = new iParcelShipValidationElement(credentials, false, true);

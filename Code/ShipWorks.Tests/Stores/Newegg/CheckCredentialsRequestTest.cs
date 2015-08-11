@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.Net;
@@ -6,7 +6,6 @@ using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class CheckCredentialsRequestTest
     {
         private CheckCredentialsRequest testObject;
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             invalidSecretKeyCredentials = new Credentials("A09V", "ABCD", NeweggChannelType.US);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void AreCredentialsValid_ReturnsFalse_WithInvalidSellerId_IntegrationTest()
         {            
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsFalse(testObject.AreCredentialsValid(invalidSellerCredentials));
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void AreCredentialsValid_ReturnsFalse_WithInvalidSecretKey_IntegrationTest()
         {
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsFalse(testObject.AreCredentialsValid(invalidSecretKeyCredentials));
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void AreCredentialsValid_ReturnsTrue_WithValidCredentials_IntegrationTest()
         {

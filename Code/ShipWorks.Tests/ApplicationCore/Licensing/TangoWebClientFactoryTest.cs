@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Microsoft.Win32;
 using ShipWorks.ApplicationCore.Licensing;
 
 namespace ShipWorks.Tests.ApplicationCore.Licensing
 {
-    [TestClass]
     public class TangoWebClientFactoryTest
     {
         private readonly TangoWebClientFactory testObject;
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    }
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsCustomTangoWebClient_WhenRegistryKeyValueIsConfiguredWithExistingType_AndIsInterapptiveUser_Test()
         //{
         //    const string fakeClientTypeName = "ShipWorks.ApplicationCore.Licensing.FakeTangoWebClient";
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    Assert.IsInstanceOfType(client, typeof(FakeTangoWebClient));
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsConfiguredWithExisting_AndIsNotInterapptiveUser_Test()
         //{
         //    const string fakeClientTypeName = "ShipWorks.ApplicationCore.Licensing.FakeTangoWebClient";
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsConfiguredWithNonExistingType_AndIsInterapptiveUser_Test()
         //{
         //    const string typeThatDoesNotExist = "ShipWorks.ApplicationCore.Licensing.SomeTypeThatDoesNotExist";
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueIsEmpty_AndIsInterapptiveUser_Test()
         //{
         //    const string typeThatDoesNotExist = "ShipWorks.ApplicationCore.Licensing.SomeTypeThatDoesNotExist";
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Create_ReturnsTangoWebClientWrapper_WhenRegistryKeyValueDoesNotExist_AndIsInterapptiveUser_Test()
         //{
         //    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Interapptive\ShipWorks\Internal");

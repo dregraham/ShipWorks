@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response.Manipulators
 {
-    [TestClass]
     public class UpsSaveCredentialsManipulatorTest
     {
         private UpsSaveCredentialsManipulator testObject;
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
             testObject = new UpsSaveCredentialsManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountUserIDSet_Test()
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
             Assert.AreEqual(registerRequest.Username, upsAccount.UserID);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountPasswordSet_Test()
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
             Assert.AreEqual(registerRequest.Password, upsAccount.Password);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountInvoiceAuthSetToTrue()
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);

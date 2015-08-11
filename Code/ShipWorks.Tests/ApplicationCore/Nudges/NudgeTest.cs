@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.ApplicationCore.Nudges.Buttons;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeTest
     {
         private readonly Nudge testObject;
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             testObject.AddNudgeOption(new NudgeOption(4, 1, "One", testObject, NudgeOptionActionType.None));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButtons_OrdersButtonsByOptionIndex_Test()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual("A really long string for a button", buttons[3].Text);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateButtons_SetsWidthOfButtonsToMatchWidestButton_Test()
         {
             List<NudgeOptionButton> buttons = testObject.CreateButtons();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
@@ -23,7 +23,6 @@ using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
 {
-    [TestClass]
     public class RebuildTableIndexTest
     {
         private readonly Mock<ExecutionMode> executionMode;
@@ -112,7 +111,7 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
             return instance;
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("SqlServer.Maintenance")]
         [TestCategory("ContinuousIntegration")]
         public void RebuildTableIndex_RebuildAllIndexes_Succeeds_Test()

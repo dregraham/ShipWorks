@@ -1,5 +1,5 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
-    [TestClass]
     public class FedExGlobalShipAddressClientDetailManipulatorTest
     {
         private FedExGlobalShipAddressClientDetailManipulator testObject;
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject = new FedExGlobalShipAddressClientDetailManipulator(mockSettingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ClientProductInformationIsCorrect_DefaultClientProductDetails_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual("5236", nativeRequest.ClientDetail.ClientProductVersion);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountNumberIsCorrect_AccountIdIs123_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual("123", nativeRequest.ClientDetail.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_MeterNumberIsCorrect_MeterNumberIs456_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -67,14 +66,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual("456", nativeRequest.ClientDetail.MeterNumber);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_Test()
         {
             testObject.Manipulate(mockCarrierRequest.Object);
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             mockCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsException_WhenNativeRequestIsNull_Test()
         {
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject.Manipulate(mockCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsException_WhenNativeRequestIsNotSearchLocationsRequest_Test()
         {

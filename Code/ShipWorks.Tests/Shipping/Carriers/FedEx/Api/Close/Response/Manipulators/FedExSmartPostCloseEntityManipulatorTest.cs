@@ -1,5 +1,5 @@
 using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulators
 {
-    [TestClass]
     public class FedExSmartPostCloseEntityManipulatorTest
     {
         private FedExSmartPostCloseEntityManipulator testObject;
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             testObject = new FedExSmartPostCloseEntityManipulator(closeRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCloseEntityIsNull_Test()
         {
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             Assert.IsNotNull(closeEntity);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNotFedEx_Test()
         {
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             testObject.Manipulate(carrierResponse.Object, closeEntity);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNull_Test()
         {
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             testObject.Manipulate(carrierResponse.Object, closeEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsFedExAccountId_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             Assert.AreEqual(account.FedExAccountID, closeEntity.FedExAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsAccountNumber_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             Assert.AreEqual(account.AccountNumber, closeEntity.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCloseDate_Test()
         {
             DateTime utcStart = DateTime.UtcNow;
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             Assert.IsTrue(closeEntity.CloseDate.Ticks <= DateTime.UtcNow.Ticks);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IsSmartPostIsTrue_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
@@ -108,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             Assert.IsTrue(closeEntity.IsSmartPost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRepositoryWhenToSave_Test()
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);

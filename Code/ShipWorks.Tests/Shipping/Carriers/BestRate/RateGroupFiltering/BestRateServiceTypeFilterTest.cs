@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
@@ -15,12 +15,11 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateServiceTypeFilterTest
     {
         private BestRateServiceTypeFilter testObject;
 
-        //[TestMethod]
+        //[Fact]
         //public void Filter_RatesAreOrderedFromCheapestToMostExpensive_Test()
         //{
         //    // Setup the broker to return specific rates
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         //    Assert.AreEqual(rates[0], filteredRates[2]);
         //}
         
-        //[TestMethod]
+        //[Fact]
         //public void Filter_RatesWithSameCost_AreOrderedByServiceLevel_Test()
         //{
         //    // Setup the broker to return specific rates
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         //    Assert.AreEqual(rates[1], filteredRates[4]);
         //}
 
-        [TestMethod]
+        [Fact]
         public void Filter_ReturnsAllRates_WhenLessThanFiveRatesAreAvailable_Test()
         {
             // Setup the broker to return specific rates
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             Assert.AreEqual(rates.Count, filteredRates.Count);
         }
 
-        //[TestMethod]
+        //[Fact]
         //public void Filter_ReturnsFirstFiveRates_WhenMoreThanFiveRatesAreAvailable_Test()
         //{
 
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         //    Assert.AreEqual(rates[5], filteredRates[4]);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Filter_ReturnsOneAndTwoDayRates_When2DaysAreSpecifiedAndExpectedDateIsNull_Test()
         //{
         //    // Setup the broker to return specific rates
@@ -148,7 +147,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         //    Assert.AreEqual(rates[3], filteredRates[4]);
         //}
 
-        //[TestMethod]
+        //[Fact]
         //public void Filter_ReturnsTwoDayAnd4DayRates_When2DaysAreSpecifiedAndA2DayServiceArivesAfter4DayService_Test()
         //{
         //    // Setup the broker to return specific rates
@@ -178,7 +177,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         //    Assert.AreEqual(rates[2], filteredRates[4]);
         //}
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithDifferentCosts_ReturnsOneRatePerServiceTypePerTag_Test()
         {
             // Setup the broker to return specific rates
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate abc", "Rate 2abc" });
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsEndiciaForEachResultKey_Test()
         {
             // Setup the broker to return specific rates
@@ -240,7 +239,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate 789", "Rate 2123" });
         }
         
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsExpress1UspsForResultKey_Test()
         {
             // Setup the broker to return specific rates
@@ -266,7 +265,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate 123" });
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsExpress1EndiciaForEachResultKey_Test()
         {
             // Setup the broker to return specific rates
@@ -302,7 +301,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate abc", "Rate 2xyz" });
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsEndiciaForResultKey_Test()
         {
             // Setup the broker to return specific rates
@@ -328,7 +327,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate 789" });
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsExpress1EndiciaForResultKey_Test()
         {
             // Setup the broker to return specific rates
@@ -354,7 +353,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RunQueueTest(rateGroup, new List<string>() { "Rate 123" });
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RatesWithSameCost_ReturnsExpress1UspsForEachResultKey_Test()
         {
             // Setup the broker to return specific rates

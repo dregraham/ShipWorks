@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -13,7 +13,6 @@ namespace ShipWorks.Tests.Stores.Volusion
     /// <summary>
     /// Summary description for VolusionWebClientTest
     /// </summary>
-    [TestClass]
     public class VolusionWebClientTest
     {
         private OrderEntity orderEntity;
@@ -28,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Volusion
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetVolusionGateway_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Stores.Volusion
             Assert.AreEqual("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetVolusionGateway_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.DhlParcelGround;
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Stores.Volusion
             Assert.AreEqual("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetVolusionGateway_ReturnsOther_WhenEndiciaAnConsolidatorServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.ConsolidatorDomestic;
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Stores.Volusion
             Assert.AreEqual("OTHER", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetVolusionGateway_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Stores.Volusion
             Assert.AreEqual("USPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetVolusionGateway_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Service = (int)PostalServiceType.FirstClass;

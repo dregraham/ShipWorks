@@ -1,5 +1,5 @@
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.OnTrac.Schemas.Shipment;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
 {
-    [TestClass]
     public class OnTracShipmentRequestTest
     {
         Mock<IHttpRequestSubmitterFactory> mockedHttpRequestSubmitterFactory;
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
                 37, "testpass", mockedHttpRequestSubmitterFactory.Object, mockedLogFactory.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetNewShipment_GetsShipmentFromOnTrac_WhenParametersAndResultsAreValid_Test()
         {
             var shippingResult = RunSuccessfullGetNewShipment();
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             Assert.AreEqual("D90000000006295", shippingResult.Tracking);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetNewShipment_RequestingUrlIsCorrect_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullGetNewShipment();
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
                 mockedSubmitter.Object.Uri.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetNewShipment_RequestVerbIsPost_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullGetNewShipment();
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             Assert.AreEqual(HttpVerb.Post, mockedSubmitter.Object.Verb);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetNewShipment_RequestIsLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullGetNewShipment();
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetNewShipment_ResponseIsLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullGetNewShipment();
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             return shippingResult;
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void GetNewShipment_OnTracError_ReturnedXmlInBadFormat_Test()
         {

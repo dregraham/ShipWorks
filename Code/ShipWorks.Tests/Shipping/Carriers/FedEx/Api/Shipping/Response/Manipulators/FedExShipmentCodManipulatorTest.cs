@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
-    [TestClass]
     public class FedExShipmentCodManipulatorTest
     {
         private FedExShipmentCodManipulator testObject;
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             testObject = new FedExShipmentCodManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CodTrackingNumberAndFormIDAddedToShipment_ResponseIncludesCodTrackingInfo()
         {
             testObject.Manipulate(fedExShipResponse);

@@ -1,13 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 {
-    [TestClass]
     public class UpsIntegrationTest : DataDrivenIntegrationTestBase
     {
         [DataSource("DataSource_Ship_UPSRecert")]
         [DeploymentItem("DataSources\\UPSRecert.xlsx")]
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Ship_UPSRecert()
         {
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Ups
 
         [DataSource("DataSource_Ship_UPSRecert_MI")]
         [DeploymentItem("DataSources\\UPSRecert.xlsx")]
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Ship_UPSRecert_MI()
         {

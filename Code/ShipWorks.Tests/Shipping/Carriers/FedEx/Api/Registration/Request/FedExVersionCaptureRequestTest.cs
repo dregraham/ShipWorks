@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 {
-    [TestClass]
     public class FedExVersionCaptureRequestTest
     {
         private FedExVersionCaptureRequest testObject;
@@ -43,19 +42,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             testObject = new FedExVersionCaptureRequest(manipulators, new ShipmentEntity(), "123", mockService.Object, account);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
             Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
             Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_FedExVersionCaptureResponseReturned_MakesValidRequest_Test()
         {
             FedExVersionCaptureResponse response = (FedExVersionCaptureResponse) testObject.Submit();
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_LocationIDIsPopulatedInNativeRequest_LocationPassedInConstructor_Test()
         {
             testObject.Submit();
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
             Assert.AreEqual("123",request.OriginLocationId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()

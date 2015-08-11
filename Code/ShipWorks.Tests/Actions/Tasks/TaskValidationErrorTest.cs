@@ -1,20 +1,19 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Tasks;
 
 namespace ShipWorks.Tests.Actions.Tasks
 {
-    [TestClass]
     public class TaskValidationErrorTest
     {
-        [TestMethod]
+        [Fact]
         public void ToString_ReturnsOnlyMessage_WhenDetailsAreEmpty()
         {
             TaskValidationError testObject = new TaskValidationError("Foo");
             Assert.AreEqual("Foo", testObject.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void ToString_ReturnsFormattedError_WhenDetailsAreNotEmpty()
         {
             TaskValidationError testObject = new TaskValidationError("Foo");

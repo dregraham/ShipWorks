@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.PayPal.WebServices;
 using System.IO;
@@ -10,10 +10,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ShipWorks.Tests.Stores.PayPal
 {
-    [TestClass]
     public class ExceptionSerializationTests
     {
-        [TestMethod]
+        [Fact]
         public void SerializeDeserialize()
         {
             GetBalanceResponseType response = new GetBalanceResponseType();

@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Common.Logging.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.XmlDiffPatch;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
@@ -15,7 +15,6 @@ using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Editions
 {
-    [TestClass]
     public class EditionManagerTest
     {
         private List<EditionRestriction> restrictions;
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Editions
             stampsRrDonnelleyRestricted2 = new EditionRestriction(new Edition(enabledStore2), EditionFeature.StampsRrDonnelleyConsolidator, EditionRestrictionLevel.Hidden);
         }
 
-        [TestMethod]
+        [Fact]
         public void NoEndiciaRegistrationRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             endiciaRegistrationRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, EditionRestrictionLevel.Hidden);
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoEndiciaRegistrationRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
-        [TestMethod]
+        [Fact]
         public void EndiciaRegistrationRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             endiciaRegistrationRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, EditionRestrictionLevel.Hidden);
@@ -133,7 +132,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
-        [TestMethod]
+        [Fact]
         public void EndiciaRegistrationRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
-        [TestMethod]
+        [Fact]
         public void EndiciaRegistrationRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -175,7 +174,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsAscendiaRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             stampsAscendiaRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsAscendiaConsolidator, EditionRestrictionLevel.Hidden);
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsAscendiaRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -219,7 +218,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsAscendiaRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             stampsAscendiaRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsAscendiaConsolidator, null, EditionRestrictionLevel.Hidden);
@@ -238,7 +237,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsAscendiaRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -258,7 +257,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsAscendiaRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -280,7 +279,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsDhlRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             stampsDhlRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsDhlConsolidator, EditionRestrictionLevel.Hidden);
@@ -303,7 +302,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsDhlRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -324,7 +323,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsDhlRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             stampsDhlRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsDhlConsolidator, null, EditionRestrictionLevel.Hidden);
@@ -343,7 +342,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsDhlRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -363,7 +362,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsDhlRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -385,7 +384,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsGlobegisticsRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             stampsGlobegisticsRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsGlobegisticsConsolidator, EditionRestrictionLevel.Hidden);
@@ -408,7 +407,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsGlobegisticsRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -429,7 +428,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsGlobegisticsRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             stampsGlobegisticsRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsGlobegisticsConsolidator, null, EditionRestrictionLevel.Hidden);
@@ -448,7 +447,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsGlobegisticsRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -468,7 +467,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsGlobegisticsRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -490,7 +489,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsIbcRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             stampsIbcRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsIbcConsolidator, EditionRestrictionLevel.Hidden);
@@ -513,7 +512,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsIbcRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -534,7 +533,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsIbcRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             stampsIbcRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsIbcConsolidator, null, EditionRestrictionLevel.Hidden);
@@ -553,7 +552,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsIbcRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -573,7 +572,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsIbcRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -595,7 +594,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsRrDonnelleyRestriction_WhenTrialStoreIsOnlyRestriction_Test()
         {
             stampsRrDonnelleyRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsRrDonnelleyConsolidator, EditionRestrictionLevel.Hidden);
@@ -618,7 +617,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void NoStampsRrDonnelleyRestriction_WhenHalfOfTheStoresAreRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -639,7 +638,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsRrDonnelleyRestriction_WhenTrialStoreIsTheOnlyStore_Test()
         {
             stampsRrDonnelleyRestricted1 = new EditionRestriction(new Edition(trialStore), EditionFeature.StampsRrDonnelleyConsolidator, null, EditionRestrictionLevel.Hidden);
@@ -658,7 +657,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsRrDonnelleyRestriction_WhenAllStoresRestricted_Test()
         {
             restrictions = new List<EditionRestriction>()
@@ -678,7 +677,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
-        [TestMethod]
+        [Fact]
         public void StampsRrDonnelleyRestriction_WhenEnabledStoresAreRestricted_AndDisabledStoresAreNot_Test()
         {
             restrictions = new List<EditionRestriction>()

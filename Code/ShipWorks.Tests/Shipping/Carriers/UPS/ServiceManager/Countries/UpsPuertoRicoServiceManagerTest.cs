@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.UPS;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 {
-    [TestClass]
     public class UpsPuertoRicoServiceManagerTest
     {
         private UpsPuertoRicoServiceManager testObject;
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             testObject = new UpsPuertoRicoServiceManager(logger.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void CountryCode_ReturnsPR_Test()
         {
             Assert.AreEqual("PR", testObject.CountryCode);
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 
         #region GetServices tests
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsUpsNextDayAir_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.UpsNextDayAir));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsUps2DayAir_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.Ups2DayAir));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsUpsGround_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.UpsGround));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsWorldwideExpress_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.WorldwideExpress));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsWorldwideExpedited_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.WorldwideExpedited));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsUpsNextDayAirAM_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.UpsNextDayAirAM));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsWorldwideExpressPlus_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -112,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(1, mappings.Count(m => m.UpsServiceType == UpsServiceType.WorldwideExpressPlus));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServices_ContainsUpsExpressSaver_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity();
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 
         #region GetServicesByRateCode tests
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpress_AndRateCodeIs01_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("01", "US");
@@ -134,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAir, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsUps2DayAir_AndRateCodeIs02AndCountryIsUs_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("02", "US");
@@ -142,7 +141,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.Ups2DayAir, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsUpsGround_AndRateCodeIs03_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("03", "US");
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsGround, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsWorldwideExpress_AndRateCodeIs07_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("07", "XXXX");
@@ -158,7 +157,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpress, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsWorldwideExpedited_AndRateCodeIs08_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("08", "XXXX");
@@ -166,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpedited, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsUpsNextDayAirAmAndRateCodeIs14_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("14", "US");
@@ -174,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAirAM, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsWorldwideExpressPlus_AndRateCodeIs54_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("54", "XXXX");
@@ -182,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpressPlus, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByRateCode_ReturnsUpsExpressSaver_AndRateCodeIs65_Test()
         {
             UpsServiceMapping mapping = testObject.GetServicesByRateCode("65", "XXXX");
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
         }
 
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsException))]
         public void GetServicesByRateCode_ThrowsUpsException_AndRateCodeIs42_Test()
         {
@@ -202,7 +201,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 
         #region GetServicesByWorldShipDescription tests
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsNextDayAir_WhenDescriptionIsNextDayAirAndCountryIsUS()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.UpsNextDayAir, "US");
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAir, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUps2DayAir_WhenDescriptionIs2ndDayAirAndCountryIsUS()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.Ups2DayAir, "US");
@@ -218,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.Ups2DayAir, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsGround_WhenDescriptionIsGroundServiceAndCountryIsUS()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.Ground, "US");
@@ -226,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsGround, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsWorldwideExpress_WhenDescriptionIsExpressOrWorldwideExpress()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.WorldwideExpress, "RU");
@@ -234,7 +233,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpress, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsWorldwideExpedited_WhenDescriptionIsExpeditedOrWorldwideExpedited()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.WorldwideExpedited, "RU");
@@ -242,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpedited, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsUpsNextDayAirAM_WhenDescriptionIsNextDayAirEarlyAMAndCountryIsUS()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.UpsNextDayAirAm, "US");
@@ -250,7 +249,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAirAM, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsWorldwideExpressPlus_WhenDescriptionIsExpressPlusOrWorldwideExpressPlus()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.WorldwideExpressPlus, "RU");
@@ -258,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpressPlus, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServicesByWorldShipDescription_ReturnsUpsExpressSaver_WhenDescriptionIsExpressSaverOrWorldwideSaver()
         {
             UpsServiceMapping mapping = testObject.GetServicesByWorldShipDescription(WorldShipServiceDescriptions.UpsExpressSaver, "RU");
@@ -266,7 +265,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsException))]
         public void GetServicesByWorldShipDescription_ThrowsUpsException_WhenDescriptionIsNotFound_Test()
         {
@@ -277,14 +276,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
 
         #region GetServicesByTransitService tests
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsException))]
         public void GetServiceByTransitCode_ThrowUpsException_WhenTransitCodeIs02AndCountryCodeIsPr_Test()
         {
             testObject.GetServiceByTransitCode("02", "PR");
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnUps2DayAirIntra_WhenTransitCodeIs01AndCountryCodeIsPr_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "PR");
@@ -292,7 +291,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.Ups2nDayAirIntra, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsUpsNextDayAirAm_WhenTransitCodeIs21AndCountryCodeIsUs_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "US");
@@ -300,7 +299,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAirAM, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsUpsNextDayAir_WhenTransitCodeIs01AndCountryCodeIsUs_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "US");
@@ -308,7 +307,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsNextDayAir,mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsUps2DayAir_WhenTransitCodeIs02AndCountryCodeIsUs_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("02", "US");
@@ -316,7 +315,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.Ups2DayAir, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsUpsGround_WhenTransitCodeIsG_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("G", "US");
@@ -324,7 +323,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsGround, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsWorldwideExpressPlus_WhenTransitCodeIs21AndCountryCodeIsNotUsOrPr_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("21", "asfdsaf");
@@ -332,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpressPlus, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsWorldwideExpress_WhenTransitCodeIs01AndCountryCodeIsNotUsOrPr_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("01", "asfdsaf");
@@ -340,7 +339,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.WorldwideExpress, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsUpsExpressSaver_WhenTransitCodeIs28AndCountryCodeIsNotUsOrPr_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("28", "asfdsaf");
@@ -348,7 +347,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager.Countries
             Assert.AreEqual(UpsServiceType.UpsExpressSaver, mapping.UpsServiceType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetServiceByTransitCode_ReturnsWordwideExpedited_WhenTransitCodeIs05AndCountryCodeIsNotUsOrPr_Test()
         {
             UpsServiceMapping mapping = testObject.GetServiceByTransitCode("05", "asfdsaf");

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
 {
-    [TestClass]
     public class FedExVoidVersionManipulatorTest
     {
         private FedExVoidVersionManipulator testObject;
@@ -25,14 +24,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject = new FedExVoidVersionManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(CarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequestOrVoidRequest_Test()
         {
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(CarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToShip_ForVoid_Test()
         {
             testObject.Manipulate(CarrierRequest.Object);
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             Assert.AreEqual("ship", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo13_ForVoid_Test()
         {
             testObject.Manipulate(CarrierRequest.Object);
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             Assert.AreEqual(15, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_ForVoid_Test()
         {
             testObject.Manipulate(CarrierRequest.Object);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             Assert.AreEqual(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo0_ForVoid_Test()
         {
             testObject.Manipulate(CarrierRequest.Object);

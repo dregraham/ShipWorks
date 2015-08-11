@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.Win32;
 using System.IO;
 using Interapptive.Shared;
@@ -10,19 +10,18 @@ using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class RegistryTests
     {
         RegistryHelper registry = new RegistryHelper(@"Software\ShipWorks\UnitTests");
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ReadIntWithNullKey()
         {
             RegistryHelper.GetValue((RegistryKey) null, null, 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntWithNonexistent()
         {
             int defaultValue = 10;
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromStringFromPath()
         {
             int value = 10;
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromString()
         {
             int value = 10;
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromNonPath()
         {
             int value = 103;
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(value, read);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FormatException))]
         public void ReadIntFromBadString()
         {
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromConvertible()
         {
             int deafultValue = 1024;

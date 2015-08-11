@@ -1,12 +1,11 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Editors;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class DailyActionScheduleTest
     {
         private readonly DailyActionSchedule testObject;
@@ -16,27 +15,27 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             testObject = new DailyActionSchedule();
         }
         
-        [TestMethod]
+        [Fact]
         public void ScheduleType_ReturnsDaily_Test()
         {
             Assert.AreEqual(ActionScheduleType.Daily, testObject.ScheduleType);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ActionScheduleException))]
         public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToZero_Test()
         {
             testObject.FrequencyInDays = 0;
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ActionScheduleException))]
         public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToNegativeValue_Test()
         {
             testObject.FrequencyInDays = -1;
         }
 
-        [TestMethod]
+        [Fact]
         public void FrequencyInDays_AllowsPositiveValue_Test()
         {
             // Prove that a positive number sets property correctly
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             Assert.AreEqual(1, testObject.FrequencyInDays);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateEditor_ReturnsDailyActionScheduleEditor_Test()
         {
             Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(DailyActionScheduleEditor));

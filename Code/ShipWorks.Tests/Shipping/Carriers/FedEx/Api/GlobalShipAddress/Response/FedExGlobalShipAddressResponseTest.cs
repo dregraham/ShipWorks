@@ -1,5 +1,5 @@
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
 {
-    [TestClass]
     public class FedExGlobalShipAddressResponseTest
     {
         private FedExGlobalShipAddressResponse testObject;
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
             testObject = new FedExGlobalShipAddressResponse(reply, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Process_ErrorThrown_NoLocationFound()
         {
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_TwoAddressesReturned_Test()
         {
             testObject.Process();

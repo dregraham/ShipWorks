@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.Postal;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal
 {
-    [TestClass]
     public class PostalUtilityTest
     {
-        [TestMethod]
+        [Fact]
         public void IsMilitaryPostalCode_ReturnsTrue_WhenPostalCodeIsMilitary()
         {
             List<string> militaryPostalCodes = new List<string>
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMilitaryPostalCode_ReturnsFalse_WhenPostalCodeIsNotMilitary()
         {
             List<string> postalCodes = new List<string>

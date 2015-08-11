@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Stores.Platforms.Newegg.Net.Orders;
@@ -12,7 +12,6 @@ using ShipWorks.Stores.Platforms.Newegg.Enums;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class ShippingRequestTest
     {
         private Credentials credentials;
@@ -190,7 +189,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             shipment.Packages.Add(package);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NeweggException))]
         public void Ship_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject.Ship(shipment);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ReturnsCorrectPackageSummary_WhenAllSuccessful_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(0, shippingResult.PackageSummary.FailedCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ReturnsCorrectPackageSummary_WhenContainingSuccessesAndFailures_Test()
         {
             testObject = new ShippingRequest(credentials, successAndFailureRequest);
@@ -222,7 +221,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(1, shippingResult.PackageSummary.FailedCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ReturnsCorrectPackageSummary_WhenAllFailures_Test()
         {
             testObject = new ShippingRequest(credentials, allFailuresRequest);
@@ -234,7 +233,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(2, shippingResult.PackageSummary.FailedCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ContainsPackageList_WhenSuccessResponse_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -244,7 +243,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsTrue(shippingResult.Detail.Shipment.Packages.Count > 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ContainsItemList_WhenSuccessResponse_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -254,7 +253,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsTrue(shippingResult.Detail.Shipment.Packages[0].Items.Count > 0);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ContainsSellerId_WhenSuccessResponse_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -264,7 +263,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(sellerId, shippingResult.Detail.SellerId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_ContainsOrderNumber_WhenSuccessResponse_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -274,7 +273,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(this.orderNumber, shippingResult.Detail.OrderNumber);
         }
         
-        [TestMethod]
+        [Fact]
         public void Ship_FormatsUrlWithOrderNumberAndSellerId_Test()
         {
             string expectedUrl = string.Format("https://api.newegg.com/marketplace/ordermgmt/orderstatus/orders/{0}?sellerid={1}", shipment.Header.OrderNumber, sellerId);
@@ -288,7 +287,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedUrl, ((Mocked.MockedNeweggRequest)allSuccessRequest).Url);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_BuildsRequestBody_WithActionValueOfTwo_Test()
         {
             const int expectedActionValue = 2;
@@ -305,7 +304,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedActionValue, actualActionValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_BuildsRequestBody_WithSerializedShipmentXml_Test()
         {
             string expectedValue = SerializationUtility.SerializeToXml(shipment);
@@ -339,7 +338,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(expectedValue, actualValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void Ship_UsesPutRequestMethod_Test()
         {
             testObject = new ShippingRequest(credentials, allSuccessRequest);
@@ -350,7 +349,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.AreEqual(HttpVerb.Put, ((Mocked.MockedNeweggRequest)allSuccessRequest).Method);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Ship_ReturnsShippingResults_WhenShippingAnOrderWithNeweggAPI_IntegrationTest()
         {

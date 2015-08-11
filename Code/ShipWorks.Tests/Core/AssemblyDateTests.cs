@@ -1,23 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Reflection;
 using Interapptive.Shared;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class AssemblyDateTests
     {
-        [TestMethod]
+        [Fact]
         public void ReadAssemblyDate()
         {
             // If it can be read, it works.
             DateTime buildDate = AssemblyDateAttribute.Read(Assembly.GetAssembly(typeof(AssemblyDateAttribute)));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void ReadAssemblyDateNonexistent()
         {
@@ -25,7 +24,7 @@ namespace ShipWorks.Tests.Core
             DateTime buildDate = AssemblyDateAttribute.Read();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ReadAssemblyDateForNullAssembly()
         {

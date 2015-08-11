@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.BestRate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsShipmentTypeTest
     {
         private UspsShipmentType testObject;
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             adultSignatureCombinationsNotAllowed = allCombinations.Except(adultSignatureCombinationsAllowed).ToList();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShippingBroker_ReturnsUspsCounterRateBroker_WhenNoUspsAccountsExist_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.IsInstanceOfType(broker, typeof(UspsCounterRatesBroker));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShippingBroker_ReturnsUspsRateBroker_WhenUspsAccountExists_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity> { new UspsAccountEntity() });
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.IsInstanceOfType(broker, typeof(UspsBestRateBroker));
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRestricted_IsReturned_WhenUspsShipmentTypeAndUsingAllowedCombinations()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void AdultSignatureRequred_IsNotReturned_WhenUspsShipmentTypeAndUsingCombinationsThatAreNotAllowed()
         {
             UspsShipmentType uspsShipmentType = new UspsShipmentType();

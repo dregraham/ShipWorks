@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Registration.Promotion;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
 {
-    [TestClass]
     public class UspsCbpRegistrationPromotionTest
     {
         private readonly UspsCbpRegistrationPromotion testObject;
@@ -18,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
             testObject = new UspsCbpRegistrationPromotion();
         }
 
-        [TestMethod]
+        [Fact]
         public void GetPromoCode_ReturnsShipWorks2_Test()
         {
             string promo = testObject.GetPromoCode();
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
             Assert.AreEqual("ShipWorks2", promo);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMonthlyFeeWaived_ReturnsFalse_Test()
         {
             Assert.AreEqual(false, testObject.IsMonthlyFeeWaived);

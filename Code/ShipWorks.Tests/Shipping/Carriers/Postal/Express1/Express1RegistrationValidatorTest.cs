@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal.Express1;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.Postal.Express1.Registration.Payment;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 {
-    [TestClass]
     public class Express1RegistrationValidatorTest
     {
         private Express1RegistrationValidator testObject;
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1RegistrationValidator(paymentValidator.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenNameIsMissing_Test()
         {
             registration.MailingAddress.FirstName = string.Empty;
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Name is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenCompanyIsMissing_Test()
         {
             registration.MailingAddress.Company = string.Empty;
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Company is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenPhoneIsMissing_Test()
         {
             registration.MailingAddress.Phone = string.Empty;
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Phone number is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenEmailIsMissing_Test()
         {
             registration.MailingAddress.Email = string.Empty;
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("An email address is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenStreetIsMissing_Test()
         {
             registration.MailingAddress.Street1 = string.Empty;
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("A street address is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenCityIsMissing_Test()
         {
             registration.MailingAddress.City = string.Empty;
@@ -122,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("City is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenStateIsMissing_Test()
         {
             registration.MailingAddress.StateProvCode = string.Empty;
@@ -133,7 +132,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("A state/province is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_AddsError_WhenPostalCodeIsMissing_Test()
         {
             registration.MailingAddress.PostalCode = string.Empty;
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("A postal code is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DelegatesToPaymentValidator_Test()
         {
             testObject.Validate(registration);
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         }
 
         
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenNameIsMissing_Test()
         {
             registration.MailingAddress.FirstName = string.Empty;
@@ -166,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Name is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenCompanyIsMissing_Test()
         {
             registration.MailingAddress.Company = string.Empty;
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Company is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenPhoneIsMissing_Test()
         {
             registration.MailingAddress.Phone = string.Empty;
@@ -188,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("Phone number is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenEmailIsMissing_Test()
         {
             registration.MailingAddress.Email = string.Empty;
@@ -199,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("An email address is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenStreetIsMissing_Test()
         {
             registration.MailingAddress.Street1 = string.Empty;
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("A street address is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenCityIsMissing_Test()
         {
             registration.MailingAddress.City = string.Empty;
@@ -221,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("City is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenStateIsMissing_Test()
         {
             registration.MailingAddress.StateProvCode = string.Empty;
@@ -232,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             Assert.AreEqual("A state/province is required", errors[0].Message);
         }
 
-        [TestMethod]
+        [Fact]
         public void ValidatePersonalInfo_AddsError_WhenPostalCodeIsMissing_Test()
         {
             registration.MailingAddress.PostalCode = string.Empty;
@@ -245,7 +244,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
 
 
-        [TestMethod]
+        [Fact]
         public void ValidatePaymentInfo_DelegatesToPaymentValidator_Test()
         {
             testObject.Validate(registration);

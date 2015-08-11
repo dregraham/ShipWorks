@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class EnumTest
     {
-        [TestMethod]
+        [Fact]
         public void Verify_EnumObfuscation_IsSet_Test()
         {
             IEnumerable<Assembly> assemblies = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.FullName.Contains("ShipWorks")).OrderBy(a => a.FullName);

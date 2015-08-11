@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 {
-    [TestClass]
     public class FedExShipmentProcessingSynchronizerTest
     {
         private FedExShipmentProcessingSynchronizer testObject;
@@ -22,14 +21,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             testObject = new FedExShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_DelegatesToRepository_Test()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void SaveAccountToShipment_ThrowsFedExException_WhenNoAccounts_Test()
         {
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
             Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<FedExAccountEntity> fedExAccounts = new List<FedExAccountEntity>()

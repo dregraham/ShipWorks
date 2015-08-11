@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 {
-    [TestClass]
     public class UspsScanFormGatewayTest
     {
         private ScanFormBatch scanFormBatch;
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             testObject = new UspsScanFormGateway(new UspsWebClient(UspsResellerType.None));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsUspsException_WhenAccountEntityIsNull_Test()
         {
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsContainNonUspsShipment_Test()
         {
@@ -55,14 +54,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
             testObject.CreateScanForms(scanFormBatch, shipments);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsNull_Test()
         {
             testObject.CreateScanForms(scanFormBatch, null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsException))]
         public void CreateScanForms_ThrowsUspsException_WhenShipmentsIsEmpty_Test()
         {

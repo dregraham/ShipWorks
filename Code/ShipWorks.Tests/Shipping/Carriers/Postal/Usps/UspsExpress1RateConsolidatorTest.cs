@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Postal;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsExpress1RateConsolidatorTest
     {
         UspsExpress1RateConsolidator consolidator;
@@ -30,13 +29,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             UspsLogo = new Bitmap(1, 1);
         }
 
-        [TestMethod]
+        [Fact]
         public void Conslidate_DoesNotThrow_WhenExpress1ApiThrows()
         {
             consolidator.Consolidate(CreateEmptyRateGroup(), CreateTaskThatThrows<Exception>());
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1ApiThrows()
         {
             RateGroup rates = consolidator.Consolidate(CreatePopulatedRateGroup(), CreateTaskThatThrows<Exception>());
@@ -46,14 +45,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_AddsErrorFooter_WhenExpress1ApiThrows()
         {
             RateGroup rates = consolidator.Consolidate(CreatePopulatedRateGroup(), CreateTaskThatThrows<Exception>());
             Assert.IsTrue(rates.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any(), "None of the footnotes are exceptions");
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesAreEmpty()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenNoExpress1RatesMatchServiceType()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesMatchButAreMoreExpensive()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsOnlyUspsRates_WhenExpress1RatesMatchAndAreEqual()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsMergedRates_WhenExpress1RatesMatchAndAreLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -147,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsExpress1Icon_WhenAllExpress1ConfirmationMatchAndAreLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -165,7 +164,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.AreEqual(Express1Logo, priorityRateHeader.ProviderLogo);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsUspsIcon_WhenAllExpress1ConfirmationMatchAndAreSame()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();
@@ -183,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.AreEqual(UspsLogo, priorityRateHeader.ProviderLogo);
         }
 
-        [TestMethod]
+        [Fact]
         public void Consolidate_ReturnsUspsIcon_WhenOneExpress1ConfirmationMatchIsLess()
         {
             RateGroup rateGroup = CreatePopulatedRateGroup();

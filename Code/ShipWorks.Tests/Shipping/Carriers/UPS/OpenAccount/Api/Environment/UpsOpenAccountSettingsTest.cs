@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using Moq;
 using Interapptive.Shared.Utility;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.UPS.UpsEnvironment;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
 {
-    [TestClass]
     public class UpsOpenAccountSettingsTest
     {
         private UpsSettings testObject;
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
             testObject = new UpsSettings(settingsRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void EndpointUrl_ReturnsTestingUrl_WhenUsingTestServer_Test()
         {
             // We've setup the repository in the initialize method to indicate we should use the 
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
             Assert.AreEqual("https://wwwcie.ups.com", testObject.EndpointUrl);
         }
 
-        [TestMethod]
+        [Fact]
         public void EndpointUrl_ReturnsProductionUrl_WhenNotUsingTestServer_Test()
         {
             // setup the repository to indicate we should be using the production server

@@ -2,13 +2,12 @@
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Net
 {
-    [TestClass]
     public class CertificateInspectorTest
     {
         private CertificateInspector testObject;
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             return new X509Certificate(bytes);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenFedExCertificateVerificationDataIsEmpty_Test()
         {
             testObject = new CertificateInspector(string.Empty);
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
         }
         
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsNone_WhenCertificateIsNull_Test()
         {
             request.Setup(r => r.Certificate).Returns<X509Certificate>(null);
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             Assert.AreEqual(CertificateSecurityLevel.None, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsSpoofed_WhenCertificateSubjectDoesNotMatchExpectedValues_Test()
         {
             request.Setup(r => r.Certificate).Returns(noMatchCertificate);
@@ -80,7 +79,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithSingleExpectedValue_Test()
         {
             request.Setup(r => r.Certificate).Returns(singleMatchCertificate);
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
         }
 
-        [TestMethod]
+        [Fact]
         public void Inspect_ReturnsTrusted_WhenCertificateSubjectMatchesAllExpectedValues_WithMultipleExpectedValues_Test()
         {
             request.Setup(r => r.Certificate).Returns(multiMatchCertificate);

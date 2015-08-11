@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
 {
-    [TestClass]
     public class FedExShipResponseTest
     {
         private FedExShipResponse testObject;
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
             testObject = new FedExShipResponse(processShipmentReply, carrierRequest.Object, setupShipmentEntity, mockLabelRepository.Object, manipulators);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_ThrowsFedExApiException_WhenHighestSeverityIsFailure()
         {
             var processShipmentReply = new ProcessShipmentReply
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_ManipulatorsApplied_WhenProcessShipmentReplyContainsNoErrors()
         {
             testObject.Process();
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
            mockedShipmentManipulator.Verify(x => x.Manipulate(It.IsAny<ICarrierResponse>()),Times.Once()); 
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_SaveLabelsCalled_WhenProcessShipmentReplyContainsNoErrors()
         {
             testObject.Process();

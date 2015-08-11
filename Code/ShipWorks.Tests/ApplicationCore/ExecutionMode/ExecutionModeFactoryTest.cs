@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.ExecutionMode;
 
 namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 {
-    [TestClass]
     public class ExecutionModeFactoryTest
     {
         private ExecutionModeFactory testObject;
 
-        [TestMethod]
+        [Fact]
         public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithFullSwitch_Test()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/service=serviceName" });
@@ -24,7 +23,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ThrowsNotImplementedException_WhenServiceIsSpecified_WithAbbreviatedSwitch_Test()
         {            
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/s=serviceName"});
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithFullSwitch_Test()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/command:opensqlfirewall" });
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithCmdSwitch_Test()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] {"/cmd:opensqlfirewall"});
@@ -57,7 +56,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsCommandLineExecutionMode_WhenCommandIsSpecified_WithAbbreviatedSwitch_Test()
         {
             ShipWorksCommandLine commandLine = ShipWorksCommandLine.Parse(new string[] { "/c:opensqlfirewall" });
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
             Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
         }
 
-        [TestMethod]
+        [Fact]
         public void Create_ReturnsUserInterfaceExecutionMode_WhenServiceIsNotSpecified_AndCommandIsNotSpecified_Test()
         {
             testObject = new ExecutionModeFactory(ShipWorksCommandLine.Empty);

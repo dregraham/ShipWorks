@@ -1,17 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Interapptive.Shared;
 using System.Diagnostics;
 using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class GuidTests
     {
-        [TestMethod]
+        [Fact]
         public void RealGuid1()
         {
             string value = "{1F9A8F64-7769-46A1-B9E9-88038ACF158E}";
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Core
             Assert.AreEqual(new Guid(value), guid);
         }
 
-        [TestMethod]
+        [Fact]
         public void NonGuid1()
         {
             string value = "Whatever";
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Core
             Assert.IsFalse(valid, "TryParse should not have returned true.");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ReadNullValue()
         {

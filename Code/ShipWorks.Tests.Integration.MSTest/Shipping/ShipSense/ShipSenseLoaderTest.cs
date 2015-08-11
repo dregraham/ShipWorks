@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
 using ShipWorks.ApplicationCore.Logging;
@@ -20,7 +20,6 @@ using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
 {
-    [TestClass]
     public class ShipSenseLoaderTest
     {
         private ShipSenseLoader testObject;
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
             }
         }
 
-        [TestMethod]
+        [Fact]
         [TestCategory("ShipSense")]
         [TestCategory("ContinuousIntegration")]
         public void LoadData_WithSeededDatabase_CompletesInFiveSecondsOrLess_Test()

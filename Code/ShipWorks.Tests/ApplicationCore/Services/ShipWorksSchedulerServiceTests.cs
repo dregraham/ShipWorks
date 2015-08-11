@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using Moq;
 using ShipWorks.Actions.Scheduling;
 using ShipWorks.ApplicationCore.Services.Fakes;
@@ -6,7 +6,6 @@ using ShipWorks.ApplicationCore.Services.Fakes;
 
 namespace ShipWorks.ApplicationCore.Services.Tests
 {
-    [TestClass]
     public class ShipWorksSchedulerServiceTests
     {
         Mock<IScheduler> scheduler;
@@ -19,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             target = new FakeShipWorksSchedulerService(scheduler.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void CanBeStopped()
         {
             // This test is no longer working due to not able to get a SW InstanceID...

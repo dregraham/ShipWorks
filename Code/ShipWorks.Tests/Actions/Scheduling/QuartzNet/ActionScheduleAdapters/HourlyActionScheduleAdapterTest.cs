@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
 using System;
@@ -6,7 +6,6 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
-    [TestClass]
     public class HourlyActionScheduleAdapterTest
     {
         HourlyActionScheduleAdapter target;
@@ -17,7 +16,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             target = new HourlyActionScheduleAdapter();
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtStartTime()
         {
             var schedule = new HourlyActionSchedule { StartDateTimeInUtc = DateTime.UtcNow };
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.AreEqual(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency()
         {
             var schedule = new HourlyActionSchedule
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequencyWhenDaylightSavingTimeEnds()
         {
             var schedule = new HourlyActionSchedule
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequencyWhenDaylightSavingTimeStarts()
         {
             var schedule = new HourlyActionSchedule

@@ -2,13 +2,12 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation;
 using ShipWorks.Stores.Platforms.Newegg.Net.CredentialValidation.Response;
 
 namespace ShipWorks.Tests.Stores.Newegg
 {
-    [TestClass]
     public class CheckCredentialsResponseSerializerTest
     {
         private string successfulResponseXml;
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_ReturnsCheckCredentialResult_WhenSucessfulResponse_Test()
         {
             object result = serializer.Deserialize(successfulResponseXml);
@@ -60,21 +59,21 @@ namespace ShipWorks.Tests.Stores.Newegg
             Assert.IsInstanceOfType(result, typeof(CheckCredentialsResult));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_CheckCredentialResultIsSuccessful_WhenSucessfulResponse_Test()
         {
             CheckCredentialsResult result = serializer.Deserialize(successfulResponseXml) as CheckCredentialsResult;
             Assert.IsTrue(result.IsSuccessful);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSellerId_Test()
         {
             object result = serializer.Deserialize(invalidSellerIdXml);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSecretKey_Test()
         {

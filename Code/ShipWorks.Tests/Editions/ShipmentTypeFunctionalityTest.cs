@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Common.Logging.Configuration;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.XmlDiffPatch;
 using ShipWorks.Editions;
 using ShipWorks.Shipping;
@@ -14,7 +14,6 @@ using ShipWorks.Shipping.Policies;
 
 namespace ShipWorks.Tests.Editions
 {
-    [TestClass]
     public class ShipmentTypeFunctionalityTest
     {
         private XmlDocument xml;
@@ -389,7 +388,7 @@ namespace ShipWorks.Tests.Editions
             path = xml.CreateNavigator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsKeysForAllShipmentTypeCodes_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
@@ -398,7 +397,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(functionality[ShipmentTypeCode.Usps].Any());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsDisabledRestriction_WhenListedInTheRestrictionSet_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
@@ -408,7 +407,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.Disabled));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsAccountRegistrationRestriction_WhenListedInTheRestrictionSet_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
@@ -418,7 +417,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.AccountRegistration));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsRateDiscountMessagingRestriction_WhenListedInTheRestrictionSet_Test()
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
@@ -428,7 +427,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.RateDiscountMessaging));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsMultipleRestrictionForShipmentType_WhenMultipleRestrictionsListedInTheRestrictionSet_Test()
         {
             SetupXmlWithMultipleFedExRestrictions();
@@ -439,7 +438,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(2, restrictions.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_HasNoRestrictions_WhenNoShipmentTypesAreInXml_Test()
         {
             SetupXmlWithNoShipmentTypes();
@@ -453,7 +452,7 @@ namespace ShipWorks.Tests.Editions
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_OnlyAddsDistinctRestrictions_WhenDuplicateRestrictionsListedInTheRestrictionSet_Test()
         {
             SetupXmlWithDuplicateFedExRestrictions();
@@ -464,7 +463,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(1, restrictions.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_HasNoRestrictions_WhenRestrictionSetIsEmpty_Test()
         {
             SetupXmlWithNoFedExRestrictions();
@@ -475,7 +474,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(0, restrictions.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_HasNoRestrictions_WhenShipmentTypeFunctionalityIsMissing_Test()
         {
             SetupXmlWithoutShipmentTypeFunctionalityNode();
@@ -486,7 +485,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(0, restrictions.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_OnlyAddsDistinctRestrictions_WhenDuplicateShipmentTypeNodesInXml_Test()
         {
             // Each node configured with the same two restrictions
@@ -498,7 +497,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(2, restrictions.Distinct().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_OnlyAddsDistinctRestrictions_WhenShipmentTypeListedMultipleTimes_WithDifferentRestrictionsInEachNode_Test()
         {
             // Each node configured with the same two restrictions
@@ -510,7 +509,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(2, restrictions.Distinct().Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsProcessingRestriction_Test()
         {
             SetupXmlWithFedExProcessingRestriction();
@@ -521,7 +520,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Processing));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsPurchasingRestriction_Test()
         {
             SetupXmlWithFedExPurchasingRestriction();
@@ -532,7 +531,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Purchasing));
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_AddsShippingAccountConversionRestriction_Test()
         {
             SetupXmlWithFedExConversionRestriction();
@@ -543,7 +542,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.ShippingAccountConversion));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToString_ReturnsOriginalShipmentTypeFunctionalityXml_Test()
         {
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
@@ -572,7 +571,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToXElement_ReturnsOriginalShipmentTypeFunctionalityElement_Test()
         {
             SetupXmlWithMultipleShipmentTypesWithSingleRestrictionEach();
@@ -601,7 +600,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
-        [TestMethod]
+        [Fact]
         public void ToXElement_ReturnsShipmentTypeFunctionalityElement_WhenSourceisMissingShipmentTypeFunctionalityNode_Test()
         {
             SetupXmlWithoutShipmentTypeFunctionalityNode();
@@ -612,7 +611,7 @@ namespace ShipWorks.Tests.Editions
             Assert.AreEqual("ShipmentTypeFunctionality", xElement.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void ToXElement_ReturnsEmptyElement_WhenSourceIsMissingShipmentTypeFunctionalityNode_Test()
         {
             SetupXmlWithoutShipmentTypeFunctionalityNode();
@@ -623,7 +622,7 @@ namespace ShipWorks.Tests.Editions
             Assert.IsTrue(xElement.IsEmpty);
         }
 
-        [TestMethod]
+        [Fact]
         public void Deserialize_XElementsAreStored_Test()
         {
             List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>> storedPolicies = null;

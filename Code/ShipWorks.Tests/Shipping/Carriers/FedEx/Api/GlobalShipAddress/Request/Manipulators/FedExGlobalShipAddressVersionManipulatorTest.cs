@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using VersionId = ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddres
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipulators
 {
-    [TestClass]
     public class FedExGlobalShipAddressVersionManipulatorTest
     {
         private FedExGlobalShipAddressVersionManipulator testObject;
@@ -28,14 +27,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject = new FedExGlobalShipAddressVersionManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToGlobalShipAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual("gsai", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo1_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(2, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
             Assert.AreEqual(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo0_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

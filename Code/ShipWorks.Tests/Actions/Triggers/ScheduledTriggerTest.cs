@@ -4,7 +4,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Triggers;
 using ShipWorks.Actions.Triggers.Editors;
@@ -13,7 +13,6 @@ using ShipWorks.Tests.Actions.Scheduling.ActionSchedules;
 
 namespace ShipWorks.Tests.Actions.Triggers
 {
-    [TestClass]
     public class ScheduledTriggerTest
     {
         private ScheduledTrigger testObject;
@@ -33,25 +32,25 @@ namespace ShipWorks.Tests.Actions.Triggers
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void TriggerType_ReturnsScheduled_Test()
         {
             Assert.AreEqual(ActionTriggerType.Scheduled, testObject.TriggerType);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateEditor_ReturnsScheduledTriggerEditor_Test()
         {
             Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(ScheduledTriggerEditor));
         }
 
-        [TestMethod]
+        [Fact]
         public void TriggeringEntityType_IsNull_Test()
         {
             Assert.IsNull(testObject.TriggeringEntityType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_IsOneTimeActionSchedule_WhenNoSettings_Test()
         {
             testObject = new ScheduledTrigger();
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(testObject.Schedule, typeof(OneTimeActionSchedule));
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_UsesStartDateFromSettings_WhenXmlSettingsContainsStartDate_Test()
         {
             DateTime testTime = DateTime.Parse("6/8/2013 12:07:00 AM");
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.AreEqual(testTime, testObject.Schedule.StartDateTimeInUtc);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_IsCorrect_WhenSerializedAndDeserailized_Test()
         {
 
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.AreEqual(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_ReturnsDailyActionSchedule_WhenScheduleTypeIsDaily_Test()
         {
             const string xmlSettings = 
@@ -117,7 +116,7 @@ namespace ShipWorks.Tests.Actions.Triggers
             Assert.IsInstanceOfType(testObject.Schedule, typeof(DailyActionSchedule));
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_FrequencyInDaysEqualsXmlValue_WhenScheduleTypeIsDaily_Test()
         {
             const string xmlSettings =

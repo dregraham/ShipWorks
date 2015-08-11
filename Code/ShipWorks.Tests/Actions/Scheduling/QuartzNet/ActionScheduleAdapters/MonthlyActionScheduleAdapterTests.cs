@@ -1,5 +1,5 @@
 ﻿using Interapptive.Shared.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
@@ -10,7 +10,6 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
-    [TestClass]
     public class MonthlyActionScheduleAdapterTests
     {
         private MonthlyActionScheduleAdapter target;
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         }
 
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresAtStartTimeOfDay()
         {
             var schedule = new MonthlyActionSchedule
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                               ));
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresOnSpecifiedLocalDay()
         {
             var schedule = new MonthlyActionSchedule
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                               ));
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresOnSpecifiedLocalWeek()
         {
             var schedule = new MonthlyActionSchedule
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                               ));
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresOnSpecifiedMonths()
         {
             var schedule = new MonthlyActionSchedule
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 );
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresOnLastDayOfMonth()
         {
             var schedule = new MonthlyActionSchedule()
@@ -124,7 +123,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             Assert.AreEqual((new DateTime(2013, 12, 31)).ToString(), localFireTimes[2].Date.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void DayMode_FiresOnLastSpecifiedDayOfMonth()
         {
             var schedule = new MonthlyActionSchedule()
@@ -147,7 +146,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         }
 
 
-        [TestMethod]
+        [Fact]
         public void DateMode_FiresAtStartTimeOfDay()
         {
             var schedule = new MonthlyActionSchedule
@@ -166,7 +165,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                               ));
         }
 
-        [TestMethod]
+        [Fact]
         public void DateMode_FiresOnSpecifiedLocalDates()
         {
             var schedule = new MonthlyActionSchedule
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 );
         }
 
-        [TestMethod]
+        [Fact]
         public void DateMode_FiresOnSpecifiedMonths()
         {
             var schedule = new MonthlyActionSchedule

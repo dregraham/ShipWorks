@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
@@ -8,7 +8,6 @@ using log4net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
-    [TestClass]
     public class FedExShipmentCostManipulatorTest
     {
         private FedExShipResponse fedExShipResponse;
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             fedExShipResponse = new FedExShipResponse(nativeResponse, carrierRequest.Object, BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ActualRateCostAddedToShipment_ActualRateTypeMatchesIncludedShipRateDetail()
         {
             testObject.Manipulate(fedExShipResponse);
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_UsesTotalNetFedExCharge_OriginIsCA()
         {
             fedExShipResponse.Shipment.OriginCountryCode = "CA";
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FirstRateCostAddedToShipment_ActualRateTypeDoesNotMatchIncludedShipRateDetail()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShippingCostLoggedAsZeroAndWarningLogged_NoShipmentRatingInformation()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating = null;
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             mockLog.Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShippingCostLoggedAsTotalNetFedExCharge_OriginIsCanada()
         {
             nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;

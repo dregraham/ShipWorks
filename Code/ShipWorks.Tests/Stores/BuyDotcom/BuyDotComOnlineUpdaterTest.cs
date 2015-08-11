@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.BuyDotCom;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -14,7 +14,6 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
     /// <summary>
     /// Summary description for BuyDotComOnlineUpdaterTest
     /// </summary>
-    [TestClass]
     public class BuyDotComOnlineUpdaterTest
     {
         private BuyDotComStoreEntity store;
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             Assert.AreEqual(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsOther_WhenEndiciaAndConsolidatorServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             Assert.AreEqual(BuyDotComTrackingType.Other, buyDotComTrackingType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
 
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             Assert.AreEqual(BuyDotComTrackingType.Usps, buyDotComTrackingType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsUsps_WhenUspsAndFirstClassServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -125,7 +124,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
 
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsUsps_WhenOtherAndFirstClassServiceUsed_Test()
         {
             shipmentEntity.Other = otherShipmentEntity;
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
             Assert.AreEqual(BuyDotComTrackingType.Other, buyDotComTrackingType);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetTrackingType_ReturnsDhlGlobalMail_WhenOtherAndDhlServiceUsed_Test()
         {
             otherShipmentEntity.Carrier = "dhl";

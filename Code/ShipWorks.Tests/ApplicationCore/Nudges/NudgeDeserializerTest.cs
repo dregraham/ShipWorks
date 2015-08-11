@@ -1,15 +1,14 @@
 ﻿using System.Linq;
 using System.Xml.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.ApplicationCore.Nudges;
 
 namespace ShipWorks.Tests.ApplicationCore.Nudges
 {
-    [TestClass]
     public class NudgeDeserializerTest
     {
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeID_Test()
         {
@@ -19,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenNudgeIDNotANumber_Test()
         {
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingNudgeType_Test()
         {
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentUri_Test()
         {
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentUriIsInvalid_Test()
         {
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensions_Test()
         {
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsWidth_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingContentDimensionsHeight_Test()
         {
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsWidthIsInvalid_Test()
         {
@@ -99,7 +98,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenContentDimensionsHeightIsInvalid_Test()
         {
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(NudgeException))]
         public void NudgeDeserializer_ThrowsNudgeOptionException_WhenMissingOptions_Test()
         {
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             NudgeDeserializer.Deserialize(nudgeOptionElement);
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectNudgeID_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(nudge.NudgeID, int.Parse(GetValue(nudgeElement, "NudgeID")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectNudgeType_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
@@ -139,7 +138,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual((int)nudge.NudgeType, int.Parse(GetValue(nudgeElement, "NudgeType")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectContentUri_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(nudge.ContentUri.AbsoluteUri, GetValue(nudgeElement, "ContentUri"));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectContentDimensions_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(nudge.ContentDimensions.Height, int.Parse(GetValue(nudgeElement.Descendants("ContentDimensions").First(), "Height")));
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeHasCorrectName_WhenNameIsProvided_Test()
         {
             XElement nudgeElement = XElement.Parse(GoodNudgeXml);
@@ -170,7 +169,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(GetValue(nudgeElement, "Name"), nudge.Name);            
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsOmittedInXml_Test()
         {
             XElement nudgeElement = XElement.Parse(NudgeXmlWithoutNameNode);
@@ -180,7 +179,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             Assert.AreEqual(string.Empty, nudge.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void NudgeDeserializer_NudgeNameIsEmptyString_WhenNameNodeIsEmpty_Test()
         {
             XElement nudgeElement = XElement.Parse(NudgeXmlWithEmptyNameNode);

@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Insurance;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
 {
-    [TestClass]
     public class OnTracBestRateBrokerTest
     {
         private OnTracBestRateBroker testObject;
@@ -28,13 +27,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_OnTracSettingSpecfiesShipWorks_Test()
         {
             Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_OnTracSettingSpecfiesCarrier_Test()
         {
             Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int)InsuranceProvider.Carrier }));

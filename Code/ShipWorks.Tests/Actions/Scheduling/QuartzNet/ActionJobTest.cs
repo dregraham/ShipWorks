@@ -4,14 +4,13 @@ using System.Linq;
 using System.Text;
 using Quartz.Impl;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using Quartz;
 using ShipWorks.Actions.Scheduling.QuartzNet;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 {
-    [TestClass]
     public class ActionJobTest
     {
         // NOTE: we can only test the path that results in the action not being sent
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             testObject = new ActionJob(log.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Execute_DeletesJob_WhenJobDataMapDoesNotContainActionJobKey_Test()
         {
             jobDataMap.Clear();
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(jobKey), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Execute_LogsError_WhenJobDataMapDoesNotContainActionJobKey_Test()
         {
             jobDataMap.Clear();
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.ErrorFormat(It.IsAny<string>(), jobDetail.Object.Key), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Execute_DeletesJob_WhenActionIdInJobDataMapIsNull_Test()
         {
             // Set action ID to a null value
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(jobKey), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Execute_LogsError_WhenActionIdInJobDataMapIsNull_Test()
         {
             // Set action ID to a null value
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.ErrorFormat(It.IsAny<string>(), jobDetail.Object.Key), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Execute_DeletesJob_WhenActionIdInJobDataMapIsAlphaNumeric_Test()
         {
             // Set action ID to an alpha value
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(jobKey), Times.Once());
         }
         
-        [TestMethod]
+        [Fact]
         public void Execute_LogsError_WhenActionIdInJobDataMapIsAlphaNumeric_Test()
         {
             // Set action ID to an alpha value

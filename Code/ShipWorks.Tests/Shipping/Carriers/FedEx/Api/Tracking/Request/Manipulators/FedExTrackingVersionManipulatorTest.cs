@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
-    [TestClass]
     public class FedExTrackingVersionManipulatorTest
     {
         private FedExTrackingVersionManipulator testObject;
@@ -25,14 +24,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject = new FedExTrackingVersionManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequestOrTrackingRequest_Test()
         {
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToTrck_ForTracking_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             Assert.AreEqual("trck", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo9_ForTracking_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             Assert.AreEqual(9, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_ForTracking_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             Assert.AreEqual(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo0_ForTracking_Test()
         {
             testObject.Manipulate(carrierRequest.Object);

@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.AddressValidation
 {
-    [TestClass]
     public class AddressValidatorTest
     {
         private AddressValidationResult result1;
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.AddressValidation
             testObject = new AddressValidator(webClient.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotCallWebClient_WhenAddressHasBeenValidated()
         {
             EnumHelper.GetEnumList<AddressValidationStatusType>()
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.AddressValidation
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsWebClient_IfValidationIsNeeded()
         {
             AddressAdapter address = new AddressAdapter()
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.AddressValidation
                 )));
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsSave_WithOriginalAddress()
         {
             ValidatedAddressEntity originalAddress = null;
@@ -131,7 +130,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.IsTrue(originalAddress.IsOriginal);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_CallsSave_WithSuggestedAddresses()
         {
             List<ValidatedAddressEntity> suggestedAddresses = null;
@@ -157,7 +156,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.IsFalse(suggestedAddresses[1].IsOriginal);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_UpdatesSuggestionCount_WithSuggestedAddresses()
         {
             //ValidatedAddressEntity orderAddress = new ValidatedAddressEntity();
@@ -169,7 +168,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(2, sampleOrder.ShipAddressValidationSuggestionCount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNotValid_WhenNoResultsAreReturned()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -180,7 +179,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToValid_WhenOneValidIdenticalAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.Valid, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenOneValidIdenticalAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -215,7 +214,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -239,7 +238,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsStatusToNeedsAttention_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -257,7 +256,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsAddressDetails_WhenAddressShouldBeAdjustedButStoreIsNotSetToApply()
         {
             results.AddressValidationResults.Remove(result2);
@@ -280,7 +279,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToAdjusted_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -292,7 +291,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.Fixed, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_ChangesAddress_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -316,7 +315,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("BA", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsAddressDetails_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -339,7 +338,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(ValidationDetailStatusType.No, (ValidationDetailStatusType)sampleOrder.ShipUSTerritory);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeOriginalAddress_WhenOneValidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -365,7 +364,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("US", originalAddress.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenOneInvalidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -376,7 +375,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenOneInvalidAddressIsReturned()
         {
             results.AddressValidationResults.Remove(result2);
@@ -393,7 +392,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsValidationStatusToNeedsAttention_WhenMultipleInvalidAddressesAreReturned()
         {
             result1.Street1 = "Foo";
@@ -404,7 +403,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.HasSuggestions, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotChangeAddress_WhenMultipleInvalidAddressesAreReturned()
         {
             result1.Street1 = "Foo";
@@ -421,7 +420,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual("US", sampleOrder.ShipCountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_OrderStatusIsError_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -434,7 +433,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.Error, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_StoresValidationError_WhenWebClientThrowsAddressValidationException()
         {
             webClient.Setup(x => x.ValidateAddress(It.IsAny<AddressAdapter>()))
@@ -447,7 +446,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.IsTrue(sampleOrder.ShipAddressValidationError.StartsWith("Error communicating with Address Validation Server.", StringComparison.InvariantCulture));
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_StoresValidationError_WhenWebClientReturnsErrorMessage()
         {
             errorMessage = "blah";
@@ -460,7 +459,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(errorMessage, sampleOrder.ShipAddressValidationError);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_SetsStatusToError_WhenWebClientReturnsErrorMessage()
         {
             errorMessage = "blah";
@@ -473,7 +472,7 @@ namespace ShipWorks.Tests.AddressValidation
             Assert.AreEqual(AddressValidationStatusType.BadAddress, (AddressValidationStatusType)sampleOrder.ShipAddressValidationStatus);
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_UnsetsValidationError_WhenWebClientReturnsErrorMessageThenReturnsNoErrorMessage()
         {
             errorMessage = "blah";

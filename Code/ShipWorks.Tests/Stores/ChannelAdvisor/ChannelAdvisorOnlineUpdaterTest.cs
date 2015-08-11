@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
@@ -17,7 +17,6 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
     /// <summary>
     /// Summary description for ChannelAdvisorOnlineUpdaterTest
     /// </summary>
-    [TestClass]
     public class ChannelAdvisorOnlineUpdaterTest
     {
         private ChannelAdvisorOrderEntity orderEntity;
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             ontracShipmentEntity = new OnTracShipmentEntity {Service = (int) OnTracServiceType.Ground };
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("CONSOLIDATOR", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsGlobalMail_WhenEndiciaAndDhlServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("Global Mail", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsGlobalMail_WhenUspsAndDhlServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("Global Mail", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsFirstClass_WhenEndiciaAndFirstClassServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("FIRSTCLASS", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsFirstClass_WhenUspsAndFirstClassServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("FIRSTCLASS", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsMi_WhenUpsAndMiServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.UpsOnLineTools);
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("MI", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetShipmentClassCode_ReturnsGround_WhenUpsAndGroundServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.UpsOnLineTools);
@@ -143,7 +142,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("GROUND", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidatorServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -155,7 +154,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("Consolidator", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDHL_WhenEndiciaAndDhlServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -167,7 +166,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("DHL", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDHL_WhenUspsAndDhlServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);
@@ -179,7 +178,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("DHL", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClassServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Endicia);
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.Stores.ChannelAdvisor
             Assert.AreEqual("USPS", code);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenUspsAndDhlServiceUsed_Test()
         {
             SetupShipmentDefaults(ShipmentTypeCode.Usps);

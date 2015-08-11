@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
 {
-    [TestClass]
     public class FedExTrackingResponseTest
     {
         private FedExTrackingResponse testObject;
@@ -80,19 +79,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
             testObject = new FedExTrackingResponse(manipulators, shipment, nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Request_ReturnsRequestProvidedToConstructor_Test()
         {
             Assert.AreEqual(carrierRequest.Object, testObject.Request);
         }
 
-        [TestMethod]
+        [Fact]
         public void NativeResponse_ReturnsRateReplyProvidedToConstructor_Test()
         {
             Assert.AreEqual(nativeResponse, testObject.NativeResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenResponseContainsError_Test()
         {
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenResponseContainsFailure_Test()
         {

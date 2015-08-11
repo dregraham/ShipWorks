@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.Postal.Usps;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsShipmentProcessingSynchronizerTest
     {
         private UspsShipmentProcessingSynchronizer testObject;
@@ -22,14 +21,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             testObject = new UspsShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_DelegatesToRepository_Test()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UspsException))]
         public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
         {
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             testObject.SaveAccountToShipment(new ShipmentEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<UspsAccountEntity> accounts = new List<UspsAccountEntity>()

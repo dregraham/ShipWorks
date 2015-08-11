@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators
 {
-    [TestClass]
     public class UpsInvoiceRegistrationAddressManipulatorTest
     {
         private RegisterRequest registerRequest;
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             testObject = new UpsInvoiceRegistrationAddressManipulator(upsAccount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CustomerNameIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(string.Format("{0} {1} {2}", upsAccount.FirstName, upsAccount.MiddleName, upsAccount.LastName), registerRequest.CustomerName);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CompanyNameIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.Company, registerRequest.CompanyName);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddressLine0IsSet_Test()
         {
             testObject.Manipulate(request);
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.Street1, registerRequest.Address.AddressLine[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AddressLine1IsSet_Test()
         {
             testObject.Manipulate(request);
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.Street2, registerRequest.Address.AddressLine[1]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CityIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.City, registerRequest.Address.City);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_StateIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.StateProvCode, registerRequest.Address.StateProvinceCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ZipIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.PostalCode, registerRequest.Address.PostalCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PostalCodeIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.PostalCode, registerRequest.Address.PostalCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CountryCodeIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.CountryCode, registerRequest.Address.CountryCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PhoneIsSet_Test()
         {
             testObject.Manipulate(request);
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             Assert.AreEqual(upsAccount.Phone.Replace("-",string.Empty), registerRequest.PhoneNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_EmailIsSet_Test()
         {
             testObject.Manipulate(request);

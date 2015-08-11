@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Connection;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsTest : DataDrivenIntegrationTestBase
     {
         private const bool justLabels = true;
@@ -20,7 +19,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("USPS")]
-        [TestMethod]
+        [Fact]
         public void ProcessBatch_UspsAndExpress1Usps_Test()
         {
             UspsMapping testObject = new UspsMapping();
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [DataSource("DataSource_Ship_Stamps")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("USPS")]
-        [TestMethod]
+        [Fact]
         public void GetRates_UspsAndExpress1Usps_Test()
         {
             UspsMapping testObject = new UspsMapping();
@@ -141,7 +140,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("USPS")]
-        [TestMethod]
+        [Fact]
         public void PurchasePostage_UspsAndExpress1Usps_Test()
         {
             UspsMapping testObject = new UspsMapping();
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         [DataSource("DataSource_Ship_PurchasePostage")]
         [DeploymentItem("DataSources\\Usps.xlsx")]
         [TestCategory("USPS")]
-        [TestMethod]
+        [Fact]
         public void CheckPostage_UspsAndExpress1Usps_Test()
         {
             UspsMapping testObject = new UspsMapping();

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.FedEx.Enums;
 using ShipWorks.Shipping.Settings;
 
 namespace ShipWorks.Tests.Shipping.Settings
 {
-    [TestClass]
     public class EnumCheckboxControlTest
     {
         private EnumCheckBoxControl<FedExServiceType> testObject;
@@ -23,14 +22,14 @@ namespace ShipWorks.Tests.Shipping.Settings
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType>());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenTypeProvidedIsNotEnum_Test()
         {
             EnumCheckBoxControl<int> control = new EnumCheckBoxControl<int>();
         }
         
-        [TestMethod]
+        [Fact]
         public void Initialize_ExcludesSpecificServicesDefinedInExcludedList_Test()
         {
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType> { FedExServiceType.FedEx1DayFreight, FedExServiceType.FedEx2DayFreight });

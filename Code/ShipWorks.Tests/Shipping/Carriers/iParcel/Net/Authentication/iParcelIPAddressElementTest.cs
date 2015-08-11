@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.iParcel.Net.Authentication;
 using Moq;
 using log4net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Authentication
 {
-    [TestClass]
     public class iParcelIPAddressElementTest
     {
         private iParcelIPAddressElement testObject;
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Authentication
             testObject = new iParcelIPAddressElement();
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsIPAddressElement_Test()
         {
             XElement element = testObject.Build();
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Authentication
             Assert.AreEqual("IPAddresses", element.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_IPAddress_Test()
         {
             XElement element = testObject.Build();

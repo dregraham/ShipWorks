@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Templates.Processing;
 using ShipWorks.Data;
 using ShipWorks.Templates;
@@ -19,7 +19,6 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Templates.Processing
 {
-    [TestClass]
     public class XmlTreeGeneration
     {
         [TestInitialize]
@@ -39,161 +38,161 @@ namespace ShipWorks.Tests.Templates.Processing
             DatabaseManager.Cleanup();
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectGenerated()
         {
             ProcessTokens("{/ShipWorks/Generated}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectTemplateContentHeight()
         {
             ProcessTokens("{/ShipWorks/Template/Output/ContentHeight}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectUsername()
         {
             ProcessTokens("{/ShipWorks/User/Username}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreName()
         {
             ProcessTokens("{/ShipWorks/Store/StoreName}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreLastDownloaded()
         {
             ProcessTokens("{/ShipWorks/Store/LastDownload}, {/ShipWorks/Store/LastDownload}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectStoreCity()
         {
             ProcessTokens("{/ShipWorks/Store/Address[@type != 'Whatever']/City}", 29006);
         }
 
-        [TestMethod()]
+        [Fact]
         [Ignore]
         public void SelectCustomerCity()
         {
             ProcessTokens("{/ShipWorks/Customer[1]/Address[@type = 'bill']/City}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectCustomerNotes()
         {
             ProcessTokens("<xsl:for-each select='/ShipWorks/Customer/Note/*'><xsl:value-of select='.' /></xsl:for-each>", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectCustomerNotesLegacy()
         {
             ProcessTokens("{/ShipWorks/Customer/Notes}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectUsernames()
         {
             ProcessTokens("<xsl:for-each select='//Username'><xsl:value-of select='.' />, </xsl:for-each>", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectUsernameTest()
         {
             ProcessTokens("{(//Username)[3]/../../Text}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectSumAllAmounts()
         {
             ProcessTokens("{sum(//Charge/@ID)}, {sum((//Amount)[position() &lt;= 5])}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderNotesLegacy()
         {
             ProcessTokens("{//Order/Notes}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderPaymentAll()
         {
             ProcessTokens("{//Order/Payment/.}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderChildren()
         {
             ProcessTokens("<xsl:for-each select='/ShipWorks/Customer/Order/*'><xsl:value-of select='.' /></xsl:for-each>", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderNumber()
         {
             ProcessTokens("{//Number}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderDate()
         {
             ProcessTokens("{//Order/Date}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectReference()
         {
             ProcessTokens("{//Reference}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectSumOrderCharges()
         {
             ProcessTokens("{sum(//Charge/Amount)}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectSumUnitPrice()
         {
             ProcessTokens("{sum(//UnitPrice)}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemCode2()
         {
             ProcessTokens("{sum((//Order/Item | //Order/Charge)/@ID)}", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectOrderItemCodes()
         {
             ProcessTokens("<xsl:for-each select='/ShipWorks/Customer/Order/Item'>[<xsl:value-of select='.' />] </xsl:for-each>", 29006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectShipments()
         {
@@ -212,28 +211,28 @@ namespace ShipWorks.Tests.Templates.Processing
             ProcessTokens("<xsl:for-each select='//Shipment//@* | //Shipment//*'>[<xsl:value-of select='.' />] </xsl:for-each>", 107006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void LabelTesting()
         {
             ProcessTokens("{count(//Label)}", 107006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectTrackingNumber()
         {
             ProcessTokens("{/ShipWorks/Customer/Order/Shipment/TrackingNumber}", 26006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectStoreSpecifics()
         {
             ProcessTokens("{count(//RecordNumber)}", 96006);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void SelectShipmentSpecifics()
         {

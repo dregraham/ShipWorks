@@ -1,5 +1,5 @@
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.OnTrac.Net.Authentication;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
 {
-    [TestClass]
     public class OnTracAuthenticationRequestTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
@@ -43,14 +42,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             testObject = new OnTracAuthentication(42, "test", mockedSubmitter.Object, mockedLogFactory.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidUser_RequestIsLogged_ReceiveValidResponseFromOnTrac_Test()
         {
             SuccessfullyValidateUser();
 
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
-        [TestMethod]
+        [Fact]
         public void IsValidUser_ResponseIsLogged_ReceiveValidResponseFromOnTrac_Test()
         {
             SuccessfullyValidateUser();
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidUser_RequestVerbIsGet_ReceiveValidResponseFromOnTrac_Test()
         {
             SuccessfullyValidateUser();
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsValidUser_ValidUrl_ReceiveValidResponseFromOnTrac_Test()
         {
             SuccessfullyValidateUser();
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             testObject.IsValidUser();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(OnTracException))]
         public void AuthenticateUser_AuthenticationFail_ReceiveInvalidResponseFromOnTrac_Test()
         {

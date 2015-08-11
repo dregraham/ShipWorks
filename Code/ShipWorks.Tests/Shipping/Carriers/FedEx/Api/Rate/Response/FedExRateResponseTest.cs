@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
 {
-    [TestClass]
     public class FedExRateResponseTest
     {
         private FedExRateResponse testObject;
@@ -34,19 +33,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject = new FedExRateResponse(nativeResponse, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Request_ReturnsRequestProvidedToConstructor_Test()
         {
             Assert.AreEqual(carrierRequest.Object, testObject.Request);
         }
 
-        [TestMethod]
+        [Fact]
         public void NativeResponse_ReturnsRateReplyProvidedToConstructor_Test()
         {
             Assert.AreEqual(nativeResponse, testObject.NativeResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenResponseContainsError_Test()
         {
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenResponseContainsFailure_Test()
         {
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Process_ThrowsFedExApiException_WhenRateReplyDetailsIsNull_Test()
         {
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs556_Test()
         {
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs557_Test()
         {
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Response
             testObject.Process();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(FedExException))]
         public void Process_ThrowsFedExApiException_WhenRateReplyIsNull_AndNotificationCodeIs558_Test()
         {

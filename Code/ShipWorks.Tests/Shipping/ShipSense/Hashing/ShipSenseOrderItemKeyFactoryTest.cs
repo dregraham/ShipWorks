@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 
 namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 {
-    [TestClass]
     public class ShipSenseOrderItemKeyFactoryTest
     {
         private ShipSenseOrderItemKeyFactory testObject;
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeyForEachOrderItem_WithAllPropertiesAdded_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(3, keys.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithAllPropertiesInSpecifiedPropertyListAdded_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("Name")));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithProperties_OrderedByPropertyName_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.IsTrue(codeIndex < nameIndex && nameIndex < skuIndex);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithPropertyValues_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.IsTrue(values[2].Contains("XYZ"));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithOnlyAttributesSpecifiedInAttributeListAdded_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(0, keys.Count(k => k.KeyValue.Contains("EDITION")));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithAttributeValues_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(3, values.Count(v => v.Contains("RED")));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ReturnsKeys_WithAttributes_OrderedByPropertyName_Test()
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
 
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ConsolidatesItems_HavingDuplicateKeyValues_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(1, itemsHavingSkuXYZ.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingDuplicateKeyValues_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -147,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(10, itemsHavingSkuXYZ.First().Quantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ConsolidatesItems_WhenHavingMixtureOfDuplicateAndUniqueKeyValues_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -175,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(1, uniqueTwoKey.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_SumsQuantities_WhenConsolidatingItems_HavingMixtureOfDuplicateAndUniqueKeyValues_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_CreatesSeparateKey_ForEachUniuqeKeyValue_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -218,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(2, keys.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_ConsolidatesItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -241,7 +240,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(1, keys.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_SumsQuantity_WhenConsolidatingItems_HavingSameAttributeValues_ButAttributesAreInDifferentOrder_Test()
         {
             orderItems = new List<OrderItemEntity>
@@ -264,7 +263,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             Assert.AreEqual(10, keys.First().Quantity);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetKeys_IgnoresAttributes_HavingEmptyStringInDescription_Test()
         {
             orderItems = new List<OrderItemEntity>

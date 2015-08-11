@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
-    [TestClass]
     public class FedExTrackingPackageIdentifierManipulatorTest
     {
         private FedExTrackingPackageIdentifierManipulator testObject;
@@ -26,14 +25,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject = new FedExTrackingPackageIdentifierManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackingRequest_Test()
         {
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenShipmentEntityIsNull_Test()
         {
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_TrackPackageIdentifierMatchesShipmentTrackingNumber_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             //Assert.AreEqual(TrackIdentifierType.TRACKING_NUMBER_OR_DOORTAG, nativeRequest.PackageIdentifier.Type);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_IncludeDetailedScansIsTrue_Test()
         {
             ShipmentEntity shipmentEntity = new ShipmentEntity();

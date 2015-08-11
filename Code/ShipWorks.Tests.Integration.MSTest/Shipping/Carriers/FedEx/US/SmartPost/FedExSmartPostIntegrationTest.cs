@@ -1,9 +1,8 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
 {
-    [TestClass]
     public class FedExSmartPostIntegrationTest : DataDrivenIntegrationTestBase
     {
 
@@ -14,7 +13,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
         [DataSource("DataSource_Ship_FedExSmartPost")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
         [TestCategory("FedEx")]
-        [TestMethod]
+        [Fact]
         public void Ship_FedExSmartPost()
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();

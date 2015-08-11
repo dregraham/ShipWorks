@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -15,7 +15,6 @@ using System.Xml.XPath;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
 {
-    [TestClass]
     public class UpsPackageServiceOptionsElementWriterTests
     {
         UpsShipmentEntity shipment;
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             return element;
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationName_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { package.VerbalConfirmationName }, names);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationName_WhenVerbalConfirmationEnabledIsFalse_Test()
         {
             package.VerbalConfirmationEnabled = false;
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.DoesNotContain(names, package.VerbalConfirmationName);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneNumber_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { package.VerbalConfirmationPhone }, phoneNumbers);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneNumber_WhenVerbalConfirmationEnabledIsFalse_Test()
         {
             package.VerbalConfirmationEnabled = false;
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Debug.Assert(phoneNumbers.Count == 0, "The phone number was written, even though VerbalConfirmationEnabled is false.");
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesVerbalConfirmationPhoneExtension_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { package.VerbalConfirmationPhoneExtension }, phoneExtensions);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmationPhoneExtension_WhenVerbalConfirmationEnabledIsFalse_Test()
         {
             package.VerbalConfirmationEnabled = false;
@@ -133,7 +132,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Debug.Assert(phoneExtensions.Count == 0, "The phone extension was written, even though VerbalConfirmationEnabled is false.");
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenShipmentIsReturn_Test()
         {
             package.VerbalConfirmationEnabled = true;
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Assert.AreEqual(0, confirmations.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteVerbalConfirmation_WhenVerbalConfirmationEnabledIsFalse_Test()
         {
             package.VerbalConfirmationEnabled = false;
@@ -164,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Assert.AreEqual(0, confirmations.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesDryIceRegulationSet_Test()
         {
             package.DryIceEnabled = true;
@@ -179,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet) }, regulationSets);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesDryIceUnitOfMeasurementCode_Test()
         {
             package.DryIceEnabled = true;
@@ -193,7 +192,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { "LBS" }, units);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesDryIceWeight_Test()
         {
             package.DryIceEnabled = true;
@@ -210,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             CollectionAssert.AreEqual(new[] { weightInLbs.ToString("##0.0") }, weights);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_WritesDryIceMedicalUseIndicator_Test()
         {
             package.DryIceEnabled = true;
@@ -226,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Assert.AreEqual(1, medicalUses.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenNotForMedicalUse_Test()
         {
             package.DryIceEnabled = true;
@@ -242,7 +241,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Assert.AreEqual(0, medicalUses.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteDryIceMedicalUseIndicator_WhenRegulationSetIsNotCfr_Test()
         {
             package.DryIceEnabled = true;
@@ -258,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             Assert.AreEqual(0, medicalUses.Count);
         }
 
-        [TestMethod]
+        [Fact]
         public void WriteServiceOptionsElement_DoesNotWriteDryIce_WhenDryIceIsNotEnabled_Test()
         {
             package.DryIceEnabled = false;

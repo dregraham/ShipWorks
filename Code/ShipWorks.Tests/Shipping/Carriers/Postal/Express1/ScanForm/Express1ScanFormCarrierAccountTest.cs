@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 {
-    [TestClass]
     public class Express1ScanFormCarrierAccountTest
     {
         private Express1EndiciaScanFormCarrierAccount testObject;
@@ -45,31 +44,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GetGateway_ReturnsExpress1ScanFormGateway_Test()
         {
             Assert.IsInstanceOfType(testObject.GetGateway(), typeof(Express1EndiciaScanFormGateway));
         }
 
-        [TestMethod]
+        [Fact]
         public void ShippingCarrierName_Test()
         {
             Assert.AreEqual("USPS (Express1 for Endicia)", testObject.ShippingCarrierName);
         }
         
-        [TestMethod]
+        [Fact]
         public void ShipmentTypeCode_Test()
         {
             Assert.AreEqual(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
         }
         
-        [TestMethod]
+        [Fact]
         public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
         {
             Assert.IsInstanceOfType(testObject.GetPrinter(), typeof(DefaultScanFormPrinter));
         }
 
-        [TestMethod]
+        [Fact]
         public void GetExistingScanFormBatches_DelegatesToRepository_Test()
         {
             testObject.GetExistingScanFormBatches();
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.GetExistingScanFormBatches(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEligibleShipmentIDs_DelegatesToRepository_Test()
         {
             testObject.GetEligibleShipmentIDs();
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEligibleShipmentIDs_Bucket_Test()
         {
             testObject.GetEligibleShipmentIDs();
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_DelegatesToRepository_Test()
         {
             ScanFormBatch batch = new ScanFormBatch(null, null, null);
@@ -113,14 +112,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.Save(batch), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ShippingException))]
         public void Save_ThrowsShippingException_WhenScanFormBatchIsNull_Test()
         {
             testObject.Save(null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_LogsMessage_WhenScanFormEntityIsNull_Test()
         {
             try

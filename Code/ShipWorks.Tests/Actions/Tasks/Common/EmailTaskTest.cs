@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Quartz;
 using ShipWorks.Actions.Tasks.Common;
 using ShipWorks.Actions.Tasks.Common.Enums;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class EmailTaskTest
     {
-        [TestMethod]
+        [Fact]
         public void Initialize_DeserializesXmlCorrectly_Test()
         {
             // Create a new purge database task to serialize

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using Moq;
 using ShipWorks.Shipping.ScanForms;
@@ -8,7 +8,6 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 {
-    [TestClass]
     public class EndiciaScanFormGatewayTest
     {
         private ScanFormBatch scanFormBatch;
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             testObject = new EndiciaScanFormGateway();
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenAccountEntityIsNull_Test()
         {
@@ -37,14 +36,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
             testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsNull_Test()
         {
             testObject.CreateScanForms(scanFormBatch, null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsEmpty_Test()
         {

@@ -1,10 +1,9 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Tasks.Common;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class DownloadOrdersTaskTest
     {
         private readonly DownloadOrdersTask testObject;
@@ -14,13 +13,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             testObject = new DownloadOrdersTask();
         }
 
-        [TestMethod]
+        [Fact]
         public void RequiresInput_ReturnsNone_Test()
         {
             Assert.AreEqual(testObject.InputRequirement, ActionTaskInputRequirement.None);
         }
 
-        [TestMethod]
+        [Fact]
         public void Initalize_DeserializesXmlTaskSettingsToStoreIDs_Test()
         {
             const string TaskSettings = @"

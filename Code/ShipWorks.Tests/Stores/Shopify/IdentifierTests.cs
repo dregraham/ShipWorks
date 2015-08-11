@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms;
@@ -9,11 +9,10 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Stores.Shopify
 {
-    [TestClass]
     public class ApiTests
     {
 
-        [TestMethod]
+        [Fact]
         public void GenEncryptedApiKeyPwd()
         {
 

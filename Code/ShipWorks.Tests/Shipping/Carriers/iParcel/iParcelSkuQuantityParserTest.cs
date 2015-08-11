@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.iParcel;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.iParcel.Net.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelSkuQuantityParserTest
     {
         private iParcelSkuQuantityParser testObject;
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject = new iParcelSkuQuantityParser(shipment, tokenProcessor.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343");
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_SingleItem_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45");
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_SkuContainsPunctuation_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC._~;123, 45 | XYZ, 2343");
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_DanglingPipe_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|");
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_SkuQuantity_DanglingPipeAndTrailingWhitespace_Test()
         {
             Dictionary<string, int> items = testObject.Parse("ABC123, 45 | XYZ, 2343|        ");
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             Assert.AreEqual(2343, items["XYZ"]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Parse_DelegatesToTokenProcessor_Test()
         {
             testObject.Parse("000000, 5 | 111111, 6");
@@ -141,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             tokenProcessor.Verify(t => t.Process("000000, 5 | 111111, 6", shipment), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingLengthIsNotTwo_Test()
         {
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.Parse("ABC123, 45 | 2343");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityGroupingIsMissingPipe_Test()
         {
@@ -157,21 +156,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.Parse("ABC123, 45 XYZ, 2343");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void Parse_ThrowsiParcelException_WhenSkuQuantityListIsMissingSku_Test()
         {
             testObject.Parse("123456789, 45 | , 2343");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void Parse_ThrowsiParcelException_WhenQuantityIsString_Test()
         {
             testObject.Parse("123456789, 45 | 123, ABC");
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(iParcelException))]
         public void Parse_ThrowsiParcelException_WhenQuantityIsDecimal_Test()
         {

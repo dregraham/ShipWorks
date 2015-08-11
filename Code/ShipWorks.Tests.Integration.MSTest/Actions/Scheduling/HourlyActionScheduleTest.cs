@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using Quartz.Impl.Matchers;
 using Quartz.Impl.Triggers;
@@ -24,7 +24,6 @@ using log4net;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
-    [TestClass]
     public class HourlyActionScheduleTest : ActionScheduleTest
     {
         private readonly ILog log;
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             SystemTimeUtilities.UpdateSystemTime(InitialRunDateTime);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Schedule_VerifyJobsRunAtCorrectTimes_Test()
         {
@@ -227,7 +226,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             SystemTimeUtilities.UpdateSystemTime(InitialRunDateTime);
         }
 
-        [TestMethod]
+        [Fact]
         [Ignore]
         public void Schedule_VerifyJobsDontRunAtIncorrectTimes_Test()
         {

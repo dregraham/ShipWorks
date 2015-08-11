@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 {
-    [TestClass]
     public class FedExCounterRatesBrokerTest
     {
         private FedExCounterRatesBroker testObject;
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             testObject = new FedExCounterRatesBroker(fedExShipmentType.Object, accountRepository.Object, settingsRepository.Object, certificateInspector.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsSettingsRepository_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsCertificateInspector_Test()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>();

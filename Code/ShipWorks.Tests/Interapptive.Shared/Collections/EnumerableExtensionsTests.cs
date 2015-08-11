@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Collections;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Linq;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 
 
 namespace ShipWorks.Tests.Interapptive.Shared.Collections
 {
-    [TestClass]
     public class EnumerableExtensionsTests
     {
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_ReturnsChunksOfSpecifiedSize()
         {
             var sequence = Enumerable.Range(0, 30);
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(10, chunks.ElementAt(2).Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_LastChunkContainsRemainderOfItems_WhenCollectionCannotBeEvenlyDividedByChunkSize()
         {
             var sequence = Enumerable.Range(0, 14);
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(4, chunks.ElementAt(2).Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_ItemsAreAddedToExpectedChunk()
         {
             var sequence = Enumerable.Range(0, 10);
@@ -50,14 +49,14 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual(9, chunks.ElementAt(3).ElementAt(0));
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_ReturnsEmptyCollection_WhenSourceIsEmpty()
         {
             var chunks = (new List<int>()).SplitIntoChunksOf(5);
             Assert.AreEqual(0, chunks.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_ThrowsIfSourceIsNull()
         {
             try
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void SplitIntoChunksOf_ThrowsIfChunkSizeIsLessThanOne()
         {
             try
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void CanRepeatSequence()
         {
             var sequence = new[] { 1, 2, 5 };       //Arthurian sequence
@@ -96,21 +95,21 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsEmpty_WithNullList()
         {
             string result = ((IEnumerable<string>)null).Combine();
             Assert.AreEqual(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsEmpty_WithEmptyList()
         {
             string result = (new List<string>()).Combine();
             Assert.AreEqual(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsCombinedStrings_WithValidList()
         {
             List<string> list = new List<string> {"foo", "bar"};
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual("foobar", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsDelimitedCombinedStrings_WithValidList()
         {
             List<string> list = new List<string> { "foo", "bar" };
@@ -126,21 +125,21 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual("foo, bar", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsEmpty_WithNullCharList()
         {
             string result = ((IEnumerable<string>)null).Combine();
             Assert.AreEqual(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsEmpty_WithEmptyCharList()
         {
             string result = (new List<char>()).Combine();
             Assert.AreEqual(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsCombinedStrings_WithValidCharList()
         {
             List<char> list = new List<char> { 'a', 'b' };
@@ -148,7 +147,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual("ab", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Combine_ReturnsDelimitedCombinedStrings_WithValidCharList()
         {
             List<char> list = new List<char> { 'a', 'b' };
@@ -156,7 +155,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual("a, b", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void Except_ReturnsElementsThatDoNotMatch_BasedOnProperty()
         {
             List<string> list = new List<string> {"foo", "bar", "baz"};
@@ -165,28 +164,28 @@ namespace ShipWorks.Tests.Interapptive.Shared.Collections
             Assert.AreEqual("foo", result[0]);
         }
 
-        [TestMethod]
+        [Fact]
         public void None_WithEmptyCollection_ReturnsTrue()
         {
             bool result = new List<string>().None();
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void None_WithSingleItem_ReturnsFalse()
         {
             bool result = Enumerable.Range(0, 1).None();
             Assert.IsFalse(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void None_WithPredicateThatReturnsEmptyResults_ReturnsTrue()
         {
             bool result = Enumerable.Range(0, 100).None(x => x == 1000);
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        [Fact]
         public void None_WithPredicateThatReturnsOneResult_ReturnsFalse()
         {
             bool result = Enumerable.Range(0, 100).None(x => x == 20);

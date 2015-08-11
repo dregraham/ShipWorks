@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -17,7 +17,6 @@ using ShipWorks.Stores.Platforms.Ebay.WebServices;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 {
-    [TestClass]
     public class UpsOpenAccountCreateUpsAccountEntityManipulatorTest
     {
         private UpsOpenAccountCreateUpsAccountEntityManipulator testObject;
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsOpenAccountBusinessAddressException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountBusinessAddressException_ResponseContainsBillingCandidate_Test()
         {
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             testObject.Manipulate(upsOpenAccountResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsOpenAccountPickupAddressException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountPickupAddressException_ResponseContainsPickupAddressCandidates_Test()
         {
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             testObject.Manipulate(upsOpenAccountResponse);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(UpsOpenAccountException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountException_ResponseContainsFailedCode_Test()
         {
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             testObject.Manipulate(upsOpenAccountResponse);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsAccountNumber_Test()
         {
             testObject.Manipulate(upsOpenAccountResponse);
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             Assert.AreEqual("42", upsAccount.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsRateTypeToOccasional_PickupOptionIsSmart_Test()
         {
             pickupCode.Code = EnumHelper.GetApiValue(UpsPickupOption.SmartPickup);
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
             Assert.AreEqual((int) UpsRateType.Occasional, upsAccount.RateType);
         }
 
-        [TestMethod]
+        [Fact]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_SetsRateTypeToDaily_PickupOptionIsDaily_Test()
         {
             pickupCode.Code = EnumHelper.GetApiValue(UpsPickupOption.RegularDailyPickup);

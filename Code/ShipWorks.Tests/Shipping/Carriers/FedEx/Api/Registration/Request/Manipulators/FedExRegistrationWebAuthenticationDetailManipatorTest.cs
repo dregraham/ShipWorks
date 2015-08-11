@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExRegistrationWebAuthenticationDetailManipulatorTest
     {
         private FedExRegistrationWebAuthenticationDetailManipulator testObject;
@@ -51,14 +50,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject = new FedExRegistrationWebAuthenticationDetailManipulator(settings);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
             testObject.Manipulate(null);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
@@ -68,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndRequestIsNotRegisterUserRequest_AndRequestIsNotSubscriptionRequest_Test()
         {
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         
         #region Version Capture Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_AndRequestIsVersionCapture_Test()
         {
             // Only setup is  to set the detail to null value
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_AndRequestIsVersionCapture_Test()
         {
             // No additional setup since everything is in the Initialize method
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Register User Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_AndRequestIsRegisterUser_Test()
         {
             // Only setup is  to set the detail to null value
@@ -122,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_AndRequestIsRegisterUser_Test()
         {
             // No additional setup since everything is in the Initialize method
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_UserCredentialIsNull_WhenWebAuthenticationDetailsIsNotNull_AndRequestIsRegisterUser_Test()
         {
             // No additional setup since everything is in the Initialize method
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Subscription Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_AndRequestIsSubscription_Test()
         {
             // Only setup is  to set the detail to null value
@@ -161,7 +160,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             Assert.IsNotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_AndRequestIsSubscription_Test()
         {
             // No additional setup since everything is in the Initialize method

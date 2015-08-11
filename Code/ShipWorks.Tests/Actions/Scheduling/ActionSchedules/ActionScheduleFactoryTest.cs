@@ -1,32 +1,31 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class ActionScheduleFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsOneTimeActionSchedule_Test()
         {
             Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.OneTime), typeof(OneTimeActionSchedule));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsHourlyTimeActionSchedule_Test()
         {
             Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Hourly), typeof(HourlyActionSchedule));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsDailyActionSchedule_Test()
         {
             Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Daily), typeof(DailyActionSchedule));
         }
 
-        [TestMethod]
+        [Fact]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CreateActionSchedule_ThrowsArgumentOutOfRangeException_Test()
         {
