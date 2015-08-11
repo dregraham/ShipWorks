@@ -137,7 +137,7 @@
             this.labelMerchantId.Name = "labelMerchantId";
             this.labelMerchantId.Size = new System.Drawing.Size(50, 13);
             this.labelMerchantId.TabIndex = 169;
-            this.labelMerchantId.Text = "Seller Id:";
+            this.labelMerchantId.Text = "Seller ID:";
             // 
             // label1
             // 

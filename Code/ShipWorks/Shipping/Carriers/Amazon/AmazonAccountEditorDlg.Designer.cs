@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.labelMerchantId.Name = "labelMerchantId";
             this.labelMerchantId.Size = new System.Drawing.Size(50, 13);
             this.labelMerchantId.TabIndex = 171;
-            this.labelMerchantId.Text = "Seller Id:";
+            this.labelMerchantId.Text = "Seller ID:";
             // 
             // ok
             // 
