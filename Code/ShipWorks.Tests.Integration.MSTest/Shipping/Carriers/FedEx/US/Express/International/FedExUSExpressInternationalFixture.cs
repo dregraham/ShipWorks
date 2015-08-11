@@ -231,7 +231,6 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested(Repetitions)1.SpecialServiceTypes", PropertyName = "PackageLineItemSpecialServiceType2", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.DryIceWeight.Units", PropertyName = "DryIceWeightUnits", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.DryIceWeight.Value", PropertyName = "DryIceWeightValue", SpreadsheetColumnIndex = -1 });
-                    columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.RequestedPackageLineItems.SpecialServicesRequested.SpecialServiceTypes", PropertyName = "SpecialServiceType1", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SaveLabel", PropertyName = "SaveLabel", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.DangerousGoodsDetail.CargoAircraftOnly", PropertyName = "DangerousGoodsCargoAircraftOnly", SpreadsheetColumnIndex = -1 });
                     columnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.SpecialServiceTypes.PriorityAlertDetail.Content", PropertyName = "PackageLineItemPriorityContent", SpreadsheetColumnIndex = -1 });
@@ -267,7 +266,20 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
 
             SetupRecipientIdentification(shipment);
 
+            SetupReturnsClearance(shipment);
+
             return shipment;
+        }
+
+        /// <summary>
+        /// Setups the returns clearance.
+        /// </summary>
+        private void SetupReturnsClearance(ShipmentEntity shipment)
+        {
+            if (SpecialServiceType1 == "RETURNS_CLEARANCE")
+            {
+                shipment.FedEx.ReturnsClearance = true;
+            }
         }
 
         private void SetupExportDetail(ShipmentEntity shipment)
