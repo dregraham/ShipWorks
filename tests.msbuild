@@ -1,0 +1,18 @@
+<Project
+    DefaultTargets="Test"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask
+    AssemblyFile=".\packages\xunit.runner.msbuild.2.0.0\build\portable-net45+win+wpa81+wp80+monotouch+monoandroid+Xamarin.iOS\xunit.runner.msbuild.dll"
+    TaskName="Xunit.Runner.MSBuild.xunit" />
+
+  <ItemGroup>
+    <!-- <TestAssemblies Include="**\bin\$(Configuration)\*.tests.dll" /> -->
+    <TestAssemblies Include="Code\ShipWorks.Shipping.Tests\bin\$(Configuration)\*.tests.dll" />
+  </ItemGroup>
+
+  <Target Name="Test">
+    <xunit Assemblies="@(TestAssemblies)" />
+  </Target>
+
+</Project>

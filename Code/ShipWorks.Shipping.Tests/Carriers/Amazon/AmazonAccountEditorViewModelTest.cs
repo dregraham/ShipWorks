@@ -1,36 +1,27 @@
 ﻿using System;
 using Autofac.Extras.Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
+using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
-    [TestClass]
     public class AmazonAccountEditorViewModelTest
     {
-        [TestMethod]
+        [Fact]
         public void Load_WithNullAccount_ThrowsNullArgumentException()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonAccountEditorViewModel testObject = mock.Create<AmazonAccountEditorViewModel>();
 
-                try
-                {
-                    testObject.Load(null);
-                    Assert.Fail();
-                }
-                catch (ArgumentNullException)
-                {
-                    // Success
-                }
+                Assert.Throws<ArgumentNullException>(() => testObject.Load(null));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_WithValidAccount_SetsCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -48,12 +39,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Load(account);
 
-                Assert.AreEqual("Foo", testObject.Credentials.MerchantId);
-                Assert.AreEqual("Bar", testObject.Credentials.AuthToken);
+                Assert.Equal("Foo", testObject.Credentials.MerchantId);
+                Assert.Equal("Bar", testObject.Credentials.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_WithValidAccount_SetsPersonDetails()
         {
             using (var mock = AutoMock.GetLoose())
@@ -68,12 +59,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Load(account);
 
-                Assert.AreEqual("Foo", testObject.Person.FirstName);
-                Assert.AreEqual("Bar", testObject.Person.LastName);
+                Assert.Equal("Foo", testObject.Person.FirstName);
+                Assert.Equal("Bar", testObject.Person.LastName);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_WithValidAccount_SetsDescription()
         {
             using (var mock = AutoMock.GetLoose())
@@ -87,11 +78,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Load(account);
 
-                Assert.AreEqual("Foo", testObject.Description);
+                Assert.Equal("Foo", testObject.Description);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_SetsDescriptionToNull_WhenDescriptionMatchesDefault()
         {
             using (var mock = AutoMock.GetLoose())
@@ -109,11 +100,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Load(account);
 
-                Assert.IsNull(testObject.Description);
+                Assert.Null(testObject.Description);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Load_WithValidAccount_SetsDescriptionPromptFromAccountManager()
         {
             using (var mock = AutoMock.GetLoose())
@@ -127,30 +118,22 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Load(account);
 
-                Assert.AreEqual("Foo description", testObject.DescriptionPrompt);
+                Assert.Equal("Foo description", testObject.DescriptionPrompt);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_WithNullAccount_ThrowsArgumentNullException()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonAccountEditorViewModel testObject = mock.Create<AmazonAccountEditorViewModel>();
 
-                try
-                {
-                    testObject.Save(null);
-                    Assert.Fail();
-                }
-                catch (ArgumentNullException)
-                {
-                    // Success
-                }
+                Assert.Throws<ArgumentNullException>(() => testObject.Save(null));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_DelegatesToAmazonCredentialsValidate_WithValidAccount()
         {
             using (var mock = AutoMock.GetLoose())
@@ -161,11 +144,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 mock.Mock<IAmazonCredentials>().Verify(x => x.Validate());
 
-                Assert.IsFalse(testObject.Success);
+                Assert.False(testObject.Success);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_SuccessIsFalse_WhenCredentialsFailValidation()
         {
             using (var mock = AutoMock.GetLoose())
@@ -178,12 +161,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(new AmazonAccountEntity());
 
-                Assert.IsFalse(testObject.Success);
-                Assert.AreEqual("Foo", testObject.Message);
+                Assert.False(testObject.Success);
+                Assert.Equal("Foo", testObject.Message);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_DelegatesAccountPopulationToCredentials_WhenCredentialsAreValid()
         {
             using (var mock = AutoMock.GetLoose())
@@ -201,7 +184,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_CopiesContactInfoToAccount_WhenCredentialsAreValid()
         {
             using (var mock = AutoMock.GetLoose())
@@ -217,12 +200,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(account);
 
-                Assert.AreEqual("NewFoo", account.FirstName);
-                Assert.AreEqual("NewBar", account.City);
+                Assert.Equal("NewFoo", account.FirstName);
+                Assert.Equal("NewBar", account.City);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_CopiesDescriptionToAccount_WhenDescriptionIsSet()
         {
             using (var mock = AutoMock.GetLoose())
@@ -237,11 +220,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(account);
 
-                Assert.AreEqual("NewFoo", account.Description);
+                Assert.Equal("NewFoo", account.Description);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_CopiesDefaultDescriptionToAccount_WhenDescriptionIsNotSet()
         {
             using (var mock = AutoMock.GetLoose())
@@ -259,11 +242,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(account);
 
-                Assert.AreEqual("New Description", account.Description);
+                Assert.Equal("New Description", account.Description);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_SavesToAccountManager_WhenCredentialsAreValid()
         {
             using (var mock = AutoMock.GetLoose())
@@ -281,7 +264,7 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_SuccessIsTrue_WhenSaveIsSuccessful()
         {
             using (var mock = AutoMock.GetLoose())
@@ -294,12 +277,12 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(account);
 
-                Assert.IsTrue(testObject.Success);
-                Assert.AreEqual(testObject.Message, string.Empty);
+                Assert.True(testObject.Success);
+                Assert.Equal(testObject.Message, string.Empty);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_SuccessIsFalseWithMessage_WhenSaveHasORMConcurrencyException()
         {
             using (var mock = AutoMock.GetLoose())
@@ -317,8 +300,8 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 
                 testObject.Save(account);
 
-                Assert.IsFalse(testObject.Success);
-                Assert.AreEqual(testObject.Message, "Your changes cannot be saved because another use has deleted the account.");
+                Assert.False(testObject.Success);
+                Assert.Equal(testObject.Message, "Your changes cannot be saved because another use has deleted the account.");
             }
         }
     }

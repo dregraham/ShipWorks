@@ -245,18 +245,26 @@ namespace :test do
 	end
 
 	desc "Execute unit tests"
-	mstest :units do |mstest|
+	msbuild :units do |msbuild|
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("units")
 		
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-		mstest.parameters = "/noisolation", "/detail:errormessage", 
-			"/testsettings:./units.testsettings",
-			"/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", 
-			"/testContainer:./Code/ShipWorks.Shipping.Tests/bin/Debug/ShipWorks.Shipping.Tests.dll", 
-			"/resultsfile:TestResults/units-results.trx"
-	end	
+
+		msbuild.use :net45
+		msbuild.parameters = "/m:3"
+		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+		#msbuild.parameters "/"
+		msbuild.properties :configuration => :Debug
+
+		#mstest.parameters = "/noisolation", "/detail:errormessage",
+		#	"/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", 
+		#	"/testContainer:./Code/ShipWorks.Shipping.Tests/bin/Debug/ShipWorks.Shipping.Tests.dll", 
+		#	"/resultsfile:TestResults/units-results.trx"
+	end
+
+
 	
 	desc "Execute integration tests"
 	mstest :integration, :categoryFilter do |mstest, args|

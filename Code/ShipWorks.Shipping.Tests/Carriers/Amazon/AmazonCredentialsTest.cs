@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac.Extras.Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Stores;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 {
-    [TestClass]
     public class AmazonCredentialsTest
     {
-        [TestMethod]
+        [Fact]
         public void Initialize_WithNoStores_DoesNotPopulateCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -21,13 +20,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
                 testObject.PopulateFromStore();
-
-                Assert.AreEqual(string.Empty, testObject.MerchantId);
-                Assert.AreEqual(string.Empty, testObject.AuthToken);
+                
+                Assert.Equal(string.Empty, testObject.MerchantId);
+                Assert.Equal(string.Empty, testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithNonAmazonStores_DoesNotPopulateCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -43,12 +42,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual(string.Empty, testObject.MerchantId);
-                Assert.AreEqual(string.Empty, testObject.AuthToken);
+                Assert.Equal(string.Empty, testObject.MerchantId);
+                Assert.Equal(string.Empty, testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithOnlyDisabledAmazonStores_DoesNotPopulateCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -64,12 +63,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual(string.Empty, testObject.MerchantId);
-                Assert.AreEqual(string.Empty, testObject.AuthToken);
+                Assert.Equal(string.Empty, testObject.MerchantId);
+                Assert.Equal(string.Empty, testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithSingleEnabledAmazonStore_PopulatesCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -85,12 +84,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual("Foo", testObject.MerchantId);
-                Assert.AreEqual("Bar", testObject.AuthToken);
+                Assert.Equal("Foo", testObject.MerchantId);
+                Assert.Equal("Bar", testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithSingleIdenticalEnabledAmazonStore_PopulatesCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -107,12 +106,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual("Foo", testObject.MerchantId);
-                Assert.AreEqual("Bar", testObject.AuthToken);
+                Assert.Equal("Foo", testObject.MerchantId);
+                Assert.Equal("Bar", testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithEnabledAndDisabledAmazonStore_PopulatesCredentialsFromEnabled()
         {
             using (var mock = AutoMock.GetLoose())
@@ -129,12 +128,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual("Foo", testObject.MerchantId);
-                Assert.AreEqual("Bar", testObject.AuthToken);
+                Assert.Equal("Foo", testObject.MerchantId);
+                Assert.Equal("Bar", testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Initialize_WithMultipleDifferentEnabledAmazonStores_DoesNotPopulateCredentials()
         {
             using (var mock = AutoMock.GetLoose())
@@ -151,12 +150,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateFromStore();
 
-                Assert.AreEqual(string.Empty, testObject.MerchantId);
-                Assert.AreEqual(string.Empty, testObject.AuthToken);
+                Assert.Equal(string.Empty, testObject.MerchantId);
+                Assert.Equal(string.Empty, testObject.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DelegatesValidationToWebClient()
         {
             using (var mock = AutoMock.GetLoose())
@@ -173,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotCallWebClient_WhenMerchantIdIsNotSet()
         {
             using (var mock = AutoMock.GetLoose())
@@ -187,12 +186,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.Validate();
 
                 webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-                Assert.AreEqual("MerchantId and AuthToken are required", testObject.Message);
-                Assert.AreEqual(false, testObject.Success);
+                Assert.Equal("MerchantId and AuthToken are required", testObject.Message);
+                Assert.Equal(false, testObject.Success);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_DoesNotCallWebClient_WhenAuthTokenIsNotSet()
         {
             using (var mock = AutoMock.GetLoose())
@@ -206,12 +205,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.Validate();
 
                 webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
-                Assert.AreEqual("MerchantId and AuthToken are required", testObject.Message);
-                Assert.AreEqual(false, testObject.Success);
+                Assert.Equal("MerchantId and AuthToken are required", testObject.Message);
+                Assert.Equal(false, testObject.Success);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_WithValidCredentials_ClearsMessageAndSetsSuccessToTrue()
         {
             using (var mock = AutoMock.GetLoose())
@@ -226,12 +225,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.AuthToken = "Bar";
                 testObject.Validate();
 
-                Assert.AreEqual(string.Empty, testObject.Message);
-                Assert.AreEqual(true, testObject.Success);
+                Assert.Equal(string.Empty, testObject.Message);
+                Assert.Equal(true, testObject.Success);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Validate_WithInvalidCredentials_SetsMessageAndSetsSuccessToFalse()
         {
             using (var mock = AutoMock.GetLoose())
@@ -246,12 +245,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.AuthToken = "Bar";
                 testObject.Validate();
 
-                Assert.AreEqual("Error message", testObject.Message);
-                Assert.AreEqual(false, testObject.Success);
+                Assert.Equal("Error message", testObject.Message);
+                Assert.Equal(false, testObject.Success);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateAccount_SetsCredentials_WhenValidated()
         {
             using (var mock = AutoMock.GetLoose())
@@ -266,12 +265,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.PopulateAccount(account);
 
-                Assert.AreEqual("Foo", account.MerchantID);
-                Assert.AreEqual("Bar", account.AuthToken);
+                Assert.Equal("Foo", account.MerchantID);
+                Assert.Equal("Bar", account.AuthToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateAccount_ThrowsInvalidOperationException_WhenNotValid()
         {
             using (var mock = AutoMock.GetLoose())
@@ -282,34 +281,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.AuthToken = "Bar";
                 testObject.Success = false;
 
-                try
-                {
-                    testObject.PopulateAccount(new AmazonAccountEntity());
-                    Assert.Fail();
-                }
-                catch (InvalidOperationException)
-                {
-                    // Pass
-                }
+                Assert.Throws<InvalidOperationException>(() => testObject.PopulateAccount(new AmazonAccountEntity()));
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void PopulateAccount_ThrowsArgumentNullException_WhenAccountIsNull()
         {
             using (var mock = AutoMock.GetLoose())
             {
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
-                try
-                {
-                    testObject.PopulateAccount(null);
-                    Assert.Fail();
-                }
-                catch (ArgumentNullException)
-                {
-                    // Pass
-                }
+                Assert.Throws<ArgumentNullException>(() => testObject.PopulateAccount(null));
             }
         }
     }
