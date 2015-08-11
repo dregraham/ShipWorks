@@ -8,7 +8,7 @@
 <#
 	var services = new object[]
 	{
-		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV45",
+		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices", "SwsimV46",
 		"ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36", "SwsimV36",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService", "EwsLabelService",
 		"ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService", "ELSServicesService",
@@ -38,8 +38,7 @@
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced", "cartAPIAdvanced",
 		"ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart", "cartAPI",
 		"ShipWorks.Shipping.Carriers.iParcel.WebServices", "XMLSOAP",
-		"ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService",
-        "ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps", "SDCV24Service"
+		"ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount", "OpenAccountService"
 	};
 #>	
 
@@ -67,7 +66,7 @@ namespace <#= services[i] #>
         /// <summary>
         /// Constructor
         /// </summary>
-        internal <#= services[i + 1] #>(IApiLogEntry logEntry)
+        public <#= services[i + 1] #>(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;

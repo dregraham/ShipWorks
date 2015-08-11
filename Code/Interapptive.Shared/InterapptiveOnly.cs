@@ -11,7 +11,7 @@ namespace ShipWorks.ApplicationCore
     /// <summary>
     /// Used to control features and functions that should only be available to Interapptive employees.
     /// </summary>
-    static class InterapptiveOnly
+    public static class InterapptiveOnly
     {
         static RegistryHelper internalRegistry = new RegistryHelper(@"Software\Interapptive\ShipWorks\Internal");
 

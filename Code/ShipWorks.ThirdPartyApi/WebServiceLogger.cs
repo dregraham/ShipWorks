@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV46(IApiLogEntry logEntry)
+        public SwsimV46(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -160,7 +160,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.v36
         /// <summary>
         /// Constructor
         /// </summary>
-        internal SwsimV36(IApiLogEntry logEntry)
+        public SwsimV36(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -297,7 +297,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.LabelService
         /// <summary>
         /// Constructor
         /// </summary>
-        internal EwsLabelService(IApiLogEntry logEntry)
+        public EwsLabelService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -434,7 +434,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.WebServices.AccountService
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ELSServicesService(IApiLogEntry logEntry)
+        public ELSServicesService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -571,7 +571,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.CustomerServic
         /// <summary>
         /// Constructor
         /// </summary>
-        internal CustomerService(IApiLogEntry logEntry)
+        public CustomerService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -708,7 +708,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.LabelService
         /// <summary>
         /// Constructor
         /// </summary>
-        internal EwsLabelService(IApiLogEntry logEntry)
+        public EwsLabelService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -845,7 +845,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RegisterMgrAcctService(IApiLogEntry logEntry)
+        public RegisterMgrAcctService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -982,7 +982,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ShippingService(IApiLogEntry logEntry)
+        public ShippingService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1119,7 +1119,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OrderService(IApiLogEntry logEntry)
+        public OrderService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1256,7 +1256,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Inventory
         /// <summary>
         /// Constructor
         /// </summary>
-        internal InventoryService(IApiLogEntry logEntry)
+        public InventoryService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1393,7 +1393,7 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Admin
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AdminService(IApiLogEntry logEntry)
+        public AdminService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1530,7 +1530,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RegistrationService(IApiLogEntry logEntry)
+        public RegistrationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1667,7 +1667,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate
         /// <summary>
         /// Constructor
         /// </summary>
-        internal RateService(IApiLogEntry logEntry)
+        public RateService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1804,7 +1804,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship
         /// <summary>
         /// Constructor
         /// </summary>
-        internal ShipService(IApiLogEntry logEntry)
+        public ShipService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -1941,7 +1941,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Track
         /// <summary>
         /// Constructor
         /// </summary>
-        internal TrackService(IApiLogEntry logEntry)
+        public TrackService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2078,7 +2078,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement
         /// <summary>
         /// Constructor
         /// </summary>
-        internal PackageMovementInformationService(IApiLogEntry logEntry)
+        public PackageMovementInformationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2215,7 +2215,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.AddressValidation
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AddressValidationService(IApiLogEntry logEntry)
+        public AddressValidationService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2352,7 +2352,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.Close
         /// <summary>
         /// Constructor
         /// </summary>
-        internal CloseService(IApiLogEntry logEntry)
+        public CloseService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2489,7 +2489,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
         /// <summary>
         /// Constructor
         /// </summary>
-        internal GlobalShipAddressService(IApiLogEntry logEntry)
+        public GlobalShipAddressService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2626,7 +2626,7 @@ namespace ShipWorks.Stores.Platforms.Infopia.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal InfopiaWebService(IApiLogEntry logEntry)
+        public InfopiaWebService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2763,7 +2763,7 @@ namespace ShipWorks.Stores.Platforms.PayPal.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal PayPalAPISoapBinding(IApiLogEntry logEntry)
+        public PayPalAPISoapBinding(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -2900,7 +2900,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.WebServices.SellerCentral
         /// <summary>
         /// Constructor
         /// </summary>
-        internal merchantinterfacedime(IApiLogEntry logEntry)
+        public merchantinterfacedime(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3037,7 +3037,7 @@ namespace ShipWorks.Stores.Platforms.Ebay.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal eBayAPIInterfaceService(IApiLogEntry logEntry)
+        public eBayAPIInterfaceService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3174,7 +3174,7 @@ namespace ShipWorks.Stores.Platforms.MarketplaceAdvisor.WebServices.Oms
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OMService(IApiLogEntry logEntry)
+        public OMService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3311,7 +3311,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal AmeriCommerceDatabaseIO(IApiLogEntry logEntry)
+        public AmeriCommerceDatabaseIO(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3448,7 +3448,7 @@ namespace ShipWorks.Stores.Platforms.NetworkSolutions.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal NetSolEcomService(IApiLogEntry logEntry)
+        public NetSolEcomService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3585,7 +3585,7 @@ namespace ShipWorks.Stores.Platforms.Magento.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal MagentoService(IApiLogEntry logEntry)
+        public MagentoService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3722,7 +3722,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.CartAdvanced
         /// <summary>
         /// Constructor
         /// </summary>
-        internal cartAPIAdvanced(IApiLogEntry logEntry)
+        public cartAPIAdvanced(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3859,7 +3859,7 @@ namespace ShipWorks.Stores.Platforms.ThreeDCart.WebServices.Cart
         /// <summary>
         /// Constructor
         /// </summary>
-        internal cartAPI(IApiLogEntry logEntry)
+        public cartAPI(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -3996,7 +3996,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel.WebServices
         /// <summary>
         /// Constructor
         /// </summary>
-        internal XMLSOAP(IApiLogEntry logEntry)
+        public XMLSOAP(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
@@ -4133,144 +4133,7 @@ namespace ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount
         /// <summary>
         /// Constructor
         /// </summary>
-        internal OpenAccountService(IApiLogEntry logEntry)
-            : this()
-        {
-            this.logEntry = logEntry;
-        }
-
-		/// <summary>
-        /// Only log error result.
-        /// </summary>
-		public bool OnlyLogOnMagicKeys 
-		{
-			get { return onlyLogOnMagicKeys; }
-			set { onlyLogOnMagicKeys = value; }
-		}
-
-        /// <summary>
-        /// Provides access to the raw soap XML sent and recieved
-        /// </summary>
-        public WebServiceRawSoap RawSoap
-        {
-            get { return rawSoap; }
-        }
-        
-        /// <summary>
-        /// The log entry being used to log the request and response
-        /// </summary>
-		public IApiLogEntry ApiLogEntry
-        {
-			get { return logEntry; }
-		}
-
-        /// <summary>
-        /// Get the writer for the message
-        /// </summary>
-        protected override XmlWriter GetWriterForMessage(SoapClientMessage message, int bufferSize)
-        {
-            rawSoap.ReadOutgoingMessage(message);
-
-            return base.GetWriterForMessage(message, bufferSize);
-        }
-
-        /// <summary>
-        /// Get the response to the message that has been generated
-        /// </summary>
-        protected override System.Net.WebResponse GetWebResponse(System.Net.WebRequest request)
-        {
-            // At this point the message has been completely serialized and ready to be logged
-            if (logEntry != null && rawSoap.RequestXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
-            {
-                logEntry.LogRequest(rawSoap.RequestXml);
-            }
-
-			// get the reponse
-            System.Net.WebResponse baseResponse = base.GetWebResponse(request);
-
-			// check for Soap the same way the framework does
-			if (!IsSoap(baseResponse.ContentType))
-			{
-				RaiseInvalidSoapException(baseResponse);
-			}
-
-			return baseResponse;
-        }
-
-        /// <summary>
-        /// Get the XmlReader used to read the response message
-        /// </summary>
-        protected override XmlReader GetReaderForMessage(SoapClientMessage message, int bufferSize)
-        {
-            rawSoap.ReadIncomingMessage(message);
-
-            // Response is now ready to be logged
-            if (logEntry != null && rawSoap.ResponseXml != null && (InterapptiveOnly.MagicKeysDown || !OnlyLogOnMagicKeys))
-            {
-                logEntry.LogResponse(rawSoap.ResponseXml);
-            }
-
-            return base.GetReaderForMessage(message, bufferSize);
-        }
-
-        /// <summary>
-        /// Checks the contentType to see if it is one that would indicate a SOAP response.
-		/// This was pulled out of a .NET Framework internal class. 
-        /// </summary>
-		private bool IsSoap(string contentType)
-        {
-            if (!contentType.StartsWith("text/xml", System.StringComparison.InvariantCultureIgnoreCase))
-            {
-                return (contentType.StartsWith("application/soap+xml", System.StringComparison.OrdinalIgnoreCase));
-            }
-
-            return true;
-        }
-
-		/// <summary>
-        /// Extract the response and raise an exception
-        /// </summary>
-        private void RaiseInvalidSoapException(System.Net.WebResponse response)
-        {
-            using (System.IO.Stream responseStream = response.GetResponseStream())
-            {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(responseStream))
-                {
-                    string responseContent = reader.ReadToEnd();
-
-                    // http-specific properties
-                    System.Net.HttpStatusCode statusCode = System.Net.HttpStatusCode.OK;
-                    string statusDescription = "";
-
-                    System.Net.HttpWebResponse httpWebResponse = response as System.Net.HttpWebResponse;
-                    if (httpWebResponse != null)
-                    {
-                        statusCode = httpWebResponse.StatusCode;
-                        statusDescription = httpWebResponse.StatusDescription;
-                    }
-
-                    throw new Interapptive.Shared.Net.InvalidSoapException(statusCode, statusDescription, responseContent);
-                }
-            }
-        }
-    }
-}		
-
-namespace ShipWorks.Shipping.Carriers.Postal.Express1.WebServices.Stamps
-{
-    /// <summary>
-    /// Partial class for the webservices generated class, to help with logging
-    /// </summary>
-    partial class SDCV36Service
-    {
-        WebServiceRawSoap rawSoap = new WebServiceRawSoap();
-        IApiLogEntry logEntry;
-		bool onlyLogOnMagicKeys = false;
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        internal SDCV36Service(IApiLogEntry logEntry)
+        public OpenAccountService(IApiLogEntry logEntry)
             : this()
         {
             this.logEntry = logEntry;
