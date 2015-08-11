@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExFreightManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedEx1DayFreight;
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
+            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment);
+            Assert.Null(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -62,14 +61,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("fbn123", nativeRequest.RequestedShipment.ExpressFreightDetail.BookingConfirmationNumber);
-            Assert.IsNull(nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
+            Assert.Equal("fbn123", nativeRequest.RequestedShipment.ExpressFreightDetail.BookingConfirmationNumber);
+            Assert.Null(nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
 
             List<ShipmentSpecialServiceType> specialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
 
-            Assert.AreEqual(2, specialServiceTypes.Count);
-            Assert.AreEqual(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.INSIDE_DELIVERY));
-            Assert.AreEqual(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.INSIDE_PICKUP));
+            Assert.Equal(2, specialServiceTypes.Count);
+            Assert.Equal(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.INSIDE_DELIVERY));
+            Assert.Equal(1, specialServiceTypes.Count(sst => sst == ShipmentSpecialServiceType.INSIDE_PICKUP));
         }
 
         [Fact]
@@ -86,12 +85,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("fbn123", nativeRequest.RequestedShipment.ExpressFreightDetail.BookingConfirmationNumber);
-            Assert.AreEqual("23", nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
+            Assert.Equal("fbn123", nativeRequest.RequestedShipment.ExpressFreightDetail.BookingConfirmationNumber);
+            Assert.Equal("23", nativeRequest.RequestedShipment.ExpressFreightDetail.ShippersLoadAndCount);
 
             List<ShipmentSpecialServiceType> specialServiceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.ToList();
 
-            Assert.AreEqual(0, specialServiceTypes.Count);
+            Assert.Equal(0, specialServiceTypes.Count);
         }
 
         [Fact]
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             List<RequestedShippingDocumentType> shippingDocumentTypes =
                 nativeRequest.RequestedShipment.ShippingDocumentSpecification.ShippingDocumentTypes.ToList();
 
-            Assert.AreEqual(1, shippingDocumentTypes.Count(sdt => sdt == RequestedShippingDocumentType.LABEL));
+            Assert.Equal(1, shippingDocumentTypes.Count(sdt => sdt == RequestedShippingDocumentType.LABEL));
         }
 
     }

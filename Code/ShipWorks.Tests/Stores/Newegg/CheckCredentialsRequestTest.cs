@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         private Credentials invalidSellerCredentials;
         private Credentials invalidSecretKeyCredentials;
 
-        [TestInitialize]
-        public void Initialize()
+        public CheckCredentialsRequestTest()
         {
             // Use the non-logging newegg request so we don't have to have a ShipWorks session
             testObject = new CheckCredentialsRequest(new Mocked.NonLoggingNeweggRequest());
@@ -25,28 +24,25 @@ namespace ShipWorks.Tests.Stores.Newegg
             invalidSecretKeyCredentials = new Credentials("A09V", "ABCD", NeweggChannelType.US);
         }
 
-        [Fact]
-        [Ignore]
+        
         public void AreCredentialsValid_ReturnsFalse_WithInvalidSellerId_IntegrationTest()
         {            
             // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.IsFalse(testObject.AreCredentialsValid(invalidSellerCredentials));
+            Assert.False(testObject.AreCredentialsValid(invalidSellerCredentials));
         }
 
-        [Fact]
-        [Ignore]
+        
         public void AreCredentialsValid_ReturnsFalse_WithInvalidSecretKey_IntegrationTest()
         {
             // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.IsFalse(testObject.AreCredentialsValid(invalidSecretKeyCredentials));
+            Assert.False(testObject.AreCredentialsValid(invalidSecretKeyCredentials));
         }
 
-        [Fact]
-        [Ignore]
+        
         public void AreCredentialsValid_ReturnsTrue_WithValidCredentials_IntegrationTest()
         {
             // This is an integration test; Marked with Ignore attribute, so this is not run in the automated build
-            Assert.IsTrue(testObject.AreCredentialsValid(validCredentials));
+            Assert.True(testObject.AreCredentialsValid(validCredentials));
         }
     }
 }

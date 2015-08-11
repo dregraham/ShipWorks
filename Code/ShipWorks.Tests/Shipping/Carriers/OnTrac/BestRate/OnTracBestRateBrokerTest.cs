@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
         private Mock<ICarrierAccountRepository<OnTracAccountEntity>> genericRepositoryMock;
         private Mock<OnTracShipmentType> genericShipmentTypeMock;
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracBestRateBrokerTest()
         {
             genericRepositoryMock = new Mock<ICarrierAccountRepository<OnTracAccountEntity>>();
             genericShipmentTypeMock = new Mock<OnTracShipmentType>();
@@ -30,13 +29,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.BestRate
         [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_OnTracSettingSpecfiesShipWorks_Test()
         {
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int) InsuranceProvider.ShipWorks}));
         }
 
         [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_OnTracSettingSpecfiesCarrier_Test()
         {
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int)InsuranceProvider.Carrier }));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { OnTracInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

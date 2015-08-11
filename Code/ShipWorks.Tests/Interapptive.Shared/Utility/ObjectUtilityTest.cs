@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             string testObject = "foo";
             string result = ObjectUtility.Nameof(() => testObject.Length);
-            Assert.AreEqual("Length", result);
+            Assert.Equal("Length", result);
         }
 
         [Fact]
@@ -18,14 +18,14 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             string testObject = "foo";
             string result = ObjectUtility.Nameof(() => testObject.ToLower());
-            Assert.AreEqual("ToLower", result);
+            Assert.Equal("ToLower", result);
         }
 
         [Fact]
         public void Nameof_ReturnsName_WithPropertyOfNullObject()
         {
             string result = ObjectUtility.Nameof(() => ((string)null).Length);
-            Assert.AreEqual("Length", result);
+            Assert.Equal("Length", result);
         }
     }
 }

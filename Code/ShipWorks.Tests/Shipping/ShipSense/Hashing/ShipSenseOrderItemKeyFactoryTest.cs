@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         
         private List<OrderItemEntity> orderItems;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShipSenseOrderItemKeyFactoryTest()
         {
             testObject = new ShipSenseOrderItemKeyFactory();
 
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
-            Assert.AreEqual(3, keys.Count);
+            Assert.Equal(3, keys.Count);
         }
 
         [Fact]
@@ -39,9 +38,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
-            Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("SKU")));
-            Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("Code")));
-            Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("Name")));
+            Assert.Equal(3, keys.Count(k => k.KeyValue.Contains("SKU")));
+            Assert.Equal(3, keys.Count(k => k.KeyValue.Contains("Code")));
+            Assert.Equal(3, keys.Count(k => k.KeyValue.Contains("Name")));
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             int nameIndex = keys[0].KeyValue.IndexOf("Name");
             int skuIndex = keys[0].KeyValue.IndexOf("SKU");
 
-            Assert.IsTrue(codeIndex < nameIndex && nameIndex < skuIndex);
+            Assert.True(codeIndex < nameIndex && nameIndex < skuIndex);
         }
 
         [Fact]
@@ -65,9 +64,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<string> values = keys.Select(k => k.KeyValue).ToList();
 
             // Keys were sorted by SKU in alpha
-            Assert.IsTrue(values[0].Contains("ABC"));
-            Assert.IsTrue(values[1].Contains("JKL"));
-            Assert.IsTrue(values[2].Contains("XYZ"));
+            Assert.True(values[0].Contains("ABC"));
+            Assert.True(values[1].Contains("JKL"));
+            Assert.True(values[2].Contains("XYZ"));
         }
 
         [Fact]
@@ -75,9 +74,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         {
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
-            Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("COLOR")));
-            Assert.AreEqual(3, keys.Count(k => k.KeyValue.Contains("SIZE")));
-            Assert.AreEqual(0, keys.Count(k => k.KeyValue.Contains("EDITION")));
+            Assert.Equal(3, keys.Count(k => k.KeyValue.Contains("COLOR")));
+            Assert.Equal(3, keys.Count(k => k.KeyValue.Contains("SIZE")));
+            Assert.Equal(0, keys.Count(k => k.KeyValue.Contains("EDITION")));
         }
 
         [Fact]
@@ -88,8 +87,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<string> values = keys.Select(k => k.KeyValue).ToList();
 
             // Keys were sorted by SKU in alpha
-            Assert.AreEqual(3, values.Count(v => v.Contains("MEDIUM")));
-            Assert.AreEqual(3, values.Count(v => v.Contains("RED")));
+            Assert.Equal(3, values.Count(v => v.Contains("MEDIUM")));
+            Assert.Equal(3, values.Count(v => v.Contains("RED")));
         }
 
         [Fact]
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             int sizeIndex = keys[0].KeyValue.IndexOf("SIZE");
             int colorIndex = keys[0].KeyValue.IndexOf("COLOR");
 
-            Assert.IsTrue(colorIndex < sizeIndex);
+            Assert.True(colorIndex < sizeIndex);
         }
 
 
@@ -122,8 +121,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<ShipSenseOrderItemKey> itemsHavingSkuABC = keys.Where(k => k.KeyValue.Contains("ABC")).ToList();
             List<ShipSenseOrderItemKey> itemsHavingSkuXYZ = keys.Where(k => k.KeyValue.Contains("XYZ")).ToList();
 
-            Assert.AreEqual(1, itemsHavingSkuABC.Count);
-            Assert.AreEqual(1, itemsHavingSkuXYZ.Count);
+            Assert.Equal(1, itemsHavingSkuABC.Count);
+            Assert.Equal(1, itemsHavingSkuXYZ.Count);
         }
 
         [Fact]
@@ -142,8 +141,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<ShipSenseOrderItemKey> itemsHavingSkuABC = keys.Where(k => k.KeyValue.Contains("ABC")).ToList();
             List<ShipSenseOrderItemKey> itemsHavingSkuXYZ = keys.Where(k => k.KeyValue.Contains("XYZ")).ToList();
 
-            Assert.AreEqual(8, itemsHavingSkuABC.First().Quantity);
-            Assert.AreEqual(10, itemsHavingSkuXYZ.First().Quantity);
+            Assert.Equal(8, itemsHavingSkuABC.First().Quantity);
+            Assert.Equal(10, itemsHavingSkuXYZ.First().Quantity);
         }
 
         [Fact]
@@ -168,10 +167,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<ShipSenseOrderItemKey> uniqueOneKey = keys.Where(k => k.KeyValue.Contains("UniqueItem-1")).ToList();
             List<ShipSenseOrderItemKey> uniqueTwoKey = keys.Where(k => k.KeyValue.Contains("UniqueItem-2")).ToList();
 
-            Assert.AreEqual(1, itemsHavingSkuABC.Count);
-            Assert.AreEqual(1, itemsHavingSkuXYZ.Count);
-            Assert.AreEqual(1, uniqueOneKey.Count);
-            Assert.AreEqual(1, uniqueTwoKey.Count);
+            Assert.Equal(1, itemsHavingSkuABC.Count);
+            Assert.Equal(1, itemsHavingSkuXYZ.Count);
+            Assert.Equal(1, uniqueOneKey.Count);
+            Assert.Equal(1, uniqueTwoKey.Count);
         }
 
         [Fact]
@@ -196,10 +195,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<ShipSenseOrderItemKey> uniqueOneKey = keys.Where(k => k.KeyValue.Contains("UniqueItem-1")).ToList();
             List<ShipSenseOrderItemKey> uniqueTwoKey = keys.Where(k => k.KeyValue.Contains("UniqueItem-2")).ToList();
 
-            Assert.AreEqual(18, itemsHavingSkuABC.First().Quantity);
-            Assert.AreEqual(19, itemsHavingSkuXYZ.First().Quantity);
-            Assert.AreEqual(37, uniqueOneKey.First().Quantity);
-            Assert.AreEqual(1, uniqueTwoKey.First().Quantity);
+            Assert.Equal(18, itemsHavingSkuABC.First().Quantity);
+            Assert.Equal(19, itemsHavingSkuXYZ.First().Quantity);
+            Assert.Equal(37, uniqueOneKey.First().Quantity);
+            Assert.Equal(1, uniqueTwoKey.First().Quantity);
         }
 
 
@@ -214,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
             
-            Assert.AreEqual(2, keys.Count);
+            Assert.Equal(2, keys.Count);
         }
 
         [Fact]
@@ -237,7 +236,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
             
-            Assert.AreEqual(1, keys.Count);
+            Assert.Equal(1, keys.Count);
         }
 
         [Fact]
@@ -260,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
-            Assert.AreEqual(10, keys.First().Quantity);
+            Assert.Equal(10, keys.First().Quantity);
         }
 
         [Fact]
@@ -288,8 +287,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             List<ShipSenseOrderItemKey> keys = testObject.GetKeys(orderItems, GetPropertyNames(), GetAttributeNames()).ToList();
 
             // The key values should not contain anything for size and color
-            Assert.IsFalse(keys.Any(k => k.KeyValue.Contains("COLOR")));
-            Assert.IsFalse(keys.Any(k => k.KeyValue.Contains("SIZE")));
+            Assert.False(keys.Any(k => k.KeyValue.Contains("COLOR")));
+            Assert.False(keys.Any(k => k.KeyValue.Contains("SIZE")));
         }
 
         private List<string> GetPropertyNames()

@@ -9,19 +9,17 @@ using ShipWorks.Shipping.Insurance.InsureShip;
 
 namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 {
-    public class InsureShipSettingsTest
+    public class InsureShipSettingsTest : IDisposable
     {
         InsureShipSettings testObject = new InsureShipSettings();
         private bool initialUseTestServer;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipSettingsTest()
         {
             initialUseTestServer = testObject.UseTestServer;
         }
-
-        [TestCleanup]
-        public void Cleanup()
+        
+        public void Dispose()
         {
             testObject.UseTestServer = initialUseTestServer;
         }
@@ -32,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.UseTestServer = false;
             testObject.UseTestServer = true;
 
-            Assert.IsTrue(testObject.UseTestServer);
+            Assert.True(testObject.UseTestServer);
         }
 
         [Fact]
@@ -41,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.UseTestServer = true;
             testObject.UseTestServer = false;
 
-            Assert.IsFalse(testObject.UseTestServer);
+            Assert.False(testObject.UseTestServer);
         }
 
         [Fact]
@@ -49,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("shipworks", testObject.Username);
+            Assert.Equal("shipworks", testObject.Username);
         }
 
         [Fact]
@@ -57,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("shipworks", testObject.Username);
+            Assert.Equal("shipworks", testObject.Username);
         }
 
         [Fact]
@@ -65,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("shipworks123", testObject.Password);
+            Assert.Equal("shipworks123", testObject.Password);
         }
 
         [Fact]
@@ -73,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("624c55cb00f588f0fe1a79", testObject.Password);
+            Assert.Equal("624c55cb00f588f0fe1a79", testObject.Password);
         }
 
         [Fact]
@@ -81,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("D00050", testObject.DistributorID);
+            Assert.Equal("D00050", testObject.DistributorID);
         }
 
         [Fact]
@@ -89,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("D00050", testObject.DistributorID);
+            Assert.Equal("D00050", testObject.DistributorID);
         }
 
         [Fact]
@@ -97,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = true;
 
-            Assert.AreEqual("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
+            Assert.Equal("https://int.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
         [Fact]
@@ -105,13 +103,13 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
+            Assert.Equal("https://api2.insureship.com/api/", testObject.ApiUrl.AbsoluteUri);
         }
 
         [Fact]
         public void SubmitClaimDelayTimespan_IsSevenDays_Test()
         {
-            Assert.AreEqual(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
+            Assert.Equal(TimeSpan.FromDays(8).Ticks, testObject.ClaimSubmissionWaitingPeriod.Ticks);
         }
 		
         [Fact]
@@ -119,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+            Assert.Equal(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
         }
 
         [Fact]
@@ -127,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.UseTestServer = false;
 
-            Assert.AreEqual(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
+            Assert.Equal(TimeSpan.FromHours(24), testObject.VoidPolicyMaximumAge);
         }
     }
 }

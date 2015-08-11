@@ -22,13 +22,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         {
             string promo = testObject.GetPromoCode();
 
-            Assert.AreEqual("ShipWorks2", promo);
+            Assert.Equal("ShipWorks2", promo);
         }
 
         [Fact]
         public void IsMonthlyFeeWaived_ReturnsFalse_Test()
         {
-            Assert.AreEqual(false, testObject.IsMonthlyFeeWaived);
+            Assert.Equal(false, testObject.IsMonthlyFeeWaived);
         }
     }
 }

@@ -16,8 +16,8 @@ namespace ShipWorks.Tests.Stores.Content.Panels
             Size size = new Size(600,500);
             Size pictureSize = MapPanel.GetPictureSize(size);
 
-            Assert.AreEqual(size.Width, pictureSize.Width);
-            Assert.AreEqual(size.Height, pictureSize.Height);
+            Assert.Equal(size.Width, pictureSize.Width);
+            Assert.Equal(size.Height, pictureSize.Height);
         }
 
         [Fact]
@@ -26,8 +26,8 @@ namespace ShipWorks.Tests.Stores.Content.Panels
             Size size = new Size(2000, 1000);
             Size pictureSize = MapPanel.GetPictureSize(size);
 
-            Assert.AreEqual(640, pictureSize.Width);
-            Assert.AreEqual(320, pictureSize.Height);
+            Assert.Equal(640, pictureSize.Width);
+            Assert.Equal(320, pictureSize.Height);
         }
 
         [Fact]
@@ -36,8 +36,8 @@ namespace ShipWorks.Tests.Stores.Content.Panels
             Size size = new Size(1000, 2000);
             Size pictureSize = MapPanel.GetPictureSize(size);
 
-            Assert.AreEqual(320, pictureSize.Width);
-            Assert.AreEqual(640, pictureSize.Height);
+            Assert.Equal(320, pictureSize.Width);
+            Assert.Equal(640, pictureSize.Height);
         }
     }
 }

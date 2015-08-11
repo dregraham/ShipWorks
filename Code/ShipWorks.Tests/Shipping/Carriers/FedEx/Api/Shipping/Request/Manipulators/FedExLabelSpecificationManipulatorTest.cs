@@ -22,10 +22,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ShippingSettingsEntity shippingSettings;
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
-        
 
-        [TestInitialize]
-        public void Initialize()
+
+        public FedExLabelSpecificationManipulatorTest()
         {
             shippingSettings = new ShippingSettingsEntity();
             shippingSettings.FedExThermalDocTab = true;
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Initialize the shipment entity that we'll be testing with
             shipmentEntity = new ShipmentEntity()
             {
-                RequestedLabelFormat = (int) ThermalLanguage.EPL,
+                RequestedLabelFormat = (int)ThermalLanguage.EPL,
                 ActualLabelFormat = (int)ThermalLanguage.EPL,
                 FedEx = new FedExShipmentEntity()
                 {
@@ -62,30 +61,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -99,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -113,7 +109,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment.LabelSpecification);
+            Assert.NotNull(nativeRequest.RequestedShipment.LabelSpecification);
         }
 
         [Fact]
@@ -127,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The FedEx property should be created now
-            Assert.IsNotNull(shipmentEntity.FedEx);
+            Assert.NotNull(shipmentEntity.FedEx);
         }
 
         [Fact]
@@ -141,7 +137,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The FedEx property should be created now
-            Assert.IsNotNull(shipmentEntity.FedEx.Shipment);
+            Assert.NotNull(shipmentEntity.FedEx.Shipment);
         }
 
         [Fact]
@@ -157,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(LabelFormatType.COMMON2D, labelSpecification.LabelFormatType);
+            Assert.Equal(LabelFormatType.COMMON2D, labelSpecification.LabelFormatType);
         }
 
         [Fact]
@@ -168,8 +164,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
             CustomerSpecifiedLabelDetail labelDetail = labelSpecification.CustomerSpecifiedDetail;
 
-            Assert.AreEqual(1, labelDetail.MaskedData.Length);
-            Assert.AreEqual(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
+            Assert.Equal(1, labelDetail.MaskedData.Length);
+            Assert.Equal(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
         }
 
         [Fact]
@@ -182,11 +178,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
             CustomerSpecifiedLabelDetail labelDetail = labelSpecification.CustomerSpecifiedDetail;
 
-            Assert.AreEqual(4, labelDetail.MaskedData.Length);
-            Assert.AreEqual(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
-            Assert.AreEqual(LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[1]);
-            Assert.AreEqual(LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[2]);
-            Assert.AreEqual(LabelMaskableDataType.CUSTOMS_VALUE, labelSpecification.CustomerSpecifiedDetail.MaskedData[3]);
+            Assert.Equal(4, labelDetail.MaskedData.Length);
+            Assert.Equal(LabelMaskableDataType.SHIPPER_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[0]);
+            Assert.Equal(LabelMaskableDataType.TRANSPORTATION_CHARGES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[1]);
+            Assert.Equal(LabelMaskableDataType.DUTIES_AND_TAXES_PAYOR_ACCOUNT_NUMBER, labelSpecification.CustomerSpecifiedDetail.MaskedData[2]);
+            Assert.Equal(LabelMaskableDataType.CUSTOMS_VALUE, labelSpecification.CustomerSpecifiedDetail.MaskedData[3]);
         }
 
 
@@ -197,7 +193,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLanguage.EPL, shipmentEntity.ActualLabelFormat);
+            Assert.Equal((int)ThermalLanguage.EPL, shipmentEntity.ActualLabelFormat);
         }
 
         [Fact]
@@ -208,18 +204,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual((int)ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
+            Assert.Equal((int)ThermalLanguage.ZPL, shipmentEntity.ActualLabelFormat);
         }
 
         [Fact]
-        [ExpectedException(typeof (InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenUnknownThermalType_Test()
         {
             // Setup: set the thermal type to an invalid value
             shipmentEntity.RequestedLabelFormat = 3;
 
             // Should throw the exception
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
 
@@ -231,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(LabelStockType.STOCK_4X6, labelSpecification.LabelStockType);
+            Assert.Equal(LabelStockType.STOCK_4X6, labelSpecification.LabelStockType);
         }
 
         [Fact]
@@ -242,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(LabelStockType.STOCK_4X675_LEADING_DOC_TAB, labelSpecification.LabelStockType);
+            Assert.Equal(LabelStockType.STOCK_4X675_LEADING_DOC_TAB, labelSpecification.LabelStockType);
         }
 
         [Fact]
@@ -253,43 +248,43 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(LabelStockType.STOCK_4X675_TRAILING_DOC_TAB, labelSpecification.LabelStockType);
+            Assert.Equal(LabelStockType.STOCK_4X675_TRAILING_DOC_TAB, labelSpecification.LabelStockType);
         }
 
         [Fact]
         public void Manipulate_SetsShipmentEntityThermalType_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+            shipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.IsNull(shipmentEntity.FedEx.Shipment.ActualLabelFormat);
+            Assert.Null(shipmentEntity.FedEx.Shipment.ActualLabelFormat);
         }
 
         [Fact]
         public void Manipulate_SetsImageTypeToPng_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+            shipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(ShippingDocumentImageType.PNG, labelSpecification.ImageType);
+            Assert.Equal(ShippingDocumentImageType.PNG, labelSpecification.ImageType);
         }
 
         [Fact]
         public void Manipulate_SetsPaper4x6StockLabel_ForImageLabel_Test()
         {
             // Setup to generate an image label
-            shipmentEntity.RequestedLabelFormat = (int) ThermalLanguage.None;
+            shipmentEntity.RequestedLabelFormat = (int)ThermalLanguage.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
             LabelSpecification labelSpecification = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.LabelSpecification;
-            Assert.AreEqual(LabelStockType.PAPER_4X6, labelSpecification.LabelStockType);
+            Assert.Equal(LabelStockType.PAPER_4X6, labelSpecification.LabelStockType);
         }
 
     }

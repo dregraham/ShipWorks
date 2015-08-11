@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.Add(1, new InsureShipAffiliate("storeID", "customerID"));
             InsureShipAffiliate insureShipAffiliate = testObject.GetInsureShipAffiliate(1);
 
-            Assert.AreEqual("storeID", insureShipAffiliate.InsureShipStoreID);
+            Assert.Equal("storeID", insureShipAffiliate.InsureShipStoreID);
         }
 
         [Fact]
@@ -38,8 +38,8 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             InsureShipAffiliate insureShipAffiliate = testObject.GetInsureShipAffiliate(1);
 
-            Assert.AreEqual("differentStoreID", insureShipAffiliate.InsureShipStoreID);
-            Assert.AreEqual("SWdifferentCustomerID", insureShipAffiliate.InsureShipPolicyID);
+            Assert.Equal("differentStoreID", insureShipAffiliate.InsureShipStoreID);
+            Assert.Equal("SWdifferentCustomerID", insureShipAffiliate.InsureShipPolicyID);
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             testObject.Add(1, new InsureShipAffiliate("storeID", "customerID"));
             InsureShipAffiliate insureShipAffiliate = testObject.GetInsureShipAffiliate(1000);
 
-            Assert.IsNull(insureShipAffiliate);
+            Assert.Null(insureShipAffiliate);
         }
     }
 }

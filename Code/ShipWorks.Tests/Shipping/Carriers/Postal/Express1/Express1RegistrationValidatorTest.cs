@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private Mock<IExpress1PaymentValidator> paymentValidator;
         private Mock<IExpress1PasswordEncryptionStrategy> encryptionStrategy;
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1RegistrationValidatorTest()
         {
             gateway = new Mock<IExpress1RegistrationGateway>();
             repository = new Mock<IExpress1RegistrationRepository>();
@@ -62,8 +61,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Name is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Name is required", errors[0].Message);
         }
 
         [Fact]
@@ -73,8 +72,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Company is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Company is required", errors[0].Message);
         }
 
         [Fact]
@@ -84,8 +83,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Phone number is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Phone number is required", errors[0].Message);
         }
 
         [Fact]
@@ -95,8 +94,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("An email address is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("An email address is required", errors[0].Message);
         }
 
         [Fact]
@@ -106,8 +105,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A street address is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A street address is required", errors[0].Message);
         }
 
         [Fact]
@@ -117,8 +116,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("City is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("City is required", errors[0].Message);
         }
 
         [Fact]
@@ -128,8 +127,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A state/province is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A state/province is required", errors[0].Message);
         }
 
         [Fact]
@@ -139,8 +138,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.Validate(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A postal code is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A postal code is required", errors[0].Message);
         }
 
         [Fact]
@@ -161,8 +160,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Name is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Name is required", errors[0].Message);
         }
 
         [Fact]
@@ -172,8 +171,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Company is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Company is required", errors[0].Message);
         }
 
         [Fact]
@@ -183,8 +182,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("Phone number is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("Phone number is required", errors[0].Message);
         }
 
         [Fact]
@@ -194,8 +193,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("An email address is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("An email address is required", errors[0].Message);
         }
 
         [Fact]
@@ -205,8 +204,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A street address is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A street address is required", errors[0].Message);
         }
 
         [Fact]
@@ -216,8 +215,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("City is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("City is required", errors[0].Message);
         }
 
         [Fact]
@@ -227,8 +226,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A state/province is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A state/province is required", errors[0].Message);
         }
 
         [Fact]
@@ -238,8 +237,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
             List<Express1ValidationError> errors = testObject.ValidatePersonalInfo(registration);
 
-            Assert.AreEqual(1, errors.Count);
-            Assert.AreEqual("A postal code is required", errors[0].Message);
+            Assert.Equal(1, errors.Count);
+            Assert.Equal("A postal code is required", errors[0].Message);
         }
 
 

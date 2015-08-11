@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(AcknowledgeNudgeOptionButton));
+            Assert.IsAssignableFrom<AcknowledgeNudgeOptionButton>(button);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(ShutdownNudgeOptionButton));
+            Assert.IsAssignableFrom<ShutdownNudgeOptionButton>(button);
         }
 
         [Fact]
@@ -38,16 +38,15 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
 
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.IsInstanceOfType(button, typeof(RegisterUspsAccountNudgeOptionButton));
+            Assert.IsAssignableFrom<RegisterUspsAccountNudgeOptionButton>(button);
         }
 
         [Fact]
-        [ExpectedException(typeof(NudgeException))]
         public void CreateButton_ThrowsNudgeException_WhenActionTypeIsNotRecognized_Test()
         {
             testObject = new NudgeOption(1, 1, "Test Option", null, (NudgeOptionActionType)900);
-            
-            testObject.CreateButton();
+
+            Assert.Throws<NudgeException>(() => testObject.CreateButton());
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
         {
             NudgeOptionButton button = testObject.CreateButton();
 
-            Assert.AreEqual(testObject.Text, button.Text);
+            Assert.Equal(testObject.Text, button.Text);
         }
     }
 }

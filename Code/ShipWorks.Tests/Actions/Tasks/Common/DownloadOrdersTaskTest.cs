@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         [Fact]
         public void RequiresInput_ReturnsNone_Test()
         {
-            Assert.AreEqual(testObject.InputRequirement, ActionTaskInputRequirement.None);
+            Assert.Equal(testObject.InputRequirement, ActionTaskInputRequirement.None);
         }
 
         [Fact]
@@ -34,11 +34,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Initialize(TaskSettings);
 
-            Assert.AreEqual(4, testObject.StoreIDs.Count());
-            Assert.AreEqual(12005, testObject.StoreIDs.ElementAt(0));
-            Assert.AreEqual(5005, testObject.StoreIDs.ElementAt(1));
-            Assert.AreEqual(8005, testObject.StoreIDs.ElementAt(2));
-            Assert.AreEqual(11005, testObject.StoreIDs.ElementAt(3));
+            Assert.Equal(4, testObject.StoreIDs.Count());
+            Assert.Equal(12005, testObject.StoreIDs.ElementAt(0));
+            Assert.Equal(5005, testObject.StoreIDs.ElementAt(1));
+            Assert.Equal(8005, testObject.StoreIDs.ElementAt(2));
+            Assert.Equal(11005, testObject.StoreIDs.ElementAt(3));
         }
        
     }

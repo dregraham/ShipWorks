@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
         private Mock<IExpress1SettingsFacade> settings;
 
-        [TestInitialize]
-        public void Initialize()
+        public BestRateExpress1PromotionFootnoteFilterTest()
         {
             settings = new Mock<IExpress1SettingsFacade>();
 
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.Count());
+            Assert.Equal(1, filteredRateGroup.FootnoteFactories.Count());
         }
 
         [Fact]
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.IsInstanceOfType(factory, typeof(Express1PromotionRateFootnoteFactory));
+            Assert.IsAssignableFrom<Express1PromotionRateFootnoteFactory>(factory);
         }
 
         [Fact]
@@ -109,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.AreEqual(ShipmentTypeCode.Endicia, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Endicia, factory.ShipmentType.ShipmentTypeCode);
         }
 
         [Fact]
@@ -137,7 +136,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             // Already have a test verifying the count, so we know there is already only one item
             IRateFootnoteFactory factory = filteredRateGroup.FootnoteFactories.First();
 
-            Assert.AreEqual(ShipmentTypeCode.Usps, factory.ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, factory.ShipmentType.ShipmentTypeCode);
         }
     }
 }

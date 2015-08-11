@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private FedExShipRequest shipRequest;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExInternationalControlledExportManipulatorTest()
         {
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
@@ -46,20 +45,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_InternationalControlledExportIsNull_WhenInternationalControlledExportDetailTypeIsNone_Test()
         {
             shipRequest.ShipmentEntity.FedEx.IntlExportDetailType =
-                (int) FedExInternationalControlledExportType.None;
+                (int)FedExInternationalControlledExportType.None;
 
             testObject.Manipulate(shipRequest);
 
-            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest) shipRequest.NativeRequest;
+            ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment);
+            Assert.Null(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
@@ -70,72 +68,62 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea036;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DEA_036, 
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dea036 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DEA_036,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea236;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DEA_236,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dea236 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DEA_236,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dea486;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DEA_486,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dea486 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DEA_486,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp05;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_05,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dsp05 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_05,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp61;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_61,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dsp61 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_61,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp73;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_73,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dsp73 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_73,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp85;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_85,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dsp85 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_85,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.Dsp94;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_94,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "Dsp94 did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_94,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.DspLicenseAgreement;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.DSP_LICENSE_AGREEMENT,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "DspLicenseAgreement did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.DSP_LICENSE_AGREEMENT,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
 
             fedExEntity.IntlExportDetailType = (int)FedExInternationalControlledExportType.FromForeignTradeZone;
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual(InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE,
-                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type,
-                "FromForeignTradeZone did not match manipulated InternationalControlledExportDetail Type");
+            Assert.Equal(InternationalControlledExportType.FROM_FOREIGN_TRADE_ZONE,
+                processShipmentRequest.RequestedShipment.SpecialServicesRequested.InternationalControlledExportDetail.Type);
         }
 
         [Fact]
@@ -147,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             fedExEntity.IntlExportDetailForeignTradeZoneCode = "ftzc";
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual("ftzc",
+            Assert.Equal("ftzc",
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.ForeignTradeZoneCode);
         }
@@ -161,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             fedExEntity.IntlExportDetailEntryNumber = "123456";
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual("123456",
+            Assert.Equal("123456",
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.EntryNumber);
         }
@@ -175,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             fedExEntity.IntlExportDetailLicenseOrPermitNumber = "abcde123456";
             testObject.Manipulate(shipRequest);
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
-            Assert.AreEqual("abcde123456",
+            Assert.Equal("abcde123456",
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitNumber);
         }
@@ -194,7 +182,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(licenseOrPermitExpirationDate,
+            Assert.Equal(licenseOrPermitExpirationDate,
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDate);
         }
@@ -210,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(false,
+            Assert.Equal(false,
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
@@ -229,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(true,
+            Assert.Equal(true,
                             processShipmentRequest.RequestedShipment.SpecialServicesRequested
                                                   .InternationalControlledExportDetail.LicenseOrPermitExpirationDateSpecified);
         }
@@ -247,8 +235,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -264,8 +252,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -281,8 +269,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -298,8 +286,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -315,8 +303,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -332,8 +320,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -349,8 +337,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -366,8 +354,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -383,8 +371,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -400,8 +388,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -417,8 +405,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
-            Assert.AreEqual(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Length);
+            Assert.Equal(ShipmentSpecialServiceType.INTERNATIONAL_CONTROLLED_EXPORT_SERVICE, processShipmentRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes[0]);
         }
 
         [Fact]
@@ -434,7 +422,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             ProcessShipmentRequest processShipmentRequest = (ProcessShipmentRequest)shipRequest.NativeRequest;
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment);
+            Assert.Null(processShipmentRequest.RequestedShipment);
         }
     }
 }

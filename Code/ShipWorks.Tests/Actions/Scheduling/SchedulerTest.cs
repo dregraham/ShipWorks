@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
 
         private Mock<ISchedulingEngine> schedulingEngine;
 
-        [TestInitialize]
-        public void Initialize()
+        public SchedulerTest()
         {
             schedulingEngine = new Mock<ISchedulingEngine>();
 
@@ -87,7 +86,6 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        [ExpectedException(typeof(SchedulingException))]
         public void ScheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
         {
             ActionEntity action = new ActionEntity();
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedulingEngine.Setup(e => e.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>())).Throws(new OutOfMemoryException());
 
             // Throws scheduling exception
-            testObject.ScheduleAction(action, schedule);
+            Assert.Throws<SchedulingException>(() => testObject.ScheduleAction(action, schedule));
         }
 
         [Fact]
@@ -126,7 +124,6 @@ namespace ShipWorks.Tests.Actions.Scheduling
         }
 
         [Fact]
-        [ExpectedException(typeof(SchedulingException))]
         public void UnscheduleAction_ThrowsSchedulingException_WhenExceptionIsThrownBySchedulingEngine_Test()
         {
             ActionEntity action = new ActionEntity();
@@ -135,7 +132,7 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedulingEngine.Setup(e => e.HasExistingSchedule(It.IsAny<ActionEntity>())).Throws(new InvalidOperationException());
 
             // Throws an exception
-            testObject.UnscheduleAction(action);
+            Assert.Throws<SchedulingException>(() => testObject.UnscheduleAction(action));
         }
 
         [Fact]
@@ -148,21 +145,13 @@ namespace ShipWorks.Tests.Actions.Scheduling
             schedulingEngine.Verify(x => x.RunAsync(token), Times.Once());
         }
 
-        [Fact, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void ScheduleAction_ValidatesSchedule()
         {
             var schedule = new Mock<ActionSchedule>();
             schedule.Setup(x => x.Validate()).Throws<SchedulingException>();
 
-            try
-            {
-                testObject.ScheduleAction(new ActionEntity(), schedule.Object);
-            }
-            catch
-            {
-                schedulingEngine.Verify(x => x.Schedule(It.IsAny<ActionEntity>(), It.IsAny<ActionSchedule>()), Times.Never());
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => testObject.ScheduleAction(new ActionEntity(), schedule.Object));
         }
     }
 }

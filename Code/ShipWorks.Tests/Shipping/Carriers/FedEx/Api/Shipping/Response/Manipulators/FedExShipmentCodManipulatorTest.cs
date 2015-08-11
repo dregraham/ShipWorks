@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         private FedExShipResponse fedExShipResponse;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipmentCodManipulatorTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
@@ -31,8 +30,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             testObject.Manipulate(fedExShipResponse);
 
             ProcessShipmentReply nativeResponse = fedExShipResponse.NativeResponse as ProcessShipmentReply;
-            Assert.AreEqual(fedExShipResponse.Shipment.FedEx.CodTrackingNumber, nativeResponse.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
-            Assert.AreEqual(fedExShipResponse.Shipment.FedEx.CodTrackingFormID, nativeResponse.CompletedShipmentDetail.MasterTrackingId.FormId);
+            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingNumber, nativeResponse.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
+            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingFormID, nativeResponse.CompletedShipmentDetail.MasterTrackingId.FormId);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
 
             StoreType storeType = StoreTypeManager.GetType(nmrStore);
 
-            Assert.AreEqual(identifier, storeType.LicenseIdentifier);
+            Assert.Equal(identifier, storeType.LicenseIdentifier);
         }
 
         [Fact]

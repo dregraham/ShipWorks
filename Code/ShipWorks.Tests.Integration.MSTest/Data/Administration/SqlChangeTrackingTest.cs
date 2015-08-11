@@ -26,11 +26,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             executionMode.Setup(m => m.IsUISupported).Returns(true);
 
             initializer = new ShipWorksInitializer(executionMode.Object);
-        }
 
-        [TestInitialize]
-        public void Initialize()
-        {
             testObject = new SqlChangeTracking();
         }
 
@@ -75,7 +71,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
             // This test in addition to the test for matching actual table names, ensures that the exact
             // tables used in the SqlChangeTracking class match the database. No more. No less.
-            Assert.AreEqual(GetTablesWithChangeTrackingEnabledFromDatabase().Count, testObject.TablesRequiringChangeTracking.Count);
+            Assert.Equal(GetTablesWithChangeTrackingEnabledFromDatabase().Count, testObject.TablesRequiringChangeTracking.Count);
         }
 
         [Fact]
@@ -88,7 +84,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
             foreach (string tableName in expectedTableNames)
             {
-                Assert.IsTrue(testObject.TablesRequiringChangeTracking.Contains(tableName));
+                Assert.True(testObject.TablesRequiringChangeTracking.Contains(tableName));
             }
         }
 
@@ -102,7 +98,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
             testObject.Enable();
 
-            Assert.IsTrue(IsDatabaseChangeTrackingEnabled());
+            Assert.True(IsDatabaseChangeTrackingEnabled());
         }
 
         [Fact]
@@ -115,7 +111,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
 
             testObject.Enable();
 
-            Assert.AreEqual(GetTablesWithChangeTrackingEnabledFromDatabase().Count, testObject.TablesRequiringChangeTracking.Count);
+            Assert.Equal(GetTablesWithChangeTrackingEnabledFromDatabase().Count, testObject.TablesRequiringChangeTracking.Count);
         }
 
         /// <summary>

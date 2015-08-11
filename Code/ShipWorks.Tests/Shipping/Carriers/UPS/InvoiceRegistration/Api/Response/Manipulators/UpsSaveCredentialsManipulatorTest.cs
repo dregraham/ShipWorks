@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 
         private UpsAccountEntity upsAccount;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsSaveCredentialsManipulatorTest()
         {
             upsAccount = new UpsAccountEntity();
 
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
 
-            Assert.AreEqual(registerRequest.Username, upsAccount.UserID);
+            Assert.Equal(registerRequest.Username, upsAccount.UserID);
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
 
-            Assert.AreEqual(registerRequest.Password, upsAccount.Password);
+            Assert.Equal(registerRequest.Password, upsAccount.Password);
         }
 
         [Fact]
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         {
             testObject.Manipulate(upsInvoiceRegistrationResponse);
 
-            Assert.IsTrue(upsAccount.InvoiceAuth);
+            Assert.True(upsAccount.InvoiceAuth);
         }
     }
 }

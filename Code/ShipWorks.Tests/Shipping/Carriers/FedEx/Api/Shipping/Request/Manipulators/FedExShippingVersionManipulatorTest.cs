@@ -16,40 +16,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private Mock<CarrierRequest> carrierRequest;
         private ProcessShipmentRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShippingVersionManipulatorTest()
         {
-            nativeRequest = new ProcessShipmentRequest { Version = new VersionId()};
+            nativeRequest = new ProcessShipmentRequest { Version = new VersionId() };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
 
             testObject = new FedExShippingVersionManipulator();
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -57,8 +53,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            VersionId version = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual("ship", version.ServiceId);
+            VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
+            Assert.Equal("ship", version.ServiceId);
         }
 
         [Fact]
@@ -67,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(15, version.Major);
+            Assert.Equal(15, version.Major);
         }
 
         [Fact]
@@ -76,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(0, version.Minor);
+            Assert.Equal(0, version.Minor);
         }
 
         [Fact]
@@ -85,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             VersionId version = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(0, version.Intermediate);
+            Assert.Equal(0, version.Intermediate);
         }
     }
 }

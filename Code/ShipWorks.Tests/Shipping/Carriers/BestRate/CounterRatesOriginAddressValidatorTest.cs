@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStreet1 = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.False(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCity = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.False(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginStateProvCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.False(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginPostalCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.False(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             ShipmentEntity shipment = CreateShipment();
             shipment.OriginCountryCode = string.Empty;
 
-            Assert.IsFalse(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.False(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             ShipmentEntity shipment = CreateShipment();
 
-            Assert.IsTrue(CounterRatesOriginAddressValidator.IsValid(shipment));
+            Assert.True(CounterRatesOriginAddressValidator.IsValid(shipment));
         }
 
         private ShipmentEntity CreateShipment()

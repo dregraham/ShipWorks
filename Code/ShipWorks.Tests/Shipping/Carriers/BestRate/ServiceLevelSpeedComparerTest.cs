@@ -12,8 +12,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
         private ServiceLevelSpeedComparer testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public ServiceLevelSpeedComparerTest()
         {
             testObject = new ServiceLevelSpeedComparer();
         }
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.Anytime, ServiceLevelType.OneDay);
 
-            Assert.IsTrue(result > 0);
+            Assert.True(result > 0);
         }
 
         [Fact]
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.Anytime, ServiceLevelType.TwoDays);
 
-            Assert.IsTrue(result > 0);
+            Assert.True(result > 0);
         }
 
         [Fact]
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.Anytime, ServiceLevelType.ThreeDays);
 
-            Assert.IsTrue(result > 0);
+            Assert.True(result > 0);
         }
 
         [Fact]
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.Anytime, ServiceLevelType.FourToSevenDays);
 
-            Assert.IsTrue(result > 0);
+            Assert.True(result > 0);
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.Anytime, ServiceLevelType.Anytime);
 
-            Assert.IsTrue(result == 0);
+            Assert.True(result == 0);
         }
 
 
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.OneDay, ServiceLevelType.Anytime);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.TwoDays, ServiceLevelType.Anytime);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.ThreeDays, ServiceLevelType.Anytime);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(ServiceLevelType.FourToSevenDays, ServiceLevelType.Anytime);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
     }

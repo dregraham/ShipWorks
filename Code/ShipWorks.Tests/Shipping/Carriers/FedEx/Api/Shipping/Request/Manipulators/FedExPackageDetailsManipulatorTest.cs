@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private Mock<ICarrierSettingsRepository> settingsRepository;
         private FedExAccountEntity fedExAccount;
 
-        [TestInitialize]
-        public void Initiliaze()
+        public FedExPackageDetailsManipulatorTest()
         {
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
@@ -51,8 +50,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(request.ShipmentEntity.FedEx.Packages.Count, 2, "Test request Expected to have two packages");
-            Assert.AreEqual(processShipmentRequest.RequestedShipment.PackageCount, "2");
+            Assert.Equal(request.ShipmentEntity.FedEx.Packages.Count, 2);
+            Assert.Equal(processShipmentRequest.RequestedShipment.PackageCount, "2");
         }
 
         [Fact]
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(request);
 
-            Assert.AreEqual((int) FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType, "Expecting Test Data PackagingType to be Custom");
+            Assert.Equal((int) FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType);
 
             CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(request);
 
-            Assert.AreEqual((int)FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType, "Expecting Test Data PackagingType to be Custom");
+            Assert.Equal((int)FedExPackagingType.Custom, request.ShipmentEntity.FedEx.PackagingType);
 
             CompareDimensions(request.ShipmentEntity, request.ShipmentEntity.FedEx.Packages[0], processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
@@ -116,14 +115,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(request);
 
             ProcessShipmentRequest nativeRequest = request.NativeRequest as ProcessShipmentRequest;
-            Assert.AreEqual(1.ToString(), nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SequenceNumber);
+            Assert.Equal(1.ToString(), nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SequenceNumber);
         }
 
         private void ValidateValue(FedExPackageEntity fedExPackageEntity, RequestedPackageLineItem requestedPackageLineItem)
         {
-            Assert.AreEqual("USD", requestedPackageLineItem.InsuredValue.Currency.ToString());
+            Assert.Equal("USD", requestedPackageLineItem.InsuredValue.Currency.ToString());
 
-            Assert.AreEqual(fedExPackageEntity.DeclaredValue,requestedPackageLineItem.InsuredValue.Amount);
+            Assert.Equal(fedExPackageEntity.DeclaredValue,requestedPackageLineItem.InsuredValue.Amount);
         }
 
         /// <summary>
@@ -134,15 +133,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private void ValidateWeight(ShipmentEntity shipment, FedExPackageEntity fedExPackageEntity, RequestedPackageLineItem requestedPackageLineItem)
         {
             decimal packageEntityWeight = FedExUtility.GetPackageTotalWeight(fedExPackageEntity);
-            Assert.AreEqual(packageEntityWeight, requestedPackageLineItem.Weight.Value);
+            Assert.Equal(packageEntityWeight, requestedPackageLineItem.Weight.Value);
 
             if (shipment.FedEx.WeightUnitType == (int)WeightUnitOfMeasure.Pounds)
             {
-                Assert.AreEqual(WeightUnits.LB, requestedPackageLineItem.Weight.Units);
+                Assert.Equal(WeightUnits.LB, requestedPackageLineItem.Weight.Units);
             }
             else
             {
-                Assert.AreEqual(WeightUnits.KG, requestedPackageLineItem.Weight.Units);
+                Assert.Equal(WeightUnits.KG, requestedPackageLineItem.Weight.Units);
             }
         }
 
@@ -153,15 +152,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             if (shipment.FedEx.LinearUnitType == (int)FedExLinearUnitOfMeasure.CM)
             {
-                Assert.AreEqual(LinearUnits.CM, requestedPackage.Dimensions.Units);
+                Assert.Equal(LinearUnits.CM, requestedPackage.Dimensions.Units);
             }
             else
             {
-                Assert.AreEqual(LinearUnits.IN, requestedPackage.Dimensions.Units);
+                Assert.Equal(LinearUnits.IN, requestedPackage.Dimensions.Units);
             }
-            Assert.AreEqual(fedExPackageEntity.DimsLength.ToString(), requestedPackage.Dimensions.Length);
-            Assert.AreEqual(fedExPackageEntity.DimsWidth.ToString(), requestedPackage.Dimensions.Width);
-            Assert.AreEqual(fedExPackageEntity.DimsHeight.ToString(), requestedPackage.Dimensions.Height);
+            Assert.Equal(fedExPackageEntity.DimsLength.ToString(), requestedPackage.Dimensions.Length);
+            Assert.Equal(fedExPackageEntity.DimsWidth.ToString(), requestedPackage.Dimensions.Width);
+            Assert.Equal(fedExPackageEntity.DimsHeight.ToString(), requestedPackage.Dimensions.Height);
         }
     }
 }

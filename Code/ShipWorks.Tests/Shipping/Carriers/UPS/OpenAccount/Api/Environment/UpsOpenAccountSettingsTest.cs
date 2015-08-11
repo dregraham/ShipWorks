@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
         Mock<ICarrierSettingsRepository> settingsRepository;
         private ShippingSettingsEntity shippingSettings;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountSettingsTest()
         {
             shippingSettings = new ShippingSettingsEntity { FedExUsername = "username", FedExPassword = "password" };
 
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
         {
             // We've setup the repository in the initialize method to indicate we should use the 
             // test server, so there's no additional setup needed
-            Assert.AreEqual("https://wwwcie.ups.com", testObject.EndpointUrl);
+            Assert.Equal("https://wwwcie.ups.com", testObject.EndpointUrl);
         }
 
         [Fact]
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Environment
             settingsRepository.Setup(r => r.UseTestServer).Returns(false);
 
             // This will need to be updated when we receive the production URL from FedEx
-            Assert.AreEqual("https://onlinetools.ups.com/", testObject.EndpointUrl);
+            Assert.Equal("https://onlinetools.ups.com/", testObject.EndpointUrl);
         }
     }
 }

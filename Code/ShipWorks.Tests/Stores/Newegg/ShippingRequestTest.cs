@@ -15,20 +15,19 @@ namespace ShipWorks.Tests.Stores.Newegg
     public class ShippingRequestTest
     {
         private Credentials credentials;
-        
+
         private INeweggRequest allSuccessRequest;
         private INeweggRequest successAndFailureRequest;
         private INeweggRequest allFailuresRequest;
         private INeweggRequest errorRequest;
-        
+
         private string sellerId = "ABC123";
         private long orderNumber = 159243598;
 
         private Shipment shipment;
         private ShippingRequest testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShippingRequestTest()
         {
             credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.US);
             InitializeShipment();
@@ -174,7 +173,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         {
             this.shipment = new Shipment();
             shipment.Header = new ShipmentHeader { OrderNumber = this.orderNumber, SellerId = this.sellerId };
-            
+
             ShipmentPackage package = new ShipmentPackage();
             package.ShipCarrier = "UPS";
             package.ShipDateInPacificStandardTime = System.TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
@@ -185,16 +184,15 @@ namespace ShipWorks.Tests.Stores.Newegg
             package.ShipFromZipCode = "63102";
             package.ShipService = "Ground";
             package.Items.Add(new ShippedItem { NeweggItemNumber = "1234ABCD", QuantityShipped = 1, SellerPartNumber = "WXYZ7890" });
-            
+
             shipment.Packages.Add(package);
         }
 
         [Fact]
-        [ExpectedException(typeof(NeweggException))]
         public void Ship_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
             testObject = new ShippingRequest(credentials, errorRequest);
-            testObject.Ship(shipment);
+            Assert.Throws<NeweggException>(() => testObject.Ship(shipment));
         }
 
         [Fact]
@@ -204,9 +202,9 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.AreEqual(2, shippingResult.PackageSummary.TotalPackages);
-            Assert.AreEqual(2, shippingResult.PackageSummary.SuccessCount);
-            Assert.AreEqual(0, shippingResult.PackageSummary.FailedCount);
+            Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
+            Assert.Equal(2, shippingResult.PackageSummary.SuccessCount);
+            Assert.Equal(0, shippingResult.PackageSummary.FailedCount);
         }
 
         [Fact]
@@ -216,9 +214,9 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.AreEqual(2, shippingResult.PackageSummary.TotalPackages);
-            Assert.AreEqual(1, shippingResult.PackageSummary.SuccessCount);
-            Assert.AreEqual(1, shippingResult.PackageSummary.FailedCount);
+            Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
+            Assert.Equal(1, shippingResult.PackageSummary.SuccessCount);
+            Assert.Equal(1, shippingResult.PackageSummary.FailedCount);
         }
 
         [Fact]
@@ -228,9 +226,9 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.AreEqual(2, shippingResult.PackageSummary.TotalPackages);
-            Assert.AreEqual(0, shippingResult.PackageSummary.SuccessCount);
-            Assert.AreEqual(2, shippingResult.PackageSummary.FailedCount);
+            Assert.Equal(2, shippingResult.PackageSummary.TotalPackages);
+            Assert.Equal(0, shippingResult.PackageSummary.SuccessCount);
+            Assert.Equal(2, shippingResult.PackageSummary.FailedCount);
         }
 
         [Fact]
@@ -240,7 +238,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.IsTrue(shippingResult.Detail.Shipment.Packages.Count > 0);
+            Assert.True(shippingResult.Detail.Shipment.Packages.Count > 0);
         }
 
         [Fact]
@@ -250,7 +248,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.IsTrue(shippingResult.Detail.Shipment.Packages[0].Items.Count > 0);
+            Assert.True(shippingResult.Detail.Shipment.Packages[0].Items.Count > 0);
         }
 
         [Fact]
@@ -260,7 +258,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.AreEqual(sellerId, shippingResult.Detail.SellerId);
+            Assert.Equal(sellerId, shippingResult.Detail.SellerId);
         }
 
         [Fact]
@@ -270,9 +268,9 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             ShippingResult shippingResult = testObject.Ship(shipment);
 
-            Assert.AreEqual(this.orderNumber, shippingResult.Detail.OrderNumber);
+            Assert.Equal(this.orderNumber, shippingResult.Detail.OrderNumber);
         }
-        
+
         [Fact]
         public void Ship_FormatsUrlWithOrderNumberAndSellerId_Test()
         {
@@ -284,7 +282,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request 
-            Assert.AreEqual(expectedUrl, ((Mocked.MockedNeweggRequest)allSuccessRequest).Url);
+            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest)allSuccessRequest).Url);
         }
 
         [Fact]
@@ -301,7 +299,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             requestXml.LoadXml(((Mocked.MockedNeweggRequest)allSuccessRequest).Body);
             int actualActionValue = int.Parse(requestXml.SelectSingleNode("UpdateOrderStatus/Action").InnerText);
 
-            Assert.AreEqual(expectedActionValue, actualActionValue);
+            Assert.Equal(expectedActionValue, actualActionValue);
         }
 
         [Fact]
@@ -335,7 +333,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             requestXml.LoadXml(((Mocked.MockedNeweggRequest)allSuccessRequest).Body);
             string actualValue = requestXml.SelectSingleNode("UpdateOrderStatus/Value").InnerText.Trim();
 
-            Assert.AreEqual(expectedValue, actualValue);
+            Assert.Equal(expectedValue, actualValue);
         }
 
         [Fact]
@@ -346,28 +344,27 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request          
-            Assert.AreEqual(HttpVerb.Put, ((Mocked.MockedNeweggRequest)allSuccessRequest).Method);
+            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest)allSuccessRequest).Method);
         }
 
-        [Fact]
-        [Ignore]
+        
         public void Ship_ReturnsShippingResults_WhenShippingAnOrderWithNeweggAPI_IntegrationTest()
         {
-        //    // We're going to try to bounce the request off of the Newegg API, so setup 
-        //    // the test object to use a "live" NeweggHttpRequest and an order setup in
-        //    // our sandbox seller account, and use the sandbox seller account credentials
+            //    // We're going to try to bounce the request off of the Newegg API, so setup 
+            //    // the test object to use a "live" NeweggHttpRequest and an order setup in
+            //    // our sandbox seller account, and use the sandbox seller account credentials
 
-        //    // TODO: Plug in an unshipped order number and build the appropriate item list to test
-        //    Shipment shipment = new Shipment { ... };
-        //    Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
-        //    testObject = new ShippingRequest(credentials, new NeweggHttpRequest());
+            //    // TODO: Plug in an unshipped order number and build the appropriate item list to test
+            //    Shipment shipment = new Shipment { ... };
+            //    Credentials credentials = new Credentials("A09V", "E09799F3-A8FD-46E0-989F-B8587A1817E0");
+            //    testObject = new ShippingRequest(credentials, new NeweggHttpRequest());
 
-        //    ShippingResult shippingResult = testObject.Ship(shipment);
+            //    ShippingResult shippingResult = testObject.Ship(shipment);
 
-        //    Assert.IsTrue(shippingResult.IsSuccessful);
-        //    Assert.AreEqual(shipment.Header.OrderNumber, shippingResult.Detail.OrderNumber);
-        //    Assert.AreEqual(shipment.Header.SellerId, shippingResult.Detail.SellerId);            
-            Assert.Inconclusive("Need an unshipped order to run this integration test.");
+            //    Assert.True(shippingResult.IsSuccessful);
+            //    Assert.Equal(shipment.Header.OrderNumber, shippingResult.Detail.OrderNumber);
+            //    Assert.Equal(shipment.Header.SellerId, shippingResult.Detail.SellerId);            
+            //Assert.Inconclusive("Need an unshipped order to run this integration test.");
         }
     }
 }

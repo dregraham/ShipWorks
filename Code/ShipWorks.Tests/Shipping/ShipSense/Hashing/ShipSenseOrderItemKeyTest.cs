@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", string.Empty);
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             testObject.Add("Code", string.Empty);
             testObject.Add("Code", string.Empty);
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         {
             testObject = new ShipSenseOrderItemKey { Quantity = 1 };
 
-            Assert.IsFalse(testObject.IsValid());
+            Assert.False(testObject.IsValid());
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
             testObject.Add("SKU", string.Empty);
             testObject.Add("Code", "123");
 
-            Assert.IsTrue(testObject.IsValid());
+            Assert.True(testObject.IsValid());
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string key = testObject.KeyValue;
 
-            Assert.IsTrue(key.Contains("[SKU,ABC]|[Code,123]"));
+            Assert.True(key.Contains("[SKU,ABC]|[Code,123]"));
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string key = testObject.KeyValue;
 
-            Assert.IsTrue(key.Contains("[SKU,]|[Code,123]"));
+            Assert.True(key.Contains("[SKU,]|[Code,123]"));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string secondKey = testObject.KeyValue;
 
-            Assert.AreNotEqual(firstKey, secondKey);
+            Assert.NotEqual(firstKey, secondKey);
         }
     }
 }

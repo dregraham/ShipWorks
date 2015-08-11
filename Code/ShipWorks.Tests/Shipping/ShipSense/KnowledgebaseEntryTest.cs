@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         private List<IPackageAdapter> adapters;
         private readonly Mock<IPackageAdapter> adapter1;
         private readonly Mock<IPackageAdapter> adapter2;
-        
+
         public KnowledgebaseEntryTest()
         {
             adapter1 = new Mock<IPackageAdapter>();
@@ -35,8 +35,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.Object.Weight = 34.2;
             adapter1.Object.Width = 4;
             adapter1.Object.ApplyAdditionalWeight = false;
-            
-            
+
+
             adapter2 = new Mock<IPackageAdapter>();
             adapter2.SetupAllProperties();
 
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 adapter1.Object,
                 adapter2.Object
             };
-            
+
             testObject = new KnowledgebaseEntry();
             testObject.Packages = new List<KnowledgebasePackage>()
             {
@@ -86,24 +86,23 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             KnowledgebaseEntry hydratedEntry = new KnowledgebaseEntry(testObject.ToJson());
 
-            Assert.AreEqual(testObject.Packages.Count(), hydratedEntry.Packages.Count());
+            Assert.Equal(testObject.Packages.Count(), hydratedEntry.Packages.Count());
             for (int i = 0; i < hydratedEntry.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).AdditionalWeight, hydratedEntry.Packages.ElementAt(i).AdditionalWeight);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Height, hydratedEntry.Packages.ElementAt(i).Height);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Length, hydratedEntry.Packages.ElementAt(i).Length);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).ApplyAdditionalWeight, hydratedEntry.Packages.ElementAt(i).ApplyAdditionalWeight);
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Hash, hydratedEntry.Packages.ElementAt(i).Hash);
+                Assert.Equal(testObject.Packages.ElementAt(i).AdditionalWeight, hydratedEntry.Packages.ElementAt(i).AdditionalWeight);
+                Assert.Equal(testObject.Packages.ElementAt(i).Height, hydratedEntry.Packages.ElementAt(i).Height);
+                Assert.Equal(testObject.Packages.ElementAt(i).Length, hydratedEntry.Packages.ElementAt(i).Length);
+                Assert.Equal(testObject.Packages.ElementAt(i).Weight, hydratedEntry.Packages.ElementAt(i).Weight);
+                Assert.Equal(testObject.Packages.ElementAt(i).Width, hydratedEntry.Packages.ElementAt(i).Width);
+                Assert.Equal(testObject.Packages.ElementAt(i).ApplyAdditionalWeight, hydratedEntry.Packages.ElementAt(i).ApplyAdditionalWeight);
+                Assert.Equal(testObject.Packages.ElementAt(i).Hash, hydratedEntry.Packages.ElementAt(i).Hash);
             }
 
-            Assert.IsFalse(hydratedEntry.ConsolidateMultiplePackagesIntoSinglePackage);
-            Assert.AreEqual(0, hydratedEntry.CustomsItems.Count());
+            Assert.False(hydratedEntry.ConsolidateMultiplePackagesIntoSinglePackage);
+            Assert.Equal(0, hydratedEntry.CustomsItems.Count());
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ApplyTo_ThrowsInvalidOperationException_WhenPackageCountDoesNotMatchAdapterCount_AndConsolidateIsFalse_Test()
         {
             adapters = new List<IPackageAdapter>
@@ -111,14 +110,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense
                 adapter1.Object
             };
 
-            testObject.ApplyTo(adapters);
+            Assert.Throws<InvalidOperationException>(() => testObject.ApplyTo(adapters));
         }
 
         [Fact]
         public void ApplyTo_AssignsAdditionalWeightOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
             testObject.ApplyTo(adapters);
-            
+
             // Don't iterate over each element because we want to verify that set 
             // was called via Moq
             adapter1.VerifySet(a => a.AdditionalWeight = testObject.Packages.ElementAt(0).AdditionalWeight, Times.Once());
@@ -168,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.VerifySet(a => a.ApplyAdditionalWeight = testObject.Packages.ElementAt(0).ApplyAdditionalWeight, Times.Once());
             adapter2.VerifySet(a => a.ApplyAdditionalWeight = testObject.Packages.ElementAt(1).ApplyAdditionalWeight, Times.Once());
         }
-        
+
         [Fact]
         public void ApplyTo_AssignsWidthOfEachAdapter_WhenConsolidateIsFalse_Test()
         {
@@ -179,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             adapter1.VerifySet(a => a.Width = testObject.Packages.ElementAt(0).Width, Times.Once());
             adapter2.VerifySet(a => a.Width = testObject.Packages.ElementAt(1).Width, Times.Once());
         }
-        
+
         [Fact]
         public void ApplyTo_AssignsSummedAdditionalWeightToPackageAdapter_WhenConsolidateIsTrue_AndPackageAdapterCountIsOne_Test()
         {
@@ -187,7 +186,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.AreEqual(testObject.Packages.Sum(p => p.AdditionalWeight), adapter1.Object.AdditionalWeight);
+            Assert.Equal(testObject.Packages.Sum(p => p.AdditionalWeight), adapter1.Object.AdditionalWeight);
         }
 
         [Fact]
@@ -197,7 +196,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.AreEqual(testObject.Packages.ElementAt(0).Height, adapter1.Object.Height);
+            Assert.Equal(testObject.Packages.ElementAt(0).Height, adapter1.Object.Height);
         }
 
         [Fact]
@@ -207,7 +206,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.AreEqual(testObject.Packages.ElementAt(0).Length, adapter1.Object.Length);
+            Assert.Equal(testObject.Packages.ElementAt(0).Length, adapter1.Object.Length);
         }
 
         [Fact]
@@ -217,7 +216,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.AreEqual(testObject.Packages.Sum(p => p.Weight), adapter1.Object.Weight);
+            Assert.Equal(testObject.Packages.Sum(p => p.Weight), adapter1.Object.Weight);
         }
 
         [Fact]
@@ -227,7 +226,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters.Take(1));
 
-            Assert.AreEqual(testObject.Packages.ElementAt(0).Width, adapter1.Object.Width);
+            Assert.Equal(testObject.Packages.ElementAt(0).Width, adapter1.Object.Width);
         }
 
         [Fact]
@@ -235,7 +234,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             testObject.ApplyTo(adapters);
 
-            Assert.IsFalse(testObject.AppliedCustoms);
+            Assert.False(testObject.AppliedCustoms);
         }
 
         [Fact]
@@ -245,10 +244,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             EntityCollection<ShipmentCustomsItemEntity> customsCollection = new EntityCollection<ShipmentCustomsItemEntity>();
             customsCollection.Add(new ShipmentCustomsItemEntity());
-            
+
             testObject.ApplyTo(adapters, customsCollection);
 
-            Assert.IsTrue(testObject.AppliedCustoms);
+            Assert.True(testObject.AppliedCustoms);
         }
 
         [Fact]
@@ -260,9 +259,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.ApplyTo(adapters, customsCollection);
 
-            Assert.IsTrue(testObject.AppliedCustoms);
+            Assert.True(testObject.AppliedCustoms);
         }
-        
+
         [Fact]
         public void ApplyFrom_RegeneratesPackages_Test()
         {
@@ -274,7 +273,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.ApplyFrom(adapters);
 
             // The number of packages on our test object should now be one instead of two
-            Assert.AreEqual(1, testObject.Packages.Count());
+            Assert.Equal(1, testObject.Packages.Count());
         }
 
         [Fact]
@@ -289,7 +288,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).AdditionalWeight, adapters[i].AdditionalWeight);
+                Assert.Equal(testObject.Packages.ElementAt(i).AdditionalWeight, adapters[i].AdditionalWeight);
             }
 
         }
@@ -306,7 +305,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).ApplyAdditionalWeight, adapters[i].ApplyAdditionalWeight);
+                Assert.Equal(testObject.Packages.ElementAt(i).ApplyAdditionalWeight, adapters[i].ApplyAdditionalWeight);
             }
 
         }
@@ -315,7 +314,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         public void ApplyFrom_AssignsHeightOfPackage_Test()
         {
             testObject.ApplyFrom(adapters);
-            
+
             // Check that the Get property was called to confirm that the values are not equal 
             // because the adapter value was assigned to
             adapter1.VerifyGet(a => a.Height, Times.Once());
@@ -323,7 +322,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Height, adapters[i].Height);
+                Assert.Equal(testObject.Packages.ElementAt(i).Height, adapters[i].Height);
             }
         }
 
@@ -339,7 +338,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Length, adapters[i].Length);
+                Assert.Equal(testObject.Packages.ElementAt(i).Length, adapters[i].Length);
             }
         }
 
@@ -355,7 +354,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Weight, adapters[i].Weight);
+                Assert.Equal(testObject.Packages.ElementAt(i).Weight, adapters[i].Weight);
             }
         }
 
@@ -371,7 +370,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
+                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
             }
         }
 
@@ -379,9 +378,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         public void ToJson_WithoutCustomsItems_Test()
         {
             const string ExpectedJson = "{\"Packages\":[{\"Hash\":\"kbpackage1\",\"Length\":4.0,\"Width\":6.0,\"Height\":2.0,\"Weight\":4.5,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5},{\"Hash\":\"kbpackage2\",\"Length\":5.0,\"Width\":7.0,\"Height\":4.0,\"Weight\":6.0,\"ApplyAdditionalWeight\":true,\"AdditionalWeight\":2.5}],\"CustomsItems\":[]}";
-            
+
             string actualJson = testObject.ToJson();
-            Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
+            Assert.True(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
         }
 
         [Fact]
@@ -415,7 +414,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             };
 
             string actualJson = testObject.ToJson();
-            Assert.IsTrue(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
+            Assert.True(Newtonsoft.Json.Linq.JToken.DeepEquals(ExpectedJson, actualJson));
         }
 
         [Fact]
@@ -459,11 +458,11 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             for (int i = 0; i < testObject.Packages.Count(); i++)
             {
-                Assert.AreEqual(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
+                Assert.Equal(testObject.Packages.ElementAt(i).Width, adapters[i].Width);
             }
 
             // Now check the customs stuff
-            Assert.AreEqual(2, testObject.CustomsItems.Count());
+            Assert.Equal(2, testObject.CustomsItems.Count());
         }
 
         [Fact]
@@ -475,9 +474,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.ApplyFrom(new FedExShipmentType().GetPackageAdapters(shipment));
             testObject.CustomsItems = new List<KnowledgebaseCustomsItem>();
 
-            Assert.IsTrue(testObject.Matches(shipment));
+            Assert.True(testObject.Matches(shipment));
         }
-        
+
         [Fact]
         public void Matches_ReturnsFalse_WhenPackageCountsDoNotMatch_Test()
         {
@@ -493,7 +492,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Add another package to the shipment, but not the test object
             shipment.FedEx.Packages.Add(new FedExPackageEntity() { DimsHeight = 2, DimsWidth = 2, DimsLength = 2 });
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -511,7 +510,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].Weight = 1000;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -529,7 +528,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].DimsHeight = 1000;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -547,7 +546,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].DimsLength = 1000;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -565,7 +564,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].DimsWidth = 1000;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -583,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].DimsWeight = 1000;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         [Fact]
@@ -601,7 +600,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Change one of the packages, so the hash no longer are in sync with the test object
             shipment.FedEx.Packages[0].DimsAddWeight = true;
 
-            Assert.IsFalse(testObject.Matches(shipment));
+            Assert.False(testObject.Matches(shipment));
         }
 
         private ShipmentEntity CreateMatchingShipment()

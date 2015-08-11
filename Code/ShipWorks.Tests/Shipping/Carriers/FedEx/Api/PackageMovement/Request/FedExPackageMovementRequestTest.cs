@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
         Mock<ICarrierRequestManipulator> firstManipulator;
         Mock<ICarrierRequestManipulator> secondManipulator;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExPackageMovementRequestTest()
         {
             account = new FedExAccountEntity
             {
@@ -50,13 +49,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
         [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
         {
             FedExPackageMovementResponse response = (FedExPackageMovementResponse)testObject.Submit();
 
-            Assert.IsNotNull(response);
+            Assert.NotNull(response);
         }
 
         [Fact]
@@ -74,9 +73,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Request
 
             PostalCodeInquiryRequest postalCodeInquiryRequest = (PostalCodeInquiryRequest) testObject.NativeRequest;
 
-            Assert.AreEqual(postalCodeInquiryRequest.PostalCode, account.PostalCode);
+            Assert.Equal(postalCodeInquiryRequest.PostalCode, account.PostalCode);
 
-            Assert.AreEqual(postalCodeInquiryRequest.CountryCode, account.CountryCode);
+            Assert.Equal(postalCodeInquiryRequest.CountryCode, account.CountryCode);
         }
 
         [Fact]

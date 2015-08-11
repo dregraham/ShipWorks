@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
         private CarrierRequest request;
         OpenAccountRequest openAccountRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountAddEndUserInformationTest()
         {
             networkUtility = new Mock<INetworkUtility>();
 
@@ -40,16 +39,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request.Manipula
 
             testObject.Manipulate(request);
 
-            Assert.AreEqual(ipAddress, openAccountRequest.EndUserInformation.EndUserIPAddress);
+            Assert.Equal(ipAddress, openAccountRequest.EndUserInformation.EndUserIPAddress);
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsOpenAccountException))]
         public void Manipulate_ThrowsUpsOpenAccountException_Test()
         {
             networkUtility.Setup(n => n.GetIPAddress()).Throws(new NetworkException("oops"));
 
-            testObject.Manipulate(request);
+            Assert.Throws<UpsOpenAccountException>(() => testObject.Manipulate(request));
         }
     }
 }

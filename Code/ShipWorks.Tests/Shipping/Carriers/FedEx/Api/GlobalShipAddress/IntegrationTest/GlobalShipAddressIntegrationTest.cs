@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
     public class GlobalShipAddressIntegrationTest
     {
 
-        [Fact]
-        [Ignore]
+        
         public void SearchLocation_ActuallyCallsFedEx_IntegrationTest()
         {
             // MARKED WITH THE IGNORE ATTRIBUTE SINCE THIS IS AN INTEGRATION TEST - WE DON'T WANT THIS TEST
@@ -47,12 +46,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Integrat
 
             FedExGlobalShipAddressResponse fedExGlobalShipAddressResponse = carrierResponse as FedExGlobalShipAddressResponse;
 
-            Assert.IsNotNull(carrierResponse, "Response is null");
+            Assert.NotNull(carrierResponse);
             carrierResponse.Process();
 
-            Assert.IsNotNull(fedExGlobalShipAddressResponse,"Invalid Response...");
+            Assert.NotNull(fedExGlobalShipAddressResponse);
 
-            Assert.AreEqual(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count(), "Unexpected result from FedEx. This could mean FedEx added a new location near the destination address.");
+            Assert.Equal(1, fedExGlobalShipAddressResponse.DistanceAndLocationDetails.Count());
         }
     }
 }

@@ -16,15 +16,14 @@ namespace ShipWorks.Tests.Stores.Newegg
     public class DownloadOrdersRequestTest
     {
         private Credentials credentials;
-     
+
         private Mocked.MockedNeweggRequest successfulRequest;
         private Mocked.MockedNeweggRequest failureRequest;
         private Mocked.MockedNeweggRequest zeroOrdersRequest;
         private Mocked.MockedNeweggRequest fortyTwoOrdersRequest;
         private Mocked.MockedNeweggRequest twoHundredOrdersRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public DownloadOrdersRequestTest()
         {
             string successfulResponseXml = GetEmbeddedResourceXml("ShipWorks.Tests.Stores.Newegg.Artifacts.DownloadedOrders.xml");
             string zeroOrdersResponseXml = GetEmbeddedResourceXml("ShipWorks.Tests.Stores.Newegg.Artifacts.ZeroOrderDownload.xml");
@@ -63,11 +62,10 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        [ExpectedException(typeof(NeweggException))]
         public void GetDownloadInfo_ThrowsInvalidOperationException_WhenErrorResponseReceived_Test()
         {
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, failureRequest);
-            testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
+            Assert.Throws<NeweggException>(() => testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All));
         }
 
         [Fact]
@@ -76,8 +74,8 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
 
-            Assert.IsNotNull(info);
-            Assert.IsInstanceOfType(info, typeof(DownloadInfo));
+            Assert.NotNull(info);
+            Assert.IsAssignableFrom<DownloadInfo>(info);
         }
 
         [Fact]
@@ -87,7 +85,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadInfo info = testObject.GetDownloadInfo(DateTime.UtcNow, DateTime.UtcNow, NeweggOrderType.All);
 
             // The number of orders in our DownloadedOrders.xml file
-            Assert.AreEqual(42, info.TotalOrders);
+            Assert.Equal(42, info.TotalOrders);
         }
 
         [Fact]
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
-            Assert.AreEqual(fromDate, info.StartDate);
+            Assert.Equal(fromDate, info.StartDate);
         }
 
         [Fact]
@@ -111,7 +109,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
-            Assert.AreEqual(toDate, info.EndDate);
+            Assert.Equal(toDate, info.EndDate);
         }
 
 
@@ -124,7 +122,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
-            Assert.AreEqual(0, info.PageCount);
+            Assert.Equal(0, info.PageCount);
         }
 
         [Fact]
@@ -138,7 +136,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
-            Assert.AreEqual(1, info.PageCount);
+            Assert.Equal(1, info.PageCount);
         }
 
         [Fact]
@@ -151,7 +149,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             DownloadInfo info = testObject.GetDownloadInfo(fromDate, toDate, NeweggOrderType.All);
 
-            Assert.AreEqual(2, info.PageCount);
+            Assert.Equal(2, info.PageCount);
         }
 
         [Fact]
@@ -169,7 +167,7 @@ namespace ShipWorks.Tests.Stores.Newegg
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("12/1/2012 4:29:19 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("4/1/2012 4:42:01 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("9/7/2012 6:01:43 PM") },
-                new Order { OrderDateInPacificStandardTime = expectedStartDateInPST },                
+                new Order { OrderDateInPacificStandardTime = expectedStartDateInPST },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("6/12/2012 2:22:23 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("3/1/2012 4:32:01 PM") },
             };
@@ -177,7 +175,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(expectedStartDateInUtc, info.StartDate);
+            Assert.Equal(expectedStartDateInUtc, info.StartDate);
         }
 
         [Fact]
@@ -195,7 +193,7 @@ namespace ShipWorks.Tests.Stores.Newegg
                 new Order { OrderDateInPacificStandardTime = expectedEndDateInPST },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("4/1/2012 4:42:01 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("9/7/2012 6:01:43 PM") },
-                new Order { OrderDateInPacificStandardTime = DateTime.Parse("1/5/2011 4:32:02 AM") },                
+                new Order { OrderDateInPacificStandardTime = DateTime.Parse("1/5/2011 4:32:02 AM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("6/12/2012 2:22:23 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("3/1/2012 4:32:01 PM") },
             };
@@ -203,7 +201,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(expectedEndDateInUtc, info.EndDate);
+            Assert.Equal(expectedEndDateInUtc, info.EndDate);
         }
 
         [Fact]
@@ -217,7 +215,7 @@ namespace ShipWorks.Tests.Stores.Newegg
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("1/2/2012 9:31:43 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("4/1/2012 4:42:01 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("9/7/2012 6:01:43 PM") },
-                new Order { OrderDateInPacificStandardTime = DateTime.Parse("1/5/2011 4:32:02 AM") },                
+                new Order { OrderDateInPacificStandardTime = DateTime.Parse("1/5/2011 4:32:02 AM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("6/12/2012 2:22:23 PM") },
                 new Order { OrderDateInPacificStandardTime = DateTime.Parse("3/1/2012 4:32:01 PM") },
             };
@@ -225,7 +223,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(orders.Count, info.TotalOrders);
+            Assert.Equal(orders.Count, info.TotalOrders);
         }
 
         [Fact]
@@ -240,9 +238,9 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(1, info.PageCount);
+            Assert.Equal(1, info.PageCount);
         }
-        
+
         [Fact]
         public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenZeroOrders_Test()
         {
@@ -251,7 +249,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(0, info.PageCount);
+            Assert.Equal(0, info.PageCount);
         }
 
         [Fact]
@@ -263,7 +261,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.IsTrue(utcNowForComparison <= info.StartDate);
+            Assert.True(utcNowForComparison <= info.StartDate);
         }
 
         [Fact]
@@ -275,9 +273,9 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.IsTrue(utcNowForComparison <= info.EndDate);
+            Assert.True(utcNowForComparison <= info.EndDate);
         }
-        
+
         [Fact]
         public void GetDownloadInfo_CalculatesPageCount_FromListOfOrders_WhenTwoHundredOrders_Test()
         {
@@ -290,7 +288,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             DownloadOrdersRequest testObject = new DownloadOrdersRequest(credentials, successfulRequest);
             DownloadInfo info = testObject.GetDownloadInfo(orders);
 
-            Assert.AreEqual(2, info.PageCount);
+            Assert.Equal(2, info.PageCount);
         }
 
         [Fact]
@@ -309,10 +307,10 @@ namespace ShipWorks.Tests.Stores.Newegg
             XmlDocument requestBodyXml = new XmlDocument();
             requestBodyXml.LoadXml(successfulRequest.Body);
             XmlNodeList orderNumberNodes = requestBodyXml.SelectNodes("NeweggAPIRequest/RequestBody/RequestCriteria/OrderNumberList/OrderNumber");
-            
-            Assert.AreEqual(2, orderNumberNodes.Count);
-            Assert.AreEqual("123456", orderNumberNodes[0].InnerText);
-            Assert.AreEqual("654321", orderNumberNodes[1].InnerText);
+
+            Assert.Equal(2, orderNumberNodes.Count);
+            Assert.Equal("123456", orderNumberNodes[0].InnerText);
+            Assert.Equal("654321", orderNumberNodes[1].InnerText);
         }
     }
 }

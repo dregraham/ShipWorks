@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private RateRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateRecipientManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
+            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -45,18 +44,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // Make sure Address fields match
             string[] addressLines = nativeRequest.RequestedShipment.Recipient.Address.StreetLines;
 
-            Assert.AreEqual(shipmentEntity.ShipStreet1, addressLines[0]);
+            Assert.Equal(shipmentEntity.ShipStreet1, addressLines[0]);
 
             if (addressLines.Length > 1)
             {
                 // Check address line 2
-                Assert.AreEqual(shipmentEntity.ShipStreet2, addressLines[1]);
+                Assert.Equal(shipmentEntity.ShipStreet2, addressLines[1]);
             }
 
             if (addressLines.Length > 2)
             {
                 // Check address line 3
-                Assert.AreEqual(shipmentEntity.ShipStreet3, addressLines[2]);
+                Assert.Equal(shipmentEntity.ShipStreet3, addressLines[2]);
             }
         }
 
@@ -66,24 +65,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a Recipient back
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment.Recipient, typeof(Party));
+            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Recipient);
 
             // Make sure the Address matches what we input
-            Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.City, shipmentEntity.ShipCity);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.CountryCode, shipmentEntity.ShipCountryCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.PostalCode, shipmentEntity.ShipPostalCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode, shipmentEntity.ShipStateProvCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.City, shipmentEntity.ShipCity);
+            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.CountryCode, shipmentEntity.ShipCountryCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.PostalCode, shipmentEntity.ShipPostalCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.StateOrProvinceCode, shipmentEntity.ShipStateProvCode);
             
             // Make sure residential info matches
             if (ShipmentTypeManager.GetType(ShipmentTypeCode.FedEx).IsResidentialStatusRequired(shipmentEntity))
             {
-                Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.Residential, shipmentEntity.ResidentialResult);
-                Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
+                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, shipmentEntity.ResidentialResult);
+                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, true);
             }
             else
             {
-                Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.Residential, false);
-                Assert.AreEqual(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
+                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.Residential, false);
+                Assert.Equal(nativeRequest.RequestedShipment.Recipient.Address.ResidentialSpecified, false);
             }
         }
     }

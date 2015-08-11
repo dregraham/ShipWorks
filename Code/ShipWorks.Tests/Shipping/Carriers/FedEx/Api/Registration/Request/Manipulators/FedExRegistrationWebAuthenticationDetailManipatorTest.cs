@@ -28,8 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private Mock<CarrierRequest> subscriptionCarrierRequest;
         private SubscriptionRequest nativeSubscription;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegistrationWebAuthenticationDetailManipulatorTest()
         {
             shippingSettings = new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" };
 
@@ -51,34 +50,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndRequestIsNotRegisterUserRequest_AndRequestIsNotSubscriptionRequest_Test()
         {
             // Setup the native request to be an unexpected type
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionReply());
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
-        
-        
+
+
         #region Version Capture Tests
 
         [Fact]
@@ -90,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -100,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         #endregion Version Capture Tests
@@ -118,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(registerCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -128,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(registerCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -138,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(registerCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNull(detail.UserCredential);
+            Assert.Null(detail.UserCredential);
         }
 
         #endregion Register User Tests
@@ -157,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -167,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         #endregion Subscription Tests

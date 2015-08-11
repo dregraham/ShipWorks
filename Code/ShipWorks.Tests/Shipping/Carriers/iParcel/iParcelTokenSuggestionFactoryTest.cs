@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         private List<ShipmentEntity> shipments;
         private Mock<IiParcelRepository> repository;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelTokenSuggestionFactoryTest()
         {
             repository = new Mock<IiParcelRepository>();
             repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>()));
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         {
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
-            Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
+            Assert.Equal(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
         [Fact]
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
-            Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
+            Assert.Equal(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
         [Fact]
@@ -93,7 +92,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             TokenSuggestion[] suggestions = testObject.GetSuggestions(TokenUsage.Generic);
 
-            Assert.AreEqual(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
+            Assert.Equal(1, suggestions.Count(s => s.Xsl == "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>"));
         }
 
         [Fact]
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             // Filter out the default suggestion
             List<TokenSuggestion> itemSpecificSuggestions = suggestions.Where(s => s.Xsl != "<xsl:for-each select=\"//Order/Item\"> {SKU}, {Quantity} <xsl:if test=\"position() !=  last()\">|</xsl:if></xsl:for-each>").ToList();
 
-            Assert.AreEqual(2, itemSpecificSuggestions.Count);
+            Assert.Equal(2, itemSpecificSuggestions.Count);
         }
 
         [Fact]
@@ -146,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             foreach (TokenSuggestion suggestion in itemSpecificSuggestions)
             {
                 string[] commaSeparatedItem = suggestion.Xsl.Split(new char[] { ',' });
-                Assert.AreEqual(2, commaSeparatedItem.Length);
+                Assert.Equal(2, commaSeparatedItem.Length);
             }
         }
 
@@ -161,18 +160,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             foreach (OrderItemEntity orderItem in shipments[0].Order.OrderItems)
             {
                 string expectedXsl = string.Format("{0}, {1} ", orderItem.SKU, orderItem.Quantity);
-                Assert.AreEqual(1, itemSpecificSuggestions.Count(s => s.Xsl == expectedXsl));
+                Assert.Equal(1, itemSpecificSuggestions.Count(s => s.Xsl == expectedXsl));
             }
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void GetSuggestions_ThrowsiParcelException_WhenExceptionOccurs_Test()
         {
             // Setup the repository to throw an exception to trigger the exception handling
             repository.Setup(r => r.PopulateOrderDetails(It.IsAny<ShipmentEntity>())).Throws(new NullReferenceException());
 
-            testObject.GetSuggestions(TokenUsage.Generic);
+            Assert.Throws<iParcelException>(() => testObject.GetSuggestions(TokenUsage.Generic));
         }
     }
 }

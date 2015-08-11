@@ -15,12 +15,12 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         public WeeklyActionScheduleTest()
         {
             testObject = new WeeklyActionSchedule();
-        }        
+        }
 
         [Fact]
         public void ScheduleType_ReturnsWeekly_Test()
         {
-            Assert.AreEqual(ActionScheduleType.Weekly, testObject.ScheduleType);
+            Assert.Equal(ActionScheduleType.Weekly, testObject.ScheduleType);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInWeeks = 0;
 
-            Assert.AreEqual(1, testObject.FrequencyInWeeks);
+            Assert.Equal(1, testObject.FrequencyInWeeks);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInWeeks = -1;
 
-            Assert.AreEqual(1, testObject.FrequencyInWeeks);
+            Assert.Equal(1, testObject.FrequencyInWeeks);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInWeeks = 53;
 
-            Assert.AreEqual(52, testObject.FrequencyInWeeks);
+            Assert.Equal(52, testObject.FrequencyInWeeks);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             // Prove that a positive number sets property correctly
             testObject.FrequencyInWeeks = 1;
 
-            Assert.AreEqual(1, testObject.FrequencyInWeeks);
+            Assert.Equal(1, testObject.FrequencyInWeeks);
         }
 
         [Fact]
@@ -62,7 +62,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             // Prove that a positive number sets property correctly
             testObject.ExecuteOnDays = null;
 
-            Assert.AreEqual(0, testObject.ExecuteOnDays.Count);
+            Assert.Equal(0, testObject.ExecuteOnDays.Count);
         }
 
         [Fact]
@@ -72,28 +72,20 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             testObject.ExecuteOnDays.Add(DayOfWeek.Sunday);
             testObject.ExecuteOnDays.Add(DayOfWeek.Monday);
 
-            Assert.AreEqual(2, testObject.ExecuteOnDays.Count);
+            Assert.Equal(2, testObject.ExecuteOnDays.Count);
         }
 
         [Fact]
         public void CreateEditor_ReturnsWeeklyActionScheduleEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(WeeklyActionScheduleEditor));
+            Assert.IsAssignableFrom<WeeklyActionScheduleEditor>(testObject.CreateEditor());
         }
 
-        [Fact, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void Validate_AtLeastOneDayIsRequired()
         {
             testObject.FrequencyInWeeks = 1;
-            try
-            {
-                testObject.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one day of the week must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => testObject.Validate());
         }
     }
 }

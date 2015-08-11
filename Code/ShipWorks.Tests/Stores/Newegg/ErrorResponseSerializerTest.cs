@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private ErrorResponseSerializer serializer;
 
-        [TestInitialize]
-        public void Initialize()
+        public ErrorResponseSerializerTest()
         {
             serializer = new ErrorResponseSerializer();
 
@@ -47,15 +46,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         {
             object result = serializer.Deserialize(errorXml);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(ErrorResult));
+            Assert.NotNull(result);
+            Assert.IsAssignableFrom<ErrorResult>(result);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenDeserializingNonErrorXml_Test()
         {
-            object result = serializer.Deserialize(nonErrorXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(nonErrorXml));
         }
 
     }

@@ -29,8 +29,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         
         private Mock<IWin32Window> window;
 
-        [TestInitialize]
-        public void Initialize()
+        public ScanFormBatchTest()
         {
             batchPrinter = new Mock<IScanFormBatchPrinter>();
             batchPrinter.Setup(p => p.Print(It.IsAny<IWin32Window>(), It.IsAny<ScanFormBatch>())).Returns(true);
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             testObject.Create(shipments);
 
-            Assert.AreEqual(0, testObject.ScanForms.Count());
+            Assert.Equal(0, testObject.ScanForms.Count());
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             testObject.Create(shipments);
 
-            Assert.AreEqual(0, testObject.ScanForms.Count());
+            Assert.Equal(0, testObject.ScanForms.Count());
         }
 
         [Fact]
@@ -100,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         {
             testObject.Create(oneShipment);
 
-            Assert.AreEqual(1, testObject.ShipmentCount);
+            Assert.Equal(1, testObject.ShipmentCount);
         }
 
         [Fact]
@@ -176,10 +175,10 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             ScanForm result = testObject.CreateScanForm("Test", shipments, null, new List<byte[]> { image });
 
-            Assert.AreEqual(carrierAccount.Object, result.CarrierAccount);
-            Assert.AreEqual("Test", result.Description);
-            Assert.AreEqual(shipments, result.Shipments);
-            Assert.AreEqual(image, result.Images[0]);
+            Assert.Equal(carrierAccount.Object, result.CarrierAccount);
+            Assert.Equal("Test", result.Description);
+            Assert.Equal(shipments, result.Shipments);
+            Assert.Equal(image, result.Images[0]);
         }
 
         [Fact]
@@ -192,11 +191,11 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             ScanForm result = testObject.CreateScanForm("Test", shipments, null, new List<byte[]> { image1, image2 });
 
-            Assert.AreEqual(carrierAccount.Object, result.CarrierAccount);
-            Assert.AreEqual("Test", result.Description);
-            Assert.AreEqual(shipments, result.Shipments);
-            Assert.AreEqual(image1, result.Images[0]);
-            Assert.AreEqual(image2, result.Images[1]);
+            Assert.Equal(carrierAccount.Object, result.CarrierAccount);
+            Assert.Equal("Test", result.Description);
+            Assert.Equal(shipments, result.Shipments);
+            Assert.Equal(image1, result.Images[0]);
+            Assert.Equal(image2, result.Images[1]);
         }
 
         [Fact]
@@ -206,8 +205,8 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             ScanForm result = testObject.CreateScanForm("Test", shipments, null, null);
 
-            Assert.AreEqual(1, testObject.ScanForms.Count());
-            Assert.AreEqual(result, testObject.ScanForms.ElementAt(0));
+            Assert.Equal(1, testObject.ScanForms.Count());
+            Assert.Equal(result, testObject.ScanForms.ElementAt(0));
         }
         
         [Fact]
@@ -310,7 +309,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
-            Assert.IsTrue(printed);
+            Assert.True(printed);
         }
 
         [Fact]
@@ -331,7 +330,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
-            Assert.IsTrue(printed);
+            Assert.True(printed);
         }
 
         [Fact]
@@ -352,7 +351,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
-            Assert.IsFalse(printed);
+            Assert.False(printed);
         }
 
         [Fact]
@@ -374,7 +373,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
-            Assert.IsTrue(printed);
+            Assert.True(printed);
         }
 
         [Fact]
@@ -396,7 +395,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             testObject = new ScanFormBatch(carrierAccount.Object, batchPrinter.Object, scanForms, batchShipmentRepository.Object);
             bool printed = testObject.Print(window.Object);
 
-            Assert.IsFalse(printed);
+            Assert.False(printed);
         }
 
         [Fact]

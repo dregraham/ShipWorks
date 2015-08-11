@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private Mock<CarrierRequest> carrierRequest;
         private RateRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateWebAuthenticationManipulatorTest()
         {
             shippingSettings = new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" };
 
@@ -39,30 +38,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RateReply());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -74,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             WebAuthenticationDetail detail = ((RateRequest)carrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -84,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             WebAuthenticationDetail detail = ((RateRequest)carrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
     }
 }

@@ -27,8 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
 
         ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipRequestTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, null);
             shipmentEntity = new ShipmentEntity();
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request
         [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]

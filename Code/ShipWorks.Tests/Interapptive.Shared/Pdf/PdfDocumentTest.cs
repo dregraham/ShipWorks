@@ -40,7 +40,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                     }
                 }
 
-                Assert.AreEqual(1, images.Count);
+                Assert.Equal(1, images.Count);
             }
             finally
             {
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                 }
 
                 // Since we're converting to TIFF there should only be one image for the entire PDF
-                Assert.AreEqual(1, images.Count);
+                Assert.Equal(1, images.Count);
             }
             finally
             {
@@ -110,7 +110,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                     }
                 }
 
-                Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+                Assert.True(formats.All(f => f.Equals(ImageFormat.Png)));
             }
         }
     }

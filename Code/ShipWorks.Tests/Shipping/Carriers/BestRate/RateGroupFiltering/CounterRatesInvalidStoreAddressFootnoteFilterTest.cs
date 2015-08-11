@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
         private RateGroup rateGroup;
 
-        [TestInitialize]
-        public void Initialize()
+        public CounterRatesInvalidStoreAddressFootnoteFilterTest()
         {
             nonInvalidAddressFootnote = new Mock<IRateFootnoteFactory>();
             anotherNonInvalidAddressFootnote = new Mock<IRateFootnoteFactory>();
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
+            Assert.Equal(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
         }
 
         [Fact]
@@ -61,8 +60,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(4, filteredRateGroup.FootnoteFactories.Count());
-            Assert.AreEqual(3, filteredRateGroup.FootnoteFactories.Count(f => f.GetType() != typeof(CounterRatesInvalidStoreAddressFootnoteFactory)));
+            Assert.Equal(4, filteredRateGroup.FootnoteFactories.Count());
+            Assert.Equal(3, filteredRateGroup.FootnoteFactories.Count(f => f.GetType() != typeof(CounterRatesInvalidStoreAddressFootnoteFactory)));
         }
 
         [Fact]
@@ -72,8 +71,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(4, filteredRateGroup.FootnoteFactories.Count());
-            Assert.AreEqual(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
+            Assert.Equal(4, filteredRateGroup.FootnoteFactories.Count());
+            Assert.Equal(1, filteredRateGroup.FootnoteFactories.OfType<CounterRatesInvalidStoreAddressFootnoteFactory>().Count());
         }
 
         [Fact]
@@ -81,8 +80,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(3, filteredRateGroup.FootnoteFactories.Count());
-            Assert.AreEqual(3, filteredRateGroup.FootnoteFactories.Count(f => f.GetType() != typeof(CounterRatesInvalidStoreAddressFootnoteFactory)));
+            Assert.Equal(3, filteredRateGroup.FootnoteFactories.Count());
+            Assert.Equal(3, filteredRateGroup.FootnoteFactories.Count(f => f.GetType() != typeof(CounterRatesInvalidStoreAddressFootnoteFactory)));
         }
     }
 }

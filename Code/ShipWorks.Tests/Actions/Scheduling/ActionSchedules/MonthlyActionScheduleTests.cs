@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
     public class MonthlyActionScheduleTests
     {
-        [Fact, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DayMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -20,15 +20,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDay = DayOfWeek.Monday
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one month must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
         [Fact]
@@ -46,7 +38,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         }
 
 
-        [Fact, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DateMode_Validate_AtLeastOneDayIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -55,18 +47,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDateMonths = new List<MonthType>() { MonthType.April }
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one day must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
-        [Fact, ExpectedException(typeof(SchedulingException))]
+        [Fact]
         public void DateMode_Validate_AtLeastOneMonthIsRequired()
         {
             var target = new MonthlyActionSchedule
@@ -75,15 +59,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 ExecuteOnDates = new List<int> { 5 }
             };
 
-            try
-            {
-                target.Validate();
-            }
-            catch (SchedulingException ex)
-            {
-                Assert.AreEqual("At least one month must be scheduled.", ex.Message);
-                throw;
-            }
+            Assert.Throws<SchedulingException>(() => target.Validate());
         }
 
         [Fact]

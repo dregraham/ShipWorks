@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Request
         private Mock<ICarrierRequestManipulator> secondManipulator;
         private List<ICarrierRequestManipulator> requestManipulators;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountRequestTest()
         {
             upsService = new Mock<IUpsServiceGateway>();
             upsService.Setup(s => s.OpenAccount(It.IsAny<OpenAccountRequest>())).Returns(new OpenAccountResponse());

@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsFalse(
+            Assert.False(
                 target.IsTimeIncluded(target.StartTimeUtc)
             );
         }
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsTrue(
+            Assert.True(
                 Enumerable.Range(0, 7).All(x => 
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )
@@ -52,7 +52,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsFalse(
+            Assert.False(
                 Enumerable.Range(7, 14).Any(x => 
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )
@@ -68,7 +68,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
                 RepeatIntervalUnit = IntervalUnit.Week
             };
 
-            Assert.IsTrue(
+            Assert.True(
                 Enumerable.Range(14, 7).All(x =>
                     target.IsTimeIncluded(target.StartTimeUtc.AddDays(x))
                 )

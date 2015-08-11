@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private CheckCredentialsResponseSerializer serializer;
 
-        [TestInitialize]
-        public void Initialize()
+        public CheckCredentialsResponseSerializerTest()
         {
             serializer = new CheckCredentialsResponseSerializer();
 
@@ -55,29 +54,27 @@ namespace ShipWorks.Tests.Stores.Newegg
         {
             object result = serializer.Deserialize(successfulResponseXml);
 
-            Assert.IsNotNull(result);
-            Assert.IsInstanceOfType(result, typeof(CheckCredentialsResult));
+            Assert.NotNull(result);
+            Assert.IsAssignableFrom<CheckCredentialsResult>(result);
         }
 
         [Fact]
         public void Deserialize_CheckCredentialResultIsSuccessful_WhenSucessfulResponse_Test()
         {
             CheckCredentialsResult result = serializer.Deserialize(successfulResponseXml) as CheckCredentialsResult;
-            Assert.IsTrue(result.IsSuccessful);
+            Assert.True(result.IsSuccessful);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSellerId_Test()
         {
-            object result = serializer.Deserialize(invalidSellerIdXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSellerIdXml));
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Deserialize_ThrowsInvalidOperationException_WhenInvalidSecretKey_Test()
         {
-            object result = serializer.Deserialize(invalidSecretKeyXml);
+            Assert.Throws<InvalidOperationException>(() => serializer.Deserialize(invalidSecretKeyXml));
         }
 
     }

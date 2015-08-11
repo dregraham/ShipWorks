@@ -12,13 +12,12 @@ namespace ShipWorks.Tests.Shipping.ShipSense
     public class KnowledgebaseEntryChangeSetXmlWriterTest
     {
         private KnowledgebaseEntryChangeSetXmlWriter testObject;
-        
+
         private Mock<IChangeSetXmlWriter> packageXmlWriter;
         private Mock<IChangeSetXmlWriter> customsXmlWriter;
         private KnowledgebaseEntry entry;
 
-        [TestInitialize]
-        public void Initialize()
+        public KnowledgebaseEntryChangeSetXmlWriterTest()
         {
             entry = new KnowledgebaseEntry();
             entry.AppliedCustoms = true;
@@ -30,10 +29,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         }
 
         [Fact]
-        [ExpectedException(typeof(ShipSenseException))]
         public void AppendChangeSet_ThrowsShipSenseException_WhenArgumentIsNull_Test()
         {
-            testObject.WriteTo(null);
+            Assert.Throws<ShipSenseException>(() => testObject.WriteTo(null));
         }
 
         [Fact]
@@ -43,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.WriteTo(changeSets);
 
-            Assert.IsNotNull(changeSets.Descendants("ChangeSet").First().Attribute("Timestamp"));
+            Assert.NotNull(changeSets.Descendants("ChangeSet").First().Attribute("Timestamp"));
         }
 
         [Fact]
@@ -56,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             IEnumerable<string> timestamps = changeSets.Descendants("ChangeSet").Select(cs => cs.Attribute("Timestamp").Value);
 
-            Assert.AreEqual(2, timestamps.Count());
+            Assert.Equal(2, timestamps.Count());
         }
 
         [Fact]
@@ -98,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.WriteTo(changeSets);
 
-            Assert.AreEqual(1, changeSets.Descendants("ChangeSet").Count());
+            Assert.Equal(1, changeSets.Descendants("ChangeSet").Count());
         }
 
     }

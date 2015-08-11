@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         private SearchLocationsReply reply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressResponseTest()
         {
             reply = new SearchLocationsReply()
             {
@@ -28,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
                     {
                         DistanceAndLocationDetails = new []
                         {
-                            new DistanceAndLocationDetail(), 
+                            new DistanceAndLocationDetail(),
                             new DistanceAndLocationDetail()
                         }
                     }
@@ -41,7 +40,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
             reply.Notifications = new[]
@@ -51,18 +49,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
                    Message = "message"
                }
             };
-            reply.HighestSeverity=NotificationSeverityType.FAILURE;
+            reply.HighestSeverity = NotificationSeverityType.FAILURE;
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Process_ErrorThrown_NoLocationFound()
         {
             reply.ResultsReturned = "0";
 
-            testObject.Process();
+            Assert.Throws<CarrierException>(() => testObject.Process());
         }
 
         [Fact]
@@ -70,7 +67,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         {
             testObject.Process();
 
-            Assert.AreEqual(2,testObject.DistanceAndLocationDetails.Count());
+            Assert.Equal(2, testObject.DistanceAndLocationDetails.Count());
         }
     }
 }

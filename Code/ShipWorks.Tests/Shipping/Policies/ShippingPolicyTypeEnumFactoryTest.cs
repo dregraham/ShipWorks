@@ -13,7 +13,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "RateResultCount");
 
-            Assert.IsInstanceOfType(policy, typeof(RateResultCountShippingPolicy));
+            Assert.IsAssignableFrom<RateResultCountShippingPolicy>(policy);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.Usps, "RateResultCount");
 
-            Assert.IsInstanceOfType(policy, typeof(NonRestrictedRateCountShippingPolicy));
+            Assert.IsAssignableFrom<NonRestrictedRateCountShippingPolicy>(policy);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.BestRate, "BestRateUpsRestriction");
 
-            Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
+            Assert.IsAssignableFrom<BestRateUpsRestrictionShippingPolicy>(policy);
         }
 
         [Fact]
@@ -40,15 +40,14 @@ namespace ShipWorks.Tests.Shipping.Policies
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
             IShippingPolicy policy = factory.Create(ShipmentTypeCode.FedEx, "BestRateUpsRestriction");
 
-            Assert.IsInstanceOfType(policy, typeof(BestRateUpsRestrictionShippingPolicy));
+            Assert.IsAssignableFrom<BestRateUpsRestrictionShippingPolicy>(policy);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Create_ThrowsInvalidOperationException_WhenPolicyTypeIsUnknown()
         {
             ShippingPolicyTypeEnumFactory factory = new ShippingPolicyTypeEnumFactory();
-            factory.Create(ShipmentTypeCode.UpsOnLineTools, "InvalidPolicy");
+            Assert.Throws<InvalidOperationException>(() => factory.Create(ShipmentTypeCode.UpsOnLineTools, "InvalidPolicy"));
         }
     }
 }

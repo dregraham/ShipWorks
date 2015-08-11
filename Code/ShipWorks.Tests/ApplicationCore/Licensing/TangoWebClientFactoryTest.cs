@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         // NOTE: These are highly dependent on the environment since they require reading and writing of 
         // the registry. All tests have been commented out for the build process for this reason.
         
-        //[TestInitialize]
-        //public void Initialize()
+        //public TangoWebClientFactoryTest()
         //{
         //    RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Interapptive\ShipWorks\Internal");
         //    if (key != null)
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(true);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(FakeTangoWebClient));
+        //    Assert.IsAssignableFrom<FakeTangoWebClient>(client);
         //}
 
         //[Fact]
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
         //[Fact]
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
         //[Fact]
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
 
         //[Fact]
@@ -127,7 +126,7 @@ namespace ShipWorks.Tests.ApplicationCore.Licensing
         //    ConfigureInterapptiveUser(false);
 
         //    ITangoWebClient client = testObject.CreateWebClient();
-        //    Assert.IsInstanceOfType(client, typeof(TangoWebClientWrapper));
+        //    Assert.IsAssignableFrom<TangoWebClientWrapper>(client);
         //}
     }
 }

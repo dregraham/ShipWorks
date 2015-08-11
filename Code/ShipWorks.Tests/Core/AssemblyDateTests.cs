@@ -17,18 +17,16 @@ namespace ShipWorks.Tests.Core
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ReadAssemblyDateNonexistent()
         {
             // This will read it off the current assembly, which does not have the date
-            DateTime buildDate = AssemblyDateAttribute.Read();
+            Assert.Throws<InvalidOperationException>(() => AssemblyDateAttribute.Read());
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ReadAssemblyDateForNullAssembly()
         {
-            AssemblyDateAttribute.Read(null);
+            Assert.Throws<ArgumentNullException>(() => AssemblyDateAttribute.Read(null));
         }
     }
 }

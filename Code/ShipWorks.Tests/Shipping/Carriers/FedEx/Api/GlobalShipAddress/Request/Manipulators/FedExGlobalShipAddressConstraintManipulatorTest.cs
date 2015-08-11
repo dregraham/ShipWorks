@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
 
         private FedExGlobalShipAddressConstraintManipulator testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressConstraintManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_GROUND, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_GROUND, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
         [Fact]
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
         [Fact]
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
 
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(SupportedRedirectToHoldServiceType.FEDEX_EXPRESS, request.Constraints.SupportedRedirectToHoldServices[0]);
+            Assert.Equal(SupportedRedirectToHoldServiceType.FEDEX_EXPRESS, request.Constraints.SupportedRedirectToHoldServices[0]);
         }
 
         [Fact]
@@ -66,8 +65,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(MultipleMatchesActionType.RETURN_ALL, request.MultipleMatchesAction);
-            Assert.IsTrue(request.MultipleMatchesActionSpecified);
+            Assert.Equal(MultipleMatchesActionType.RETURN_ALL, request.MultipleMatchesAction);
+            Assert.True(request.MultipleMatchesActionSpecified);
         }
 
 

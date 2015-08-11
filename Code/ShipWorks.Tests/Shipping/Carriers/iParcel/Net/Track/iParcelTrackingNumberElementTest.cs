@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
 
         private iParcelTrackingNumberElement testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelTrackingNumberElementTest()
         {
             package=new IParcelPackageEntity()
             {
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("TrackingNumber", element.Name.LocalName);
+            Assert.Equal("TrackingNumber", element.Name.LocalName);
         }
 
         [Fact]
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("42", element.Value);
+            Assert.Equal("42", element.Value);
         }
     }
 }

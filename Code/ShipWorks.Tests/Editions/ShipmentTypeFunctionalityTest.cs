@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Editions
         private XmlDocument xml;
         private XPathNavigator path;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShipmentTypeFunctionalityTest()
         {
             // Because we're now caching policy data, we need to make sure we clear the cache before each test run
             ShippingPolicies.ClearCache();
@@ -393,8 +392,8 @@ namespace ShipWorks.Tests.Editions
         {
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
-            Assert.IsTrue(functionality[ShipmentTypeCode.FedEx].Any());
-            Assert.IsTrue(functionality[ShipmentTypeCode.Usps].Any());
+            Assert.True(functionality[ShipmentTypeCode.FedEx].Any());
+            Assert.True(functionality[ShipmentTypeCode.Usps].Any());
         }
 
         [Fact]
@@ -404,7 +403,7 @@ namespace ShipWorks.Tests.Editions
 
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.Usps];
 
-            Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.Disabled));
+            Assert.True(restrictions.Contains(ShipmentTypeRestrictionType.Disabled));
         }
 
         [Fact]
@@ -414,7 +413,7 @@ namespace ShipWorks.Tests.Editions
 
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.AccountRegistration));
+            Assert.True(restrictions.Contains(ShipmentTypeRestrictionType.AccountRegistration));
         }
 
         [Fact]
@@ -424,7 +423,7 @@ namespace ShipWorks.Tests.Editions
 
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.Endicia];
 
-            Assert.IsTrue(restrictions.Contains(ShipmentTypeRestrictionType.RateDiscountMessaging));
+            Assert.True(restrictions.Contains(ShipmentTypeRestrictionType.RateDiscountMessaging));
         }
 
         [Fact]
@@ -435,7 +434,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(2, restrictions.Count());
+            Assert.Equal(2, restrictions.Count());
         }
 
         [Fact]
@@ -448,7 +447,7 @@ namespace ShipWorks.Tests.Editions
             foreach (ShipmentTypeCode typeCode in Enum.GetValues(typeof (ShipmentTypeCode)))
             {
                 IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[typeCode];
-                Assert.AreEqual(0, restrictions.Count());
+                Assert.Equal(0, restrictions.Count());
             }
         }
 
@@ -460,7 +459,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(1, restrictions.Count());
+            Assert.Equal(1, restrictions.Count());
         }
 
         [Fact]
@@ -471,7 +470,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(0, restrictions.Count());
+            Assert.Equal(0, restrictions.Count());
         }
 
         [Fact]
@@ -482,7 +481,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(0, restrictions.Count());
+            Assert.Equal(0, restrictions.Count());
         }
 
         [Fact]
@@ -494,7 +493,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
             
-            Assert.AreEqual(2, restrictions.Distinct().Count());
+            Assert.Equal(2, restrictions.Distinct().Count());
         }
 
         [Fact]
@@ -506,7 +505,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(2, restrictions.Distinct().Count());
+            Assert.Equal(2, restrictions.Distinct().Count());
         }
 
         [Fact]
@@ -517,7 +516,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Processing));
+            Assert.Equal(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Processing));
         }
 
         [Fact]
@@ -528,7 +527,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Purchasing));
+            Assert.Equal(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.Purchasing));
         }
 
         [Fact]
@@ -539,7 +538,7 @@ namespace ShipWorks.Tests.Editions
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
             IEnumerable<ShipmentTypeRestrictionType> restrictions = functionality[ShipmentTypeCode.FedEx];
 
-            Assert.AreEqual(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.ShippingAccountConversion));
+            Assert.Equal(1, restrictions.Count(r => r == ShipmentTypeRestrictionType.ShippingAccountConversion));
         }
 
         [Fact]
@@ -568,7 +567,7 @@ namespace ShipWorks.Tests.Editions
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
-            Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
+            Assert.True(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
         [Fact]
@@ -597,7 +596,7 @@ namespace ShipWorks.Tests.Editions
 
             ShipmentTypeFunctionality functionality = ShipmentTypeFunctionality.Deserialize(1, path);
 
-            Assert.IsTrue(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
+            Assert.True(CompareXmlToText(functionality.ToXElement(), expectedRawXml));
         }
 
         [Fact]
@@ -608,7 +607,7 @@ namespace ShipWorks.Tests.Editions
 
             XElement xElement = functionality.ToXElement();
 
-            Assert.AreEqual("ShipmentTypeFunctionality", xElement.Name);
+            Assert.Equal("ShipmentTypeFunctionality", xElement.Name);
         }
 
         [Fact]
@@ -619,7 +618,7 @@ namespace ShipWorks.Tests.Editions
 
             XElement xElement = functionality.ToXElement();
 
-            Assert.IsTrue(xElement.IsEmpty);
+            Assert.True(xElement.IsEmpty);
         }
 
         [Fact]
@@ -634,17 +633,17 @@ namespace ShipWorks.Tests.Editions
                 storedPolicies = policies;
             } );
 
-            Assert.AreEqual(31, storedStoreId);
+            Assert.Equal(31, storedStoreId);
             
-            Assert.AreEqual(1,storedPolicies.Count);
-            Assert.AreEqual(ShipmentTypeCode.Usps, storedPolicies.First().Key);
-            Assert.AreEqual(2,storedPolicies.First().Value.Count());
-            Assert.IsTrue(
+            Assert.Equal(1,storedPolicies.Count);
+            Assert.Equal(ShipmentTypeCode.Usps, storedPolicies.First().Key);
+            Assert.Equal(2,storedPolicies.First().Value.Count());
+            Assert.True(
                 CompareXmlToText(
                     storedPolicies.First().Value.First(),
                     "<Feature><Type>BestRateUpsRestriction</Type><Config>True</Config></Feature>"),
                 "Xml Didn't Match");
-            Assert.IsTrue(
+            Assert.True(
                 CompareXmlToText(
                     storedPolicies.First().Value.Last(),
                     " <Feature><Type>RateResultCount</Type><Config>2</Config></Feature>"),

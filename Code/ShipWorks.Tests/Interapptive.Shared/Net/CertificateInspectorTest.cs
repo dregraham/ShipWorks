@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
         private X509Certificate singleMatchCertificate;
         private X509Certificate multiMatchCertificate;
 
-        [TestInitialize]
-        public void Initialize()
+        public CertificateInspectorTest()
         {
             request = new Mock<ICertificateRequest>();
             request.Setup(r => r.Certificate).Returns(new X509Certificate());
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Spoofed, securityLevel);
         }
         
         [Fact]
@@ -65,7 +64,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.None, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.None, securityLevel);
         }
 
         [Fact]
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Spoofed, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Spoofed, securityLevel);
         }
 
         [Fact]
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             testObject = new CertificateInspector(certificateVerificationData);
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Trusted, securityLevel);
         }
 
         [Fact]
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
             testObject = new CertificateInspector("<Service><Subject><Value>FedEx</Value><Value>banana hammock</Value></Subject></Service>");
             CertificateSecurityLevel securityLevel = testObject.Inspect(request.Object);
 
-            Assert.AreEqual(CertificateSecurityLevel.Trusted, securityLevel);
+            Assert.Equal(CertificateSecurityLevel.Trusted, securityLevel);
         }
     }
 }

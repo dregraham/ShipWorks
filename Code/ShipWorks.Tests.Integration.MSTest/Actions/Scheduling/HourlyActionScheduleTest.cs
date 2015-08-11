@@ -37,11 +37,6 @@ namespace ShipWorks.Tests.Integration.MSTest
             log = LogManager.GetLogger(typeof (HourlyActionScheduleTest));
         }
 
-        [TestInitialize]
-        public void Initialize()
-        {
-        }
-
         /// <summary>
         /// Initialize for a test to verify jobs run when expected.
         /// </summary>
@@ -71,8 +66,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             SystemTimeUtilities.UpdateSystemTime(InitialRunDateTime);
         }
 
-        [Fact]
-        [Ignore]
+        
         public void Schedule_VerifyJobsRunAtCorrectTimes_Test()
         {
             InitializeForHourlyActionScheduleTestTimesShouldRun();
@@ -226,8 +220,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             SystemTimeUtilities.UpdateSystemTime(InitialRunDateTime);
         }
 
-        [Fact]
-        [Ignore]
+        
         public void Schedule_VerifyJobsDontRunAtIncorrectTimes_Test()
         {
             InitializeForHourlyActionScheduleTestTimesShouldNotRun();

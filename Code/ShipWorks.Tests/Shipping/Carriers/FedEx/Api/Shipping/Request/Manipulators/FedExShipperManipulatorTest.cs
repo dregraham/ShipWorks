@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipperManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
+            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -43,18 +42,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a Shipper back
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment.Shipper, typeof(Party));
+            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Shipper);
 
             // Make sure Address fields match
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.City, shipmentEntity.OriginCity);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.CountryCode, shipmentEntity.OriginCountryCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.PostalCode, shipmentEntity.OriginPostalCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipmentEntity.OriginStateProvCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.City, shipmentEntity.OriginCity);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.CountryCode, shipmentEntity.OriginCountryCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.PostalCode, shipmentEntity.OriginPostalCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipmentEntity.OriginStateProvCode);
 
             // Make sure Contact fields match
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Contact.CompanyName, shipmentEntity.OriginCompany);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Contact.EMailAddress, shipmentEntity.OriginEmail);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Contact.PhoneNumber, shipmentEntity.OriginPhone);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.CompanyName, shipmentEntity.OriginCompany);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.EMailAddress, shipmentEntity.OriginEmail);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Contact.PhoneNumber, shipmentEntity.OriginPhone);
         }
 
         [Fact]
@@ -64,17 +63,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified_Test()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
+            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -107,16 +106,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
-            
-            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -126,9 +124,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.Shipper);
+            Assert.Null(nativeRequest.RequestedShipment.Shipper);
 
-            Assert.AreEqual(shipmentEntity.OriginCity, nativeRequest.RequestedShipment.Recipient.Address.City);
+            Assert.Equal(shipmentEntity.OriginCity, nativeRequest.RequestedShipment.Recipient.Address.City);
         }
     }
 }

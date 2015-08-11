@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
         private Mock<ICarrierAccountRepository<IParcelAccountEntity>> genericRepositoryMock;
         private Mock<iParcelShipmentType> genericShipmentTypeMock;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelBestRateBrokerTest()
         {
             genericRepositoryMock = new Mock<ICarrierAccountRepository<IParcelAccountEntity>>();
             genericShipmentTypeMock = new Mock<iParcelShipmentType>();
@@ -30,13 +29,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.BestRate
         [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_iParcelSettingSpecfiesShipWorks_Test()
         {
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { IParcelInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { IParcelInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
         }
 
         [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_iParcelSettingSpecfiesCarrier_Test()
         {
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { IParcelInsuranceProvider = (int)InsuranceProvider.Carrier }));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { IParcelInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

@@ -60,7 +60,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             AccountInfo info = testObject.GetAccountInfo(account) as AccountInfo;
 
             // Basically just a connectivity test to confirm that the web client is not broken
-            Assert.IsNotNull(info);
+            Assert.NotNull(info);
         }
 
         [TestCategory("USPS")]
@@ -98,7 +98,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             {
                 // Since we just dummied some data up to create a scan form with we're going
                 // to get an exception. Make sure the error code is that of an invalid transaction ID
-                Assert.AreEqual(4523265, exception.Code);
+                Assert.Equal(4523265, exception.Code);
             }
         }
 
@@ -112,7 +112,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
             UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
-            Assert.IsFalse(registrationResult.IsSuccessful);
+            Assert.False(registrationResult.IsSuccessful);
         }
 
         [TestCategory("USPS")]
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 
             UspsRegistrationResult registrationResult = testObject.RegisterAccount(registration);
 
-            Assert.IsTrue(registrationResult.IsSuccessful);
+            Assert.True(registrationResult.IsSuccessful);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         {
             UspsAccountContractType contractType = testObject.GetContractType(account);
 
-            Assert.AreEqual(UspsAccountContractType.Reseller, contractType);
+            Assert.Equal(UspsAccountContractType.Reseller, contractType);
         }
 
         [TestCategory("USPS")]
@@ -184,7 +184,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
             catch (UspsApiException exception)
             {
-                Assert.AreEqual(0x005f0302, exception.Code);
+                Assert.Equal(0x005f0302, exception.Code);
             }
         }
 

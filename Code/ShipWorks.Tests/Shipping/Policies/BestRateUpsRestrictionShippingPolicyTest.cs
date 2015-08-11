@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         private int initialBrokerCount;
         private List<ShipmentTypeCode> shipmentTypeCodes;
         
-        [TestInitialize]
-        public void Initialize()
+        public BestRateUpsRestrictionShippingPolicyTest()
         {
             testObject = new BestRateUpsRestrictionShippingPolicy();
 
@@ -45,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("true");
 
-            Assert.IsTrue(testObject.IsApplicable(brokers), "Expected IsApplicable to be true.");
+            Assert.True(testObject.IsApplicable(brokers), "Expected IsApplicable to be true.");
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("true");
 
-            Assert.IsTrue(testObject.IsApplicable(shipmentTypeCodes), "Expected IsApplicable to be true.");
+            Assert.True(testObject.IsApplicable(shipmentTypeCodes), "Expected IsApplicable to be true.");
         }
 
         [Fact]
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("false");
 
-            Assert.IsFalse(testObject.IsApplicable(brokers), "Expected IsApplicable to be false.");
+            Assert.False(testObject.IsApplicable(brokers), "Expected IsApplicable to be false.");
         }
 
         [Fact]
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             List<string> strings = new List<string>();
 
-            Assert.IsFalse(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
+            Assert.False(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
         }
 
         [Fact]
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             List<string> strings = new List<string>();
 
-            Assert.IsFalse(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
+            Assert.False(testObject.IsApplicable(strings), "Expected IsApplicable to be false.");
         }
 
         [Fact]
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             testObject.Apply(brokers);
 
-            Assert.AreEqual(initialBrokerCount, brokers.Count);
+            Assert.Equal(initialBrokerCount, brokers.Count);
         }
 
         [Fact]
@@ -101,7 +100,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             testObject.Apply(brokers);
 
-            Assert.AreEqual(initialBrokerCount - 3, brokers.Count);
+            Assert.Equal(initialBrokerCount - 3, brokers.Count);
         }
 
         [Fact]
@@ -111,8 +110,8 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             testObject.Apply(shipmentTypeCodes);
 
-            Assert.IsTrue(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsOnLineTools));
-            Assert.IsTrue(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsWorldShip));
+            Assert.True(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsOnLineTools));
+            Assert.True(shipmentTypeCodes.Contains(ShipmentTypeCode.UpsWorldShip));
         }
 
         [Fact]
@@ -122,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             testObject.Apply(shipmentTypeCodes);
 
-            Assert.IsFalse(shipmentTypeCodes.Any());
+            Assert.False(shipmentTypeCodes.Any());
         }
     }
 }

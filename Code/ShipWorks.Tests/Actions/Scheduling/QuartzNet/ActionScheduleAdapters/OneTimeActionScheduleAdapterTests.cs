@@ -10,8 +10,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
     {
         OneTimeActionScheduleAdapter target;
 
-        [TestInitialize]
-        public void Initialize()
+        public OneTimeActionScheduleAdapterTests()
         {
             target = new OneTimeActionScheduleAdapter();
         }
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
         {
             var fireTimes = new OneTimeActionSchedule().ComputeFireTimes(target, 5);
 
-            Assert.AreEqual(1, fireTimes.Count);
+            Assert.Equal(1, fireTimes.Count);
         }
 
         [Fact]
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
             var fireTimes = schedule.ComputeFireTimes(target, 1);
 
-            Assert.AreEqual(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
+            Assert.Equal(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
         }
     }
 }

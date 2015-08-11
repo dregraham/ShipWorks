@@ -9,8 +9,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
     {
         WebRequestTask testObject;
 
-        [TestInitialize]
-        public void TestInitialize()
+        public WebRequestTaskTests()
         {
             testObject = new WebRequestTask()
             {
@@ -37,12 +36,12 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             var deserializedObject = new WebRequestTask();
             deserializedObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true, deserializedObject.UseBasicAuthentication);
-            Assert.AreEqual("user", deserializedObject.Username);
-            Assert.AreEqual("2nd", deserializedObject.HttpHeaders[1].Value);
-            Assert.AreEqual("second", deserializedObject.HttpHeaders[1].Key);
+            Assert.Equal(true, deserializedObject.UseBasicAuthentication);
+            Assert.Equal("user", deserializedObject.Username);
+            Assert.Equal("2nd", deserializedObject.HttpHeaders[1].Value);
+            Assert.Equal("second", deserializedObject.HttpHeaders[1].Key);
 
-            Assert.AreEqual(HttpVerb.Get, deserializedObject.Verb);
+            Assert.Equal(HttpVerb.Get, deserializedObject.Verb);
         }
     }
 }

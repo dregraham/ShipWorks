@@ -10,8 +10,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
     {
         HourlyActionScheduleAdapter target;
 
-        [TestInitialize]
-        public void Initialize()
+        public HourlyActionScheduleAdapterTest()
         {
             target = new HourlyActionScheduleAdapter();
         }
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
             var fireTimes = schedule.ComputeFireTimes(target, 1);
 
-            Assert.AreEqual(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
+            Assert.Equal(schedule.StartDateTimeInUtc, fireTimes[0].DateTime);
         }
 
         [Fact]
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
+            Assert.True(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
 
         [Fact]
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
+            Assert.True(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
 
         [Fact]
@@ -77,7 +76,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
+            Assert.True(intervals.All(x => (int)x.TotalHours == schedule.FrequencyInHours));
         }
     }
 }

@@ -27,10 +27,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             EmailTask testObject = new EmailTask();
             testObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true, testObject.DelayDelivery);
-            Assert.AreEqual(6, testObject.DelayQuantity);
-            Assert.AreEqual(new TimeSpan(123456), testObject.DelayTimeOfDay);
-            Assert.AreEqual(EmailDelayType.TimeHours, initialObject.DelayType);
+            Assert.Equal(true, testObject.DelayDelivery);
+            Assert.Equal(6, testObject.DelayQuantity);
+            Assert.Equal(new TimeSpan(123456), testObject.DelayTimeOfDay);
+            Assert.Equal(EmailDelayType.TimeHours, initialObject.DelayType);
         }
     }
 }

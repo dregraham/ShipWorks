@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         private const string accountIdentifier = "blahblahblah";
         private const decimal balance = (decimal)42.42;
 
-        [TestInitialize]
-        public void Initialize()
+        public PostageBalanceTests()
         {
             postageWebClient = new Mock<IPostageWebClient>();
             postageWebClient.Setup(p => p.GetBalance()).Returns(balance);
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         [Fact]
         public void Value_ValueIsCorrect_Test()
         {
-            Assert.AreEqual(balance, testObject.Value);
+            Assert.Equal(balance, testObject.Value);
         }
 
         [Fact]
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             tangoWebClient.Setup(t => t.LogPostageEvent(It.IsAny<decimal>(), It.IsAny<decimal>(), It.IsAny<ShipmentTypeCode>(), It.IsAny<string>())).Throws(new TangoException());
 
-            Assert.AreEqual(balance, testObject.Value);
+            Assert.Equal(balance, testObject.Value);
         }
     }
 }

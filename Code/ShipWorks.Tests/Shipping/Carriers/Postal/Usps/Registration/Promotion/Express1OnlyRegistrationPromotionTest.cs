@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration.Promotion
         {
             string promo = testObject.GetPromoCode();
 
-            Assert.AreEqual("ShipWorks7", promo);
+            Assert.Equal("ShipWorks7", promo);
         }
     }
 }

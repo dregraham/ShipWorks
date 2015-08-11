@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Stores.PayPal
             PayPalException exception = new PayPalException(response);
             
             // ensure there are 3 errors
-            Assert.AreEqual(3, exception.Errors.Count);
+            Assert.Equal(3, exception.Errors.Count);
 
             PayPalException exceptionCopy = null;
 
@@ -39,13 +39,13 @@ namespace ShipWorks.Tests.Stores.PayPal
             }
 
             // check equality
-            Assert.IsNotNull(exceptionCopy);
-            Assert.AreEqual(3, exceptionCopy.Errors.Count);
+            Assert.NotNull(exceptionCopy);
+            Assert.Equal(3, exceptionCopy.Errors.Count);
 
             for (int x = 0; x < exception.Errors.Count; x++)
             {
-                Assert.AreEqual(exception.Errors[x].Code, exceptionCopy.Errors[x].Code);
-                Assert.AreEqual(exception.Errors[x].Message, exceptionCopy.Errors[x].Message);
+                Assert.Equal(exception.Errors[x].Code, exceptionCopy.Errors[x].Code);
+                Assert.Equal(exception.Errors[x].Message, exceptionCopy.Errors[x].Message);
             }
         }
     }

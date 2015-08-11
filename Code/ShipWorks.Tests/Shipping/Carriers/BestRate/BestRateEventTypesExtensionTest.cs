@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None;
 
-            Assert.AreEqual(BestRateEventTypes.None, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.None, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.RatesCompared;
 
-            Assert.AreEqual(BestRateEventTypes.RatesCompared, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RatesCompared, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared;
 
-            Assert.AreEqual(BestRateEventTypes.RatesCompared, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RatesCompared, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.RateSelected;
 
-            Assert.AreEqual(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None |BestRateEventTypes.RateSelected;
 
-            Assert.AreEqual(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected;
 
-            Assert.AreEqual(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateSelected, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.RateAutoSelectedAndProcessed;
 
-            Assert.AreEqual(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
-            Assert.AreEqual(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
-            Assert.AreEqual(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RateSelected | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
-            Assert.AreEqual(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = BestRateEventTypes.None | BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected | BestRateEventTypes.RateAutoSelectedAndProcessed;
 
-            Assert.AreEqual(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
+            Assert.Equal(BestRateEventTypes.RateAutoSelectedAndProcessed, testObject.GetLatestBestRateEvent());
         }
     }
 }

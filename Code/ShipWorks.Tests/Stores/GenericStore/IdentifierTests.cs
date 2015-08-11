@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Stores.osCommerce
 
             StoreType storeType = StoreTypeManager.GetType(oscStore);
 
-            Assert.AreEqual(identifier, storeType.LicenseIdentifier);
+            Assert.Equal(identifier, storeType.LicenseIdentifier);
         }
 
         [Fact]

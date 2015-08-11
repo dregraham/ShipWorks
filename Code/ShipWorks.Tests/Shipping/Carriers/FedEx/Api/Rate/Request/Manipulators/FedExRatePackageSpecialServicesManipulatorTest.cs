@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initiliaze()
+        public FedExRatePackageSpecialServicesManipulatorTest()
         {
             account = new FedExAccountEntity
             {
@@ -75,40 +74,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenNoSignature_AndPackageDeclaredValueGreaterThan500_Test()
         {
-            shipmentEntity.FedEx.Signature = (int) FedExSignatureType.NoSignature;
+            shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
             shipmentEntity.FedEx.Packages[1].DeclaredValue = 500.01M;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -118,17 +113,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.RequestedPackageLineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail == null));
+            Assert.True(nativeRequest.RequestedShipment.RequestedPackageLineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail == null));
         }
 
         [Fact]
         public void Manipulate_SignatureOptionIsNotNull_WhenNotUsingServiceDefaultSignature_Test()
         {
-            shipmentEntity.FedEx.Signature = (int) FedExSignatureType.NoSignature;
+            shipmentEntity.FedEx.Signature = (int)FedExSignatureType.NoSignature;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.RequestedPackageLineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail != null));
+            Assert.True(nativeRequest.RequestedShipment.RequestedPackageLineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail != null));
         }
 
         [Fact]
@@ -139,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.INDIRECT));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.INDIRECT));
         }
 
         [Fact]
@@ -150,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.DIRECT));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.DIRECT));
         }
 
         [Fact]
@@ -161,7 +156,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.ADULT));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.ADULT));
         }
 
         [Fact]
@@ -172,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.NO_SIGNATURE_REQUIRED));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.OptionType == SignatureOptionType.NO_SIGNATURE_REQUIRED));
         }
 
         [Fact]
@@ -183,7 +178,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.SignatureReleaseNumber == account.SignatureRelease));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SignatureOptionDetail.SignatureReleaseNumber == account.SignatureRelease));
         }
 
         [Fact]
@@ -194,19 +189,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.SIGNATURE_OPTION)));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.SIGNATURE_OPTION)));
         }
 
         [Fact]
         public void Manipulate_SpecialServicesContainsNonStandardContainer_WhenShipmentIsHomeDelivery_AndNonStandardContainer_Test()
         {
             shipmentEntity.FedEx.NonStandardContainer = true;
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
 
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
         }
 
         [Fact]
@@ -218,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.IsTrue(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
+            Assert.True(lineItems.All(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
         }
 
         [Fact]
@@ -230,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
+            Assert.Equal(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
         }
 
         [Fact]
@@ -242,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
+            Assert.Equal(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
         }
 
         [Fact]
@@ -254,7 +249,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
+            Assert.Equal(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.NON_STANDARD_CONTAINER)));
         }
 
         [Fact]
@@ -266,7 +261,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(1, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
+            Assert.Equal(1, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
         }
 
         [Fact]
@@ -280,7 +275,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(shipmentEntity.FedEx.Packages.Count, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
+            Assert.Equal(shipmentEntity.FedEx.Packages.Count, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
         }
 
         [Fact]
@@ -294,7 +289,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             RequestedPackageLineItem[] lineItems = nativeRequest.RequestedShipment.RequestedPackageLineItems;
-            Assert.AreEqual(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
+            Assert.Equal(0, lineItems.Count(i => i.SpecialServicesRequested.SpecialServiceTypes.Contains(PackageSpecialServiceType.ALCOHOL)));
         }
     }
 }

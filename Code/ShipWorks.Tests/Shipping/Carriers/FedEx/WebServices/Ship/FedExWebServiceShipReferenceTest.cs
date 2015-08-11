@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
         private Type contactType;
         private Type addressType;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExWebServiceShipReferenceTest()
         {
             contactType = typeof(Contact);
             addressType = typeof(Address);
@@ -129,8 +128,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.Ship
 
             XmlElementAttribute[] xmlElementAttributes = (XmlElementAttribute[])propertyInfo.GetCustomAttributes(typeof(XmlElementAttribute), false);
 
-            Assert.AreEqual(1, xmlElementAttributes.Length, "XmlElementAttribute Expected in FedEx Webservices Ship " + type.Name + " " + propertyName);
-            Assert.AreEqual(orderValue, xmlElementAttributes[0].Order, "XmlElementAttribute Order in FedEx Webservices Ship " + type.Name + " " + propertyName + " is expected to be " + orderValue);
+            Assert.Equal(1, xmlElementAttributes.Length);
+            Assert.Equal(orderValue, xmlElementAttributes[0].Order);
         }
     }
 }

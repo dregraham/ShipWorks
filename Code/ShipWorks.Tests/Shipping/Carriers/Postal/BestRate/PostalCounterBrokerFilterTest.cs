@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
             var testObject = new PostalCounterBrokerFilter();
             var results = testObject.Filter(brokers);
 
-            Assert.AreEqual(testBroker1, results.Single());
+            Assert.Equal(testBroker1, results.Single());
         }
 
         [Fact]
@@ -39,8 +39,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.BestRate
             var testObject = new PostalCounterBrokerFilter();
             var results = testObject.Filter(brokers);
 
-            Assert.AreEqual(testBroker1, results.First());
-            Assert.AreEqual(testBroker2, results.Last());
+            Assert.Equal(testBroker1, results.First());
+            Assert.Equal(testBroker2, results.Last());
         }
     }
 }

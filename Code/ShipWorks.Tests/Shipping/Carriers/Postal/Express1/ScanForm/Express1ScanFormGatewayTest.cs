@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
         private Express1EndiciaScanFormGateway testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1ScanFormGatewayTest()
         {
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new EndiciaAccountEntity());
@@ -27,27 +26,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
         [Fact]
-        [ExpectedException(typeof(Express1EndiciaException))]
         public void CreateScanForms_ThrowsExpress1Exception_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
 
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
-        }
-        
-        [Fact]
-        [ExpectedException(typeof(Express1EndiciaException))]
-        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsNull_Test()
-        {
-            testObject.CreateScanForms(scanFormBatch, null);
+            Assert.Throws<Express1EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
         [Fact]
-        [ExpectedException(typeof(Express1EndiciaException))]
+        public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsNull_Test()
+        {
+            Assert.Throws<Express1EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, null));
+        }
+
+        [Fact]
         public void CreateScanForms_ThrowsExpress1Exception_WhenShipmentsIsEmpty_Test()
         {
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
+            Assert.Throws<Express1EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
         // Can't effectively unit test the rest of this class since it is calling into 

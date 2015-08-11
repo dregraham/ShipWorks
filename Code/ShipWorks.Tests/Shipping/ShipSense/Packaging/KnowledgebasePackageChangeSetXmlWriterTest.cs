@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
         private List<KnowledgebasePackage> afterPackages;
         private XElement changeSetElement;
 
-        [TestInitialize]
-        public void Initialize()
+        public KnowledgebasePackageChangeSetXmlWriterTest()
         {
             beforePackages = new List<KnowledgebasePackage>
             {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(1, changeSetElement.Descendants("Packages").Count());
+            Assert.Equal(1, changeSetElement.Descendants("Packages").Count());
         }
 
         [Fact]
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(1, changeSetElement.Descendants("Packages").Descendants("Before").Count());
+            Assert.Equal(1, changeSetElement.Descendants("Packages").Descendants("Before").Count());
         }
         
         [Fact]
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(beforePackages.Count, changeSetElement.Descendants("Packages").Descendants("Before").Descendants("Package").Count());
+            Assert.Equal(beforePackages.Count, changeSetElement.Descendants("Packages").Descendants("Before").Descendants("Package").Count());
         }
 
         [Fact]
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].Weight.ToString(), packageElement.Descendants("Weight").First().Value);
+                Assert.Equal(beforePackages[i].Weight.ToString(), packageElement.Descendants("Weight").First().Value);
             }
         }
 
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].Height.ToString(), packageElement.Descendants("Height").First().Value);
+                Assert.Equal(beforePackages[i].Height.ToString(), packageElement.Descendants("Height").First().Value);
             }
         }
 
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].Width.ToString(), packageElement.Descendants("Width").First().Value);
+                Assert.Equal(beforePackages[i].Width.ToString(), packageElement.Descendants("Width").First().Value);
             }
         }
 
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].Length.ToString(), packageElement.Descendants("Length").First().Value);
+                Assert.Equal(beforePackages[i].Length.ToString(), packageElement.Descendants("Length").First().Value);
             }
         }
 
@@ -130,7 +129,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].AdditionalWeight.ToString(), packageElement.Descendants("AdditionalWeight").First().Value);
+                Assert.Equal(beforePackages[i].AdditionalWeight.ToString(), packageElement.Descendants("AdditionalWeight").First().Value);
             }
         }
 
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(beforePackages[i].ApplyAdditionalWeight.ToString().ToLower(), packageElement.Descendants("ApplyAdditionalWeight").First().Value);
+                Assert.Equal(beforePackages[i].ApplyAdditionalWeight.ToString().ToLower(), packageElement.Descendants("ApplyAdditionalWeight").First().Value);
             }
         }
 
@@ -158,7 +157,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < beforePackages.Count; i++)
             {
                 XElement packageElement = beforePackageElements[i];
-                Assert.AreEqual(0, packageElement.Descendants("Hash").Count());
+                Assert.Equal(0, packageElement.Descendants("Hash").Count());
             }
         }
 
@@ -168,7 +167,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(1, changeSetElement.Descendants("Packages").Descendants("After").Count());
+            Assert.Equal(1, changeSetElement.Descendants("Packages").Descendants("After").Count());
         }
 
         [Fact]
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             testObject = new KnowledgebasePackageChangeSetXmlWriter(beforePackages, afterPackages);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(afterPackages.Count, changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").Count());
+            Assert.Equal(afterPackages.Count, changeSetElement.Descendants("Packages").Descendants("After").Descendants("Package").Count());
         }
 
         [Fact]
@@ -190,7 +189,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].Weight.ToString(), packageElement.Descendants("Weight").First().Value);
+                Assert.Equal(afterPackages[i].Weight.ToString(), packageElement.Descendants("Weight").First().Value);
             }
         }
 
@@ -204,7 +203,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].Height.ToString(), packageElement.Descendants("Height").First().Value);
+                Assert.Equal(afterPackages[i].Height.ToString(), packageElement.Descendants("Height").First().Value);
             }
         }
 
@@ -218,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].Width.ToString(), packageElement.Descendants("Width").First().Value);
+                Assert.Equal(afterPackages[i].Width.ToString(), packageElement.Descendants("Width").First().Value);
             }
         }
 
@@ -232,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].Length.ToString(), packageElement.Descendants("Length").First().Value);
+                Assert.Equal(afterPackages[i].Length.ToString(), packageElement.Descendants("Length").First().Value);
             }
         }
 
@@ -246,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].AdditionalWeight.ToString(), packageElement.Descendants("AdditionalWeight").First().Value);
+                Assert.Equal(afterPackages[i].AdditionalWeight.ToString(), packageElement.Descendants("AdditionalWeight").First().Value);
             }
         }
 
@@ -260,7 +259,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(afterPackages[i].ApplyAdditionalWeight.ToString().ToLower(), packageElement.Descendants("ApplyAdditionalWeight").First().Value);
+                Assert.Equal(afterPackages[i].ApplyAdditionalWeight.ToString().ToLower(), packageElement.Descendants("ApplyAdditionalWeight").First().Value);
             }
         }
 
@@ -274,7 +273,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Packaging
             for (int i = 0; i < afterPackages.Count; i++)
             {
                 XElement packageElement = afterPackageElements[i];
-                Assert.AreEqual(0, packageElement.Descendants("Hash").Count());
+                Assert.Equal(0, packageElement.Descendants("Hash").Count());
             }
         }
     }

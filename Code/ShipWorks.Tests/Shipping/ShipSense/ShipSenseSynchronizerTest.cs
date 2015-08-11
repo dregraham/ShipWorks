@@ -24,8 +24,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         private ShippingSettingsEntity shippingSettings;
         private List<ShipmentEntity> shipments;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShipSenseSynchronizerTest()
         {
             // Setup the hash to just return a pipe-delimited list of the keys
             hashingStrategy = new Mock<IKnowledgebaseHash>();
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
         {
             // Already constructed the testObject in the initializer, so just 
             // inspect it
-            Assert.AreEqual(6, testObject.MonitoredShipments.Count());
+            Assert.Equal(6, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -104,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             // Already constructed the testObject in the initializer, so just 
             // inspect it. Based on the shipments and mocks, there should be 
             // two entries
-            Assert.AreEqual(2, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(2, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -115,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount + 1, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount + 1, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -131,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(addedShipments);
 
-            Assert.AreEqual(originalCount + 2, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount + 2, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -146,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount + 1, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(originalCount + 1, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -159,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(originalCount, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -174,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount + 1, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(originalCount + 1, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -188,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(originalCount, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -202,7 +201,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(shipment);
 
-            Assert.AreEqual(originalCount, testObject.KnowledgebaseEntries.Count());
+            Assert.Equal(originalCount, testObject.KnowledgebaseEntries.Count());
         }
 
         [Fact]
@@ -221,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(addedShipments);
 
-            Assert.AreEqual(originalCount, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -234,7 +233,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.Add(null as ShipmentEntity);
 
-            Assert.AreEqual(originalCount, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount, testObject.MonitoredShipments.Count());
         }
         
         [Fact]
@@ -246,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             ShipmentEntity shipment = shipments[2];
             testObject.Remove(shipment);
 
-            Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount - 1, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -259,7 +258,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipments[0]);
 
-            Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount - 1, testObject.MonitoredShipments.Count());
         }
 
         [Fact]
@@ -272,7 +271,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipments[0]);
 
-            Assert.AreEqual(originalCount - 1, testObject.MonitoredShipments.Count());
+            Assert.Equal(originalCount - 1, testObject.MonitoredShipments.Count());
         }
         
         [Fact]
@@ -285,7 +284,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -298,7 +297,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.NotApplied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -312,7 +311,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -326,7 +325,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Overwritten, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -344,7 +343,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -362,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(shipment);
 
-            Assert.AreEqual((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Applied, shipment.ShipSenseStatus);
         }
 
         [Fact]
@@ -385,7 +384,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             for (int i = 1; i < shipments.Count; i++)
             {
                 ShipmentType shipmentType = ShipmentTypeManager.GetType(shipments[i]);
-                Assert.IsFalse(entry.Matches(shipments[i]));
+                Assert.False(entry.Matches(shipments[i]));
             }
         }
 
@@ -410,9 +409,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.IsTrue(entry.Matches(shipments[2]));
-            Assert.IsTrue(entry.Matches(shipments[4]));
-            Assert.IsTrue(entry.Matches(shipments[5]));
+            Assert.True(entry.Matches(shipments[2]));
+            Assert.True(entry.Matches(shipments[4]));
+            Assert.True(entry.Matches(shipments[5]));
         }
 
         [Fact]
@@ -442,9 +441,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.AreEqual(shipment.ShipSenseStatus, shipments[2].ShipSenseStatus);
-            Assert.AreEqual(shipment.ShipSenseStatus, shipments[4].ShipSenseStatus);
-            Assert.AreEqual(shipment.ShipSenseStatus, shipments[5].ShipSenseStatus);
+            Assert.Equal(shipment.ShipSenseStatus, shipments[2].ShipSenseStatus);
+            Assert.Equal(shipment.ShipSenseStatus, shipments[4].ShipSenseStatus);
+            Assert.Equal(shipment.ShipSenseStatus, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -470,9 +469,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[2].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[4].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.Applied, shipments[5].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Applied, shipments[2].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Applied, shipments[4].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Applied, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -497,9 +496,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[2].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[4].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.Overwritten, shipments[5].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[2].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[4].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.Overwritten, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -524,9 +523,9 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             testObject.SynchronizeWith(shipment);
 
             // Shipments 2, 4, and 5 should match based on the initialization
-            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[2].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[4].ShipSenseStatus);
-            Assert.AreEqual((int)ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[2].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[4].ShipSenseStatus);
+            Assert.Equal((int)ShipSenseStatus.NotApplied, shipments[5].ShipSenseStatus);
         }
 
         [Fact]
@@ -551,10 +550,10 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(multiPackageShipment);
 
-            Assert.IsFalse(multiPackageEntry.Matches(shipments[0]));
-            Assert.IsFalse(multiPackageEntry.Matches(shipments[2]));
-            Assert.IsFalse(multiPackageEntry.Matches(shipments[3]));
-            Assert.IsFalse(multiPackageEntry.Matches(shipments[5]));
+            Assert.False(multiPackageEntry.Matches(shipments[0]));
+            Assert.False(multiPackageEntry.Matches(shipments[2]));
+            Assert.False(multiPackageEntry.Matches(shipments[3]));
+            Assert.False(multiPackageEntry.Matches(shipments[5]));
         }
 
         [Fact]
@@ -579,7 +578,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
 
             testObject.SynchronizeWith(multiPackageShipment);
 
-            Assert.IsTrue(multiPackageEntry.Matches(shipments[4]));
+            Assert.True(multiPackageEntry.Matches(shipments[4]));
         }
 
         [Fact]
@@ -609,7 +608,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             
             testObject.SynchronizeWith(multiPackageShipment);
 
-            Assert.IsFalse(multiPackageEntry.Matches(shipments[4]));
+            Assert.False(multiPackageEntry.Matches(shipments[4]));
         }
 
         [Fact]
@@ -623,7 +622,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense
             }
             catch (KeyNotFoundException)
             {
-                Assert.Fail("Should not have thrown KeyNotFoundException");
+                Assert.False(true, "Should not have thrown KeyNotFoundException");
             }
         }
         

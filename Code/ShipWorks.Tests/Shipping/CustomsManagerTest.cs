@@ -12,8 +12,7 @@ namespace ShipWorks.Tests.Shipping
     {
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public CustomsManagerTest()
         {
             shipment = new ShipmentEntity
             {
@@ -30,49 +29,49 @@ namespace ShipWorks.Tests.Shipping
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUnitedStates_Test()
         //{
-        //    Assert.IsFalse(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.False(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUSTerritory96910_Test()
         //{
         //    shipment.ShipPostalCode = "96910";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUSTerritory96950_Test()
         //{
         //    shipment.ShipPostalCode = "96950";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUSTerritory96960_Test()
         //{
         //    shipment.ShipPostalCode = "96960";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUSTerritory96970_Test()
         //{
         //    shipment.ShipPostalCode = "96970";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToUSTerritory96799_Test()
         //{
         //    shipment.ShipPostalCode = "96799";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToMilitaryState_Test()
         //{
         //    shipment.ShipStateProvCode = "AA";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -81,14 +80,14 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipStateProvCode = "AA";
         //    shipment.ShipmentType = (int) ShipmentTypeCode.Endicia;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
         //public void IsCustomsRequiredByShipment_FromUnitedStatesToNonUSCountry_Test()
         //{
         //    shipment.ShipCountryCode = "CA";
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "GU";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "PR";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
 
-        //    Assert.IsFalse(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.False(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
 
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "PR";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "CA";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
-        //    Assert.IsFalse(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.False(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -139,7 +138,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "CA";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
 
-        //    Assert.IsFalse(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.False(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -150,7 +149,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "PR";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.Endicia;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
 
@@ -162,7 +161,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "CA";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -172,7 +171,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "CA";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
 
         //[Fact]
@@ -185,7 +184,7 @@ namespace ShipWorks.Tests.Shipping
         //    shipment.ShipCountryCode = "CA";
         //    shipment.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
-        //    Assert.IsTrue(CustomsManager.IsCustomsRequiredByShipment(shipment));
+        //    Assert.True(CustomsManager.IsCustomsRequiredByShipment(shipment));
         //}
     }
 }

@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
 
             if (firstServiceStatus == null)
             {
-                Assert.Fail("Could not retrieve a service status");
+                Assert.False(true, "Could not retrieve a service status");
             }
 
             // Imitate something else modifying the service status without refetching it

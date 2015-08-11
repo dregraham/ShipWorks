@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = new BestRateEventsDescription(BestRateEventTypes.None);
 
-            Assert.AreEqual(EnumHelper.GetDescription(BestRateEventTypes.None), testObject.ToString());
+            Assert.Equal(EnumHelper.GetDescription(BestRateEventTypes.None), testObject.ToString());
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             testObject = new BestRateEventsDescription(BestRateEventTypes.None | BestRateEventTypes.RatesCompared);
 
-            Assert.AreEqual(EnumHelper.GetDescription(BestRateEventTypes.RatesCompared), testObject.ToString());
+            Assert.Equal(EnumHelper.GetDescription(BestRateEventTypes.RatesCompared), testObject.ToString());
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             testObject = new BestRateEventsDescription(BestRateEventTypes.RatesCompared | BestRateEventTypes.RateSelected);
 
             string expected = string.Format("{0}, {1}", EnumHelper.GetDescription(BestRateEventTypes.RatesCompared), EnumHelper.GetDescription(BestRateEventTypes.RateSelected));
-            Assert.AreEqual(expected, testObject.ToString());
+            Assert.Equal(expected, testObject.ToString());
         }
     }
 }

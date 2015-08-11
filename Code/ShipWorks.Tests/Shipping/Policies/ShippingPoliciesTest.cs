@@ -72,8 +72,7 @@ namespace ShipWorks.Tests.Shipping.Policies
                 {ShipmentTypeCode.Usps, LoadElements(uspsFeatureXml)}
             };
 
-        [TestInitialize]
-        public void Setup()
+        public ShippingPoliciesTest()
         {
             mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
             policyFactoryMock = mockRepository.Create<IShippingPolicyFactory>();
@@ -155,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             policies = ShippingPolicies.Current;
             ShippingPolicies.Load(0, new List<KeyValuePair<ShipmentTypeCode, IEnumerable<XElement>>>());
-            Assert.AreNotSame(policies, ShippingPolicies.Current);
+            Assert.NotSame(policies, ShippingPolicies.Current);
         }
 
         [Fact]
@@ -258,7 +257,7 @@ namespace ShipWorks.Tests.Shipping.Policies
 
             ShippingPolicies.Unload(1);
 
-            Assert.AreSame(currentPolicies, ShippingPolicies.Current);
+            Assert.Same(currentPolicies, ShippingPolicies.Current);
         }
 
         private List<Mock<IShippingPolicy>> CreateAndRegisterFactoryMocks(string key, int count)

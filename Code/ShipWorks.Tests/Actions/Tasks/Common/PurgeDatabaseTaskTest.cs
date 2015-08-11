@@ -114,11 +114,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            Assert.AreEqual(labelScript, calledPurges[0]);
-            Assert.AreEqual(printResultScript, calledPurges[1]);
-            Assert.AreEqual(emailScript, calledPurges[2]);
-            Assert.AreEqual(auditScript, calledPurges[3]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[4]);
+            Assert.Equal(labelScript, calledPurges[0]);
+            Assert.Equal(printResultScript, calledPurges[1]);
+            Assert.Equal(emailScript, calledPurges[2]);
+            Assert.Equal(auditScript, calledPurges[3]);
+            Assert.Equal(abandonedResourcesScript, calledPurges[4]);
         }
 
         [Fact]
@@ -137,9 +137,9 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            Assert.AreEqual(printResultScript, calledPurges[0]);
-            Assert.AreEqual(auditScript, calledPurges[1]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[2]);
+            Assert.Equal(printResultScript, calledPurges[0]);
+            Assert.Equal(auditScript, calledPurges[1]);
+            Assert.Equal(abandonedResourcesScript, calledPurges[2]);
         }
 
         [Fact]
@@ -204,13 +204,13 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             try
             {
                 testObject.Run(null, null);
-                Assert.Fail("ActionTaskRunException should have been thrown.");
+                Assert.False(true, "ActionTaskRunException should have been thrown.");
             }
             catch (ActionTaskRunException ex)
             {
                 // Ensure a successful test since the correct exception was thrown.
-                Assert.IsInstanceOfType(ex.InnerException, typeof(ExceptionCollection));
-                Assert.IsInstanceOfType(((ExceptionCollection)ex.InnerException).Exceptions[0], typeof(DbException));
+                Assert.IsAssignableFrom<ExceptionCollection>(ex.InnerException);
+                Assert.IsAssignableFrom<DbException>(((ExceptionCollection)ex.InnerException).Exceptions[0]);
             }
         }
 
@@ -260,11 +260,11 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             }
             catch (ActionTaskRunException ex)
             {
-                Assert.IsTrue(ex.Message.ToLower().Contains("label"));
-                Assert.IsTrue(ex.Message.ToLower().Contains("email"));
-                Assert.IsInstanceOfType(ex.InnerException, typeof (ExceptionCollection));
+                Assert.True(ex.Message.ToLower().Contains("label"));
+                Assert.True(ex.Message.ToLower().Contains("email"));
+                Assert.IsAssignableFrom<ExceptionCollection>(ex.InnerException);
                 ExceptionCollection exceptions = (ExceptionCollection) ex.InnerException;
-                Assert.AreEqual(2, exceptions.Exceptions.OfType<DbException>().Count());
+                Assert.Equal(2, exceptions.Exceptions.OfType<DbException>().Count());
             }
         }
 
@@ -285,12 +285,12 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             PurgeDatabaseTask testObject = new PurgeDatabaseTask();
             testObject.Initialize(serializedObject);
             
-            Assert.AreEqual(true, testObject.CanTimeout);
-            Assert.AreEqual(8, testObject.TimeoutInHours);
-            Assert.AreEqual(19, testObject.RetentionPeriodInDays);
-            Assert.AreEqual(2, testObject.Purges.Count);
-            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Audit));
-            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Email));
+            Assert.Equal(true, testObject.CanTimeout);
+            Assert.Equal(8, testObject.TimeoutInHours);
+            Assert.Equal(19, testObject.RetentionPeriodInDays);
+            Assert.Equal(2, testObject.Purges.Count);
+            Assert.True(testObject.Purges.Contains(PurgeDatabaseType.Audit));
+            Assert.True(testObject.Purges.Contains(PurgeDatabaseType.Email));
         }
 
         [Fact]

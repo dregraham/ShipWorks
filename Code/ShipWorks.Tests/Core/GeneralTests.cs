@@ -25,8 +25,7 @@ namespace ShipWorks.Tests.Core
 {
     public class GeneralTests
     {
-        [Fact]
-        [Ignore]
+        
         public void DropAssemblies()
         {
             SqlConnectionStringBuilder cs = new SqlConnectionStringBuilder();
@@ -46,8 +45,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [Fact]
-        [Ignore]
+        
         public void DeployAssemblies()
         {
             SqlConnectionStringBuilder cs = new SqlConnectionStringBuilder();

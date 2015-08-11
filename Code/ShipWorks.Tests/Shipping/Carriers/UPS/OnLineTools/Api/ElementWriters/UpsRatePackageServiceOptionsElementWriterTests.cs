@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         UpsPackageEntity package;
         UpsServicePackageTypeSetting packageSetting;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsRatePackageServiceOptionsElementWriterTests()
         {
             shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
             package = shipment.Packages.AddNew();
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, dryIces.Count);
+            Assert.Equal(0, dryIces.Count);
         }
     }
 }

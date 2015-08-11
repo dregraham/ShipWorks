@@ -11,8 +11,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
         Mock<IScheduler> scheduler;
         FakeShipWorksSchedulerService target;
 
-        [TestInitialize]
-        public void Initialize()
+        public ShipWorksSchedulerServiceTests()
         {
             scheduler = new Mock<IScheduler>();
             target = new FakeShipWorksSchedulerService(scheduler.Object);
@@ -23,7 +22,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
         {
             // This test is no longer working due to not able to get a SW InstanceID...
             // So ignoring for now.
-            Assert.IsTrue(target.CanStop);
+            Assert.True(target.CanStop);
         }
     }
 }

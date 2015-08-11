@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Actions
             testObject = new ComputerActionPolicy("1001");
 
             string csv = testObject.ToCsv();
-            Assert.AreEqual("1001", csv);
+            Assert.Equal("1001", csv);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Actions
             testObject = new ComputerActionPolicy(computerIDs);
 
             string csv = testObject.ToCsv();
-            Assert.AreEqual("1001, 2001, 3001, 4001", csv);
+            Assert.Equal("1001, 2001, 3001, 4001", csv);
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace ShipWorks.Tests.Actions
 
             testObject = new ComputerActionPolicy(computerIDs);
 
-            Assert.IsFalse(testObject.IsComputerAllowed(new ComputerEntity(5001)));
+            Assert.False(testObject.IsComputerAllowed(new ComputerEntity(5001)));
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace ShipWorks.Tests.Actions
 
             testObject = new ComputerActionPolicy(computerIDs);
 
-            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(3001)));
+            Assert.True(testObject.IsComputerAllowed(new ComputerEntity(3001)));
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Actions
 
             testObject = new ComputerActionPolicy(computerIDs);
 
-            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(1001)));
+            Assert.True(testObject.IsComputerAllowed(new ComputerEntity(1001)));
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.Actions
 
             testObject = new ComputerActionPolicy(computerIDs);
 
-            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(2001)));
+            Assert.True(testObject.IsComputerAllowed(new ComputerEntity(2001)));
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace ShipWorks.Tests.Actions
 
             testObject = new ComputerActionPolicy(computerIDs);
 
-            Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(1001)));
+            Assert.True(testObject.IsComputerAllowed(new ComputerEntity(1001)));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace ShipWorks.Tests.Actions
             for (int i = 0; i < 5; i++)
             {
                 long computerId = 1001 + 1000 * i;
-                Assert.IsTrue(testObject.IsComputerAllowed(new ComputerEntity(computerId)));
+                Assert.True(testObject.IsComputerAllowed(new ComputerEntity(computerId)));
             }
         }
     }

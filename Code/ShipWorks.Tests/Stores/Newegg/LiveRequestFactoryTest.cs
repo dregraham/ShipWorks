@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Stores.Newegg
     {
         private LiveRequestFactory testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public LiveRequestFactoryTest()
         {
             testObject = new LiveRequestFactory();
         }
@@ -28,14 +27,14 @@ namespace ShipWorks.Tests.Stores.Newegg
         public void CreateReportStatusRequest_ReturnsStatusRequest_Test()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            Assert.IsInstanceOfType(testObject.CreateReportStatusRequest(credentials), typeof(StatusRequest));
+            Assert.IsAssignableFrom<StatusRequest>(testObject.CreateReportStatusRequest(credentials));
         }
 
 
         [Fact]
         public void CreateCheckCredentialRequest_ReturnsCheckCredentialRequest_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateCheckCredentialRequest(), typeof(CheckCredentialsRequest));
+            Assert.IsAssignableFrom<CheckCredentialsRequest>(testObject.CreateCheckCredentialRequest());
         }
 
 
@@ -43,28 +42,28 @@ namespace ShipWorks.Tests.Stores.Newegg
         public void CreateDownloadOrderRequest_ReturnsOrdersRequest_Test()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            Assert.IsInstanceOfType(testObject.CreateDownloadOrderRequest(credentials), typeof(DownloadOrdersRequest));
+            Assert.IsAssignableFrom<DownloadOrdersRequest>(testObject.CreateDownloadOrderRequest(credentials));
         }
 
         [Fact]
         public void CreateCancelOrderRequest_ReturnsCancelOrdersRequest_Test()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            Assert.IsInstanceOfType(testObject.CreateCancelOrderRequest(credentials), typeof(CancelOrderRequest));
+            Assert.IsAssignableFrom<CancelOrderRequest>(testObject.CreateCancelOrderRequest(credentials));
         }
 
         [Fact]
         public void CreateShippingRequest_ReturnsShippingRequest_Test()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            Assert.IsInstanceOfType(testObject.CreateShippingRequest(credentials), typeof(ShippingRequest));
+            Assert.IsAssignableFrom<ShippingRequest>(testObject.CreateShippingRequest(credentials));
         }
 
         [Fact]
         public void CreateRemoveItemsRequest_ReturnsRemoveItemsRequest_Test()
         {
             Credentials credentials = new Credentials(string.Empty, string.Empty, NeweggChannelType.US);
-            Assert.IsInstanceOfType(testObject.CreateRemoveItemRequest(credentials), typeof(RemoveItemRequest));
+            Assert.IsAssignableFrom<RemoveItemRequest>(testObject.CreateRemoveItemRequest(credentials));
         }
     }
 }

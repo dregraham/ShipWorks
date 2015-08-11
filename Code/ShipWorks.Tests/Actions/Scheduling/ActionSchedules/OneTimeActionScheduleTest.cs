@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             DateTime topOfHour = utcNow.AddMinutes(60 - utcNow.Minute);
 
             // Make sure the time is between before the call and after the call.
-            Assert.AreEqual(topOfHour.Hour, testObject.StartDateTimeInUtc.Hour);
+            Assert.Equal(topOfHour.Hour, testObject.StartDateTimeInUtc.Hour);
         }
 
         [Fact]
@@ -32,24 +32,24 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 
             if (utcNow.Hour < 23)
             {
-                Assert.AreEqual(testObject.StartDateTimeInUtc.Hour, utcNow.Hour + 1);
+                Assert.Equal(testObject.StartDateTimeInUtc.Hour, utcNow.Hour + 1);
             }
             else
             {
-                Assert.AreEqual(0, testObject.StartDateTimeInUtc.Hour);
+                Assert.Equal(0, testObject.StartDateTimeInUtc.Hour);
             }
         }
 
         [Fact]
         public void StartDateTimeInUtc_MinuteIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Minute);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Minute);
         }
 
         [Fact]
         public void StartDateTimeInUtc_SecondIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Second);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Second);
         }
     }
 }

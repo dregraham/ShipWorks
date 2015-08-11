@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 3
             });
 
-            Assert.AreEqual("1, 3", formattedDays);
+            Assert.Equal("1, 3", formattedDays);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2
             });
 
-            Assert.AreEqual("1, 2", formattedDays);
+            Assert.Equal("1, 2", formattedDays);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2, 3
             });
 
-            Assert.AreEqual("1-3", formattedDays);
+            Assert.Equal("1-3", formattedDays);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2, 3, 5, 7, 10
             });
 
-            Assert.AreEqual("1-3, 5, 7, 10", formattedDays);
+            Assert.Equal("1-3, 5, 7, 10", formattedDays);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2, 3, 5, 6, 7
             });
 
-            Assert.AreEqual("1-3, 5-7", formattedDays);
+            Assert.Equal("1-3, 5-7", formattedDays);
         }
 
         [Fact]
@@ -72,7 +72,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2, 3, 5, 6, 7, 8, 9, 11, 12
             });
 
-            Assert.AreEqual("1-3, 5-9, 11, 12", formattedDays);
+            Assert.Equal("1-3, 5-9, 11, 12", formattedDays);
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 2, 3, 5, 6, 8, 9, 10
             });
 
-            Assert.AreEqual("1-3, 5, 6, 8-10", formattedDays);
+            Assert.Equal("1-3, 5, 6, 8-10", formattedDays);
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
                 1, 3, 4, 5, 6, 8, 9, 10, 20
             });
 
-            Assert.AreEqual("1, 3-6, 8-10, 20", formattedDays);
+            Assert.Equal("1, 3-6, 8-10, 20", formattedDays);
         }
     }
 }

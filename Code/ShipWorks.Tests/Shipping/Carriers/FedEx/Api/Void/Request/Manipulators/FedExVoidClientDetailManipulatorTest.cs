@@ -15,16 +15,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         private FedExVoidClientDetailManipulator testObject;
 
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        
+
         private Mock<CarrierRequest> voidCarrierRequest;
         private DeleteShipmentRequest nativeRequest;
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVoidClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity {AccountNumber = "12345", MeterNumber = "67890"};
+            account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
@@ -32,35 +31,32 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             nativeRequest = new DeleteShipmentRequest { ClientDetail = new ClientDetail() };
             voidCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             voidCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
-            
+
             testObject = new FedExVoidClientDetailManipulator(settingsRepository.Object);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             voidCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(voidCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(voidCarrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequest_AndIsNotVoidRequest_Test()
         {
             // Setup the native request to be an unexpected type
             voidCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new ShipmentReply());
 
-            testObject.Manipulate(voidCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(voidCarrierRequest.Object));
         }
 
         [Fact]
@@ -80,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(voidCarrierRequest.Object);
 
             ClientDetail detail = ((DeleteShipmentRequest)voidCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -90,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             testObject.Manipulate(voidCarrierRequest.Object);
 
             ClientDetail detail = ((DeleteShipmentRequest)voidCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
     }
 }

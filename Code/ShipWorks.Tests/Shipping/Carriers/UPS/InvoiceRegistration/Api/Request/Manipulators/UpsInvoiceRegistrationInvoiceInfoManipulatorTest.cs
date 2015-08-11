@@ -24,8 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
         private Mock<CarrierRequest> mockRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationInvoiceInfoManipulatorTest()
         {
             invoiceAuthorization = new UpsOltInvoiceAuthorizationData()
             {
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("USD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
+            Assert.Equal("USD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
         }
 
         [Fact]
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
             testObject.Manipulate(request);
 
-            Assert.AreEqual("CAD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
+            Assert.Equal("CAD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
         }
 
         [Fact]
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(invoiceAuthorization.InvoiceNumber, registerRequest.ShipperAccount.InvoiceInfo.InvoiceNumber);
+            Assert.Equal(invoiceAuthorization.InvoiceNumber, registerRequest.ShipperAccount.InvoiceInfo.InvoiceNumber);
         }
 
         [Fact]
@@ -86,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("20090927", registerRequest.ShipperAccount.InvoiceInfo.InvoiceDate);
+            Assert.Equal("20090927", registerRequest.ShipperAccount.InvoiceInfo.InvoiceDate);
         }
 
         [Fact]
@@ -94,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("42.42", registerRequest.ShipperAccount.InvoiceInfo.InvoiceAmount);
+            Assert.Equal("42.42", registerRequest.ShipperAccount.InvoiceInfo.InvoiceAmount);
         }
 
         [Fact]
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(invoiceAuthorization.ControlID, registerRequest.ShipperAccount.InvoiceInfo.ControlID);
+            Assert.Equal(invoiceAuthorization.ControlID, registerRequest.ShipperAccount.InvoiceInfo.ControlID);
         }
     }
 }

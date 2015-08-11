@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
     {
         private WorldShipShipmentType testObject;
 
-        [TestInitialize]
-        public void Intialize()
+        public WorldShipShipmentTypeTest()
         {
             testObject = new WorldShipShipmentType();
         }
@@ -25,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.WorldShip
         {
             IBestRateShippingBroker broker = testObject.GetShippingBroker(new ShipmentEntity());
 
-            Assert.IsInstanceOfType(broker, typeof(WorldShipBestRateBroker));
+            Assert.IsAssignableFrom<WorldShipBestRateBroker>(broker);
         }
     }
 }

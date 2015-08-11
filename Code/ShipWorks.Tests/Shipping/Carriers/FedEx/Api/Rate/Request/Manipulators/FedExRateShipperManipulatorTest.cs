@@ -14,13 +14,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
     public class FedExRateShipperManipulatorTest
     {
         private FedExRateShipperManipulator testObject;
-        
+
         private Mock<CarrierRequest> carrierRequest;
         private RateRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateShipperManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -35,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment, typeof(RequestedShipment));
+            Assert.IsAssignableFrom<RequestedShipment>(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -44,23 +43,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a Shipper back
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment.Shipper, typeof(Party));
+            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Shipper);
 
             // Make sure Address fields match
             string[] addressLines = nativeRequest.RequestedShipment.Shipper.Address.StreetLines;
-            
-            Assert.AreEqual(shipmentEntity.OriginStreet1, addressLines[0]);
+
+            Assert.Equal(shipmentEntity.OriginStreet1, addressLines[0]);
 
             if (addressLines.Length > 1)
             {
                 // Check address line 2
-                Assert.AreEqual(shipmentEntity.OriginStreet2, addressLines[1]);
+                Assert.Equal(shipmentEntity.OriginStreet2, addressLines[1]);
             }
 
             if (addressLines.Length > 2)
             {
                 // Check address line 3
-                Assert.AreEqual(shipmentEntity.OriginStreet3, addressLines[2]);
+                Assert.Equal(shipmentEntity.OriginStreet3, addressLines[2]);
             }
         }
 
@@ -70,13 +69,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a Shipper back
-            Assert.IsInstanceOfType(nativeRequest.RequestedShipment.Shipper, typeof(Party));
+            Assert.IsAssignableFrom<Party>(nativeRequest.RequestedShipment.Shipper);
 
             // Make sure Address fields match
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.City, shipmentEntity.OriginCity);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.CountryCode, shipmentEntity.OriginCountryCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.PostalCode, shipmentEntity.OriginPostalCode);
-            Assert.AreEqual(nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipmentEntity.OriginStateProvCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.City, shipmentEntity.OriginCity);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.CountryCode, shipmentEntity.OriginCountryCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.PostalCode, shipmentEntity.OriginPostalCode);
+            Assert.Equal(nativeRequest.RequestedShipment.Shipper.Address.StateOrProvinceCode, shipmentEntity.OriginStateProvCode);
         }
 
         [Fact]
@@ -86,17 +85,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.ResidentialSpecified);
         }
 
         [Fact]
         public void Manipulate_ShipperAddressResidentialFlagIsTrue_WhenResidentialTypeIsSpecified_Test()
         {
-            shipmentEntity.FedEx.OriginResidentialDetermination = (int) ResidentialDeterminationType.Residential;
+            shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.Residential;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -107,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -118,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.True(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
@@ -129,16 +128,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.Shipper.Address.Residential);
+            Assert.False(nativeRequest.RequestedShipment.Shipper.Address.Residential);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExAddressLookupTypeIsSpecified_Test()
         {
             shipmentEntity.FedEx.OriginResidentialDetermination = (int)ResidentialDeterminationType.FedExAddressLookup;
-            
-            testObject.Manipulate(carrierRequest.Object);
+
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
     }
 }

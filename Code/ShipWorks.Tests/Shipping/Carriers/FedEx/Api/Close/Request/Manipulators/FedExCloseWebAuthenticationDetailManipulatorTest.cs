@@ -23,14 +23,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         private Mock<CarrierRequest> smartPostCarrierRequest;
         private SmartPostCloseRequest nativeSmartPostRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCloseWebAuthenticationDetailManipulatorTest()
         {
             shippingSettings = new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" };
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetShippingSettings()).Returns(shippingSettings);
-         
+
             nativeGroundRequest = new GroundCloseRequest { WebAuthenticationDetail = new WebAuthenticationDetail() };
             groundCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeGroundRequest);
 
@@ -41,30 +40,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             groundCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(groundCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCarrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_AndNotSmartPostCloseReport_Test()
         {
             // Setup the native request to be an unexpected type
             groundCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseReply());
 
-            testObject.Manipulate(groundCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCarrierRequest.Object));
         }
 
         [Fact]
@@ -76,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((GroundCloseRequest)groundCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -86,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((GroundCloseRequest)groundCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
 
@@ -100,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((SmartPostCloseRequest)smartPostCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -110,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((SmartPostCloseRequest)smartPostCarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
 

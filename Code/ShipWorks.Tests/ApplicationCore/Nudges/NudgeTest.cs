@@ -28,10 +28,10 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             List<NudgeOptionButton> buttons = testObject.CreateButtons();
 
             // Kind of a cheap test for sort order, but we don't have access to the underlying nudge option's index
-            Assert.AreEqual("Zero", buttons[0].Text);
-            Assert.AreEqual("One", buttons[1].Text);
-            Assert.AreEqual("Two", buttons[2].Text);
-            Assert.AreEqual("A really long string for a button", buttons[3].Text);
+            Assert.Equal("Zero", buttons[0].Text);
+            Assert.Equal("One", buttons[1].Text);
+            Assert.Equal("Two", buttons[2].Text);
+            Assert.Equal("A really long string for a button", buttons[3].Text);
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.ApplicationCore.Nudges
             
             int maximumWidth = buttons.Max(b => b.Width);
             
-            Assert.IsTrue(buttons.All(b => b.Width == maximumWidth));
+            Assert.True(buttons.All(b => b.Width == maximumWidth));
         }
     }
 }

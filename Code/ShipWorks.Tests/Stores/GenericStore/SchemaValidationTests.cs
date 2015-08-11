@@ -27,12 +27,12 @@ namespace ShipWorks.Tests.Stores.GenericStore
         {
             using (Stream stream = Assembly.GetAssembly(typeof(GenericStoreWebClient)).GetManifestResourceStream(@"ShipWorks.Data.Import.Xml.Schema.ShipWorksModule.xsd"))
             {
-                Assert.IsNotNull(stream, "Unable to find the ShipWorks schema.");
+                Assert.NotNull(stream);
 
                 XmlSchema.Read(stream, (o, e) =>
                     {
                         // want to know about Errors and Warnings
-                        Assert.Fail(e.Message);
+                        Assert.False(true, e.Message);
                     });
             }
         }
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Stores.GenericStore
                 // Raise failure if needed
                 if (!((errors.Count > 0) ^ shouldValidate))
                 {
-                    Assert.Fail(string.Format("'{0}' {1} have validated but it {2}. {3}",
+                    Assert.False(true, string.Format("'{0}' {1} have validated but it {2}. {3}",
                                     resourceName,
                                     shouldValidate ? "should" : "should not",
                                     shouldValidate ? "didn't" : "did",

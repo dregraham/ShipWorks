@@ -12,11 +12,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
     {
         private ScanFormBatch scanFormBatch;
         private Mock<IScanFormCarrierAccount> carrierAccount;
-        
+
         private EndiciaScanFormGateway testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public EndiciaScanFormGatewayTest()
         {
             carrierAccount = new Mock<IScanFormCarrierAccount>();
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns(new EndiciaAccountEntity());
@@ -27,27 +26,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
         }
 
         [Fact]
-        [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenAccountEntityIsNull_Test()
         {
             // Setup the GetAccountEntity method to return a null value
             carrierAccount.Setup(c => c.GetAccountEntity()).Returns((IEntity2)null);
 
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
+            Assert.Throws<EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
         [Fact]
-        [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsNull_Test()
         {
-            testObject.CreateScanForms(scanFormBatch, null);
+            Assert.Throws<EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, null));
         }
 
         [Fact]
-        [ExpectedException(typeof(EndiciaException))]
         public void CreateScanForms_ThrowsEndiciaException_WhenShipmentsIsEmpty_Test()
         {
-            testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>());
+            Assert.Throws<EndiciaException>(() => testObject.CreateScanForms(scanFormBatch, new List<ShipmentEntity>()));
         }
 
         // Can't effectively unit test the rest of this class since it is calling into 

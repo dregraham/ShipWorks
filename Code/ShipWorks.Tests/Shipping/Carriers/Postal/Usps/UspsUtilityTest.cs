@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
     {
         PostalShipmentEntity postalShipment = new PostalShipmentEntity();
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsUtilityTest()
         {
             postalShipment.Memo1 = "memo1";
             postalShipment.Memo2 = "memo2";

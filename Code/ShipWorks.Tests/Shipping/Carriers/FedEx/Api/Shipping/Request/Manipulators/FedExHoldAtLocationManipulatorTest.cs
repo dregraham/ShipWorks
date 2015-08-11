@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExHoldAtLocationManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
+            Assert.Null(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
             testObject.Manipulate(carrierRequest.Object);
-            Assert.IsNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
+            Assert.Null(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail);
+            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail);
         }
 
         [Fact]
@@ -66,38 +65,38 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             HoldAtLocationDetail holdAtLocationDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail;
 
-            Assert.AreEqual(1, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count(t => t == ShipmentSpecialServiceType.HOLD_AT_LOCATION));
+            Assert.Equal(1, nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes.Count(t => t == ShipmentSpecialServiceType.HOLD_AT_LOCATION));
 
             // Check address values
-            Assert.AreEqual(shipmentEntity.FedEx.HoldCity, holdAtLocationDetail.LocationContactAndAddress.Address.City);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldCountryCode, holdAtLocationDetail.LocationContactAndAddress.Address.CountryCode);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldPostalCode, holdAtLocationDetail.LocationContactAndAddress.Address.PostalCode);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldResidential, holdAtLocationDetail.LocationContactAndAddress.Address.Residential);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldResidential.HasValue, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldStateOrProvinceCode, holdAtLocationDetail.LocationContactAndAddress.Address.StateOrProvinceCode);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldUrbanizationCode, holdAtLocationDetail.LocationContactAndAddress.Address.UrbanizationCode);
+            Assert.Equal(shipmentEntity.FedEx.HoldCity, holdAtLocationDetail.LocationContactAndAddress.Address.City);
+            Assert.Equal(shipmentEntity.FedEx.HoldCountryCode, holdAtLocationDetail.LocationContactAndAddress.Address.CountryCode);
+            Assert.Equal(shipmentEntity.FedEx.HoldPostalCode, holdAtLocationDetail.LocationContactAndAddress.Address.PostalCode);
+            Assert.Equal(shipmentEntity.FedEx.HoldResidential, holdAtLocationDetail.LocationContactAndAddress.Address.Residential);
+            Assert.Equal(shipmentEntity.FedEx.HoldResidential.HasValue, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
+            Assert.Equal(shipmentEntity.FedEx.HoldStateOrProvinceCode, holdAtLocationDetail.LocationContactAndAddress.Address.StateOrProvinceCode);
+            Assert.Equal(shipmentEntity.FedEx.HoldUrbanizationCode, holdAtLocationDetail.LocationContactAndAddress.Address.UrbanizationCode);
                                                  
             // Check each street line            
-            Assert.AreEqual(2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines.Length);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldStreet1, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[0]);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldStreet2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[1]);
+            Assert.Equal(2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines.Length);
+            Assert.Equal(shipmentEntity.FedEx.HoldStreet1, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[0]);
+            Assert.Equal(shipmentEntity.FedEx.HoldStreet2, holdAtLocationDetail.LocationContactAndAddress.Address.StreetLines[1]);
             
                                                  
             // Check contact values              
-            Assert.AreEqual(shipmentEntity.FedEx.HoldCompanyName, holdAtLocationDetail.LocationContactAndAddress.Contact.CompanyName);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldContactId, holdAtLocationDetail.LocationContactAndAddress.Contact.ContactId);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldEmailAddress, holdAtLocationDetail.LocationContactAndAddress.Contact.EMailAddress);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldFaxNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.FaxNumber);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldPagerNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.PagerNumber);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldPersonName, holdAtLocationDetail.LocationContactAndAddress.Contact.PersonName);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldPhoneExtension, holdAtLocationDetail.LocationContactAndAddress.Contact.PhoneExtension);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldPhoneNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.PhoneNumber);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldTitle, holdAtLocationDetail.LocationContactAndAddress.Contact.Title);
+            Assert.Equal(shipmentEntity.FedEx.HoldCompanyName, holdAtLocationDetail.LocationContactAndAddress.Contact.CompanyName);
+            Assert.Equal(shipmentEntity.FedEx.HoldContactId, holdAtLocationDetail.LocationContactAndAddress.Contact.ContactId);
+            Assert.Equal(shipmentEntity.FedEx.HoldEmailAddress, holdAtLocationDetail.LocationContactAndAddress.Contact.EMailAddress);
+            Assert.Equal(shipmentEntity.FedEx.HoldFaxNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.FaxNumber);
+            Assert.Equal(shipmentEntity.FedEx.HoldPagerNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.PagerNumber);
+            Assert.Equal(shipmentEntity.FedEx.HoldPersonName, holdAtLocationDetail.LocationContactAndAddress.Contact.PersonName);
+            Assert.Equal(shipmentEntity.FedEx.HoldPhoneExtension, holdAtLocationDetail.LocationContactAndAddress.Contact.PhoneExtension);
+            Assert.Equal(shipmentEntity.FedEx.HoldPhoneNumber, holdAtLocationDetail.LocationContactAndAddress.Contact.PhoneNumber);
+            Assert.Equal(shipmentEntity.FedEx.HoldTitle, holdAtLocationDetail.LocationContactAndAddress.Contact.Title);
 
             // Check location type and phone number
-            Assert.AreEqual(shipmentEntity.FedEx.HoldLocationType, (int)holdAtLocationDetail.LocationType);
-            Assert.AreEqual(shipmentEntity.FedEx.HoldLocationType.HasValue, holdAtLocationDetail.LocationTypeSpecified);
-            Assert.AreEqual(shipmentEntity.ShipPhone, holdAtLocationDetail.PhoneNumber);
+            Assert.Equal(shipmentEntity.FedEx.HoldLocationType, (int)holdAtLocationDetail.LocationType);
+            Assert.Equal(shipmentEntity.FedEx.HoldLocationType.HasValue, holdAtLocationDetail.LocationTypeSpecified);
+            Assert.Equal(shipmentEntity.ShipPhone, holdAtLocationDetail.PhoneNumber);
         }
 
         [Fact]
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             HoldAtLocationDetail holdAtLocationDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail;
 
-            Assert.AreEqual(false, holdAtLocationDetail.LocationTypeSpecified);
+            Assert.Equal(false, holdAtLocationDetail.LocationTypeSpecified);
         }
 
         [Fact]
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             HoldAtLocationDetail holdAtLocationDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail;
 
-            Assert.AreEqual(true, holdAtLocationDetail.LocationTypeSpecified);
+            Assert.Equal(true, holdAtLocationDetail.LocationTypeSpecified);
         }
 
         [Fact]
@@ -143,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             HoldAtLocationDetail holdAtLocationDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail;
 
-            Assert.AreEqual(false, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
+            Assert.Equal(false, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
         }
 
         [Fact]
@@ -156,7 +155,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             HoldAtLocationDetail holdAtLocationDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.HoldAtLocationDetail;
 
-            Assert.AreEqual(true, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
+            Assert.Equal(true, holdAtLocationDetail.LocationContactAndAddress.Address.ResidentialSpecified);
         }
 
         /// <summary>

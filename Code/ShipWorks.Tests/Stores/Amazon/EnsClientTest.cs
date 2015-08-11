@@ -42,9 +42,8 @@ namespace ShipWorks.Tests.Stores.Amazon
                 }
             }
         }
-
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        
+        static EnsClientTest()
         {
             // SSL certificate policy
             ServicePointManager.ServerCertificateValidationCallback = WebHelper.TrustAllCertificatePolicy;

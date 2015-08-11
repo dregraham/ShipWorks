@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
         private RegisterRequest registerRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationShipperInfoManipulatorTest()
         {
             upsAccount = new UpsAccountEntity()
             {
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("Interapptive", registerRequest.ShipperAccount.AccountName);
+            Assert.Equal("Interapptive", registerRequest.ShipperAccount.AccountName);
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.AccountNumber, registerRequest.ShipperAccount.AccountNumber);
+            Assert.Equal(upsAccount.AccountNumber, registerRequest.ShipperAccount.AccountNumber);
         }
 
         [Fact]
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.PostalCode, registerRequest.ShipperAccount.PostalCode);
+            Assert.Equal(upsAccount.PostalCode, registerRequest.ShipperAccount.PostalCode);
         }
 
         [Fact]
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.CountryCode, registerRequest.ShipperAccount.CountryCode);
+            Assert.Equal(upsAccount.CountryCode, registerRequest.ShipperAccount.CountryCode);
         }
     }
 }

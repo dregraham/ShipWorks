@@ -18,8 +18,8 @@ namespace ShipWorks.Tests.Core
             Guid guid;
             bool valid = GuidHelper.TryParse(value, out guid);
 
-            Assert.IsTrue(valid, "TryParse returned false.");
-            Assert.AreEqual(new Guid(value), guid);
+            Assert.True(valid, "TryParse returned false.");
+            Assert.Equal(new Guid(value), guid);
         }
 
         [Fact]
@@ -30,15 +30,14 @@ namespace ShipWorks.Tests.Core
             Guid guid;
             bool valid = GuidHelper.TryParse(value, out guid);
 
-            Assert.IsFalse(valid, "TryParse should not have returned true.");
+            Assert.False(valid, "TryParse should not have returned true.");
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ReadNullValue()
         {
             Guid guid;
-            GuidHelper.TryParse(null, out guid);
+            Assert.Throws<ArgumentNullException>(() => GuidHelper.TryParse(null, out guid));
         }
     }
 }

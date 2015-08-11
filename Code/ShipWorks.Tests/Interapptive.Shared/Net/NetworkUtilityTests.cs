@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Net
 
          private NetworkUtility testObject;
 
-         [TestInitialize]
-         public void Initialize()
+         public NetworkUtilityTests()
          {
              logger = new Mock<ILog>();
              logger.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));

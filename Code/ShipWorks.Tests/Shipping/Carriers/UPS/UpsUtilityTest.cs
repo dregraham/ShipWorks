@@ -14,7 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St Louis");
 
-            Assert.AreEqual("Saint Louis", fixedCity);
+            Assert.Equal("Saint Louis", fixedCity);
         }
 
         [Fact]
@@ -22,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Ste Genevieve");
 
-            Assert.AreEqual("Saint Genevieve", fixedCity);
+            Assert.Equal("Saint Genevieve", fixedCity);
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("St. Paul");
 
-            Assert.AreEqual("Saint Paul", fixedCity);
+            Assert.Equal("Saint Paul", fixedCity);
         }
 
         [Fact]
@@ -38,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             string fixedCity = UpsUtility.CorrectSmartPickupError("Saint Paul");
 
-            Assert.AreEqual("St Paul", fixedCity);
+            Assert.Equal("St Paul", fixedCity);
         }
     }
 }

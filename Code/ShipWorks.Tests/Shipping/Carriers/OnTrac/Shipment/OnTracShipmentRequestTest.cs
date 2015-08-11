@@ -20,15 +20,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         Mock<HttpVariableRequestSubmitter> mockedSubmitter;
 
         OnTracShipmentRequest testObject;
-
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        
+        static OnTracShipmentRequestTest()
         {
             OnTracRequest.UseTestServer = true;
         }
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracShipmentRequestTest()
         {
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
@@ -46,7 +44,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
 
             //Setup Logger           
             mockedLogger = new Mock<IApiLogEntry>();
-            
+
             Mock<ILogEntryFactory> mockedLogFactory = new Mock<ILogEntryFactory>();
             mockedLogFactory
                 .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
@@ -63,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             var shippingResult = RunSuccessfullGetNewShipment();
 
             //Check the object deserialized it properly
-            Assert.AreEqual("D90000000006295", shippingResult.Tracking);
+            Assert.Equal("D90000000006295", shippingResult.Tracking);
         }
 
         [Fact]
@@ -72,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             RunSuccessfullGetNewShipment();
 
             //Validate URI was in correct format given the parameters
-            Assert.AreEqual(
+            Assert.Equal(
                 "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/37/shipments?pw=testpass",
                 mockedSubmitter.Object.Uri.ToString());
         }
@@ -82,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         {
             RunSuccessfullGetNewShipment();
 
-            Assert.AreEqual(HttpVerb.Post, mockedSubmitter.Object.Verb);
+            Assert.Equal(HttpVerb.Post, mockedSubmitter.Object.Verb);
         }
 
         [Fact]
@@ -116,7 +114,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracException))]
         public void GetNewShipment_OnTracError_ReturnedXmlInBadFormat_Test()
         {
             //fake string response from OnTrac
@@ -126,7 +123,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Shipment
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(fakedResponseXml);
 
             //Get result
-            testObject.ProcessShipment(new ShipmentRequestList());
+            Assert.Throws<OnTracException>(() => testObject.ProcessShipment(new ShipmentRequestList()));
         }
     }
 }

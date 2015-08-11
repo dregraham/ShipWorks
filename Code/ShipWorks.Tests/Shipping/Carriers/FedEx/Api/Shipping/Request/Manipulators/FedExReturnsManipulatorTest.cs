@@ -30,8 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             }
         }
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExReturnsManipulatorTest()
         {
             testObject = new FedExReturnsManipulator();
 
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment);
+            Assert.Null(processShipmentRequest.RequestedShipment);
         }
 
         [Fact]
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(ReturnType.PENDING, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
+            Assert.Equal(ReturnType.PENDING, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
         }
 
         [Fact]
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(ReturnType.PRINT_RETURN_LABEL, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
+            Assert.Equal(ReturnType.PRINT_RETURN_LABEL, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnType);
         }
 
         [Fact]
@@ -88,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(rmaReason, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma.Reason);
+            Assert.Equal(rmaReason, processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma.Reason);
         }
 
         [Fact]
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma);
+            Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.Rma);
         }
 
         [Fact]
@@ -108,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(1, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count(x => x.CustomerReferenceType == CustomerReferenceType.RMA_ASSOCIATION && x.Value == rmaNumber));
+            Assert.Equal(1, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count(x => x.CustomerReferenceType == CustomerReferenceType.RMA_ASSOCIATION && x.Value == rmaNumber));
         }
 
         [Fact]
@@ -116,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(0, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count());
+            Assert.Equal(0, processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0].CustomerReferences.Count());
         }
 
         [Fact]
@@ -126,7 +125,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail);
+            Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail);
         }
 
         [Fact]
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail);
+            Assert.Null(processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail);
         }
 
         [Fact]
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 shipmentEntity.OriginPhone,
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.MerchantPhoneNumber);
         }
@@ -154,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 PendingShipmentType.EMAIL,
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.Type);
         }
@@ -164,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 DateTime.Today.AddDays(30),
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.ExpirationDate);
         }
@@ -174,7 +173,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         //{
         //    testObject.Manipulate(shipRequest);
 
-        //    Assert.AreEqual(
+        //    Assert.Equal(
         //        shipmentEntity.ShipEmail,
         //        processShipmentRequest.RequestedShipment.SpecialServicesRequested.PendingShipmentDetail.EmailLabelDetail.NotificationEMailAddress);
         //}
@@ -186,7 +185,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 1,
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.AllowedSpecialServices.Count(x => x == ReturnEMailAllowedSpecialServiceType.SATURDAY_PICKUP));
         }
@@ -198,7 +197,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsTrue(
+            Assert.True(
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.AllowedSpecialServices == null ||
                 processShipmentRequest.RequestedShipment.SpecialServicesRequested.ReturnShipmentDetail.ReturnEMailDetail.AllowedSpecialServices.Count(x => x == ReturnEMailAllowedSpecialServiceType.SATURDAY_PICKUP) == 0);
         }

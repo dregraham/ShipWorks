@@ -28,8 +28,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
         private UspsShipmentEntity uspsShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public BuyDotComOnlineUpdaterTest()
         {
             store = new BuyDotComStoreEntity();
             updater = new BuyDotComOnlineUpdater(store);
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
 
         [Fact]
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.Other, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.Other, buyDotComTrackingType);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
 
 
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.Usps, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.Usps, buyDotComTrackingType);
         }
 
         [Fact]
@@ -119,7 +118,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.Usps, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.Usps, buyDotComTrackingType);
         }
 
 
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.Other, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.Other, buyDotComTrackingType);
         }
 
         [Fact]
@@ -144,7 +143,7 @@ namespace ShipWorks.Tests.Stores.BuyDotcom
 
             BuyDotComTrackingType buyDotComTrackingType = updater.GetTrackingType(shipmentEntity);
 
-            Assert.AreEqual(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
+            Assert.Equal(BuyDotComTrackingType.DHLGlobalMail, buyDotComTrackingType);
         }
 
 

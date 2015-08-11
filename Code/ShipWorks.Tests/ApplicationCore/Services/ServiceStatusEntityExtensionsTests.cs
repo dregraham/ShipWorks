@@ -9,8 +9,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
     {
         ServiceStatusEntity target;
 
-        [TestInitialize]
-        public void Initialize()
+        public ServiceStatusEntityExtensionsTests()
         {
             target = new ServiceStatusEntity();
         }
@@ -19,7 +18,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
         [Fact]
         public void StatusIsNeverStartedWhenStartTimeIsNull()
         {
-            Assert.AreEqual(ServiceStatus.NeverStarted, target.GetStatus());
+            Assert.Equal(ServiceStatus.NeverStarted, target.GetStatus());
         }
 
         [Fact]
@@ -28,7 +27,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             target.LastStartDateTime = DateTime.UtcNow;
             target.LastStopDateTime = target.LastStartDateTime.Value.AddHours(1);
 
-            Assert.AreEqual(ServiceStatus.Stopped, target.GetStatus());
+            Assert.Equal(ServiceStatus.Stopped, target.GetStatus());
         }
 
         [Fact]
@@ -37,7 +36,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             target.LastStartDateTime = DateTime.UtcNow;
             target.LastCheckInDateTime = target.LastStartDateTime.Value.AddMinutes(10);
 
-            Assert.AreEqual(ServiceStatus.Running, target.GetStatus());
+            Assert.Equal(ServiceStatus.Running, target.GetStatus());
         }
 
         [Fact]
@@ -47,7 +46,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             target.LastCheckInDateTime = target.LastStartDateTime.Value.AddMinutes(10);
             target.LastStopDateTime = target.LastStartDateTime.Value.AddHours(-1);
 
-            Assert.AreEqual(ServiceStatus.Running, target.GetStatus());
+            Assert.Equal(ServiceStatus.Running, target.GetStatus());
         }
 
         [Fact]
@@ -56,7 +55,7 @@ namespace ShipWorks.ApplicationCore.Services.Tests
             target.LastCheckInDateTime = DateTime.UtcNow.Add(-ServiceStatusManager.NotRunningTimeSpan);
             target.LastStartDateTime = target.LastCheckInDateTime.Value.AddHours(-1);
 
-            Assert.AreEqual(ServiceStatus.NotResponding, target.GetStatus());
+            Assert.Equal(ServiceStatus.NotResponding, target.GetStatus());
         }
     }
 }

@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
         private DateTime testDateTime = DateTime.Now;
 
-        [TestInitialize]
-        public void Initialize()
+        public ScheduledTriggerTest()
         {
             testObject = new ScheduledTrigger()
             {
@@ -35,19 +34,19 @@ namespace ShipWorks.Tests.Actions.Triggers
         [Fact]
         public void TriggerType_ReturnsScheduled_Test()
         {
-            Assert.AreEqual(ActionTriggerType.Scheduled, testObject.TriggerType);
+            Assert.Equal(ActionTriggerType.Scheduled, testObject.TriggerType);
         }
 
         [Fact]
         public void CreateEditor_ReturnsScheduledTriggerEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(ScheduledTriggerEditor));
+            Assert.IsAssignableFrom<ScheduledTriggerEditor>(testObject.CreateEditor());
         }
 
         [Fact]
         public void TriggeringEntityType_IsNull_Test()
         {
-            Assert.IsNull(testObject.TriggeringEntityType);
+            Assert.Null(testObject.TriggeringEntityType);
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             testObject = new ScheduledTrigger();
 
-            Assert.IsInstanceOfType(testObject.Schedule, typeof(OneTimeActionSchedule));
+            Assert.IsAssignableFrom<OneTimeActionSchedule>(testObject.Schedule);
         }
 
         [Fact]
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject = new ScheduledTrigger(xmlSettings);
 
-            Assert.AreEqual(testTime, testObject.Schedule.StartDateTimeInUtc);
+            Assert.Equal(testTime, testObject.Schedule.StartDateTimeInUtc);
         }
 
         [Fact]
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             ScheduledTrigger deserializedScheduledTrigger = new ScheduledTrigger(xml);
 
-            Assert.AreEqual(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
+            Assert.Equal(testObject.Schedule.StartDateTimeInUtc, deserializedScheduledTrigger.Schedule.StartDateTimeInUtc);
         }
 
         [Fact]
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject.DeserializeXml(xpath);
 
-            Assert.IsInstanceOfType(testObject.Schedule, typeof(DailyActionSchedule));
+            Assert.IsAssignableFrom<DailyActionSchedule>(testObject.Schedule);
         }
 
         [Fact]
@@ -136,7 +135,7 @@ namespace ShipWorks.Tests.Actions.Triggers
 
             testObject.DeserializeXml(xpath);
 
-            Assert.AreEqual(30, ((DailyActionSchedule)testObject.Schedule).FrequencyInDays);
+            Assert.Equal(30, ((DailyActionSchedule)testObject.Schedule).FrequencyInDays);
         }
     }
 }

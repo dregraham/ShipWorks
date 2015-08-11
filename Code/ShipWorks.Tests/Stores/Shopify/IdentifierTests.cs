@@ -22,8 +22,8 @@ namespace ShipWorks.Tests.Stores.Shopify
             string decryptedKey = SecureText.Decrypt(encryptedKey, "interapptive");
             string decryptedPwd = SecureText.Decrypt(encryptedPwd, "interapptive");
 
-            Assert.AreEqual(decryptedKey, "36d5caf5fa4e17b35e915dbf61add688");
-            Assert.AreEqual(decryptedPwd, "7e7a6b34705570389dd9f6fe976ff7f2");
+            Assert.Equal(decryptedKey, "36d5caf5fa4e17b35e915dbf61add688");
+            Assert.Equal(decryptedPwd, "7e7a6b34705570389dd9f6fe976ff7f2");
 
         }
 

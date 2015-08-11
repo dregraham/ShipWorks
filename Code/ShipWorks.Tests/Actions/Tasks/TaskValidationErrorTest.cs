@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Actions.Tasks
         public void ToString_ReturnsOnlyMessage_WhenDetailsAreEmpty()
         {
             TaskValidationError testObject = new TaskValidationError("Foo");
-            Assert.AreEqual("Foo", testObject.ToString());
+            Assert.Equal("Foo", testObject.ToString());
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Actions.Tasks
         {
             TaskValidationError testObject = new TaskValidationError("Foo");
             testObject.Details.Add("Bar");
-            Assert.AreEqual("Foo" + Environment.NewLine + "  - Bar", testObject.ToString());  
+            Assert.Equal("Foo" + Environment.NewLine + "  - Bar", testObject.ToString());  
         }
     }
 }

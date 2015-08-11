@@ -22,10 +22,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         private FedExAccountEntity account;
         private FedExEndOfDayCloseEntity closeEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGroundCloseReportManipulatorTest()
         {
-            account = new FedExAccountEntity {AccountNumber = "12345", FedExAccountID = 1001};
+            account = new FedExAccountEntity { AccountNumber = "12345", FedExAccountID = 1001 };
             closeEntity = new FedExEndOfDayCloseEntity();
 
             // Setup the carrier request to return the preconfigured account since this will be 
@@ -43,32 +42,29 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCloseEntityIsNull_Test()
         {
             closeEntity = null;
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
 
-            Assert.IsNotNull(closeEntity);
+            Assert.NotNull(closeEntity);
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNotFedEx_Test()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(new UpsAccountEntity());
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExException))]
         public void Manipulate_ThrowsFedExException_WhenCarrierAccountIsNull_Test()
         {
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns<IEntity2>(null);
 
-            testObject.Manipulate(carrierResponse.Object, closeEntity);
+            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
         }
 
         [Fact]
@@ -76,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.AreEqual(account.FedExAccountID, closeEntity.FedExAccountID);
+            Assert.Equal(account.FedExAccountID, closeEntity.FedExAccountID);
         }
 
         [Fact]
@@ -84,9 +80,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.AreEqual(account.AccountNumber, closeEntity.AccountNumber);
+            Assert.Equal(account.AccountNumber, closeEntity.AccountNumber);
         }
-        
+
         [Fact]
         public void Manipulate_SetsCloseDate_Test()
         {
@@ -96,8 +92,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
 
             // Verify that the date assigned to the close date falls between the time the test started
             // and the after manipulate was completed
-            Assert.IsTrue(utcStart.Ticks <= closeEntity.CloseDate.Ticks);
-            Assert.IsTrue(closeEntity.CloseDate.Ticks <= DateTime.UtcNow.Ticks);
+            Assert.True(utcStart.Ticks <= closeEntity.CloseDate.Ticks);
+            Assert.True(closeEntity.CloseDate.Ticks <= DateTime.UtcNow.Ticks);
         }
 
         [Fact]
@@ -105,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
         {
             testObject.Manipulate(carrierResponse.Object, closeEntity);
 
-            Assert.IsFalse(closeEntity.IsSmartPost);
+            Assert.False(closeEntity.IsSmartPost);
         }
 
         [Fact]

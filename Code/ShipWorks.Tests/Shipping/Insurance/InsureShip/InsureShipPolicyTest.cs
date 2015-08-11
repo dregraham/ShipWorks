@@ -21,15 +21,14 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
         private Mock<InsureShipRequestBase> request;
         private Mock<IInsureShipResponse> response;
-        
+
         private Mock<ILog> log;
 
         private ShipmentEntity shipment;
         private InsureShipAffiliate affiliate;
         private ShipmentEntity shipmentForVoiding;
-       
-        [TestInitialize]
-        public void Initialize()
+
+        public InsureShipPolicyTest()
         {
             settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.DistributorID).Returns("D00002");
@@ -47,7 +46,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>()));
-            
+
             responseFactory = new Mock<IInsureShipResponseFactory>();
             response = new Mock<IInsureShipResponse>();
 
@@ -70,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
                     CreatedWithApi = true
                 }
             };
-            
+
             testObject = new InsureShipPolicy(affiliate, requestFactory.Object, log.Object, settings.Object);
         }
 
@@ -143,13 +142,13 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 testObject.Insure(shipment);
             }
-            catch(InsureShipException)
+            catch (InsureShipException)
             { }
 
             log.Verify(l => l.Error("An error occurred trying to insure shipment 100031 with InsureShip. A(n) UnknownFailure response code was received from InsureShip.", responseException), Times.Once());
         }
 
-        
+
         [Fact]
         public void Void_DoesNotMakeRequest_WhenShipmentIsNotProcessed_Test()
         {
@@ -214,32 +213,29 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Void_DoesNotMakeRequest_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
-            testObject.Void(shipmentForVoiding);
+            Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
 
             requestFactory.Verify(f => f.CreateVoidPolicyRequest(It.IsAny<ShipmentEntity>(), It.IsAny<InsureShipAffiliate>()), Times.Never());
             request.Verify(r => r.Submit(), Times.Never());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Void_LogsMessage_WhenPolicyAgeExceedsGracePeriodForVoiding_Test()
         {
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
-            testObject.Void(shipmentForVoiding);
+            Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
 
             log.Verify(l => l.InfoFormat("The policy for shipment {0} cannot be voided with the InsureShip API. The policy was created more than {1} hours ago.", shipmentForVoiding.ShipmentID, It.IsAny<double>()), Times.Once());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Void_UsesInsureShipSettings_ToDetermineEligibility_Test()
         {
             // Grace period set to 24 hours in the initialize method above
@@ -247,7 +243,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             testObject.Void(shipmentForVoiding);
 
-            settings.Verify(s => s.VoidPolicyMaximumAge, Times.Once());
+            Assert.Throws<InsureShipException>(() => settings.Verify(s => s.VoidPolicyMaximumAge, Times.Once()));
         }
 
         [Fact]
@@ -297,7 +293,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             response.Verify(r => r.Process(), Times.Once());
         }
-        
+
         [Fact]
         public void Void_LogsMessage_WhenPolicyIsVoidedSuccessfully_Test()
         {
@@ -318,12 +314,11 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Void_ThrowsInsureShipException_WhenInsureShipResponseExceptionIsCaught_Test()
         {
             response.Setup(r => r.Process()).Throws(new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter));
 
-            testObject.Void(shipmentForVoiding);
+            Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
         }
 
         [Fact]

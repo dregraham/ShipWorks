@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         private PostalShipmentEntity postalShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public MwsClientTests()
         {
             orderEntity = new AmazonOrderEntity { OrderNumber = 123456 };
             postalShipmentEntity = new PostalShipmentEntity { Service = (int)PostalServiceType.FirstClass };
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         {
             using (AmazonMwsClient client = new AmazonMwsClient(new AmazonStoreEntity {AmazonApiRegion = "US"}))
             {
-                Assert.IsTrue(client.ClockInSyncWithMWS());   
+                Assert.True(client.ClockInSyncWithMWS());   
             }
         }
 
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Stores.Amazon
 
             string signed = RequestSignature.CreateRequestSignature(stringToSign, "0+NcTFU11/qooQriFFO7k0JxY64t/P38DIAAAgeW", SigningAlgorithm.SHA256);
 
-            Assert.AreEqual(signature, signed);
+            Assert.Equal(signature, signed);
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Usps;
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
-            Assert.AreEqual("USPS", carrierName);
+            Assert.Equal("USPS", carrierName);
         }
 
         [Fact]
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Stores.Amazon
             shipmentEntity.ShipmentType = (int)ShipmentTypeCode.Endicia;
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
-            Assert.AreEqual("USPS", carrierName);
+            Assert.Equal("USPS", carrierName);
         }
 
         [Fact]
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Stores.Amazon
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("DHL Global Mail", carrierName);
+            Assert.Equal("DHL Global Mail", carrierName);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Stores.Amazon
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Usps);
 
-            Assert.AreEqual("DHL Global Mail", carrierName);
+            Assert.Equal("DHL Global Mail", carrierName);
         }
 
         [Fact]
@@ -95,7 +94,7 @@ namespace ShipWorks.Tests.Stores.Amazon
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("Consolidator", carrierName);
+            Assert.Equal("Consolidator", carrierName);
         }
 
         [Fact]
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Stores.Amazon
 
             string carrierName = AmazonMwsClient.GetCarrierName(shipmentEntity, ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("Some other carrier", carrierName);
+            Assert.Equal("Some other carrier", carrierName);
         }
 
     }

@@ -12,31 +12,29 @@ namespace ShipWorks.Tests.Shipping.Settings
         private EnumCheckBoxControl<FedExServiceType> testObject;
 
         private List<FedExServiceType> fedExServiceTypes;
-            
-        [TestInitialize]
-        public void Initialize()
+
+        public EnumCheckboxControlTest()
         {
             testObject = new EnumCheckBoxControl<FedExServiceType>();
 
-            fedExServiceTypes = Enum.GetValues(typeof (FedExServiceType)).Cast<FedExServiceType>().ToList();
+            fedExServiceTypes = Enum.GetValues(typeof(FedExServiceType)).Cast<FedExServiceType>().ToList();
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType>());
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenTypeProvidedIsNotEnum_Test()
         {
-            EnumCheckBoxControl<int> control = new EnumCheckBoxControl<int>();
+            Assert.Throws<InvalidOperationException>(() => new EnumCheckBoxControl<int>());
         }
-        
+
         [Fact]
         public void Initialize_ExcludesSpecificServicesDefinedInExcludedList_Test()
         {
             testObject.Initialize(fedExServiceTypes, new List<FedExServiceType> { FedExServiceType.FedEx1DayFreight, FedExServiceType.FedEx2DayFreight });
 
-            Assert.AreEqual(2, testObject.ExcludedEnumValues.Count());
-            Assert.IsTrue(testObject.ExcludedEnumValues.Contains(FedExServiceType.FedEx1DayFreight));
-            Assert.IsTrue(testObject.ExcludedEnumValues.Contains(FedExServiceType.FedEx2DayFreight));
+            Assert.Equal(2, testObject.ExcludedEnumValues.Count());
+            Assert.True(testObject.ExcludedEnumValues.Contains(FedExServiceType.FedEx1DayFreight));
+            Assert.True(testObject.ExcludedEnumValues.Contains(FedExServiceType.FedEx2DayFreight));
         }
     }
 }

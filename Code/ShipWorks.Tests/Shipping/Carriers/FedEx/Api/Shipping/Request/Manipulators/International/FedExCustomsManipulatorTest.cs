@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity fedExAccount;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCustomsManipulatorTest()
         {
             // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
             nativeRequest = new ProcessShipmentRequest()
@@ -32,7 +31,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 {
                     Recipient = new Party()
                     {
-                        Tins = new TaxpayerIdentification[1] {new TaxpayerIdentification()}
+                        Tins = new TaxpayerIdentification[1] { new TaxpayerIdentification() }
                     }
                 }
             };
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 ShipCountryCode = "NZ",
                 OriginCountryCode = "CA",
                 CustomsValue = 123.45M,
-                FedEx = new FedExShipmentEntity() {PayorDutiesAccount = "987", PayorTransportName = "Transport Name", PayorDutiesType = (int) FedExPayorType.Sender, CustomsRecipientTIN = "5468"}
+                FedEx = new FedExShipmentEntity() { PayorDutiesAccount = "987", PayorTransportName = "Transport Name", PayorDutiesType = (int)FedExPayorType.Sender, CustomsRecipientTIN = "5468" }
             };
 
             shipmentEntity.CustomsItems.Add(new ShipmentCustomsItemEntity { Description = "item one", Quantity = 4, Weight = 2.3, UnitValue = 15.36M, HarmonizedCode = "Harmonized 1", UnitPriceAmount = 51.36M, NumberOfPieces = 4 });
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.CustomsItems.Add(new ShipmentCustomsItemEntity { Description = "item three", Quantity = 342, Weight = 92.3, UnitValue = 6.67M, HarmonizedCode = "Harmonized 3", UnitPriceAmount = 14.06M, NumberOfPieces = 25 });
 
 
-            fedExAccount = new FedExAccountEntity {AccountNumber = "123", CountryCode = "US", LastName = "Doe", FirstName = "John"};
+            fedExAccount = new FedExAccountEntity { AccountNumber = "123", CountryCode = "US", LastName = "Doe", FirstName = "John" };
 
 
             // Setup the carrier request's NativeRequest property to return the ProcessShipmentRequest object
@@ -65,30 +64,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -100,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -112,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The recipient property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment.Recipient);
+            Assert.NotNull(nativeRequest.RequestedShipment.Recipient);
         }
 
         [Fact]
@@ -123,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.CustomsClearanceDetail);
+            Assert.Null(nativeRequest.RequestedShipment.CustomsClearanceDetail);
         }
 
         [Fact]
@@ -135,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.CustomsClearanceDetail);
+            Assert.Null(nativeRequest.RequestedShipment.CustomsClearanceDetail);
         }
 
         [Fact]
@@ -144,7 +140,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The amount on the shipment is 123.45
-            Assert.AreEqual(123.45M, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Amount);
+            Assert.Equal(123.45M, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Amount);
         }
 
         [Fact]
@@ -152,7 +148,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Currency);
+            Assert.Equal("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsValue.Currency);
         }
 
         [Fact]
@@ -162,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(InternationalDocumentContentType.DOCUMENTS_ONLY, nativeRequest.RequestedShipment.CustomsClearanceDetail.DocumentContent);
+            Assert.Equal(InternationalDocumentContentType.DOCUMENTS_ONLY, nativeRequest.RequestedShipment.CustomsClearanceDetail.DocumentContent);
         }
 
         [Fact]
@@ -172,12 +168,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(InternationalDocumentContentType.NON_DOCUMENTS, nativeRequest.RequestedShipment.CustomsClearanceDetail.DocumentContent);
+            Assert.Equal(InternationalDocumentContentType.NON_DOCUMENTS, nativeRequest.RequestedShipment.CustomsClearanceDetail.DocumentContent);
         }
 
 
         #region Commodities Tests
-        
+
         [Fact]
         public void Manipulate_CommoditiesAddsAllShipmentCustomItems_WhenFedExCustomsDocumentsOnlyIsFalse_Test()
         {
@@ -185,7 +181,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.CustomsItems.Count, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Length);
+            Assert.Equal(shipmentEntity.CustomsItems.Count, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities.Length);
         }
 
         [Fact]
@@ -197,7 +193,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].Description, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Description);
+                Assert.Equal(shipmentEntity.CustomsItems[i].Description, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Description);
             }
         }
 
@@ -210,7 +206,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].Quantity, (double)nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
+                Assert.Equal(shipmentEntity.CustomsItems[i].Quantity, (double)nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Quantity);
             }
         }
 
@@ -223,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual("EA", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].QuantityUnits);
+                Assert.Equal("EA", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].QuantityUnits);
             }
         }
 
@@ -236,7 +232,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].NumberOfPieces.ToString(), nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].NumberOfPieces);
+                Assert.Equal(shipmentEntity.CustomsItems[i].NumberOfPieces.ToString(), nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].NumberOfPieces);
             }
         }
 
@@ -249,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual((decimal)shipmentEntity.CustomsItems[i].Weight, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Value);
+                Assert.Equal((decimal)shipmentEntity.CustomsItems[i].Weight, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Value);
             }
         }
 
@@ -257,13 +253,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_CommoditiesWeightsIsPounds_WhenFedExCustomsDocumentsOnlyIsFalse_AndCustomItemWeightIsPounds_Test()
         {
             shipmentEntity.FedEx.CustomsDocumentsOnly = false;
-            shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Pounds;
+            shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Pounds;
 
             testObject.Manipulate(carrierRequest.Object);
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(WeightUnits.LB, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Units);
+                Assert.Equal(WeightUnits.LB, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Units);
             }
         }
 
@@ -277,30 +273,29 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(WeightUnits.KG, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Units);
+                Assert.Equal(WeightUnits.KG, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].Weight.Units);
             }
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenFedExCustomsDocumentsOnlyIsFalse_AndShipmentWeightTypeIsUnknown_Test()
         {
             shipmentEntity.FedEx.CustomsDocumentsOnly = false;
             shipmentEntity.FedEx.WeightUnitType = 42;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
         public void Manipulate_CommoditiesUnitPriceFromFedExShipmentCustomItem_WhenFedExCustomsDocumentsOnlyIsFalse_Test()
         {
             shipmentEntity.FedEx.CustomsDocumentsOnly = false;
-            
+
             testObject.Manipulate(carrierRequest.Object);
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].UnitPriceAmount, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Amount);
+                Assert.Equal(shipmentEntity.CustomsItems[i].UnitPriceAmount, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Amount);
             }
         }
 
@@ -313,7 +308,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Currency);
+                Assert.Equal("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Currency);
             }
         }
 
@@ -327,7 +322,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual("CAD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Currency);
+                Assert.Equal("CAD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].UnitPrice.Currency);
             }
         }
 
@@ -340,7 +335,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].CountryOfOrigin, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CountryOfManufacture);
+                Assert.Equal(shipmentEntity.CustomsItems[i].CountryOfOrigin, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CountryOfManufacture);
             }
         }
 
@@ -353,7 +348,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].HarmonizedCode, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].HarmonizedCode);
+                Assert.Equal(shipmentEntity.CustomsItems[i].HarmonizedCode, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].HarmonizedCode);
             }
         }
 
@@ -366,7 +361,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CustomsValue.Currency);
+                Assert.Equal("USD", nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CustomsValue.Currency);
             }
         }
 
@@ -379,7 +374,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             for (int i = 0; i < shipmentEntity.CustomsItems.Count; i++)
             {
-                Assert.AreEqual(shipmentEntity.CustomsItems[i].UnitValue, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CustomsValue.Amount);
+                Assert.Equal(shipmentEntity.CustomsItems[i].UnitValue, nativeRequest.RequestedShipment.CustomsClearanceDetail.Commodities[i].CustomsValue.Amount);
             }
         }
 
@@ -398,7 +393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.IsNull(commodity.NaftaDetail);
+                Assert.Null(commodity.NaftaDetail);
             }
         }
 
@@ -410,7 +405,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.IsNull(customsDetail.RegulatoryControls);
+            Assert.Null(customsDetail.RegulatoryControls);
         }
 
 
@@ -422,7 +417,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(1, customsDetail.RegulatoryControls.Length);
+            Assert.Equal(1, customsDetail.RegulatoryControls.Length);
         }
 
         [Fact]
@@ -433,7 +428,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
-            Assert.AreEqual(RegulatoryControlType.NAFTA, customsDetail.RegulatoryControls[0]);
+            Assert.Equal(RegulatoryControlType.NAFTA, customsDetail.RegulatoryControls[0]);
         }
 
         [Fact]
@@ -446,7 +441,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.IsNotNull(commodity.NaftaDetail);
+                Assert.NotNull(commodity.NaftaDetail);
             }
         }
 
@@ -454,14 +449,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_NetCostMethodIsNO_WhenNaftaIsEnabled_AndNetCostIsNotCalculated_Test()
         {
             shipmentEntity.FedEx.CustomsNaftaEnabled = true;
-            shipmentEntity.FedEx.CustomsNaftaNetCostMethod = (int) FedExNaftaNetCostMethod.NotCalculated;
+            shipmentEntity.FedEx.CustomsNaftaNetCostMethod = (int)FedExNaftaNetCostMethod.NotCalculated;
 
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaNetCostMethodCode.NO, commodity.NaftaDetail.NetCostMethod);
+                Assert.Equal(NaftaNetCostMethodCode.NO, commodity.NaftaDetail.NetCostMethod);
             }
         }
 
@@ -476,18 +471,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaNetCostMethodCode.NC, commodity.NaftaDetail.NetCostMethod);
+                Assert.Equal(NaftaNetCostMethodCode.NC, commodity.NaftaDetail.NetCostMethod);
             }
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnabled_AndNetCostIsInvalid_Test()
         {
             shipmentEntity.FedEx.CustomsNaftaEnabled = true;
             shipmentEntity.FedEx.CustomsNaftaNetCostMethod = 54;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -501,7 +495,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.IsTrue(commodity.NaftaDetail.NetCostMethodSpecified);
+                Assert.True(commodity.NaftaDetail.NetCostMethodSpecified);
             }
         }
 
@@ -517,7 +511,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.A, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.A, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
@@ -532,7 +526,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.B, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.B, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
@@ -547,7 +541,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.C, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.C, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
@@ -562,7 +556,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.D, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.D, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
@@ -577,7 +571,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.E, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.E, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
@@ -592,18 +586,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaPreferenceCriterionCode.F, commodity.NaftaDetail.PreferenceCriterion);
+                Assert.Equal(NaftaPreferenceCriterionCode.F, commodity.NaftaDetail.PreferenceCriterion);
             }
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnable_AndPreferenceIsInvalid_Test()
         {
             shipmentEntity.FedEx.CustomsNaftaEnabled = true;
             shipmentEntity.FedEx.CustomsNaftaPreferenceType = 40;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
 
@@ -618,7 +611,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.IsTrue(commodity.NaftaDetail.PreferenceCriterionSpecified);
+                Assert.True(commodity.NaftaDetail.PreferenceCriterionSpecified);
             }
         }
 
@@ -627,14 +620,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         public void Manipulate_ProducerDeterminationIsYes_WhenNaftaIsEnable_AndCodeIsProducerOfCommodity_Test()
         {
             shipmentEntity.FedEx.CustomsNaftaEnabled = true;
-            shipmentEntity.FedEx.CustomsNaftaDeterminationCode = (int) FedExNaftaDeterminationCode.ProducerOfCommodity;
+            shipmentEntity.FedEx.CustomsNaftaDeterminationCode = (int)FedExNaftaDeterminationCode.ProducerOfCommodity;
 
             testObject.Manipulate(carrierRequest.Object);
 
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaProducerDeterminationCode.YES, commodity.NaftaDetail.ProducerDetermination);
+                Assert.Equal(NaftaProducerDeterminationCode.YES, commodity.NaftaDetail.ProducerDetermination);
             }
         }
 
@@ -649,7 +642,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaProducerDeterminationCode.NO_1, commodity.NaftaDetail.ProducerDetermination);
+                Assert.Equal(NaftaProducerDeterminationCode.NO_1, commodity.NaftaDetail.ProducerDetermination);
             }
         }
 
@@ -664,7 +657,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaProducerDeterminationCode.NO_2, commodity.NaftaDetail.ProducerDetermination);
+                Assert.Equal(NaftaProducerDeterminationCode.NO_2, commodity.NaftaDetail.ProducerDetermination);
             }
         }
 
@@ -679,18 +672,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.AreEqual(NaftaProducerDeterminationCode.NO_3, commodity.NaftaDetail.ProducerDetermination);
+                Assert.Equal(NaftaProducerDeterminationCode.NO_3, commodity.NaftaDetail.ProducerDetermination);
             }
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenNaftaIsEnable_AndProducerIsInvalid_Test()
         {
             shipmentEntity.FedEx.CustomsNaftaEnabled = true;
             shipmentEntity.FedEx.CustomsNaftaPreferenceType = 13;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
 
@@ -705,14 +697,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             CustomsClearanceDetail customsDetail = nativeRequest.RequestedShipment.CustomsClearanceDetail;
             foreach (Commodity commodity in customsDetail.Commodities)
             {
-                Assert.IsTrue(commodity.NaftaDetail.ProducerDeterminationSpecified);
+                Assert.True(commodity.NaftaDetail.ProducerDeterminationSpecified);
             }
         }
 
 
 
         #endregion NAFTA Tests
-        
+
 
         #region Payment Detail Tests
 
@@ -721,7 +713,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.DutiesPayment);
+            Assert.NotNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.DutiesPayment);
         }
 
 
@@ -734,7 +726,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(fedExAccount.AccountNumber, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
+            Assert.Equal(fedExAccount.AccountNumber, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
         }
 
         [Fact]
@@ -746,7 +738,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(fedExAccount.CountryCode, dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
+            Assert.Equal(fedExAccount.CountryCode, dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
         }
 
         [Fact]
@@ -758,7 +750,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(fedExAccount.FirstName + " " + fedExAccount.LastName, dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
+            Assert.Equal(fedExAccount.FirstName + " " + fedExAccount.LastName, dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
         }
 
 
@@ -771,7 +763,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(PaymentType.RECIPIENT, dutiesPayment.PaymentType);
+            Assert.Equal(PaymentType.RECIPIENT, dutiesPayment.PaymentType);
         }
 
         [Fact]
@@ -784,7 +776,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual("CA", dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
+            Assert.Equal("CA", dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
         }
 
         [Fact]
@@ -796,7 +788,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(shipmentEntity.FedEx.PayorDutiesAccount, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
+            Assert.Equal(shipmentEntity.FedEx.PayorDutiesAccount, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
         }
 
         [Fact]
@@ -808,7 +800,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual("Peter Gibbons", dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
+            Assert.Equal("Peter Gibbons", dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
         }
 
         [Fact]
@@ -820,7 +812,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(PaymentType.THIRD_PARTY, dutiesPayment.PaymentType);
+            Assert.Equal(PaymentType.THIRD_PARTY, dutiesPayment.PaymentType);
         }
 
         [Fact]
@@ -832,7 +824,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(shipmentEntity.FedEx.PayorDutiesAccount, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
+            Assert.Equal(shipmentEntity.FedEx.PayorDutiesAccount, dutiesPayment.Payor.ResponsibleParty.AccountNumber);
         }
 
         [Fact]
@@ -844,7 +836,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual("Michael Bolton", dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
+            Assert.Equal("Michael Bolton", dutiesPayment.Payor.ResponsibleParty.Contact.PersonName);
         }
 
         [Fact]
@@ -857,7 +849,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual("UK", dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
+            Assert.Equal("UK", dutiesPayment.Payor.ResponsibleParty.Address.CountryCode);
         }
 
         [Fact]
@@ -869,7 +861,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate((carrierRequest.Object));
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
-            Assert.AreEqual(PaymentType.COLLECT, dutiesPayment.PaymentType);
+            Assert.Equal(PaymentType.COLLECT, dutiesPayment.PaymentType);
         }
 
         [Fact]
@@ -881,7 +873,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
 
-            Assert.IsNull(dutiesPayment.Payor);
+            Assert.Null(dutiesPayment.Payor);
         }
 
         [Fact]
@@ -893,17 +885,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             Payment dutiesPayment = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).RequestedShipment.CustomsClearanceDetail.DutiesPayment;
 
-            Assert.IsNull(dutiesPayment.Payor);
+            Assert.Null(dutiesPayment.Payor);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_ForUnknownPayorType_Test()
         {
             // Setup the fedex shipment payor type for the test by setting the type to an unsupported value
             shipmentEntity.FedEx.PayorDutiesType = 23;
 
-            testObject.Manipulate((carrierRequest.Object));
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate((carrierRequest.Object)));
         }
 
         #endregion Payment Detail Tests
@@ -916,7 +907,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.Recipient.Tins);
+            Assert.NotNull(nativeRequest.RequestedShipment.Recipient.Tins);
         }
 
         [Fact]
@@ -924,7 +915,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
+            Assert.Equal(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
         }
 
         [Fact]
@@ -934,7 +925,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
+            Assert.Equal(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
         }
 
         [Fact]
@@ -944,15 +935,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
+            Assert.Equal(1, nativeRequest.RequestedShipment.Recipient.Tins.Length);
         }
 
         [Fact]
         public void Manipulate_RecipientTinsNumber_IsShipmentCustomerRecipientTin_Test()
-        {   
+        {
             testObject.Manipulate(carrierRequest.Object);
-            
-            Assert.AreEqual(shipmentEntity.FedEx.CustomsRecipientTIN, nativeRequest.RequestedShipment.Recipient.Tins[0].Number);
+
+            Assert.Equal(shipmentEntity.FedEx.CustomsRecipientTIN, nativeRequest.RequestedShipment.Recipient.Tins[0].Number);
         }
 
         [Fact]
@@ -960,7 +951,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(TinType.PERSONAL_STATE, nativeRequest.RequestedShipment.Recipient.Tins[0].TinType);
+            Assert.Equal(TinType.PERSONAL_STATE, nativeRequest.RequestedShipment.Recipient.Tins[0].TinType);
         }
 
 
@@ -971,7 +962,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail);
+            Assert.NotNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail);
         }
 
         [Fact]
@@ -982,7 +973,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
+            Assert.False(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
         }
 
         [Fact]
@@ -993,7 +984,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
+            Assert.False(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
         }
 
         [Fact]
@@ -1001,17 +992,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOptionSpecified);
         }
 
         [Fact]
         public void Manipulate_B13FilingOptionSpecifiedIsNotRequired_Test()
         {
-            shipmentEntity.FedEx.CustomsExportFilingOption = (int) FedExCustomsExportFilingOption.NotRequired;
+            shipmentEntity.FedEx.CustomsExportFilingOption = (int)FedExCustomsExportFilingOption.NotRequired;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(B13AFilingOptionType.NOT_REQUIRED, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
+            Assert.Equal(B13AFilingOptionType.NOT_REQUIRED, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
         }
 
         [Fact]
@@ -1021,7 +1012,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(B13AFilingOptionType.MANUALLY_ATTACHED, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
+            Assert.Equal(B13AFilingOptionType.MANUALLY_ATTACHED, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
         }
 
         [Fact]
@@ -1031,7 +1022,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(B13AFilingOptionType.FILED_ELECTRONICALLY, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
+            Assert.Equal(B13AFilingOptionType.FILED_ELECTRONICALLY, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
         }
 
         [Fact]
@@ -1041,7 +1032,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(B13AFilingOptionType.SUMMARY_REPORTING, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
+            Assert.Equal(B13AFilingOptionType.SUMMARY_REPORTING, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.B13AFilingOption);
         }
 
         [Fact]
@@ -1051,9 +1042,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreNotEqual(string.Empty, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.ExportComplianceStatement);
+            Assert.NotEqual(string.Empty, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.ExportComplianceStatement);
         }
-        
+
         [Fact]
         public void Manipulate_ComplianceStatementIsNotEmpty_Test()
         {
@@ -1061,17 +1052,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreNotEqual(string.Empty, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.ExportComplianceStatement);
-        }        
+            Assert.NotEqual(string.Empty, nativeRequest.RequestedShipment.CustomsClearanceDetail.ExportDetail.ExportComplianceStatement);
+        }
 
         [Fact]
         public void Manipulate_RecipientCustomsIdIsNull_WhenIdentificationTypeIsNone_Test()
         {
-            shipmentEntity.FedEx.CustomsRecipientIdentificationType = (int) FedExCustomsRecipientIdentificationType.None;
+            shipmentEntity.FedEx.CustomsRecipientIdentificationType = (int)FedExCustomsRecipientIdentificationType.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId);
+            Assert.Null(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId);
         }
 
         [Fact]
@@ -1081,7 +1072,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(RecipientCustomsIdType.PASSPORT, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
+            Assert.Equal(RecipientCustomsIdType.PASSPORT, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
         }
 
         [Fact]
@@ -1091,7 +1082,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
         }
 
         [Fact]
@@ -1102,7 +1093,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
+            Assert.Equal("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
         }
 
         [Fact]
@@ -1112,7 +1103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(RecipientCustomsIdType.INDIVIDUAL, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
+            Assert.Equal(RecipientCustomsIdType.INDIVIDUAL, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
         }
 
         [Fact]
@@ -1122,7 +1113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
         }
 
         [Fact]
@@ -1133,7 +1124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
+            Assert.Equal("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
         }
 
         [Fact]
@@ -1143,7 +1134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(RecipientCustomsIdType.COMPANY, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
+            Assert.Equal(RecipientCustomsIdType.COMPANY, nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Type);
         }
 
         [Fact]
@@ -1153,7 +1144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.TypeSpecified);
         }
 
         [Fact]
@@ -1164,29 +1155,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
+            Assert.Equal("123456", nativeRequest.RequestedShipment.CustomsClearanceDetail.RecipientCustomsId.Value);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenIdentificationTypeIsNotRecognized_Test()
         {
             shipmentEntity.FedEx.CustomsRecipientIdentificationType = 53;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        
+
         #region Customs Options Tests
 
         [Fact]
         public void Manipulate_CustomOptionsIsNull_WhenOptionTypeIsNone_Test()
         {
-            shipmentEntity.FedEx.CustomsOptionsType = (int) FedExCustomsOptionType.None;
+            shipmentEntity.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions);
+            Assert.Null(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions);
         }
 
         [Fact]
@@ -1196,7 +1186,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.COURTESY_RETURN_LABEL, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.COURTESY_RETURN_LABEL, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1206,7 +1196,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1217,7 +1207,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1227,7 +1217,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.EXHIBITION_TRADE_SHOW, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.EXHIBITION_TRADE_SHOW, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1237,7 +1227,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1248,7 +1238,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1258,7 +1248,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.FAULTY_ITEM, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.FAULTY_ITEM, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1268,7 +1258,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1279,7 +1269,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1289,7 +1279,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.FOLLOWING_REPAIR, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.FOLLOWING_REPAIR, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1299,7 +1289,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1310,7 +1300,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1320,7 +1310,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.FOR_REPAIR, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.FOR_REPAIR, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1330,7 +1320,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1341,7 +1331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1351,7 +1341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.ITEM_FOR_LOAN, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.ITEM_FOR_LOAN, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1361,7 +1351,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1372,7 +1362,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1382,7 +1372,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.OTHER, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.OTHER, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1392,7 +1382,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1403,7 +1393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1413,7 +1403,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.REJECTED, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.REJECTED, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1423,7 +1413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1434,7 +1424,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1444,7 +1434,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.REPLACEMENT, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.REPLACEMENT, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1454,7 +1444,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1465,7 +1455,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
@@ -1475,7 +1465,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(CustomsOptionType.TRIAL, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
+            Assert.Equal(CustomsOptionType.TRIAL, nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Type);
         }
 
         [Fact]
@@ -1485,7 +1475,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.TypeSpecified);
         }
 
         [Fact]
@@ -1496,16 +1486,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
+            Assert.Equal("option description", nativeRequest.RequestedShipment.CustomsClearanceDetail.CustomsOptions.Description);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenTypeIsNotRecognized_Test()
         {
             shipmentEntity.FedEx.CustomsOptionsType = 32;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         #endregion Customs Options Tests

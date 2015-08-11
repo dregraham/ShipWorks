@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.AddressValidation
         private AddressValidationResult result;
         private AddressAdapter adapter;
 
-        [TestInitialize]
-        public void Initialize()
+        public AddressValidationResultTest()
         {
             result = new AddressValidationResult
             {
@@ -42,56 +41,56 @@ namespace ShipWorks.Tests.AddressValidation
         [Fact]
         public void IsEqualTo_ReturnsTrue_WhenAdapterIsEqual()
         {
-            Assert.IsTrue(result.IsEqualTo(adapter));
+            Assert.True(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenStreet1IsDifferent()
         {
             adapter.Street1 = adapter.Street1.ToUpper();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenStreet2IsDifferent()
         {
             adapter.Street2 = adapter.Street2.ToUpper();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenStreet3IsDifferent()
         {
             adapter.Street3 = adapter.Street3.ToUpper();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenCityIsDifferent()
         {
             adapter.City = adapter.City.ToUpper();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenStateProvCodeIsDifferent()
         {
             adapter.StateProvCode = adapter.StateProvCode.ToLower();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenCountryCodeIsDifferent()
         {
             adapter.CountryCode = adapter.CountryCode.ToLower();
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
         public void IsEqualTo_ReturnsFalse_WhenPostalCodeIsDifferent()
         {
             adapter.PostalCode = "23456";
-            Assert.IsFalse(result.IsEqualTo(adapter));
+            Assert.False(result.IsEqualTo(adapter));
         }
 
         [Fact]
@@ -99,13 +98,13 @@ namespace ShipWorks.Tests.AddressValidation
         {
             AddressAdapter newAdapter = new AddressAdapter();
             result.CopyTo(newAdapter);
-            Assert.AreEqual("Street1", newAdapter.Street1);
-            Assert.AreEqual("Street2", newAdapter.Street2);
-            Assert.AreEqual("Street3", newAdapter.Street3);
-            Assert.AreEqual("City", newAdapter.City);
-            Assert.AreEqual("MO", newAdapter.StateProvCode);
-            Assert.AreEqual("US", newAdapter.CountryCode);
-            Assert.AreEqual("12345", newAdapter.PostalCode);
+            Assert.Equal("Street1", newAdapter.Street1);
+            Assert.Equal("Street2", newAdapter.Street2);
+            Assert.Equal("Street3", newAdapter.Street3);
+            Assert.Equal("City", newAdapter.City);
+            Assert.Equal("MO", newAdapter.StateProvCode);
+            Assert.Equal("US", newAdapter.CountryCode);
+            Assert.Equal("12345", newAdapter.PostalCode);
         }
     }
 }

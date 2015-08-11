@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         {
             string accountId = BrightpearlUtility.GetAccountId(testUrl);
 
-            Assert.AreEqual("accountCode", accountId);
+            Assert.Equal("accountCode", accountId);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         {
             BrightpearlServerTimeZoneType timeZone = BrightpearlUtility.GetTimeZone(testUrl);
 
-            Assert.AreEqual(BrightpearlServerTimeZoneType.Eu1, timeZone);
+            Assert.Equal(BrightpearlServerTimeZoneType.Eu1, timeZone);
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Stores.Brightpearl
         {
             string moduleUrl = BrightpearlUtility.GetModuleUrl("accountCode", BrightpearlServerTimeZoneType.Eu1);
 
-            Assert.AreEqual(testUrl, moduleUrl);
+            Assert.Equal(testUrl, moduleUrl);
         }
     }
 }

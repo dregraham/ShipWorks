@@ -9,8 +9,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         private AddressSuggestionsForConsumerPredicate predicate;
         private FakePredicateExpression pred;
 
-        [TestInitialize]
-        public void Setup()
+        public AddressSuggestionsForConsumerPredicateTest()
         {
             pred = new FakePredicateExpression();
 
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ValidatedAddressFields.ConsumerID == (long)123));
+            Assert.True(pred.ContainsPredicate(ValidatedAddressFields.ConsumerID == (long)123));
         }
 
         [Fact]
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ValidatedAddressFields.AddressPrefix == "Foo"));
+            Assert.True(pred.ContainsPredicate(ValidatedAddressFields.AddressPrefix == "Foo"));
         }
     }
 }

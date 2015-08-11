@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
         private Mock<ICarrierAccountRepository<UpsAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<UpsAccountEntity>>();
 
@@ -47,16 +46,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.Ups.UpsAccountID);
+            Assert.Equal(123, shipment.Ups.UpsAccountID);
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsException))]
         public void SaveAccountToShipment_ThrowsUpsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UpsAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<UpsException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
 
         [Fact]
@@ -76,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Ups.UpsAccountID);
+            Assert.Equal(123, shipment.Ups.UpsAccountID);
         }
 
         [Fact]
@@ -97,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Ups.UpsAccountID);
+            Assert.Equal(123, shipment.Ups.UpsAccountID);
         }
     }
 }

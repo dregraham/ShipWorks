@@ -40,8 +40,7 @@ namespace ShipWorks.Tests.Editions
         private StoreEntity disabledStore2;
         private StoreEntity trialStore;
 
-        [TestInitialize]
-        public void Initialize()
+        public EditionManagerTest()
         {
             // Make sure we're starting with a fresh cache each time
             ShippingPolicies.ClearCache();
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
         [Fact]
@@ -110,7 +109,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
         [Fact]
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
         [Fact]
@@ -149,7 +148,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
         [Fact]
@@ -171,7 +170,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.ShipmentTypeRegistration, ShipmentTypeCode.Endicia, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.ShipmentTypeRegistration && (ShipmentTypeCode)r.Data == ShipmentTypeCode.Endicia));
         }
 
         [Fact]
@@ -194,7 +193,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
         [Fact]
@@ -215,7 +214,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
         [Fact]
@@ -234,7 +233,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
         [Fact]
@@ -254,7 +253,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
         [Fact]
@@ -276,7 +275,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsAscendiaConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsAscendiaConsolidator));
         }
 
         [Fact]
@@ -299,7 +298,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
         [Fact]
@@ -320,7 +319,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
         [Fact]
@@ -339,7 +338,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
         [Fact]
@@ -359,7 +358,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
         [Fact]
@@ -381,7 +380,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsDhlConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsDhlConsolidator));
         }
 
         [Fact]
@@ -404,7 +403,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
         [Fact]
@@ -425,7 +424,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
         [Fact]
@@ -444,7 +443,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
         [Fact]
@@ -464,7 +463,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
         [Fact]
@@ -486,7 +485,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsGlobegisticsConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsGlobegisticsConsolidator));
         }
 
         [Fact]
@@ -509,7 +508,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
         [Fact]
@@ -530,7 +529,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
         [Fact]
@@ -549,7 +548,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
         [Fact]
@@ -569,7 +568,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
         [Fact]
@@ -591,7 +590,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsIbcConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsIbcConsolidator));
         }
 
         [Fact]
@@ -614,7 +613,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
         [Fact]
@@ -635,7 +634,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
-            Assert.IsFalse(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+            Assert.False(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
         [Fact]
@@ -654,7 +653,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
         [Fact]
@@ -674,7 +673,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
 
         [Fact]
@@ -696,7 +695,7 @@ namespace ShipWorks.Tests.Editions
 
             List<EditionRestriction> effectiveEditionRestrictions = EditionManager.RemoveRestrictionIfNeeded(EditionFeature.StampsRrDonnelleyConsolidator, null, restrictions, stores);
 
-            Assert.IsTrue(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
+            Assert.True(effectiveEditionRestrictions.Any(r => r.Feature == EditionFeature.StampsRrDonnelleyConsolidator));
         }
     }
 }

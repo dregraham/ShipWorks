@@ -32,8 +32,7 @@ namespace ShipWorks.Tests.Stores.eBay
         private UspsShipmentEntity uspsShipmentEntity;
         private OtherShipmentEntity otherShipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public EbayOnlineUpdaterTest()
         {
             EbayOrderItemEntity.SetEffectiveCheckoutStatusAlgorithm(e => 0);
             EbayOrderItemEntity.SetEffectivePaymentMethodAlgorithm(e => 0);
@@ -185,8 +184,8 @@ namespace ShipWorks.Tests.Stores.eBay
 
             EbayOnlineUpdater.GetShippingCarrierAndTracking(shipmentEntity, out newCarrierCode, out trackingNumber);
 
-            Assert.AreEqual(oldCarrierCode, newCarrierCode);
-            Assert.AreEqual(oldTrackingNumber, trackingNumber);
+            Assert.Equal(oldCarrierCode, newCarrierCode);
+            Assert.Equal(oldTrackingNumber, trackingNumber);
         }
     }
 

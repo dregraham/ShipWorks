@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
 
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVoidResponseTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         {
             CarrierRequest request = testObject.Request;
 
-            Assert.AreEqual(carrierRequest.Object, request);
+            Assert.Equal(carrierRequest.Object, request);
         }
 
         [Fact]
@@ -37,27 +36,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Response
         {
             object nativeRespose = testObject.NativeResponse;
 
-            Assert.AreEqual(nativeRespose, nativeResponse);
+            Assert.Equal(nativeRespose, nativeResponse);
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]

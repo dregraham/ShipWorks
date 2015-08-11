@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVoidRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
             account = new FedExAccountEntity {AccountNumber = "1234", MeterNumber = "45453"};
@@ -58,13 +57,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
         [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]

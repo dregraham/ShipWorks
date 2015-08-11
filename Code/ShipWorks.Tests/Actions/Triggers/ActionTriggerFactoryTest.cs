@@ -10,7 +10,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.OrderDownloaded, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(OrderDownloadedTrigger));
+            Assert.IsAssignableFrom<OrderDownloadedTrigger>(trigger);
         }
 
         [Fact]
@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.DownloadFinished, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(DownloadFinishedTrigger));
+            Assert.IsAssignableFrom<DownloadFinishedTrigger>(trigger);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentProcessed, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ShipmentProcessedTrigger));
+            Assert.IsAssignableFrom<ShipmentProcessedTrigger>(trigger);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.ShipmentVoided, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ShipmentVoidedTrigger));
+            Assert.IsAssignableFrom<ShipmentVoidedTrigger>(trigger);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.FilterContentChanged, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(FilterContentTrigger));
+            Assert.IsAssignableFrom<FilterContentTrigger>(trigger);
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Actions.Triggers
         {
             ActionTrigger trigger = ActionTriggerFactory.CreateTrigger(ActionTriggerType.Scheduled, null);
 
-            Assert.IsInstanceOfType(trigger, typeof(ScheduledTrigger));
+            Assert.IsAssignableFrom<ScheduledTrigger>(trigger);
         }
 
     }

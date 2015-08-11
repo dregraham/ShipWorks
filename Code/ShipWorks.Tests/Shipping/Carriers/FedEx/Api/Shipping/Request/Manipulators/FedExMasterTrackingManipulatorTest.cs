@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private FedExShipRequest request;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExMasterTrackingManipulatorTest()
         {
             ShipmentEntity shipmentEntity = BuildFedExShipmentEntity.SetupBaseShipmentEntity();
             shipmentEntity.TrackingNumber = "xyz";
@@ -39,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
 
-            Assert.IsNull(requestedShipment.MasterTrackingId);
+            Assert.Null(requestedShipment.MasterTrackingId);
         }
 
         [Fact]
@@ -51,7 +50,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
 
-            Assert.IsNotNull(requestedShipment.MasterTrackingId);
+            Assert.NotNull(requestedShipment.MasterTrackingId);
         }
 
         [Fact]
@@ -63,7 +62,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
                         RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
 
-            Assert.AreEqual(request.ShipmentEntity.FedEx.MasterFormID, requestedShipment.MasterTrackingId.FormId);
+            Assert.Equal(request.ShipmentEntity.FedEx.MasterFormID, requestedShipment.MasterTrackingId.FormId);
         }
 
         [Fact]
@@ -75,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             RequestedShipment requestedShipment = FedExRequestManipulatorUtilities.GetShipServiceRequestedShipment(request);
 
-            Assert.AreEqual(request.ShipmentEntity.TrackingNumber, requestedShipment.MasterTrackingId.TrackingNumber);
+            Assert.Equal(request.ShipmentEntity.TrackingNumber, requestedShipment.MasterTrackingId.TrackingNumber);
         }
     }
 }

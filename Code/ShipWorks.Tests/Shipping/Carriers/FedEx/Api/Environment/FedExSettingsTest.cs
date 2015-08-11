@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         Mock<ICarrierSettingsRepository> settingsRepository;
         private ShippingSettingsEntity shippingSettings;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExSettingsTest()
         {
             shippingSettings = new ShippingSettingsEntity {FedExUsername = "username", FedExPassword = "password"};
 
@@ -31,14 +30,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void UserCredentialKey_Test()
         {
             // Make sure the user credentials return those retrieved from the repository
-            Assert.AreEqual("username", testObject.UserCredentialsKey);
+            Assert.Equal("username", testObject.UserCredentialsKey);
         }
 
         [Fact]
         public void UserCredentialsPassword_IsEncrypted_WhenFedExPasswordIsNotNull_Test()
         {
             // Make sure the user credentials return those retrieved from the repository
-            Assert.AreEqual(SecureText.Decrypt("password", "FedEx"), testObject.UserCredentialsPassword);
+            Assert.Equal(SecureText.Decrypt("password", "FedEx"), testObject.UserCredentialsPassword);
         }
 
         [Fact]
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
             shippingSettings.FedExPassword = null;
 
             // Make sure the user credentials return those retrieved from the repository
-            Assert.IsNull(testObject.UserCredentialsPassword);
+            Assert.Null(testObject.UserCredentialsPassword);
         }
 
 
@@ -56,35 +55,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         public void CspCredentialKey_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("fOilEsjTTKLzuwNi", testObject.CspCredentialKey);
+            Assert.Equal("fOilEsjTTKLzuwNi", testObject.CspCredentialKey);
         }
 
         [Fact]
         public void CspCredentialPassword_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("vyyT54JnUrAVbq0NR8IIcq293", testObject.CspCredentialPassword);
+            Assert.Equal("vyyT54JnUrAVbq0NR8IIcq293", testObject.CspCredentialPassword);
         }
 
         [Fact]
         public void ClientProductionId_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("ITSW", testObject.ClientProductId);
+            Assert.Equal("ITSW", testObject.ClientProductId);
         }
 
         [Fact]
         public void ClientProductionVersion_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("5236", testObject.ClientProductVersion);
+            Assert.Equal("5236", testObject.ClientProductVersion);
         }
 
         [Fact]
         public void CspSolutionId_Test()
         {
             // Testing the property value to make sure inadvertent changes are not made
-            Assert.AreEqual("086", testObject.CspSolutionId);
+            Assert.Equal("086", testObject.CspSolutionId);
         }
 
         [Fact]
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
         {
             // We've setup the repository in the initialize method to indicate we should use the 
             // test server, so there's no additional setup needed
-            Assert.AreEqual("https://wsbeta.fedex.com:443/web-services/", testObject.EndpointUrl);
+            Assert.Equal("https://wsbeta.fedex.com:443/web-services/", testObject.EndpointUrl);
         }
 
         [Fact]
@@ -102,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Environment
             settingsRepository.Setup(r => r.UseTestServer).Returns(false);
 
             // This will need to be updated when we receive the production URL from FedEx
-            Assert.AreEqual("https://ws.fedex.com:443/web-services/", testObject.EndpointUrl);
+            Assert.Equal("https://ws.fedex.com:443/web-services/", testObject.EndpointUrl);
         }
     }
 }

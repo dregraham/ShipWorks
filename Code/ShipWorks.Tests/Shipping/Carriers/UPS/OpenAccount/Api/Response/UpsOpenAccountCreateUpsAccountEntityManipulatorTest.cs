@@ -27,8 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         private CodeDescriptionType responseCode;
         private UpsAccountEntity upsAccount;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountCreateUpsAccountEntityManipulatorTest()
         {
             testObject = new UpsOpenAccountCreateUpsAccountEntityManipulator();
 
@@ -36,14 +35,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 
             openAccountResponse = new OpenAccountResponse()
             {
-                Response = new ResponseType() { ResponseStatus = responseCode , Alert = new CodeDescriptionType[0]}
+                Response = new ResponseType() { ResponseStatus = responseCode, Alert = new CodeDescriptionType[0] }
             };
 
             pickupCode = new CodeOnlyType() { Code = EnumHelper.GetApiValue(UpsPickupOption.DailyOnRoute) };
 
             OpenAccountRequest nativeRequest = new OpenAccountRequest() { PickupInformation = new PickupInformationType() { PickupOption = pickupCode } };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
-           
+
             upsAccount = new UpsAccountEntity()
             {
                 Street1 = "test street",
@@ -56,34 +55,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
                 .Returns(upsAccount);
 
             upsOpenAccountResponse = new UpsOpenAccountResponse(openAccountResponse, carrierRequest.Object, new List<ICarrierResponseManipulator>());
-            
+
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsOpenAccountBusinessAddressException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountBusinessAddressException_ResponseContainsBillingCandidate_Test()
         {
             openAccountResponse.BillingAddressCandidate = new AddressKeyCandidateType();
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountBusinessAddressException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsOpenAccountPickupAddressException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountPickupAddressException_ResponseContainsPickupAddressCandidates_Test()
         {
             openAccountResponse.PickupAddressCandidate = new AddressKeyCandidateType();
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountPickupAddressException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsOpenAccountException))]
         public void UpsOpenAccountCreateUpsAccountEntityManipulator_ThrowsUpsOpenAccountException_ResponseContainsFailedCode_Test()
         {
             responseCode.Code = EnumHelper.GetApiValue(UpsOpenAccountResponseStatusCode.Failed);
 
-            testObject.Manipulate(upsOpenAccountResponse);
+            Assert.Throws<UpsOpenAccountException>(() => testObject.Manipulate(upsOpenAccountResponse));
         }
 
         [Fact]
@@ -91,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
         {
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual("42", upsAccount.AccountNumber);
+            Assert.Equal("42", upsAccount.AccountNumber);
         }
 
         [Fact]
@@ -101,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual((int) UpsRateType.Occasional, upsAccount.RateType);
+            Assert.Equal((int)UpsRateType.Occasional, upsAccount.RateType);
         }
 
         [Fact]
@@ -111,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api.Response
 
             testObject.Manipulate(upsOpenAccountResponse);
 
-            Assert.AreEqual((int) UpsRateType.DailyPickup, upsAccount.RateType);
+            Assert.Equal((int)UpsRateType.DailyPickup, upsAccount.RateType);
         }
     }
 }

@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
         UpsPackageEntity package;
         UpsServicePackageTypeSetting packageSetting;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsPackageServiceOptionsElementWriterTests()
         {
             shipment = new UpsShipmentEntity { Shipment = new ShipmentEntity() };
             package = shipment.Packages.AddNew();
@@ -53,8 +52,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
             var names =
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Name/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
-
-            CollectionAssert.AreEqual(new[] { package.VerbalConfirmationName }, names);
+            
+            Assert.Equal(new[] { package.VerbalConfirmationName }, names);
         }
 
         [Fact]
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Name/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
 
-            CollectionAssert.DoesNotContain(names, package.VerbalConfirmationName);
+            Assert.DoesNotContain(package.VerbalConfirmationName, names);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Phone/Number/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
 
-            CollectionAssert.AreEqual(new[] { package.VerbalConfirmationPhone }, phoneNumbers);
+            Assert.Equal(new[] { package.VerbalConfirmationPhone }, phoneNumbers);
         }
 
         [Fact]
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation/ContactInfo/Phone/Extension/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
 
-            CollectionAssert.AreEqual(new[] { package.VerbalConfirmationPhoneExtension }, phoneExtensions);
+            Assert.Equal(new[] { package.VerbalConfirmationPhoneExtension }, phoneExtensions);
         }
 
         [Fact]
@@ -145,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, confirmations.Count);
+            Assert.Equal(0, confirmations.Count);
         }
 
         [Fact]
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/VerbalConfirmation"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, confirmations.Count);
+            Assert.Equal(0, confirmations.Count);
         }
 
         [Fact]
@@ -175,7 +174,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce/RegulationSet/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
 
-            CollectionAssert.AreEqual(new[] { EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet) }, regulationSets);
+            Assert.Equal(new[] { EnumHelper.GetApiValue((UpsDryIceRegulationSet)package.DryIceRegulationSet) }, regulationSets);
         }
 
         [Fact]
@@ -189,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce/DryIceWeight/UnitOfMeasurement/Code/text()"))
                     .Cast<XText>().Select(x => x.Value).ToList();
 
-            CollectionAssert.AreEqual(new[] { "LBS" }, units);
+            Assert.Equal(new[] { "LBS" }, units);
         }
 
         [Fact]
@@ -206,7 +205,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
 
             var weightInLbs = WeightUtility.Convert(packageSetting.WeightUnitOfMeasure, WeightUnitOfMeasure.Pounds, package.DryIceWeight);
 
-            CollectionAssert.AreEqual(new[] { weightInLbs.ToString("##0.0") }, weights);
+            Assert.Equal(new[] { weightInLbs.ToString("##0.0") }, weights);
         }
 
         [Fact]
@@ -222,7 +221,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce/MedicalUseIndicator"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(1, medicalUses.Count);
+            Assert.Equal(1, medicalUses.Count);
         }
 
         [Fact]
@@ -238,7 +237,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce/MedicalUseIndicator"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, medicalUses.Count);
+            Assert.Equal(0, medicalUses.Count);
         }
 
         [Fact]
@@ -254,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce/MedicalUseIndicator"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, medicalUses.Count);
+            Assert.Equal(0, medicalUses.Count);
         }
 
         [Fact]
@@ -268,7 +267,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OnLineTools.Api.ElementWriters
                 ((IEnumerable)element.XPathEvaluate("/PackageServiceOptions/DryIce"))
                     .Cast<XElement>().ToList();
 
-            Assert.AreEqual(0, dryIces.Count);
+            Assert.Equal(0, dryIces.Count);
         }
     }
 }

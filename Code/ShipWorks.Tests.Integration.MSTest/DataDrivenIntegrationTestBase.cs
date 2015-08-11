@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Integration.MSTest
         /// <returns>Returns true when a row needs to be tests (i.e. the current row is not the headers); otherwise false.</returns>
         public bool PopulateTestObject<T>(T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
         {
-            DataRow testDataRow = TestContext.DataRow;
+            DataRow testDataRow = row;
 
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
 
@@ -125,7 +125,7 @@ namespace ShipWorks.Tests.Integration.MSTest
             StringBuilder populationCode = new StringBuilder();
             List<ColumnPropertyMapDefinition> columnPropertyMap = new List<ColumnPropertyMapDefinition>();
 
-            PopulateTranslationMap(TestContext.DataConnection.Database, TestContext.DataRow.Table.TableName, columnPropertyMap);
+            PopulateTranslationMap(TestContext.DataConnection.Database, row.Table.TableName, columnPropertyMap);
 
             if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
             {

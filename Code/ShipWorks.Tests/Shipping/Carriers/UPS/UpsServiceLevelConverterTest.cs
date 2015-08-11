@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.Ups3DaySelect, null);
 
-            Assert.AreEqual(ServiceLevelType.ThreeDays, serviceLevel);
+            Assert.Equal(ServiceLevelType.ThreeDays, serviceLevel);
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         {
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(UpsServiceType.UpsGround, -1);
 
-            Assert.AreEqual(ServiceLevelType.Anytime, serviceLevel);
+            Assert.Equal(ServiceLevelType.Anytime, serviceLevel);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, upsTransitTime);
 
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
+            Assert.Equal(ServiceLevelType.TwoDays, serviceLevel);
         }
 
         [Fact]
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, upsTransitTime);
 
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
+            Assert.Equal(ServiceLevelType.TwoDays, serviceLevel);
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             ServiceLevelType serviceLevel = UpsServiceLevelConverter.GetServiceLevel(serviceRate, upsTransitTime);
 
-            Assert.AreEqual(ServiceLevelType.TwoDays, serviceLevel);
+            Assert.Equal(ServiceLevelType.TwoDays, serviceLevel);
         }
     }
 }

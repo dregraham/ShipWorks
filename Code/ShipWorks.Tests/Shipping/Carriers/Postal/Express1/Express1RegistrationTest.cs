@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
 
         private Express1RegistrationResult registrationResult;
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1RegistrationTest()
         {
             registrationResult = new Express1RegistrationResult
             {
@@ -103,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            Assert.AreEqual(registrationResult.AccountNumber, testObject.UserName);
+            Assert.Equal(registrationResult.AccountNumber, testObject.UserName);
         }
 
         [Fact]
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         {
             testObject.CreateNewAccount();
 
-            Assert.AreEqual(registrationResult.Password, testObject.PlainTextPassword);
+            Assert.Equal(registrationResult.Password, testObject.PlainTextPassword);
         }
 
         [Fact]
@@ -180,7 +179,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             encryptionStrategy.Setup(s => s.EncryptPassword(It.IsAny<Express1Registration>())).Returns("ThePasswordHasBeenEncrypted");
             string encryptedPassword = testObject.EncryptedPassword;
 
-            Assert.AreEqual("ThePasswordHasBeenEncrypted", encryptedPassword);
+            Assert.Equal("ThePasswordHasBeenEncrypted", encryptedPassword);
         }
     }
 }

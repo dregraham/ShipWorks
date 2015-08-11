@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         private ShipmentEntity shipment;
         private Mock<IiParcelServiceGateway> gateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelTrackRequestTest()
         {
             gateway = new Mock<IiParcelServiceGateway>();
             gateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -70,25 +69,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Track
         [Fact]
         public void OperationName_Test()
         {
-            Assert.AreEqual("Track", testObject.OperationName);
+            Assert.Equal("Track", testObject.OperationName);
         }
 
         [Fact]
         public void RootElementName_Test()
         {
-            Assert.AreEqual("iparcelTrackingRequest", testObject.RootElementName);
+            Assert.Equal("iparcelTrackingRequest", testObject.RootElementName);
         }
 
         [Fact]
         public void RequestElements_ContainOneItems_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count);
+            Assert.Equal(1, testObject.RequestElements.Count);
         }
 
         [Fact]
         public void RequestElements_ContainsTrackingNumberElement_Test()
         {
-            Assert.AreEqual(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));
+            Assert.Equal(1, testObject.RequestElements.Count(e => e.GetType() == typeof(iParcelTrackingNumberElement)));
         }
     }
 }

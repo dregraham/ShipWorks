@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
         private Mock<ICarrierResponseManipulator> mockedShipmentManipulator;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipResponseTest()
         {
             mockedShipmentManipulator = new Mock<ICarrierResponseManipulator>();
             manipulators = new List<ICarrierResponseManipulator>
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response
             }
             catch (FedExApiCarrierException ex)
             {
-                Assert.IsTrue(ex.Message.Contains("TestFailure"));
+                Assert.True(ex.Message.Contains("TestFailure"));
             }
         }
 

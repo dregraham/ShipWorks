@@ -18,17 +18,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExAdmissibilityManipulatorTest()
         {
             shipmentEntity = new ShipmentEntity
             {
                 FedEx = new FedExShipmentEntity
                 {
-                    CustomsAdmissibilityPackaging = (int) FedExPhysicalPackagingType.Bag
+                    CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Bag
                 }
             };
-            
+
             nativeRequest = new ProcessShipmentRequest()
             {
                 RequestedShipment = new RequestedShipment()
@@ -39,36 +38,33 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     }
                 }
             };
-            
+
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject = new FedExAdmissibilityManipulator();
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -80,7 +76,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -92,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
         }
 
         [Fact]
@@ -104,19 +100,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
         }
 
         [Fact]
         public void Manipulate_AccountsForNullElementInPackageLineItemArray_Test()
         {
             // setup the test by setting the line item array to null
-            nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[] {null};
+            nativeRequest.RequestedShipment.RequestedPackageLineItems = new RequestedPackageLineItem[] { null };
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
@@ -126,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsFalse(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified);
+            Assert.False(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified);
         }
 
         [Fact]
@@ -136,18 +132,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified);
+            Assert.True(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackagingSpecified);
         }
 
         [Fact]
         public void Manipulate_PhysicalPackagingTypeIsBag_WhenShipCountryCodeIsCA_AndFedExTypeIsBag_Test()
         {
             shipmentEntity.ShipCountryCode = "CA";
-            shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int) FedExPhysicalPackagingType.Bag;
+            shipmentEntity.FedEx.CustomsAdmissibilityPackaging = (int)FedExPhysicalPackagingType.Bag;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BAG, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BAG, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -158,7 +154,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BARREL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BARREL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -169,7 +165,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BASKET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BASKET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -180,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BOX, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BOX, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -191,7 +187,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BUCKET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BUCKET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -202,7 +198,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.BUNDLE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.BUNDLE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -213,7 +209,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.CARTON, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.CARTON, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -224,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.CASE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.CASE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -235,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.CONTAINER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.CONTAINER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -246,7 +242,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.CRATE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.CRATE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -257,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.CYLINDER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.CYLINDER, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -268,7 +264,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.DRUM, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.DRUM, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -279,7 +275,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.ENVELOPE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.ENVELOPE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -290,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.PAIL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.PAIL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -301,7 +297,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.PALLET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.PALLET, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -312,7 +308,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.PIECE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.PIECE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -323,7 +319,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.REEL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.REEL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -334,7 +330,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.ROLL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.ROLL, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -345,7 +341,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.SKID, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.SKID, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -356,7 +352,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.TANK, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.TANK, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
@@ -367,19 +363,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsFedExException_WhenShipCountryCodeIsCA_AndFedExTypeIsUnknown_Test()
         {
             shipmentEntity.ShipCountryCode = "CA";
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = 67;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
 
-            Assert.AreEqual(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
+            Assert.Equal(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
     }
 }

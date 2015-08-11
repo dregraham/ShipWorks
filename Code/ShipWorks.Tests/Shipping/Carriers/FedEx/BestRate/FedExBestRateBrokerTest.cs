@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICarrierAccountRepository<FedExAccountEntity>> genericRepositoryMock;
         private Mock<FedExShipmentType> genericShipmentTypeMock;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExBestRateBrokerTest()
         {
             genericRepositoryMock = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
             genericShipmentTypeMock = new Mock<FedExShipmentType>();
@@ -30,13 +29,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_FedExSettingSpecfiesShipWorks_Test()
         {
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
         }
 
         [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_FedExSettingSpecfiesCarrier_Test()
         {
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.Carrier }));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { FedExInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

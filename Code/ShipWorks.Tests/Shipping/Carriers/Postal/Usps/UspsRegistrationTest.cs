@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         Mock<IUspsRegistrationGateway> mockedGateway;
         private Mock<IRegistrationPromotion> promotion;
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsRegistrationTest()
         {
             // Setup a validator so our test object always passes validation
             mockedValidator = new Mock<IUspsRegistrationValidator>();
@@ -37,23 +36,22 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             mockedValidator.Verify(v => v.Validate(testObject), Times.Once());
         }
-        
+
         [Fact]
-        [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsRegistrationException_WhenValidationFails_Test()
         {
             // Setup our mocked validator to return two errors
             mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
                 .Returns
                 (
-                    new List<RegistrationValidationError>() 
-                    { 
+                    new List<RegistrationValidationError>()
+                    {
                         new RegistrationValidationError("Mocked failure 1"),
                         new RegistrationValidationError("Mocked failure 2")
                     }
                 );
 
-            testObject.Submit();
+            Assert.Throws<UspsRegistrationException>(() => testObject.Submit());
         }
 
         [Fact]
@@ -72,8 +70,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
             mockedValidator.Setup(v => v.Validate(It.IsAny<UspsRegistration>()))
                 .Returns
                 (
-                    new List<RegistrationValidationError>() 
-                    { 
+                    new List<RegistrationValidationError>()
+                    {
                         new RegistrationValidationError("Mocked failure 1"),
                         new RegistrationValidationError("Mocked failure 2")
                     }
@@ -84,7 +82,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
                 testObject.Submit();
             }
             catch (UspsRegistrationException)
-            { 
+            {
                 // Catch the exception here since we just want to make sure
                 // the gateway was not called
             }
@@ -94,12 +92,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
         }
 
         [Fact]
-        [ExpectedException(typeof(UspsRegistrationException))]
         public void Submit_ThrowsUspsException_WhenRegistrationGatewayThrowsException_Test()
         {
             // Setup up our mocked gateway to throw an execption
             mockedGateway.Setup(g => g.Register(It.IsAny<UspsRegistration>())).Throws(new UspsRegistrationException());
-            testObject.Submit();
+            Assert.Throws<UspsRegistrationException>(() => testObject.Submit());
         }
 
 
@@ -110,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             // Make sure we have a version 4 formatted IP address
             string ipExpression = "\\b\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\b";
-            Assert.IsTrue(Regex.IsMatch(testObject.MachineInfo.IPAddress, ipExpression));
+            Assert.True(Regex.IsMatch(testObject.MachineInfo.IPAddress, ipExpression));
         }
     }
 }

@@ -28,13 +28,12 @@ namespace ShipWorks.Tests.Stores.Newegg
 
         private RemoveItemRequest testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public RemoveItemRequestTest()
         {
             credentials = new Credentials(sellerId, string.Empty, NeweggChannelType.US);
             orderToRemoveItemsFrom = new Order { OrderNumber = orderNumberToRemoveFrom };
             itemToRemove = new Item { SellerPartNumber = sellerPartNumberToRemove };
-            
+
             string errorResponse = @"<?xml version=""1.0"" encoding=""utf-8""?>
                     <Errors>
                       <Error>
@@ -84,19 +83,17 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        [ExpectedException(typeof(NeweggException))]
         public void RemoveItems_ThrowsNeweggException_WhenErrorResponseIsReceived_Test()
         {
             testObject = new RemoveItemRequest(credentials, errorRequest);
-            testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
+            Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
-        [ExpectedException(typeof(NeweggException))]
         public void RemoveItems_ThrowsNeweggException_WhenIsSuccessfulIsFalse_Test()
         {
             testObject = new RemoveItemRequest(credentials, failedRequest);
-            testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
+            Assert.Throws<NeweggException>(() => testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove }));
         }
 
         [Fact]
@@ -105,8 +102,8 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject = new RemoveItemRequest(credentials, successfulRequest);
             ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
-            Assert.AreEqual(1, result.Details.Order.ItemResult.ItemsRemoved.Count);
-            Assert.AreEqual(sellerPartNumberToRemove, result.Details.Order.ItemResult.ItemsRemoved[0].SellerPartNumber);
+            Assert.Equal(1, result.Details.Order.ItemResult.ItemsRemoved.Count);
+            Assert.Equal(sellerPartNumberToRemove, result.Details.Order.ItemResult.ItemsRemoved[0].SellerPartNumber);
         }
 
         [Fact]
@@ -115,7 +112,7 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject = new RemoveItemRequest(credentials, successfulRequest);
             ItemRemovalResult result = testObject.RemoveItems(orderToRemoveItemsFrom, new List<Item> { itemToRemove });
 
-            Assert.AreEqual(orderNumberToRemoveFrom, result.Details.Order.OrderNumber);
+            Assert.Equal(orderNumberToRemoveFrom, result.Details.Order.OrderNumber);
         }
 
         [Fact]
@@ -127,7 +124,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request 
-            Assert.AreEqual(HttpVerb.Put, ((Mocked.MockedNeweggRequest)successfulRequest).Method);
+            Assert.Equal(HttpVerb.Put, ((Mocked.MockedNeweggRequest)successfulRequest).Method);
         }
 
         [Fact]
@@ -140,7 +137,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request 
-            Assert.AreEqual(expectedUrl, ((Mocked.MockedNeweggRequest)successfulRequest).Url);
+            Assert.Equal(expectedUrl, ((Mocked.MockedNeweggRequest)successfulRequest).Url);
         }
 
         [Fact]
@@ -167,7 +164,7 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             // Since we configured our request with a mocked Newegg request we can inspect
             // the data/configuration of the request 
-            Assert.AreEqual(0, string.Compare(expectedRequestBody, ((Mocked.MockedNeweggRequest)successfulRequest).Body.Trim()));
+            Assert.Equal(0, string.Compare(expectedRequestBody, ((Mocked.MockedNeweggRequest)successfulRequest).Body.Trim()));
         }
     }
 }

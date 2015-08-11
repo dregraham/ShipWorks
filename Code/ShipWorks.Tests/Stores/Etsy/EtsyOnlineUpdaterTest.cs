@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Stores.Etsy
         private ShipmentEntity shipmentEntity;
         private PostalShipmentEntity postalShipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public EtsyOnlineUpdaterTest()
         {
             orderEntity = new EtsyOrderEntity { OrderNumber = 123456 };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
 
-            Assert.AreEqual("dhl", carrierCode);
+            Assert.Equal("dhl", carrierCode);
         }
 
         [Fact]
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
 
-            Assert.AreEqual("dhl", carrierCode);
+            Assert.Equal("dhl", carrierCode);
         }
 
         [Fact]
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
 
-            Assert.AreEqual("usps", carrierCode);
+            Assert.Equal("usps", carrierCode);
         }
 
         [Fact]
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
 
-            Assert.AreEqual("usps", carrierCode);
+            Assert.Equal("usps", carrierCode);
         }
 
         [Fact]
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Stores.Etsy
 
             string carrierCode = EtsyOnlineUpdater.GetEtsyCarrierCode(shipmentEntity);
 
-            Assert.AreEqual("other", carrierCode);
+            Assert.Equal("other", carrierCode);
         }
     }
 }

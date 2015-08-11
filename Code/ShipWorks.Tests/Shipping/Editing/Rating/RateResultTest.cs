@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shipping.Editing.Rating
         {
             RateResult testObject = new RateResult("Test Description", "3");
             testObject.MaskDescription(new List<RateResult>());
-            Assert.AreEqual("Test Description", testObject.Description);
+            Assert.Equal("Test Description", testObject.Description);
         }
     }
 }

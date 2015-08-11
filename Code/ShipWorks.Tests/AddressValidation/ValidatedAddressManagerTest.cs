@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.AddressValidation
         private ValidatedAddressEntity addressForOtherOrder;
         private ValidatedAddressEntity addressForOrder;
 
-        [TestInitialize]
-        public void Initialize()
+        public ValidatedAddressManagerTest()
         {
             originalAddress = new AddressAdapter
             {
@@ -102,10 +101,10 @@ namespace ShipWorks.Tests.AddressValidation
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
 
-            Assert.AreEqual(newAddress.Street1, shipmentWithOrderAddress.ShipStreet1);
-            Assert.AreNotEqual(newAddress.Street1, shipmentWithOtherAddress.ShipStreet1);
-            Assert.AreNotEqual(newAddress.Street1, shipmentFromOtherOrder.ShipStreet1);
-            Assert.AreNotEqual(newAddress.Street1, shipmentIsProcessed.ShipStreet1);
+            Assert.Equal(newAddress.Street1, shipmentWithOrderAddress.ShipStreet1);
+            Assert.NotEqual(newAddress.Street1, shipmentWithOtherAddress.ShipStreet1);
+            Assert.NotEqual(newAddress.Street1, shipmentFromOtherOrder.ShipStreet1);
+            Assert.NotEqual(newAddress.Street1, shipmentIsProcessed.ShipStreet1);
         }
 
         [Fact]
@@ -113,9 +112,9 @@ namespace ShipWorks.Tests.AddressValidation
         {
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
 
-            Assert.AreEqual(newAddress.AddressValidationStatus, shipmentWithOrderAddress.ShipAddressValidationStatus);
-            Assert.AreEqual(newAddress.AddressValidationError, shipmentWithOrderAddress.ShipAddressValidationError);
-            Assert.AreEqual(newAddress.AddressValidationSuggestionCount, shipmentWithOrderAddress.ShipAddressValidationSuggestionCount);
+            Assert.Equal(newAddress.AddressValidationStatus, shipmentWithOrderAddress.ShipAddressValidationStatus);
+            Assert.Equal(newAddress.AddressValidationError, shipmentWithOrderAddress.ShipAddressValidationError);
+            Assert.Equal(newAddress.AddressValidationSuggestionCount, shipmentWithOrderAddress.ShipAddressValidationSuggestionCount);
         }
 
         [Fact]
@@ -138,8 +137,8 @@ namespace ShipWorks.Tests.AddressValidation
 
             ValidatedAddressManager.PropagateAddressChangesToShipments(dataAccess.Object, testOrder.OrderID, originalAddress, newAddress);
 
-            Assert.IsTrue(new AddressAdapter(addressForOrder, string.Empty) == new AddressAdapter(savedAddresses[0], string.Empty));
-            Assert.AreEqual(shipmentWithOrderAddress.ShipmentID, savedAddresses[0].ConsumerID);
+            Assert.True(new AddressAdapter(addressForOrder, string.Empty) == new AddressAdapter(savedAddresses[0], string.Empty));
+            Assert.Equal(shipmentWithOrderAddress.ShipmentID, savedAddresses[0].ConsumerID);
         }
 
         [Fact]
@@ -234,8 +233,8 @@ namespace ShipWorks.Tests.AddressValidation
                 .Callback<IEntity2>(x => savedEntity = x as ValidatedAddressEntity);
             ValidatedAddressManager.SaveEntityAddress(dataAccess.Object, testOrder.OrderID, testAddress);
             
-            Assert.AreEqual(testOrder.OrderID, savedEntity.ConsumerID);
-            Assert.AreEqual(testAddress, savedEntity);
+            Assert.Equal(testOrder.OrderID, savedEntity.ConsumerID);
+            Assert.Equal(testAddress, savedEntity);
         }
 
         private void AssertSavedAddress(IEnumerable<ValidatedAddressEntity> savedAddresses, ValidatedAddressEntity orderAddress, bool isOriginalExpected)
@@ -246,13 +245,13 @@ namespace ShipWorks.Tests.AddressValidation
             {
                 if (validatedAddress == orderAddress)
                 {
-                    Assert.AreEqual(testOrder.OrderID, validatedAddress.ConsumerID);
-                    Assert.AreEqual(isOriginalExpected, validatedAddress.IsOriginal);
+                    Assert.Equal(testOrder.OrderID, validatedAddress.ConsumerID);
+                    Assert.Equal(isOriginalExpected, validatedAddress.IsOriginal);
                     wasFound = true;
                 }
             }
 
-            Assert.IsTrue(wasFound);
+            Assert.True(wasFound);
         }
     }
 }

@@ -9,8 +9,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         private UnprocessedShipmentsForOrderPredicate predicate;
         private FakePredicateExpression pred;
 
-        [TestInitialize]
-        public void Setup()
+        public UnprocessedShipmentsForOrderPredicateTest()
         {
             pred = new FakePredicateExpression();
 
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.OrderID == (long)123));
+            Assert.True(pred.ContainsPredicate(ShipmentFields.OrderID == (long)123));
         }
 
         [Fact]
@@ -30,7 +29,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.Processed == false));
+            Assert.True(pred.ContainsPredicate(ShipmentFields.Processed == false));
         }
     }
 }

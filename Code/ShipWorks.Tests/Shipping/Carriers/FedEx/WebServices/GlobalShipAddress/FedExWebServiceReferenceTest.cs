@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress
             // to be a double. This is just a test to serve as a reminder that the Reference.cs needs to be updated
             // if it gets regenerated in the future.
             ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress.Distance d = new Distance();
-            Assert.IsInstanceOfType(d.Value, typeof(double));
+            Assert.IsAssignableFrom<double>(d.Value);
         }
     }
 }

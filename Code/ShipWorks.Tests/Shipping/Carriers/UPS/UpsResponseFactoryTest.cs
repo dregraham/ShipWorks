@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         private UpsResponseFactory testObject;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsResponseFactoryTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, new ShipmentEntity());
 
@@ -27,18 +26,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
         #region CreateRegisterUserResponse Tests
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseIsNull_Test()
         {
-            testObject.CreateRegisterUserResponse(null, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(null, carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void CreateRegisterUserResponse_ThrowsCarrierException_WhenInvalidNativeResponseProvided_Test()
         {
             UpsResponseFactory invalidType = new UpsResponseFactory();
-            testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.CreateRegisterUserResponse(invalidType, carrierRequest.Object));
         }
 
         [Fact]
@@ -48,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
 
             ICarrierResponse response = testObject.CreateRegisterUserResponse(validType, carrierRequest.Object);
 
-            Assert.IsInstanceOfType(response, typeof(UpsInvoiceRegistrationResponse));
+            Assert.IsAssignableFrom<UpsInvoiceRegistrationResponse>(response);
         }
         #endregion
     }

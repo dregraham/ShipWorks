@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 
         private List<Mock<ICarrierResponseManipulator>> manipulators;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationResponseTest()
         {
             carrierRequest = new Mock<CarrierRequest>();
 
@@ -44,9 +43,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 
             manipulators = new List<Mock<ICarrierResponseManipulator>> { manipulator };
 
-            testObject=new UpsInvoiceRegistrationResponse(
+            testObject = new UpsInvoiceRegistrationResponse(
                 nativeResponse,
-                carrierRequest.Object,manipulators.Select(x=>x.Object).ToList());
+                carrierRequest.Object, manipulators.Select(x => x.Object).ToList());
         }
 
         [Fact]
@@ -61,12 +60,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
         }
 
         [Fact]
-        [ExpectedException(typeof(UpsApiException))]
         public void Process_UpsApiException_WhenResponseStatusIsFailure_Test()
         {
             nativeResponse.Response.ResponseStatus.Code = EnumHelper.GetApiValue(UpsInvoiceRegistrationResponseStatusCode.Failed);
 
-            testObject.Process();
+            Assert.Throws<UpsApiException>(() => testObject.Process());
         }
     }
 }

@@ -50,7 +50,7 @@ namespace ShipWorks.Tests.Core
                 }
             }
 
-            Assert.AreEqual(0, missingObfuscationAttribute.Length, missingObfuscationAttribute);
+            Assert.Equal(0, missingObfuscationAttribute.Length);
         }
 
         /// <summary>

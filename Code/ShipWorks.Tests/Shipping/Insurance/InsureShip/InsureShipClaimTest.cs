@@ -29,8 +29,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         private ShipmentEntity shipment;
         private InsureShipAffiliate affiliate;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipClaimTest()
         {
             settings = new Mock<IInsureShipSettings>();
             settings.Setup(s => s.DistributorID).Returns("D00002");
@@ -75,12 +74,11 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Submit_ThrowsInsureShipException_WhenClaimHasAlreadyBeenMade_Test()
         {
             shipment.InsurancePolicy.ClaimID = 1;
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+            Assert.Throws<InsureShipException>(() => testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com"));
         }
 
         [Fact]
@@ -92,19 +90,18 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
             }
-            catch(InsureShipException)
+            catch (InsureShipException)
             { }
 
             log.Verify(l => l.ErrorFormat("A claim has already been submitted for shipment {0}", shipment.ShipmentID), Times.Once());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Submit_ThrowsInsureShipException_WhenShipmentIsProcessed_Test()
         {
             shipment.Processed = false;
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+            Assert.Throws<InsureShipException>(() => testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com"));
         }
 
         [Fact]
@@ -116,20 +113,19 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
             }
-            catch(InsureShipException)
+            catch (InsureShipException)
             { }
 
             log.Verify(l => l.InfoFormat("Shipment {0} has not been processed. A claim cannot be submitted for an unprocessed shipment.", shipment.ShipmentID), Times.Once());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Submit_ThrowsInsureShipException_WhenShipDateDoesNotExceedWaitPeriod_Test()
         {
             // Set the ship date to be a day short of the wait period
             shipment.ShipDate = DateTime.UtcNow.Subtract(settings.Object.ClaimSubmissionWaitingPeriod).AddDays(1);
 
-            testObject.Submit(InsureShipClaimType.Missing, "item 1", "desc", 1.00M, "email@shipworks.com");
+            Assert.Throws<InsureShipException>(() => testObject.Submit(InsureShipClaimType.Missing, "item 1", "desc", 1.00M, "email@shipworks.com"));
         }
 
         [Fact]
@@ -187,7 +183,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
-            Assert.AreEqual((int)InsureShipClaimType.Damage, shipment.InsurancePolicy.ClaimType);
+            Assert.Equal((int)InsureShipClaimType.Damage, shipment.InsurancePolicy.ClaimType);
         }
 
         [Fact]
@@ -195,7 +191,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
-            Assert.AreEqual("item 1", shipment.InsurancePolicy.ItemName);
+            Assert.Equal("item 1", shipment.InsurancePolicy.ItemName);
         }
 
         [Fact]
@@ -203,7 +199,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
-            Assert.AreEqual(1.00M, shipment.InsurancePolicy.DamageValue);
+            Assert.Equal(1.00M, shipment.InsurancePolicy.DamageValue);
         }
 
         [Fact]
@@ -212,7 +208,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             DateTime testBegin = DateTime.UtcNow;
 
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
-            
+
             DateTime testEnd = DateTime.UtcNow;
 
 
@@ -221,7 +217,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             TimeSpan beginToSubmission = shipment.InsurancePolicy.SubmissionDate.Value.Subtract(testBegin);
             TimeSpan endFromSubmission = testEnd.Subtract(shipment.InsurancePolicy.SubmissionDate.Value);
 
-            Assert.IsTrue(beginToSubmission.TotalMilliseconds >= 0 && endFromSubmission.TotalMilliseconds >= 0);
+            Assert.True(beginToSubmission.TotalMilliseconds >= 0 && endFromSubmission.TotalMilliseconds >= 0);
         }
 
         [Fact]
@@ -229,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
 
-            Assert.AreEqual("email@shipworks.com", shipment.InsurancePolicy.EmailAddress);
+            Assert.Equal("email@shipworks.com", shipment.InsurancePolicy.EmailAddress);
         }
 
         [Fact]
@@ -282,13 +278,12 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        [ExpectedException(typeof (InsureShipException))]
         public void Submit_CatchesInsureShipResponseException_AndThrowsInsureShipException_Test()
         {
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
             response.Setup(r => r.Process()).Throws(responseException);
 
-            testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
+            Assert.Throws< InsureShipException>(() => testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com"));
         }
 
         [Fact]
@@ -301,19 +296,18 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             {
                 testObject.Submit(InsureShipClaimType.Damage, "item 1", "desc", 1.00M, "email@shipworks.com");
             }
-            catch(InsureShipException)
+            catch (InsureShipException)
             { }
 
             log.Verify(l => l.Error("An error occurred trying to submit a claim to InsureShip on shipment 100031. A(n) MissingRequiredParameter response code was received from InsureShip.", responseException), Times.Once());
-        }        
+        }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void CheckStatus_ThrowsException_WhenClaimIDIsNull_Test()
         {
             shipment.InsurancePolicy.ClaimID = null;
-            
-            testObject.CheckStatus();
+
+            Assert.Throws<InsureShipException>(() => testObject.CheckStatus());
         }
 
         [Fact]
@@ -411,7 +405,6 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void CheckStatus_CatchesInsureShipResponseException_AndThrowsInsureShipException_Test()
         {
             shipment.InsurancePolicy.ClaimID = 939;
@@ -419,7 +412,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             InsureShipResponseException responseException = new InsureShipResponseException(InsureShipResponseCode.MissingRequiredParameter);
             response.Setup(r => r.Process()).Throws(responseException);
 
-            testObject.CheckStatus();
+            Assert.Throws<InsureShipException>(() => testObject.CheckStatus());
         }
 
         [Fact]
@@ -430,7 +423,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
 
             string status = testObject.CheckStatus();
 
-            Assert.AreEqual(shipment.InsurancePolicy.ClaimStatus, status);
+            Assert.Equal(shipment.InsurancePolicy.ClaimStatus, status);
         }
     }
 }

@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private FedExEmailNotificationsManipulator testObject;
         private Mock<ICarrierSettingsRepository> settingsRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExEmailNotificationsManipulatorTest()
         {
             settingsRepository = new Mock<ICarrierSettingsRepository>();
 
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
+            Assert.Null(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
+            Assert.Null(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
+            Assert.Null(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -91,7 +90,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.AreEqual(4, ((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested.EMailNotificationDetail.Recipients.Count());
+            Assert.Equal(4, ((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested.EMailNotificationDetail.Recipients.Count());
         }
 
         //Sender
@@ -103,8 +102,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(1, recipient.NotificationEventsRequested.Count());
-            Assert.AreEqual(EMailNotificationEventType.ON_EXCEPTION, recipient.NotificationEventsRequested.First());
+            Assert.Equal(1, recipient.NotificationEventsRequested.Count());
+            Assert.Equal(EMailNotificationEventType.ON_EXCEPTION, recipient.NotificationEventsRequested.First());
         }
 
         [Fact]
@@ -115,10 +114,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(3, recipient.NotificationEventsRequested.Count());
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_SHIPMENT));
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_EXCEPTION));
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_DELIVERY));
+            Assert.Equal(3, recipient.NotificationEventsRequested.Count());
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_SHIPMENT));
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_EXCEPTION));
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_DELIVERY));
         }
 
         [Fact]
@@ -129,7 +128,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_SHIPMENT));
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_SHIPMENT));
         }
 
         [Fact]
@@ -140,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_EXCEPTION));
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_EXCEPTION));
         }
 
         [Fact]
@@ -151,7 +150,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.IsTrue(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_DELIVERY));
+            Assert.True(recipient.NotificationEventsRequested.Any(x => x == EMailNotificationEventType.ON_DELIVERY));
         }
 
         [Fact]
@@ -162,7 +161,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(EMailNotificationFormatType.HTML, recipient.Format);
+            Assert.Equal(EMailNotificationFormatType.HTML, recipient.Format);
         }
 
         [Fact]
@@ -173,7 +172,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual("EN", recipient.Localization.LanguageCode);
+            Assert.Equal("EN", recipient.Localization.LanguageCode);
         }
 
         [Fact]
@@ -184,7 +183,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(EMailNotificationRecipientType.SHIPPER, recipient.EMailNotificationRecipientType);
+            Assert.Equal(EMailNotificationRecipientType.SHIPPER, recipient.EMailNotificationRecipientType);
         }
 
         [Fact]
@@ -195,7 +194,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(shipmentEntity.OriginEmail, recipient.EMailAddress);
+            Assert.Equal(shipmentEntity.OriginEmail, recipient.EMailAddress);
         }
 
         //Recipient
@@ -208,7 +207,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(EMailNotificationRecipientType.RECIPIENT, recipient.EMailNotificationRecipientType);
+            Assert.Equal(EMailNotificationRecipientType.RECIPIENT, recipient.EMailNotificationRecipientType);
         }
 
         [Fact]
@@ -219,7 +218,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(shipmentEntity.ShipEmail, recipient.EMailAddress);
+            Assert.Equal(shipmentEntity.ShipEmail, recipient.EMailAddress);
         }
 
         //Other
@@ -232,7 +231,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(EMailNotificationRecipientType.OTHER, recipient.EMailNotificationRecipientType);
+            Assert.Equal(EMailNotificationRecipientType.OTHER, recipient.EMailNotificationRecipientType);
         }
 
         [Fact]
@@ -243,7 +242,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(shipmentEntity.FedEx.EmailNotifyOtherAddress, recipient.EMailAddress);
+            Assert.Equal(shipmentEntity.FedEx.EmailNotifyOtherAddress, recipient.EMailAddress);
         }
 
         //Broker
@@ -256,7 +255,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(EMailNotificationRecipientType.BROKER, recipient.EMailNotificationRecipientType);
+            Assert.Equal(EMailNotificationRecipientType.BROKER, recipient.EMailNotificationRecipientType);
         }
 
         [Fact]
@@ -267,7 +266,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             var recipient = GetSingleRecipient();
 
-            Assert.AreEqual(shipmentEntity.FedEx.BrokerEmail, recipient.EMailAddress);
+            Assert.Equal(shipmentEntity.FedEx.BrokerEmail, recipient.EMailAddress);
         }
 
         [Fact]
@@ -278,7 +277,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(shipRequest);
 
-            Assert.IsNull(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
+            Assert.Null(((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested);
         }
 
         /// <summary>
@@ -288,7 +287,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             EMailNotificationRecipient[] recipients = ((ProcessShipmentRequest) shipRequest.NativeRequest).RequestedShipment.SpecialServicesRequested.EMailNotificationDetail.Recipients;
 
-            Assert.AreEqual(1, recipients.Count());
+            Assert.Equal(1, recipients.Count());
 
             EMailNotificationRecipient recipient = recipients[0];
             return recipient;

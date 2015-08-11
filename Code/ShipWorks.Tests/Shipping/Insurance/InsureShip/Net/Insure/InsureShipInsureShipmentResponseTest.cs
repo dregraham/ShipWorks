@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
 
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipInsureShipmentResponseTest()
         {
             shipment = new ShipmentEntity(100031);
 
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             settings.Setup(s => s.Username).Returns("test2");
             settings.Setup(s => s.Password).Returns("password");
             settings.Setup(s => s.ApiUrl).Returns(new Uri("https://int.insureship.com/api/"));
-            
+
             log = new Mock<ILog>();
             log.Setup(l => l.Error(It.IsAny<object>()));
 
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             testObject = new InsureShipInsureShipmentResponse(request.Object, log.Object);
         }
 
-        [Fact]        
+        [Fact]
         public void Process_UsesRawResponse_FromRequest_Test()
         {
             testObject.Process();
@@ -55,15 +54,14 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
-        [Fact]        
+        [Fact]
         public void Process_LogsMessage_WhenStatusCodeIsNotRecognized_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
@@ -79,22 +77,20 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
         [Fact]
@@ -149,7 +145,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
             catch (InsureShipResponseException)
             { }
 
-            Assert.IsFalse(shipment.InsurancePolicy.CreatedWithApi);
+            Assert.False(shipment.InsurancePolicy.CreatedWithApi);
         }
 
         [Fact]
@@ -157,7 +153,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Insure
         {
             testObject.Process();
 
-            Assert.IsTrue(shipment.InsurancePolicy.CreatedWithApi);
+            Assert.True(shipment.InsurancePolicy.CreatedWithApi);
         }
     }
 }

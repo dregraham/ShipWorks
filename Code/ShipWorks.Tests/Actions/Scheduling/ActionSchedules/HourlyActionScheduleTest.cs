@@ -18,7 +18,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         [Fact]
         public void ScheduleType_ReturnsHourly_Test()
         {
-            Assert.AreEqual(ActionScheduleType.Hourly, testObject.ScheduleType);
+            Assert.Equal(ActionScheduleType.Hourly, testObject.ScheduleType);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInHours = 0;
 
-            Assert.AreEqual(1, testObject.FrequencyInHours);
+            Assert.Equal(1, testObject.FrequencyInHours);
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInHours = -1;
 
-            Assert.AreEqual(1, testObject.FrequencyInHours);
+            Assert.Equal(1, testObject.FrequencyInHours);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject.FrequencyInHours = 24;
 
-            Assert.AreEqual(23, testObject.FrequencyInHours);
+            Assert.Equal(23, testObject.FrequencyInHours);
         }
 
         [Fact]
@@ -51,13 +51,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             // Prove that a positive number sets property correctly
             testObject.FrequencyInHours = 1;
 
-            Assert.AreEqual(1, testObject.FrequencyInHours);
+            Assert.Equal(1, testObject.FrequencyInHours);
         }
 
         [Fact]
         public void CreateEditor_ReturnsHourlyActionScheduleEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(HourlyActionScheduleEditor));
+            Assert.IsAssignableFrom<HourlyActionScheduleEditor>(testObject.CreateEditor());
         }
     }
 }

@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         private Mock<CarrierRequest> carrierRequest;
         private DeleteShipmentRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVoidParametersManipulatorTest()
         {
             nativeRequest = new DeleteShipmentRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
@@ -27,30 +26,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVoidRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new ProcessShipmentRequest());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -63,8 +59,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.GROUND);
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdTypeSpecified);
+            Assert.True(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.GROUND);
+            Assert.True(nativeRequest.TrackingId.TrackingIdTypeSpecified);
         }
 
         [Fact]
@@ -77,8 +73,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.GROUND);
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdTypeSpecified);
+            Assert.True(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.GROUND);
+            Assert.True(nativeRequest.TrackingId.TrackingIdTypeSpecified);
         }
 
         [Fact]
@@ -93,8 +89,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.USPS);
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdTypeSpecified);
+            Assert.True(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.USPS);
+            Assert.True(nativeRequest.TrackingId.TrackingIdTypeSpecified);
         }
 
         [Fact]
@@ -107,8 +103,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.EXPRESS);
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingIdTypeSpecified);
+            Assert.True(nativeRequest.TrackingId.TrackingIdType == TrackingIdType.EXPRESS);
+            Assert.True(nativeRequest.TrackingId.TrackingIdTypeSpecified);
         }
 
         [Fact]
@@ -123,7 +119,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TrackingId.TrackingNumber == trackingNumber);
+            Assert.True(nativeRequest.TrackingId.TrackingNumber == trackingNumber);
         }
 
         [Fact]
@@ -138,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.DeletionControl == DeletionControlType.DELETE_ALL_PACKAGES);
+            Assert.True(nativeRequest.DeletionControl == DeletionControlType.DELETE_ALL_PACKAGES);
         }
     }
 }

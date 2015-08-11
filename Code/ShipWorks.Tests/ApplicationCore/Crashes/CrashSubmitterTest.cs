@@ -24,8 +24,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
         private string stackTrace = "StackTrace";
         private string innerStackTrace = "InnerStackTrace";
 
-        [TestInitialize]
-        public void Initialize()
+        public CrashSubmitterTest()
         {
             Assembly assembly = typeof(CrashSubmitter).Assembly;
             version = string.Format("V{0}", assembly.GetName().Version.ToString());
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException.Object);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
         [Fact]
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
         [Fact]
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testIoException.Object);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
 
         [Fact]
@@ -92,7 +91,7 @@ namespace ShipWorks.Tests.ApplicationCore.Crashes
 
             string returnedIdentifier = CrashSubmitter.GetIdentifier(testException);
 
-            Assert.AreEqual(expectedIdentifier, returnedIdentifier);
+            Assert.Equal(expectedIdentifier, returnedIdentifier);
         }
     }
 }

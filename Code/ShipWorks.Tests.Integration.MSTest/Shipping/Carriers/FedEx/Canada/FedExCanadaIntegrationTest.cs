@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", row["ProcessShipmentRequest#TransactionDetail"]));
                     Console.WriteLine(@"--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             }
             catch (Exception)
             {
-                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                if (string.IsNullOrWhiteSpace(row[0].ToString().Trim()))
                 {
                     // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
                     return;
@@ -68,12 +68,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
             catch (Exception ex)
             {
                 // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
-                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                if (string.IsNullOrWhiteSpace(row[0].ToString().Trim()))
                 {
                     return;
                 }
 
-                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"], ex.Message);
+                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", row["ProcessShipmentRequest#TransactionDetail"], ex.Message);
                 throw new Exception(msg, ex);
             }
         }
@@ -92,7 +92,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.Canada
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine("{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
-                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"]));
+                    Console.WriteLine(string.Format("Executing customer transaction ID {0}", row["ProcessShipmentRequest#TransactionDetail"]));
                     Console.WriteLine("--------------------------------------------------------------------------------{0}{0}", Environment.NewLine);
 
                     testObject.FedExAccountNumber = fedExTestAccountNumber;

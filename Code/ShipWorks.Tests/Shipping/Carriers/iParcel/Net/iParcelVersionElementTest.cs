@@ -8,8 +8,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
     {
         private iParcelVersionElement testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelVersionElementTest()
         {
             testObject = new iParcelVersionElement();
         }
@@ -19,14 +18,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("Version", element.Name);
+            Assert.Equal("Version", element.Name);
         }
 
         [Fact]
         public void Build_VersionNumber_Test()
         {
             XElement element = testObject.Build();
-            Assert.AreEqual("3.3", element.Value);
+            Assert.Equal("3.3", element.Value);
         }
     }
 }

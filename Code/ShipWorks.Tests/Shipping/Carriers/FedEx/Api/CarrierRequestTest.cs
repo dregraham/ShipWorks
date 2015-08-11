@@ -47,8 +47,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         // test that the appy manipulators method actually uses all of the manipulators provided.
         CarrierRequestToTestProtectedMethod testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public CarrierRequestTest()
         {
             firstManipulator = new Mock<ICarrierRequestManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<CarrierRequest>()));

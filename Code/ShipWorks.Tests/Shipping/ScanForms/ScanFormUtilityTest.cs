@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         private SandRibbon.MenuItem createSandMenuItem;
         private SandRibbon.Menu printMenu;
 
-        [TestInitialize]
-        public void Initialize()
+        public ScanFormUtilityTest()
         {
             carrierAccount = new Mock<IScanFormCarrierAccount>();            
 
@@ -74,14 +73,14 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         public void PopulateCreateScanFormMenu_HasZeroChildElments_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
-            Assert.AreEqual(0, createSandMenuItem.Items.Count);
+            Assert.Equal(0, createSandMenuItem.Items.Count);
         }
 
         [Fact]
         public void PopulateCreateScanFormMenu_MenuTextEndsWithEllipsis_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
-            Assert.AreEqual("...", createSandMenuItem.Text.Substring(createSandMenuItem.Text.Length - 3, 3));
+            Assert.Equal("...", createSandMenuItem.Text.Substring(createSandMenuItem.Text.Length - 3, 3));
         }
 
         [Fact]
@@ -92,9 +91,9 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
 
-            Assert.IsNotNull(createSandMenuItem.Items);
-            Assert.AreEqual(1, createSandMenuItem.Items.Count);
-            Assert.IsInstanceOfType(createSandMenuItem.Items[0], typeof(SandRibbon.Menu));
+            Assert.NotNull(createSandMenuItem.Items);
+            Assert.Equal(1, createSandMenuItem.Items.Count);
+            Assert.IsAssignableFrom<SandRibbon.Menu>(createSandMenuItem.Items[0]);
         }
 
         [Fact]
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             ScanFormUtility.PopulateCreateScanFormMenu(createSandMenuItem, repositories);
 
             SandRibbon.Menu childMenu = (SandRibbon.Menu)createSandMenuItem.Items[0];
-            Assert.AreEqual(repositories.Count, childMenu.Items.Count);
+            Assert.Equal(repositories.Count, childMenu.Items.Count);
         }
 
         [Fact]
@@ -121,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             foreach (SandRibbon.MenuItem item in childMenu.Items)
             {
-                Assert.AreNotEqual("...", item.Text.Substring(item.Text.Length - 3, 3));
+                Assert.NotEqual("...", item.Text.Substring(item.Text.Length - 3, 3));
             }
         }
 
@@ -140,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         public void PopulatePrintScanFormMenu_HasZeroChildElments_WhenOneAccount_Test()
         {
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
-            Assert.AreEqual(0, createSandMenuItem.Items.Count);
+            Assert.Equal(0, createSandMenuItem.Items.Count);
         }
 
 
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             DateTime expectedDateTime = DateTime.Parse("10/26/2012 3:30 PM").ToLocalTime();
             string expectedString = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", expectedDateTime, 1);
 
-            Assert.AreEqual(expectedString, childMenuItem.Text);
+            Assert.Equal(expectedString, childMenuItem.Text);
         }
 
         [Fact]
@@ -164,7 +163,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
 
-            Assert.AreEqual(repositories.Count, printMenu.Items.Count);
+            Assert.Equal(repositories.Count, printMenu.Items.Count);
         }
 
         [Fact]
@@ -189,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             DateTime expectedDateTime = DateTime.Parse("10/28/2012 8:24 PM").ToLocalTime();
             string expectedString = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", expectedDateTime, 1);
 
-            Assert.AreEqual(expectedString, childMenuItem.Text);
+            Assert.Equal(expectedString, childMenuItem.Text);
         }
 
         [Fact]
@@ -214,7 +213,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
                 DateTime expectedDateTime = batches[i].CreatedDate.ToLocalTime();
                 string expectedString = string.Format("{0:MM/dd/yy h:mm tt} ({1} shipments)", expectedDateTime, batches[i].ShipmentCount);
 
-                Assert.AreEqual(expectedString, childMenuItem.Text);
+                Assert.Equal(expectedString, childMenuItem.Text);
             }
         }
         
@@ -226,7 +225,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
 
             SandRibbon.MenuItem childMenuItem = (SandRibbon.MenuItem)printMenu.Items[0];
-            Assert.IsFalse(childMenuItem.Enabled);
+            Assert.False(childMenuItem.Enabled);
         }
 
         [Fact]
@@ -237,7 +236,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, repositories);
 
             SandRibbon.MenuItem childMenuItem = (SandRibbon.MenuItem)printMenu.Items[0];
-            Assert.AreEqual("(none)", childMenuItem.Text);
+            Assert.Equal("(none)", childMenuItem.Text);
         }
 
         [Fact]
@@ -246,7 +245,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             ScanFormUtility.PopulatePrintScanFormMenu(printMenu, new List<IScanFormAccountRepository>());
 
             SandRibbon.MenuItem childMenuItem = (SandRibbon.MenuItem) printMenu.Items[0];
-            Assert.AreEqual("(none)", childMenuItem.Text);
+            Assert.Equal("(none)", childMenuItem.Text);
         }
     }
 }

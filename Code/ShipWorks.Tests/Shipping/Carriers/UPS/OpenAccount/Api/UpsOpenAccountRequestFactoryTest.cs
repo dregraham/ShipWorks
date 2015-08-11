@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
     {
         private UpsOpenAccountRequestFactory testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountRequestFactoryTest()
         {
             testObject = new UpsOpenAccountRequestFactory(new UpsAccountEntity());
         }
@@ -24,7 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest());
 
-            Assert.IsInstanceOfType(request, typeof(UpsOpenAccountRequest));
+            Assert.IsAssignableFrom<UpsOpenAccountRequest>(request);
         }
 
         [Fact]
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
-            Assert.AreEqual(1, request.Manipulators.Count());
+            Assert.Equal(1, request.Manipulators.Count());
         }
 
         [Fact]
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 
-            Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(UpsOpenAccountAddEndUserInformation)) == 1);
+            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(UpsOpenAccountAddEndUserInformation)) == 1);
         }
     }
 }

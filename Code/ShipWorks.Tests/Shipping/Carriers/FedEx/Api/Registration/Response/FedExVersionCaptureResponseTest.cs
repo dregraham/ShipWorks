@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         private VersionCaptureReply reply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVersionCaptureResponseTest()
         {
 
             reply = new VersionCaptureReply()
@@ -41,12 +40,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
-            reply.HighestSeverity=NotificationSeverityType.FAILURE;
+            reply.HighestSeverity = NotificationSeverityType.FAILURE;
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
     }
 }

@@ -23,12 +23,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity fedExAccount;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCodOptionsManipulatorTest()
         {
             shipmentEntity = new ShipmentEntity
             {
-                ShipCountryCode =  "US",
+                ShipCountryCode = "US",
                 OriginCountryCode = "US",
                 FedEx = new FedExShipmentEntity
                 {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                     CodPhone = "555-555-5555",
                     CodPostalCode = "63102",
                     CodStreet1 = "1 Memorial Drive",
-                    CodStreet2 =  "Suite 2000",
+                    CodStreet2 = "Suite 2000",
                     CodStateProvCode = "MO",
                     CodCountryCode = "US",
 
@@ -93,30 +92,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         #region Tests for initializing the request and its properties
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -128,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -143,7 +139,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems);
         }
 
         [Fact]
@@ -155,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
+            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -167,8 +163,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, nativeRequest.RequestedShipment.RequestedPackageLineItems.Length);
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
+            Assert.Equal(1, nativeRequest.RequestedShipment.RequestedPackageLineItems.Length);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0]);
         }
 
         [Fact]
@@ -180,7 +176,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
+            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested);
         }
 
         [Fact]
@@ -192,7 +188,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail);
+            Assert.NotNull(nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail);
         }
 
         [Fact]
@@ -208,14 +204,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested);
         }
 
         [Fact]
         public void Manipulate_AccountsForNullPackageCodDetail_Test()
         {
             // Change this to use a ground service so the package data is updated
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.GroundHomeDelivery;
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.GroundHomeDelivery;
 
             // setup the test by setting the special services requested property to null
             nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail = null;
@@ -223,7 +219,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail);
+            Assert.NotNull(nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail);
         }
 
         #endregion Tests for initializing the request and its properties
@@ -237,7 +233,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             ShipmentSpecialServiceType[] serviceTypes = nativeRequest.RequestedShipment.SpecialServicesRequested.SpecialServiceTypes;
-            Assert.AreEqual(1, serviceTypes.Count(s => s == ShipmentSpecialServiceType.COD));
+            Assert.Equal(1, serviceTypes.Count(s => s == ShipmentSpecialServiceType.COD));
         }
 
         [Fact]
@@ -247,7 +243,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Pull the COD detail out of the shipment
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("USD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("USD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -259,7 +255,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Pull the COD detail out of the shipment
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("CAD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("CAD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -271,19 +267,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // since this is a NOT ground shipment. The shipment was configured with COD amount of 100.50, so the COD
             // amount at the shipment level should be the full amount
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(100.5M, codDetail.CodCollectionAmount.Amount);
+            Assert.Equal(100.5M, codDetail.CodCollectionAmount.Amount);
         }
 
         [Fact]
         public void Manipulate_SetsCurrencyToUSD_WhenRecipientCountryCodeIsUS_AndServiceIsFedExGround_Test()
         {
-            shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExGround;
+            shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExGround;
 
             testObject.Manipulate(carrierRequest.Object);
 
             // Pull the COD detail out of the line items
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("USD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("USD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -296,7 +292,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Pull the COD detail out of the line items
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("CAD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("CAD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -309,7 +305,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Pull the COD detail out of the line items
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("CAD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("CAD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -321,7 +317,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             // Pull the COD detail out of the line items
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("USD", codDetail.CodCollectionAmount.Currency);
+            Assert.Equal("USD", codDetail.CodCollectionAmount.Currency);
         }
 
         [Fact]
@@ -335,7 +331,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // since this is a ground shipment. The shipment was configured with COD amount of 100.50, so the COD
             // amount on the package should be 50.25
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(50.25M, codDetail.CodCollectionAmount.Amount);
+            Assert.Equal(50.25M, codDetail.CodCollectionAmount.Amount);
         }
 
         [Fact]
@@ -349,7 +345,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // since this is a ground shipment. The shipment was configured with COD amount of 100.50, so the COD
             // amount on the package should be 50.25
             CodDetail codDetail = nativeRequest.RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(50.25M, codDetail.CodCollectionAmount.Amount);
+            Assert.Equal(50.25M, codDetail.CodCollectionAmount.Amount);
         }
 
         #endregion COD Amount Tests
@@ -357,12 +353,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         [Fact]
         public void Manipulate_AssignsGuaranteedFundsPaymentType_WhenPaymentTypeIsSecured_Test()
         {
-            shipmentEntity.FedEx.CodPaymentType = (int) FedExCodPaymentType.Secured;
+            shipmentEntity.FedEx.CodPaymentType = (int)FedExCodPaymentType.Secured;
 
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(CodCollectionType.GUARANTEED_FUNDS, codDetail.CollectionType);
+            Assert.Equal(CodCollectionType.GUARANTEED_FUNDS, codDetail.CollectionType);
         }
 
         [Fact]
@@ -373,7 +369,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(CodCollectionType.CASH, codDetail.CollectionType);
+            Assert.Equal(CodCollectionType.CASH, codDetail.CollectionType);
         }
 
         [Fact]
@@ -384,16 +380,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(CodCollectionType.ANY, codDetail.CollectionType);
+            Assert.Equal(CodCollectionType.ANY, codDetail.CollectionType);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Manipulate_ThrowsInvalidOperationException_WhenInvalidPaymentTypeIsGiven_Test()
         {
             shipmentEntity.FedEx.CodPaymentType = 45;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
 
@@ -402,12 +397,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             shipmentEntity.FedEx.CodAddFreight = true;
 
-            shipmentEntity.FedEx.CodChargeBasis = (int) CodAddTransportationChargeBasisType.NET_FREIGHT;
+            shipmentEntity.FedEx.CodChargeBasis = (int)CodAddTransportationChargeBasisType.NET_FREIGHT;
 
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(CodAddTransportationChargeBasisType.NET_FREIGHT, codDetail.AddTransportationChargesDetail.ChargeBasis);
+            Assert.Equal(CodAddTransportationChargeBasisType.NET_FREIGHT, codDetail.AddTransportationChargesDetail.ChargeBasis);
         }
 
         [Fact]
@@ -418,7 +413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsTrue(codDetail.AddTransportationChargesDetail.ChargeBasisSpecified);
+            Assert.True(codDetail.AddTransportationChargesDetail.ChargeBasisSpecified);
         }
 
         [Fact]
@@ -430,7 +425,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(RateTypeBasisType.LIST, codDetail.AddTransportationChargesDetail.RateTypeBasis);
+            Assert.Equal(RateTypeBasisType.LIST, codDetail.AddTransportationChargesDetail.RateTypeBasis);
         }
 
         [Fact]
@@ -442,7 +437,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(RateTypeBasisType.ACCOUNT, codDetail.AddTransportationChargesDetail.RateTypeBasis);
+            Assert.Equal(RateTypeBasisType.ACCOUNT, codDetail.AddTransportationChargesDetail.RateTypeBasis);
         }
 
         [Fact]
@@ -453,7 +448,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsTrue(codDetail.AddTransportationChargesDetail.RateTypeBasisSpecified);
+            Assert.True(codDetail.AddTransportationChargesDetail.RateTypeBasisSpecified);
         }
 
         [Fact]
@@ -464,7 +459,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(ChargeBasisLevelType.CURRENT_PACKAGE, codDetail.AddTransportationChargesDetail.ChargeBasisLevel);
+            Assert.Equal(ChargeBasisLevelType.CURRENT_PACKAGE, codDetail.AddTransportationChargesDetail.ChargeBasisLevel);
         }
 
         [Fact]
@@ -475,7 +470,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsTrue(codDetail.AddTransportationChargesDetail.ChargeBasisLevelSpecified);
+            Assert.True(codDetail.AddTransportationChargesDetail.ChargeBasisLevelSpecified);
         }
 
         [Fact]
@@ -486,7 +481,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.AddTransportationChargesDetail);
+            Assert.Null(codDetail.AddTransportationChargesDetail);
         }
 
 
@@ -496,7 +491,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("Samir Nagahnagahnaworkhereanymore", codDetail.CodRecipient.Contact.PersonName);
+            Assert.Equal("Samir Nagahnagahnaworkhereanymore", codDetail.CodRecipient.Contact.PersonName);
         }
 
         [Fact]
@@ -505,7 +500,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("1 Memorial Drive", codDetail.CodRecipient.Address.StreetLines[0]);
+            Assert.Equal("1 Memorial Drive", codDetail.CodRecipient.Address.StreetLines[0]);
         }
 
         [Fact]
@@ -514,7 +509,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("Suite 2000", codDetail.CodRecipient.Address.StreetLines[1]);
+            Assert.Equal("Suite 2000", codDetail.CodRecipient.Address.StreetLines[1]);
         }
 
         [Fact]
@@ -523,7 +518,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("St. Louis", codDetail.CodRecipient.Address.City);
+            Assert.Equal("St. Louis", codDetail.CodRecipient.Address.City);
         }
 
         [Fact]
@@ -532,7 +527,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("MO", codDetail.CodRecipient.Address.StateOrProvinceCode);
+            Assert.Equal("MO", codDetail.CodRecipient.Address.StateOrProvinceCode);
         }
 
         [Fact]
@@ -541,7 +536,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("63102", codDetail.CodRecipient.Address.PostalCode);
+            Assert.Equal("63102", codDetail.CodRecipient.Address.PostalCode);
         }
 
         [Fact]
@@ -550,7 +545,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("US", codDetail.CodRecipient.Address.CountryCode);
+            Assert.Equal("US", codDetail.CodRecipient.Address.CountryCode);
         }
 
         [Fact]
@@ -561,7 +556,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("12345", codDetail.CodRecipient.AccountNumber);
+            Assert.Equal("12345", codDetail.CodRecipient.AccountNumber);
         }
 
         [Fact]
@@ -572,7 +567,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.CodRecipient.AccountNumber);
+            Assert.Null(codDetail.CodRecipient.AccountNumber);
         }
 
         [Fact]
@@ -583,7 +578,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.CodRecipient.AccountNumber);
+            Assert.Null(codDetail.CodRecipient.AccountNumber);
         }
 
         [Fact]
@@ -596,7 +591,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("0123456789", codDetail.ReturnTrackingId.TrackingNumber);
+            Assert.Equal("0123456789", codDetail.ReturnTrackingId.TrackingNumber);
         }
 
         [Fact]
@@ -609,7 +604,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("9876", codDetail.ReturnTrackingId.FormId);
+            Assert.Equal("9876", codDetail.ReturnTrackingId.FormId);
         }
 
         [Fact]
@@ -623,7 +618,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.ReturnTrackingId);
+            Assert.Null(codDetail.ReturnTrackingId);
         }
 
         [Fact]
@@ -637,7 +632,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.ReturnTrackingId);
+            Assert.Null(codDetail.ReturnTrackingId);
         }
 
         [Fact]
@@ -648,7 +643,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNotNull(codDetail.CodRecipient.Tins);
+            Assert.NotNull(codDetail.CodRecipient.Tins);
         }
 
         [Fact]
@@ -659,7 +654,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(1, codDetail.CodRecipient.Tins.Length);
+            Assert.Equal(1, codDetail.CodRecipient.Tins.Length);
         }
 
         [Fact]
@@ -670,7 +665,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNotNull(codDetail.CodRecipient.Tins[0]);
+            Assert.NotNull(codDetail.CodRecipient.Tins[0]);
         }
 
         [Fact]
@@ -681,7 +676,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.CodRecipient.Tins);
+            Assert.Null(codDetail.CodRecipient.Tins);
         }
 
         [Fact]
@@ -692,7 +687,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.IsNull(codDetail.CodRecipient.Tins);
+            Assert.Null(codDetail.CodRecipient.Tins);
         }
 
         [Fact]
@@ -703,7 +698,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual("123", codDetail.CodRecipient.Tins[0].Number);
+            Assert.Equal("123", codDetail.CodRecipient.Tins[0].Number);
         }
 
         [Fact]
@@ -714,7 +709,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             CodDetail codDetail = nativeRequest.RequestedShipment.SpecialServicesRequested.CodDetail;
-            Assert.AreEqual(TinType.PERSONAL_STATE, codDetail.CodRecipient.Tins[0].TinType);
+            Assert.Equal(TinType.PERSONAL_STATE, codDetail.CodRecipient.Tins[0].TinType);
         }
     }
 }

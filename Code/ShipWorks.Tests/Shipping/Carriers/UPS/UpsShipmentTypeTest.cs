@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS
         [Fact]
         public void SupportsMultiplePackages_ReturnsTrue_Test()
         {
-            Assert.IsTrue(testObject.SupportsMultiplePackages);
+            Assert.True(testObject.SupportsMultiplePackages);
         }
     }
 }

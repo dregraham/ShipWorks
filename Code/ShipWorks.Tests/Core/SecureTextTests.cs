@@ -18,11 +18,11 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, salt);
 
-            Assert.AreEqual(original, decrypted);
+            Assert.Equal(original, decrypted);
         }
 
         [Fact]
@@ -33,11 +33,11 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, "whatever");
 
-            Assert.AreEqual(string.Empty, decrypted);
+            Assert.Equal(string.Empty, decrypted);
         }
 
         [Fact]
@@ -48,39 +48,35 @@ namespace ShipWorks.Tests.Core
 
             string encrypted = SecureText.Encrypt(original, salt);
 
-            Assert.AreNotEqual(original, encrypted);
+            Assert.NotEqual(original, encrypted);
 
             string decrypted = SecureText.Decrypt(encrypted, salt);
 
-            Assert.AreEqual(original, decrypted);
+            Assert.Equal(original, decrypted);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void EncryptNullSalt()
         {
-            SecureText.Encrypt("", null);
+            Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt("", null));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void EncryptNullValue()
         {
-            SecureText.Encrypt(null, "");
+            Assert.Throws<ArgumentNullException>(() => SecureText.Encrypt(null, ""));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DecryptNullSalt()
         {
-            SecureText.Decrypt("", null);
+            Assert.Throws<ArgumentNullException>(() => SecureText.Decrypt("", null));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DecryptNullValue()
         {
-            SecureText.Decrypt(null, "");
+            Assert.Throws<ArgumentNullException>(() => SecureText.Decrypt(null, ""));
         }
     }
 }

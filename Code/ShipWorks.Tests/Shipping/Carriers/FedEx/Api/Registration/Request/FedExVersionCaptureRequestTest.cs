@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         Mock<ICarrierRequestManipulator> secondManipulator;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVersionCaptureRequestTest()
         {
             account = new FedExAccountEntity { AccountNumber = "1234", MeterNumber = "45453" };
 
@@ -45,13 +44,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         [Fact]
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
         {
             FedExVersionCaptureResponse response = (FedExVersionCaptureResponse) testObject.Submit();
 
-            Assert.IsNotNull(response);
+            Assert.NotNull(response);
         }
 
         [Fact]
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request
 
             VersionCaptureRequest request = (VersionCaptureRequest) testObject.NativeRequest;
 
-            Assert.AreEqual("123",request.OriginLocationId);
+            Assert.Equal("123",request.OriginLocationId);
         }
 
         [Fact]

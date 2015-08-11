@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private RateRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateTotalWeightManipulatorTest()
         {
             // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
             nativeRequest = new RateRequest()
@@ -41,30 +40,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRateRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new RateReply());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -78,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -88,17 +84,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
-            Assert.AreEqual(WeightUnits.LB, weight.Units);
+            Assert.Equal(WeightUnits.LB, weight.Units);
         }
 
         [Fact]
         public void Manipulate_SetsUnitsToKilograms_Test()
         {
-            shipmentEntity.FedEx.WeightUnitType = (int) WeightUnitOfMeasure.Kilograms;
+            shipmentEntity.FedEx.WeightUnitType = (int)WeightUnitOfMeasure.Kilograms;
             testObject.Manipulate(carrierRequest.Object);
 
             Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
-            Assert.AreEqual(WeightUnits.KG, weight.Units);
+            Assert.Equal(WeightUnits.KG, weight.Units);
         }
 
         [Fact]
@@ -107,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
-            Assert.AreEqual((decimal)shipmentEntity.TotalWeight, weight.Value);
+            Assert.Equal((decimal)shipmentEntity.TotalWeight, weight.Value);
         }
 
         [Fact]
@@ -118,7 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             Weight weight = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.TotalWeight;
-            Assert.AreEqual(0.1m, weight.Value);
+            Assert.Equal(0.1m, weight.Value);
         }
     }
 }

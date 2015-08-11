@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
         private Mock<IUpsServiceManager> unitedStatesServiceManager;
         private Mock<IUpsServiceManager> puertoRicoServiceManager;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsServiceManagerFactoryTest()
         {
             canadaServiceManager = new Mock<IUpsServiceManager>();
             canadaServiceManager.Setup(m => m.CountryCode).Returns("CA");
@@ -46,8 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "CA" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("CA", serviceManager.CountryCode);
-            Assert.AreEqual(canadaServiceManager.Object, serviceManager);
+            Assert.Equal("CA", serviceManager.CountryCode);
+            Assert.Equal(canadaServiceManager.Object, serviceManager);
         }
 
         [Fact]
@@ -56,8 +55,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "PR" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("PR", serviceManager.CountryCode);
-            Assert.AreEqual(puertoRicoServiceManager.Object, serviceManager);
+            Assert.Equal("PR", serviceManager.CountryCode);
+            Assert.Equal(puertoRicoServiceManager.Object, serviceManager);
         }
 
 
@@ -67,8 +66,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "US" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("US", serviceManager.CountryCode);
-            Assert.AreEqual(unitedStatesServiceManager.Object, serviceManager);
+            Assert.Equal("US", serviceManager.CountryCode);
+            Assert.Equal(unitedStatesServiceManager.Object, serviceManager);
         }
 
         [Fact]
@@ -77,8 +76,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.ServiceManager
             ShipmentEntity shipment = new ShipmentEntity { OriginCountryCode = "GB" };
             IUpsServiceManager serviceManager = testObject.Create(shipment);
 
-            Assert.AreEqual("US", serviceManager.CountryCode);
-            Assert.AreEqual(unitedStatesServiceManager.Object, serviceManager);
+            Assert.Equal("US", serviceManager.CountryCode);
+            Assert.Equal(unitedStatesServiceManager.Object, serviceManager);
         }
     }
 }

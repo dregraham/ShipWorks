@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
         private Mock<ICarrierAccountRepository<UspsAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<UspsAccountEntity>>();
 
@@ -50,16 +49,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
+            Assert.Equal(123, shipment.Postal.Usps.UspsAccountID);
         }
 
         [Fact]
-        [ExpectedException(typeof(UspsException))]
         public void SaveAccountToShipment_ThrowsUspsException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<UspsAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<UspsException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
 
         [Fact]
@@ -82,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
+            Assert.Equal(123, shipment.Postal.Usps.UspsAccountID);
         }
 
         [Fact]
@@ -106,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Usps.UspsAccountID);
+            Assert.Equal(123, shipment.Postal.Usps.UspsAccountID);
         }
     }
 }

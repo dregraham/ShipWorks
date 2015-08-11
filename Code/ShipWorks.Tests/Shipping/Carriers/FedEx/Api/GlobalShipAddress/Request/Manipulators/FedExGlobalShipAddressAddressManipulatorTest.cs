@@ -14,15 +14,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
     public class FedExGlobalShipAddressAddressManipulatorTest
     {
         private FedExGlobalShipAddressAddressManipulator testObject;
-        
+
         private Mock<CarrierRequest> mockCarrierRequest;
         private SearchLocationsRequest request;
         private ShipmentEntity shipmentEntity;
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        
 
-        [TestInitialize]
-        public void Initialize()
+
+        public FedExGlobalShipAddressAddressManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -40,7 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.IsNotNull(request.Address);
+            Assert.NotNull(request.Address);
         }
 
         [Fact]
@@ -48,8 +47,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.IsNotNull(request.Address.StreetLines != null);
-            Assert.AreEqual(2, request.Address.StreetLines.Length);
+            Assert.NotNull(request.Address.StreetLines != null);
+            Assert.Equal(2, request.Address.StreetLines.Length);
         }
 
         [Fact]
@@ -57,8 +56,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipStreet1, request.Address.StreetLines[0]);
-            Assert.AreEqual(shipmentEntity.ShipStreet2, request.Address.StreetLines[1]);
+            Assert.Equal(shipmentEntity.ShipStreet1, request.Address.StreetLines[0]);
+            Assert.Equal(shipmentEntity.ShipStreet2, request.Address.StreetLines[1]);
         }
 
         [Fact]
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipCity, request.Address.City);
+            Assert.Equal(shipmentEntity.ShipCity, request.Address.City);
         }
 
         [Fact]
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipStateProvCode, request.Address.StateOrProvinceCode);
+            Assert.Equal(shipmentEntity.ShipStateProvCode, request.Address.StateOrProvinceCode);
         }
 
         [Fact]
@@ -82,7 +81,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipPostalCode, request.Address.PostalCode);
+            Assert.Equal(shipmentEntity.ShipPostalCode, request.Address.PostalCode);
         }
 
         [Fact]
@@ -90,7 +89,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ShipCountryCode, request.Address.CountryCode);
+            Assert.Equal(shipmentEntity.ShipCountryCode, request.Address.CountryCode);
         }
 
         [Fact]
@@ -98,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(shipmentEntity.ResidentialResult, request.Address.Residential);
+            Assert.Equal(shipmentEntity.ResidentialResult, request.Address.Residential);
         }
 
         [Fact]
@@ -106,16 +105,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual(LocationsSearchCriteriaType.ADDRESS, request.LocationsSearchCriterion);
-            Assert.IsTrue(request.LocationsSearchCriterionSpecified);
+            Assert.Equal(LocationsSearchCriteriaType.ADDRESS, request.LocationsSearchCriterion);
+            Assert.True(request.LocationsSearchCriterionSpecified);
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WrongRequestType_Test()
         {
             CarrierRequest wrongRequest = new FedExShipRequest(null, shipmentEntity, null, null, settingsRepository.Object, new ProcessShipmentRequest());
-            testObject.Manipulate(wrongRequest);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(wrongRequest));
         }
     }
 }

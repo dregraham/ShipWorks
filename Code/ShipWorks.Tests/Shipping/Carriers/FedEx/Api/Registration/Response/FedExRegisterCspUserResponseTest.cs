@@ -20,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 
         private ShippingSettingsEntity shippingSettings;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegisterCspUserResponseTest()
         {
             shippingSettings = new ShippingSettingsEntity();
 
@@ -39,9 +38,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
                     Password = "password"
                 }
             };
-            
+
             carrierRequest = new Mock<CarrierRequest>(null, null);
-            
+
             testObject = new FedExRegisterCspUserResponse(nativeResponse, carrierRequest.Object, settingsRepository.Object);
         }
 
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         {
             testObject.Process();
 
-            Assert.AreEqual(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
+            Assert.Equal(nativeResponse.Credential.Key, shippingSettings.FedExUsername);
         }
 
         [Fact]
@@ -59,7 +58,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject.Process();
 
             // Just checking that the password was set (i.e. not empty)
-            Assert.IsFalse(string.IsNullOrEmpty(shippingSettings.FedExPassword));
+            Assert.False(string.IsNullOrEmpty(shippingSettings.FedExPassword));
         }
 
         [Fact]
@@ -67,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         {
             testObject.Process();
 
-            Assert.AreEqual(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
+            Assert.Equal(SecureText.Encrypt("password", "FedEx"), shippingSettings.FedExPassword);
         }
 
         [Fact]
@@ -88,23 +87,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReceivingErrorSeverity_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReceivingFailureSeverity_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
-            nativeResponse.Notifications = new Notification[] {new Notification { Message = "message" } };
+            nativeResponse.Notifications = new Notification[] { new Notification { Message = "message" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
     }
 }

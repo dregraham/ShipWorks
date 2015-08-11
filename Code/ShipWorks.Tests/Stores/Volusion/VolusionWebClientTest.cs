@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Stores.Volusion
         private ShipmentEntity shipmentEntity;
         private PostalShipmentEntity postalShipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public VolusionWebClientTest()
         {
             orderEntity = new NeweggOrderEntity { OrderNumber = 123456 };
             shipmentEntity = new ShipmentEntity { Order = orderEntity, TrackingNumber = "ABCD1234", ShipDate = DateTime.UtcNow };
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Stores.Volusion
 
             string carrierCode = VolusionWebClient.GetVolusionGateway(shipmentEntity);
 
-            Assert.AreEqual("DHL", carrierCode);
+            Assert.Equal("DHL", carrierCode);
         }
 
         [Fact]
@@ -48,7 +47,7 @@ namespace ShipWorks.Tests.Stores.Volusion
 
             string carrierCode = VolusionWebClient.GetVolusionGateway(shipmentEntity);
 
-            Assert.AreEqual("DHL", carrierCode);
+            Assert.Equal("DHL", carrierCode);
         }
 
         [Fact]
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Stores.Volusion
 
             string carrierCode = VolusionWebClient.GetVolusionGateway(shipmentEntity);
 
-            Assert.AreEqual("OTHER", carrierCode);
+            Assert.Equal("OTHER", carrierCode);
         }
 
         [Fact]
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Stores.Volusion
 
             string carrierCode = VolusionWebClient.GetVolusionGateway(shipmentEntity);
 
-            Assert.AreEqual("USPS", carrierCode);
+            Assert.Equal("USPS", carrierCode);
         }
 
         [Fact]
@@ -84,7 +83,7 @@ namespace ShipWorks.Tests.Stores.Volusion
 
             string carrierCode = VolusionWebClient.GetVolusionGateway(shipmentEntity);
 
-            Assert.AreEqual("USPS", carrierCode);
+            Assert.Equal("USPS", carrierCode);
         }
 
     }

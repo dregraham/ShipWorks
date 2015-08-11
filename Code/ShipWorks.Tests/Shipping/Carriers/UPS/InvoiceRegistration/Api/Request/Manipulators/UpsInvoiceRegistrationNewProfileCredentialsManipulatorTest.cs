@@ -19,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
         private RegisterRequest registerRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationNewProfileCredentialsManipulatorTest()
         {
             registerRequest=new RegisterRequest();
 
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(registerRequest.Username));
+            Assert.False(string.IsNullOrWhiteSpace(registerRequest.Username));
         }
 
         [Fact]
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.IsFalse(string.IsNullOrWhiteSpace(registerRequest.Password));
+            Assert.False(string.IsNullOrWhiteSpace(registerRequest.Password));
         }
 
         [Fact]
@@ -52,7 +51,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("N", registerRequest.SuggestUsernameIndicator);
+            Assert.Equal("N", registerRequest.SuggestUsernameIndicator);
         }
 
         [Fact]
@@ -60,7 +59,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("00", registerRequest.NotificationCode);
+            Assert.Equal("00", registerRequest.NotificationCode);
         }
 
         [Fact]
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
             testObject.Manipulate(request);
 
-            Assert.AreNotEqual(firstUsername, registerRequest.Username);
+            Assert.NotEqual(firstUsername, registerRequest.Username);
         }
     }
 }

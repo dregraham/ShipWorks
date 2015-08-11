@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private Mock<CarrierRequest> carrierRequest;
         private RateRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateRateTypeManipulatorTest()
         {
             // Default the repository to indicate we should use list rates
             settingsRepository = new Mock<ICarrierSettingsRepository>();
@@ -38,30 +37,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RateReply());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -75,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // The requested shipment property should be created now
-            Assert.IsNotNull(nativeRequest.RequestedShipment);
+            Assert.NotNull(nativeRequest.RequestedShipment);
         }
 
         [Fact]
@@ -96,8 +92,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // extract the rates from the manipulated request and test for the rate type
             RateRequestType[] rateTypes = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
 
-            Assert.AreEqual(1, rateTypes.Length);
-            Assert.AreEqual(RateRequestType.LIST, rateTypes[0]);
+            Assert.Equal(1, rateTypes.Length);
+            Assert.Equal(RateRequestType.LIST, rateTypes[0]);
         }
 
         [Fact]
@@ -111,8 +107,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             // extract the rates from the manipulated request and test for the rate type
             RateRequestType[] rateTypes = ((RateRequest)carrierRequest.Object.NativeRequest).RequestedShipment.RateRequestTypes;
 
-            Assert.AreEqual(1, rateTypes.Length);
-            Assert.AreEqual(RateRequestType.NONE, rateTypes[0]);
+            Assert.Equal(1, rateTypes.Length);
+            Assert.Equal(RateRequestType.NONE, rateTypes[0]);
         }
     }
 }

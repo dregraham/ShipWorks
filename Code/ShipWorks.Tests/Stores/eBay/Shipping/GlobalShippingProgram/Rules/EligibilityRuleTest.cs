@@ -23,7 +23,7 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = true;
 
-            Assert.IsTrue(testObject.Evaluate(ebayOrder));
+            Assert.True(testObject.Evaluate(ebayOrder));
         }
 
         [Fact]
@@ -32,14 +32,14 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = false;
 
-            Assert.IsFalse(testObject.Evaluate(ebayOrder));
+            Assert.False(testObject.Evaluate(ebayOrder));
         }
 
         [Fact]
         public void Evaluate_ReturnsFalse_WhenOrderIsNull_Test()
         {
             EbayOrderEntity ebayOrder = null;
-            Assert.IsFalse(testObject.Evaluate(ebayOrder));
+            Assert.False(testObject.Evaluate(ebayOrder));
         }
     }
 }

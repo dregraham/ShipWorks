@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.IsFalse(testObject.DashboardBar.CanUserDismiss);
+            Assert.False(testObject.DashboardBar.CanUserDismiss);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("Actions", testObject.DashboardBar.PrimaryText);
+            Assert.Equal("Actions", testObject.DashboardBar.PrimaryText);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.AreEqual("A required ShipWorks action scheduler is not running.", testObject.DashboardBar.SecondaryText);
+            Assert.Equal("A required ShipWorks action scheduler is not running.", testObject.DashboardBar.SecondaryText);
         }
         
         [Fact]
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.ApplicationCore.Dashboard.Content
 
             testObject.Initialize(new DashboardBar());
 
-            Assert.IsNotNull(testObject.DashboardBar.Image);
+            Assert.NotNull(testObject.DashboardBar.Image);
         }
     }
 }

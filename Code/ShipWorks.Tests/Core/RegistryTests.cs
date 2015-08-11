@@ -15,10 +15,9 @@ namespace ShipWorks.Tests.Core
         RegistryHelper registry = new RegistryHelper(@"Software\ShipWorks\UnitTests");
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ReadIntWithNullKey()
         {
-            RegistryHelper.GetValue((RegistryKey) null, null, 0);
+            Assert.Throws<ArgumentNullException>(() => RegistryHelper.GetValue((RegistryKey) null, null, 0));
         }
 
         [Fact]
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Core
             using (RegistryKey key = registry.CreateKey("Testing"))
             {
                 int read = RegistryHelper.GetValue(key, "Missing", defaultValue);
-                Assert.AreEqual(defaultValue, read);
+                Assert.Equal(defaultValue, read);
             }
         }
 
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(value, read);
+                Assert.Equal(value, read);
             }
         }
 
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(value, read);
+                Assert.Equal(value, read);
             }
         }
 
@@ -82,11 +81,10 @@ namespace ShipWorks.Tests.Core
             // Read it back
             int read = registry.GetValue("DoesNotExist", keyName, value);
 
-            Assert.AreEqual(value, read);
+            Assert.Equal(value, read);
         }
 
         [Fact]
-        [ExpectedException(typeof(FormatException))]
         public void ReadIntFromBadString()
         {
             int deafultValue = 10;
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Core
                 try
                 {
                     // Read it back
-                    int read = RegistryHelper.GetValue(key, keyName, deafultValue);
+                    Assert.Throws<FormatException>(() => RegistryHelper.GetValue(key, keyName, deafultValue));
                 }
                 finally
                 {
@@ -125,7 +123,7 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(deafultValue, read);
+                Assert.Equal(deafultValue, read);
             }
         }
     }

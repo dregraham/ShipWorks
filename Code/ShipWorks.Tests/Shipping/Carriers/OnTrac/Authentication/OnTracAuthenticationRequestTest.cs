@@ -21,8 +21,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
                "<OnTracZipResponse xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><Zips/><Error>{0}</Error></OnTracZipResponse>";
 
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracAuthenticationRequestTest()
         {
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
 
             Mock<ILogEntryFactory> mockedLogFactory = new Mock<ILogEntryFactory>();
             mockedLogFactory
-                .Setup(f=>f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(),It.IsAny<LogActionType>()))
+                .Setup(f => f.GetLogEntry(It.IsAny<ApiLogSource>(), It.IsAny<string>(), It.IsAny<LogActionType>()))
                 .Returns(mockedLogger.Object);
 
             testObject = new OnTracAuthentication(42, "test", mockedSubmitter.Object, mockedLogFactory.Object);
@@ -62,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         {
             SuccessfullyValidateUser();
 
-            Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
+            Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
         [Fact]
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             SuccessfullyValidateUser();
 
             //validate url
-            Assert.IsTrue(
+            Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith("/OnTracServices.svc/v2/42/zips?pw=test&lastupdate=3000-1-1"));
         }
 
@@ -88,7 +87,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracException))]
         public void AuthenticateUser_AuthenticationFail_ReceiveInvalidResponseFromOnTrac_Test()
         {
             const string invalidResponse =
@@ -97,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Authentication
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(invalidResponse);
 
-            testObject.IsValidUser();
+            Assert.Throws<OnTracException>(() => testObject.IsValidUser());
         }
     }
 }

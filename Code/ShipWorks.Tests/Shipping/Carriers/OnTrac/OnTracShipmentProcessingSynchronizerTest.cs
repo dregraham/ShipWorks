@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
         private Mock<ICarrierAccountRepository<OnTracAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<OnTracAccountEntity>>();
 
@@ -47,20 +46,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.OnTrac.OnTracAccountID);
+            Assert.Equal(123, shipment.OnTrac.OnTracAccountID);
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracException))]
         public void SaveAccountToShipment_ThrowsOnTracException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<OnTracAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<OnTracException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
-
-
-
+        
         [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
@@ -78,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.OnTrac.OnTracAccountID);
+            Assert.Equal(123, shipment.OnTrac.OnTracAccountID);
         }
 
         [Fact]
@@ -99,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.OnTrac.OnTracAccountID);
+            Assert.Equal(123, shipment.OnTrac.OnTracAccountID);
         }
     }
 }

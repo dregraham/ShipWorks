@@ -14,25 +14,23 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             testObject = new DailyActionSchedule();
         }
-        
+
         [Fact]
         public void ScheduleType_ReturnsDaily_Test()
         {
-            Assert.AreEqual(ActionScheduleType.Daily, testObject.ScheduleType);
+            Assert.Equal(ActionScheduleType.Daily, testObject.ScheduleType);
         }
 
         [Fact]
-        [ExpectedException(typeof(ActionScheduleException))]
         public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToZero_Test()
         {
-            testObject.FrequencyInDays = 0;
+            Assert.Throws<ActionScheduleException>(() => testObject.FrequencyInDays = 0);
         }
 
         [Fact]
-        [ExpectedException(typeof(ActionScheduleException))]
         public void FrequencyInDays_ThrowsActionScheduleException_WhenSettingValueToNegativeValue_Test()
         {
-            testObject.FrequencyInDays = -1;
+            Assert.Throws<ActionScheduleException>(() => testObject.FrequencyInDays = -1);
         }
 
         [Fact]
@@ -41,13 +39,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             // Prove that a positive number sets property correctly
             testObject.FrequencyInDays = 1;
 
-            Assert.AreEqual(1, testObject.FrequencyInDays);
+            Assert.Equal(1, testObject.FrequencyInDays);
         }
 
         [Fact]
         public void CreateEditor_ReturnsDailyActionScheduleEditor_Test()
         {
-            Assert.IsInstanceOfType(testObject.CreateEditor(), typeof(DailyActionScheduleEditor));
+            Assert.IsAssignableFrom<DailyActionScheduleEditor>(testObject.CreateEditor());
         }
     }
 }

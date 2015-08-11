@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
         string errorMessageFromLogger;
 
-        [TestInitialize]
-        public void Initialize()
+        public UspsScanFormCarrierAccountTest()
         {
             UspsAccountEntity accountEntity = new UspsAccountEntity()
             {
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
             logger = new Mock<ILog>();
             logger.Setup(l => l.Error(It.IsAny<string>()))
-                  .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
+                  .Callback((object errorMessage) => errorMessageFromLogger = (string)errorMessage);
 
             testObject = new UspsScanFormCarrierAccount(repository.Object, accountEntity, logger.Object);
         }
@@ -46,31 +45,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         [Fact]
         public void ShippingCarrierName_ReturnsUsps_Test()
         {
-            Assert.AreEqual("USPS", testObject.ShippingCarrierName);
+            Assert.Equal("USPS", testObject.ShippingCarrierName);
         }
 
         [Fact]
         public void ShipmentTypeCode_Test()
         {
-            Assert.AreEqual(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, testObject.ShipmentTypeCode);
         }
 
         [Fact]
         public void GetDescription_Test()
         {
-            Assert.AreEqual("USPS - testUsername", testObject.GetDescription());
+            Assert.Equal("USPS - testUsername", testObject.GetDescription());
         }
 
         [Fact]
         public void GetGateway_ReturnsUspsScanFormGateway_Test()
         {
-            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(UspsScanFormGateway));
+            Assert.IsAssignableFrom<UspsScanFormGateway>(testObject.GetGateway());
         }
-        
+
         [Fact]
         public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
         {
-            Assert.IsInstanceOfType(testObject.GetPrinter(), typeof(DefaultScanFormPrinter));
+            Assert.IsAssignableFrom<DefaultScanFormPrinter>(testObject.GetPrinter());
         }
 
         [Fact]
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
                         b => b.Relations.Count == 2
                     )
                 ), Times.Once());
-            
+
         }
 
         [Fact]
@@ -118,13 +117,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
         }
 
         [Fact]
-        [ExpectedException(typeof(ShippingException))]
         public void Save_ThrowsShippingException_WhenScanFormBatchIsNull_Test()
         {
-            testObject.Save(null);
+            Assert.Throws<ShippingException>(() => testObject.Save(null));
         }
 
-        [Fact]        
+        [Fact]
         public void Save_LogsMessage_WhenScanFormBatchIsNull_Test()
         {
             try
@@ -137,7 +135,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.ScanForm
 
             // Verify the correct message was logged
             string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            Assert.AreEqual(expectedMessage, errorMessageFromLogger);
+            Assert.Equal(expectedMessage, errorMessageFromLogger);
         }
     }
 }

@@ -17,45 +17,43 @@ namespace ShipWorks.Tests.Stores.Newegg
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CalculatePageCount_ThrowsInvalidOperationException_WhenMaxPageSizeIsZero_Test()
         {
-            testObject.CalculatePageCount(10, 0);
+            Assert.Throws<InvalidOperationException>(() => testObject.CalculatePageCount(10, 0));
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CalculatePageCount_ThrowsInvalidOperationException_WhenMaxPageSizeIsLessThanZero_Test()
         {
-            testObject.CalculatePageCount(10, -1);
+            Assert.Throws<InvalidOperationException>(() => testObject.CalculatePageCount(10, -1));
         }
 
         [Fact]
         public void CalculatePageCount_WhenZeroResults_Test()
         {
             int pageCount = testObject.CalculatePageCount(0, 25);
-            Assert.AreEqual(0, pageCount);
+            Assert.Equal(0, pageCount);
         }
 
         [Fact]
         public void CalculatesPageCount_WhenNumberOfResultsGreaterThanMaxPageSize_Test()
         {
             int pageCount = testObject.CalculatePageCount(42, 25);
-            Assert.AreEqual(2, pageCount);
+            Assert.Equal(2, pageCount);
         }
 
         [Fact]
         public void CalculatesPageCount_WhenNumberOfResultsEqualsMaxPageSize_Test()
         {
             int pageCount = testObject.CalculatePageCount(25, 25);
-            Assert.AreEqual(1, pageCount);
+            Assert.Equal(1, pageCount);
         }
 
         [Fact]
         public void CalculatesPageCount_WhenNumberOfResultsIsMultipleOfMaxPageSize_Test()
         {
             int pageCount = testObject.CalculatePageCount(50, 25);
-            Assert.AreEqual(2, pageCount);
+            Assert.Equal(2, pageCount);
         }
     }
 }

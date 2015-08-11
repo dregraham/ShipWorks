@@ -11,7 +11,7 @@ namespace ShipWorks.Tests.Shipping
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "PR" };
             var result = ShipmentType.IsPuertoRicoAddress(shipment, "Origin");
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -19,7 +19,7 @@ namespace ShipWorks.Tests.Shipping
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "PR"};
             var result = ShipmentType.IsPuertoRicoAddress(shipment, "Origin");
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Shipping
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "US", OriginStateProvCode = "MO" };
             var result = ShipmentType.IsPuertoRicoAddress(shipment, "Origin");
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace ShipWorks.Tests.Shipping
         {
             var shipment = new ShipmentEntity { OriginCountryCode = "FR" };
             var result = ShipmentType.IsPuertoRicoAddress(shipment, "Origin");
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         private void TestIsShipmentBetweenUnitedStatesAndPuertoRicoInBothDirections(string sourceCountry,
@@ -49,8 +49,7 @@ namespace ShipWorks.Tests.Shipping
                 ShipStateProvCode = destinationState
             };
             var result = ShipmentType.IsShipmentBetweenUnitedStatesAndPuertoRico(shipment);
-            Assert.AreEqual(expectedResults, result, 
-                string.Format("Between {0}, {1} and {2}, {3}", sourceState, sourceCountry, destinationState, destinationCountry));
+            Assert.Equal(expectedResults, result);
 
             shipment = new ShipmentEntity
             {
@@ -60,8 +59,7 @@ namespace ShipWorks.Tests.Shipping
                 ShipStateProvCode = sourceState
             };
             result = ShipmentType.IsShipmentBetweenUnitedStatesAndPuertoRico(shipment);
-            Assert.AreEqual(expectedResults, result, 
-                string.Format("Between {0}, {1} and {2}, {3}", destinationState, destinationCountry, sourceState, sourceCountry));
+            Assert.Equal(expectedResults, result);
         }
 
         [Fact]

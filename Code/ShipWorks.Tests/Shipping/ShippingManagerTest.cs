@@ -12,7 +12,7 @@ namespace ShipWorks.Tests.Shipping
             DateTime aMonday = new DateTime(2013, 11, 11);
             DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(2, aMonday, DayOfWeek.Saturday, DayOfWeek.Sunday);
 
-            Assert.AreEqual(aMonday.AddDays(2), deliveryDate);
+            Assert.Equal(aMonday.AddDays(2), deliveryDate);
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Shipping
             DateTime aFriday = new DateTime(2013, 11, 15);
             DateTime? deliveryDate = ShippingManager.CalculateExpectedDeliveryDate(2, aFriday, DayOfWeek.Saturday, DayOfWeek.Sunday);
 
-            Assert.AreEqual(aFriday.AddDays(4), deliveryDate);
+            Assert.Equal(aFriday.AddDays(4), deliveryDate);
         }
     }
 }

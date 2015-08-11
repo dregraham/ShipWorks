@@ -24,8 +24,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         private Mock<IActionScheduleAdapter> scheduleAdapter;
         private Mock<ILog> log;
 
-        [TestInitialize]
-        public void Initialize()
+        public QuartzSchedulingEngineTest()
         {
             scheduler = new Mock<Quartz.IScheduler>();
 
@@ -161,7 +160,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
 
-            Assert.IsFalse(testObject.HasExistingSchedule(new ActionEntity()));
+            Assert.False(testObject.HasExistingSchedule(new ActionEntity()));
         }
 
         [Fact]
@@ -171,7 +170,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
 
-            Assert.IsTrue(testObject.HasExistingSchedule(action));
+            Assert.True(testObject.HasExistingSchedule(action));
         }
 
         [Fact]
@@ -340,7 +339,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 
             scheduler.Verify(x => x.Shutdown(true), Times.Once());
 
-            Assert.IsTrue(task.IsCanceled);
+            Assert.True(task.IsCanceled);
         }
 
         [Fact]
@@ -472,11 +471,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             try
             {
                 testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
-                Assert.Fail("Did not throw expected exception.");
+                Assert.False(true, "Did not throw expected exception.");
             }
             catch (SchedulingException ex)
             {
-                Assert.AreEqual("Based on the configured schedule, the action will never execute.", ex.Message);
+                Assert.Equal("Based on the configured schedule, the action will never execute.", ex.Message);
             }
         }
     }

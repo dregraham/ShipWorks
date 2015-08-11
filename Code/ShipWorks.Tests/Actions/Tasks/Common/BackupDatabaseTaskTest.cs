@@ -21,10 +21,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             BackupDatabaseTask testObject = new BackupDatabaseTask();
             testObject.Initialize(serializedObject);
 
-            Assert.AreEqual(true, testObject.LimitNumberOfBackupsRetained);
-            Assert.AreEqual(9, testObject.KeepNumberOfBackups);
-            Assert.AreEqual(@"c:\shipworks\backup", testObject.BackupDirectory);
-            Assert.AreEqual("MyBackup", testObject.FilePrefix);
+            Assert.Equal(true, testObject.LimitNumberOfBackupsRetained);
+            Assert.Equal(9, testObject.KeepNumberOfBackups);
+            Assert.Equal(@"c:\shipworks\backup", testObject.BackupDirectory);
+            Assert.Equal("MyBackup", testObject.FilePrefix);
         }
     }
 }

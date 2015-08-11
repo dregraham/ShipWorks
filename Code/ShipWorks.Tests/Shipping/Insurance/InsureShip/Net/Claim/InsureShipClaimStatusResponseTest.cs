@@ -27,8 +27,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public InsureShipClaimStatusResponseTest()
         {
             shipment = new ShipmentEntity(100031)
             {
@@ -66,12 +65,11 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsNotExpected_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Found);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
         [Fact]
@@ -90,22 +88,20 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIsRecongized_ButNotSuccessful_Test()
         {
             request.Setup(r => r.ResponseStatusCode).Returns(HttpStatusCode.Conflict);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipResponseException))]
         public void Process_ThrowsInsureShipResponseException_WhenStatusCodeIs419_ButNotSuccessful_Test()
         {
             // Called out specifically since there is not an HttpStatusCode entry for 419
             request.Setup(r => r.ResponseStatusCode).Returns((HttpStatusCode)419);
 
-            testObject.Process();
+            Assert.Throws<InsureShipResponseException>(() => testObject.Process());
         }
 
         [Fact]
@@ -153,7 +149,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         {
             testObject.Process();
 
-            Assert.AreEqual("Created", shipment.InsurancePolicy.ClaimStatus);
+            Assert.Equal("Created", shipment.InsurancePolicy.ClaimStatus);
         }
 
         [Fact]
@@ -165,7 +161,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
 
             testObject.Process();
 
-            Assert.AreEqual("No status information available.", shipment.InsurancePolicy.ClaimStatus);
+            Assert.Equal("No status information available.", shipment.InsurancePolicy.ClaimStatus);
         }
 
 
@@ -182,22 +178,20 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip.Net.Claim
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Process_ThrowsInsureShipException_WhenResponseContentIsEmpty_Test()
         {
             // Setup the simulated response from the request
             request.Setup(r => r.ResponseContent).Returns(string.Empty);
 
-            testObject.Process();
+            Assert.Throws<InsureShipException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(InsureShipException))]
         public void Process_ThrowsInsureShipException_WhenResponseStreamIsNull_Test()
         {
             request.Setup(r => r.ResponseContent).Returns((string)null);
 
-            testObject.Process();
+            Assert.Throws<InsureShipException>(() => testObject.Process());
         }
     }
 }

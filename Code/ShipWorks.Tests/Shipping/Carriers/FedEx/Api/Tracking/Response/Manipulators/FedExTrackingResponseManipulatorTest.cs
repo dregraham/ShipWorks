@@ -16,10 +16,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         FedExTrackingResponse fedExTrackingResponse;
         TrackReply nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
-        private ShipmentEntity shipment; 
+        private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingResponseManipulatorTest()
         {
             nativeResponse = FedExTrackingUtilities.BuildSuccessTrackReply();
             shipment = new ShipmentEntity
@@ -35,51 +34,49 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsError_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.ERROR;
-            
-            testObject.Manipulate(fedExTrackingResponse);
+
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Manipulate(fedExTrackingResponse));
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Manipulate_ThrowsFedExApiException_WhenHighestSeverityIsFailure_Test()
         {
             nativeResponse.HighestSeverity = NotificationSeverityType.FAILURE;
-            
-            testObject.Manipulate(fedExTrackingResponse);
+
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Manipulate(fedExTrackingResponse));
         }
 
         [Fact]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsNull_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = null;
-            
+
             testObject.Manipulate(fedExTrackingResponse);
-            
-            Assert.AreEqual("Unknown", fedExTrackingResponse.TrackingResult.Summary);
+
+            Assert.Equal("Unknown", fedExTrackingResponse.TrackingResult.Summary);
         }
 
         [Fact]
         public void Manipulate_ResultSummaryIsUnknown_WhenTrackDetailsIsEmpty_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails = new TrackDetail[0];
-            
+
             testObject.Manipulate(fedExTrackingResponse);
-            
-            Assert.AreEqual("Unknown", fedExTrackingResponse.TrackingResult.Summary);
+
+            Assert.Equal("Unknown", fedExTrackingResponse.TrackingResult.Summary);
         }
 
         [Fact]
         public void Manipulate_ResultSummaryIsNoTrackingInfoReturned_WhenTrackDetailsStatusDescriptionIsEmpty_Test()
         {
             nativeResponse.CompletedTrackDetails[0].TrackDetails[0].StatusDetail.Description = string.Empty;
-            
+
             testObject.Manipulate(fedExTrackingResponse);
 
-            Assert.AreEqual("No tracking information was returned.", fedExTrackingResponse.TrackingResult.Summary);
+            Assert.Equal("No tracking information was returned.", fedExTrackingResponse.TrackingResult.Summary);
         }
 
         [Fact]
@@ -94,7 +91,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             testObject.Manipulate(fedExTrackingResponse);
 
-            Assert.IsTrue(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
+            Assert.True(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
 
         [Fact]
@@ -109,7 +106,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             testObject.Manipulate(fedExTrackingResponse);
 
-            Assert.IsFalse(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
+            Assert.False(fedExTrackingResponse.TrackingResult.Details[0].Location.ToLower().Contains("canada"));
         }
 
         [Fact]
@@ -119,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Response.Manipula
 
             testObject.Manipulate(fedExTrackingResponse);
 
-            Assert.AreEqual(0, fedExTrackingResponse.TrackingResult.Details.Count);
+            Assert.Equal(0, fedExTrackingResponse.TrackingResult.Details.Count);
         }
     }
 }

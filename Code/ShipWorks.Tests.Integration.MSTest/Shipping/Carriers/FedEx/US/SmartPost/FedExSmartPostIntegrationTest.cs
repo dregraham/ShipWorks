@@ -28,12 +28,12 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
             catch (Exception ex)
             {
                 // The test framework doesn't seem to know when to stop...so if we don't have a SaveLabel populated, return with no error. 
-                if (string.IsNullOrWhiteSpace(TestContext.DataRow[0].ToString().Trim()))
+                if (string.IsNullOrWhiteSpace(row[0].ToString().Trim()))
                 {
                     return;
                 }
 
-                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", TestContext.DataRow["ProcessShipmentRequest#TransactionDetail"], ex.Message);
+                string msg = string.Format("CustomerTransactionID: {0}, Message: {1}", row["ProcessShipmentRequest#TransactionDetail"], ex.Message);
                 throw new Exception(msg, ex);
             }
         }

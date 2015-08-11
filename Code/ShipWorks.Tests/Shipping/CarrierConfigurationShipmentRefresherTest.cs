@@ -26,8 +26,7 @@ namespace ShipWorks.Tests.Shipping
         private List<ShipmentEntity> shipments;
         private ShipmentEntity processingShipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public CarrierConfigurationShipmentRefresherTest()
         {
             mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
             messengerMock = mockRepository.Create<IMessenger>();
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Shipping
             shipment1 = new ShipmentEntity { ShipmentID = 1, ShipmentType = (int)ShipmentTypeCode.Usps };
             shipment2 = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.Usps };
             shipment3 = new ShipmentEntity { ShipmentID = 3, ShipmentType = (int)ShipmentTypeCode.Usps };
-            
+
             shipments = new List<ShipmentEntity>
             {
                 shipment1, shipment2, shipment3
@@ -51,28 +50,28 @@ namespace ShipWorks.Tests.Shipping
             shippingProfileManagerMock.Setup(x => x.GetDefaultProfile(It.IsAny<ShipmentTypeCode>())).Returns(profile);
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenMessengerIsNull()
         {
-            new CarrierConfigurationShipmentRefresher(null, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object);
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(null, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenShipmentDialogIsNull()
         {
-            new CarrierConfigurationShipmentRefresher(messengerMock.Object, null, shippingProfileManagerMock.Object, shippingManagerMock.Object);
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, null, shippingProfileManagerMock.Object, shippingManagerMock.Object));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenShippingProfileManagerIsNull()
         {
-            new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, null, shippingManagerMock.Object);
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, null, shippingManagerMock.Object));
         }
 
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Constructor_ThrowsArgumentNullException_WhenShippingManagerIsNull()
         {
-            new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, shippingProfileManagerMock.Object, null);
+            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, shippingProfileManagerMock.Object, null));
         }
 
         [Fact]
@@ -153,7 +152,7 @@ namespace ShipWorks.Tests.Shipping
             TestMessenger messenger = new TestMessenger();
             CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
 
-            refresher.ProcessingShipments(new List<ShipmentEntity> {new ShipmentEntity {ShipmentID = 2}});
+            refresher.ProcessingShipments(new List<ShipmentEntity> { new ShipmentEntity { ShipmentID = 2 } });
 
             messenger.Send(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
 
@@ -204,9 +203,9 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(1, shipment1.RequestedLabelFormat);
-            Assert.AreEqual(1, shipment2.RequestedLabelFormat);
-            Assert.AreEqual(1, shipment3.RequestedLabelFormat);
+            Assert.Equal(1, shipment1.RequestedLabelFormat);
+            Assert.Equal(1, shipment2.RequestedLabelFormat);
+            Assert.Equal(1, shipment3.RequestedLabelFormat);
         }
 
         [Fact]
@@ -232,9 +231,9 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, shipment1.RequestedLabelFormat);
-            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
-            Assert.AreEqual(0, shipment3.RequestedLabelFormat);
+            Assert.Equal(0, shipment1.RequestedLabelFormat);
+            Assert.Equal(0, shipment2.RequestedLabelFormat);
+            Assert.Equal(0, shipment3.RequestedLabelFormat);
         }
 
         [Fact]
@@ -247,7 +246,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            Assert.Equal(0, shipment2.RequestedLabelFormat);
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
@@ -261,21 +260,21 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            Assert.Equal(0, shipment2.RequestedLabelFormat);
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
         [Fact]
         public void HandleCarrierConfigured_DoesNotModifyShipment_WhenShipmentIsDifferentType()
         {
-            shipment2.ShipmentType = (int) ShipmentTypeCode.FedEx;
+            shipment2.ShipmentType = (int)ShipmentTypeCode.FedEx;
 
             TestMessenger messenger = new TestMessenger();
             CreateRefresher(messenger);
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            Assert.Equal(0, shipment2.RequestedLabelFormat);
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
@@ -289,7 +288,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, shipment2.RequestedLabelFormat);
+            Assert.Equal(0, shipment2.RequestedLabelFormat);
             shippingManagerMock.Verify(x => x.RefreshShipment(shipment2), Times.Never);
         }
 
@@ -304,7 +303,7 @@ namespace ShipWorks.Tests.Shipping
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(1, processingShipment.RequestedLabelFormat);
+            Assert.Equal(1, processingShipment.RequestedLabelFormat);
         }
 
         [Fact]
@@ -313,12 +312,12 @@ namespace ShipWorks.Tests.Shipping
             TestMessenger messenger = new TestMessenger();
 
             CarrierConfigurationShipmentRefresher refresher = CreateRefresher(messenger);
-            processingShipment = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int) ShipmentTypeCode.FedEx };
+            processingShipment = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.FedEx };
             refresher.ProcessingShipments(new List<ShipmentEntity> { processingShipment });
 
             messenger.Send(new CarrierConfiguredMessage(this, ShipmentTypeCode.Usps));
 
-            Assert.AreEqual(0, processingShipment.RequestedLabelFormat);
+            Assert.Equal(0, processingShipment.RequestedLabelFormat);
         }
 
         [Fact]

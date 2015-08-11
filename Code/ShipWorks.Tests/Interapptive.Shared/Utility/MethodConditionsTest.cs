@@ -6,10 +6,10 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
 {
     public class MethodConditionsTest
     {
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void EnsureArgumentIsNotNull_ThrowsArgumentNullException_WhenObjectIsNull()
         {
-            MethodConditions.EnsureArgumentIsNotNull((object)null, "null");
+            Assert.Throws< ArgumentNullException>(() => MethodConditions.EnsureArgumentIsNotNull((object)null, "null"));
         }
 
         [Fact]
@@ -21,7 +21,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             }
             catch (ArgumentNullException ex)
             {
-                Assert.AreEqual("value", ex.ParamName);
+                Assert.Equal("value", ex.ParamName);
             }
         }
 
@@ -30,13 +30,14 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             object test = new object();
             object result = MethodConditions.EnsureArgumentIsNotNull(test, "null");
-            Assert.AreEqual(test, result);
+            Assert.Equal(test, result);
         }
-        [Fact, ExpectedException(typeof(ArgumentNullException))]
+
+        [Fact]
         public void EnsureArgumentIsNotNull_WithExpressionThrowsArgumentNullException_WhenObjectIsNull()
         {
             string value = "";
-            MethodConditions.EnsureArgumentIsNotNull((object)null, () => value);
+            Assert.Throws< ArgumentNullException>(() => MethodConditions.EnsureArgumentIsNotNull((object)null, () => value));
         }
 
         [Fact]
@@ -49,7 +50,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
             }
             catch (ArgumentNullException ex)
             {
-                Assert.AreEqual("value", ex.ParamName);
+                Assert.Equal("value", ex.ParamName);
             }
         }
 
@@ -58,7 +59,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Utility
         {
             object test = new object();
             object result = MethodConditions.EnsureArgumentIsNotNull(test, () => test);
-            Assert.AreEqual(test, result);
+            Assert.Equal(test, result);
         }
     }
 }

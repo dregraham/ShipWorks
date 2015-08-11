@@ -13,11 +13,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         public RateResultCountShippingPolicyTest()
         {
             testObject = new RateResultCountShippingPolicy();
-        }
 
-        [TestInitialize]
-        public void Initialize()
-        {
             rateControl = new RateControl();
         }
 
@@ -26,7 +22,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure(string.Empty);
 
-            Assert.AreEqual(1, testObject.RateResultQuantity);
+            Assert.Equal(1, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -34,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("3.3");
 
-            Assert.AreEqual(1, testObject.RateResultQuantity);
+            Assert.Equal(1, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -42,7 +38,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("3ABC");
             
-            Assert.AreEqual(1, testObject.RateResultQuantity);
+            Assert.Equal(1, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -50,21 +46,21 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("3 4");
 
-            Assert.AreEqual(1, testObject.RateResultQuantity);
+            Assert.Equal(1, testObject.RateResultQuantity);
         }
 
         [Fact]
         public void Configure_AssignsQuantity_WhenDataIsInteger_Test()
         {
             testObject.Configure("34");
-            Assert.AreEqual(34, testObject.RateResultQuantity);
+            Assert.Equal(34, testObject.RateResultQuantity);
         }
 
         [Fact]
         public void Configure_AssignsQuantity_WhenDataIsInteger_AndContainsTrimmableWhitespace_Test()
         {
             testObject.Configure(" 34 ");
-            Assert.AreEqual(34, testObject.RateResultQuantity);
+            Assert.Equal(34, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -75,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject.Configure("16");
             testObject.Configure("2");
 
-            Assert.AreEqual(16, testObject.RateResultQuantity);
+            Assert.Equal(16, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -83,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Configure("0");
 
-            Assert.AreEqual(1, testObject.RateResultQuantity);
+            Assert.Equal(1, testObject.RateResultQuantity);
         }
 
         [Fact]
@@ -103,7 +99,7 @@ namespace ShipWorks.Tests.Shipping.Policies
         {
             testObject.Apply(rateControl);
 
-            Assert.IsFalse(rateControl.ShowAllRates);
+            Assert.False(rateControl.ShowAllRates);
         }
 
         [Fact]
@@ -112,7 +108,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject.Configure("400");
             testObject.Apply(rateControl);
 
-            Assert.AreEqual(testObject.RateResultQuantity, rateControl.RestrictedRateCount);
+            Assert.Equal(testObject.RateResultQuantity, rateControl.RestrictedRateCount);
         }
 
         [Fact]
@@ -121,7 +117,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject.Configure("3");
             testObject.Apply(rateControl);
 
-            Assert.IsFalse(rateControl.ShowSingleRate);
+            Assert.False(rateControl.ShowSingleRate);
         }
 
         [Fact]
@@ -130,7 +126,7 @@ namespace ShipWorks.Tests.Shipping.Policies
             testObject.Configure("1");
             testObject.Apply(rateControl);
 
-            Assert.IsTrue(rateControl.ShowSingleRate);
+            Assert.True(rateControl.ShowSingleRate);
         }
 
         [Fact]

@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         private Mock<ILog> logger;
         private ShipmentEntity shipment;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelDatabaseRepositoryTest()
         {
             shipment = new ShipmentEntity
             {
@@ -34,8 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject = new iParcelDatabaseRepository(logger.Object);
         }
 
-        [Fact]
-        [Ignore]
+        
         public void SaveLabel_Test()
         {
             // MARKED WITH THE IGNORE ATTRIBTE SINCE THIS ISN'T REALLY A UNIT TEST (DUE
@@ -68,7 +66,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                 }
             }
 
-            Assert.AreEqual("634986177870945805", shipment.TrackingNumber);
+            Assert.Equal("634986177870945805", shipment.TrackingNumber);
         }
 
         [Fact]
@@ -85,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
                 }
             }
 
-            Assert.AreEqual("216062095", shipment.IParcel.Packages[0].ParcelNumber);
+            Assert.Equal("216062095", shipment.IParcel.Packages[0].ParcelNumber);
         }
 
         /// <summary>

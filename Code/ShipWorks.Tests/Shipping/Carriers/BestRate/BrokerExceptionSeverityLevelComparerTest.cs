@@ -7,8 +7,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
         private BrokerExceptionSeverityLevelComparer testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public BrokerExceptionSeverityLevelComparerTest()
         {
             testObject = new BrokerExceptionSeverityLevelComparer();
         }
@@ -18,7 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Warning);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -26,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Information);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Error, BrokerExceptionSeverityLevel.Error);
 
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
         [Fact]
@@ -42,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Error);
 
-            Assert.IsTrue(result > 0);
+            Assert.True(result > 0);
         }
 
         [Fact]
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Information);
 
-            Assert.IsTrue(result < 0);
+            Assert.True(result < 0);
         }
 
         [Fact]
@@ -58,7 +57,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Warning, BrokerExceptionSeverityLevel.Warning);
 
-            Assert.AreEqual(0, result);
+            Assert.Equal(0, result);
         }
 
         [Fact]
@@ -66,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             int result = testObject.Compare(BrokerExceptionSeverityLevel.Information, BrokerExceptionSeverityLevel.Information);
 
-            Assert.IsTrue(result == 0);
+            Assert.True(result == 0);
         }
 
     }

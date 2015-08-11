@@ -24,9 +24,8 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 
         private JobKey jobKey;
         private JobDataMap jobDataMap;
-
-        [TestInitialize]
-        public void Initialize()
+        
+        public ActionJobTest()
         {
             log = new Mock<ILog>();
 

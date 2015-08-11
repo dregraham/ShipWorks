@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
         private Mock<ICarrierAccountRepository<EndiciaAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public EndiciaShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<EndiciaAccountEntity>>();
 
@@ -50,16 +49,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Endicia.EndiciaAccountID);
+            Assert.Equal(123, shipment.Postal.Endicia.EndiciaAccountID);
         }
 
         [Fact]
-        [ExpectedException(typeof(EndiciaException))]
         public void SaveAccountToShipment_ThrowsEndiciaException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<EndiciaAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<EndiciaException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
 
         [Fact]
@@ -82,7 +80,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Endicia.EndiciaAccountID);
+            Assert.Equal(123, shipment.Postal.Endicia.EndiciaAccountID);
         }
 
         [Fact]
@@ -106,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.Postal.Endicia.EndiciaAccountID);
+            Assert.Equal(123, shipment.Postal.Endicia.EndiciaAccountID);
         }
     }
 }

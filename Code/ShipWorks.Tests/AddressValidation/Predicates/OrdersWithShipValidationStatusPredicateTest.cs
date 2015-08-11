@@ -10,8 +10,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         private UnprocessedErrorShipmentsPredicate predicate;
         private FakePredicateExpression pred;
 
-        [TestInitialize]
-        public void Setup()
+        public UnprocessedShipmentsWithShipValidationStatusPredicateTest()
         {
             pred = new FakePredicateExpression();
 
@@ -23,7 +22,7 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error));
+            Assert.True(pred.ContainsPredicate(ShipmentFields.ShipAddressValidationStatus == (int)AddressValidationStatusType.Error));
         }
 
         [Fact]
@@ -31,14 +30,14 @@ namespace ShipWorks.Tests.AddressValidation.Predicates
         {
             predicate.Apply(pred);
 
-            Assert.IsTrue(pred.ContainsPredicate(ShipmentFields.Processed == false));
+            Assert.True(pred.ContainsPredicate(ShipmentFields.Processed == false));
         }
 
         [Fact]
         public void MaximumRows_ReturnsLimitOf50()
         {
             int result = predicate.MaximumRows;
-            Assert.AreEqual(50, result);
+            Assert.Equal(50, result);
         }
     }
 }

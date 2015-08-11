@@ -12,67 +12,67 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStates_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("United States"));
+            Assert.Equal("US", Geography.GetCountryCode("United States"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("united states"));
+            Assert.Equal("US", Geography.GetCountryCode("united states"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInUpperCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UNITED STATES"));
+            Assert.Equal("US", Geography.GetCountryCode("UNITED STATES"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UnItEd StAtEs"));
+            Assert.Equal("US", Geography.GetCountryCode("UnItEd StAtEs"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSA_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("USA"));
+            Assert.Equal("US", Geography.GetCountryCode("USA"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSAInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("usa"));
+            Assert.Equal("US", Geography.GetCountryCode("usa"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUSAInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UsA"));
+            Assert.Equal("US", Geography.GetCountryCode("UsA"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmerica_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("United States of America"));
+            Assert.Equal("US", Geography.GetCountryCode("United States of America"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInLowerCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("united states of america"));
+            Assert.Equal("US", Geography.GetCountryCode("united states of america"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInUpperCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("UNITED STATES OF AMERICA"));
+            Assert.Equal("US", Geography.GetCountryCode("UNITED STATES OF AMERICA"));
         }
 
         [Fact]
         public void GetCountryCode_ReturnsUS_WhenNameIsUnitedStatesOfAmericaInMixedCase_Test()
         {
-            Assert.AreEqual("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
+            Assert.Equal("US", Geography.GetCountryCode("uNiTeD StAtEs Of AmErIcA"));
         }
 
         [Fact]
@@ -80,7 +80,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "AS" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "US", StateProvCode = "AS"};
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsTrue(result);
+            Assert.True(result);
         }
 
         [Fact]
@@ -96,7 +96,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "MO" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "AS" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         [Fact]
@@ -112,21 +112,21 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             AddressAdapter address = new AddressAdapter { CountryCode = "CA", StateProvCode = "ON" };
             bool result = address.IsUSInternationalTerritory();
-            Assert.IsFalse(result);
+            Assert.False(result);
         }
 
         [Fact]
         public void GetStateProvCode_ReturnsEmptyString_WhenCountryCodeIsGreatBrittain()
         {
             string stateProvince = Geography.GetStateProvCode("something", "GB");
-            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+            Assert.True(string.IsNullOrEmpty(stateProvince));
         }
 
         [Fact]
         public void GetStateProvCode_ReturnsEmptyString_WhenStateProvinceIsEmptyAndCountryCodeIsGreatBrittain()
         {
             string stateProvince = Geography.GetStateProvCode(string.Empty, "GB");
-            Assert.IsTrue(string.IsNullOrEmpty(stateProvince));
+            Assert.True(string.IsNullOrEmpty(stateProvince));
         }
 
         [Fact]
@@ -134,7 +134,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             string expected = "something";
             string actual = Geography.GetStateProvCode(expected, "unknown country");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -142,7 +142,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             string expected = "MO";
             string actual = Geography.GetStateProvCode("Missouri", "US");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             string expected = "something";
             string actual = Geography.GetStateProvCode(expected);
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             string expected = string.Empty;
             string actual = Geography.GetStateProvCode(string.Empty);
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
@@ -166,7 +166,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Business
         {
             string expected = "MO";
             string actual = Geography.GetStateProvCode("Missouri");
-            Assert.AreEqual(expected, actual);
+            Assert.Equal(expected, actual);
         }
     }
 }

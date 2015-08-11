@@ -36,12 +36,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
         private Mock<IRateGroupFilterFactory> filterFactory;
 
-        [TestInitialize]
-        public void Initialize()
+        public BestRateShipmentTypeTest()
         {
             rates = new List<RateResult>
             {
-                CreateRateResult("Rate xyz", "5", 4.23M), 
+                CreateRateResult("Rate xyz", "5", 4.23M),
                 CreateRateResult("Rate 123", "4", 6.23M)
             };
 
@@ -97,10 +96,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.GetBestRates(It.IsAny<ShipmentEntity>(), It.IsAny<List<BrokerException>>())).Returns(new RateGroup(new List<RateResult>()));
 
             RateGroup rateGroup = testObject.GetRates(shipment);
-            
-            Assert.AreEqual(0, rateGroup.Rates.Count());
+
+            Assert.Equal(0, rateGroup.Rates.Count());
         }
-        
+
         [Fact]
         public void GetRates_RateAmountFromBrokerIsUnmodified_Test()
         {
@@ -114,7 +113,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
-            Assert.AreEqual(4.23M, bestRates[0].Amount);
+            Assert.Equal(4.23M, bestRates[0].Amount);
         }
 
         [Fact]
@@ -132,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
-            Assert.AreEqual("12", bestRates[0].Days);
+            Assert.Equal("12", bestRates[0].Days);
         }
 
         [Fact]
@@ -152,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             BestRateResultTag bestRateResultTag = (BestRateResultTag)bestRates.First(rr => ((BestRateResultTag)rr.Tag).ResultKey == "SomeRateResult").Tag;
 
-            Assert.AreEqual(rates[0].Tag, bestRateResultTag);
+            Assert.Equal(rates[0].Tag, bestRateResultTag);
         }
 
         [Fact]
@@ -170,14 +169,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
             List<RateResult> bestRates = rateGroup.Rates.ToList();
 
-            Assert.AreEqual(rates[0].Selectable, bestRates[0].Selectable);
+            Assert.Equal(rates[0].Selectable, bestRates[0].Selectable);
         }
-        
+
         [Fact]
         public void GetRates_CallsMaskDescription_OnReturnedRates_Test()
         {
             var testRate = new Mock<RateResult>();
-            testRate.Object.Tag = new BestRateResultTag() { ResultKey = "SomeKey"};
+            testRate.Object.Tag = new BestRateResultTag() { ResultKey = "SomeKey" };
 
             // Setup the broker to return specific rates
             rates = new List<RateResult>
@@ -191,7 +190,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             testRate.Verify(x => x.MaskDescription(rates));
         }
-        
+
         [Fact]
         public void GetRates_DelegatesToFilterFactory_Test()
         {
@@ -254,7 +253,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateGroup rateGroup = testObject.GetRates(shipment);
             RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote(null) as BrokerExceptionsRateFootnoteControl;
 
-            Assert.IsNotNull(footnote);
+            Assert.NotNull(footnote);
         }
 
         [Fact]
@@ -278,10 +277,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             // Create the footnote control and extract the exceptions
             RateFootnoteControl footnote = rateGroup.FootnoteFactories.First().CreateFootnote(null);
             List<BrokerException> exceptionsInFootnoteControl = ((BrokerExceptionsRateFootnoteControl)footnote).BrokerExceptions.ToList();
-            
-            Assert.AreEqual(BrokerExceptionSeverityLevel.Error, exceptionsInFootnoteControl[0].SeverityLevel);
-            Assert.AreEqual(BrokerExceptionSeverityLevel.Warning, exceptionsInFootnoteControl[1].SeverityLevel);
-            Assert.AreEqual(BrokerExceptionSeverityLevel.Information, exceptionsInFootnoteControl[2].SeverityLevel);
+
+            Assert.Equal(BrokerExceptionSeverityLevel.Error, exceptionsInFootnoteControl[0].SeverityLevel);
+            Assert.Equal(BrokerExceptionSeverityLevel.Warning, exceptionsInFootnoteControl[1].SeverityLevel);
+            Assert.Equal(BrokerExceptionSeverityLevel.Information, exceptionsInFootnoteControl[2].SeverityLevel);
         }
 
         [Fact]
@@ -290,7 +289,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             shipment.BestRateEvents = 0;
             testObject.GetRates(shipment);
 
-            Assert.AreEqual((int)BestRateEventTypes.RatesCompared, shipment.BestRateEvents);
+            Assert.Equal((int)BestRateEventTypes.RatesCompared, shipment.BestRateEvents);
         }
 
         [Fact]
@@ -299,17 +298,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             shipment.BestRateEvents = (int)BestRateEventTypes.RateSelected;
             testObject.GetRates(shipment);
 
-            Assert.AreEqual(BestRateEventTypes.RateSelected, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RateSelected);
+            Assert.Equal(BestRateEventTypes.RateSelected, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RateSelected);
         }
 
         [Fact]
         public void GetRates_ReturnsRateGroup_WhenFactoryCreatesZeroBrokers_Test()
         {
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), It.IsAny<bool>())).Returns(new List<IBestRateShippingBroker>());
-            
+
             RateGroup rateGroup = testObject.GetRates(shipment);
 
-            Assert.IsNotNull(rateGroup);
+            Assert.NotNull(rateGroup);
         }
 
         [Fact]
@@ -319,21 +318,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             RateGroup rateGroup = testObject.GetRates(shipment);
 
-            Assert.AreEqual(1, rateGroup.FootnoteFactories.Count());
-            Assert.IsInstanceOfType(rateGroup.FootnoteFactories.First(), typeof(ExceptionsRateFootnoteFactory));
+            Assert.Equal(1, rateGroup.FootnoteFactories.Count());
+            Assert.IsAssignableFrom<ExceptionsRateFootnoteFactory>(rateGroup.FootnoteFactories.First());
         }
 
         [Fact]
         public void SupportsGetRates_ReturnsTrue_Test()
         {
-            Assert.IsTrue(testObject.SupportsGetRates);
+            Assert.True(testObject.SupportsGetRates);
         }
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ProcessShipment_ThrowsInvalidOperationException_Test()
         {
-            testObject.ProcessShipment(new ShipmentEntity());
+            Assert.Throws<InvalidOperationException>(() => testObject.ProcessShipment(new ShipmentEntity()));
         }
 
         [Fact]
@@ -342,7 +340,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             broker.Setup(b => b.HasAccounts).Returns(false);
             broker.Setup(b => b.GetInsuranceProvider(It.IsAny<ShippingSettingsEntity>())).Returns(InsuranceProvider.ShipWorks);
 
-            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
+            Assert.Equal(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [Fact]
@@ -353,7 +351,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
 
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [Fact]
@@ -364,7 +362,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object, broker.Object });
 
-            Assert.AreEqual(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
+            Assert.Equal(InsuranceProvider.Invalid, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
 
         [Fact]
@@ -375,9 +373,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetShipmentInsuranceProvider(new ShipmentEntity()));
         }
-		
+
         [Fact]
         public void ApplySelectedShipmentRate_AddsRateSelectedEventToShipment_Test()
         {
@@ -385,7 +383,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             testObject.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.AreEqual((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents); 
+            Assert.Equal((int)BestRateEventTypes.RateSelected, shipment.BestRateEvents);
         }
 
         [Fact]
@@ -395,7 +393,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => { } } };
             testObject.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.AreEqual(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
+            Assert.Equal(BestRateEventTypes.RatesCompared, (BestRateEventTypes)shipment.BestRateEvents & BestRateEventTypes.RatesCompared);
         }
 
         [Fact]
@@ -405,7 +403,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
             testObject.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.AreEqual(shipment, calledShipment);
+            Assert.Equal(shipment, calledShipment);
         }
 
         [Fact]
@@ -417,7 +415,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
             RateResult rate = new RateResult("foo", "3") { Tag = new BestRateResultTag { RateSelectionDelegate = entity => calledShipment = entity } };
             testObject.ApplySelectedShipmentRate(shipment, rate);
 
-            Assert.IsFalse(signUpActionResult.HasValue);
+            Assert.False(signUpActionResult.HasValue);
         }
 
         private void InitializeFootnoteTests()
@@ -440,7 +438,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
 
             rateGroupWithFooterNotAssociatedWithAmount = new RateGroup(new List<RateResult>
             {
-                new RateResult("result1", "2") { Tag = new BestRateResultTag() { ResultKey = "result1"} }, 
+                new RateResult("result1", "2") { Tag = new BestRateResultTag() { ResultKey = "result1"} },
                 new RateResult("result2", "2") { Tag = new BestRateResultTag() { ResultKey = "result2"} }
             });
             rateGroupWithFooterNotAssociatedWithAmount.AddFootnoteFactory(notAssociatedWithAmountFooterFootnoteFactory.Object);
@@ -457,7 +455,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
         //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.IsFalse(isRequired);
+        //    Assert.False(isRequired);
         //}
 
         //[Fact]
@@ -469,7 +467,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { broker.Object });
 
         //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.IsTrue(isRequired);
+        //    Assert.True(isRequired);
         //}
 
         //[Fact]
@@ -484,7 +482,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
         //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.IsFalse(isRequired);
+        //    Assert.False(isRequired);
         //}
 
         //[Fact]
@@ -499,7 +497,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
         //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.IsTrue(isRequired);
+        //    Assert.True(isRequired);
         //}
 
         //[Fact]
@@ -514,7 +512,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         //    brokerFactory.Setup(f => f.CreateBrokers(It.IsAny<ShipmentEntity>(), false)).Returns(new List<IBestRateShippingBroker> { firstBroker.Object, secondBroker.Object });
 
         //    bool isRequired = testObject.IsCustomsRequired(new ShipmentEntity());
-        //    Assert.IsTrue(isRequired);
+        //    Assert.True(isRequired);
         //}
 
         // Helper methods for creating rate results

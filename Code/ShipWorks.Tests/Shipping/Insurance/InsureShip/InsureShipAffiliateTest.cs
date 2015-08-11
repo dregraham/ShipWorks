@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject = new InsureShipAffiliate("tangoStoreID", "xx");
 
-            Assert.AreEqual("tangoStoreID", testObject.InsureShipStoreID);
+            Assert.Equal("tangoStoreID", testObject.InsureShipStoreID);
         }
 
         [Fact]
@@ -24,7 +24,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
         {
             testObject = new InsureShipAffiliate("tangoStoreID", "tangoCustomerID");
 
-            Assert.AreEqual("SWtangoCustomerID", testObject.InsureShipPolicyID);
+            Assert.Equal("SWtangoCustomerID", testObject.InsureShipPolicyID);
         }
 
         [Fact]

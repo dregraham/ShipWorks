@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
     {
         private MonthlyActionScheduleAdapter target;
 
-        [TestInitialize]
-        public void Initialize()
+        public MonthlyActionScheduleAdapterTests()
         {
             target = new MonthlyActionScheduleAdapter();
         }
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var utcFireTimes = schedule.ComputeFireTimes(target, 5)
                                        .Select(x => x.ToUniversalTime()).ToArray();
 
-            Assert.IsTrue(utcFireTimes.All(
+            Assert.True(utcFireTimes.All(
                 x => x.TimeOfDay == schedule.StartDateTimeInUtc.TimeOfDay
                               ));
         }
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 6)
                                          .Select(x => x.ToLocalTime()).ToArray();
 
-            Assert.IsTrue(localFireTimes.All(
+            Assert.True(localFireTimes.All(
                 x => x.DayOfWeek == schedule.ExecuteOnDay
                               ));
         }
@@ -76,7 +75,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 6)
                                          .Select(x => x.ToLocalTime()).ToArray();
 
-            Assert.IsTrue(localFireTimes.All(
+            Assert.True(localFireTimes.All(
                 x => (WeekOfMonthType)(x.Day/7) == schedule.ExecuteOnWeek
                               ));
         }
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDayMonths.Count)
                                          .Select(x => x.ToLocalTime()).ToArray();
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 schedule.ExecuteOnDayMonths.Repeat(3).ToArray(),
                 localFireTimes.Select(x => (MonthType)(x.Month - 1)).ToArray()
                 );
@@ -118,9 +117,9 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDayMonths.Count)
                                         .Select(x => x.ToLocalTime()).ToArray();
 
-            Assert.AreEqual((new DateTime(2013, 1, 31)).ToString(), localFireTimes[0].Date.ToString());
-            Assert.AreEqual((new DateTime(2013, 2, 28)).ToString(), localFireTimes[1].Date.ToString());
-            Assert.AreEqual((new DateTime(2013, 12, 31)).ToString(), localFireTimes[2].Date.ToString());
+            Assert.Equal((new DateTime(2013, 1, 31)).ToString(), localFireTimes[0].Date.ToString());
+            Assert.Equal((new DateTime(2013, 2, 28)).ToString(), localFireTimes[1].Date.ToString());
+            Assert.Equal((new DateTime(2013, 12, 31)).ToString(), localFireTimes[2].Date.ToString());
         }
 
         [Fact]
@@ -139,9 +138,9 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 3 * schedule.ExecuteOnDayMonths.Count)
                                         .Select(x => x.ToLocalTime()).ToArray();
 
-            Assert.AreEqual((new DateTime(2013, 1, 30)).ToString(), localFireTimes[0].Date.ToString());
-            Assert.AreEqual((new DateTime(2013, 2, 27)).ToString(), localFireTimes[1].Date.ToString());
-            Assert.AreEqual((new DateTime(2013, 12, 25)).ToString(), localFireTimes[2].Date.ToString());
+            Assert.Equal((new DateTime(2013, 1, 30)).ToString(), localFireTimes[0].Date.ToString());
+            Assert.Equal((new DateTime(2013, 2, 27)).ToString(), localFireTimes[1].Date.ToString());
+            Assert.Equal((new DateTime(2013, 12, 25)).ToString(), localFireTimes[2].Date.ToString());
 
         }
 
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var utcFireTimes = schedule.ComputeFireTimes(target, 5)
                                        .Select(x => x.ToUniversalTime()).ToArray();
 
-            Assert.IsTrue(utcFireTimes.All(
+            Assert.True(utcFireTimes.All(
                 x => x.TimeOfDay == schedule.StartDateTimeInUtc.TimeOfDay
                               ));
         }
@@ -179,7 +178,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDates.Count)
                                          .Select(x => x.ToLocalTime()).ToArray();
 
-            CollectionAssert.AreEqual(
+           Assert.Equal(
                 schedule.ExecuteOnDates.Repeat(3).ToArray(),
                 localFireTimes.Select(x => x.Day).ToArray()
                 );
@@ -199,7 +198,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
             var localFireTimes = schedule.ComputeFireTimes(target, 3*schedule.ExecuteOnDateMonths.Count)
                                          .Select(x => x.ToLocalTime()).ToArray();
 
-            CollectionAssert.AreEqual(
+            Assert.Equal(
                 schedule.ExecuteOnDateMonths.Repeat(3).ToArray(),
                 localFireTimes.Select(x => (MonthType)(x.Month - 1)).ToArray()
                 );

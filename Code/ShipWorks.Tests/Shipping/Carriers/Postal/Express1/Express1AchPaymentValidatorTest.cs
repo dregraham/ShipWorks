@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         private Express1AchPaymentValidator testObject;
         private Express1PaymentInfo paymentInfo;
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1AchPaymentValidatorTest()
         {
             paymentInfo = new Express1PaymentInfo(Express1PaymentType.Ach)
                 {
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             IEnumerable<Express1ValidationError> errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.AreEqual(errors.Count(), 0);
+            Assert.Equal(errors.Count(), 0);
         }
 
         [Fact]
@@ -56,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidPaymentTypeCreditCard));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidPaymentTypeCreditCard));
         }
         
         [Fact]
@@ -69,21 +68,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
 
             // AchAccountHolderName is blank
             paymentInfo.AchAccountHolderName = "";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
 
             // AchAccountHolderName is just spaces
             paymentInfo.AchAccountHolderName = "   ";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountHolderName));
         }
 
         [Fact]
@@ -96,21 +95,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
 
             // AchAccountNumber is blank
             paymentInfo.AchAccountNumber = "";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
 
             // AchAccountNumber is just spaces
             paymentInfo.AchAccountNumber = "   ";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountNumber));
         }
 
         [Fact]
@@ -123,21 +122,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
 
             // AchBankName is blank
             paymentInfo.AchBankName = "";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
 
             // AchBankName is just spaces
             paymentInfo.AchBankName = "   ";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchBankName));
         }
 
         [Fact]
@@ -150,21 +149,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
 
             // AchRoutingId is blank
             paymentInfo.AchRoutingId = "";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
 
             // AchRoutingId is just spaces
             paymentInfo.AchRoutingId = "   ";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchRoutingId));
         }
 
         [Fact]
@@ -177,21 +176,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
 
             // AchAccountName is blank
             paymentInfo.AchAccountName = "";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
 
             // AchAccountName is just spaces
             paymentInfo.AchAccountName = "   ";
             testObject = new Express1AchPaymentValidator();
 
             errors = testObject.ValidatePaymentInfo(paymentInfo);
-            Assert.IsTrue(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
+            Assert.True(errors.Any(e => e.Message == Express1AchPaymentValidator.InvalidAchAccountName));
         }
     }
 }

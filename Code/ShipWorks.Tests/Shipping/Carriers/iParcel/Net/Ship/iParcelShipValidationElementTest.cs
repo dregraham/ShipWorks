@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
         private iParcelCredentials credentials;
         private Mock<IiParcelServiceGateway> gateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelShipValidationElementTest()
         {
             gateway = new Mock<IiParcelServiceGateway>();
             gateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -37,8 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement requestTypeElement = element.XPathSelectElement("/RequestType");
 
-            Assert.IsNotNull(requestTypeElement);
-            Assert.AreEqual("LIVE", requestTypeElement.Value);
+            Assert.NotNull(requestTypeElement);
+            Assert.Equal("LIVE", requestTypeElement.Value);
         }
 
         [Fact]
@@ -49,8 +48,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement requestTypeElement = element.XPathSelectElement("/RequestType");
 
-            Assert.IsNotNull(requestTypeElement);
-            Assert.AreEqual("TEST", requestTypeElement.Value);
+            Assert.NotNull(requestTypeElement);
+            Assert.Equal("TEST", requestTypeElement.Value);
         }
 
         [Fact]
@@ -59,8 +58,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement returnElement = element.XPathSelectElement("/ReturnInfo");
 
-            Assert.IsNotNull(returnElement);
-            Assert.AreEqual("ALL", returnElement.Value);
+            Assert.NotNull(returnElement);
+            Assert.Equal("ALL", returnElement.Value);
         }
 
         [Fact]
@@ -69,7 +68,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement domesticElement = element.XPathSelectElement("/DomesticShipping");
 
-            Assert.IsNotNull(domesticElement);
+            Assert.NotNull(domesticElement);
         }
 
         [Fact]
@@ -78,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement domesticElement = element.XPathSelectElement("/DomesticShipping");
             
-            Assert.AreEqual("1", domesticElement.Value);
+            Assert.Equal("1", domesticElement.Value);
         }
 
         [Fact]
@@ -89,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net.Ship
             XElement element = testObject.Build();
             XElement domesticElement = element.XPathSelectElement("/DomesticShipping");
 
-            Assert.AreEqual("0", domesticElement.Value);
+            Assert.Equal("0", domesticElement.Value);
         }
     }
 }

@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICredentialStore> credentialStore;
         private Mock<ICertificateInspector> certificateInspector;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCounterRatesBrokerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
 
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
            
             testObject.GetBestRates(shipment, brokerExceptions);
 
-            Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
+            Assert.Equal(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
         }
 
         [Fact]
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 
             testObject.GetBestRates(shipment, brokerExceptions);
 
-            Assert.AreEqual(certificateInspector.Object, testObject.ShipmentType.CertificateInspector);
+            Assert.Equal(certificateInspector.Object, testObject.ShipmentType.CertificateInspector);
         }
 
     }

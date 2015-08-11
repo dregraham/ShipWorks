@@ -46,8 +46,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         private Mock<UpsShipmentType> genericShipmentTypeMock;
         private Dictionary<long, RateGroup> rateResults;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsBestRateBrokerTest()
         {
             account1 = new UpsAccountEntity { UpsAccountID = 1, CountryCode = "US"};
             account2 = new UpsAccountEntity { UpsAccountID = 2, CountryCode = "US" };
@@ -112,7 +111,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             bool hasAccounts = testObject.HasAccounts;
 
-            Assert.IsTrue(hasAccounts);
+            Assert.True(hasAccounts);
         }
 
         [Fact]
@@ -122,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             bool hasAccounts = testObject.HasAccounts;
 
-            Assert.IsFalse(hasAccounts);
+            Assert.False(hasAccounts);
         }
 
         [Fact]
@@ -150,8 +149,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (var shipment in getRatesShipments)
             {
-                Assert.AreEqual(ShipmentTypeCode.UpsOnLineTools, (ShipmentTypeCode)shipment.ShipmentType);
-                Assert.AreEqual(12.1, shipment.ContentWeight);
+                Assert.Equal(ShipmentTypeCode.UpsOnLineTools, (ShipmentTypeCode)shipment.ShipmentType);
+                Assert.Equal(12.1, shipment.ContentWeight);
             }
         }
 
@@ -160,12 +159,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         //{
         //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-        //    Assert.AreEqual(5, rates.Count);
-        //    Assert.AreEqual(account1Rate1, OriginalRates(rates).ElementAt(3));
-        //    Assert.AreEqual(account1Rate2, OriginalRates(rates).ElementAt(1));
-        //    Assert.AreEqual(account1Rate3, OriginalRates(rates).ElementAt(4));
-        //    Assert.AreEqual(account3Rate1, OriginalRates(rates).ElementAt(0));
-        //    Assert.AreEqual(account3Rate2, OriginalRates(rates).ElementAt(2));
+        //    Assert.Equal(5, rates.Count);
+        //    Assert.Equal(account1Rate1, OriginalRates(rates).ElementAt(3));
+        //    Assert.Equal(account1Rate2, OriginalRates(rates).ElementAt(1));
+        //    Assert.Equal(account1Rate3, OriginalRates(rates).ElementAt(4));
+        //    Assert.Equal(account3Rate1, OriginalRates(rates).ElementAt(0));
+        //    Assert.Equal(account3Rate2, OriginalRates(rates).ElementAt(2));
         //}
 
         //[Fact]
@@ -175,10 +174,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
         //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-        //    Assert.IsTrue(OriginalRates(rates).Contains(account1Rate1));
-        //    Assert.IsTrue(OriginalRates(rates).Contains(account1Rate3));
-        //    Assert.IsTrue(OriginalRates(rates).Contains(account3Rate2));
-        //    Assert.AreEqual(3, rates.Count);
+        //    Assert.True(OriginalRates(rates).Contains(account1Rate1));
+        //    Assert.True(OriginalRates(rates).Contains(account1Rate3));
+        //    Assert.True(OriginalRates(rates).Contains(account3Rate2));
+        //    Assert.Equal(3, rates.Count);
         //}
 
         //[Fact]
@@ -188,8 +187,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
         //    var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-        //    Assert.IsTrue(OriginalRates(rates).Contains(account1Rate3));
-        //    Assert.AreEqual(1, rates.Count);
+        //    Assert.True(OriginalRates(rates).Contains(account1Rate3));
+        //    Assert.Equal(1, rates.Count);
         //}
 
         [Fact]
@@ -205,8 +204,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.AreEqual(2, rates.Rates.Count);
+            Assert.True(rates.Rates.Contains(result1));
+            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -222,8 +221,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(2, rates.Rates.Count);
+            Assert.True(rates.Rates.Contains(result2));
+            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -239,9 +238,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(2, rates.Rates.Count);
+            Assert.True(rates.Rates.Contains(result1));
+            Assert.True(rates.Rates.Contains(result2));
+            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -257,9 +256,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Contains(result1));
-            Assert.IsTrue(rates.Rates.Contains(result2));
-            Assert.AreEqual(2, rates.Rates.Count);
+            Assert.True(rates.Rates.Contains(result1));
+            Assert.True(rates.Rates.Contains(result2));
+            Assert.Equal(2, rates.Rates.Count);
         }
 
         [Fact]
@@ -269,7 +268,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testShipment.Ups = upsShipment;
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.AreEqual(upsShipment, testShipment.Ups);
+            Assert.Equal(upsShipment, testShipment.Ups);
         }
 
         [Fact]
@@ -287,7 +286,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(exception, brokerExceptions.First().InnerException);
+            Assert.Equal(exception, brokerExceptions.First().InnerException);
         }
 
         [Fact]
@@ -301,11 +300,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.AreEqual(3, shipment.Ups.Packages[0].DimsHeight);
-                Assert.AreEqual(5, shipment.Ups.Packages[0].DimsWidth);
-                Assert.AreEqual(2, shipment.Ups.Packages[0].DimsLength);
-                Assert.IsFalse(shipment.Ups.Packages[0].DimsAddWeight);
-                Assert.AreEqual(12.1, shipment.Ups.Packages[0].Weight);
+                Assert.Equal(3, shipment.Ups.Packages[0].DimsHeight);
+                Assert.Equal(5, shipment.Ups.Packages[0].DimsWidth);
+                Assert.Equal(2, shipment.Ups.Packages[0].DimsLength);
+                Assert.False(shipment.Ups.Packages[0].DimsAddWeight);
+                Assert.Equal(12.1, shipment.Ups.Packages[0].Weight);
             }
         }
 
@@ -323,8 +322,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.AreEqual(UpsServiceType.UpsGround, (UpsServiceType)shipment.Ups.Service);
-                Assert.AreEqual(UpsPackagingType.Custom, (UpsPackagingType)shipment.Ups.Packages[0].PackagingType);
+                Assert.Equal(UpsServiceType.UpsGround, (UpsServiceType)shipment.Ups.Service);
+                Assert.Equal(UpsPackagingType.Custom, (UpsPackagingType)shipment.Ups.Packages[0].PackagingType);
             }
         }
 
@@ -340,10 +339,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsFalse(getRatesShipments.Any(x => x.Ups.UpsAccountID == 1));
-            Assert.IsTrue(getRatesShipments.Any(x => x.Ups.UpsAccountID == 2));
-            Assert.IsFalse(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
-            Assert.IsFalse(getRatesShipments.Any(x => x.Ups.UpsAccountID == 999));
+            Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 1));
+            Assert.True(getRatesShipments.Any(x => x.Ups.UpsAccountID == 2));
+            Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 3));
+            Assert.False(getRatesShipments.Any(x => x.Ups.UpsAccountID == 999));
         }
 
         [Fact]
@@ -360,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (ShipmentEntity shipment in getRatesShipments)
             {
-                Assert.AreEqual(12.1, shipment.Ups.Packages[0].Weight);
+                Assert.Equal(12.1, shipment.Ups.Packages[0].Weight);
             }
         }
 
@@ -371,7 +370,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             foreach (var rate in rates.Rates)
             {
-                Assert.IsInstanceOfType(rate, typeof(RateResult));
+                Assert.IsAssignableFrom<RateResult>(rate);
             }
         }
 
@@ -386,12 +385,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
                 if (tag == null)
                 {
-                    Assert.Fail("Tag is {0} instead of BestRateResultTag", rate.Tag.GetType());
+                    Assert.False(true);
                 }
 
-                Assert.IsInstanceOfType(tag.RateSelectionDelegate, typeof(Action<ShipmentEntity>));
-                Assert.IsNotNull(tag.OriginalTag);
-                Assert.IsNotNull(tag.ResultKey);
+                Assert.IsAssignableFrom<Action<ShipmentEntity>>(tag.RateSelectionDelegate);
+                Assert.NotNull(tag.OriginalTag);
+                Assert.NotNull(tag.ResultKey);
             }
         }
 
@@ -407,8 +406,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var resultKeys = rates.Rates.Select(x => x.Tag).Cast<BestRateResultTag>().Select(x => x.ResultKey).ToList();
             
-            Assert.IsTrue(resultKeys.Contains("UPSUpsGround"));
-            Assert.IsTrue(resultKeys.Contains("UPSUpsNextDayAir"));
+            Assert.True(resultKeys.Contains("UPSUpsGround"));
+            Assert.True(resultKeys.Contains("UPSUpsNextDayAir"));
         }
 
         //[Fact]
@@ -424,9 +423,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         //    var rates = testObject.GetBestRates(testShipment);
         //    ((Action<ShipmentEntity>) rates[0].Tag)(testShipment);
 
-        //    Assert.AreEqual((int)ShipmentTypeCode.UpsOnLineTools, testShipment.ShipmentType);
-        //    Assert.AreEqual((int)UpsServiceType.UpsExpressEarlyAm, testShipment.Ups.Service);
-        //    Assert.AreEqual(account1.UpsAccountID, testShipment.Ups.UpsAccountID);
+        //    Assert.Equal((int)ShipmentTypeCode.UpsOnLineTools, testShipment.ShipmentType);
+        //    Assert.Equal((int)UpsServiceType.UpsExpressEarlyAm, testShipment.Ups.Service);
+        //    Assert.Equal(account1.UpsAccountID, testShipment.Ups.UpsAccountID);
         //}
 
         //[Fact]
@@ -445,7 +444,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
         //    var rates = testObject.GetBestRates(testShipment);
         //    ((Action<ShipmentEntity>)rates[0].Tag)(testShipment);
 
-        //    Assert.AreEqual(fedExEntity, testShipment.FedEx);
+        //    Assert.Equal(fedExEntity, testShipment.FedEx);
         //}
 
         [Fact]
@@ -461,9 +460,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             var rates = testObject.GetBestRates(testShipment, new List<BrokerException>());
 
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("UPS Ground"));
-            Assert.IsTrue(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
-            Assert.AreEqual(2, rates.Rates.Count);
+            Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Ground"));
+            Assert.True(rates.Rates.Select(x => x.Description).Contains("UPS Some Service"));
+            Assert.Equal(2, rates.Rates.Count);
         }
        
         [Fact]
@@ -488,7 +487,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(1, brokerExceptions.Count);
+            Assert.Equal(1, brokerExceptions.Count);
         }
 
         [Fact]
@@ -514,7 +513,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual("UPS did not provide SurePost rates.", brokerExceptions[0].Message);
+            Assert.Equal("UPS did not provide SurePost rates.", brokerExceptions[0].Message);
         }
 
         [Fact]
@@ -539,7 +538,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(BrokerExceptionSeverityLevel.Warning, brokerExceptions[0].SeverityLevel);
+            Assert.Equal(BrokerExceptionSeverityLevel.Warning, brokerExceptions[0].SeverityLevel);
         }
 
         [Fact]
@@ -564,7 +563,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(0, brokerExceptions.Count);
+            Assert.Equal(0, brokerExceptions.Count);
         }
 
         [Fact]
@@ -591,19 +590,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
             testObject.Configure(settings.Object);
             testObject.GetBestRates(testShipment, brokerExceptions);
 
-            Assert.AreEqual(0, brokerExceptions.Count);
+            Assert.Equal(0, brokerExceptions.Count);
         }
         
         [Fact]
         public void GetInsuranceProvider_ReturnsShipWorks_UpsSettingSpecfiesShipWorks_Test()
         {
-            Assert.AreEqual(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
+            Assert.Equal(InsuranceProvider.ShipWorks, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.ShipWorks }));
         }
 
         [Fact]
         public void GetInsuranceProvider_ReturnsCarrier_UpsSettingSpecfiesCarrier_Test()
         {
-            Assert.AreEqual(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.Carrier }));
+            Assert.Equal(InsuranceProvider.Carrier, testObject.GetInsuranceProvider(new ShippingSettingsEntity() { UpsInsuranceProvider = (int)InsuranceProvider.Carrier }));
         }
     }
 }

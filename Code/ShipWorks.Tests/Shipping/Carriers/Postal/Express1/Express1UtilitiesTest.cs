@@ -20,31 +20,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1
         [Fact]
         public void ValidateDataIsProvided_ReturnsNoErrors_WhenValueProvided_Test()
         {
-            Assert.AreEqual(Express1Utilities.ValidateDataIsProvided("aValue", errorMessage).Count(), 0);
+            Assert.Equal(Express1Utilities.ValidateDataIsProvided("aValue", errorMessage).Count(), 0);
         }
 
         [Fact]
         public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsBlank_Test()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided("", errorMessage);
-            Assert.AreEqual(errors.Count(), 1);
-            Assert.AreEqual(errors.First().Message, errorMessage);
+            Assert.Equal(errors.Count(), 1);
+            Assert.Equal(errors.First().Message, errorMessage);
         }
 
         [Fact]
         public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsSpaces_Test()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided("  ", errorMessage);
-            Assert.AreEqual(errors.Count(), 1);
-            Assert.AreEqual(errors.First().Message, errorMessage);
+            Assert.Equal(errors.Count(), 1);
+            Assert.Equal(errors.First().Message, errorMessage);
         }
 
         [Fact]
         public void ValidateDataIsProvided_ReturnsErrors_WhenValueIsNull_Test()
         {
             IEnumerable<Express1ValidationError> errors = Express1Utilities.ValidateDataIsProvided(null, errorMessage);
-            Assert.AreEqual(errors.Count(), 1);
-            Assert.AreEqual(errors.First().Message, errorMessage);
+            Assert.Equal(errors.Count(), 1);
+            Assert.Equal(errors.First().Message, errorMessage);
         }
     }
 }

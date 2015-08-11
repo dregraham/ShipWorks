@@ -10,28 +10,28 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         [Fact]
         public void CreateActionSchedule_ReturnsOneTimeActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.OneTime), typeof(OneTimeActionSchedule));
+            Assert.IsAssignableFrom<OneTimeActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.OneTime));
         }
 
         [Fact]
         public void CreateActionSchedule_ReturnsHourlyTimeActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Hourly), typeof(HourlyActionSchedule));
+            Assert.IsAssignableFrom<HourlyActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Hourly));
         }
 
         [Fact]
         public void CreateActionSchedule_ReturnsDailyActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Daily), typeof(DailyActionSchedule));
+            Assert.IsAssignableFrom<DailyActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Daily));
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CreateActionSchedule_ThrowsArgumentOutOfRangeException_Test()
         {
+
             // This test will pass until the next schedule type is added (i.e. the failure will be a 
             // "reminder" to add/edit these tests as factory is changed)
-            ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 5);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 5));
         }
     }
 }

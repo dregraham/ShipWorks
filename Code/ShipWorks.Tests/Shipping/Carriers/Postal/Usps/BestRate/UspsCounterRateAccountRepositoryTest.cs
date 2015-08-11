@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
         [Fact]
         public void Accounts_ReturnsCollectionWithOneItem_Test()
         {
-            Assert.AreEqual(1, testObject.Accounts.Count());
+            Assert.Equal(1, testObject.Accounts.Count());
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             UspsAccountEntity account = testObject.Accounts.First();
 
             credentialStore.Verify(s => s.UspsUsername, Times.Once());
-            Assert.AreEqual(credentialStore.Object.UspsUsername, account.Username);
+            Assert.Equal(credentialStore.Object.UspsUsername, account.Username);
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.BestRate
             UspsAccountEntity account = testObject.Accounts.First();
 
             credentialStore.Verify(s => s.UspsPassword, Times.Once());
-            Assert.AreEqual(credentialStore.Object.UspsPassword, account.Password);
+            Assert.Equal(credentialStore.Object.UspsPassword, account.Password);
         }
     }
 }

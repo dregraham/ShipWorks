@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
         private Mock<IiParcelServiceGateway> serviceGateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelCredentialsTest()
         {
             serviceGateway = new Mock<IiParcelServiceGateway>();
             serviceGateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             // Since the credentials use a static class, we'll just check that we get back the same
             // value for the encrypted password property as the password that was provided (i.e.
             // the password was not encrypted again)
-            Assert.AreEqual("somePassword", testObject.EncryptedPassword);
+            Assert.Equal("somePassword", testObject.EncryptedPassword);
         }
 
         [Fact]
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             // Since the credentials use a static class, we'll just check that we get a different
             // value for the encrypted password property than the password that was provided (i.e.
             // the value is different)
-            Assert.AreNotEqual("somePassword", testObject.EncryptedPassword);
+            Assert.NotEqual("somePassword", testObject.EncryptedPassword);
         }
 
         [Fact]
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             // Since the credentials use a static class, we'll just check that we get a different
             // value for the decrypted password property than the password that was provided
-            Assert.AreNotEqual("D4ljlev6Y5B+KN4tWMzYsw==", testObject.DecryptedPassword);
+            Assert.NotEqual("D4ljlev6Y5B+KN4tWMzYsw==", testObject.DecryptedPassword);
         }
 
         [Fact]
@@ -65,43 +64,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             // Since the credentials use a static class, we'll just check that we get back the same
             // value for the encrypted password property as the password that was provided (i.e.
             // the password was not encrypted again)
-            Assert.AreEqual("somePassword", testObject.DecryptedPassword);
+            Assert.Equal("somePassword", testObject.DecryptedPassword);
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void Validate_ThrowsiParcelException_WhenUsernameIsNull_Test()
         {
             testObject = new iParcelCredentials(null, "somePassword", false, serviceGateway.Object);
 
-            testObject.Validate();
+            Assert.Throws<iParcelException>(() => testObject.Validate());
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void Validate_ThrowsiParcelException_WhenUsernameIsEmpty_Test()
         {
             testObject = new iParcelCredentials(string.Empty, "somePassword", false, serviceGateway.Object);
 
-            testObject.Validate();
+            Assert.Throws<iParcelException>(() => testObject.Validate());
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void Validate_ThrowsiParcelException_WhenPasswordIsNull_Test()
         {
             testObject = new iParcelCredentials("someUser", null, false, serviceGateway.Object);
 
-            testObject.Validate();
+            Assert.Throws<iParcelException>(() => testObject.Validate());
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void Validate_ThrowsiParcelException_WhenPasswordIsEmpty_Test()
         {
             testObject = new iParcelCredentials("someUser", string.Empty, false, serviceGateway.Object);
 
-            testObject.Validate();
+            Assert.Throws<iParcelException>(() => testObject.Validate());
         }
 
         [Fact]
@@ -116,13 +111,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void Validate_ThrowsiParcelException_WhenCredentialsDoNotPassGatewayValidation_Test()
         {
             serviceGateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(false);
             testObject = new iParcelCredentials("someUser", "somePassword", false, serviceGateway.Object);
 
-            testObject.Validate();
+            Assert.Throws<iParcelException>(() => testObject.Validate());
         }
 
         [Fact]
@@ -136,13 +130,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
         }
 
         [Fact]
-        [ExpectedException(typeof(iParcelException))]
         public void SaveToEntity_ThrowsiParcelException_ForInvalidCredentials_Test()
         {
             // Setup our test object with an invalid username
             testObject = new iParcelCredentials(string.Empty, "somePassword", false, serviceGateway.Object);
 
-            testObject.SaveToEntity(new IParcelAccountEntity());
+            Assert.Throws<iParcelException>(() => testObject.SaveToEntity(new IParcelAccountEntity()));
         }
 
         [Fact]
@@ -153,7 +146,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.SaveToEntity(account);
 
-            Assert.AreEqual("someUser", account.Username);
+            Assert.Equal("someUser", account.Username);
         }
 
         [Fact]
@@ -165,7 +158,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
             testObject.SaveToEntity(account);
 
             // This should be the encrypted password
-            Assert.AreEqual("D4ljlev6Y5B+KN4tWMzYsw==", account.Password);
+            Assert.Equal("D4ljlev6Y5B+KN4tWMzYsw==", account.Password);
         }
     }
 }

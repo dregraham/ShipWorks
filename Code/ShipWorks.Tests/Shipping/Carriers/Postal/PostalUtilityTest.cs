@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             foreach (string postalCode in militaryPostalCodes)
             {
-                Assert.IsTrue(PostalUtility.IsMilitaryPostalCode(postalCode), "{0} should be a military postal code", postalCode);
+                Assert.True(PostalUtility.IsMilitaryPostalCode(postalCode));
             }
         }
 
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             foreach (string postalCode in postalCodes)
             {
-                Assert.IsFalse(PostalUtility.IsMilitaryPostalCode(postalCode), "{0} should not be a military postal code", postalCode);
+                Assert.False(PostalUtility.IsMilitaryPostalCode(postalCode));
             }
         }
     }

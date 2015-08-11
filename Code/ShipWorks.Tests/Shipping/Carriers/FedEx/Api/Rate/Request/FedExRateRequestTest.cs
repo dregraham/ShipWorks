@@ -25,8 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity() { ReferencePO = "testPO" };
@@ -75,12 +74,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
         [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         public void CarrierAccountEntity_IsAccountRetrievedFromRepository_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity);
         }
 
         [Fact]

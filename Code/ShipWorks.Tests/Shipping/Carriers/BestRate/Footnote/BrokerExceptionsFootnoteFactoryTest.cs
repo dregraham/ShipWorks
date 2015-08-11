@@ -17,10 +17,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
         private BrokerExceptionsRateFootnoteFactory testObject;
 
         [Fact]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void Constructor_ThrowsInvalidOperationException_WhenCollectionOfBrokerExceptionsIsEmpty_Test()
         {
-            testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), new List<BrokerException>());
+            Assert.Throws<InvalidOperationException>(() => new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), new List<BrokerException>()));
         }
 
         [Fact]
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
 
             RateFootnoteControl footnote = testObject.CreateFootnote(null);
 
-            Assert.IsInstanceOfType(footnote, typeof(BrokerExceptionsRateFootnoteControl));
+            Assert.IsAssignableFrom<BrokerExceptionsRateFootnoteControl>(footnote);
         }
 
         [Fact]
@@ -49,12 +48,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.Footnote
                 new BrokerException(new ShippingException("broker exception 2"), BrokerExceptionSeverityLevel.Warning, new OnTracShipmentType()),
                 new BrokerException(new ShippingException("broker exception 3"), BrokerExceptionSeverityLevel.Error, new OnTracShipmentType())
             };
-                
+
             testObject = new BrokerExceptionsRateFootnoteFactory(new BestRateShipmentType(), brokerExceptions);
 
             BrokerExceptionsRateFootnoteControl footnote = testObject.CreateFootnote(null) as BrokerExceptionsRateFootnoteControl;
 
-            Assert.AreEqual(3, footnote.BrokerExceptions.Count());
+            Assert.Equal(3, footnote.BrokerExceptions.Count());
         }
     }
 }

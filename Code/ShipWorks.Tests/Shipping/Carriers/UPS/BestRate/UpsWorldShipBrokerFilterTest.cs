@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
     {
         private UpsWorldShipBrokerFilter testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsWorldShipBrokerFilterTest()
         {
             testObject = new UpsWorldShipBrokerFilter();
         }
@@ -30,8 +29,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(0, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
         [Fact]
@@ -45,8 +44,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
         }
 
         [Fact]
@@ -59,8 +58,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(WorldShipBestRateBroker)));
         }
 
         [Fact]
@@ -73,8 +72,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.BestRate
 
             List<IBestRateShippingBroker> fileredBrokers = testObject.Filter(brokers).ToList();
 
-            Assert.AreEqual(1, fileredBrokers.Count);
-            Assert.AreEqual(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
+            Assert.Equal(1, fileredBrokers.Count);
+            Assert.Equal(1, fileredBrokers.Count(b => b.GetType() == typeof(UpsBestRateBroker)));
         }
     }
 }

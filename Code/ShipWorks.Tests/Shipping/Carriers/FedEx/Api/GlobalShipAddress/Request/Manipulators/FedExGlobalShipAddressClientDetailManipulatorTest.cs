@@ -20,10 +20,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         private Mock<ICarrierSettingsRepository> mockSettingsRepository;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity {AccountNumber = "123", MeterNumber = "456"};
+            account = new FedExAccountEntity { AccountNumber = "123", MeterNumber = "456" };
 
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
 
@@ -46,8 +45,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual("ITSW", nativeRequest.ClientDetail.ClientProductId);
-            Assert.AreEqual("5236", nativeRequest.ClientDetail.ClientProductVersion);
+            Assert.Equal("ITSW", nativeRequest.ClientDetail.ClientProductId);
+            Assert.Equal("5236", nativeRequest.ClientDetail.ClientProductVersion);
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual("123", nativeRequest.ClientDetail.AccountNumber);
+            Assert.Equal("123", nativeRequest.ClientDetail.AccountNumber);
         }
 
         [Fact]
@@ -63,14 +62,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         {
             testObject.Manipulate(mockCarrierRequest.Object);
 
-            Assert.AreEqual("456", nativeRequest.ClientDetail.MeterNumber);
+            Assert.Equal("456", nativeRequest.ClientDetail.MeterNumber);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
@@ -82,23 +80,21 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsException_WhenNativeRequestIsNull_Test()
         {
             // Set the native request to null
             mockCarrierRequest = new Mock<CarrierRequest>(null, shipmentEntity, null);
 
-            testObject.Manipulate(mockCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(mockCarrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsException_WhenNativeRequestIsNotSearchLocationsRequest_Test()
         {
             // Set the native request to null
             mockCarrierRequest = new Mock<CarrierRequest>(null, shipmentEntity, new SearchLocationsReply());
 
-            testObject.Manipulate(mockCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(mockCarrierRequest.Object));
         }
     }
 }

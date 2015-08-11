@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaRepository;
         Mock<ICarrierAccountRepository<EndiciaAccountEntity>> endiciaExpress1Repository;
 
-        [TestInitialize]
-        public void Setup()
+        public RegistrationPromotionFactoryTest()
         {
             mockRepository = new MockRepository(MockBehavior.Loose);
             uspsRepository = CreateEmptyRepository<UspsAccountEntity>();
@@ -33,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
         {
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(NewPostalCustomerRegistrationPromotion));
+            Assert.IsAssignableFrom<NewPostalCustomerRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -43,7 +42,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
+            Assert.IsAssignableFrom<Express1OnlyRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
+            Assert.IsAssignableFrom<Express1OnlyRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -64,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(Express1OnlyRegistrationPromotion));
+            Assert.IsAssignableFrom<Express1OnlyRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -74,7 +73,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion)); 
+            Assert.IsAssignableFrom<EndiciaIntuishipRegistrationPromotion>(promotion); 
         }
 
         [Fact]
@@ -85,7 +84,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion));
+            Assert.IsAssignableFrom<EndiciaIntuishipRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -96,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(EndiciaIntuishipRegistrationPromotion));
+            Assert.IsAssignableFrom<EndiciaIntuishipRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -113,7 +112,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(EndiciaCbpRegistrationPromotion));
+            Assert.IsAssignableFrom<EndiciaCbpRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -123,7 +122,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(UspsIntuishipRegistrationPromotion));
+            Assert.IsAssignableFrom<UspsIntuishipRegistrationPromotion>(promotion);
         }
 
         [Fact]
@@ -143,7 +142,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal
 
             RegistrationPromotionFactory factory = CreateRegistrationPromotionFactory();
             IRegistrationPromotion promotion = factory.CreateRegistrationPromotion();
-            Assert.IsInstanceOfType(promotion, typeof(UspsCbpRegistrationPromotion));
+            Assert.IsAssignableFrom<UspsCbpRegistrationPromotion>(promotion);
         }
 
         /// <summary>

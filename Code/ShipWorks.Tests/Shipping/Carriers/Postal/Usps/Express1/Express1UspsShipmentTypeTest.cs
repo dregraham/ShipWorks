@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         private List<PostalServicePackagingCombination> allCombinations = new List<PostalServicePackagingCombination>();
         private List<PostalServicePackagingCombination> adultSignatureCombinationsAllowed = new List<PostalServicePackagingCombination>();
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1UspsShipmentTypeTest()
         {
             testObject = new Express1UspsShipmentType();
 
@@ -37,7 +36,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRequired, testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRequired), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
@@ -46,7 +46,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
         {
             foreach (PostalServicePackagingCombination combo in adultSignatureCombinationsAllowed)
             {
-                Assert.IsTrue(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
+                Assert.Contains(PostalConfirmationType.AdultSignatureRestricted, testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType));
+                //Assert.True(testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType).Any(ct => ct == PostalConfirmationType.AdultSignatureRestricted), "{0}, {1} should be included in the allowed confirmation types", combo.ServiceType, combo.PackagingType);
             }
         }
 
@@ -57,7 +58,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Express1
             {
                 List<PostalConfirmationType> returnedConfirmationTypes = testObject.GetAvailableConfirmationTypes("US", combo.ServiceType, combo.PackagingType);
 
-                Assert.IsTrue(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
+                Assert.DoesNotContain(PostalConfirmationType.AdultSignatureRequired, returnedConfirmationTypes);
+                //Assert.True(returnedConfirmationTypes.All(ct => ct != PostalConfirmationType.AdultSignatureRequired), "AdultSignatureRequired should not have been returned for {0}, {1}.", combo.ServiceType, combo.PackagingType);
             }
         }
 

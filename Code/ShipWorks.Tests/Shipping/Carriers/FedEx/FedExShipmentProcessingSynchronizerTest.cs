@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
         private Mock<ICarrierAccountRepository<FedExAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
 
@@ -47,16 +46,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
+            Assert.Equal(123, shipment.FedEx.FedExAccountID);
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExException))]
         public void SaveAccountToShipment_ThrowsFedExException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<FedExAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<FedExException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
 
 
@@ -77,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
+            Assert.Equal(123, shipment.FedEx.FedExAccountID);
         }
 
         [Fact]
@@ -98,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.FedEx.FedExAccountID);
+            Assert.Equal(123, shipment.FedEx.FedExAccountID);
         }
     }
 }

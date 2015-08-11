@@ -5,16 +5,15 @@ using ShipWorks.Shipping;
 using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shipping.ScanForms
-{    
+{
     public class ScanFormTest
     {
         private Mock<IScanFormPrinter> printer;
         private Mock<IScanFormCarrierAccount> carrierAccount;
-        
+
         private ScanForm testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public ScanFormTest()
         {
             // Setup a mocked printer that always returns true
             printer = new Mock<IScanFormPrinter>();
@@ -31,12 +30,11 @@ namespace ShipWorks.Tests.Shipping.ScanForms
         }
 
         [Fact]
-        [ExpectedException(typeof(ShippingException))]
         public void Print_ThrowsShippingException_WhenCarrierAccountIsNull_Test()
         {
             // Create a new test object that has a null carrier to generate the exception
             testObject = new ScanForm(null, 1000, string.Empty);
-            testObject.Print(null);
+            Assert.Throws<ShippingException>(() => testObject.Print(null));
         }
 
         [Fact]
@@ -65,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
             // The test object is already setup with the success path
             bool success = testObject.Print(new Form());
 
-            Assert.IsTrue(success);
+            Assert.True(success);
         }
 
         [Fact]
@@ -76,7 +74,7 @@ namespace ShipWorks.Tests.Shipping.ScanForms
 
             bool success = testObject.Print(new Form());
 
-            Assert.IsFalse(success);
+            Assert.False(success);
         }
     }
 }

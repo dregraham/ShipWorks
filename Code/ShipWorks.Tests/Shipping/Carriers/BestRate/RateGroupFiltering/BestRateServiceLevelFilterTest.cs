@@ -32,9 +32,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.Anytime);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[1], filteredRates[0]);
-            Assert.AreEqual(rates[2], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
+            Assert.Equal(rates[1], filteredRates[0]);
+            Assert.Equal(rates[2], filteredRates[1]);
+            Assert.Equal(rates[0], filteredRates[2]);
         }
 
         [Fact]
@@ -55,11 +55,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.Anytime);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[2], filteredRates[0]);
-            Assert.AreEqual(rates[4], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
-            Assert.AreEqual(rates[3], filteredRates[3]);
-            Assert.AreEqual(rates[1], filteredRates[4]);
+            Assert.Equal(rates[2], filteredRates[0]);
+            Assert.Equal(rates[4], filteredRates[1]);
+            Assert.Equal(rates[0], filteredRates[2]);
+            Assert.Equal(rates[3], filteredRates[3]);
+            Assert.Equal(rates[1], filteredRates[4]);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.Anytime);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates.Count, filteredRates.Count);
+            Assert.Equal(rates.Count, filteredRates.Count);
         }
 
         [Fact]
@@ -107,11 +107,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.Anytime);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[6], filteredRates[0]);
-            Assert.AreEqual(rates[8], filteredRates[1]);
-            Assert.AreEqual(rates[4], filteredRates[2]);
-            Assert.AreEqual(rates[7], filteredRates[3]);
-            Assert.AreEqual(rates[5], filteredRates[4]);
+            Assert.Equal(rates[6], filteredRates[0]);
+            Assert.Equal(rates[8], filteredRates[1]);
+            Assert.Equal(rates[4], filteredRates[2]);
+            Assert.Equal(rates[7], filteredRates[3]);
+            Assert.Equal(rates[5], filteredRates[4]);
         }
 
         [Fact]
@@ -137,11 +137,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.TwoDays);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[6], filteredRates[0]);
-            Assert.AreEqual(rates[0], filteredRates[1]);
-            Assert.AreEqual(rates[1], filteredRates[2]);
-            Assert.AreEqual(rates[2], filteredRates[3]);
-            Assert.AreEqual(rates[3], filteredRates[4]);
+            Assert.Equal(rates[6], filteredRates[0]);
+            Assert.Equal(rates[0], filteredRates[1]);
+            Assert.Equal(rates[1], filteredRates[2]);
+            Assert.Equal(rates[2], filteredRates[3]);
+            Assert.Equal(rates[3], filteredRates[4]);
         }
 
         [Fact]
@@ -167,11 +167,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             testObject = new BestRateServiceLevelFilter(ServiceLevelType.TwoDays);
             List<RateResult> filteredRates = testObject.Filter(rateGroup).Rates;
 
-            Assert.AreEqual(rates[7], filteredRates[0]);
-            Assert.AreEqual(rates[6], filteredRates[1]);
-            Assert.AreEqual(rates[0], filteredRates[2]);
-            Assert.AreEqual(rates[1], filteredRates[3]);
-            Assert.AreEqual(rates[2], filteredRates[4]);
+            Assert.Equal(rates[7], filteredRates[0]);
+            Assert.Equal(rates[6], filteredRates[1]);
+            Assert.Equal(rates[0], filteredRates[2]);
+            Assert.Equal(rates[1], filteredRates[3]);
+            Assert.Equal(rates[2], filteredRates[4]);
         }
 
 
@@ -220,10 +220,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                                                                  (rr, correct) => rr).ToList();
 
                 // Make sure the counts of correct results matches the rates returned.
-                Assert.AreEqual(correctRateResultDescriptions.Count(), filteredGroup.Rates.Count());
+                Assert.Equal(correctRateResultDescriptions.Count(), filteredGroup.Rates.Count());
 
                 // Check each of the correct results with the returned results to make sure they are correct.
-                correctRateResults.ForEach(rr => Assert.AreEqual(rr,
+                correctRateResults.ForEach(rr => Assert.Equal(rr,
                                                                  filteredGroup.Rates.First(r => r.Description == rr.Description)));
 
                 // Shift the last entry to the first.

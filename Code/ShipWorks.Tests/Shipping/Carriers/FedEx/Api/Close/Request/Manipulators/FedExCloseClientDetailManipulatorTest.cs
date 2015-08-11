@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         private FedExCloseClientDetailManipulator testObject;
 
         private Mock<ICarrierSettingsRepository> settingsRepository;
-        
+
         private Mock<CarrierRequest> groundCloseCarrierRequest;
         private GroundCloseRequest nativeGroundCloseRequest;
 
@@ -25,10 +25,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCloseClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity {AccountNumber = "12345", MeterNumber = "67890"};
+            account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
             settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
@@ -41,35 +40,32 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             nativeSmartPostRequest = new SmartPostCloseRequest { ClientDetail = new ClientDetail() };
             smartPostCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeSmartPostRequest);
             smartPostCloseCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
-            
+
             testObject = new FedExCloseClientDetailManipulator(settingsRepository.Object);
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(groundCloseCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCloseCarrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotGroundCloseRequest_AndIsNotSmartPostCloseRequest_Test()
         {
             // Setup the native request to be an unexpected type
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseReply());
 
-            testObject.Manipulate(groundCloseCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCloseCarrierRequest.Object));
         }
 
         [Fact]
@@ -89,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCloseCarrierRequest.Object);
 
             ClientDetail detail = ((GroundCloseRequest)groundCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -99,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCloseCarrierRequest.Object);
 
             ClientDetail detail = ((GroundCloseRequest)groundCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
 
@@ -125,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCloseCarrierRequest.Object);
 
             ClientDetail detail = ((SmartPostCloseRequest)smartPostCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         [Fact]
@@ -135,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCloseCarrierRequest.Object);
 
             ClientDetail detail = ((SmartPostCloseRequest)smartPostCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
     }
 }

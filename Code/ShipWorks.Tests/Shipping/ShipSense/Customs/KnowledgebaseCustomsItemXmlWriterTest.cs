@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
         private List<KnowledgebaseCustomsItem> afterCustomsItems;
         private XElement changeSetElement;
 
-        [TestInitialize]
-        public void Initialize()
+        public KnowledgebaseCustomsItemXmlWriterTest()
         {
             beforeCustomsItems = new List<KnowledgebaseCustomsItem>
             {
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(1, changeSetElement.Descendants("CustomsItems").Count());
+            Assert.Equal(1, changeSetElement.Descendants("CustomsItems").Count());
         }
 
         [Fact]
@@ -53,8 +52,8 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(1, changeSetElement.Descendants("Before").Count());
-            Assert.AreEqual(1, changeSetElement.Descendants("After").Count());
+            Assert.Equal(1, changeSetElement.Descendants("Before").Count());
+            Assert.Equal(1, changeSetElement.Descendants("After").Count());
         }
 
         [Fact]
@@ -67,14 +66,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             {
                 XElement beforeXElement = changeSetElement.Descendants("Before").Descendants("CustomsItem").ElementAt(i);
 
-                Assert.AreEqual(beforeCustomsItems[i].CountryOfOrigin, beforeXElement.Descendants("CountryOfOrigin").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].Description, beforeXElement.Descendants("Description").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].HarmonizedCode, beforeXElement.Descendants("HarmonizedCode").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].NumberOfPieces.ToString(), beforeXElement.Descendants("NumberOfPieces").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].Quantity.ToString(), beforeXElement.Descendants("Quantity").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].UnitPriceAmount.ToString(), beforeXElement.Descendants("UnitPriceAmount").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].UnitValue.ToString(), beforeXElement.Descendants("UnitValue").First().Value);
-                Assert.AreEqual(beforeCustomsItems[i].Weight.ToString(), beforeXElement.Descendants("Weight").First().Value);    
+                Assert.Equal(beforeCustomsItems[i].CountryOfOrigin, beforeXElement.Descendants("CountryOfOrigin").First().Value);
+                Assert.Equal(beforeCustomsItems[i].Description, beforeXElement.Descendants("Description").First().Value);
+                Assert.Equal(beforeCustomsItems[i].HarmonizedCode, beforeXElement.Descendants("HarmonizedCode").First().Value);
+                Assert.Equal(beforeCustomsItems[i].NumberOfPieces.ToString(), beforeXElement.Descendants("NumberOfPieces").First().Value);
+                Assert.Equal(beforeCustomsItems[i].Quantity.ToString(), beforeXElement.Descendants("Quantity").First().Value);
+                Assert.Equal(beforeCustomsItems[i].UnitPriceAmount.ToString(), beforeXElement.Descendants("UnitPriceAmount").First().Value);
+                Assert.Equal(beforeCustomsItems[i].UnitValue.ToString(), beforeXElement.Descendants("UnitValue").First().Value);
+                Assert.Equal(beforeCustomsItems[i].Weight.ToString(), beforeXElement.Descendants("Weight").First().Value);    
             }
         }
 
@@ -88,14 +87,14 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             {
                 XElement afterXElement = changeSetElement.Descendants("After").Descendants("CustomsItem").ElementAt(i);
 
-                Assert.AreEqual(afterCustomsItems[i].CountryOfOrigin, afterXElement.Descendants("CountryOfOrigin").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].Description, afterXElement.Descendants("Description").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].HarmonizedCode, afterXElement.Descendants("HarmonizedCode").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].NumberOfPieces.ToString(), afterXElement.Descendants("NumberOfPieces").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].Quantity.ToString(), afterXElement.Descendants("Quantity").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].UnitPriceAmount.ToString(), afterXElement.Descendants("UnitPriceAmount").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].UnitValue.ToString(), afterXElement.Descendants("UnitValue").First().Value);
-                Assert.AreEqual(afterCustomsItems[i].Weight.ToString(), afterXElement.Descendants("Weight").First().Value);
+                Assert.Equal(afterCustomsItems[i].CountryOfOrigin, afterXElement.Descendants("CountryOfOrigin").First().Value);
+                Assert.Equal(afterCustomsItems[i].Description, afterXElement.Descendants("Description").First().Value);
+                Assert.Equal(afterCustomsItems[i].HarmonizedCode, afterXElement.Descendants("HarmonizedCode").First().Value);
+                Assert.Equal(afterCustomsItems[i].NumberOfPieces.ToString(), afterXElement.Descendants("NumberOfPieces").First().Value);
+                Assert.Equal(afterCustomsItems[i].Quantity.ToString(), afterXElement.Descendants("Quantity").First().Value);
+                Assert.Equal(afterCustomsItems[i].UnitPriceAmount.ToString(), afterXElement.Descendants("UnitPriceAmount").First().Value);
+                Assert.Equal(afterCustomsItems[i].UnitValue.ToString(), afterXElement.Descendants("UnitValue").First().Value);
+                Assert.Equal(afterCustomsItems[i].Weight.ToString(), afterXElement.Descendants("Weight").First().Value);
             }
         }
 
@@ -105,7 +104,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Customs
             testObject = new KnowledgebaseCustomsItemXmlWriter(beforeCustomsItems, afterCustomsItems);
             testObject.WriteTo(changeSetElement);
 
-            Assert.AreEqual(0, changeSetElement.Descendants("CustomsItems").Descendants("Hash").Count());
+            Assert.Equal(0, changeSetElement.Descendants("CustomsItems").Descendants("Hash").Count());
         }
     }
 }

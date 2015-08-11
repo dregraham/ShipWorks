@@ -30,8 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
         OnTracRates testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracRateRequestTest()
         {
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         {
             var rateGroup = RunSuccessfullGetRates();
 
-            Assert.AreEqual(OnTracServiceType.Ground, (OnTracServiceType)rateGroup.Rates.First().Tag);
+            Assert.Equal(OnTracServiceType.Ground, (OnTracServiceType)rateGroup.Rates.First().Tag);
         }
 
         [Fact]
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         {
             var rateGroup = RunSuccessfullGetRates(OnTracShipmentType.ServiceTypes.Where(x => x != OnTracServiceType.Ground));
 
-            Assert.AreEqual(0, rateGroup.Rates.Count);
+            Assert.Equal(0, rateGroup.Rates.Count);
         }
 
         [Fact]
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         {
             RunSuccessfullGetRates();
 
-            Assert.IsTrue(
+            Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
                     "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;15;1X2X3;"));
         }
@@ -121,7 +120,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
         {
             RunSuccessfullGetRates();
 
-            Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
+            Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
         RateGroup RunSuccessfullGetRates(IEnumerable<OnTracServiceType> availableServiceTypes = null)
@@ -184,14 +183,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
 
             RateGroup rateGroup = testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
 
-            Assert.IsTrue(
+            Assert.True(
                 mockedSubmitter.Object.Uri.ToString().EndsWith(
                     "/OnTracServices.svc/v2/42/rates?pw=testpass&packages=uid;90210;63102;True;10;False;450;0;0X0X0;"));
 
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracApiErrorException))]
         public void GetRates_ThrowsOnTracException_WhenErrorInShipment_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -218,11 +216,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracApiErrorException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracException))]
         public void GetRates_ThrowsOnTracException_WhenNoShipmentReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -236,11 +233,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
         [Fact]
-        [ExpectedException(typeof(OnTracApiErrorException))]
         public void GetRates_ThrowsOnTracException_WhenRequestErrorReturned_Test()
         {
             RateShipmentList rateShipmentList = new RateShipmentList
@@ -253,7 +249,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Rates
             //Setup mock object that holds response from request
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(serializedValidResponse);
 
-            testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes);
+            Assert.Throws<OnTracApiErrorException>(() => testObject.GetRates(shipment, OnTracShipmentType.ServiceTypes));
         }
 
         [Fact]

@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(5, filters.Count());
+            Assert.Equal(5, filters.Count());
         }
         
         [Fact]
@@ -41,7 +41,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(1, filters.OfType<BestRateExpress1PromotionFootnoteFilter>().Count());
+            Assert.Equal(1, filters.OfType<BestRateExpress1PromotionFootnoteFilter>().Count());
         }
 
         [Fact]
@@ -49,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(1, filters.OfType<BestRateNonExistentShipmentTypeFootnoteFilter>().Count());
+            Assert.Equal(1, filters.OfType<BestRateNonExistentShipmentTypeFootnoteFilter>().Count());
         }
 
         [Fact]
@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
                 }
             }
             
-            Assert.IsTrue(nonExistentFilterIndex < promoFilterIndex);
+            Assert.True(nonExistentFilterIndex < promoFilterIndex);
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         {
             IEnumerable<IRateGroupFilter> filters = testObject.CreateFilters(shipment);
 
-            Assert.AreEqual(1, filters.OfType<CounterRatesInvalidStoreAddressFootnoteFilter>().Count());
+            Assert.Equal(1, filters.OfType<CounterRatesInvalidStoreAddressFootnoteFilter>().Count());
         }
     }
 }

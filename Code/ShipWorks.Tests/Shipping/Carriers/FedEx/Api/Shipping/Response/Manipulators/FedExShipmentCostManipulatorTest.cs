@@ -18,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         private ProcessShipmentReply nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipmentCostManipulatorTest()
         {
             mockLog = new Mock<ILog>();
             mockLog.Setup(log => log.WarnFormat(It.IsAny<string>(), 77));
@@ -37,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         {
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
@@ -61,7 +60,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
@@ -73,7 +72,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(0, fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(0, fedExShipResponse.Shipment.ShipmentCost);
 
             mockLog.Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
         }
@@ -87,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }

@@ -20,7 +20,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
+            Assert.IsAssignableFrom<ServiceExecutionMode>(executionMode);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(ServiceExecutionMode));
+            Assert.IsAssignableFrom<ServiceExecutionMode>(executionMode);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
+            Assert.IsAssignableFrom<CommandLineExecutionMode>(executionMode);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
+            Assert.IsAssignableFrom<CommandLineExecutionMode>(executionMode);
         }
 
         [Fact]
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(CommandLineExecutionMode));
+            Assert.IsAssignableFrom<CommandLineExecutionMode>(executionMode);
         }
 
         [Fact]
@@ -74,7 +74,7 @@ namespace ShipWorks.Tests.ApplicationCore.ExecutionMode
 
             var executionMode = testObject.Create();
 
-            Assert.IsInstanceOfType(executionMode, typeof(UserInterfaceExecutionMode));
+            Assert.IsAssignableFrom<UserInterfaceExecutionMode>(executionMode);
         }
     }
 }

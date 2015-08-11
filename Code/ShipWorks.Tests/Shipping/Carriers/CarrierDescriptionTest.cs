@@ -23,10 +23,10 @@ namespace ShipWorks.Tests.Shipping.Carriers
 
             CarrierDescription description = new CarrierDescription(shipment);
 
-            Assert.IsFalse(description.IsUSPS);
-            Assert.IsFalse(description.IsUPS);
-            Assert.IsFalse(description.IsFedEx);
-            Assert.IsFalse(description.IsDHL);
+            Assert.False(description.IsUSPS);
+            Assert.False(description.IsUPS);
+            Assert.False(description.IsFedEx);
+            Assert.False(description.IsDHL);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
 
             CarrierDescription description = new CarrierDescription(shipment);
 
-            Assert.AreEqual("Foo", description.Name);
+            Assert.Equal("Foo", description.Name);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in upsNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.AreEqual("UPS", description.Name, string.Format("{0} should set Name to UPS", carrierName));
+                Assert.Equal("UPS", description.Name);
             }
         }
 
@@ -55,7 +55,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in uspsNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.AreEqual("USPS", description.Name, string.Format("{0} should set Name to Usps", carrierName));
+                Assert.Equal("USPS", description.Name);
             }
         }
 
@@ -65,7 +65,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in fedExNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.AreEqual("FedEx", description.Name, string.Format("{0} should set Name to FedEx", carrierName));
+                Assert.Equal("FedEx", description.Name);
             }
         }
 
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in dhlNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.AreEqual("DHL", description.Name, string.Format("{0} should set Name to DHL", carrierName));
+                Assert.Equal("DHL", description.Name);
             }
         }
 
@@ -85,7 +85,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in upsNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.IsTrue(description.IsUPS, string.Format("{0} should set IsUPS to true", carrierName));   
+                Assert.True(description.IsUPS, $"{carrierName} should set IsUPS to true");
             }
         }
 
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in uspsNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Priority"));
-                Assert.IsTrue(description.IsUSPS, string.Format("{0} should set IsUsps to true", carrierName));
+                Assert.True(description.IsUSPS, string.Format("{0} should set IsUsps to true", carrierName));
             }
         }
 
@@ -105,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in fedExNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.IsTrue(description.IsFedEx, string.Format("{0} should set IsFedEx to true", carrierName));
+                Assert.True(description.IsFedEx, string.Format("{0} should set IsFedEx to true", carrierName));
             }
         }
 
@@ -115,7 +115,7 @@ namespace ShipWorks.Tests.Shipping.Carriers
             foreach (string carrierName in dhlNames)
             {
                 CarrierDescription description = new CarrierDescription(CreateOtherShipment(carrierName, "Ground"));
-                Assert.IsTrue(description.IsDHL, string.Format("{0} should set IsDHL to true", carrierName));
+                Assert.True(description.IsDHL, string.Format("{0} should set IsDHL to true", carrierName));
             }
         }
 

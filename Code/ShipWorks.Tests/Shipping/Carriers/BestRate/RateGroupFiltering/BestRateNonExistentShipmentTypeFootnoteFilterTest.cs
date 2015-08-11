@@ -16,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
         private BestRateNonExistentShipmentTypeFootnoteFilter testObject;
         private Mock<IExpress1SettingsFacade> settings;
 
-        [TestInitialize]
-        public void Initialize()
+        public BestRateNonExistentShipmentTypeFootnoteFilterTest()
         {
             settings = new Mock<IExpress1SettingsFacade>();
 
@@ -50,7 +49,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
             // Shouldn't have any footnote factories that aren't for USPS
-            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
+            Assert.False(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 
 
@@ -79,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
         }
     }
 }

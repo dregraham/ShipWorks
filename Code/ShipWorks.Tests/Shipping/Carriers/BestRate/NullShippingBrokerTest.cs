@@ -14,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
     {
         private NullShippingBroker testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public NullShippingBrokerTest()
         {
             testObject = new NullShippingBroker();
         }
@@ -25,13 +24,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate
         {
             IEnumerable<RateResult> rates = testObject.GetBestRates(new ShipmentEntity(), new List<BrokerException>()).Rates;
 
-            Assert.IsTrue(!rates.Any());
+            Assert.True(!rates.Any());
         }
 
         [Fact]
         public void HasAccounts_ReturnsFalse_Test()
         {
-            Assert.IsFalse(testObject.HasAccounts);
+            Assert.False(testObject.HasAccounts);
         }
     }
 }

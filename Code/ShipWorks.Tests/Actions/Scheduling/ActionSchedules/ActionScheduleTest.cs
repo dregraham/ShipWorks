@@ -22,19 +22,19 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
         {
             DateTime utcNow = DateTime.UtcNow;
 
-            Assert.AreEqual((utcNow.Hour + 1) % 24, testObject.StartDateTimeInUtc.Hour);
+            Assert.Equal((utcNow.Hour + 1) % 24, testObject.StartDateTimeInUtc.Hour);
         }
 
         [Fact]
         public void StartDateTimeInUtc_MinuteIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Minute);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Minute);
         }
 
         [Fact]
         public void StartDateTimeInUtc_SecondIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Second);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Second);
         }
     }
 }

@@ -89,11 +89,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
                 GspPostalCode = "41018",
                 GspCountryCode = "US"
             };
-        }
 
-        [TestInitialize]
-        public void Initialize()
-        {
             // Setup our test object will all passing rules since this will be the setup
             // required by most of our tests
             testObject = new Policy(mockedAllPassingRules);
@@ -144,7 +140,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
-            Assert.IsNotNull(policy.Rules.Any(r => r.GetType() == typeof(EligibilityRule)));
+            Assert.NotNull(policy.Rules.Any(r => r.GetType() == typeof(EligibilityRule)));
         }
 
         [Fact]
@@ -152,7 +148,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
-            Assert.IsNotNull(policy.Rules.Any(r => r.GetType() == typeof(SelectedShippingMethodRule)));
+            Assert.NotNull(policy.Rules.Any(r => r.GetType() == typeof(SelectedShippingMethodRule)));
         }
 
         [Fact]
@@ -160,7 +156,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             // Testing the default constructor so just create a new Policy object for testing
             Policy policy = new Policy();
-            Assert.AreEqual(2, policy.Rules.Count());
+            Assert.Equal(2, policy.Rules.Count());
         }
 
         [Fact]
@@ -185,7 +181,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject = new Policy(mockedAllPassingRules);
                         
-            Assert.IsTrue(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
+            Assert.True(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
         }
 
         [Fact]
@@ -194,7 +190,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // configure the test object to have a rule set where some rules pass and some fail
             testObject = new Policy(mockedMixtureOfRules);
 
-            Assert.IsFalse(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
+            Assert.False(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
         }
 
         [Fact]
@@ -203,13 +199,13 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // configure the test object to have a rule set where all rules fail
             testObject = new Policy(mockedAllFailingRules);
 
-            Assert.IsFalse(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
+            Assert.False(testObject.IsEligibleForGlobalShippingProgram(new EbayOrderEntity()));
         }
 
         [Fact]
         public void EligibleForGlobalShippingProgram_ReturnsFalse_WhenEbayOrderIsNull_Test()
         {
-            Assert.IsFalse(testObject.IsEligibleForGlobalShippingProgram(null));
+            Assert.False(testObject.IsEligibleForGlobalShippingProgram(null));
         }
 
         
@@ -219,7 +215,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // Nothing specific about the reference ID based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
 
-            Assert.AreEqual(shipmentOrder.GspReferenceID, endiciaShipment.ShipCompany);
+            Assert.Equal(shipmentOrder.GspReferenceID, endiciaShipment.ShipCompany);
         }
 
         [Fact]
@@ -228,14 +224,14 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // Nothing specific about the address based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
 
-            Assert.AreEqual(shipmentOrder.GspStreet1, endiciaShipment.ShipStreet1);
-            Assert.AreEqual(shipmentOrder.GspStreet2, endiciaShipment.ShipStreet2);
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipStreet3);
+            Assert.Equal(shipmentOrder.GspStreet1, endiciaShipment.ShipStreet1);
+            Assert.Equal(shipmentOrder.GspStreet2, endiciaShipment.ShipStreet2);
+            Assert.Equal(string.Empty, endiciaShipment.ShipStreet3);
 
-            Assert.AreEqual(shipmentOrder.GspCity, endiciaShipment.ShipCity);
-            Assert.AreEqual(shipmentOrder.GspStateProvince, endiciaShipment.ShipStateProvCode);
-            Assert.AreEqual(shipmentOrder.GspPostalCode, endiciaShipment.ShipPostalCode);
-            Assert.AreEqual(shipmentOrder.GspCountryCode, endiciaShipment.ShipCountryCode);
+            Assert.Equal(shipmentOrder.GspCity, endiciaShipment.ShipCity);
+            Assert.Equal(shipmentOrder.GspStateProvince, endiciaShipment.ShipStateProvCode);
+            Assert.Equal(shipmentOrder.GspPostalCode, endiciaShipment.ShipPostalCode);
+            Assert.Equal(shipmentOrder.GspCountryCode, endiciaShipment.ShipCountryCode);
         }
 
         [Fact]
@@ -244,8 +240,8 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // Nothing specific about the phone/email based on the carrier, so just use any carrier
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipPhone);
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipEmail);
+            Assert.Equal(string.Empty, endiciaShipment.ShipPhone);
+            Assert.Equal(string.Empty, endiciaShipment.ShipEmail);
         }
 
         [Fact]
@@ -253,9 +249,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(endiciaShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipFirstName);
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipMiddleName);
-            Assert.AreEqual(string.Empty, endiciaShipment.ShipLastName);
+            Assert.Equal(string.Empty, endiciaShipment.ShipFirstName);
+            Assert.Equal(string.Empty, endiciaShipment.ShipMiddleName);
+            Assert.Equal(string.Empty, endiciaShipment.ShipLastName);
         }
 
         [Fact]
@@ -263,9 +259,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(express1Shipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, express1Shipment.ShipFirstName);
-            Assert.AreEqual(string.Empty, express1Shipment.ShipMiddleName);
-            Assert.AreEqual(string.Empty, express1Shipment.ShipLastName);
+            Assert.Equal(string.Empty, express1Shipment.ShipFirstName);
+            Assert.Equal(string.Empty, express1Shipment.ShipMiddleName);
+            Assert.Equal(string.Empty, express1Shipment.ShipLastName);
         }
 
         [Fact]
@@ -278,9 +274,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
                 testObject.ConfigureShipmentForGlobalShippingProgram(upsShipment, shipmentOrder);
 
                 string testingDescription = string.Format("Testing {0}", EnumHelper.GetDescription(service));
-                Assert.AreEqual(string.Empty, upsShipment.ShipFirstName, testingDescription);
-                Assert.AreEqual(string.Empty, upsShipment.ShipMiddleName, testingDescription);
-                Assert.AreEqual(shipmentOrder.GspReferenceID, upsShipment.ShipLastName, testingDescription);
+                Assert.Equal(string.Empty, upsShipment.ShipFirstName);
+                Assert.Equal(string.Empty, upsShipment.ShipMiddleName);
+                Assert.Equal(shipmentOrder.GspReferenceID, upsShipment.ShipLastName);
             }
         }
 
@@ -289,9 +285,9 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(shipmentOrder.GspFirstName, uspsShipment.ShipFirstName);
-            Assert.AreEqual(string.Empty, uspsShipment.ShipMiddleName);
-            Assert.AreEqual(shipmentOrder.GspLastName, uspsShipment.ShipLastName);
+            Assert.Equal(shipmentOrder.GspFirstName, uspsShipment.ShipFirstName);
+            Assert.Equal(string.Empty, uspsShipment.ShipMiddleName);
+            Assert.Equal(shipmentOrder.GspLastName, uspsShipment.ShipLastName);
         }
 
         [Fact]
@@ -299,7 +295,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.IsFalse(uspsShipment.Postal.Usps.RequireFullAddressValidation);
+            Assert.False(uspsShipment.Postal.Usps.RequireFullAddressValidation);
         }
 
         [Fact]
@@ -307,7 +303,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(fedexShipment, shipmentOrder);
 
-            Assert.AreEqual(PhoneNumber, fedexShipment.ShipPhone);
+            Assert.Equal(PhoneNumber, fedexShipment.ShipPhone);
         }
 
         [Fact]
@@ -315,7 +311,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
         {
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, uspsShipment.ShipPhone);
+            Assert.Equal(string.Empty, uspsShipment.ShipPhone);
         }
 
         [Fact]
@@ -324,21 +320,21 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // This is not carrier specific, so any carrier will do
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual(string.Empty, uspsShipment.ShipEmail);
+            Assert.Equal(string.Empty, uspsShipment.ShipEmail);
         }
 
         [Fact]
         public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenNotFedExShipment_Test()
         {
             List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
-            Assert.AreEqual(13, modifiedFields.Count);
+            Assert.Equal(13, modifiedFields.Count);
         }
 
         [Fact]
         public void ConfigureShipmentForGlobalShippingProgram_ReturnsCorrectModifiedFieldCount_WhenFedExShipment_Test()
         {
             List<ShipmentFieldIndex> modifiedFields = testObject.ConfigureShipmentForGlobalShippingProgram(fedexShipment, shipmentOrder);
-            Assert.AreEqual(12, modifiedFields.Count);
+            Assert.Equal(12, modifiedFields.Count);
         }
 
         [Fact]
@@ -349,7 +345,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // This is not carrier specific, so any carrier will do
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual("41018", uspsShipment.ShipPostalCode);
+            Assert.Equal("41018", uspsShipment.ShipPostalCode);
         }
 
         [Fact]
@@ -361,7 +357,7 @@ namespace ShipWorks.Tests.Stores.eBay.GlobalShippingProgram
             // This is not carrier specific, so any carrier will do
             testObject.ConfigureShipmentForGlobalShippingProgram(uspsShipment, shipmentOrder);
 
-            Assert.AreEqual("41018", uspsShipment.ShipPostalCode);
+            Assert.Equal("41018", uspsShipment.ShipPostalCode);
         }
     }
 }

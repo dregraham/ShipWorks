@@ -15,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         private iParcelCredentials credentials;
         private Mock<IiParcelServiceGateway> gateway;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelValidationElementTest()
         {
             gateway = new Mock<IiParcelServiceGateway>();
             gateway.Setup(g => g.IsValidUser(It.IsAny<iParcelCredentials>())).Returns(true);
@@ -31,7 +30,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("Validation", element.Name);
+            Assert.Equal("Validation", element.Name);
         }
 
         [Fact]
@@ -40,8 +39,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             XElement element = testObject.Build();
             XElement usernameElement = element.XPathSelectElement("/UserName");
 
-            Assert.IsNotNull(usernameElement);
-            Assert.AreEqual(credentials.Username, usernameElement.Value);
+            Assert.NotNull(usernameElement);
+            Assert.Equal(credentials.Username, usernameElement.Value);
         }
 
         [Fact]
@@ -50,8 +49,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             XElement element = testObject.Build();
             XElement passwordElement = element.XPathSelectElement("/Password");
 
-            Assert.IsNotNull(passwordElement);
-            Assert.AreEqual(credentials.DecryptedPassword, passwordElement.Value);
+            Assert.NotNull(passwordElement);
+            Assert.Equal(credentials.DecryptedPassword, passwordElement.Value);
         }
 
         [Fact]
@@ -60,8 +59,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             XElement element = testObject.Build();
             XElement termsElement = element.XPathSelectElement("/AgreeTerms");
 
-            Assert.IsNotNull(termsElement);
-            Assert.AreEqual("1", termsElement.Value);
+            Assert.NotNull(termsElement);
+            Assert.Equal("1", termsElement.Value);
         }
 
         [Fact]
@@ -70,8 +69,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             XElement element = testObject.Build();
             XElement checkedElement = element.XPathSelectElement("/SDNDPLChecked");
 
-            Assert.IsNotNull(checkedElement);
-            Assert.AreEqual("1", checkedElement.Value);
+            Assert.NotNull(checkedElement);
+            Assert.Equal("1", checkedElement.Value);
         }
 
         [Fact]
@@ -80,8 +79,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
             XElement element = testObject.Build();
             XElement checkedElement = element.XPathSelectElement("/ExportLicenseChecked");
 
-            Assert.IsNotNull(checkedElement);
-            Assert.AreEqual("1", checkedElement.Value);
+            Assert.NotNull(checkedElement);
+            Assert.Equal("1", checkedElement.Value);
         }
     }
 }

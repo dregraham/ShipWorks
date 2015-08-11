@@ -23,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCertificationManipulatorTest()
         {
             // Create a ProcessShipmentRequest type and set the properties the manipulator is interested in
             nativeRequest = new ProcessShipmentRequest()
@@ -44,7 +43,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Create our default shipment entity and initialize the properties our test object will be accessing
             shipmentEntity = new ShipmentEntity()
             {
-                FedEx = new FedExShipmentEntity() { ReferencePO = "//Order/OrderNumber"}
+                FedEx = new FedExShipmentEntity() { ReferencePO = "//Order/OrderNumber" }
             };
 
             // Setup the carrier request's NativeRequest property to return the ProcessShipmentRequest object
@@ -60,30 +59,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
-        [ExpectedException(typeof(CarrierException))]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotProcessShipmentRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, new object());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]
@@ -97,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The transaction detail property should be created now
-            Assert.IsNotNull(nativeRequest.TransactionDetail);
+            Assert.NotNull(nativeRequest.TransactionDetail);
         }
 
         [Fact]
@@ -105,7 +101,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            settingsRepository.Verify(r=> r.IsInterapptiveUser, Times.Once());
+            settingsRepository.Verify(r => r.IsInterapptiveUser, Times.Once());
         }
 
         [Fact]
@@ -122,8 +118,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             // The token processor was mocked in the initializer to return "Processed Token"
-            TransactionDetail transactionDetail = ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).TransactionDetail;
-            Assert.AreEqual("Processed Token", transactionDetail.CustomerTransactionId);
+            TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
+            Assert.Equal("Processed Token", transactionDetail.CustomerTransactionId);
         }
 
         [Fact]
@@ -135,7 +131,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
-            Assert.IsNull(transactionDetail.CustomerTransactionId);
+            Assert.Null(transactionDetail.CustomerTransactionId);
         }
 
         [Fact]
@@ -147,7 +143,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject.Manipulate(carrierRequest.Object);
 
             TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
-            Assert.IsNull(transactionDetail.CustomerTransactionId);
+            Assert.Null(transactionDetail.CustomerTransactionId);
         }
 
         [Fact]
@@ -156,15 +152,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             // Setup the shipment's reference PO to be a null value
             shipmentEntity = new ShipmentEntity()
             {
-                FedEx = new FedExShipmentEntity() {ReferencePO = null}
+                FedEx = new FedExShipmentEntity() { ReferencePO = null }
             };
-            
+
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
 
             testObject.Manipulate(carrierRequest.Object);
 
             TransactionDetail transactionDetail = ((ProcessShipmentRequest)carrierRequest.Object.NativeRequest).TransactionDetail;
-            Assert.IsNull(transactionDetail.CustomerTransactionId);
+            Assert.Null(transactionDetail.CustomerTransactionId);
         }
     }
 }

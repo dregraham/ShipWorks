@@ -17,7 +17,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericStoreStatusCodeProvider provider = CreateTestProvider(GenericVariantDataType.Text);
 
             string codeValue = (string)provider.ConvertCodeValue("Foo");
-            Assert.AreEqual("Foo", codeValue);
+            Assert.Equal("Foo", codeValue);
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             string codeValue = (string)provider.ConvertCodeValue(55);
-            Assert.AreEqual("55", codeValue);
+            Assert.Equal("55", codeValue);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             object codeValue = provider.ConvertCodeValue(null);
-            Assert.IsNull(codeValue);
+            Assert.Null(codeValue);
         }
 
         [Fact]
@@ -57,7 +57,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             long codeValue = (long)provider.ConvertCodeValue(55);
-            Assert.AreEqual(55, codeValue);
+            Assert.Equal(55, codeValue);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
             object codeValue = provider.ConvertCodeValue("Foo");
-            Assert.IsNull(codeValue);
+            Assert.Null(codeValue);
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode("Foo"));
+            Assert.True(provider.IsValidCode("Foo"));
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(55));
+            Assert.False(provider.IsValidCode(55));
         }
 
         [Fact]
@@ -104,7 +104,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Text };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(null));
+            Assert.False(provider.IsValidCode(null));
         }
 
         [Fact]
@@ -113,7 +113,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode(55));
+            Assert.True(provider.IsValidCode(55));
         }
 
         [Fact]
@@ -122,7 +122,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsTrue(provider.IsValidCode(55L));
+            Assert.True(provider.IsValidCode(55L));
         }
 
         [Fact]
@@ -131,7 +131,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode("Foo"));
+            Assert.False(provider.IsValidCode("Foo"));
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace ShipWorks.Tests.Stores.Platforms.GenericModule
             GenericModuleStoreEntity store = new GenericModuleStoreEntity { ModuleOnlineStatusDataType = (int)GenericVariantDataType.Numeric };
             GenericStoreStatusCodeProvider provider = new GenericStoreStatusCodeProvider(store);
 
-            Assert.IsFalse(provider.IsValidCode(null));
+            Assert.False(provider.IsValidCode(null));
         }
 
         /// <summary>

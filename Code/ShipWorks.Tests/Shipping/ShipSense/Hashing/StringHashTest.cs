@@ -13,8 +13,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
         private StringHash testObject;
         private string stringToHash;
 
-        [TestInitialize]
-        public void Initialize()
+        public StringHashTest()
         {
             stringToHash = string.Empty;
             testObject = new KnowledgebaseHash();
@@ -27,7 +26,7 @@ namespace ShipWorks.Tests.Shipping.ShipSense.Hashing
 
             string hash = testObject.Hash(stringToHash, "2005");
 
-            Assert.AreEqual("X63+ia+sW5olNgkpyRA2yXf9LeSmNAZwTeiHCQMx9ZM=", hash);
+            Assert.Equal("X63+ia+sW5olNgkpyRA2yXf9LeSmNAZwTeiHCQMx9ZM=", hash);
         }
     }
 }

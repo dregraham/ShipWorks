@@ -22,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
 
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExSmartPostCloseResponseTest()
         {
             firstManipulator = new Mock<IFedExCloseResponseManipulator>();
             firstManipulator.Setup(m => m.Manipulate(It.IsAny<ICarrierResponse>(), It.IsAny<FedExEndOfDayCloseEntity>()));
@@ -49,7 +48,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         {
             CarrierRequest request = testObject.Request;
 
-            Assert.AreEqual(carrierRequest.Object, request);
+            Assert.Equal(carrierRequest.Object, request);
         }
 
         [Fact]
@@ -57,27 +56,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
         {
             object nativeRespose = testObject.NativeResponse;
 
-            Assert.AreEqual(nativeRespose, nativeSmartPostResponse);
+            Assert.Equal(nativeRespose, nativeSmartPostResponse);
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsError_Test()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.ERROR;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
-        [ExpectedException(typeof(FedExApiCarrierException))]
         public void Process_ThrowsFedExApiException_WhenReplyContainsFailure_Test()
         {
             nativeSmartPostResponse.HighestSeverity = NotificationSeverityType.FAILURE;
             nativeSmartPostResponse.Notifications = new Notification[] { new Notification { Message = "some message", Code = "23" } };
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
         [Fact]
@@ -124,7 +121,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             testObject = new FedExSmartPostCloseResponse(manipulators, nativeSmartPostResponse, carrierRequest.Object);
             testObject.Process();
 
-            Assert.IsNotNull(testObject.CloseEntity);
+            Assert.NotNull(testObject.CloseEntity);
         }
 
         [Fact]
@@ -136,7 +133,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
             testObject = new FedExSmartPostCloseResponse(manipulators, nativeSmartPostResponse, carrierRequest.Object);
             testObject.Process();
 
-            Assert.IsNull(testObject.CloseEntity);
+            Assert.Null(testObject.CloseEntity);
         }
 
         [Fact]
@@ -147,7 +144,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response
 
             testObject.Process();
 
-            Assert.IsNotNull(testObject.CloseEntity);
+            Assert.NotNull(testObject.CloseEntity);
         }
     }
 }

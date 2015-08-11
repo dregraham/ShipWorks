@@ -15,7 +15,7 @@ namespace ShipWorks.Tests.SqlServer
         {
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(new byte[0], FilterNodeColumnMaskTable.Order);
 
-            Assert.IsFalse(set);
+            Assert.False(set);
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.Order);
 
-            Assert.IsFalse(set);
+            Assert.False(set);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.Customer);
 
-            Assert.IsFalse(set);
+            Assert.False(set);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.OrderItem);
 
-            Assert.IsTrue(set);
+            Assert.True(set);
         }
 
         [Fact]
@@ -59,7 +59,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.Customer);
 
-            Assert.IsTrue(set);
+            Assert.True(set);
         }
 
         [Fact]
@@ -76,7 +76,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.Customer);
 
-            Assert.IsTrue(set);
+            Assert.True(set);
         }
 
         [Fact]
@@ -87,7 +87,7 @@ namespace ShipWorks.Tests.SqlServer
 
             bool set = FilterNodeColumnMaskUtility.HasAnyTableBitsSet(FilterNodeColumnMaskUtility.ConvertBitArrayToBitmask(mask), FilterNodeColumnMaskTable.OrderItem);
 
-            Assert.IsTrue(set);
+            Assert.True(set);
         }
     }
 }

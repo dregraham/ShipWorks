@@ -17,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         ProcessShipmentReply processShipmentReply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingManipulatorTest()
         {
             
 
@@ -36,7 +35,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         public void Manipulate_MasterTrackingNumberAddedToShipment_WhenMasterTrackingIdPresent_Test()
         {
             testObject.Manipulate(fedExShipResponse);
-            Assert.AreEqual(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
+            Assert.Equal(shipmentEntity.TrackingNumber, "MasterTrackingNumber");
         }
 
         [Fact]
@@ -46,7 +45,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             processShipmentReply.CompletedShipmentDetail.MasterTrackingId = null;
             
             testObject.Manipulate(fedExShipResponse);
-            Assert.AreEqual(shipmentEntity.TrackingNumber, "Package1Tracking");
+            Assert.Equal(shipmentEntity.TrackingNumber, "Package1Tracking");
         }
 
         [Fact]
@@ -56,8 +55,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.IsNull(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);           
-            Assert.AreEqual("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
+            Assert.Null(fedExShipResponse.Shipment.FedEx.Packages[0].TrackingNumber);           
+            Assert.Equal("Package1Tracking", fedExShipResponse.Shipment.FedEx.Packages[1].TrackingNumber);
         }
     }
 }

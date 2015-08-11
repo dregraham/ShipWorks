@@ -88,7 +88,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.ShipSense
                 stopWatch.Stop();
             }
 
-            Assert.IsTrue(stopWatch.ElapsedMilliseconds < 5000);
+            Assert.True(stopWatch.ElapsedMilliseconds < 5000);
 
             Console.WriteLine(@"===================================================================================================");
             Console.WriteLine(@"====                           ShipSense Loader                                                ====");
