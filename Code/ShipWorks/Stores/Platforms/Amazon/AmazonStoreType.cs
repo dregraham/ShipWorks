@@ -530,7 +530,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
                         if (marketplaces != null)
                         {
                             // Lookup the marketplace based on the marketplace ID, so we get the correct domain name
-                            // in the event the merchant ID is setup with  multiple marketplaces
+                            // in the event the merchant ID (aka Seller ID) is setup with  multiple marketplaces
                             AmazonMwsMarketplace marketplace = marketplaces.FirstOrDefault(m => m.MarketplaceID.ToUpperInvariant() == amazonStore.MarketplaceID.ToUpperInvariant());
                             string domainName = marketplace == null || string.IsNullOrWhiteSpace(marketplace.DomainName) ? string.Empty : marketplace.DomainName;
 

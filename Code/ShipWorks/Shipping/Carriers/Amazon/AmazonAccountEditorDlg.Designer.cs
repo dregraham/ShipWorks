@@ -49,7 +49,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // labelAuthToken
             // 
             this.labelAuthToken.AutoSize = true;
-            this.labelAuthToken.Location = new System.Drawing.Point(22, 58);
+            this.labelAuthToken.Location = new System.Drawing.Point(20, 58);
             this.labelAuthToken.Name = "labelAuthToken";
             this.labelAuthToken.Size = new System.Drawing.Size(66, 13);
             this.labelAuthToken.TabIndex = 172;
@@ -58,11 +58,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // labelMerchantId
             // 
             this.labelMerchantId.AutoSize = true;
-            this.labelMerchantId.Location = new System.Drawing.Point(19, 31);
+            this.labelMerchantId.Location = new System.Drawing.Point(36, 31);
             this.labelMerchantId.Name = "labelMerchantId";
-            this.labelMerchantId.Size = new System.Drawing.Size(69, 13);
+            this.labelMerchantId.Size = new System.Drawing.Size(50, 13);
             this.labelMerchantId.TabIndex = 171;
-            this.labelMerchantId.Text = "Merchant Id:";
+            this.labelMerchantId.Text = "Seller Id:";
             // 
             // ok
             // 
@@ -99,7 +99,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // labelDescription
             // 
             this.labelDescription.AutoSize = true;
-            this.labelDescription.Location = new System.Drawing.Point(24, 85);
+            this.labelDescription.Location = new System.Drawing.Point(22, 85);
             this.labelDescription.Name = "labelDescription";
             this.labelDescription.Size = new System.Drawing.Size(64, 13);
             this.labelDescription.TabIndex = 179;
@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.labelOptional.AutoSize = true;
             this.labelOptional.ForeColor = System.Drawing.SystemColors.GrayText;
-            this.labelOptional.Location = new System.Drawing.Point(260, 85);
+            this.labelOptional.Location = new System.Drawing.Point(259, 85);
             this.labelOptional.Name = "labelOptional";
             this.labelOptional.Size = new System.Drawing.Size(53, 13);
             this.labelOptional.TabIndex = 181;
@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // description
             // 
-            this.description.Location = new System.Drawing.Point(92, 82);
+            this.description.Location = new System.Drawing.Point(91, 82);
             this.fieldLengthProvider.SetMaxLengthSource(this.description, ShipWorks.Data.Utility.EntityFieldLengthSource.EndiciaAccountDescription);
             this.description.Name = "description";
             this.description.PromptColor = System.Drawing.SystemColors.GrayText;
@@ -154,14 +154,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             this.merchantId.BackColor = System.Drawing.SystemColors.Control;
             this.merchantId.Enabled = false;
-            this.merchantId.Location = new System.Drawing.Point(92, 28);
+            this.merchantId.Location = new System.Drawing.Point(91, 28);
             this.merchantId.Name = "merchantId";
             this.merchantId.Size = new System.Drawing.Size(265, 21);
             this.merchantId.TabIndex = 169;
             // 
             // authToken
             // 
-            this.authToken.Location = new System.Drawing.Point(92, 55);
+            this.authToken.Location = new System.Drawing.Point(91, 55);
             this.authToken.MaxLength = 50;
             this.authToken.Name = "authToken";
             this.authToken.Size = new System.Drawing.Size(265, 21);

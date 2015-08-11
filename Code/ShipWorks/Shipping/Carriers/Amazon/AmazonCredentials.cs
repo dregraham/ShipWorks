@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Amazon account merchant id
+        /// Amazon account Merchant ID (aka Seller ID)
         /// </summary>
         public string MerchantId
         {

@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public interface IAmazonCredentials
     {
         /// <summary>
-        /// Amazon account merchant id
+        /// Amazon account Merchant ID (aka Seller ID)
         /// </summary>
         string MerchantId { get; set; }
 

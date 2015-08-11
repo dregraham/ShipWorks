@@ -96,7 +96,7 @@
             this.wizardPageCredentials.Controls.Add(this.labelAuthToken);
             this.wizardPageCredentials.Controls.Add(this.labelMerchantId);
             this.wizardPageCredentials.Controls.Add(this.label1);
-            this.wizardPageCredentials.Description = "Enter your Amazon merchant id and auth token.";
+            this.wizardPageCredentials.Description = "Enter your Amazon Seller ID and Auth Token.";
             this.wizardPageCredentials.Dock = System.Windows.Forms.DockStyle.Fill;
             this.wizardPageCredentials.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.wizardPageCredentials.Location = new System.Drawing.Point(0, 0);
@@ -134,20 +134,20 @@
             // labelMerchantId
             // 
             this.labelMerchantId.AutoSize = true;
-            this.labelMerchantId.Location = new System.Drawing.Point(43, 36);
+            this.labelMerchantId.Location = new System.Drawing.Point(62, 36);
             this.labelMerchantId.Name = "labelMerchantId";
-            this.labelMerchantId.Size = new System.Drawing.Size(69, 13);
+            this.labelMerchantId.Size = new System.Drawing.Size(50, 13);
             this.labelMerchantId.TabIndex = 169;
-            this.labelMerchantId.Text = "Merchant Id:";
+            this.labelMerchantId.Text = "Seller Id:";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(22, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(292, 13);
+            this.label1.Size = new System.Drawing.Size(279, 13);
             this.label1.TabIndex = 166;
-            this.label1.Text = "Enter the merchant id and auth token provided by Amazon.";
+            this.label1.Text = "Enter the Seller ID and Auth Token provided by Amazon.";
             // 
             // wizardPageWelcome
             // 
