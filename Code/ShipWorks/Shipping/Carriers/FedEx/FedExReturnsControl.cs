@@ -39,6 +39,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     rmaNumber.ApplyMultiText(fedEx.RmaNumber);
                     rmaReason.ApplyMultiText(fedEx.RmaReason);
                     saturdayPickup.ApplyMultiCheck(fedEx.ReturnSaturdayPickup);
+                    returnsClearance.ApplyMultiCheck(fedEx.ReturnsClearance);
                 }
             }
         }
@@ -60,6 +61,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                     rmaNumber.ReadMultiText(t => fedEx.RmaNumber = t);
                     rmaReason.ReadMultiText(t => fedEx.RmaReason = t);
                     saturdayPickup.ReadMultiCheck(t => fedEx.ReturnSaturdayPickup = t);
+                    returnsClearance.ReadMultiCheck(t=> fedEx.ReturnsClearance = t);
                 }
             }
         }

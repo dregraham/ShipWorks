@@ -37,6 +37,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.labelRmaReason = new System.Windows.Forms.Label();
             this.labelSaturdayPickup = new System.Windows.Forms.Label();
             this.saturdayPickup = new System.Windows.Forms.CheckBox();
+            this.returnsClearance = new System.Windows.Forms.CheckBox();
+            this.returnsClearanceLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // returnService
@@ -112,11 +114,32 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.saturdayPickup.Text = "Saturday Pickup";
             this.saturdayPickup.UseVisualStyleBackColor = true;
             // 
+            // returnsClearance
+            // 
+            this.returnsClearance.AutoSize = true;
+            this.returnsClearance.Location = new System.Drawing.Point(114, 111);
+            this.returnsClearance.Name = "returnsClearance";
+            this.returnsClearance.Size = new System.Drawing.Size(115, 17);
+            this.returnsClearance.TabIndex = 16;
+            this.returnsClearance.Text = "Returns Clearance";
+            this.returnsClearance.UseVisualStyleBackColor = true;
+            // 
+            // returnsClearanceLabel
+            // 
+            this.returnsClearanceLabel.AutoSize = true;
+            this.returnsClearanceLabel.Location = new System.Drawing.Point(10, 111);
+            this.returnsClearanceLabel.Name = "returnsClearanceLabel";
+            this.returnsClearanceLabel.Size = new System.Drawing.Size(100, 13);
+            this.returnsClearanceLabel.TabIndex = 15;
+            this.returnsClearanceLabel.Text = "Returns Clearance:";
+            // 
             // FedExReturnsControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
+            this.Controls.Add(this.returnsClearance);
+            this.Controls.Add(this.returnsClearanceLabel);
             this.Controls.Add(this.saturdayPickup);
             this.Controls.Add(this.labelSaturdayPickup);
             this.Controls.Add(this.rmaReason);
@@ -126,7 +149,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             this.Controls.Add(this.returnService);
             this.Controls.Add(this.labelFedExReturnType);
             this.Name = "FedExReturnsControl";
-            this.Size = new System.Drawing.Size(325, 109);
+            this.Size = new System.Drawing.Size(325, 137);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,6 +165,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         private System.Windows.Forms.Label labelRmaReason;
         private System.Windows.Forms.Label labelSaturdayPickup;
         private System.Windows.Forms.CheckBox saturdayPickup;
+        private System.Windows.Forms.CheckBox returnsClearance;
+        private System.Windows.Forms.Label returnsClearanceLabel;
 
     }
 }
