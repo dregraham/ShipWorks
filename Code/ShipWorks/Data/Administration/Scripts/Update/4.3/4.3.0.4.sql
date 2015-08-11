@@ -12,4 +12,9 @@ GO
 ALTER TABLE [dbo].[FedExProfile] ADD
 [ReturnsClearance] [bit]
 GO
-UPDATE TABLE fp
+UPDATE fep
+set fep.ReturnsClearance = 0
+FROM dbo.FedExProfile fep	
+INNER JOIN dbo.ShippingProfile sp ON sp.ShippingProfileID = fep.ShippingProfileID
+WHERE sp.ShipmentTypePrimary = 1
+GO
