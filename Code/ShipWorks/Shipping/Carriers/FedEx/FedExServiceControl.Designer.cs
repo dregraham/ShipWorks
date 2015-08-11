@@ -1935,7 +1935,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.labelDropoffType.AutoSize = true;
             this.labelDropoffType.BackColor = System.Drawing.Color.Transparent;
-            this.labelDropoffType.Location = new System.Drawing.Point(30, 9);
+            this.labelDropoffType.Location = new System.Drawing.Point(52, 9);
             this.labelDropoffType.Name = "labelDropoffType";
             this.labelDropoffType.Size = new System.Drawing.Size(48, 13);
             this.labelDropoffType.TabIndex = 63;
@@ -1945,7 +1945,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // 
             this.dropoffType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.dropoffType.FormattingEnabled = true;
-            this.dropoffType.Location = new System.Drawing.Point(84, 6);
+            this.dropoffType.Location = new System.Drawing.Point(106, 6);
             this.dropoffType.Name = "dropoffType";
             this.dropoffType.PromptText = "(Multiple Values)";
             this.dropoffType.Size = new System.Drawing.Size(175, 21);
