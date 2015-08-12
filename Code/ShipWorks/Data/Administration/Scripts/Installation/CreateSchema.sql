@@ -5375,6 +5375,10 @@ PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
 GO
 ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [PK_GrouponOrder] PRIMARY KEY CLUSTERED  ([OrderID])
 GO
+PRINT N'Creating index [IX_Auto_GrouponOrderID] on [dbo].[GrouponOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_GrouponOrderID] ON [dbo].[GrouponOrder] ([GrouponOrderID])
+GO
 PRINT N'Creating [dbo].[GrouponOrderItem]'
 GO
 CREATE TABLE [dbo].[GrouponOrderItem]

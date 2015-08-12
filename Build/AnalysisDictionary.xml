@@ -57,6 +57,7 @@
       <Word>ups</Word>
       <Word>username</Word>
       <Word>MainForm</Word>
+      <Word>Groupon</Word>
 		</Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
