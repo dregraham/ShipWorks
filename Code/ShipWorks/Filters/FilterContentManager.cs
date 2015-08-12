@@ -370,13 +370,20 @@ namespace ShipWorks.Filters
 
                     log.DebugFormat("Begin {0} filter counts", initial ? "initial" : "update");
 
+                    SqlAdapterRetry<SqlException> sqlAppResourceLockExceptionRetry =
+                        new SqlAdapterRetry<SqlException>(5, -5, "FilterContentManager.InitiateCalculationThread");
+
                     if (initial)
                     {
-                        ActionProcedures.CalculateInitialFilterCounts(adapter);
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => 
+                            ActionProcedures.CalculateInitialFilterCounts(adapter)
+                            );
                     }
                     else
                     {
-                        ActionProcedures.CalculateUpdateFilterCounts(adapter);
+                        sqlAppResourceLockExceptionRetry.ExecuteWithRetry(() => 
+                            ActionProcedures.CalculateUpdateFilterCounts(adapter)
+                            );
                     }
 
                     log.DebugFormat("Complete {0} filter counts", initial ? "initial" : "update");

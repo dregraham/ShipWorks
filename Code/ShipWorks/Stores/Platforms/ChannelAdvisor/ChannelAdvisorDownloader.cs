@@ -316,7 +316,10 @@ namespace ShipWorks.Stores.Platforms.ChannelAdvisor
                     case LineItemTypeCodes.VATShipping:
                         name = "VAT Shipping";
                         type = "VAT";
-                        break;
+                        // Skip pulling in 'VAT Shipping'
+                        // it is included in the tax 
+                        // see FreshDesk 593454
+                        continue;
 
                     default:
                         // there are some undocumented enum values
