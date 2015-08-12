@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
 		Build\AnalysisDictionary.xml = Build\AnalysisDictionary.xml
@@ -13,11 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipWorks.Core", "Code\ShipWorks\ShipWorks.Core.csproj", "{02653371-C0DC-4D70-949D-60D37C69F781}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0} = {2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShipWorks.Native", "Code\ShipWorks.Native\Native.vcxproj", "{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "ShipWorks.SqlServer", "Code\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj", "{D9FBA556-68E0-4961-A400-636A9A6BC7BC}"
 EndProject
@@ -91,34 +88,6 @@ Global
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|Win32.ActiveCfg = Release|Any CPU
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|x86.ActiveCfg = Release|x86
 		{02653371-C0DC-4D70-949D-60D37C69F781}.Release|x86.Build.0 = Release|x86
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|Any CPU.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|Mixed Platforms.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|Mixed Platforms.Build.0 = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|Win32.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|Win32.Build.0 = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|x86.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug (x86)|x86.Build.0 = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|Mixed Platforms.Build.0 = Debug|x64
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|Win32.Build.0 = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|x86.ActiveCfg = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Debug|x86.Build.0 = Debug|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|Any CPU.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|Mixed Platforms.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|Mixed Platforms.Build.0 = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|Win32.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|Win32.Build.0 = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|x86.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release (x86)|x86.Build.0 = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Any CPU.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Mixed Platforms.ActiveCfg = Release|x64
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Mixed Platforms.Build.0 = Release|x64
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Win32.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|Win32.Build.0 = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|x86.ActiveCfg = Release|Win32
-		{2AC1FDE7-3FF2-49A5-83AA-1DFAFB7A4FF0}.Release|x86.Build.0 = Release|Win32
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.ActiveCfg = Debug|Any CPU
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Build.0 = Debug|Any CPU
 		{D9FBA556-68E0-4961-A400-636A9A6BC7BC}.Debug (x86)|Any CPU.Deploy.0 = Debug|Any CPU

@@ -7,7 +7,6 @@
 
     <ShipWorksSolution>..\ShipWorks.sln</ShipWorksSolution>
     <ShipWorksProject>..\Code\ShipWorks\ShipWorks.csproj</ShipWorksProject>
-    <NativeProject>..\Code\ShipWorks.Native\Native.vcxproj</NativeProject>
 
     <!--Build output-->
     <ArtifactDirectory>..\Artifacts</ArtifactDirectory>
@@ -87,7 +86,6 @@
     <CompileDependsOn>
       CleanAll;
       CompileSolution;
-      CompileNative;
     </CompileDependsOn>
   </PropertyGroup>
   <Target Name="Compile"
@@ -129,18 +127,6 @@
 			Targets="Clean">
     </MSBuild>
 
-    <!-- Clean each of the native projects -->
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=Win32;"
-			Targets="Clean">
-    </MSBuild>
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=x64;"
-			Targets="Clean">
-    </MSBuild>
-
   </Target>
 
   <!-- Compile the ShipWorks project -->
@@ -159,29 +145,12 @@
 
   </Target>
 
-  <!-- Compile the Native projects -->
-  <Target Name="CompileNative">
-
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=Win32"
-			Targets="Build">
-    </MSBuild>
-
-    <MSBuild
-			Projects="$(NativeProject)"
-			Properties="Configuration=$(Configuration);Platform=x64"
-			Targets="Build">
-    </MSBuild>
-
-  </Target>
-
   <!-- Copy all the files to the Latest directory -->
   <Target Name="CopyToLatest" >
 
     <!-- Copy the native files -->
-    <Copy SourceFiles="..\Code\ShipWorks.Native\x64\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
-    <Copy SourceFiles="..\Code\ShipWorks.Native\Win32\$(Configuration)\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
+    <Copy SourceFiles="..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
+    <Copy SourceFiles="..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
 
   </Target>
 

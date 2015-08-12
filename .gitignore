@@ -18,6 +18,8 @@ x64/
 [Bb]in/
 [Oo]bj/
 
+!Components/x64
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*

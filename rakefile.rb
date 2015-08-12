@@ -97,31 +97,16 @@ namespace :build do
 		msb.parameters = "/p:warn=0"
 		msb.targets :Build
 	end
-	
-	desc "Build ShipWorks.Native in a given configuration and platform"
-	msbuild :native, [:configuration, :platform] do |msb, args|
-		print "Building the Native project with the #{args[:configuration]}|#{args[:platform]} config...\r\n\r\n"
-
-		msb.solution = "Code/ShipWorks.Native/Native.vcxproj"
-		msb.properties args
-		msb.targets :Build
-	end
 		
 	desc "Build an unsigned Debug installer for local testing"
 	task :debug_installer => :debug do
 		print "Building unsigned debug installer package...\r\n\r\n"
 
-		Rake::Task['build:native'].instance_exec do
-			invoke "Debug", "Win32"
-			reenable
-			invoke "Debug", "x64"
-		end
-
 		print "\r\nCopying Native dlls to Artifacts... "
 		FileUtils.mkdir_p "Artifacts/Application/Win32"
-		FileUtils.cp "Code/ShipWorks.Native/Win32/Debug/ShipWorks.Native.dll", "Artifacts/Application/Win32"
+		FileUtils.cp "Components/Win32/ShipWorks.Native.dll", "Artifacts/Application/Win32"
 		FileUtils.mkdir_p "Artifacts/Application/x64"
-		FileUtils.cp "Code/ShipWorks.Native/x64/Debug/ShipWorks.Native.dll", "Artifacts/Application/x64"
+		FileUtils.cp "Components/x64/ShipWorks.Native.dll", "Artifacts/Application/x64"
 		print "done.\r\n"
 
 		print "Querying required schema version... "
