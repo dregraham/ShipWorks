@@ -86,6 +86,7 @@
     <CompileDependsOn>
       CleanAll;
       CompileSolution;
+      CopyToLatest;
     </CompileDependsOn>
   </PropertyGroup>
   <Target Name="Compile"
@@ -151,6 +152,7 @@
     <!-- Copy the native files -->
     <Copy SourceFiles="..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\x64" />
     <Copy SourceFiles="..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)\Win32" />
+    <Copy SourceFiles="..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(AppDirectory)" />
 
   </Target>
 
