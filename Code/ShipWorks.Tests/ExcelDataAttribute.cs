@@ -67,7 +67,7 @@ namespace ShipWorks.Tests
             {
                 adapter.Fill(dataSet);
 
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                foreach (DataRow row in dataSet.Tables[0].Rows.OfType<DataRow>().Where(x => x.ItemArray.Any(y => y != null && y != DBNull.Value)))
                     yield return new[] { row };
             }
             finally
