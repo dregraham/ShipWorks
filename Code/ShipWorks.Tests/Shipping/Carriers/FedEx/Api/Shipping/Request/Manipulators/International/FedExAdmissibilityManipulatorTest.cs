@@ -373,8 +373,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             shipmentEntity.FedEx.CustomsAdmissibilityPackaging = 67;
 
             Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
-
-            Assert.Equal(PhysicalPackagingType.TUBE, nativeRequest.RequestedShipment.RequestedPackageLineItems[0].PhysicalPackaging);
         }
     }
 }

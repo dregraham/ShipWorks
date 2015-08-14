@@ -43,6 +43,7 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             log = new Mock<ILog>();
             log.Setup(l => l.Error(It.IsAny<object>(), It.IsAny<InsureShipResponseException>()));
             log.Setup(l => l.Error(It.IsAny<string>()));
+            log.Setup(l => l.Info(It.IsAny<string>(), It.IsAny<Exception>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<string>()));
             log.Setup(l => l.InfoFormat(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<double>()));
@@ -230,9 +231,9 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
-            Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
+            InsureShipException thrownException = Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
 
-            log.Verify(l => l.InfoFormat("The policy for shipment {0} cannot be voided with the InsureShip API. The policy was created more than {1} hours ago.", shipmentForVoiding.ShipmentID, It.IsAny<double>()), Times.Once());
+            log.Verify(l => l.Info("The policy for shipment 1031 cannot be voided with the InsureShip API. The policy was created more than 24 hours ago.", It.IsAny<Exception>()));
         }
 
         [Fact]
@@ -241,9 +242,9 @@ namespace ShipWorks.Tests.Shipping.Insurance.InsureShip
             // Grace period set to 24 hours in the initialize method above
             shipmentForVoiding.ShipDate = DateTime.UtcNow.Subtract(new TimeSpan(0, 24, 1, 0));
 
-            testObject.Void(shipmentForVoiding);
+            Assert.Throws<InsureShipException>(() => testObject.Void(shipmentForVoiding));
 
-            Assert.Throws<InsureShipException>(() => settings.Verify(s => s.VoidPolicyMaximumAge, Times.Once()));
+            settings.Verify(s => s.VoidPolicyMaximumAge, Times.Once());
         }
 
         [Fact]

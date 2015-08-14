@@ -272,7 +272,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Endicia.BestRate
         //}
         
         [CsvData(@"Shipping\Carriers\Postal\Endicia\BestRate", "Endicia_GetBestRates_DoesNotIncludeTypes")]
-        [Fact]
+        [Theory]
         public void GetBestRates_ExcludesVariousTypes_Test(DataRow row)
         {
             PostalServiceType excludedServiceType = (PostalServiceType)Enum.Parse(typeof (PostalServiceType), row[0].ToString());

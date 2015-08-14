@@ -719,7 +719,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             smartPostCloseRequest.Setup(r => r.Submit()).Throws(new CarrierException());
 
             FedExAccountEntity account = new FedExAccountEntity();
-            Assert.Throws<FedExException>(() => Assert.Throws<FedExException>(() => testObject.CloseSmartPost(account)));
+            Assert.Throws<FedExException>(() => testObject.CloseSmartPost(account));
         }
 
         [Fact]
@@ -1072,9 +1072,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         [Fact]
         public void GetRates_ThrowsFedExException_WhenShipStreet3IsNotEmpty_Test()
         {
-            Assert.Throws<FedExException>(() => shipmentEntity.ShipStreet3 = "desk");
+            shipmentEntity.ShipStreet3 = "desk";
 
-            testObject.GetRates(shipmentEntity);
+            Assert.Throws<FedExException>(() => testObject.GetRates(shipmentEntity));
         }
 
         [Fact]

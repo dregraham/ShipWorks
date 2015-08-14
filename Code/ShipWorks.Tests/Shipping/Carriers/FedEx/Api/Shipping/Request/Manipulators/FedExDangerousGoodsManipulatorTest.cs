@@ -582,7 +582,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         {
             shipmentEntity.FedEx.Packages[0].DangerousGoodsType = 23;
 
-            Assert.Throws<FedExException>(() => testObject.Manipulate(carrierRequest.Object));
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
         [Fact]

@@ -47,8 +47,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Response.Manipulator
             closeEntity = null;
 
             Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(carrierResponse.Object, closeEntity));
-
-            Assert.NotNull(closeEntity);
         }
 
         [Fact]
