@@ -12,7 +12,7 @@ namespace ShipWorks.Stores.Platforms.Groupon.CoreExtensions.Filters
     /// <summary>
     /// Condition for the MarketplaceAdvisor Invoice Number field
     /// </summary>
-    [ConditionElement("Groupon Order ID", "Groupon.OrderID")]
+    [ConditionElement("Groupon Order #", "Groupon.OrderID")]
     [ConditionStoreType(StoreTypeCode.Groupon)]
     public class GrouponOrderIdCondition : StringCondition
     {
