@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Xunit;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPost
@@ -10,16 +11,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
 
         private const bool justLabels = false;
 
-        [DataSource("DataSource_Ship_FedExSmartPost")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [TestCategory("FedEx")]
-        [Fact]
-        public void Ship_FedExSmartPost()
+        //[DataSource("DataSource_Ship_FedExSmartPost")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Trait("Category", "FedEx")]
+        [Theory]
+        public void Ship_FedExSmartPost(DataRow row)
         {
             FedExSmartPostFixture testObject = new FedExSmartPostFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExSmartPostFixture.SmartPostMapping) &&
+                if (PopulateTestObject(row, testObject, FedExSmartPostFixture.SmartPostMapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.Ship();

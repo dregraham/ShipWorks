@@ -3,6 +3,7 @@ using Xunit;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Ground;
+using System.Data;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 {
@@ -13,17 +14,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
 
         private bool justLabels = false;
 
-        [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExUSGroundDomestic()
+        //[DataSource("DataSource_Ship_FedExUSGroundDomestic")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExUSGroundDomestic(DataRow row)
         {
             var testObject = new FedExUSGroundFixture();
             
             try
             {
-                if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
+                if (PopulateTestObject(row, testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
@@ -44,18 +45,18 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExGroundDomesticAlcohol")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExGroundDomesticAlcohol()
+        //[DataSource("DataSource_Ship_FedExGroundDomesticAlcohol")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExGroundDomesticAlcohol(DataRow row)
         {
             fedExTestAccountNumber = "510158040";
 
             var testObject = new FedExUSGroundAlcoholFixture();
             try
             {
-                if (PopulateTestObject(testObject, FedExUSGroundAlcoholFixture.Mapping) &&
+                if (PopulateTestObject(row, testObject, FedExUSGroundAlcoholFixture.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     testObject.FedExAccountNumber = fedExTestAccountNumber;
@@ -76,11 +77,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressInternationalAlcohol")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExExpressInternationalAlcohol()
+        //[DataSource("DataSource_Ship_FedExExpressInternationalAlcohol")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExExpressInternationalAlcohol(DataRow row)
         {
             fedExTestAccountNumber = "510158040";
 
@@ -88,7 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             {
                 var testObject = new FedExUSExpressInternationalFixture();
 
-                if (PopulateTestObject(testObject, FedExUSExpressInternationalAlcoholMapping.Mapping) &&
+                if (PopulateTestObject(row, testObject, FedExUSExpressInternationalAlcoholMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -112,15 +113,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressInternational")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExExpressInternational()
+        //[DataSource("DataSource_Ship_FedExExpressInternational")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExExpressInternational(DataRow row)
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalFixture.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 try
@@ -147,17 +148,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressDomesticAlcohol")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExExpressDomesticAlcohol()
+        //[DataSource("DataSource_Ship_FedExExpressDomesticAlcohol")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExExpressDomesticAlcohol(DataRow row)
         {
             fedExTestAccountNumber = "510158040";
 
             var testObject = new FedExPrototypeFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticAlcoholMapping.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -170,15 +171,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExExpressDomestic")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExExpressDomestic()
+        //[DataSource("DataSource_Ship_FedExExpressDomestic")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExExpressDomestic(DataRow row)
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSExpressDomesticMapping.UsExpDomesticMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -191,15 +192,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExOneRate")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExOneRate_Test()
+        //[DataSource("DataSource_Ship_FedExOneRate")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExOneRate_Test(DataRow row)
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
 
-            if (PopulateTestObject(testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -212,15 +213,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             }
         }
 
-        [DataSource("DataSource_Ship_FedExETD")]
-        [DeploymentItem("DataSources\\FedExAll.xlsx")]
-        [Fact]
-        [TestCategory("FedEx")]
-        public void Ship_FedExETD()
+        //[DataSource("DataSource_Ship_FedExETD")]
+        //[DeploymentItem("DataSources\\FedExAll.xlsx")]
+        [Theory]
+        [Trait("Category", "FedEx")]
+        public void Ship_FedExETD(DataRow row)
         {
             var testObject = new FedExUSExpressInternationalFixture();
 
-            if (PopulateTestObject(testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
+            if (PopulateTestObject(row, testObject, FedExUSExpressInternationalEtdMapping.Mapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {
                 try

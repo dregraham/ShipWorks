@@ -52,8 +52,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             UspsWebClient.UseTestServer = true;
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
         {           
@@ -63,8 +63,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             Assert.NotNull(info);
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void CreateScanForm_Connectivity_Test()
         {
@@ -102,8 +102,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
@@ -115,8 +115,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             Assert.False(registrationResult.IsSuccessful);
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void RegisterAccount_IsSuccessful_Test()
         {
@@ -160,8 +160,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             return registration;
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void GetContract_Connectivity_Test()
         {
@@ -170,8 +170,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             Assert.Equal(UspsAccountContractType.Reseller, contractType);
         }
 
-        [TestCategory("USPS")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "USPS")]
+        [Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void ChangeToExpeditedPlan_Connectivity_Test()
         {

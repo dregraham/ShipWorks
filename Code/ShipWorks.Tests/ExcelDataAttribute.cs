@@ -14,10 +14,15 @@ namespace ShipWorks.Tests
     {
         public ExcelDataAttribute(string path, string worksheet) :
             base($"Provider=Microsoft.ACE.OLEDB.12.0; Data Source={path}; Extended Properties='Excel 12.0;HDR=YES;IMEX=1;';", 
-                $"select * from [{worksheet}#csv]")
+                $"select * from [{worksheet}$]")
         {
-
+            Filepath = path;
+            Worksheet = worksheet;
         }
+
+        public string Filepath { get; }
+
+        public string Worksheet { get; }
     }
     
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]

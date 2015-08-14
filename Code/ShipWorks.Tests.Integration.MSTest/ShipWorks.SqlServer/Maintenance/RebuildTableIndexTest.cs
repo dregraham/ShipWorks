@@ -112,8 +112,8 @@ namespace ShipWorks.Tests.Integration.MSTest.ShipWorks.SqlServer.Maintenance
         }
 
         [Fact]
-        [TestCategory("SqlServer.Maintenance")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "SqlServer.Maintenance")]
+        [Trait("Category", "ContinuousIntegration")]
         public void RebuildTableIndex_RebuildAllIndexes_Succeeds_Test()
         {
             // This assumes it is being run against the "seeded" database (see SeedDatabase.sql script

@@ -106,6 +106,9 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ShipWorks.Tests\ExcelDataAttribute.cs">
+      <Link>ExcelDataAttribute.cs</Link>
+    </Compile>
     <Compile Include="Actions\Scheduling\ActionScheduleTest.cs" />
     <Compile Include="Actions\Scheduling\QuartzJobListener.cs" />
     <Compile Include="Data\Administration\SqlChangeTrackingTest.cs" />

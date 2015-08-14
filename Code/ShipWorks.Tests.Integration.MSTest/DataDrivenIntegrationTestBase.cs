@@ -14,29 +14,48 @@ namespace ShipWorks.Tests.Integration.MSTest
 {
     public class DataDrivenIntegrationTestBase
     {
-        private TestContext testContextInstance;
+        //private TestContext testContextInstance;
         private bool isTranslationMapPopulated = false;
 
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
+        //public TestContext TestContext
+        //{
+        //    get
+        //    {
+        //        return testContextInstance;
+        //    }
+        //    set
+        //    {
+        //        testContextInstance = value;
+        //    }
+        //}
         
         /// <summary>
         /// Populates the test object based on the mapping of a spreadsheet columns to the test object's properties.
         /// </summary>
         /// <returns>Returns true when a row needs to be tests (i.e. the current row is not the headers); otherwise false.</returns>
-        public bool PopulateTestObject<T>(T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
+        public bool PopulateTestObject<T>(DataRow testDataRow, T testObject, List<ColumnPropertyMapDefinition> columnPropertyMap)
         {
-            DataRow testDataRow = row;
+            ExcelDataAttribute attribute = null;
+            StackTrace st = new StackTrace();
+            for (int i = 0; i < st.FrameCount; i++)
+            {
+                StackFrame sf = st.GetFrame(i);
+                attribute = sf.GetMethod().GetCustomAttribute<ExcelDataAttribute>();
 
+                if (attribute != null)
+                {
+                    break;
+                }
+            }
+            
+            if (attribute == null)
+            {
+                throw new InvalidOperationException("You must add the ExcelData attribute to the test to populate a test object");
+            }
+            
+            string worksheet = attribute.Worksheet;
+            string filepath = attribute.Filepath;
+            
             int rowIndex = testDataRow.Table.Rows.IndexOf(testDataRow);
 
             if (string.IsNullOrWhiteSpace(testDataRow[0].ToString()))
@@ -46,13 +65,13 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (!isTranslationMapPopulated)
             {
-                PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
+                PopulateTranslationMap(filepath, worksheet, columnPropertyMap);
             }
 
             if (rowIndex == 0 && !isTranslationMapPopulated)
             {
                 // Build the translation map using the column headers in the first row
-                PopulateTranslationMap(TestContext.DataConnection.Database, testDataRow.Table.TableName, columnPropertyMap);
+                PopulateTranslationMap(filepath, worksheet, columnPropertyMap);
 
                 return false;
             }
@@ -120,12 +139,12 @@ namespace ShipWorks.Tests.Integration.MSTest
             isTranslationMapPopulated = true;
         }
 
-        public void GenerateColumnPropertyListCode()
+        public void GenerateColumnPropertyListCode(DataRow row)
         {
             StringBuilder populationCode = new StringBuilder();
             List<ColumnPropertyMapDefinition> columnPropertyMap = new List<ColumnPropertyMapDefinition>();
 
-            PopulateTranslationMap(TestContext.DataConnection.Database, row.Table.TableName, columnPropertyMap);
+            PopulateTranslationMap(row.Table.DataSet.DataSetName, row.Table.TableName, columnPropertyMap);
 
             if (columnPropertyMap.Any(cpm => cpm.SpreadsheetColumnIndex == -1))
             {

@@ -63,7 +63,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         }
         
         [Fact]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "ContinuousIntegration")]
         public void TablesRequiringChangeTracking_CountMatchesNumberOfTablesWithChangeTrackingInDatabase_Test()
         {
             // This assumes a database is being used that has change tracking configured correctly on 
@@ -75,7 +75,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         }
 
         [Fact]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "ContinuousIntegration")]
         public void TablesRequiringChangeTracking_MatchesTableNamesWithChangeTrackingInDatabase_Test()
         {
             // This assumes a database is being used that has change tracking configured correctly on 
@@ -89,7 +89,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         }
 
         [Fact]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "ContinuousIntegration")]
         public void Enable_TurnsOnChangeTrackingForDatabase_Test()
         {
             // Setup
@@ -102,7 +102,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
         }
 
         [Fact]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "ContinuousIntegration")]
         public void Enable_TurnsOnChangeTrackingForAllTables_Test()
         {
             // Setup

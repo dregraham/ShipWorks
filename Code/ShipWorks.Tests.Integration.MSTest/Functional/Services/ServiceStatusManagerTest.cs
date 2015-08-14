@@ -112,8 +112,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Functional.Services
         }
 
         [Fact]
-        [TestCategory("ApplicationCore")]
-        [TestCategory("ContinuousIntegration")]
+        [Trait("Category", "ApplicationCore")]
+        [Trait("Category", "ContinuousIntegration")]
         public void CheckIn_DoesNotThrowORMEntityOutOfSyncException_WhenDatabaseValuesHaveChanged()
         {
             ServiceStatusEntity firstServiceStatus = null;

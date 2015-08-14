@@ -9,6 +9,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Shipping.Carriers.Postal.WebTools;
 using ShipWorks.Shipping.Editing.Rating;
+using System.Data;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
 {
@@ -16,11 +17,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
     {
         private const bool justLabels = true;
 
-        [DataSource("DataSource_Ship_Stamps")]
-        [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("USPS")]
-        [Fact]
-        public void ProcessBatch_UspsAndExpress1Usps_Test()
+        //// [DataSource("DataSource_Ship_Stamps")]
+        //// [DeploymentItem("DataSources\\Usps.xlsx")]
+        [Trait("Category", "USPS")]
+        [Theory]
+        public void ProcessBatch_UspsAndExpress1Usps_Test(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -30,7 +31,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
+                if (PopulateTestObject(row, testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -84,11 +85,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [DataSource("DataSource_Ship_Stamps")]
-        [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("USPS")]
-        [Fact]
-        public void GetRates_UspsAndExpress1Usps_Test()
+        // [DataSource("DataSource_Ship_Stamps")]
+        // [DeploymentItem("DataSources\\Usps.xlsx")]
+        [Trait("Category", "USPS")]
+        [Theory]
+        public void GetRates_UspsAndExpress1Usps_Test(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -98,7 +99,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
+                if (PopulateTestObject(row, testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -137,11 +138,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [DataSource("DataSource_Ship_PurchasePostage")]
-        [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("USPS")]
-        [Fact]
-        public void PurchasePostage_UspsAndExpress1Usps_Test()
+        // [DataSource("DataSource_Ship_PurchasePostage")]
+        // [DeploymentItem("DataSources\\Usps.xlsx")]
+        [Trait("Category", "USPS")]
+        [Theory]
+        public void PurchasePostage_UspsAndExpress1Usps_Test(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -151,7 +152,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
+                if (PopulateTestObject(row, testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
@@ -194,11 +195,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             }
         }
 
-        [DataSource("DataSource_Ship_PurchasePostage")]
-        [DeploymentItem("DataSources\\Usps.xlsx")]
-        [TestCategory("USPS")]
-        [Fact]
-        public void CheckPostage_UspsAndExpress1Usps_Test()
+        // [DataSource("DataSource_Ship_PurchasePostage")]
+        // [DeploymentItem("DataSources\\Usps.xlsx")]
+        [Trait("Category", "USPS")]
+        [Theory]
+        public void CheckPostage_UspsAndExpress1Usps_Test(DataRow row)
         {
             UspsMapping testObject = new UspsMapping();
 
@@ -208,7 +209,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 UspsWebClient.UseTestServer = true;
                 Express1UspsWebClient.UseTestServer = true;
 
-                if (PopulateTestObject(testObject, UspsMapping.Mapping) &&
+                if (PopulateTestObject(row, testObject, UspsMapping.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     Console.WriteLine(@"{0}{0}--------------------------------------------------------------------------------", Environment.NewLine);
