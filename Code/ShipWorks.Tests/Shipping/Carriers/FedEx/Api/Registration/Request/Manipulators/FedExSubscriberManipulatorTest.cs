@@ -71,7 +71,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotSubscriptionRequest_Test()
         {
             // Setup the native request to be an unexpected type
-            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RegisterWebCspUserRequest());
+            carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new RegisterWebUserRequest());
 
             testObject.Manipulate(carrierRequest.Object);
         }

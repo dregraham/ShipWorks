@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         private Mock<CarrierRequest> carrierRequest;
 
-        private RegisterWebCspUserRequest nativeRequest;
+        private RegisterWebUserRequest nativeRequest;
         private FedExAccountEntity account;
 
         [TestInitialize]
@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
                 PostalCode = "63102"
             };
 
-            nativeRequest = new RegisterWebCspUserRequest();
+            nativeRequest = new RegisterWebUserRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             carrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 

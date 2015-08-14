@@ -30,6 +30,13 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
                 SupportedRedirectToHoldServices = new[]
                 {
                     supportedRedirectToHoldServiceType
+                },
+                RadiusDistance = new Distance()
+                {
+                    Units = DistanceUnits.MI,
+                    UnitsSpecified = true,
+                    Value = 500.0,
+                    ValueSpecified = true
                 }
             };
 
@@ -47,6 +54,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
             switch (fedExService)
             {
                 case FedExServiceType.FedExGround:
+                case FedExServiceType.FedExInternationalGround:
                     return SupportedRedirectToHoldServiceType.FEDEX_GROUND;
                 case FedExServiceType.GroundHomeDelivery:
                     return SupportedRedirectToHoldServiceType.FEDEX_GROUND_HOME_DELIVERY;

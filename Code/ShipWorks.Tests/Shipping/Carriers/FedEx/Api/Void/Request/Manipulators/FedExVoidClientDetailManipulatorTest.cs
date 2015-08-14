@@ -15,8 +15,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
     {
         private FedExVoidClientDetailManipulator testObject;
 
-        private Mock<ICarrierSettingsRepository> settingsRepository;
-        
         private Mock<CarrierRequest> voidCarrierRequest;
         private DeleteShipmentRequest nativeRequest;
 
@@ -27,14 +25,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
         {
             account = new FedExAccountEntity {AccountNumber = "12345", MeterNumber = "67890"};
 
-            settingsRepository = new Mock<ICarrierSettingsRepository>();
-            settingsRepository.Setup(r => r.GetAccount(It.IsAny<ShipmentEntity>())).Returns(account);
-
             nativeRequest = new DeleteShipmentRequest { ClientDetail = new ClientDetail() };
             voidCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
             voidCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
-            
-            testObject = new FedExVoidClientDetailManipulator(settingsRepository.Object);
+
+            testObject = new FedExVoidClientDetailManipulator();
         }
 
         [TestMethod]

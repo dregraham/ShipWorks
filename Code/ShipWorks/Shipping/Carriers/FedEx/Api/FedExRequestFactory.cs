@@ -140,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(settingsRepository),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator()
             };
 
@@ -201,7 +201,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExCloseWebAuthenticationDetailManipulator(),
-                new FedExCloseClientDetailManipulator(settingsRepository),
+                new FedExCloseClientDetailManipulator(),
                 new FedExCloseVersionManipulator(),
                 new FedExCloseDateManipulator()
             };
@@ -220,7 +220,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExCloseWebAuthenticationDetailManipulator(),
-                new FedExCloseClientDetailManipulator(settingsRepository),
+                new FedExCloseClientDetailManipulator(),
                 new FedExCloseVersionManipulator(),
                 new FedExPickupCarrierManipulator()
             };
@@ -240,7 +240,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExVoidWebAuthenticationDetailManipulator(),
-                new FedExVoidClientDetailManipulator(settingsRepository),
+                new FedExVoidClientDetailManipulator(),
                 new FedExVoidVersionManipulator(),
                 new FedExVoidParametersManipulator()
             };
@@ -259,7 +259,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator(),
                 new FedExCspContactManipulator()
             };
@@ -278,7 +278,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExRegistrationWebAuthenticationDetailManipulator(),
-                new FedExRegistrationClientDetailManipulator(settingsRepository),
+                new FedExRegistrationClientDetailManipulator(),
                 new FedExRegistrationVersionManipulator(),
                 new FedExSubscriberManipulator()
             };
@@ -302,7 +302,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             // Create the "standard" manipulators for a FedEx rate request
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
-                new FedExRateClientDetailManipulator(settingsRepository),
+                new FedExRateClientDetailManipulator(),
                 new FedExRateWebAuthenticationManipulator(settings),
                 new FedExRateVersionManipulator(),
                 new FedExRateReturnTransitManipulator(),
@@ -318,7 +318,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 new FedExRatePackagingTypeManipulator(),
                 new FedExRateCodOptionsManipulator(settingsRepository),
                 new FedExRateDryIceManipulator(settings),
-                new FedExRateBrokerManipulator(settings)
+                new FedExRateBrokerManipulator(settings),
+                new FedExRateDangerousGoodsManipulator(),
+                new FedExRateHoldAtLocationManipulator()
             };
 
             if (specializedManipulators != null && specializedManipulators.Any())
@@ -342,7 +344,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             List<ICarrierRequestManipulator> manipulators = new List<ICarrierRequestManipulator>
             {
                 new FedExTrackingWebAuthenticationDetailManipulator(),
-                new FedExTrackingClientDetailManipulator(settingsRepository),
+                new FedExTrackingClientDetailManipulator(),
                 new FedExTrackingVersionManipulator(),
                 new FedExTrackingPackageIdentifierManipulator()
             };

@@ -1,25 +1,12 @@
 using System;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Api;
 using ShipWorks.Shipping.Carriers.Api;
-using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
     public class FedExRateClientDetailManipulator : ICarrierRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FedExRateClientDetailManipulator" /> class.
-        /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExRateClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
-        {
-            this.fedExSettings = new FedExSettings(settingsRepository);
-        }
-
         /// <summary>
         /// Manipulates the specified request.
         /// </summary>
@@ -33,7 +20,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             
             // We can safely cast this since we've passed validation
             RateRequest nativeRequest = request.NativeRequest as RateRequest;
-            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRateClientDetail(account, fedExSettings);
+            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateRateClientDetail(account);
         }
 
         /// <summary>

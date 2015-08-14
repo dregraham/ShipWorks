@@ -225,6 +225,10 @@ namespace ShipWorks.Shipping.Settings
 
             settings.AutoCreateShipments = true;
 
+            settings.FedExFimsEnabled = false;
+            settings.FedExFimsUsername = string.Empty;
+            settings.FedExFimsPassword = string.Empty;
+
             adapter.SaveAndRefetch(settings);
         }
     }

@@ -12,15 +12,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
     /// </summary>
     public class FedExVoidClientDetailManipulator : ICarrierRequestManipulator
     {
-        private readonly FedExSettings fedExSettings;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExVoidClientDetailManipulator" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        public FedExVoidClientDetailManipulator(ICarrierSettingsRepository settingsRepository)
+        public FedExVoidClientDetailManipulator()
         {
-            fedExSettings = new FedExSettings(settingsRepository);
         }
 
         /// <summary>
@@ -36,7 +32,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Void.Request.Manipulators
             DeleteShipmentRequest nativeRequest = request.NativeRequest as DeleteShipmentRequest;
 
             FedExAccountEntity account = request.CarrierAccountEntity as FedExAccountEntity;
-            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateVoidClientDetail(account, fedExSettings);
+            nativeRequest.ClientDetail = FedExRequestManipulatorUtilities.CreateVoidClientDetail(account);
         }
 
         /// <summary>

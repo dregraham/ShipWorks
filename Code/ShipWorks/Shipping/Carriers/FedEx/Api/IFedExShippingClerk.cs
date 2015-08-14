@@ -1,5 +1,6 @@
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
+using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Shipping.Carriers.FedEx.Api
 {
@@ -18,5 +19,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <param name="account">The account.</param>
         /// <returns>A FedExEndOfDayCloseEntity object containing the details of each closing; a null value is returned if there weren't any shipments closed.</returns>
         FedExEndOfDayCloseEntity CloseSmartPost(FedExAccountEntity account);
+
+        /// <summary>
+        /// Queries FedEx for HoldAtLocations near the destination address.
+        /// </summary>
+        DistanceAndLocationDetail[] PerformHoldAtLocationSearch(ShipmentEntity shipment);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.Domestic;
 using ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.International;
@@ -9,10 +10,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
     [TestClass]
     public class FedExUSIntegrationTests : DataDrivenIntegrationTestBase
     {
-        private string fedExTestAccountNumber = "604589967"; // "603103343";
+        private string fedExTestAccountNumber = "607253064"; // "603103343";
         private const string ecodAccountNumber = "222326460";
 
-        private bool justLabels = false;
+        private bool justLabels = true;
 
         [DataSource("DataSource_Ship_FedExUSGroundDomestic")]
         [DeploymentItem("DataSources\\FedExAll.xlsx")]
@@ -51,7 +52,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExGroundDomesticAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExUSGroundAlcoholFixture();
             try
@@ -83,7 +84,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExExpressInternationalAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             try
             {
@@ -154,7 +155,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         [TestCategory("FedEx")]
         public void Ship_FedExExpressDomesticAlcohol()
         {
-            fedExTestAccountNumber = "510158040";
+            fedExTestAccountNumber = "607253064";
 
             var testObject = new FedExPrototypeFixture();
 
@@ -199,7 +200,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
         public void Ship_FedExOneRate_Test()
         {
             FedExPrototypeFixture testObject = new FedExUSGroundFixture();
-
+            
             if (PopulateTestObject(testObject, FedExUSOneRateMapping.UsOneRateMapping) &&
                 (testObject.IsSaveLabel || !justLabels))
             {

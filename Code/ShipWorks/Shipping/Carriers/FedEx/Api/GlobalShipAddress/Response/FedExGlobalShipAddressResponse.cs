@@ -1,3 +1,4 @@
+using System.Linq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
@@ -57,7 +58,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         {
             Verify();
 
-            DistanceAndLocationDetails = nativeResponse.AddressToLocationRelationships[0].DistanceAndLocationDetails;
+            DistanceAndLocationDetail[] distanceAndLocationDetails = nativeResponse.AddressToLocationRelationships[0].DistanceAndLocationDetails;
+
+            DistanceAndLocationDetails = distanceAndLocationDetails.ToList().Take(5).ToArray();
         }
 
         /// <summary>

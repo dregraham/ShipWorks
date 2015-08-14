@@ -28,6 +28,8 @@ using ShipWorks.Users.Audit;
 using ShipWorks.Shipping;
 using Moq;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Environment;
+using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
 
 namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 {   
@@ -252,6 +254,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             }
         }
 
+        /// <summary>
+        /// Ships the shipment
+        /// </summary>
+        /// <returns></returns>
         public virtual bool Ship()
         {
             try
@@ -265,7 +271,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 if (!MagicKeysDown)
                 {
 
-                    FedExShippingClerk shippingClerk = new FedExShippingClerk(new FedExShipmentType().CertificateInspector);
+                    FedExShippingClerkParameters parameters = new FedExShippingClerkParameters()
+                    {
+                        Inspector = new FedExShipmentType().CertificateInspector,
+                        SettingsRepository = new FedExSettingsRepository(),
+                        RequestFactory = new FedExRequestFactory(new FedExSettingsRepository()),
+                        LabelRepository = new FedExLabelRepository(),
+                        Log = LogManager.GetLogger(typeof(FedExShippingClerk)),
+                        ForceVersionCapture = false
+                    };
+                    FedExShippingClerk shippingClerk = new FedExShippingClerk(parameters);
 
                     shippingClerk.Ship(shipment);
 
@@ -587,6 +602,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.ShipUnparsedName = ShipperPersonName;
 
 
+
                 shipment.OriginFirstName = RecipientPersonName;
                 shipment.OriginMiddleName = string.Empty;
                 shipment.OriginLastName = RecipientPersonName;
@@ -604,6 +620,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.OriginEmail = string.Empty;
                 shipment.OriginWebsite = string.Empty;
                 shipment.OriginFax = string.Empty;
+
+                var residentialStatus = shipment.FedEx.OriginResidentialDetermination;
+                shipment.FedEx.OriginResidentialDetermination = shipment.ResidentialDetermination;
+                shipment.ResidentialDetermination = residentialStatus;
             }
         }
         
@@ -719,14 +739,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             if (accountNumber.ToLower() == "please use shipper account number")
             {
                 // Return the fedex account number of our account
-                accountNumber = "224813333";
+                accountNumber = "607253064";
             }
             else
             {
                 if (accountNumber.ToLower() == "canadian test account number")
                 {
                     // Return the canadian fedex account number of our account
-                    accountNumber = "602611841";
+                    accountNumber = "607194785";
                 }
             }
 
@@ -803,7 +823,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
-            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT")
+            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" || PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
@@ -853,7 +873,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "dangerous_goods"))
                 
             {
-                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1";
+                bool cargoAircraftOnly = DangerousGoodsCargoAircraftOnly == "1" || (!string.IsNullOrEmpty(DangerousGoodsCargoAircraftOnly) && DangerousGoodsCargoAircraftOnly.ToLower() == "true");
                 FedExDangerousGoodsAccessibilityType accessibility = GetFedExDangerousGoodsAccessibilityType();
 
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
@@ -1067,8 +1087,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                     // (i.e. SpecialServiceType1 vs. SpecialServiceType2)
                     if (shipment.FedEx.Service == (int)FedExServiceType.PriorityOvernight
                         || shipment.FedEx.Service == (int)FedExServiceType.FirstFreight
-                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight
-                        || shipment.FedEx.Service == (int) FedExServiceType.InternationalPriority)
+                        || shipment.FedEx.Service == (int)FedExServiceType.FedEx1DayFreight)
                     {
                         shipment.ShipDate = GetNext(DateTime.Now, DayOfWeek.Friday);
                     }
@@ -1353,6 +1372,28 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             }
 
             throw new Exception("Unrecognized payment type");
+        }
+
+        protected void AddCustomsOptions(ShipmentEntity shipment, string customsOptionType, string customsOptionDescription)
+        {
+            if (!string.IsNullOrEmpty(customsOptionType))
+            {
+                if (string.Equals(customsOptionType, "other", StringComparison.OrdinalIgnoreCase))
+                {
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.Other;
+                }
+                else
+                {
+                    // The only other option type is Faulty item so just hard code the type here
+                    shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.FaultyItem;
+                }
+
+                shipment.FedEx.CustomsOptionsDesription = customsOptionDescription;
+            }
+            else
+            {
+                shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
+            }
         }
     }
 }
