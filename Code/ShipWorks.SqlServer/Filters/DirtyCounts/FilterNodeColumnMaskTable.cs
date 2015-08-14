@@ -42,5 +42,6 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
         SearsOrder = 29,
         BigCommerceOrderItem = 30,
         InsurancePolicy = 31,
+        GrouponOrder = 32
     }
 }
