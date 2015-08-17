@@ -787,7 +787,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         {
             bool hasAlcohol = ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "alcohol") ||
                                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
-                               (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol"));
+                               (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol") ||
+                               (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "alcohol"));
 
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
