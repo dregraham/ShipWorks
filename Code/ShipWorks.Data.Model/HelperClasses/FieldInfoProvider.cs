@@ -331,6 +331,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("AmazonOrderEntity", "AmazonCommission", typeof(System.Decimal), false, false, false, false,  (int)AmazonOrderFieldIndex.AmazonCommission, 0, 4, 19);
 			base.AddElementFieldInfo("AmazonOrderEntity", "FulfillmentChannel", typeof(System.Int32), false, false, false, false,  (int)AmazonOrderFieldIndex.FulfillmentChannel, 0, 0, 10);
 			base.AddElementFieldInfo("AmazonOrderEntity", "IsPrime", typeof(System.Int32), false, false, false, false,  (int)AmazonOrderFieldIndex.IsPrime, 0, 0, 10);
+			base.AddElementFieldInfo("AmazonOrderEntity", "EarliestExpectedDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmazonOrderFieldIndex.EarliestExpectedDeliveryDate, 0, 0, 0);
+			base.AddElementFieldInfo("AmazonOrderEntity", "LatestExpectedDeliveryDate", typeof(Nullable<System.DateTime>), false, false, false, true,  (int)AmazonOrderFieldIndex.LatestExpectedDeliveryDate, 0, 0, 0);
 		}
 		/// <summary>Inits AmazonOrderItemEntity's FieldInfo objects</summary>
 		private void InitAmazonOrderItemEntityInfos()

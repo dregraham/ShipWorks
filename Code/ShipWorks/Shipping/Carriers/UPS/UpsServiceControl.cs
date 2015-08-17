@@ -213,15 +213,22 @@ namespace ShipWorks.Shipping.Carriers.UPS
 
                 var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
                 IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
-                List<UpsServiceType> upsServiceTypesToLoad = carrierServiceManager.GetServices(overriddenShipment)
-                    .Select(s => s.UpsServiceType).Intersect(availableServices).ToList();
+
+                // Get a list of service types that are valid for the overriddenShipments
+                List<UpsServiceType> validServiceTypes = carrierServiceManager.GetServices(overriddenShipment)
+                    .Select(s => s.UpsServiceType).ToList();
+
+                // only include service types that are valid and enabled (availalbeServices)
+                List<UpsServiceType> upsServiceTypesToLoad = validServiceTypes.Intersect(availableServices).ToList();
 
                 if (LoadedShipments.Any())
                 {
                     // Always include the service type that the shipment is currently configured in the 
                     // event the shipment was configured prior to a service being excluded
                     // Always include the service that the shipments are currently configured with
-                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service).Distinct();
+                    // Only if the ServiceType is valid for the shipment type
+                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service)
+                        .Intersect(validServiceTypes).Distinct();
                     upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
                 }
 

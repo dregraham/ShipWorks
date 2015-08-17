@@ -1104,7 +1104,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
 
                 if (exceptionMessage.Length > 0)
                 {
-                    exceptionMessage += "Package dimensions must be greater than 0 and not 1x1x1.  ";
+                    exceptionMessage += "Package dimensions must be 1 or greater and not 1x1x1.  ";
                     throw new InvalidPackageDimensionsException(exceptionMessage);
                 }
             }

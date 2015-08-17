@@ -169,6 +169,9 @@ namespace ShipWorks.Stores.Platforms.Amazon
             order.OrderDate = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:PurchaseDate", "")).ToUniversalTime();
             order.OnlineLastModified = DateTime.Parse(XPathUtility.Evaluate(xpath, "amz:LastUpdateDate", "")).ToUniversalTime();
 
+            order.EarliestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:EarliestDeliveryDate", ""));
+            order.LatestExpectedDeliveryDate = ParseDeliveryDate(XPathUtility.Evaluate(xpath, "amz:LatestDeliveryDate", ""));
+            
             // set the status
             order.OnlineStatus = orderStatus;
             order.OnlineStatusCode = orderStatus;
@@ -176,7 +179,7 @@ namespace ShipWorks.Stores.Platforms.Amazon
             // Fulfilled by
             string fulfillmentChannel = XPathUtility.Evaluate(xpath, "amz:FulfillmentChannel", "");
             order.FulfillmentChannel = (int) TranslateFulfillmentChannel(fulfillmentChannel);
-
+            
             // IsPrime
             string isPrime = XPathUtility.Evaluate(xpath, "amz:IsPrime", "");
             order.IsPrime = (int)TranslateIsPrime(isPrime);
@@ -496,5 +499,19 @@ namespace ShipWorks.Stores.Platforms.Amazon
                 }
             }
         }
+
+        /// <summary>
+        /// Sets delivery date from string, returns null if parse failed
+        /// </summary>
+        private static DateTime? ParseDeliveryDate(string date)
+        {
+            DateTime parsedDate;
+            if (DateTime.TryParse(date, out parsedDate))
+            {
+                return parsedDate.ToUniversalTime();
+            }
+
+            return null;
+        } 
     }
 }

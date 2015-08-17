@@ -1,35 +1,35 @@
-﻿<Dictionary>
-	<Words>
-		<Recognized>
-			<Word>stylesheet</Word>
-			<Word>GotDotNet</Word>
-			<Word>Interapptive</Word>
-			<Word>Interapptive®</Word>
-			<Word>ShipWorks</Word>
-			<Word>Mdac</Word>
-			<Word>Dlg</Word>
-			<Word>Qat</Word>
-			<Word>Prov</Word>
-			<Word>Renderer</Word>
-			<Word>Refetch</Word>
-			<Word>sysadmin</Word>
-			<Word>Endicia</Word>
-			<Word>Infopia</Word>
-			<Word>Miva</Word>
-			<Word>FedEx</Word>
-			<Word>Marketworks</Word>
-			<Word>CreLoaded</Word>
-			<Word>xpath</Word>
-			<Word>sapassword</Word>
-			<Word>prefetch</Word>
-			<Word>Builtin</Word>
-			<Word>eBay</Word>
-			<Word>Infopia</Word>
-			<Word>Magento</Word>
-			<Word>Ameri</Word>
-			<Word>AmeriCommerce</Word>
-			<Word>Volusion</Word>
-			<Word>Udi</Word>
+<Dictionary>
+  <Words>
+    <Recognized>
+      <Word>stylesheet</Word>
+      <Word>GotDotNet</Word>
+      <Word>Interapptive</Word>
+      <Word>Interapptive�</Word>
+      <Word>ShipWorks</Word>
+      <Word>Mdac</Word>
+      <Word>Dlg</Word>
+      <Word>Qat</Word>
+      <Word>Prov</Word>
+      <Word>Renderer</Word>
+      <Word>Refetch</Word>
+      <Word>sysadmin</Word>
+      <Word>Endicia</Word>
+      <Word>Infopia</Word>
+      <Word>Miva</Word>
+      <Word>FedEx</Word>
+      <Word>Marketworks</Word>
+      <Word>CreLoaded</Word>
+      <Word>xpath</Word>
+      <Word>sapassword</Word>
+      <Word>prefetch</Word>
+      <Word>Builtin</Word>
+      <Word>eBay</Word>
+      <Word>Infopia</Word>
+      <Word>Magento</Word>
+      <Word>Ameri</Word>
+      <Word>AmeriCommerce</Word>
+      <Word>Volusion</Word>
+      <Word>Udi</Word>
       <Word>Resumable</Word>
       <Word>tkn</Word>
       <Word>etsy</Word>
@@ -60,11 +60,12 @@
       <Word>MainForm</Word>
       <Word>FIMS</Word>
       <Word>Fims</Word>
-		</Recognized>
+      <Word>Groupon</Word>
+    </Recognized>
     <Compound>
       <Term CompoundAlternate="FileName">filename</Term>
     </Compound>
-    <DiscreteExceptions> 
+    <DiscreteExceptions>
       <Term>ShipWorks</Term>
       <Term>CreLoaded</Term>
       <Term>OnLine</Term>
@@ -72,21 +73,21 @@
       <Term>AmeriCommerce</Term>
       <Term>MainForm</Term>
     </DiscreteExceptions>
-		<Deprecated>
-			<Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
-		</Deprecated>
-	</Words>
-	<Acronyms>
-		<CasingExceptions>
-			<Acronym>Pi</Acronym>
-			<Acronym>UPS</Acronym>
-			<Acronym>eBay</Acronym>
-			<Acronym>ID</Acronym>
-			<Acronym>os</Acronym>
-			<Acronym>XPath</Acronym>
-			<Acronym>OK</Acronym>
-			<Acronym>Oz</Acronym>
-			<Acronym>Td</Acronym>
-		</CasingExceptions>
-	</Acronyms>
+    <Deprecated>
+      <Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
+    </Deprecated>
+  </Words>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>Pi</Acronym>
+      <Acronym>UPS</Acronym>
+      <Acronym>eBay</Acronym>
+      <Acronym>ID</Acronym>
+      <Acronym>os</Acronym>
+      <Acronym>XPath</Acronym>
+      <Acronym>OK</Acronym>
+      <Acronym>Oz</Acronym>
+      <Acronym>Td</Acronym>
+    </CasingExceptions>
+  </Acronyms>
 </Dictionary>

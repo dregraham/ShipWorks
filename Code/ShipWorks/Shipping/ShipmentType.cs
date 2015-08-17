@@ -1251,7 +1251,7 @@ namespace ShipWorks.Shipping
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         public virtual bool DimensionsAreValid(double length, double width, double height)
         {
-            if (length <= 0 || width <= 0 || height <= 0)
+            if (length <= 0 || width <= 0 || height <= 0) 
             {
                 return false;
             }

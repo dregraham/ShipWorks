@@ -1217,5 +1217,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             adapter.UpdateEntitiesDirectly(new FedExShipmentEntity { RequestedLabelFormat = newLabelFormat }, bucket);
         }
+
+        /// <summary>
+        /// Check to see if a package dimensions are valid for carriers that require dimensions.
+        /// </summary>
+        public override bool DimensionsAreValid(double length, double width, double height)
+        {
+            if (length < 1 || width < 1 || height < 1)
+            {
+                return false;
+            }
+
+            return base.DimensionsAreValid(length, width, height);
+        }
     }
 }

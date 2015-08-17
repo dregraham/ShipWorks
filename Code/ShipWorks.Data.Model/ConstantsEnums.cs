@@ -386,6 +386,10 @@ namespace ShipWorks.Data.Model
 		FulfillmentChannel,
 		///<summary>IsPrime. </summary>
 		IsPrime,
+		///<summary>EarliestExpectedDeliveryDate. </summary>
+		EarliestExpectedDeliveryDate,
+		///<summary>LatestExpectedDeliveryDate. </summary>
+		LatestExpectedDeliveryDate,
 		/// <summary></summary>
 		AmountOfFields
 	}

@@ -155,6 +155,22 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Amazon
                         },
 
+                    new GridColumnDefinition("{D529CF7A-B27B-4C0C-97A0-8E72FA966B71}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"}, 
+                        "Latest Delivery", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
+                        AmazonOrderFields.LatestExpectedDeliveryDate)
+                        {
+                            StoreTypeCode = StoreTypeCode.Amazon
+                        },
+
+                    new GridColumnDefinition("{1D15FDDE-6D09-4B74-BB34-32031EB89C08}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"}, 
+                        "Earliest Delivery", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
+                        AmazonOrderFields.EarliestExpectedDeliveryDate)
+                        {
+                            StoreTypeCode = StoreTypeCode.Amazon
+                        },
+
                     new GridColumnDefinition("{94454F08-0E76-4777-96DD-F184ED77AFFD}", true,
                         new GridOrderNumberDisplayType(), "Groupon Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.Groupon, "AB-1234567-1234567"),
                         GrouponOrderFields.GrouponOrderID)

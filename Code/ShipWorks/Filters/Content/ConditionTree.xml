@@ -90,6 +90,8 @@
         <Condition identifier="Amazon.OrderID" />
         <Condition identifier="Amazon.FulfillmentChannel" displayAs="Amazon Fulfilled By" />
         <Condition identifier="Amazon.IsPrime" displayAs="Amazon Prime" />
+        <Condition identifier="Amazon.EarliestExpectedDeliveryDate" displayAs="Amazon Earliest Delivery" />
+        <Condition identifier="Amazon.LatestExpectedDeliveryDate" displayAs="Amazon Latest Delivery" />
         <Condition identifier="ChannelAdvisorOrder.CustomOrderIdentifier" />
         <Condition identifier="ChannelAdvisorOrder.ShippingStatus" />
         <Condition identifier="ChannelAdvisorOrder.PaymentStatus" />
@@ -102,6 +104,7 @@
         <Condition identifier="EbayOrder.GspEligible" />
         <Condition identifier="EtsyOrder.WasPaid" />
         <Condition identifier="EtsyOrder.WasShipped" />
+        <Condition identifier="Groupon.OrderID" />
         <Condition identifier="MarketplaceAdvisorOrder.InvoiceNumber" />
         <Condition identifier="MarketplaceAdvisorOrder.SellerOrderNumber" />
         <Condition identifier="NeweggOrder.InvoiceNumber" />
