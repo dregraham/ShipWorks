@@ -1550,10 +1550,10 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnShipmentServiceChanged(object sender, EventArgs e)
         {
+            UpdateCustomsDisplay(uiDisplayedShipments);
+
             if (tabControl.Contains(tabPageCustoms))
             {
-                UpdateCustomsDisplay(uiDisplayedShipments);
-
                 CustomsControl.LoadShipments(uiDisplayedShipments, true);
             }
         }
