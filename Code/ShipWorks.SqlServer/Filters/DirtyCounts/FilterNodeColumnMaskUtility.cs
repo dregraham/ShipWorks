@@ -53,6 +53,8 @@ namespace ShipWorks.SqlServer.Filters.DirtyCounts
             tableBitCount[(int) FilterNodeColumnMaskTable.SearsOrder] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.BigCommerceOrderItem] = 6;
             tableBitCount[(int) FilterNodeColumnMaskTable.InsurancePolicy] = 10;
+            tableBitCount[(int) FilterNodeColumnMaskTable.GrouponOrder] = 2;
+
 
             tableBitOffset = new int[Enum.GetValues(typeof(FilterNodeColumnMaskTable)).Length];
             tableBitOffset[0] = 0;

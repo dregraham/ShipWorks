@@ -1112,6 +1112,7 @@
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
@@ -11143,6 +11144,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.0.sql" />
