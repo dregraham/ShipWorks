@@ -4,12 +4,16 @@ require "securerandom"
 require 'date'
 require 'fileutils'
 
+def program_files
+	ENV["PROGRAMFILES(x86)"] || ENV["PROGRAMFILES"]
+end
+
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
 		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
-		msbuild.command = "C:/Program Files (x86)/MSBuild/14.0/Bin/msbuild.exe"
-		msbuild.properties = { TreatWarningsAsErrors: true }
+		msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
+		#msbuild.properties = { TreatWarningsAsErrors: true }
 	end
 
 	config.mstest do |mstest|
