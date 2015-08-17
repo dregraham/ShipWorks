@@ -27,13 +27,17 @@ end
 @revisionFilePath = "\\\\INTFS01\\Development\\CruiseControl\\Configuration\\Versioning\\ShipWorks\\NextRevision.txt"
 
 desc "Cleans and builds the solution with the debug config"
-task :rebuild, [:forCI] => ["build:clean", "build:debug"] do |t, args|
-end
+task :rebuild, [:forCI] => ["build:clean", "build:debug"]
 
 ########################################################################
 ## Tasks to build in debug and release modes (using Albacore library)
 ########################################################################
 namespace :build do
+	desc "Restore nuget packages"
+	task :restore do
+		`build/nuget.exe restore ShipWorks.sln`
+	end
+
 	desc "Cleans the ShipWorks solution"
 	msbuild :clean do |msb|
 		print "Cleaning solution...\r\n\r\n"
@@ -41,7 +45,7 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks in the Debug configuration"
-	msbuild :debug, :forCI do |msb, args|
+	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
 		
 		if args != nil and args.forCI != nil and args.forCI == 'true'			
 			puts 'Updating config file for integration tests to run on CI server...'
@@ -86,7 +90,7 @@ namespace :build do
 	end
 
 	desc "Build ShipWorks in the Release configuration"
-	msbuild :release => "build:clean" do |msb|
+	msbuild :release => ["build:clean", "build:restore"] do |msb|
 		print "Building solution with the release config...\r\n\r\n"
 
 		msb.properties :configuration => :Release, TreatWarningsAsErrors: true
