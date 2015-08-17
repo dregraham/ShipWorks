@@ -10,7 +10,7 @@ namespace ShipWorks.Startup
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             IoC.Initialize(typeof(ShippingModule).Assembly);
 

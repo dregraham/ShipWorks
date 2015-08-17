@@ -77,27 +77,27 @@ namespace :build do
 		end 
 		print "Building solution with the debug config...\r\n\r\n"
 
-		msb.properties :configuration => :Debug
+		msb.properties :configuration => :Debug, TreatWarningsAsErrors: true
 		msb.targets :Build
 	end
 
 	desc "Build ShipWorks in the Release configuration"
-	msbuild :release do |msb|
+	msbuild :release => "build:clean" do |msb|
 		print "Building solution with the release config...\r\n\r\n"
 
-		msb.properties :configuration => :Release
-		msb.targets :Clean, :Build
-	end
-	
-	desc "Runs code analysis"
-	msbuild :analyze do |msb|
-		print "Running code analysis...\r\n\r\n"
-		
-		msb.verbosity = "quiet"
-		msb.properties :configuration => :Debug, :RunCodeAnalysis => true
-		msb.parameters = "/p:warn=0"
+		msb.properties :configuration => :Release, TreatWarningsAsErrors: true
 		msb.targets :Build
 	end
+	
+	#desc "Runs code analysis"
+	#msbuild :analyze do |msb|
+	#	print "Running code analysis...\r\n\r\n"
+	#	
+	#	msb.verbosity = "quiet"
+	#	msb.properties :configuration => :Debug, :RunCodeAnalysis => true
+	#	msb.parameters = "/p:warn=0"
+	#	msb.targets :Build
+	#end
 		
 	desc "Build an unsigned Debug installer for local testing"
 	task :debug_installer => :debug do

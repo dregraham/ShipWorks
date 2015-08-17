@@ -242,6 +242,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -311,6 +312,9 @@
       <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
       <Name>ShipWorks.SqlServer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\SonarLint.1.1.0\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
