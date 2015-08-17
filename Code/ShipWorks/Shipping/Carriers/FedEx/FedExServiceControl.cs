@@ -616,6 +616,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
+
+
+            RaiseShipmentServiceChanged();
         }
 
         /// <summary>
