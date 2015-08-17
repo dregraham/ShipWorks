@@ -6,9 +6,10 @@ require 'fileutils'
 
 Albacore.configure do |config|
 	config.msbuild do |msbuild|
-		msbuild.use :net40
 		msbuild.parameters = "/m:3"
 		msbuild.solution = "ShipWorks.sln"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+		msbuild.command = "C:/Program Files (x86)/MSBuild/14.0/Bin/msbuild.exe"
+		msbuild.properties = { TreatWarningsAsErrors: true }
 	end
 
 	config.mstest do |mstest|
@@ -237,20 +238,11 @@ namespace :test do
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 
-		msbuild.use :net45
 		msbuild.parameters = "/m:3"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
-		#msbuild.parameters "/"
 		msbuild.properties :configuration => :Debug
-
-		#mstest.parameters = "/noisolation", "/detail:errormessage",
-		#	"/testContainer:./Code/ShipWorks.Tests/bin/Debug/ShipWorks.Tests.dll", 
-		#	"/testContainer:./Code/ShipWorks.Shipping.Tests/bin/Debug/ShipWorks.Shipping.Tests.dll", 
-		#	"/resultsfile:TestResults/units-results.trx"
 	end
 
-
-	
 	desc "Execute integration tests"
 	mstest :integration, :categoryFilter do |mstest, args|
 		# Delete results from any previous test runs

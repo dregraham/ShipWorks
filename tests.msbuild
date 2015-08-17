@@ -1,5 +1,5 @@
 <Project
-    DefaultTargets="Test"
+    DefaultTargets="Unit"
     xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <UsingTask
@@ -7,12 +7,16 @@
     TaskName="Xunit.Runner.MSBuild.xunit" />
 
   <ItemGroup>
-    <!-- <TestAssemblies Include="**\bin\$(Configuration)\*.tests.dll" /> -->
-    <TestAssemblies Include="Code\ShipWorks.Shipping.Tests\bin\$(Configuration)\*.tests.dll" />
+    <UnitAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
+    <IntegrationAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
   </ItemGroup>
 
-  <Target Name="Test">
-    <xunit Assemblies="@(TestAssemblies)" />
+  <Target Name="Unit">
+    <xunit Assemblies="@(UnitAssemblies)" />
+  </Target>
+
+  <Target Name="Integration">
+    <xunit Assemblies="@(IntegrationAssemblies)" />
   </Target>
 
 </Project>
