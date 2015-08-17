@@ -617,7 +617,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             UpdateSectionDescription();
             UpdateSaturdayAvailability();
 
-
+            // To support showing/hiding the customs tab for SmartPost, we need to raise the shipment service changed event.
             RaiseShipmentServiceChanged();
         }
 
