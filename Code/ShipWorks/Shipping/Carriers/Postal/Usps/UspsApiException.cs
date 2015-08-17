@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.Services.Protocols;
 using System.Globalization;
 using System.Xml;
 using System.Text.RegularExpressions;
+using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps
 {
@@ -60,12 +59,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                 }
 
                 message = message.Replace("Invalid SOAP message due to XML Schema validation failure.", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2008/01/swsim/swsimv1:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2011/9/swsim/swsimv18:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2011/11/swsim/swsimv20:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2013/05/swsim/swsimv29:", "");
-                message = message.Replace("http://stamps.com/xml/namespace/2013/05/swsim/swsimv36:", "");
-            
+                message = RemoveNamespaceFromMessage(message);
+
                 string leftOver = string.Empty;
 
                 int swsIndex = message.IndexOf(" SWS");
@@ -103,6 +98,25 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
 
                 return message.Trim();
             }
+        }
+
+        /// <summary>
+        /// Remove the namespace from the message.
+        /// </summary>
+        private static string RemoveNamespaceFromMessage(string message)
+        {
+            SoapDocumentMethodAttribute soapDocumentMethodAttribute = UspsWebClient.WebServiceType.
+                GetMethod("AuthenticateUser").
+                GetCustomAttributes(true).
+                OfType<SoapDocumentMethodAttribute>().
+                FirstOrDefault();
+
+            if (soapDocumentMethodAttribute != null)
+            {
+                message = message.Replace(soapDocumentMethodAttribute.ResponseNamespace + ":", string.Empty);
+            }
+
+            return message;
         }
 
         /// <summary>

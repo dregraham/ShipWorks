@@ -100,6 +100,14 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         }
 
         /// <summary>
+        /// Returns the current type of the web service.  Used to remove the namespace in exceptions received from Stamps.
+        /// </summary>
+        public static Type WebServiceType
+        {
+            get { return typeof (SwsimV49); }
+        }
+
+        /// <summary>
         /// Create the web service instance with the appropriate URL
         /// </summary>
         private SwsimV49 CreateWebService(string logName, LogActionType logActionType)
