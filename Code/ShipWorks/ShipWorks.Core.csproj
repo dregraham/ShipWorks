@@ -774,6 +774,7 @@
     </Compile>
     <Compile Include="Filters\Management\FilterNodeEditedMessage.cs" />
     <Compile Include="Filters\Management\FilterNodeReferenceRepository.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Shipping\AddressConversions.cs" />
     <Compile Include="Shipping\BilledType.cs" />
     <Compile Include="Shipping\CarrierConfigurationShipmentRefresher.cs" />
@@ -10975,7 +10976,7 @@
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\..\..\Users\mmulaosmanovic\Desktop\sonarlint-vs-master\src\SonarLint\bin\Debug\SonarLint.dll" />
+    <Analyzer Include="..\..\Components\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
