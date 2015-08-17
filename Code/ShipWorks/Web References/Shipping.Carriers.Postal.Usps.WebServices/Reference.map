@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/work/ShipWorks3x/Code/ShipWorks/Shipping/Carriers/Postal/Usps/Wsdl/swsimv46.wsdl" filename="swsimv46.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="file:///C:/git/ShipWorks3x/Code/ShipWorks/Web References/Shipping.Carriers.Postal.Usps.WebServices.v49/swsimv49.wsdl" filename="swsimv49.wsdl" />
   </Results>
 </DiscoveryClientResultsFile>

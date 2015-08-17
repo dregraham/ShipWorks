@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         /// <param name="uspsCodewordType">Type of the USPS codeword.</param>
         /// <param name="questionText">The question text.</param>
-        public CodewordDropdownItem(CodewordType2 uspsCodewordType, string questionText)
+        public CodewordDropdownItem(CodewordType uspsCodewordType, string questionText)
         {
             CodewordType = uspsCodewordType;
             QuestionText = questionText;
@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <value>
         /// The type of the codeword.
         /// </value>
-        public CodewordType2 CodewordType { get; set; }
+        public CodewordType CodewordType { get; set; }
 
         /// <summary>
         /// Gets or sets the question text.
