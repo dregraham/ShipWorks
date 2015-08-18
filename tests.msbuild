@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <UnitsAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
-    <IntegrationAssemblies Include="Code\*.Tests\bin\$(Configuration)\*.tests.dll" />
+    <IntegrationAssemblies Include="Code\*.Tests.Integration\bin\$(Configuration)\*.tests.integration.dll" />
   </ItemGroup>
 
   <Target Name="Units">
@@ -16,7 +16,9 @@
   </Target>
 
   <Target Name="Integration">
-    <xunit Assemblies="@(IntegrationAssemblies)" Xml="TestResults\integration.xml" />
+    <xunit Assemblies="@(IntegrationAssemblies)" 
+      Xml="TestResults\integration.xml"
+      IncludeTraits="$(IncludeTraits)" />
   </Target>
 
 </Project>

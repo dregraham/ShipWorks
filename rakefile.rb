@@ -256,7 +256,8 @@ namespace :test do
 		categoryParameter = ""
 		if args != nil and args.categoryFilter != nil and args.categoryFilter != ""
 			# We need to filter the tests based on the categories provided
-			categoryParameter = "/category:" + args.categoryFilter
+			#categoryParameter = "/category:" + args.categoryFilter
+			msbuild.parameters = "/p:IncludeTraits=\"Category=#{args.categoryFilter}\""
 		end
 		
 		puts categoryParameter		
