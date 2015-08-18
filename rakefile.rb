@@ -244,7 +244,7 @@ namespace :test do
 
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
-		msbuild.targets :Unit
+		msbuild.targets :Units
 	end
 
 	desc "Execute integration tests"
