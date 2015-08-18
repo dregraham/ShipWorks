@@ -221,12 +221,12 @@ end
 namespace :test do
 
 	desc "Execute all unit tests and integration tests"
-	task :all do 
-		puts "Starting ShipWorks unit tests...\r\n\r\n"
-		Rake::Task['test:units'].execute
+	task :all => ["test:units", "test:integration"] do 
+		#puts "Starting ShipWorks unit tests...\r\n\r\n"
+		#Rake::Task['test:units'].execute
 		
-		puts "Starting ShipWorks integration tests...\r\n\r\n"
-		Rake::Task['test:integration'].execute
+		#puts "Starting ShipWorks integration tests...\r\n\r\n"
+		#Rake::Task['test:integration'].execute
 		
 		# If we ever wanted to include UI/acceptance tests in the build we would add
 		# another section below and uncomment the following two lines
