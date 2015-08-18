@@ -198,6 +198,7 @@ def DeleteOldTestRuns(testType)
 	print "Deleting previous #{testType} results...\r\n\r\n"
 	Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 	File.delete("TestResults/#{testType}-results.trx") if File.exist?("TestResults/#{testType}-results.trx")
+	File.delete("TestResults/#{testType}.xml") if File.exist?("TestResults/#{testType}.xml")
 		
 	# Delete previous test result directories to keep disk space under control otherwise
 	# there could be GBs of test result files hanging around since each test run contains 
