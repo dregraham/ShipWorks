@@ -16,6 +16,7 @@ using ShipWorks.Shipping.Insurance;
 using Interapptive.Shared.Net;
 using System.Xml;
 using ShipWorks.Shipping.Settings;
+using Interapptive.Shared.Business;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
@@ -151,6 +152,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             if (ShippingSettings.Fetch().FedExFimsEnabled)
             {
                 serviceTypes.Add(FedExServiceType.FedExFims);
+            }
+
+            if (shipments.All(s => IsSmartPostEnabled(s) && s.ShipPerson.IsUSInternationalTerritory()))
+            {
+                // SmartPost service is allowed between US and US Territories
+                serviceTypes.Add(FedExServiceType.SmartPost);
             }
 
             return serviceTypes;

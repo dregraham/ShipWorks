@@ -1230,5 +1230,21 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             return base.DimensionsAreValid(length, width, height);
         }
+
+        /// <summary>
+        /// Indicates if customs forms may be required to ship the shipment based on the
+        /// shipping address.
+        /// </summary>
+        protected override bool IsCustomsRequiredByShipment(ShipmentEntity shipment)
+        {
+            if (FedExUtility.IsSmartPostEnabled(shipment) 
+                && Geography.IsUSInternationalTerritory(shipment.ShipPerson)
+                && ((FedExServiceType)shipment.FedEx.Service) == FedExServiceType.SmartPost)
+            {
+                return false;
+            }
+
+            return base.IsCustomsRequiredByShipment(shipment);
+        }
     }
 }

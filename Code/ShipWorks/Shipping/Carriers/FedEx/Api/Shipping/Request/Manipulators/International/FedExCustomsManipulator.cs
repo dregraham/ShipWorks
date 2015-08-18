@@ -49,7 +49,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shipmentCurrencyType = GetShipmentCurrencyType(request.ShipmentEntity);
 
-            if (!new FedExShipmentType().IsDomestic(request.ShipmentEntity))
+            FedExShipmentType fedExShipmentType = new FedExShipmentType();
+
+            if (fedExShipmentType.IsCustomsRequired(request.ShipmentEntity))
             {
                 // Obtain a handle to the customs detail
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
