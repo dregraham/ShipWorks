@@ -15,10 +15,6 @@ Albacore.configure do |config|
 		msbuild.command = "#{program_files}/MSBuild/14.0/Bin/msbuild.exe"
 		#msbuild.properties = { TreatWarningsAsErrors: true }
 	end
-
-	config.mstest do |mstest|
-		mstest.command = "C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\Common7\\IDE\\mstest.exe"
-	end
 end
 
 @innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
@@ -70,7 +66,7 @@ namespace :build do
 			end
 			
 			# Read in the app settings for the integration test project
-			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration.MSTest/App.config"
+			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration/App.config"
 			originalAppSettings = File.read(appConfigFilePath)
 			match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
 			puts match
@@ -220,7 +216,7 @@ def DeleteOldTestRuns(testType)
 end
 
 ########################################################################
-## Tasks to run unit tests with MsTest (using Albacore library)
+## Tasks to run unit tests (using Albacore library)
 ########################################################################
 namespace :test do
 
@@ -246,13 +242,13 @@ namespace :test do
 		print "Executing ShipWorks unit tests...\r\n\r\n"
 		Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
 
-		msbuild.parameters = "/m:3"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
+		msbuild.targets :Unit
 	end
 
 	desc "Execute integration tests"
-	mstest :integration, :categoryFilter do |mstest, args|
+	msbuild :integration, :categoryFilter do |msbuild, args|
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("integration")
 		
@@ -265,7 +261,10 @@ namespace :test do
 		puts categoryParameter		
 		print "Category Parameter" + categoryParameter
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
-		mstest.parameters = "/detail:errorstacktrace", "/testContainer:./Code/ShipWorks.Tests.Integration.MSTest/bin/Debug/ShipWorks.Tests.Integration.MSTest.dll", categoryParameter, "/resultsfile:TestResults/integration-results.trx"
+
+		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
+		msbuild.properties :configuration => :Debug
+		msbuild.targets :Integration
 	end
 end
 
