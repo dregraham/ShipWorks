@@ -11,8 +11,8 @@
     <ProjectGuid>{57D1AA0E-1003-48F3-B59E-07B3EBFD1F68}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ShipWorks.Tests.Integration.MSTest</RootNamespace>
-    <AssemblyName>ShipWorks.Tests.Integration.MSTest</AssemblyName>
+    <RootNamespace>ShipWorks.Tests.Integration</RootNamespace>
+    <AssemblyName>ShipWorks.Tests.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
