@@ -16,4 +16,5 @@ PLATFORMS
 
 DEPENDENCIES
   albacore (~> 1.0)
+  nokogiri (~> 1.6)
   rake (~> 10.4)

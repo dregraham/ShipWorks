@@ -3,6 +3,7 @@ require 'win32/registry'
 require "securerandom"
 require 'date'
 require 'fileutils'
+require 'nokogiri'
 
 def program_files
 	ENV["PROGRAMFILES(x86)"] || ENV["PROGRAMFILES"]
@@ -67,16 +68,18 @@ namespace :build do
 			
 			# Read in the app settings for the integration test project
 			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration/App.config"
-			originalAppSettings = File.read(appConfigFilePath)
-			match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
-			puts match
-			updatedAppSettings = originalAppSettings.gsub(/#{match}/, '<add key="ShipWorksInstanceGuid" value="' + instanceGuid + '"/>')
+			#originalAppSettings = File.read(appConfigFilePath)
+			#match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
+			#puts match
+			#updatedAppSettings = originalAppSettings.gsub(/#{match}/, '<add key="ShipWorksInstanceGuid" value="' + instanceGuid + '"/>')
 			
+			replace_instance_guid appConfigFilePath, instanceGuid
+
 			# Write the updated app.config settings back to disk, so we connect to the 
 			# correct database in our integration tests
-			File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }	
+			#File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }	
 			
-			puts 'Updated configuration file: ' + updatedAppSettings
+			#puts 'Updated configuration file: ' + updatedAppSettings
 			puts 'config file has been updated'
 		end 
 		print "Building solution with the debug config...\r\n\r\n"
@@ -92,16 +95,6 @@ namespace :build do
 		msb.properties :configuration => :Release, TreatWarningsAsErrors: true
 		msb.targets :Build
 	end
-	
-	#desc "Runs code analysis"
-	#msbuild :analyze do |msb|
-	#	print "Running code analysis...\r\n\r\n"
-	#	
-	#	msb.verbosity = "quiet"
-	#	msb.properties :configuration => :Debug, :RunCodeAnalysis => true
-	#	msb.parameters = "/p:warn=0"
-	#	msb.targets :Build
-	#end
 		
 	desc "Build an unsigned Debug installer for local testing"
 	task :debug_installer => :debug do
@@ -190,6 +183,21 @@ namespace :build do
 		# so the build will increment the version in preparation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
 	end	
+
+	private 
+
+	def replace_instance_guid(appConfigFilePath, instanceGuid)
+		destinationXml = File.open appConfigFilePath do |f|
+			Nokogiri::XML(f)
+		end
+
+		# Get the connection string we'll be using from the test config file
+		destinationXml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
+
+		destinationXml = File.open appConfigFilePath, "w" do |f|
+			f << destinationXml.to_s
+		end
+	end
 end
 
 
