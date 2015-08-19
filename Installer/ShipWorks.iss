@@ -127,6 +127,9 @@ Source: {#AppArtifacts}\NAudio.dll; DestDir: {app}; Flags: overwritereadonly ign
 Source: {#AppArtifacts}\Common.Logging.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Common.Logging.Core.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\Common.Logging.Log4Net1213.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Autofac.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Autofac.Extras.Attributed.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
+Source: {#AppArtifacts}\Autofac.Integration.Mef.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion
 Source: {#AppArtifacts}\x64\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: Is64BitInstallMode
 Source: {#AppArtifacts}\Win32\ShipWorks.Native.dll; DestDir: {app}; Flags: overwritereadonly ignoreversion; Check: not Is64BitInstallMode
 
