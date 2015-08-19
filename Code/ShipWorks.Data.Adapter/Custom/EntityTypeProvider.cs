@@ -188,6 +188,7 @@ namespace ShipWorks.Data.Adapter.Custom
 				case "ExcludedPackageTypeEntity": return EntityType.ExcludedPackageTypeEntity;
 				case "ExcludedServiceTypeEntity": return EntityType.ExcludedServiceTypeEntity;
 				case "AmazonAccountEntity": return EntityType.AmazonAccountEntity;
+				case "AmazonShipmentEntity": return EntityType.AmazonShipmentEntity;
 				}
 			
 			throw new ArgumentException(string.Format("Entity type name '{0}' is not valid.", entityTypeName));
