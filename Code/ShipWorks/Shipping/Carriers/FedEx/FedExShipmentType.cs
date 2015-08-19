@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     /// <summary>
     /// FedEx implementation of ShipmentType
     /// </summary>
-    public class FedExShipmentType : ShipmentType
+    public class FedExShipmentType : ShipmentType, ICustomsRequired
     {
         private ICarrierSettingsRepository settingsRepository;
         

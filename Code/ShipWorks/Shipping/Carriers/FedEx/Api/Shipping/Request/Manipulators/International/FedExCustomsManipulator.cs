@@ -16,21 +16,22 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
     /// </summary>
     public class FedExCustomsManipulator : FedExShippingRequestManipulatorBase
     {
+        private readonly ICustomsRequired customsRequired;
         private string shipmentCurrencyType;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCustomsManipulator" /> class.
         /// </summary>
         public FedExCustomsManipulator()
-            : this(new FedExSettings(new FedExSettingsRepository()))
+            : this(new FedExSettings(new FedExSettingsRepository()), new FedExShipmentType())
         {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExCustomsManipulator" /> class.
         /// </summary>
-        /// <param name="fedExSettings">The fed ex settings.</param>
-        public FedExCustomsManipulator(FedExSettings fedExSettings) : base(fedExSettings)
+        public FedExCustomsManipulator(FedExSettings fedExSettings, ICustomsRequired customsRequired) : base(fedExSettings)
         {
+            this.customsRequired = customsRequired;
         }
 
         /// <summary>
@@ -49,9 +50,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators.In
 
             shipmentCurrencyType = GetShipmentCurrencyType(request.ShipmentEntity);
 
-            FedExShipmentType fedExShipmentType = new FedExShipmentType();
-
-            if (fedExShipmentType.IsCustomsRequired(request.ShipmentEntity))
+            if (customsRequired.IsCustomsRequired(request.ShipmentEntity))
             {
                 // Obtain a handle to the customs detail
                 CustomsClearanceDetail customsDetail = GetCustomsDetail(nativeRequest);
