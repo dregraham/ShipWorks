@@ -331,6 +331,11 @@
     <Message Text="Copying output to application directory:" Importance="high" />
     <Message Text="     %(BuildOutputs.Filename)%(BuildOutputs.Extension)" Importance="high" />
     <Copy SourceFiles="@(BuildOutputs)" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\" />
+    
+    <!-- Copy the native files -->
+    <Copy SourceFiles="..\..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\\x64" />
+    <Copy SourceFiles="..\..\Components\Win32\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\\Win32" />
+    <Copy SourceFiles="..\..\Components\x64\ShipWorks.Native.dll" DestinationFolder="$(MSBuildProjectPath)..\..\Artifacts\Application\" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>
