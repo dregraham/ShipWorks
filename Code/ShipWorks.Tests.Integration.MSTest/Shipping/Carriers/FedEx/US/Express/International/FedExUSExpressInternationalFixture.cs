@@ -271,16 +271,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.Express.
             return shipment;
         }
 
-        /// <summary>
-        /// Setups the returns clearance.
-        /// </summary>
-        private void SetupReturnsClearance(ShipmentEntity shipment)
-        {
-            if (SpecialServiceType1 == "RETURNS_CLEARANCE")
-            {
-                shipment.FedEx.ReturnsClearance = true;
-            }
-        }
+
 
         private void SetupExportDetail(ShipmentEntity shipment)
         {

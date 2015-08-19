@@ -130,6 +130,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
 
         public string SpecialServiceType1 { get; set; }
         public string SpecialServiceType2 { get; set; }
+        public string SpecialServiceType3 { get; set; }
         
         public string CodCollectionCurrency { get; set; }
         public string CodCollectionAmount { get; set; }
@@ -552,6 +553,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         {
             if (!string.IsNullOrEmpty(ReturnType))
             {
+                // RETURNS_CLEARANCE always has a return type, they are only returns if 
                 shipment.ReturnShipment = true;
 
                 // The spreadsheet has return shipment addresses already swapped; since the manipulators swap the
@@ -788,7 +790,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             bool hasAlcohol = ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "alcohol") ||
                                (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "alcohol") ||
                                (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "alcohol") ||
-                               (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "alcohol"));
+                               (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "alcohol") ||
+                               (SpecialServiceType2 != null && SpecialServiceType2.ToLower() == "alcohol"));
 
             foreach (FedExPackageEntity package in shipment.FedEx.Packages)
             {
@@ -824,7 +827,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         /// <param name="shipment">The shipment.</param>
         protected void SetPriortyAlertData(ShipmentEntity shipment)
         {
-            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" || PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
+            if (PackageLineItemSpecialServiceType1 == "PRIORITY_ALERT" || 
+                PackageLineItemSpecialServiceType2 == "PRIORITY_ALERT" || 
+                PackageLineItemSpecialServiceType3 == "PRIORITY_ALERT" || 
+                PackageLineItemPriorityEnhancementType == "PRIORITY_ALERT_PLUS")
             {
                 foreach (FedExPackageEntity package in shipment.FedEx.Packages)
                 {
@@ -1080,7 +1086,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                         break;
                 }
 
-                if (shipment.FedEx.SaturdayDelivery)
+                // Don't do this if the spreadsheet already specifies a timestamp
+                if (shipment.FedEx.SaturdayDelivery && string.IsNullOrEmpty(ShipTimestamp))
                 {
                     // We have a Saturday delivery, so update the ship date accordingly. We don't do this in
                     // the switch statement above to avoid the case where a future delivery may overwrite the 
@@ -1158,14 +1165,15 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
         {
             if ((PackageLineItemSpecialServiceType1 != null && PackageLineItemSpecialServiceType1.ToLower() == "cod") || 
                 (PackageLineItemSpecialServiceType2 != null && PackageLineItemSpecialServiceType2.ToLower() == "cod") || 
-                (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "cod"))
+                (PackageLineItemSpecialServiceType3 != null && PackageLineItemSpecialServiceType3.ToLower() == "cod") ||
+                (SpecialServiceType1 != null && SpecialServiceType1.ToLower() == "cod"))
             {
                 shipment.FedEx.CodEnabled = true;
             }
 
             if (shipment.FedEx.CodEnabled)
             {
-                if (!string.IsNullOrEmpty(this.CodCollectionAmount))
+               if (!string.IsNullOrEmpty(this.CodCollectionAmount))
                 {
                     shipment.FedEx.CodAmount = decimal.Parse(this.CodCollectionAmount);
                 }
@@ -1173,7 +1181,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
                 shipment.FedEx.CodPaymentType = (int) GetCodPaymentType();
                 shipment.FedEx.CodCity = this.CodCity;
                 shipment.FedEx.CodCompany = this.CodCompanyName;
-                string[] personName = this.CodPersonName.Split(new char[] {' '}, 0);
+                string[] personName = this.CodPersonName.Split(new char[] {' '}, 2);
                 if (personName.Length > 0)
                 {
                     shipment.FedEx.CodFirstName = personName[0];
@@ -1394,6 +1402,17 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx
             else
             {
                 shipment.FedEx.CustomsOptionsType = (int)FedExCustomsOptionType.None;
+            }
+        }
+
+        /// <summary>
+        /// Setups the returns clearance.
+        /// </summary>
+        protected void SetupReturnsClearance(ShipmentEntity shipment)
+        {
+            if (SpecialServiceType1 == "RETURNS_CLEARANCE")
+            {
+                shipment.FedEx.ReturnsClearance = true;
             }
         }
     }

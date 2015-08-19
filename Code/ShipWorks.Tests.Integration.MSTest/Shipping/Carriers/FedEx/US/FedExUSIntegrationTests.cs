@@ -28,7 +28,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 if (PopulateTestObject(testObject, FedExUSGroundFixture.UsGroundDomesticMapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
-                    testObject.FedExAccountNumber = fedExTestAccountNumber;
+                    // TransactionID 605733 should use ECOD account.
+                    testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605733" ? ecodAccountNumber : fedExTestAccountNumber;
 
                     testObject.Ship();
                 }
@@ -60,7 +61,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                 if (PopulateTestObject(testObject, FedExUSGroundAlcoholFixture.Mapping) &&
                     (testObject.IsSaveLabel || !justLabels))
                 {
-                    testObject.FedExAccountNumber = fedExTestAccountNumber;
+                    testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605752" ? ecodAccountNumber : fedExTestAccountNumber;
 
                     testObject.Ship();
                 }
@@ -123,7 +124,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
             var testObject = new FedExUSExpressInternationalFixture();
 
             if (PopulateTestObject(testObject, FedExUSExpressInternationalFixture.Mapping) &&
-                (testObject.IsSaveLabel || !justLabels))
+                (testObject.IsSaveLabel || !justLabels) && testObject.CustomerTransactionId=="413231b")
             {
                 try
                 {
