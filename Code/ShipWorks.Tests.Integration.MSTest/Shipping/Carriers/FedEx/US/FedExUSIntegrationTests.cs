@@ -29,7 +29,16 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US
                     (testObject.IsSaveLabel || !justLabels))
                 {
                     // TransactionID 605733 should use ECOD account.
-                    testObject.FedExAccountNumber = testObject.CustomerTransactionId == "605733" ? ecodAccountNumber : fedExTestAccountNumber;
+                    List<string> transactionsForEcodAccount = new List<string>()
+                    {
+                        "605733",
+                        "605793",
+                        "605797",
+                        "605798"
+                    };
+
+                    testObject.FedExAccountNumber = transactionsForEcodAccount.Contains(testObject.CustomerTransactionId) 
+                        ? ecodAccountNumber : fedExTestAccountNumber;
 
                     testObject.Ship();
                 }
