@@ -59,9 +59,9 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
                 {
                     Units = GetApiLinearUnit(request.ShipmentEntity),
 
-                    Length = package.DimsLength.ToString(CultureInfo.InvariantCulture),
-                    Height = package.DimsHeight.ToString(CultureInfo.InvariantCulture),
-                    Width = package.DimsWidth.ToString(CultureInfo.InvariantCulture)
+                    Length = Math.Round(package.DimsLength, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                    Height = Math.Round(package.DimsHeight, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture),
+                    Width = Math.Round(package.DimsWidth, MidpointRounding.AwayFromZero).ToString("0", CultureInfo.InvariantCulture)
                 };
 
                 // todo: make this something other than test.
