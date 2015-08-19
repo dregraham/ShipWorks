@@ -18,7 +18,9 @@
   <Target Name="Integration">
     <xunit Assemblies="@(IntegrationAssemblies)" 
       Xml="TestResults\integration.xml"
-      IncludeTraits="$(IncludeTraits)" />
+      IncludeTraits="$(IncludeTraits)"
+      ParallelizeAssemblies="false"
+      ParallelizeTestCollections="false" />
   </Target>
 
 </Project>

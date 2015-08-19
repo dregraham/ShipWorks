@@ -18,6 +18,9 @@ Albacore.configure do |config|
 	end
 end
 
+DATABASE_NAME = "ShipWorks_SeedData"
+HOST_AND_INSTANCE_NAME = "#{ENV["COMPUTERNAME"]}\\Development"
+
 @innoPath = "C:/Program Files (x86)/Inno Setup 5/ISCC.EXE"
 
 # The path to the file containing the next revision number to use in the version (i.e. 4567 would result in a version of x.x.x.4567)
@@ -43,36 +46,17 @@ namespace :build do
 
 	desc "Build ShipWorks in the Debug configuration"
 	msbuild :debug, [:forCI] => "build:restore" do |msb, args|
-		
 		if args != nil and args.forCI != nil and args.forCI == 'true'			
 			puts 'Updating config file for integration tests to run on CI server...'
-			# We are going to adjust the ShipWorks instance used in the config file
-			# based on the registry key value of our current directory path. This is
-			# so that it does not matter where the integration tests are run from, they
-			# will always connect to the appropriate database instance
-			instanceGuid = ""
-			
-			# Assume we're in the directory containing the ShipWorks solution - we need to get
-			# the registry key name based on the directory to the ShipWorks.exe to figure out
-			# which GUID to use in our path to the the SQL session file.
-			appDirectory = Dir.pwd + "/Artifacts/Application"
-			appDirectory = appDirectory.gsub('/', '\\')
-			
-			# Read the GUID from the registry, so we know which directory to look in; pass in 
-			# 0x100 to read from 64-bit registry otherwise the key will not be found			
-			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-				instanceGuid = reg[appDirectory]				
-				puts 'Found instance GUID: ' + instanceGuid
-			end
-			
+
 			# Read in the app settings for the integration test project
 			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration/App.config"
 			
-			replace_instance_guid appConfigFilePath, instanceGuid
+			replace_instance_guid appConfigFilePath, shipworks_instance_guid
 
 			puts 'config file has been updated'
-		end 
+		end
+
 		print "Building solution with the debug config...\r\n\r\n"
 
 		msb.properties :configuration => :Debug, TreatWarningsAsErrors: true
@@ -173,50 +157,7 @@ namespace :build do
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
 		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
-	end	
-
-	private 
-
-	def replace_instance_guid(app_config_path, instanceGuid)
-		modify_xml app_config_path do |xml|
-			# Get the connection string we'll be using from the test config file
-			xml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
-		end
-		#destinationXml = File.open appConfigFilePath do |f|
-		#	Nokogiri::XML(f)
-		#end
-
-		# Get the connection string we'll be using from the test config file
-		#destinationXml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
-
-		#destinationXml = File.open appConfigFilePath, "w" do |f|
-		#	f << destinationXml.to_s
-		#end
 	end
-end
-
-
-def DeleteOldTestRuns(testType)
-	# Delete the actual file containing the test results from a previous run
-	print "Deleting previous #{testType} results...\r\n\r\n"
-	Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
-	File.delete("TestResults/#{testType}-results.trx") if File.exist?("TestResults/#{testType}-results.trx")
-	File.delete("TestResults/#{testType}.xml") if File.exist?("TestResults/#{testType}.xml")
-		
-	# Delete previous test result directories to keep disk space under control otherwise
-	# there could be GBs of test result files hanging around since each test run contains 
-	# the ShipWorks binaries (this results in 100+ MB of space being # reclaimed for each 
-	# test run that gets deleted)
-	print "Deleting test results older than 4 days...\r\n"
-	deletedCount = 0
-	Dir["TestResults/*/"].map {|d|
-			if (File.stat(d).mtime < (DateTime.now - 4).to_time)
-				puts "Deleting " + d + "\r\n" 
-				FileUtils.rm_r d					
-				deletedCount = deletedCount + 1
-			end
-		}
-	print "Deleted the results for #{deletedCount} previous test run(s).\r\n\r\n"
 end
 
 ########################################################################
@@ -225,18 +166,7 @@ end
 namespace :test do
 
 	desc "Execute all unit tests and integration tests"
-	task :all => ["test:units", "test:integration"] do 
-		#puts "Starting ShipWorks unit tests...\r\n\r\n"
-		#Rake::Task['test:units'].execute
-		
-		#puts "Starting ShipWorks integration tests...\r\n\r\n"
-		#Rake::Task['test:integration'].execute
-		
-		# If we ever wanted to include UI/acceptance tests in the build we would add
-		# another section below and uncomment the following two lines
-		# puts "Starting ShipWorks acceptance tests...\r\n\r\n"
-		# Rake::Task['test:acceptance'].execute
-	end
+	task :all => ["test:units", "test:integration"]
 
 	desc "Execute unit tests"
 	msbuild :units do |msbuild|
@@ -252,7 +182,7 @@ namespace :test do
 	end
 
 	desc "Execute integration tests"
-	msbuild :integration, :categoryFilter do |msbuild, args|
+	msbuild :integration, [:categoryFilter] do |msbuild, args|
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("integration")
 		
@@ -267,123 +197,23 @@ namespace :test do
 		print "Category Parameter" + categoryParameter
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
 
+		#msbuild.parameters = "/m:1"
 		msbuild.solution = "tests.msbuild"		# Assumes rake will be executed from the directory containing the rakefile and solution file
 		msbuild.properties :configuration => :Debug
 		msbuild.targets :Integration
 	end
 end
 
-
 ########################################################################
 ## Tasks for creating and seeding the database 
 ########################################################################
 namespace :db do
 
-	DATABASE_NAME = "ShipWorks_SeedData"
-	HOST_AND_INSTANCE_NAME = "#{ENV["COMPUTERNAME"]}\\Development"
-
-	def trace_output(message)
-		Rake.application.trace message if Rake.application.options.trace
-	end
-
-	def nil_if_empty(value)
-		value.nil? || value.empty? ? nil : value
-	end
-
-	def get_instance_from_arguments(args)
-		host_and_instance_name = nil_if_empty(args[:instance]) ||  HOST_AND_INSTANCE_NAME
-		
-		pieces = host_and_instance_name.split "\\"
-		server = host = pieces[0]
-		instance = pieces[1]
-		server += "\\" + instance if instance
-
-		trace_output "*** Instance: #{server}"
-
-		{ host: host, instance: (instance || "MSSqlServer"), server: server }
-	end
-
-	def get_database_name_from_arguments(args)
-		database_name = nil_if_empty(args[:targetDatabase]) || DATABASE_NAME
-		trace_output "*** Database: #{database_name}"
-		
-		database_name
-	end
-
-	def get_data_path_from_arguments(args, instance_name)
-		file_path = nil_if_empty(args[:filePath]) || get_sql_data_path(instance_name)
-		trace_output "*** Sql data path: #{file_path}"
-
-		file_path
-	end
-
-	def get_schema_version_from_arguments(args)
-		schema_version = nil_if_empty(args[:schemaVersion]) || latest_schema_version
-		trace_output "*** Schema version: #{schema_version}"
-
-		schema_version
-	end
-
-	def latest_schema_version
-		latest_path = newest_version "", [0, 0], /(\d+)\.(\d+)/
-		newest_version latest_path, [0,0,0,0], /(\d*)\.(\d*)\.(\d*)\.(\d*)\.sql/
-	end
-
-	def newest_version(sub_directory, initial_version, version_pattern)
-		Dir.entries("code/ShipWorks/Data/Administration/Scripts/Update/#{sub_directory}")
-			.map { |item| version_array item, version_pattern }
-			.inject(initial_version) { |latest, version| (version <=> latest) == 1 ? version : latest }
-			.join "."
-	end
-
-	def version_array(item, pattern)
-		match = item.match pattern
-		match.to_a.slice(1..-1).map { |item| item.to_i } unless match.nil?
-	end
-
-	def get_sql_data_path(instance)
-		keyPath = nil
-		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\Instance Names\\SQL"
-		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			keyPath = reg[instance]
-		end
-
-		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\#{keyPath}\\Setup"
-		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			reg["SQLDataRoot"] + "\\Data\\"
-		end
-	end
-
-	def delete_if_exists(path)
-		File.delete(path) if File.exist?(path)
-	end
-
-	def execute_sql(full_instance, sql, info)
-		puts info
-		name = info.gsub(/ /, "_")
-
-		path = "./#{name}.sql"
-		delete_if_exists path
-		
-		File.open(path, "w") {|file| file.puts sql}
-		
-		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
-		# exit code and $?.success which is checked later
-		command = "sqlcmd -S #{full_instance[:server]} -i #{path} -b"
-		system(command)
-
-		delete_if_exists path
-
-		abort "Failed executing #{info}." if !$?.success?
-	end
-
 	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
-	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy] do |t, args|
-	end
+	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy]
 
 	desc "Create and populate a new ShipWorks database with seed data. Intended to be executed in a build"
-	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed] do |t, args|
-	end
+	task :populate, [:schemaVersion, :instance, :targetDatabase, :filePath] => [:create, :schema, :seed]
 	
 	desc "Drop and create the ShipWorks_SeedData database"
 	task :create, [:instance, :targetDatabase] do |t, args|
@@ -468,23 +298,11 @@ namespace :db do
 		full_instance = get_instance_from_arguments args
 		database_name = get_database_name_from_arguments args
 		
-		# Assume we're in the directory containing the ShipWorks solution - we need to get
-		# the registry key name based on the directory to the ShipWorks.exe to figure out
-		# which GUID to use in our path to the the SQL session file.
-		app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
-		
-		shipworks_instance_guid = ""
-		
-		# Read the GUID from the registry, so we know which directory to look in; pass in 
-		# 0x100 to read from 64-bit registry otherwise the key will not be found			
-		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
-		shipworks_instance_guid = Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			reg["app_directory"]				
-		end
-		
-		if shipworks_instance_guid != ""
-			puts "Found an instance GUID: " + shipworks_instance_guid
-			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + shipworks_instance_guid + "\\Settings\\sqlsession.xml"
+		guid = shipworks_instance_guid
+
+		if guid != ""
+			puts "Found an instance GUID: #{guid}"
+			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\#{guid}\\Settings\\sqlsession.xml"
 			
 			puts "Updating SQL session file..."	
 			modify_xml fileName do |xml|
@@ -513,22 +331,9 @@ namespace :setup do
 	desc "Creates ShipWorks entry in the registry based on the path to the ShipWorks.exe provided"
 	task :registry, :instancePath do |t, args|
 	
-		instanceGuid = ""
+		instanceGuid = shipworks_instance_guid
 		
-		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
-		# registry otherwise the key will not be found
-		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
-		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			begin
-				# Read the instance GUID from the registry
-				instanceGuid = reg[args.instancePath]		
-				puts "Found instance GUID for this path: " + instanceGuid				
-			rescue	
-				instanceGuid = ""
-			end
-		end
-		
-		if (instanceGuid == "")	
+		if instanceGuid
 			# No instance GUID was found in the registry, so we need to create an entry for this path provided
 			instanceGuid = SecureRandom.uuid
 			puts instanceGuid
@@ -545,16 +350,7 @@ namespace :setup do
 	
 	desc "Creates/writes the SQL session file for the given instance to point at the target database provided"
 	task :sqlSession, :instancePath, :targetDatabase do |t, args|
-	
-		instanceGuid = ""
-		
-		# Read the GUID from the registry; pass in 0x100 to read from 64-bit 
-		# registry otherwise the key will not be found
-		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
-		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-			# Read the instance GUID from the registry
-			instanceGuid = reg[args.instancePath]				
-		end
+		instanceGuid = shipworks_instance_guid
 		
 		instanceName = "(local)\\Development"
 		if args[:instanceName] != nil and args[:instanceName] != ""
@@ -563,8 +359,7 @@ namespace :setup do
 			instanceName = args[:instanceName]
 			puts "Changed instance name to " + instanceName
 		end
-			
-		
+
 		# Write out some boiler plate XML that will contain the database name provided
 		boilerPlateXml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>
 <SqlSession>
@@ -605,7 +400,6 @@ namespace :launch do
 		command = "start .\\Artifacts\\Application\\ShipWorks.exe"
 		sh command
 	end
-
 end
 
 private 
@@ -620,4 +414,147 @@ def modify_xml(file)
 	File.open file, "w" do |f|
 		f << destination_xml.to_s
 	end
+end
+
+def replace_instance_guid(app_config_path, instanceGuid)
+	modify_xml app_config_path do |xml|
+		# Get the connection string we'll be using from the test config file
+		xml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
+	end
+end
+
+def shipworks_instance_guid
+	# Assume we're in the directory containing the ShipWorks solution - we need to get
+	# the registry key name based on the directory to the ShipWorks.exe to figure out
+	# which GUID to use in our path to the the SQL session file.
+	app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
+	
+	# Read the GUID from the registry, so we know which directory to look in; pass in 
+	# 0x100 to read from 64-bit registry otherwise the key will not be found			
+	keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+	Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+		begin
+			reg[app_directory]
+		rescue
+			nil
+		end
+	end
+end
+
+def trace_output(message)
+	Rake.application.trace message if Rake.application.options.trace
+end
+
+def nil_if_empty(value)
+	value.nil? || value.empty? ? nil : value
+end
+
+def get_instance_from_arguments(args)
+	host_and_instance_name = nil_if_empty(args[:instance]) ||  HOST_AND_INSTANCE_NAME
+	
+	pieces = host_and_instance_name.split "\\"
+	server = host = pieces[0]
+	instance = pieces[1]
+	server += "\\" + instance if instance
+
+	trace_output "*** Instance: #{server}"
+
+	{ host: host, instance: (instance || "MSSqlServer"), server: server }
+end
+
+def get_database_name_from_arguments(args)
+	database_name = nil_if_empty(args[:targetDatabase]) || DATABASE_NAME
+	trace_output "*** Database: #{database_name}"
+	
+	database_name
+end
+
+def get_data_path_from_arguments(args, instance_name)
+	file_path = nil_if_empty(args[:filePath]) || get_sql_data_path(instance_name)
+	trace_output "*** Sql data path: #{file_path}"
+
+	file_path
+end
+
+def get_schema_version_from_arguments(args)
+	schema_version = nil_if_empty(args[:schemaVersion]) || latest_schema_version
+	trace_output "*** Schema version: #{schema_version}"
+
+	schema_version
+end
+
+def latest_schema_version
+	latest_path = newest_version "", [0, 0], /(\d+)\.(\d+)/
+	newest_version latest_path, [0,0,0,0], /(\d*)\.(\d*)\.(\d*)\.(\d*)\.sql/
+end
+
+def newest_version(sub_directory, initial_version, version_pattern)
+	Dir.entries("code/ShipWorks/Data/Administration/Scripts/Update/#{sub_directory}")
+		.map { |item| version_array item, version_pattern }
+		.inject(initial_version) { |latest, version| (version <=> latest) == 1 ? version : latest }
+		.join "."
+end
+
+def version_array(item, pattern)
+	match = item.match pattern
+	match.to_a.slice(1..-1).map { |item| item.to_i } unless match.nil?
+end
+
+def get_sql_data_path(instance)
+	keyPath = nil
+	keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\Instance Names\\SQL"
+	Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+		keyPath = reg[instance]
+	end
+
+	keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\#{keyPath}\\Setup"
+	Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+		reg["SQLDataRoot"] + "\\Data\\"
+	end
+end
+
+def delete_if_exists(path)
+	File.delete(path) if File.exist?(path)
+end
+
+def execute_sql(full_instance, sql, info)
+	puts info
+	name = info.gsub(/ /, "_")
+
+	path = "./#{name}.sql"
+	delete_if_exists path
+	
+	File.open(path, "w") {|file| file.puts sql}
+	
+	# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+	# exit code and $?.success which is checked later
+	command = "sqlcmd -S #{full_instance[:server]} -i #{path} -b"
+	system(command)
+
+	delete_if_exists path
+
+	abort "Failed executing #{info}." if !$?.success?
+end
+
+def DeleteOldTestRuns(testType)
+	# Delete the actual file containing the test results from a previous run
+	print "Deleting previous #{testType} results...\r\n\r\n"
+	Dir.mkdir("TestResults") if !Dir.exist?("TestResults")
+	delete_if_exists "TestResults/#{testType}-results.trx"
+	delete_if_exists "TestResults/#{testType}.xml"
+		
+	# Delete previous test result directories to keep disk space under control otherwise
+	# there could be GBs of test result files hanging around since each test run contains 
+	# the ShipWorks binaries (this results in 100+ MB of space being # reclaimed for each 
+	# test run that gets deleted)
+	print "Deleting test results older than 4 days...\r\n"
+	deletedCount = 0
+	Dir["TestResults/*/"].map do |d|
+		if (File.stat(d).mtime < (DateTime.now - 4).to_time)
+			puts "Deleting " + d + "\r\n" 
+			FileUtils.rm_r d
+			deletedCount = deletedCount + 1
+		end
+	end
+	print "Deleted the results for #{deletedCount} previous test run(s).\r\n\r\n"
 end

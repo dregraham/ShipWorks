@@ -156,7 +156,10 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             registration.Password = "abc123456xyz";
             registration.RegistrationType = PostalAccountRegistrationType.Expedited;
             registration.PhysicalAddress = registration.CreditCard.BillingAddress;
-
+            registration.FirstCodewordType = CodewordType2.Last4DriversLicense;
+            registration.FirstCodewordValue = "9933";
+            registration.SecondCodewordType = CodewordType2.FirstCarsMakeModel;
+            registration.SecondCodewordValue = "Foo Bar";
             return registration;
         }
 
