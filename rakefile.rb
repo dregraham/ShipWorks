@@ -68,18 +68,9 @@ namespace :build do
 			
 			# Read in the app settings for the integration test project
 			appConfigFilePath = Dir.pwd + "/Code/ShipWorks.Tests.Integration/App.config"
-			#originalAppSettings = File.read(appConfigFilePath)
-			#match = '<add key=\"ShipWorksInstanceGuid\"[\s\S\w\W]*\/>'
-			#puts match
-			#updatedAppSettings = originalAppSettings.gsub(/#{match}/, '<add key="ShipWorksInstanceGuid" value="' + instanceGuid + '"/>')
 			
 			replace_instance_guid appConfigFilePath, instanceGuid
 
-			# Write the updated app.config settings back to disk, so we connect to the 
-			# correct database in our integration tests
-			#File.open(appConfigFilePath, 'w') { |file| file.write(updatedAppSettings) }	
-			
-			#puts 'Updated configuration file: ' + updatedAppSettings
 			puts 'config file has been updated'
 		end 
 		print "Building solution with the debug config...\r\n\r\n"
@@ -186,17 +177,21 @@ namespace :build do
 
 	private 
 
-	def replace_instance_guid(appConfigFilePath, instanceGuid)
-		destinationXml = File.open appConfigFilePath do |f|
-			Nokogiri::XML(f)
+	def replace_instance_guid(app_config_path, instanceGuid)
+		modify_xml app_config_path do |xml|
+			# Get the connection string we'll be using from the test config file
+			xml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
 		end
+		#destinationXml = File.open appConfigFilePath do |f|
+		#	Nokogiri::XML(f)
+		#end
 
 		# Get the connection string we'll be using from the test config file
-		destinationXml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
+		#destinationXml.xpath("//configuration/appSettings/add[@key='ShipWorksInstanceGuid']").first["value"] = instanceGuid
 
-		destinationXml = File.open appConfigFilePath, "w" do |f|
-			f << destinationXml.to_s
-		end
+		#destinationXml = File.open appConfigFilePath, "w" do |f|
+		#	f << destinationXml.to_s
+		#end
 	end
 end
 
@@ -284,6 +279,104 @@ end
 ########################################################################
 namespace :db do
 
+	DATABASE_NAME = "ShipWorks_SeedData"
+	HOST_AND_INSTANCE_NAME = "#{ENV["COMPUTERNAME"]}\\Development"
+
+	def trace_output(message)
+		Rake.application.trace message if Rake.application.options.trace
+	end
+
+	def nil_if_empty(value)
+		value.nil? || value.empty? ? nil : value
+	end
+
+	def get_instance_from_arguments(args)
+		host_and_instance_name = nil_if_empty(args[:instance]) ||  HOST_AND_INSTANCE_NAME
+		
+		pieces = host_and_instance_name.split "\\"
+		server = host = pieces[0]
+		instance = pieces[1]
+		server += "\\" + instance if instance
+
+		trace_output "*** Instance: #{server}"
+
+		{ host: host, instance: (instance || "MSSqlServer"), server: server }
+	end
+
+	def get_database_name_from_arguments(args)
+		database_name = nil_if_empty(args[:targetDatabase]) || DATABASE_NAME
+		trace_output "*** Database: #{database_name}"
+		
+		database_name
+	end
+
+	def get_data_path_from_arguments(args, instance_name)
+		file_path = nil_if_empty(args[:filePath]) || get_sql_data_path(instance_name)
+		trace_output "*** Sql data path: #{file_path}"
+
+		file_path
+	end
+
+	def get_schema_version_from_arguments(args)
+		schema_version = nil_if_empty(args[:schemaVersion]) || latest_schema_version
+		trace_output "*** Schema version: #{schema_version}"
+
+		schema_version
+	end
+
+	def latest_schema_version
+		latest_path = newest_version "", [0, 0], /(\d+)\.(\d+)/
+		newest_version latest_path, [0,0,0,0], /(\d*)\.(\d*)\.(\d*)\.(\d*)\.sql/
+	end
+
+	def newest_version(sub_directory, initial_version, version_pattern)
+		Dir.entries("code/ShipWorks/Data/Administration/Scripts/Update/#{sub_directory}")
+			.map { |item| version_array item, version_pattern }
+			.inject(initial_version) { |latest, version| (version <=> latest) == 1 ? version : latest }
+			.join "."
+	end
+
+	def version_array(item, pattern)
+		match = item.match pattern
+		match.to_a.slice(1..-1).map { |item| item.to_i } unless match.nil?
+	end
+
+	def get_sql_data_path(instance)
+		keyPath = nil
+		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\Instance Names\\SQL"
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			keyPath = reg[instance]
+		end
+
+		keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\#{keyPath}\\Setup"
+		Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			reg["SQLDataRoot"] + "\\Data\\"
+		end
+	end
+
+	def delete_if_exists(path)
+		File.delete(path) if File.exist?(path)
+	end
+
+	def execute_sql(full_instance, sql, info)
+		puts info
+		name = info.gsub(/ /, "_")
+
+		path = "./#{name}.sql"
+		delete_if_exists path
+		
+		File.open(path, "w") {|file| file.puts sql}
+		
+		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
+		# exit code and $?.success which is checked later
+		command = "sqlcmd -S #{full_instance[:server]} -i #{path} -b"
+		system(command)
+
+		delete_if_exists path
+
+		abort "Failed executing #{info}." if !$?.success?
+	end
+
 	desc "Create, populate, and switch to a new ShipWorks database that is populated with seed data; useful for running locally"
 	task :rebuild, [:schemaVersion, :instance, :targetDatabase] => [:create, :schema, :seed, :switch, :deploy] do |t, args|
 	end
@@ -293,309 +386,112 @@ namespace :db do
 	end
 	
 	desc "Drop and create the ShipWorks_SeedData database"
-	task :create do |t, args|
+	task :create, [:instance, :targetDatabase] do |t, args|
+		full_instance = get_instance_from_arguments args
+		database_name = get_database_name_from_arguments args
+		file_path = get_data_path_from_arguments args, full_instance[:instance]
 
-		databaseName = "ShipWorks_SeedData"
-		instanceName = "(local)"
-		
-		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
-			# A database name was passed in, so use it for the target database
-			databaseName = args[:targetDatabase]
-		end
-		
-		if args != nil and args[:instance] != nil and args[:instance] != ""
-			# A database name was passed in, so use it for the target database
-			instanceName = args[:instance]
-			puts "Connecting to instance " + instanceName + "..."
-		end
-		
-		# Drop the seed database if it exists
-		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
-		
-		print "Killing all connections and dropping database...\r\n"
 		dropSqlText = "
 			DECLARE @SQL varchar(max)
 
 			-- Build the SQL to kill the all connections to @DatbaseName (Kill 54;Kill 56;...)
 			SELECT @SQL = COALESCE(@SQL,'') + 'Kill ' + Convert(varchar, SPId) + ';'
 			FROM MASTER..SysProcesses
-			WHERE DBId = DB_ID('{DBNAME}') AND SPId <> @@SPId
+			WHERE DBId = DB_ID('#{database_name}') AND SPId <> @@SPId
 			
 			EXEC (@SQL)
 			GO
 
 			-- Now it's safe to drop the database without any open connections
-			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
-				DROP DATABASE [{DBNAME}] "
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '#{database_name}')
+				DROP DATABASE [#{database_name}] "
 
-		dropSqlText = dropSqlText.gsub(/{DBNAME}/, databaseName)
-		File.open("./DropSeedDatabase.sql", "w") {|file| file.puts dropSqlText}
-		
-		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
-		# exit code and $?.success which is checked later
-		command = "sqlcmd -S " + instanceName + " -i DropSeedDatabase.sql -b"
-		system(command)
+		execute_sql full_instance, dropSqlText, "Drop seed database"
 
-		File.delete("./DropSeedDatabase.sql") if File.exist?("./DropSeedDatabase.sql")
-		
-		if (!$?.success?)
-			abort("Task to create the database failed when attempting to drop database " + databaseName + ".")
-		end
-
-		# We're good to create a new seed database
-
-		puts "Finding SQL Server data path for " + instanceName + "..."
-		filePath = ""
-		
-		if args != nil and args[:filePath] != nil and args[:filePath] != ""
-			# A database name was passed in, so use it for the target database
-			filePath = args[:filePath]
-			puts "File path set to " + filePath
-		end
-		
-		if filePath == ""
-			# A file path was not found in the argument list, so try to set it via the 
-			# SQLPath registry value
-			registryInstanceName = instanceName
-			backSlashIndex = registryInstanceName.index("\\")		
-			if !backSlashIndex.nil? && backSlashIndex > 0 
-				# Trim off "(local)\" portion of the instance name in order to query the 
-				# registry
-				registryInstanceName = registryInstanceName[backSlashIndex..-1]
-			end
-			
-			# Lookup the file path to use in the script based on the instance's data path in SQL Server; 
-			# pass in 0x100 to read from 64-bit registry otherwise the key will not be found			
-			keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\MSSQLServer"
-			keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
-			puts "Looking for key " + keyName + "..."
-			begin		
-				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-					begin
-						filePath = reg["DefaultData"]
-					rescue
-						# Registry value DefaultData did not exist
-						filePath = ""
-					end
-				end
-			rescue
-				filePath = ""
-			end
-					
-			if filePath == nil or filePath == ""
-				# Nothing useful was found in the DefaultData value, so fallback to appending
-				# "\Data" to the SQL path value for the instance
-				keyName = "SOFTWARE\\Microsoft\\Microsoft SQL Server\\{INSTANCENAME}\\Setup"
-				keyName = keyName.gsub(/{INSTANCENAME}/, registryInstanceName)
-				Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-					filePath = reg["SQLPath"] + "\\Data\\"
-				end
-			end
-			puts "File path is " + filePath
-		end 
-		
-		puts "Creating the database...\r\n"
-		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
-		
 		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used 
 		# by the ShipWorks application
 		sqlText = File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateDatabase.sql")
-		sqlText = sqlText.gsub(/{DBNAME}/, databaseName)
-		sqlText = sqlText.gsub(/{FILEPATH}/, filePath)
-		sqlText = sqlText.gsub(/{FILENAME}/, databaseName)
-
-		# Write the script to disk, so we can execute it via shell
-		File.open("./CreateSeedDatabase.sql", "w") {|file| file.puts sqlText}
+			.gsub(/{DBNAME}/, database_name)
+			.gsub(/{FILEPATH}/, file_path)
+			.gsub(/{FILENAME}/, database_name)
 		
-		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
-		# exit code and $?.success which is checked later
-		command = "sqlcmd -S " + instanceName + " -i CreateSeedDatabase.sql -b"
-		system(command)
-
-		# Clean up the temporary script
-		File.delete("./CreateSeedDatabase.sql") if File.exist?("./CreateSeedDatabase.sql")
-		
-		if (!$?.success?)
-			abort("Task to create the database failed when attempting to create database " + databaseName + ".")
-		end
+		execute_sql full_instance, sqlText, "Create seed database"
 	end
 
 	desc "Build the ShipWorks_SeedData database schema from scratch"
-	task :schema, :schemaVersion, :instance, :targetDatabase do |t, args|
-		puts "Creating the database schema..."
-			
-		databaseName = "ShipWorks_SeedData"
-		
-		versionForProcedure = "3.0.0.0"
-		
-		if args != nil and args[:schemaVersion] != nil and args[:schemaVersion] != ""
-			# A schema version was passed in, so use it for the schema version procedure
-			versionForProcedure = args[:schemaVersion]
-		end
-		
-		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
-			# A database name was passed in, so use it for the target database
-			databaseName = args[:targetDatabase]
-		end
-		
-		if args != nil and args[:instance] != nil and args[:instance] != ""
-			# A database name was passed in, so use it for the target database
-			instanceName = args[:instance]
-			puts "Connecting to instance " + instanceName + "..."
-		end
-		
-		# Clean up any remnants of the temporary script that may exist from a previous run
-		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
+	task :schema, [:schemaVersion, :instance, :targetDatabase] do |t, args|
+		full_instance = get_instance_from_arguments args
+		database_name = get_database_name_from_arguments args
+		schema_version = get_schema_version_from_arguments args
 
 		# We're going to use the schema script in the ShipWorks project, but we're going to write it
 		# to a temporary file, so we can tell prefix the script to use our seed database
 		sqlText = "
-		USE {DBNAME}
+		USE #{database_name}
 		GO
 		"
 		
-		# Concatenate the schema script to our string
 		sqlText.concat(File.read("./Code/ShipWorks/Data/Administration/Scripts/Installation/CreateSchema.sql"))
 
 		sqlText.concat("
 		        CREATE PROCEDURE [dbo].[GetSchemaVersion] 
                 
                 AS 
-                SELECT '{SCHEMA_VERSION_VALUE}' AS 'SchemaVersion'
+                SELECT '#{schema_version}' AS 'SchemaVersion'
 				GO
 		")
-		sqlText = sqlText.sub(/{SCHEMA_VERSION_VALUE}/, versionForProcedure)
-		sqlText = sqlText.sub(/{DBNAME}/, databaseName)
-		
-		# Write our script to a temporary file and execute the SQL
-		File.open("./CreateSeedSchema.sql", "w") {|file| file.puts sqlText}
-		
-		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
-		# exit code and $?.success which is checked later
-		command = "sqlcmd -S " + instanceName + " -i CreateSeedSchema.sql -b"
-		system(command)
 
-		# Clean up the temporary script
-		File.delete("./CreateSeedSchema.sql") if File.exist?("./CreateSeedSchema.sql")
-		
-		if (!$?.success?)
-			abort("Task to create the database schema failed.")
-		end
+		execute_sql full_instance, sqlText, "Create seed schema"
 	end
 
 	desc "Populate the ShipWorks_SeedData database with order, shipment, and carrier account data"
-	task :seed do |t, args|
-		puts "Populating data..."
-
-		databaseName = "ShipWorks_SeedData"
-		instanceName = "(local)"
+	task :seed, [:instance, :targetDatabase] do |t, args|
+		full_instance = get_instance_from_arguments args
+		database_name = get_database_name_from_arguments args
 		
-		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""
-			# A database name was passed in, so use it for the target database
-			databaseName = args[:targetDatabase]
-		end
-		
-		if args != nil and args[:instance] != nil and args[:instance] != ""
-			# A database name was passed in, so use it for the target database
-			instanceName = args[:instance]
-			puts "Connecting to instance " + instanceName + "..."
-		end
-		
-		# Clean up any remnants of the temporary script that may exist from a previous run
-		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
-
 		# We're going to write the static seed data to a temporary file, so we can tell prefix the script 
 		# to use our seed database
 		sqlText = "
 		USE {DBNAME}
 		GO
 		"
-		sqlText = sqlText.sub(/{DBNAME}/, databaseName)
+		sqlText = sqlText.sub(/{DBNAME}/, database_name)
 		
 		# Concatenate the script containing our seed data to the string
 		sqlText.concat(File.read("./SeedData.sql"))
 
-		# Write our script to a temporary file and execute the SQL
-		File.open("./TempSeedData.sql", "w") {|file| file.puts sqlText}
-		
-		# Run the sqlcomd.exe with the -b option, so any errors will be denoted in the 
-		# exit code and $?.success which is checked later
-		command = "sqlcmd -S " + instanceName + " -i TempSeedData.sql -b"
-		system(command)
-		
-		# Clean up the temporary script
-		File.delete("./TempSeedData.sql") if File.exist?("./TempSeedData.sql")
-		
-		if (!$?.success?)
-			abort("Task to seed database failed. Make sure the SeedData.sql script has been updated to match any schema changes.")
-		end
+		execute_sql full_instance, sqlText, "Seed data"
 	end
 	
 	desc "Switch the ShipWorks settings to point to a given database"
-	task :switch, :instance, :targetDatabase do |t, args|
-		if args != nil and args[:targetDatabase] != nil and args[:targetDatabase] != ""			
-			# A target database was passed in, so update the sql session file
-			#puts "Database name is " + args[:targetDatabase]
+	task :switch, [:instance, :targetDatabase] do |t, args|
+		full_instance = get_instance_from_arguments args
+		database_name = get_database_name_from_arguments args
+		
+		# Assume we're in the directory containing the ShipWorks solution - we need to get
+		# the registry key name based on the directory to the ShipWorks.exe to figure out
+		# which GUID to use in our path to the the SQL session file.
+		app_directory = (Dir.pwd + "/Artifacts/Application").gsub('/', '\\')
+		
+		shipworks_instance_guid = ""
+		
+		# Read the GUID from the registry, so we know which directory to look in; pass in 
+		# 0x100 to read from 64-bit registry otherwise the key will not be found			
+		keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
+		shipworks_instance_guid = Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
+			reg["app_directory"]				
+		end
+		
+		if shipworks_instance_guid != ""
+			puts "Found an instance GUID: " + shipworks_instance_guid
+			fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + shipworks_instance_guid + "\\Settings\\sqlsession.xml"
 			
-			# Assume we're in the directory containing the ShipWorks solution - we need to get
-			# the registry key name based on the directory to the ShipWorks.exe to figure out
-			# which GUID to use in our path to the the SQL session file.
-			appDirectory = Dir.pwd + "/Artifacts/Application"
-			appDirectory = appDirectory.gsub('/', '\\')
-			
-			shipWorksInstanceGuid = ""					
-			
-			# Read the GUID from the registry, so we know which directory to look in; pass in 
-			# 0x100 to read from 64-bit registry otherwise the key will not be found			
-			keyName = "SOFTWARE\\Interapptive\\ShipWorks\\Instances"			
-			Win32::Registry::HKEY_LOCAL_MACHINE.open(keyName, Win32::Registry::KEY_READ | 0x100) do |reg|
-				shipWorksInstanceGuid = reg[appDirectory]				
+			puts "Updating SQL session file..."	
+			modify_xml fileName do |xml|
+				# Get the connection string we'll be using from the test config file
+				xml.xpath("//SqlSession/Server/Instance")[0].content = full_instance[:server]
+				xml.xpath("//SqlSession/Server/Database")[0].content = database_name
 			end
-			
-			if shipWorksInstanceGuid != ""
-				puts "Found an instance GUID: " + shipWorksInstanceGuid
-				fileName = "C:\\ProgramData\\Interapptive\\ShipWorks\\Instances\\" + shipWorksInstanceGuid + "\\Settings\\sqlsession.xml"
-				
-				puts "Updating SQL session file..."			
-
-				sqlInstanceName = "Development"
-			
-				if args[:instance] != nil and args[:instance] != ""
-					# Default the instance name to run on the local machine's Development instance if 
-					# none is provided
-					sqlInstanceName = args[:instance]
-					puts "An instance name was provided: " + sqlInstanceName				
-				end
-
-				if sqlInstanceName.include? "local"					
-					# The build is specifying the server instance, but if it is the 
-					# local server we want to use the computer name of the local machine
-					backSlashIndex = sqlInstanceName.index("\\")		
-					if backSlashIndex != nil and backSlashIndex > 0 
-						# Since we're building the instance name based on computer name, trim 
-						# off "(local)\" portion of the instance name in order to query the registry
-						sqlInstanceName = sqlInstanceName[backSlashIndex..-1]
-					end
-				
-					sqlServerInstanceName = ENV["COMPUTERNAME"] + "\\" + sqlInstanceName
-				else
-					# A server instance was provided that was not "local", so use the named instance
-					sqlServerInstanceName = sqlInstanceName
-				end
-				
-				# Replace the current instance and database name with that of the info provided
-				contents = File.read(fileName)				
-				contents = contents.gsub(/<Instance>.*<\/Instance>/, '<Instance>' + sqlServerInstanceName + '</Instance>')
-				contents = contents.gsub(/<Database>.*<\/Database>/, '<Database>' + args.targetDatabase + '</Database>')
-				
-				# Write the updated SQL session XML back to the file
-				File.open(fileName, 'w') { |file| file.write(contents) }
-				
-				puts "Updated SQL session file is now..."			
-				puts contents
-			end
-		else
-			puts "Did not switch database used by ShipWorks: a target database was not specified."
 		end
 	end
 	
@@ -710,4 +606,18 @@ namespace :launch do
 		sh command
 	end
 
+end
+
+private 
+
+def modify_xml(file)
+	destination_xml = File.open file do |f|
+		Nokogiri::XML(f)
+	end
+
+	yield destination_xml
+	
+	File.open file, "w" do |f|
+		f << destination_xml.to_s
+	end
 end
