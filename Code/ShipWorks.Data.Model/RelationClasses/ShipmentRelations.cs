@@ -88,7 +88,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 		{
 			get
 			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "AmazonShipment", true);
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, "Amazon", true);
 
 				relation.AddEntityFieldPair(ShipmentFields.ShipmentID, AmazonShipmentFields.ShipmentID);
 

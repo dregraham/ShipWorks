@@ -809,6 +809,7 @@
       <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Amazon\IAmazonAccountManager.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorDlg.cs">
       <SubType>Form</SubType>
@@ -817,6 +818,13 @@
       <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonServiceControl.Designer.cs">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Shipping\Carriers\Amazon\PropertyChangedHandler.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettings.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateScope.cs" />
@@ -897,6 +905,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
+    <Compile Include="UI\Controls\TextMultiValueBinder.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7591,6 +7600,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonAccountEditorDlg.resx">
       <DependentUpon>AmazonAccountEditorDlg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\AmazonServiceControl.resx">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\BestRate\BestRateMissingRatesDialog.resx">
       <DependentUpon>BestRateMissingRatesDialog.cs</DependentUpon>

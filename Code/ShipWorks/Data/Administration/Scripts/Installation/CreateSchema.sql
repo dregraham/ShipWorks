@@ -1705,10 +1705,11 @@ GO
 CREATE TABLE [dbo].[AmazonShipment]
 (
 [ShipmentID] [bigint] NOT NULL,
+[AmazonAccountID] [bigint] NOT NULL,
 [CarrierName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierName] DEFAULT (''),
 [ShippingServiceName] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceName] DEFAULT (''),
-[ShippingServiceId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
-[ShippingServiceOfferId] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceOfferId] DEFAULT (''),
+[ShippingServiceID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceId] DEFAULT (''),
+[ShippingServiceOfferID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT [DF_AmazonShipment_ShippingServiceOfferId] DEFAULT (''),
 [InsuranceValue] [money] NOT NULL CONSTRAINT [DF_AmazonShipment_InsuranceValue] DEFAULT ((0)),
 [DimsProfileID] [bigint] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsProfileID] DEFAULT ((0)),
 [DimsLength] [float] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsLength] DEFAULT ((0)),
@@ -1718,7 +1719,7 @@ CREATE TABLE [dbo].[AmazonShipment]
 [DimsAddWeight] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_DimsAddWeight] DEFAULT ((0)),
 [DateMustArriveBy] [datetime] NOT NULL,
 [DeliveryExperience] [int] NOT NULL CONSTRAINT [DF_AmazonShipment_DeliveryExperience] DEFAULT ((0)),
-[CarrierWillPickUp] [bit] NOT NULL,
+[CarrierWillPickUp] [bit] NOT NULL CONSTRAINT [DF_AmazonShipment_CarrierWillPickUp] DEFAULT ((0)),
 [DeclaredValue] [money] NULL,
 [AmazonUniqueShipmentID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
@@ -1726,10 +1727,6 @@ GO
 PRINT N'Creating primary key [PK_AmazonShipment] on [dbo].[AmazonShipment]'
 GO
 ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [PK_AmazonShipment] PRIMARY KEY CLUSTERED  ([ShipmentID])
-GO
-PRINT N'Adding foreign keys to [dbo].[AmazonShipment]'
-GO
-ALTER TABLE [dbo].[AmazonShipment] ADD CONSTRAINT [FK_AmazonShipment_Shipment] FOREIGN KEY ([ShipmentID]) REFERENCES [dbo].[Shipment] ([ShipmentID]) ON DELETE CASCADE
 GO
 PRINT N'Creating extended properties'
 GO
@@ -1745,6 +1742,7 @@ EXEC sp_addextendedproperty N'AuditFormat', N'2', 'SCHEMA', N'dbo', 'TABLE', N'A
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'1', 'SCHEMA', N'dbo', 'TABLE', N'AmazonShipment', 'COLUMN', N'ShippingServiceName'
 GO
+
 PRINT N'Creating [dbo].[FedExShipment]'
 GO
 CREATE TABLE [dbo].[FedExShipment]

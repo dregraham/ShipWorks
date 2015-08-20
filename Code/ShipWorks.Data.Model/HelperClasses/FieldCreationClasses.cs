@@ -1012,6 +1012,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShipmentID);}
 		}
+		/// <summary>Creates a new AmazonShipmentEntity.AmazonAccountID field instance</summary>
+		public static EntityField2 AmazonAccountID
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.AmazonAccountID);}
+		}
 		/// <summary>Creates a new AmazonShipmentEntity.CarrierName field instance</summary>
 		public static EntityField2 CarrierName
 		{
@@ -1022,15 +1027,15 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceName);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceId field instance</summary>
-		public static EntityField2 ShippingServiceId
+		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceID field instance</summary>
+		public static EntityField2 ShippingServiceID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceId);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceID);}
 		}
-		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceOfferId field instance</summary>
-		public static EntityField2 ShippingServiceOfferId
+		/// <summary>Creates a new AmazonShipmentEntity.ShippingServiceOfferID field instance</summary>
+		public static EntityField2 ShippingServiceOfferID
 		{
-			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceOfferId);}
+			get { return (EntityField2)EntityFieldFactory.Create(AmazonShipmentFieldIndex.ShippingServiceOfferID);}
 		}
 		/// <summary>Creates a new AmazonShipmentEntity.InsuranceValue field instance</summary>
 		public static EntityField2 InsuranceValue

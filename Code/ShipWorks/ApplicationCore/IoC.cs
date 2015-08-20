@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using Autofac.Core;
 using Autofac.Core.Activators.Reflection;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 
@@ -74,6 +77,17 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<ShippingSettingsWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
+                .AsSelf()
+                .ExternallyOwned();
+
+            builder.RegisterType<AmazonServiceControl>()
+                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel))
+                .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
+                .ExternallyOwned();
+
+            builder.RegisterType<AmazonServiceViewModel>();
 
             return builder.Build();
         }

@@ -363,6 +363,11 @@ namespace ShipWorks.Data.Utility
                 case EntityFieldLengthSource.OnTracInstructions: return OnTracShipmentFields.Instructions;
                 case EntityFieldLengthSource.OnTracReference1: return OnTracShipmentFields.Reference1;
                 case EntityFieldLengthSource.OnTracReference2: return OnTracShipmentFields.Reference2;
+
+                case EntityFieldLengthSource.AmazonShipmentCarrierName: return AmazonShipmentFields.CarrierName;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceID: return AmazonShipmentFields.ShippingServiceID;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceName: return AmazonShipmentFields.ShippingServiceName;
+                case EntityFieldLengthSource.AmazonShipmentShippingServiceOfferID: return AmazonShipmentFields.ShippingServiceOfferID;
             }
 
             throw new InvalidOperationException("Unmapped EntityFieldLengthSource: " + source);

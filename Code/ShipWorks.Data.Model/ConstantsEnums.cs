@@ -507,14 +507,16 @@ namespace ShipWorks.Data.Model
 	{
 		///<summary>ShipmentID. </summary>
 		ShipmentID,
+		///<summary>AmazonAccountID. </summary>
+		AmazonAccountID,
 		///<summary>CarrierName. </summary>
 		CarrierName,
 		///<summary>ShippingServiceName. </summary>
 		ShippingServiceName,
-		///<summary>ShippingServiceId. </summary>
-		ShippingServiceId,
-		///<summary>ShippingServiceOfferId. </summary>
-		ShippingServiceOfferId,
+		///<summary>ShippingServiceID. </summary>
+		ShippingServiceID,
+		///<summary>ShippingServiceOfferID. </summary>
+		ShippingServiceOfferID,
 		///<summary>InsuranceValue. </summary>
 		InsuranceValue,
 		///<summary>DimsProfileID. </summary>

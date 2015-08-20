@@ -45,7 +45,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private OrderEntity _order;
 
 
-		private AmazonShipmentEntity _amazonShipment;
+		private AmazonShipmentEntity _amazon;
 		private BestRateShipmentEntity _bestRate;
 		private FedExShipmentEntity _fedEx;
 		private InsurancePolicyEntity _insurancePolicy;
@@ -78,8 +78,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 			public static readonly string ValidatedAddress = "ValidatedAddress";
 			/// <summary>Member name OrderCollectionViaValidatedAddress</summary>
 			public static readonly string OrderCollectionViaValidatedAddress = "OrderCollectionViaValidatedAddress";
-			/// <summary>Member name AmazonShipment</summary>
-			public static readonly string AmazonShipment = "AmazonShipment";
+			/// <summary>Member name Amazon</summary>
+			public static readonly string Amazon = "Amazon";
 			/// <summary>Member name BestRate</summary>
 			public static readonly string BestRate = "BestRate";
 			/// <summary>Member name FedEx</summary>
@@ -166,10 +166,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 				}
 
 
-				_amazonShipment = (AmazonShipmentEntity)info.GetValue("_amazonShipment", typeof(AmazonShipmentEntity));
-				if(_amazonShipment!=null)
+				_amazon = (AmazonShipmentEntity)info.GetValue("_amazon", typeof(AmazonShipmentEntity));
+				if(_amazon!=null)
 				{
-					_amazonShipment.AfterSave+=new EventHandler(OnEntityAfterSave);
+					_amazon.AfterSave+=new EventHandler(OnEntityAfterSave);
 				}
 				_bestRate = (BestRateShipmentEntity)info.GetValue("_bestRate", typeof(BestRateShipmentEntity));
 				if(_bestRate!=null)
@@ -280,8 +280,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 					this.OrderCollectionViaValidatedAddress.Add((OrderEntity)entity);
 					this.OrderCollectionViaValidatedAddress.IsReadOnly = true;
 					break;
-				case "AmazonShipment":
-					this.AmazonShipment = (AmazonShipmentEntity)entity;
+				case "Amazon":
+					this.Amazon = (AmazonShipmentEntity)entity;
 					break;
 				case "BestRate":
 					this.BestRate = (BestRateShipmentEntity)entity;
@@ -345,7 +345,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					toReturn.Add(ShipmentEntity.Relations.ValidatedAddressEntityUsingConsumerID, "ShipmentEntity__", "ValidatedAddress_", JoinHint.None);
 					toReturn.Add(ValidatedAddressEntity.Relations.OrderEntityUsingConsumerID, "ValidatedAddress_", string.Empty, JoinHint.None);
 					break;
-				case "AmazonShipment":
+				case "Amazon":
 					toReturn.Add(ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID);
 					break;
 				case "BestRate":
@@ -433,8 +433,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ValidatedAddress":
 					this.ValidatedAddress.Add((ValidatedAddressEntity)relatedEntity);
 					break;
-				case "AmazonShipment":
-					SetupSyncAmazonShipment(relatedEntity);
+				case "Amazon":
+					SetupSyncAmazon(relatedEntity);
 					break;
 				case "BestRate":
 					SetupSyncBestRate(relatedEntity);
@@ -487,8 +487,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 				case "ValidatedAddress":
 					base.PerformRelatedEntityRemoval(this.ValidatedAddress, relatedEntity, signalRelatedEntityManyToOne);
 					break;
-				case "AmazonShipment":
-					DesetupSyncAmazonShipment(false, true);
+				case "Amazon":
+					DesetupSyncAmazon(false, true);
 					break;
 				case "BestRate":
 					DesetupSyncBestRate(false, true);
@@ -524,9 +524,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependingRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-			if(_amazonShipment!=null)
+			if(_amazon!=null)
 			{
-				toReturn.Add(_amazonShipment);
+				toReturn.Add(_amazon);
 			}
 
 			if(_bestRate!=null)
@@ -636,7 +636,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 				info.AddValue("_order", (!this.MarkedForDeletion?_order:null));
 
 
-				info.AddValue("_amazonShipment", (!this.MarkedForDeletion?_amazonShipment:null));
+				info.AddValue("_amazon", (!this.MarkedForDeletion?_amazon:null));
 				info.AddValue("_bestRate", (!this.MarkedForDeletion?_bestRate:null));
 				info.AddValue("_fedEx", (!this.MarkedForDeletion?_fedEx:null));
 				info.AddValue("_insurancePolicy", (!this.MarkedForDeletion?_insurancePolicy:null));
@@ -727,7 +727,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'AmazonShipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
 		/// <returns></returns>
-		public virtual IRelationPredicateBucket GetRelationInfoAmazonShipment()
+		public virtual IRelationPredicateBucket GetRelationInfoAmazon()
 		{
 			IRelationPredicateBucket bucket = new RelationPredicateBucket();
 			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonShipmentFields.ShipmentID, null, ComparisonOperator.Equal, this.ShipmentID));
@@ -901,7 +901,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			toReturn.Add("CustomsItems", _customsItems);
 			toReturn.Add("ValidatedAddress", _validatedAddress);
 			toReturn.Add("OrderCollectionViaValidatedAddress", _orderCollectionViaValidatedAddress);
-			toReturn.Add("AmazonShipment", _amazonShipment);
+			toReturn.Add("Amazon", _amazon);
 			toReturn.Add("BestRate", _bestRate);
 			toReturn.Add("FedEx", _fedEx);
 			toReturn.Add("InsurancePolicy", _insurancePolicy);
@@ -936,9 +936,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			}
 
 
-			if(_amazonShipment!=null)
+			if(_amazon!=null)
 			{
-				_amazonShipment.ActiveContext = base.ActiveContext;
+				_amazon.ActiveContext = base.ActiveContext;
 			}
 			if(_bestRate!=null)
 			{
@@ -986,7 +986,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_order = null;
 
 
-			_amazonShipment = null;
+			_amazon = null;
 			_bestRate = null;
 			_fedEx = null;
 			_insurancePolicy = null;
@@ -1269,31 +1269,31 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-		/// <summary> Removes the sync logic for member _amazonShipment</summary>
+		/// <summary> Removes the sync logic for member _amazon</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
-		private void DesetupSyncAmazonShipment(bool signalRelatedEntity, bool resetFKFields)
+		private void DesetupSyncAmazon(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _amazonShipment, new PropertyChangedEventHandler( OnAmazonShipmentPropertyChanged ), "AmazonShipment", ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
-			_amazonShipment = null;
+			base.PerformDesetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID, false, signalRelatedEntity, "Shipment", false, new int[] { (int)ShipmentFieldIndex.ShipmentID } );
+			_amazon = null;
 		}
 		
-		/// <summary> setups the sync logic for member _amazonShipment</summary>
+		/// <summary> setups the sync logic for member _amazon</summary>
 		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
-		private void SetupSyncAmazonShipment(IEntity2 relatedEntity)
+		private void SetupSyncAmazon(IEntity2 relatedEntity)
 		{
-			if(_amazonShipment!=relatedEntity)
+			if(_amazon!=relatedEntity)
 			{
-				DesetupSyncAmazonShipment(true, true);
-				_amazonShipment = (AmazonShipmentEntity)relatedEntity;
-				base.PerformSetupSyncRelatedEntity( _amazonShipment, new PropertyChangedEventHandler( OnAmazonShipmentPropertyChanged ), "AmazonShipment", ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID, false, new string[] {  } );
+				DesetupSyncAmazon(true, true);
+				_amazon = (AmazonShipmentEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _amazon, new PropertyChangedEventHandler( OnAmazonPropertyChanged ), "Amazon", ShipmentEntity.Relations.AmazonShipmentEntityUsingShipmentID, false, new string[] {  } );
 			}
 		}
 		
 		/// <summary>Handles property change events of properties in a related entity.</summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void OnAmazonShipmentPropertyChanged( object sender, PropertyChangedEventArgs e )
+		private void OnAmazonPropertyChanged( object sender, PropertyChangedEventArgs e )
 		{
 			switch( e.PropertyName )
 			{
@@ -1654,12 +1654,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonShipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
 		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
-		public static IPrefetchPathElement2 PrefetchPathAmazonShipment
+		public static IPrefetchPathElement2 PrefetchPathAmazon
 		{
 			get
 			{
 				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonShipmentEntityFactory))),
-					(IEntityRelation)GetRelationsForField("AmazonShipment")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, 0, null, null, null, null, "AmazonShipment", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
+					(IEntityRelation)GetRelationsForField("Amazon")[0], (int)ShipWorks.Data.Model.EntityType.ShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, 0, null, null, null, null, "Amazon", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne);
 			}
 		}
 
@@ -2676,17 +2676,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets / sets related entity of type 'AmazonShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
 		[Browsable(false)]
-		public virtual AmazonShipmentEntity AmazonShipment
+		public virtual AmazonShipmentEntity Amazon
 		{
 			get
 			{
-				return _amazonShipment;
+				return _amazon;
 			}
 			set
 			{
 				if(base.IsDeserializing)
 				{
-					SetupSyncAmazonShipment(value);
+					SetupSyncAmazon(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
 						value.SetRelatedEntity(this, "Shipment");
@@ -2696,20 +2696,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 				{
 					if(value==null)
 					{
-						bool raisePropertyChanged = (_amazonShipment !=null);
-						DesetupSyncAmazonShipment(true, true);
+						bool raisePropertyChanged = (_amazon !=null);
+						DesetupSyncAmazon(true, true);
 						if(raisePropertyChanged)
 						{
-							OnPropertyChanged("AmazonShipment");
+							OnPropertyChanged("Amazon");
 						}
 					}
 					else
 					{
-						if(_amazonShipment!=value)
+						if(_amazon!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
 							relatedEntity.SetRelatedEntity(this, "Shipment");
-							SetupSyncAmazonShipment(relatedEntity);
+							SetupSyncAmazon(relatedEntity);
 						}
 					}
 				}

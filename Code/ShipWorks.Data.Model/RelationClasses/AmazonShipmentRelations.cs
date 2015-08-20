@@ -32,7 +32,7 @@ namespace ShipWorks.Data.Model.RelationClasses
 			List<IEntityRelation> toReturn = new List<IEntityRelation>();
 
 			toReturn.Add(this.ShipmentEntityUsingShipmentID);
-
+			toReturn.Add(this.AmazonAccountEntityUsingAmazonAccountID);
 			return toReturn;
 		}
 
@@ -58,6 +58,20 @@ namespace ShipWorks.Data.Model.RelationClasses
 			}
 		}
 
+		/// <summary>Returns a new IEntityRelation object, between AmazonShipmentEntity and AmazonAccountEntity over the m:1 relation they have, using the relation between the fields:
+		/// AmazonShipment.AmazonAccountID - AmazonAccount.AmazonAccountID
+		/// </summary>
+		public virtual IEntityRelation AmazonAccountEntityUsingAmazonAccountID
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne, "AmazonAccount", false);
+				relation.AddEntityFieldPair(AmazonAccountFields.AmazonAccountID, AmazonShipmentFields.AmazonAccountID);
+				relation.InheritanceInfoPkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonAccountEntity", false);
+				relation.InheritanceInfoFkSideEntity = InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("AmazonShipmentEntity", true);
+				return relation;
+			}
+		}
 
 		/// <summary>stub, not used in this entity, only for TargetPerEntity entities.</summary>
 		public virtual IEntityRelation GetSubTypeRelation(string subTypeEntityName) { return null; }

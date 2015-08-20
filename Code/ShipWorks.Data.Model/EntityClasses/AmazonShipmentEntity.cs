@@ -26,7 +26,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 	// __LLBLGENPRO_USER_CODE_REGION_START AdditionalNamespaces
 	// __LLBLGENPRO_USER_CODE_REGION_END
-	
 
 	/// <summary>
 	/// Entity class which represents the entity 'AmazonShipment'.<br/><br/>
@@ -35,18 +34,16 @@ namespace ShipWorks.Data.Model.EntityClasses
 	[Serializable]
 	public partial class AmazonShipmentEntity : CommonEntityBase, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
-		// __LLBLGENPRO_USER_CODE_REGION_END
-			
+		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
 		#region Class Member Declarations
 
 
-
+		private AmazonAccountEntity _amazonAccount;
 		private ShipmentEntity _shipment;
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START PrivateMembers
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Statics
@@ -56,7 +53,8 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
 		public static partial class MemberNames
 		{
-
+			/// <summary>Member name AmazonAccount</summary>
+			public static readonly string AmazonAccount = "AmazonAccount";
 
 
 			/// <summary>Member name Shipment</summary>
@@ -121,7 +119,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				_amazonAccount = (AmazonAccountEntity)info.GetValue("_amazonAccount", typeof(AmazonAccountEntity));
+				if(_amazonAccount!=null)
+				{
+					_amazonAccount.AfterSave+=new EventHandler(OnEntityAfterSave);
+				}
 				_shipment = (ShipmentEntity)info.GetValue("_shipment", typeof(ShipmentEntity));
 				if(_shipment!=null)
 				{
@@ -132,7 +134,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START DeserializationConstructor
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 		}
 
 		
@@ -144,6 +145,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 				case AmazonShipmentFieldIndex.ShipmentID:
 					DesetupSyncShipment(true, false);
+					break;
+				case AmazonShipmentFieldIndex.AmazonAccountID:
+					DesetupSyncAmazonAccount(true, false);
 					break;
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -167,7 +171,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(propertyName)
 			{
-
+				case "AmazonAccount":
+					this.AmazonAccount = (AmazonAccountEntity)entity;
+					break;
 
 
 				case "Shipment":
@@ -194,7 +200,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
 			{
-
+				case "AmazonAccount":
+					toReturn.Add(AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID);
+					break;
 
 
 				case "Shipment":
@@ -235,7 +243,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "AmazonAccount":
+					SetupSyncAmazonAccount(relatedEntity);
+					break;
 
 				case "Shipment":
 					SetupSyncShipment(relatedEntity);
@@ -254,7 +264,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			switch(fieldName)
 			{
-
+				case "AmazonAccount":
+					DesetupSyncAmazonAccount(false, true);
+					break;
 
 				case "Shipment":
 					DesetupSyncShipment(false, true);
@@ -280,7 +292,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override List<IEntity2> GetDependentRelatedEntities()
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
-
+			if(_amazonAccount!=null)
+			{
+				toReturn.Add(_amazonAccount);
+			}
 			if(_shipment!=null)
 			{
 				toReturn.Add(_shipment);
@@ -311,13 +326,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 			{
 
 
-
+				info.AddValue("_amazonAccount", (!this.MarkedForDeletion?_amazonAccount:null));
 				info.AddValue("_shipment", (!this.MarkedForDeletion?_shipment:null));
 			}
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START GetObjectInfo
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			base.GetObjectData(info, context);
 		}
 
@@ -350,6 +364,15 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
+		/// the related entity of type 'AmazonAccount' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
+		/// <returns></returns>
+		public virtual IRelationPredicateBucket GetRelationInfoAmazonAccount()
+		{
+			IRelationPredicateBucket bucket = new RelationPredicateBucket();
+			bucket.PredicateExpression.Add(new FieldCompareValuePredicate(AmazonAccountFields.AmazonAccountID, null, ComparisonOperator.Equal, this.AmazonAccountID));
+			return bucket;
+		}
 
 		/// <summary> Creates a new IRelationPredicateBucket object which contains the predicate expression and relation collection to fetch
 		/// the related entity of type 'Shipment' to this entity. Use DataAccessAdapter.FetchNewEntity() to fetch this related entity.</summary>
@@ -427,7 +450,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		public override Dictionary<string, object> GetRelatedData()
 		{
 			Dictionary<string, object> toReturn = new Dictionary<string, object>();
-
+			toReturn.Add("AmazonAccount", _amazonAccount);
 
 
 			toReturn.Add("Shipment", _shipment);
@@ -439,7 +462,10 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 
 
-
+			if(_amazonAccount!=null)
+			{
+				_amazonAccount.ActiveContext = base.ActiveContext;
+			}
 			if(_shipment!=null)
 			{
 				_shipment.ActiveContext = base.ActiveContext;
@@ -452,13 +478,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
-
+			_amazonAccount = null;
 			_shipment = null;
 			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			OnInitClassMembersComplete();
 		}
 
@@ -475,16 +500,19 @@ namespace ShipWorks.Data.Model.EntityClasses
 			_fieldsCustomProperties.Add("ShipmentID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
+			_fieldsCustomProperties.Add("AmazonAccountID", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
 			_fieldsCustomProperties.Add("CarrierName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ShippingServiceName", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShippingServiceId", fieldHashtable);
+			_fieldsCustomProperties.Add("ShippingServiceID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShippingServiceOfferId", fieldHashtable);
+			_fieldsCustomProperties.Add("ShippingServiceOfferID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("InsuranceValue", fieldHashtable);
@@ -524,13 +552,45 @@ namespace ShipWorks.Data.Model.EntityClasses
 		}
 		#endregion
 
+		/// <summary> Removes the sync logic for member _amazonAccount</summary>
+		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
+		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
+		private void DesetupSyncAmazonAccount(bool signalRelatedEntity, bool resetFKFields)
+		{
+			base.PerformDesetupSyncRelatedEntity( _amazonAccount, new PropertyChangedEventHandler( OnAmazonAccountPropertyChanged ), "AmazonAccount", AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID, true, signalRelatedEntity, "AmazonShipment", resetFKFields, new int[] { (int)AmazonShipmentFieldIndex.AmazonAccountID } );		
+			_amazonAccount = null;
+		}
+
+		/// <summary> setups the sync logic for member _amazonAccount</summary>
+		/// <param name="relatedEntity">Instance to set as the related entity of type entityType</param>
+		private void SetupSyncAmazonAccount(IEntity2 relatedEntity)
+		{
+			if(_amazonAccount!=relatedEntity)
+			{
+				DesetupSyncAmazonAccount(true, true);
+				_amazonAccount = (AmazonAccountEntity)relatedEntity;
+				base.PerformSetupSyncRelatedEntity( _amazonAccount, new PropertyChangedEventHandler( OnAmazonAccountPropertyChanged ), "AmazonAccount", AmazonShipmentEntity.Relations.AmazonAccountEntityUsingAmazonAccountID, true, new string[] {  } );
+			}
+		}
+		
+		/// <summary>Handles property change events of properties in a related entity.</summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnAmazonAccountPropertyChanged( object sender, PropertyChangedEventArgs e )
+		{
+			switch( e.PropertyName )
+			{
+				default:
+					break;
+			}
+		}
 
 		/// <summary> Removes the sync logic for member _shipment</summary>
 		/// <param name="signalRelatedEntity">If set to true, it will call the related entity's UnsetRelatedEntity method</param>
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", AmazonShipmentEntity.Relations.ShipmentEntityUsingShipmentID, true, signalRelatedEntity, "AmazonShipment", false, new int[] { (int)AmazonShipmentFieldIndex.ShipmentID } );
+			base.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", AmazonShipmentEntity.Relations.ShipmentEntityUsingShipmentID, true, signalRelatedEntity, "Amazon", false, new int[] { (int)AmazonShipmentFieldIndex.ShipmentID } );
 			_shipment = null;
 		}
 		
@@ -572,7 +632,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 
 			OnInitialized();
 		}
@@ -593,6 +652,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'AmazonAccount' 
+		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
+		/// <returns>Ready to use IPrefetchPathElement2 implementation.</returns>
+		public static IPrefetchPathElement2 PrefetchPathAmazonAccount
+		{
+			get
+			{
+				return new PrefetchPathElement2(new EntityCollection(EntityFactoryCache2.GetEntityFactory(typeof(AmazonAccountEntityFactory))),
+					(IEntityRelation)GetRelationsForField("AmazonAccount")[0], (int)ShipWorks.Data.Model.EntityType.AmazonShipmentEntity, (int)ShipWorks.Data.Model.EntityType.AmazonAccountEntity, 0, null, null, null, null, "AmazonAccount", SD.LLBLGen.Pro.ORMSupportClasses.RelationType.ManyToOne);
+			}
+		}
 
 		/// <summary> Creates a new PrefetchPathElement2 object which contains all the information to prefetch the related entities of type 'Shipment' 
 		/// for this entity. Add the object returned by this property to an existing PrefetchPath2 instance.</summary>
@@ -641,6 +711,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonShipmentFieldIndex.ShipmentID, value); }
 		}
 
+		/// <summary> The AmazonAccountID property of the Entity AmazonShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."AmazonAccountID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.Int64 AmazonAccountID
+		{
+			get { return (System.Int64)GetValue((int)AmazonShipmentFieldIndex.AmazonAccountID, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.AmazonAccountID, value); }
+		}
+
 		/// <summary> The CarrierName property of the Entity AmazonShipment<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "AmazonShipment"."CarrierName"<br/>
@@ -663,26 +744,26 @@ namespace ShipWorks.Data.Model.EntityClasses
 			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceName, value); }
 		}
 
-		/// <summary> The ShippingServiceId property of the Entity AmazonShipment<br/><br/>
+		/// <summary> The ShippingServiceID property of the Entity AmazonShipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."ShippingServiceId"<br/>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."ShippingServiceID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShippingServiceId
+		public virtual System.String ShippingServiceID
 		{
-			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceId, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceId, value); }
+			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceID, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceID, value); }
 		}
 
-		/// <summary> The ShippingServiceOfferId property of the Entity AmazonShipment<br/><br/>
+		/// <summary> The ShippingServiceOfferID property of the Entity AmazonShipment<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "AmazonShipment"."ShippingServiceOfferId"<br/>
+		/// <remarks>Mapped on  table field: "AmazonShipment"."ShippingServiceOfferID"<br/>
 		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
-		public virtual System.String ShippingServiceOfferId
+		public virtual System.String ShippingServiceOfferID
 		{
-			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferId, true); }
-			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferId, value); }
+			get { return (System.String)GetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferID, true); }
+			set	{ SetValue((int)AmazonShipmentFieldIndex.ShippingServiceOfferID, value); }
 		}
 
 		/// <summary> The InsuranceValue property of the Entity AmazonShipment<br/><br/>
@@ -819,6 +900,40 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+		/// <summary> Gets / sets related entity of type 'AmazonAccountEntity' which has to be set using a fetch action earlier. If no related entity
+		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
+		[Browsable(false)]
+		public virtual AmazonAccountEntity AmazonAccount
+		{
+			get
+			{
+				return _amazonAccount;
+			}
+			set
+			{
+				if(base.IsDeserializing)
+				{
+					SetupSyncAmazonAccount(value);
+				}
+				else
+				{
+					if(value==null)
+					{
+						if(_amazonAccount != null)
+						{
+							_amazonAccount.UnsetRelatedEntity(this, "AmazonShipment");
+						}
+					}
+					else
+					{
+						if(_amazonAccount!=value)
+						{
+							((IEntity2)value).SetRelatedEntity(this, "AmazonShipment");
+						}
+					}
+				}
+			}
+		}
 
 		/// <summary> Gets / sets related entity of type 'ShipmentEntity' which has to be set using a fetch action earlier. If no related entity
 		/// is set for this property, null is returned. This property is not visible in databound grids.</summary>
@@ -836,7 +951,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					SetupSyncShipment(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
-						value.SetRelatedEntity(this, "AmazonShipment");
+						value.SetRelatedEntity(this, "Amazon");
 					}
 				}
 				else
@@ -855,7 +970,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 						if(_shipment!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "AmazonShipment");
+							relatedEntity.SetRelatedEntity(this, "Amazon");
 							SetupSyncShipment(relatedEntity);
 						}
 					}
@@ -889,7 +1004,6 @@ namespace ShipWorks.Data.Model.EntityClasses
 		
 		// __LLBLGENPRO_USER_CODE_REGION_START CustomEntityCode
 		// __LLBLGENPRO_USER_CODE_REGION_END
-		
 		#endregion
 
 		#region Included code
