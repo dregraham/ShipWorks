@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.UI.Controls;
 
@@ -39,7 +40,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void Initialize()
         {
+            base.Initialize();
+
+            EnumHelper.BindComboBox<AmazonDeliveryExperienceType>(deliveryConfirmation);
+
             originControl.Initialize(ShipmentTypeCode.Amazon);
+            dimensionsControl.Initialize();
         }
 
         /// <summary>
@@ -54,6 +60,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             viewModel.Load(shipmentsAsList);
             CreateUiBindings();
 
+            LoadDimensions(shipmentsAsList);
+
             originControl.LoadShipments(shipmentsAsList);
 
             UpdateInsuranceDisplay();
@@ -61,30 +69,32 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             UpdateSectionDescription();
         }
 
+        private void LoadDimensions(List<ShipmentEntity> shipments)
+        {
+            List<DimensionsAdapter> dimensions = new List<DimensionsAdapter>();
+
+            shipments.ForEach(s => dimensions.Add(new DimensionsAdapter(s.Amazon)));
+
+            //Load the dimensions
+            dimensionsControl.LoadDimensions(dimensions);
+        }
+
         /// <summary>
         /// Add ui control bindings to the view model
         /// </summary>
         private void CreateUiBindings()
         {
-            carrier.DataBindings.Clear();
-            carrier.DataBindings.Add("Text", viewModel, "Carrier");
-            carrier.DataBindings.Add("MultiValued", viewModel, "CarrierIsMultiValued");
+            deliveryConfirmation.DataBindings.Clear();
+            deliveryConfirmation.DataBindings.Add("SelectedValue", viewModel, "DeliveryConfirmation");
+            deliveryConfirmation.DataBindings.Add("MultiValued", viewModel, "DeliveryConfirmationIsMultiValued");
 
-            service.DataBindings.Clear();
-            service.DataBindings.Add("Text", viewModel, "Service");
-            service.DataBindings.Add("MultiValued", viewModel, "ServiceIsMultiValued");
-
-            tracking.DataBindings.Clear();
-            tracking.DataBindings.Add("Text", viewModel, "Tracking");
-            tracking.DataBindings.Add("MultiValued", viewModel, "TrackingIsMultiValued");
-
-            cost.DataBindings.Clear();
-            cost.DataBindings.Add("Amount", viewModel, "Cost");
-            cost.DataBindings.Add("MultiValued", viewModel, "CostIsMultiValued");
-
-            shipDate.DataBindings.Clear();
-            shipDate.DataBindings.Add("Text", viewModel, "ShipDate");
-            shipDate.DataBindings.Add("MultiValued", viewModel, "ShipDateIsMultiValued");
+            carrierWillPickUp.DataBindings.Clear();
+            carrierWillPickUp.DataBindings.Add("Checked", viewModel, "CarrierWillPickUp");
+            carrierWillPickUp.DataBindings.Add("CheckState", viewModel, "CarrierWillPickUpCheckState");
+            
+            mustArriveByDate.DataBindings.Clear();
+            mustArriveByDate.DataBindings.Add("Text", viewModel, "MustArriveByDate");
+            mustArriveByDate.DataBindings.Add("MultiValued", viewModel, "MustArriveByDateIsMultiValued");
 
             weight.DataBindings.Clear();
             weight.DataBindings.Add("Weight", viewModel, "ContentWeight");
@@ -104,11 +114,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void RefreshContentWeight()
         {
+            // Stop the dimensions control from listening to weight changes
+            dimensionsControl.ShipmentWeightBox = null;
+
             viewModel.Load(LoadedShipments);
 
             weight.DataBindings.Clear();
             weight.DataBindings.Add("Weight", viewModel, "ContentWeight");
             weight.DataBindings.Add("MultiValued", viewModel, "ContentWeightIsMultiValued");
+
+            // Start the dimensions control listening to weight changes
+            dimensionsControl.ShipmentWeightBox = weight;
         }
 
         /// <summary>
@@ -124,6 +140,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             originControl.SaveToEntities();
 
             viewModel.Save(LoadedShipments);
+
+            //Save dimensions
+            dimensionsControl.SaveToEntities();
 
             insuranceControl.SaveToInsuranceChoices();
 
@@ -152,26 +171,26 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void UpdateSectionDescription()
         {
-            string text;
+            string text = string.Empty;
 
-            if (service.MultiValued || carrier.MultiValued)
-            {
-                text = "(Multiple)";
-            }
-            else
-            {
-                text = carrier.Text;
+            //if (service.MultiValued || carrier.MultiValued)
+            //{
+            //    text = "(Multiple)";
+            //}
+            //else
+            //{
+            //    text = carrier.Text;
 
-                if (service.Text.Length > 0)
-                {
-                    if (text.Length > 0)
-                    {
-                        text += ", ";
-                    }
+            //    if (service.Text.Length > 0)
+            //    {
+            //        if (text.Length > 0)
+            //        {
+            //            text += ", ";
+            //        }
 
-                    text += service.Text;
-                }
-            }
+            //        text += service.Text;
+            //    }
+            //}
 
             sectionShipment.ExtraText = text;
         }
@@ -182,6 +201,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void OnShipSenseFieldChanged(object sender, EventArgs e)
         {
             RaiseShipSenseFieldChanged();
+        }
+
+        private void OnRateCriteriaChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

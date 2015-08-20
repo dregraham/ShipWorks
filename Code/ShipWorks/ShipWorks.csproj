@@ -907,7 +907,7 @@
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
-    <Compile Include="UI\Controls\TextMultiValueBinder.cs" />
+    <Compile Include="UI\Controls\GenericMultiValueBinder.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
