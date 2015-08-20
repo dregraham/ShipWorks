@@ -6,6 +6,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Stores;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -58,6 +59,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Amazon account merchant id
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string MerchantId
         {
             get { return merchantId; }
@@ -67,6 +69,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Amazon account authentication token
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string AuthToken
         {
             get { return authToken; }

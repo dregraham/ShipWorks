@@ -1,4 +1,5 @@
 using ShipWorks.Data.Model.EntityClasses;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -10,11 +11,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Amazon account merchant id
         /// </summary>
+        [Obfuscation(Exclude = true)]
         string MerchantId { get; set; }
 
         /// <summary>
         /// Amazon account authentication token
         /// </summary>
+        [Obfuscation(Exclude = true)]
         string AuthToken { get; set; }
 
         /// <summary>

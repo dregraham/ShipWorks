@@ -3,6 +3,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using System.Reflection;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -106,6 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Default description of the account
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string DescriptionPrompt 
         {
             get { return descriptionPrompt; }
@@ -115,6 +117,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Description of the account
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public string Description
         {
             get { return description; }
