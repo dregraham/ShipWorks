@@ -107,7 +107,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void PopulateAccount(AmazonAccountEntity account)
         {
-            MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+            MethodConditions.EnsureArgumentIsNotNull(account, nameof(account));
 
             if (!Success)
             {

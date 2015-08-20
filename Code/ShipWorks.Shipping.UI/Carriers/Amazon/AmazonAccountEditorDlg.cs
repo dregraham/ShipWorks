@@ -40,10 +40,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            merchantId.DataBindings.Add(ObjectUtility.Nameof(() => merchantId.Text), viewModel.Credentials, ObjectUtility.Nameof(() => viewModel.Credentials.MerchantId));
-            authToken.DataBindings.Add(ObjectUtility.Nameof(() => authToken.Text), viewModel.Credentials, ObjectUtility.Nameof(() => viewModel.Credentials.AuthToken));
-            description.DataBindings.Add(ObjectUtility.Nameof(() => description.PromptText), viewModel, ObjectUtility.Nameof(() => viewModel.DescriptionPrompt), false, DataSourceUpdateMode.Never);
-            description.DataBindings.Add(ObjectUtility.Nameof(() => description.Text), viewModel, ObjectUtility.Nameof(() => viewModel.Description));
+            merchantId.DataBindings.Add(nameof(merchantId.Text), viewModel.Credentials, nameof(viewModel.Credentials.MerchantId));
+            authToken.DataBindings.Add(nameof(authToken.Text), viewModel.Credentials, nameof(viewModel.Credentials.AuthToken));
+            description.DataBindings.Add(nameof(description.PromptText), viewModel, nameof(viewModel.DescriptionPrompt), false, DataSourceUpdateMode.Never);
+            description.DataBindings.Add(nameof(description.Text), viewModel, nameof(viewModel.Description));
         }
 
         /// <summary>

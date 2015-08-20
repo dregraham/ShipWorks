@@ -205,7 +205,6 @@
     <Compile Include="Interapptive.Shared\Net\TrustingCertificateInspectorTest.cs" />
     <Compile Include="Interapptive.Shared\Pdf\PdfDocumentTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\MethodConditionsTest.cs" />
-    <Compile Include="Interapptive.Shared\Utility\ObjectUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\PathUtilityTests.cs" />
     <Compile Include="Interapptive.Shared\Utility\StringUtilityTest.cs" />
     <Compile Include="Interapptive.Shared\Utility\WeightUtilityTest.cs" />

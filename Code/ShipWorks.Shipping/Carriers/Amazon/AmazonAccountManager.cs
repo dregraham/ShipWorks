@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override string GetDefaultDescription(AmazonAccountEntity account)
         {
-            MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+            MethodConditions.EnsureArgumentIsNotNull(account, nameof(account));
 
             return string.Format("Account {0}", account.MerchantID);
         }

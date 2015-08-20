@@ -49,8 +49,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnLoad(object sender, EventArgs e)
         {
-            merchantId.DataBindings.Add(ObjectUtility.Nameof(() => merchantId.Text), credentialViewModel, ObjectUtility.Nameof(() => credentialViewModel.MerchantId));
-            authToken.DataBindings.Add(ObjectUtility.Nameof(() => authToken.Text), credentialViewModel, ObjectUtility.Nameof(() => credentialViewModel.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
+            merchantId.DataBindings.Add(nameof(merchantId.Text), credentialViewModel, nameof(credentialViewModel.MerchantId));
+            authToken.DataBindings.Add(nameof(authToken.Text), credentialViewModel, nameof(credentialViewModel.AuthToken)); //, false, DataSourceUpdateMode.OnPropertyChanged);
 
             Pages.Add(new ShippingWizardPageDefaults(shipmentType));
             Pages.Add(new ShippingWizardPagePrinting(shipmentType));

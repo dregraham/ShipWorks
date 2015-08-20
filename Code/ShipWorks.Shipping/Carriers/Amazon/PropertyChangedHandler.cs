@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             field = value;
-            OnPropertyChanged(ObjectUtility.Nameof(func));
+            OnPropertyChanged(nameof(func));
         }
 
         /// <summary>

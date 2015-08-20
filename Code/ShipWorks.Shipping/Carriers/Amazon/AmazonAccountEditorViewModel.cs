@@ -36,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Load(AmazonAccountEntity account)
         {
-            MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+            MethodConditions.EnsureArgumentIsNotNull(account, nameof(account));
             
             DescriptionPrompt = accountManager.GetDefaultDescription(account);
             Description = account.Description != DescriptionPrompt ? account.Description : null;
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Save(AmazonAccountEntity account)
         {
-            MethodConditions.EnsureArgumentIsNotNull(account, () => account);
+            MethodConditions.EnsureArgumentIsNotNull(account, nameof(account));
 
             Credentials.Validate();
 
