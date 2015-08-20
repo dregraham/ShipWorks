@@ -53,7 +53,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void GetAccountInfo_ReturnsAccountInformation_Test()
         {           
@@ -64,7 +64,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void CreateScanForm_Connectivity_Test()
         {
@@ -103,7 +103,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void RegisterAccount_IsNotSuccessful_WhenUsernameExists_Test()
         {
@@ -116,7 +116,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void RegisterAccount_IsSuccessful_Test()
         {
@@ -164,7 +164,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void GetContract_Connectivity_Test()
         {
@@ -174,7 +174,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
         }
 
         [Trait("Category", "USPS")]
-        [Trait("Category", "ContinuousIntegration")]
+        //[Trait("Category", "ContinuousIntegration")]
         [Fact]
         public void ChangeToExpeditedPlan_Connectivity_Test()
         {
