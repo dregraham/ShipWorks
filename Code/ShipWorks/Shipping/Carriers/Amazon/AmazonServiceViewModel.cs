@@ -10,7 +10,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.UI.Controls;
+using ShipWorks.UI.Controls.MultiValueBinders;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
