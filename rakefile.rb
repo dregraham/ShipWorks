@@ -101,12 +101,7 @@ namespace :build do
 		print "Building internal release installer...\r\n\r\n"
 
 		# Default the build label to 0.0.0
-		labelForBuild = "0.0.0"
-		
-		if args != nil and args.versionLabel != nil and args.versionLabel != ""
-			# A label was passed in, so use it for the Major.Minor.Patch 
-			labelForBuild = args.versionLabel
-		end
+		labelForBuild = nil_if_empty(args[:versionLabel]) || "0.0.0"
 		
 		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
@@ -134,12 +129,7 @@ namespace :build do
 		print "Building an installer for the public release...\r\n\r\n"
 
 		# Default the build label to 0.0.0
-		labelForBuild = "0.0.0"
-		
-		if args != nil and args.versionLabel != nil and args.versionLabel != ""
-			# A label was passed in, so use it for the Major.Minor.Patch 
-			labelForBuild = args.versionLabel
-		end
+		labelForBuild = nil_if_empty(args[:versionLabel]) || "0.0.0"
 		
 		# Use the MSBuild project when building the installer
 		msb.solution = "./Build/shipworks.proj"
@@ -152,11 +142,11 @@ namespace :build do
 
 		# Append the revision number to the label 
 		labelForBuild = labelForBuild + "." + revisionNumber
-		print "Building with label " + labelForBuild + "\r\n\r\n"
+		print "Building with label #{labelForBuild}\r\n\r\n"
 		
 		# Use the revisionNumber extracted from the file and pass the revision filename
 		# so the build will increment the version in preparation for the next run
-		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=" + @revisionFilePath + " /p:CCNetLabel=" + labelForBuild
+		msb.parameters = "/p:CreateInstaller=True /p:Tests=None /p:Obfuscate=True /p:ReleaseType=Public /p:BuildType=Automated /p:ProjectRevisionFile=#{@revisionFilePath} /p:CCNetLabel=#{labelForBuild}"
 	end
 end
 
@@ -186,15 +176,14 @@ namespace :test do
 		# Delete results from any previous test runs
 		DeleteOldTestRuns("integration")
 		
-		categoryParameter = ""
-		if args != nil and args.categoryFilter != nil and args.categoryFilter != ""
+		unless args.categoryFilter.nil? or args.categoryFilter.empty?
 			# We need to filter the tests based on the categories provided
 			#categoryParameter = "/category:" + args.categoryFilter
 			msbuild.parameters = "/p:IncludeTraits=\"Category=#{args.categoryFilter}\""
+			print "Category Parameter #{args.categoryFilter}"
+		
 		end
 		
-		puts categoryParameter		
-		print "Category Parameter" + categoryParameter
 		print "Executing ShipWorks integrations tests...\r\n\r\n"
 
 		#msbuild.parameters = "/m:1"

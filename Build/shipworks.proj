@@ -252,6 +252,7 @@
       StrongName;
       SignAssemblies;
       InnoSetup;
+      Wait;
       SignInstaller;
     </CreateInstallerDependsOn>
   </PropertyGroup>
@@ -446,6 +447,13 @@
 
     <Message Text="Signing installers: @(Installers->'%(Filename)', ', ')" />
     <Exec Command='$(SignCommand) "%(Installers.FullPath)"' />
+  </Target>
+
+  <!-- Sign the assemblies with authenticode -->
+  <Target Name="Wait" >
+
+    <Message Text="Waiting for installer executables to be freed up" />
+    <Exec Command='ping 127.0.0.1 -n 6 > nul' />
   </Target>
 
   <!-- Packages up and archives the results of the build -->
