@@ -801,6 +801,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\DTOs\GetEligibleShippingServices.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\IAmazonRates.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\OperationResponse.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
