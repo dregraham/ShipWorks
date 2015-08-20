@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Set the value of a field for a property
         /// </summary>
-        public void Set<T>(Expression<Func<T>> func, ref T field, T value)
+        public void Set<T>(string name, ref T field, T value)
         {
             if (Equals(field, value))
             {
@@ -31,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             }
 
             field = value;
-            OnPropertyChanged(nameof(func));
+            OnPropertyChanged(name);
         }
 
         /// <summary>

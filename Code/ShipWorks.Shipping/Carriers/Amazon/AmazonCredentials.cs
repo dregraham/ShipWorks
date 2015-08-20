@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string MerchantId
         {
             get { return merchantId; }
-            set { handler.Set(() => MerchantId, ref merchantId, value); }
+            set { handler.Set(nameof(MerchantId), ref merchantId, value); }
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string AuthToken
         {
             get { return authToken; }
-            set { handler.Set(() => AuthToken, ref authToken, value); }
+            set { handler.Set(nameof(AuthToken), ref authToken, value); }
         }
 
         /// <summary>

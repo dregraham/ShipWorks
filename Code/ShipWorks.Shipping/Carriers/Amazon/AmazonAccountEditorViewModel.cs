@@ -109,7 +109,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string DescriptionPrompt 
         {
             get { return descriptionPrompt; }
-            set { handler.Set(() => DescriptionPrompt, ref descriptionPrompt, value); }
+            set { handler.Set(nameof(DescriptionPrompt), ref descriptionPrompt, value); }
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public string Description
         {
             get { return description; }
-            set { handler.Set(() => Description, ref description, value); }
+            set { handler.Set(nameof(Description), ref description, value); }
         }
     }
 }
