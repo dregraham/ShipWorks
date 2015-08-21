@@ -15,6 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        RateGroup GetRates(AmazonAccountEntity amazonAccount, ShipmentEntity shipment);
+        RateGroup GetRates(ShipmentEntity shipment);
     }
 }

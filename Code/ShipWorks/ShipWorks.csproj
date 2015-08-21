@@ -799,6 +799,9 @@
       <DependentUpon>AmazonShipmentSetupWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\Api\AmazonRates.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\DTOs\GetEligibleShippingServices.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
