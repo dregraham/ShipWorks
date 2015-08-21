@@ -17,18 +17,34 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// <summary>
     /// View model for the AmazonServiceControl
     /// </summary>
-    public class AmazonServiceViewModel
+    public class AmazonServiceViewModel : INotifyPropertyChanged
     {
+        private readonly PropertyChangedHandler handler;
+        public event PropertyChangedEventHandler PropertyChanged;
         private GenericMultiValueBinder<ShipmentEntity, DateTime> mustArriveByDateBinder;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
         private GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType> deliveryConfirmationBinder;
+        private GenericMultiValueBinder<ShipmentEntity, string> serviceBinder;
+        private List<string> servicesAvailable;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonServiceViewModel()
+        {
+            handler = new PropertyChangedHandler(PropertyChanged);
+        }
 
         /// <summary>
         /// Load the given shipments into the view model
         /// </summary>
         public void Load(List<ShipmentEntity> shipments)
         {
+            List<string> availableServices = new List<string>() { "Loading Services" };
+            availableServices.AddRange(shipments.Where(s => s.Amazon != null).Select(s => s.Amazon.ShippingServiceName));
+            ServicesAvailable = availableServices.Distinct().ToList();
+
             // Build a multi value binder for each of the UI controls.
             mustArriveByDateBinder = new GenericMultiValueBinder<ShipmentEntity, DateTime>(shipments,
                 entity => entity.Amazon.DateMustArriveBy,
@@ -45,6 +61,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             deliveryConfirmationBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType>(shipments,
                 entity => (AmazonDeliveryExperienceType)entity.Amazon.DeliveryExperience,
                 (entity, value) => entity.Amazon.DeliveryExperience = (int)value);
+
+            serviceBinder = new GenericMultiValueBinder<ShipmentEntity, string>(shipments,
+                entity => entity.Amazon.ShippingServiceName,
+                (entity, value) => entity.Amazon.ShippingServiceName = value);
         }
 
         /// <summary>
@@ -56,6 +76,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             weightBinder.Save();
             carrierWillPickUpBinder.Save();
             deliveryConfirmationBinder.Save();
+            serviceBinder.Save();
         }
 
         /// <summary>
@@ -169,6 +190,45 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             get
             {
                 return weightBinder.IsMultiValued;
+            }
+        }
+
+        /// <summary>
+        /// Service display text
+        /// </summary>
+        public string Service
+        {
+            get
+            {
+                return serviceBinder.PropertyValue;
+            }
+            set { serviceBinder.PropertyValue = value; }
+        }
+
+        /// <summary>
+        /// Service is multi valued.
+        /// </summary>
+        public bool ServiceIsMultiValued
+        {
+            get
+            {
+                return serviceBinder.IsMultiValued;
+            }
+        }
+
+        /// <summary>
+        /// Service display text
+        /// </summary>
+        public List<string> ServicesAvailable
+        {
+            get
+            {
+                return servicesAvailable;
+            }
+            set
+            {
+                handler.Set(() => ServicesAvailable, ref servicesAvailable, value);
+                servicesAvailable = value; 
             }
         }
     }

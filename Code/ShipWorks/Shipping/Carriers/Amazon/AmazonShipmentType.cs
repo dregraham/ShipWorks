@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Autofac;
 using ShipWorks.ApplicationCore;
-using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
@@ -134,17 +133,18 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
             AmazonShipmentEntity amazonShipment = shipment.Amazon;
+
             AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
 
             // TODO: Remove or replace this if statement when we decide how to handle non-Amazon orders.
-            Debug.Assert(amazonOrder == null);
+            Debug.Assert(amazonOrder != null);
             if (amazonOrder == null)
             {
-                amazonShipment.DateMustArriveBy = DateTime.Now.AddDays(2);
+                amazonShipment.DateMustArriveBy = DateTime.Now.AddDays(2); 
             }
             else
             {
-                amazonShipment.DateMustArriveBy = amazonOrder.LatestExpectedDeliveryDate.Value;   
+                amazonShipment.DateMustArriveBy = amazonOrder.LatestExpectedDeliveryDate ?? DateTime.Now.AddDays(2);   
             }
 
             // TODO: This should probably be removed when we have amazon profiles...
