@@ -10979,7 +10979,7 @@
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.22004\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.26437\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

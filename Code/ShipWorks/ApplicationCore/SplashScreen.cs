@@ -7,9 +7,9 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading;
 using Interapptive.Shared.Utility;
-using ShipWorks.Common.Threading;
 using System.Reflection;
 using ShipWorks.Properties;
+using ShipWorks.Common.Threading;
 
 namespace ShipWorks.ApplicationCore
 {
