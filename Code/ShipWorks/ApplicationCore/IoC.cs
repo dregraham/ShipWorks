@@ -1,8 +1,7 @@
-﻿using System;
-using System.Reflection;
-using Autofac;
+﻿using Autofac;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
+using System.Reflection;
 
 namespace ShipWorks.ApplicationCore
 {

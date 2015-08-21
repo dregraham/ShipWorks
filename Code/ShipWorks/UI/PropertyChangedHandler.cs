@@ -1,14 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using Interapptive.Shared.Utility;
+﻿using System.ComponentModel;
 
-namespace ShipWorks.Shipping.Carriers.Amazon
+namespace ShipWorks.Core.UI
 {
     /// <summary>
     /// Help manage INotifyPropertyChanged classes
     /// </summary>
-    internal class PropertyChangedHandler
+    public class PropertyChangedHandler
     {
         private readonly PropertyChangedEventHandler onPropertyChanged;
 

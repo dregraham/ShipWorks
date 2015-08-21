@@ -500,6 +500,53 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
+	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.
+	/// </summary>
+    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
+	public enum AmazonShipmentFieldIndex:int
+	{
+		///<summary>ShipmentID. </summary>
+		ShipmentID,
+		///<summary>AmazonAccountID. </summary>
+		AmazonAccountID,
+		///<summary>CarrierName. </summary>
+		CarrierName,
+		///<summary>ShippingServiceName. </summary>
+		ShippingServiceName,
+		///<summary>ShippingServiceID. </summary>
+		ShippingServiceID,
+		///<summary>ShippingServiceOfferID. </summary>
+		ShippingServiceOfferID,
+		///<summary>InsuranceValue. </summary>
+		InsuranceValue,
+		///<summary>DimsProfileID. </summary>
+		DimsProfileID,
+		///<summary>DimsLength. </summary>
+		DimsLength,
+		///<summary>DimsWidth. </summary>
+		DimsWidth,
+		///<summary>DimsHeight. </summary>
+		DimsHeight,
+		///<summary>DimsWeight. </summary>
+		DimsWeight,
+		///<summary>DimsAddWeight. </summary>
+		DimsAddWeight,
+		///<summary>DateMustArriveBy. </summary>
+		DateMustArriveBy,
+		///<summary>DeliveryExperience. </summary>
+		DeliveryExperience,
+		///<summary>CarrierWillPickUp. </summary>
+		CarrierWillPickUp,
+		///<summary>DeclaredValue. </summary>
+		DeclaredValue,
+		///<summary>AmazonUniqueShipmentID. </summary>
+		AmazonUniqueShipmentID,
+		/// <summary></summary>
+		AmountOfFields
+	}
+
+
+	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonStore.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -10508,6 +10555,8 @@ namespace ShipWorks.Data.Model
 		AmazonOrderEntity,
 		///<summary>AmazonOrderItem</summary>
 		AmazonOrderItemEntity,
+		///<summary>AmazonShipment</summary>
+		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>

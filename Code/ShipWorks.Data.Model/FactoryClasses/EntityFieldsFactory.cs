@@ -62,6 +62,9 @@ namespace ShipWorks.Data.Model.FactoryClasses
 				case ShipWorks.Data.Model.EntityType.AmazonOrderItemEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonOrderItemEntity");
 					break;
+				case ShipWorks.Data.Model.EntityType.AmazonShipmentEntity:
+					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonShipmentEntity");
+					break;
 				case ShipWorks.Data.Model.EntityType.AmazonStoreEntity:
 					fieldsToReturn = fieldProvider.GetEntityFields(inheritanceProvider, "AmazonStoreEntity");
 					break;

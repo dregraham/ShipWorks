@@ -70,7 +70,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             edit.Enabled = enabled;
             delete.Enabled = enabled;
 
-            bool allowAccountRegistration = new AmazonShipmentType().IsAccountRegistrationAllowed;
+            bool allowAccountRegistration = IoC.Current.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Amazon).IsAccountRegistrationAllowed;
 
             if (!allowAccountRegistration)
             {
@@ -129,7 +129,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-
             using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
             {
                 using (ShipmentTypeSetupWizardForm dlg = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon))

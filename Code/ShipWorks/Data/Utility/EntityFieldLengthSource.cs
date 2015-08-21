@@ -159,6 +159,11 @@ namespace ShipWorks.Data.Utility
         OnTracReference1,
         OnTracReference2,
         OnTracInstructions,
-        OnTracAccountDescription
+        OnTracAccountDescription,
+
+        AmazonShipmentCarrierName,
+        AmazonShipmentShippingServiceName,
+        AmazonShipmentShippingServiceID,
+        AmazonShipmentShippingServiceOfferID,
     }
 }

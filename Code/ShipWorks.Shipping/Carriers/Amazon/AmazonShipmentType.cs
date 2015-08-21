@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Shipping.Settings;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -14,6 +16,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
+        IAmazonAccountManager accountManager;
+
+        public AmazonShipmentType(IAmazonAccountManager accountManager)
+        {
+            this.accountManager = accountManager;
+        }
+
         /// <summary>
         /// Shipment type code
         /// </summary>
@@ -26,21 +35,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Creates the UserControl that is used to edit service options for the shipment type
-        /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
         public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new List<IPackageAdapter>()
+            {
+                new NullPackageAdapter()
+            };
         }
 
         /// <summary>
@@ -51,7 +53,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
-            throw new NotImplementedException();
+            ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Amazon", typeof(AmazonShipmentEntity), refreshIfPresent);
         }
 
         /// <summary>
@@ -60,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override string GetServiceDescription(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return string.Format("{0} {1}", shipment.Amazon.CarrierName, shipment.Amazon.ShippingServiceName);
         }
 
         /// <summary>
@@ -68,7 +70,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            throw new NotImplementedException();
+            if (shipment == null)
+            {
+                throw new ArgumentNullException("shipment");
+            }
+
+            return new ShipmentParcel(shipment, null,
+                new InsuranceChoice(shipment, shipment, shipment.Amazon, null),
+                new DimensionsAdapter());
         }
 
         /// <summary>
@@ -80,21 +89,55 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
+        /// Create the XML input to the XSL engine
+        /// </summary>
+        public override void GenerateTemplateElements(ElementOutline container, Func<ShipmentEntity> shipment, Func<ShipmentEntity> loaded)
+        {
+            ElementOutline outline = container.AddElement("Amazon");
+            outline.AddElement("Carrier", () => loaded().Amazon.CarrierName);
+            outline.AddElement("Service", () => loaded().Amazon.ShippingServiceName);
+            outline.AddElement("AmazonUniqueShipmentID", () => loaded().Amazon.AmazonUniqueShipmentID);
+            outline.AddElement("ShippingServiceID", () => loaded().Amazon.ShippingServiceID);
+            outline.AddElement("ShippingServiceOfferID", () => loaded().Amazon.ShippingServiceOfferID);
+        }
+
+        /// <summary>
         /// Gets an instance to the best rate shipping broker for a provider based on the shipment configuration.
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            return new NullShippingBroker();
         }
 
         /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// Create and Initialize a new shipment
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        public override void ConfigureNewShipment(ShipmentEntity shipment)
         {
-            throw new NotImplementedException();
+            AmazonShipmentEntity amazonShipment = shipment.Amazon;
+            AmazonOrderEntity amazonOrder = shipment.Order as AmazonOrderEntity;
+
+            // TODO: Remove or replace this if statement when we decide how to handle non-Amazon orders.
+            Debug.Assert(amazonOrder == null);
+            if (amazonOrder == null)
+            {
+                amazonShipment.DateMustArriveBy = DateTime.Now.AddDays(2);
+            }
+            else
+            {
+                amazonShipment.DateMustArriveBy = amazonOrder.LatestExpectedDeliveryDate.Value;   
+            }
+
+            // TODO: This should probably be removed when we have amazon profiles...
+            long accountID = accountManager.Accounts.Any() ? accountManager.Accounts.First().AmazonAccountID : 0;
+            amazonShipment.AmazonAccountID = accountID;
+
+            amazonShipment.DimsWeight = shipment.ContentWeight;
+            amazonShipment.CarrierWillPickUp = false;
+
+            base.ConfigureNewShipment(shipment);
         }
     }
 }

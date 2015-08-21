@@ -254,6 +254,16 @@ namespace ShipWorks.Shipping
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public ServiceControlBase CreateServiceControl(RateControl rateControl)
         {
+            return CreateServiceControl(rateControl, IoC.Current);
+        }
+
+        /// <summary>
+        /// Creates the UserControl that is used to edit service options for the shipment type
+        /// </summary>
+        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
+        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
+        public ServiceControlBase CreateServiceControl(RateControl rateControl, ILifetimeScope lifetimeScope)
+        {
             ServiceControlBase serviceControlBase = null;
             int retries = 0;
 
@@ -265,6 +275,7 @@ namespace ShipWorks.Shipping
                 try
                 {
                     serviceControlBase = InternalCreateServiceControl(rateControl);
+
                     break;
                 }
                 catch (ArgumentException ex)
@@ -299,7 +310,15 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected abstract ServiceControlBase InternalCreateServiceControl(RateControl rateControl);
+        protected virtual ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
+        {
+            if (IoC.Current.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode))
+            {
+                IoC.Current.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl));
+            }
+
+            throw new NotImplementedException("Either override InternalCreateServiceControl or register one with the IoC container");
+        }
 
         /// <summary>
         /// Creates the UserControl taht is used to edit customs options
@@ -1140,11 +1159,27 @@ namespace ShipWorks.Shipping
         {
             
         }
+        
+        /// <summary>
+        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
+        /// </summary>
+        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        {
+            return GetProcessingSynchronizer(IoC.Current);
+        }
 
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public abstract IShipmentProcessingSynchronizer GetProcessingSynchronizer();
+        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer(ILifetimeScope lifetimeScope)
+        {
+            if (lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode))
+            {
+                return lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode);
+            }
+
+            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
+        }
 
         /// <summary>
         /// Indicates if customs forms may be required to ship the shipment based on the
@@ -1276,7 +1311,7 @@ namespace ShipWorks.Shipping
         /// <returns>True if the dimensions are valid.  False otherwise.</returns>
         public virtual bool DimensionsAreValid(double length, double width, double height)
         {
-            if (length <= 0 || width <= 0 || height <= 0)
+            if (length <= 0 || width <= 0 || height <= 0) 
             {
                 return false;
             }

@@ -71,13 +71,18 @@
     <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServices.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
-    <Compile Include="Carriers\Amazon\PropertyChangedHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -112,7 +117,7 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.26437\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.30808\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

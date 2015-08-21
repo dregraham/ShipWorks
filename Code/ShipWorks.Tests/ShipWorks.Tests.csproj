@@ -517,6 +517,8 @@
     <Compile Include="ApplicationCore\Services\Fakes\FakeShipWorksSchedulerService.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksSchedulerServiceTests.cs" />
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
+    <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
+    <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

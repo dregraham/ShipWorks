@@ -22,6 +22,7 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Users;
 using ShipWorks.Data.Adapter.Custom;
 using Interapptive.Shared.Data;
+using ShipWorks.Data.Administration.Retry;
 
 namespace ShipWorks.Filters.Search
 {
@@ -297,56 +298,8 @@ namespace ShipWorks.Filters.Search
                     FilterDefinition definition = (FilterDefinition) state;
                     FilterNodeContentEntity nodeContent;
 
-                    // Create a new count and initialize the filter node to do it.  Up to and through the first alpha we didn't apply the count
-                    // to the node until after the results were calculated.  This provided a very "smooth" search experience where you were always
-                    // taken directly from one result set to the next.  But, if the search takes a while, then you'd be viewing a result set from
-                    // the last search until it completed, and this felt pretty wrong.  If the code starting with making a clone is moved back to the area
-                    // that is "if (searchCompleted)", then the DeleteAbandonedFilterCounts needs to be updated to make sure to not somehow delete
-                    // the node count that would look abandoned while doing the initial search calculation.
-                    using (SqlAdapter adapter = new SqlAdapter(true))
-                    {
-                        // Create the FilterNodeContent row to hold the results
-                        nodeContent = CreateFilterNodeContent(definition);
-
-                        // Make a clone. Because we are on another thread.  The UI thread could be trying
-                        // to look at the node ID between setting and saving it if we dont.  It doesnt matter
-                        // that we have a clone.  The actual object does not matter, only the information.
-                        FilterNodeEntity clone = new FilterNodeEntity(searchNode.Fields.Clone());
-                        clone.IsNew = false;
-                        clone.IgnoreConcurrency = true;
-                        clone.FilterSequence = SearchManager.GetPlaceholder(filterTarget).FilterSequence;
-
-                        // Update the FilterNodeContentID of the node.  This is what points to the new search results.
-                        clone.FilterNodeContentID = nodeContent.FilterNodeContentID;
-
-                        try
-                        {
-                            adapter.SaveEntity(clone, false, false);
-                        }
-                        catch (ORMConcurrencyException ex)
-                        {
-                            // Even with the added ping, this was still happening as of 3.7.5.5512. We'll just create a new
-                            // filter node and associate the content with it instead.
-                            log.Debug("The Search must have been considered abandoned by another instance.  Creating a new filter node", ex);
-
-                            clone.IsNew = true;
-
-                            foreach (IEntityField2 field in clone.Fields)
-                            {
-                                field.IsChanged = true;
-                            }
-
-                            adapter.SaveEntity(clone, true, false);
-                        }
-
-                        // We didn't refetch, so we have to manually set the sync state
-                        clone.Fields.State = EntityState.Fetched;
-
-                        // This is the new search node
-                        searchNode = clone;
-
-                        adapter.Commit();
-                    }
+                    // Create a new filter node content entity
+                    nodeContent = CreateSearchFilterNodeContentEntity(definition);
 
                     lock (searchCmdLock)
                     {
@@ -357,68 +310,13 @@ namespace ShipWorks.Filters.Search
                         // searchCmd.CommandText = "WAITFOR DELAY '00:00:20'; " + searchCmd.CommandText;
                     }
 
+                    // Execute the search in a SqlAdapterRetry
                     bool searchCompleted = false;
-
-                    // Execute the search
-                    if (!isCancelRequested)
+                    SqlAdapterRetry<SqlException> sqlAdapterRetry = new SqlAdapterRetry<SqlException>(5, -5, "SearchProvider.SearchThread ExecuteSearch.");
+                    sqlAdapterRetry.ExecuteWithRetry(() =>
                     {
-                        try
-                        {
-                            using (SqlConnection con = SqlSession.Current.OpenConnection())
-                            {
-                                bool gotLock = false;
-
-                                // Wait in line with other update\initial counts
-                                while (!isCancelRequested)
-                                {
-                                    if (ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(2)))
-                                    {
-                                        gotLock = true;
-                                        break;
-                                    }
-
-                                    log.InfoFormat("Search timed out waiting for calculation lock, will try again...");
-                                }
-
-                                try
-                                {
-                                    if (!isCancelRequested)
-                                    {
-                                        Stopwatch sw = Stopwatch.StartNew();
-
-                                        searchCmd.Connection = con;
-                                        searchCmd.ExecuteNonQuery();
-                                        searchCompleted = true;
-
-                                        log.DebugFormat("@@@@@ Time to execute search query: {0}", sw.Elapsed.TotalSeconds);
-                                    }
-                                }
-                                finally
-                                {
-                                    if (gotLock)
-                                    {
-                                        try
-                                        {
-                                            ActiveCalculationUtility.ReleaseCalculatingLock(con);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            log.Error("Search failed to release calculating lock.", ex);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        // Depending on the timing of the cancel, it could throw either SqlException or InvalidOperationException
-                        catch (SqlException)
-                        {
-                            if (!isCancelRequested) { throw; }
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            if (!isCancelRequested) { throw; }
-                        }
-                    }
+                        searchCompleted = ExecuteSearch();    
+                    });
 
                     lock (searchCmdLock)
                     {
@@ -459,6 +357,144 @@ namespace ShipWorks.Filters.Search
             // This has to go after the set.  Otherwise if the UI handles the event, and does an Invoke,
             // we could deadlock if the UI is also wiating on a searchComplete.WaitOne().
             RaiseStatusChanged();
+        }
+
+        /// <summary>
+        /// Execute the search
+        /// </summary>
+        /// <returns>True if the search completes, false otherwise.</returns>
+        private bool ExecuteSearch()
+        {
+            bool searchCompleted = false;
+
+            // Execute the search
+            if (!isCancelRequested)
+            {
+                try
+                {
+                    using (SqlConnection con = SqlSession.Current.OpenConnection())
+                    {
+                        bool gotLock = false;
+
+                        // Wait in line with other update\initial counts
+                        while (!isCancelRequested)
+                        {
+                            if (ActiveCalculationUtility.AcquireCalculatingLock(con, TimeSpan.FromSeconds(2)))
+                            {
+                                gotLock = true;
+                                break;
+                            }
+
+                            log.InfoFormat("Search timed out waiting for calculation lock, will try again...");
+                        }
+
+                        try
+                        {
+                            if (!isCancelRequested)
+                            {
+                                Stopwatch sw = Stopwatch.StartNew();
+
+                                searchCmd.Connection = con;
+                                searchCmd.ExecuteNonQuery();
+                                searchCompleted = true;
+
+                                log.DebugFormat("@@@@@ Time to execute search query: {0}", sw.Elapsed.TotalSeconds);
+                            }
+                        }
+                        finally
+                        {
+                            if (gotLock)
+                            {
+                                try
+                                {
+                                    ActiveCalculationUtility.ReleaseCalculatingLock(con);
+                                }
+                                catch (Exception ex)
+                                {
+                                    log.Error("Search failed to release calculating lock.", ex);
+                                }
+                            }
+                        }
+                    }
+                }
+                    // Depending on the timing of the cancel, it could throw either SqlException or InvalidOperationException
+                catch (SqlException)
+                {
+                    if (!isCancelRequested)
+                    {
+                        throw;
+                    }
+                }
+                catch (InvalidOperationException)
+                {
+                    if (!isCancelRequested)
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return searchCompleted;
+        }
+
+        /// <summary>
+        /// Create a new filter node content entity
+        /// </summary>
+        private FilterNodeContentEntity CreateSearchFilterNodeContentEntity(FilterDefinition definition)
+        {
+            FilterNodeContentEntity nodeContent;
+            
+            // Create a new count and initialize the filter node to do it.  Up to and through the first alpha we didn't apply the count
+            // to the node until after the results were calculated.  This provided a very "smooth" search experience where you were always
+            // taken directly from one result set to the next.  But, if the search takes a while, then you'd be viewing a result set from
+            // the last search until it completed, and this felt pretty wrong.  If the code starting with making a clone is moved back to the area
+            // that is "if (searchCompleted)", then the DeleteAbandonedFilterCounts needs to be updated to make sure to not somehow delete
+            // the node count that would look abandoned while doing the initial search calculation.
+            using (SqlAdapter adapter = new SqlAdapter(true))
+            {
+                // Create the FilterNodeContent row to hold the results
+                nodeContent = CreateFilterNodeContent(definition);
+
+                // Make a clone. Because we are on another thread.  The UI thread could be trying
+                // to look at the node ID between setting and saving it if we dont.  It doesnt matter
+                // that we have a clone.  The actual object does not matter, only the information.
+                FilterNodeEntity clone = new FilterNodeEntity(searchNode.Fields.Clone());
+                clone.IsNew = false;
+                clone.IgnoreConcurrency = true;
+                clone.FilterSequence = SearchManager.GetPlaceholder(filterTarget).FilterSequence;
+
+                // Update the FilterNodeContentID of the node.  This is what points to the new search results.
+                clone.FilterNodeContentID = nodeContent.FilterNodeContentID;
+
+                try
+                {
+                    adapter.SaveEntity(clone, false, false);
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    // Even with the added ping, this was still happening as of 3.7.5.5512. We'll just create a new
+                    // filter node and associate the content with it instead.
+                    log.Debug("The Search must have been considered abandoned by another instance.  Creating a new filter node", ex);
+
+                    clone.IsNew = true;
+
+                    foreach (IEntityField2 field in clone.Fields)
+                    {
+                        field.IsChanged = true;
+                    }
+
+                    adapter.SaveEntity(clone, true, false);
+                }
+
+                // We didn't refetch, so we have to manually set the sync state
+                clone.Fields.State = EntityState.Fetched;
+
+                // This is the new search node
+                searchNode = clone;
+
+                adapter.Commit();
+            }
+            return nodeContent;
         }
 
         /// <summary>

@@ -51,6 +51,10 @@
     <Reference Include="Autofac.Integration.Mef">
       <HintPath>..\..\Components\Autofac.Integration.Mef.dll</HintPath>
     </Reference>
+    <Reference Include="ComponentFactory.Krypton.Toolkit, Version=4.4.0.0, Culture=neutral, PublicKeyToken=a87e673e9ecb6e8e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\ComponentFactory.Krypton.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="Divelements.SandGrid, Version=2.2.4.1, Culture=neutral, PublicKeyToken=75b7ec17dd7c14c3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Divelements.SandGrid.dll</HintPath>
@@ -95,6 +99,12 @@
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonOptionsControl.Designer.cs">
       <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Amazon\AmazonServiceControl.Designer.cs">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Amazon\AmazonSettingsControl.cs">
       <SubType>UserControl</SubType>
@@ -151,6 +161,9 @@
     <EmbeddedResource Include="Carriers\Amazon\AmazonOptionsControl.resx">
       <DependentUpon>AmazonOptionsControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Amazon\AmazonServiceControl.resx">
+      <DependentUpon>AmazonServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Amazon\AmazonSettingsControl.resx">
       <DependentUpon>AmazonSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -164,7 +177,7 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.26437\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.30808\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

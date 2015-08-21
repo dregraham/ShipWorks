@@ -67,6 +67,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         }
 
         [Fact]
+        public void Manipulate_DimensionsRoundedProperly_WhenDimensionsAreDecimals()
+        {
+            request.ShipmentEntity.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.IN;
+            request.ShipmentEntity.FedEx.Packages[0].DimsHeight = 3.2;
+            request.ShipmentEntity.FedEx.Packages[0].DimsLength = 3.9;
+            request.ShipmentEntity.FedEx.Packages[0].DimsWidth = 3.5;
+
+            testObject.Manipulate(request);
+
+            RequestedPackageLineItem requestedPackage = processShipmentRequest.RequestedShipment.RequestedPackageLineItems[0];
+
+            Assert.Equal("3", requestedPackage.Dimensions.Height);
+            Assert.Equal("4", requestedPackage.Dimensions.Length);
+            Assert.Equal("4", requestedPackage.Dimensions.Width);
+        }
+
+        [Fact]
         public void Manipulate_DimensionsSetProperly_TwoPackagesWithDimensionsInShipment_AndLinearUnitsIsCentimetersTest()
         {
             request.ShipmentEntity.FedEx.LinearUnitType = (int)FedExLinearUnitOfMeasure.CM;

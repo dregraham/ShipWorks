@@ -7,6 +7,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Stores;
 using System.Reflection;
+using ShipWorks.Core.UI;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -57,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// Amazon account merchant id
+        /// Amazon account Merchant ID (aka Seller ID)
         /// </summary>
         [Obfuscation(Exclude = true)]
         public string MerchantId

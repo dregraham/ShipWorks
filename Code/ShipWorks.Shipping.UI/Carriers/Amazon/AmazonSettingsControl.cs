@@ -19,10 +19,9 @@ namespace ShipWorks.Shipping.UI.Carriers.Amazon
         public override void LoadSettings()
         {
             accountManagerControl.Initialize();
-
-            ShippingSettingsEntity settings = ShippingSettings.Fetch();
-            
+                        
             //TODO Set insurance provider based on database field for Amazon Insurance
+            //ShippingSettingsEntity settings = ShippingSettings.Fetch();
             //insuranceProviderChooser.InsuranceProvider = (InsuranceProvider)settings.;
 
         }

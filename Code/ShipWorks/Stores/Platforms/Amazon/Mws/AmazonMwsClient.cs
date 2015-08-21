@@ -400,7 +400,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             // we work with a single marketplace at once
             request.Variables.Add("MarketplaceId.Id.1", store.MarketplaceID);
 
-            // The feed apparently takes the old Merchant Token or the new Merchant ID
+            // The feed apparently takes the old Merchant Token or the new Merchant ID (aka Seller ID)
             request.Variables.Add("Merchant", store.MerchantID);
 
             // Uploading fulfillment

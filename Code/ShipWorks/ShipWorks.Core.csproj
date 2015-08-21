@@ -1113,6 +1113,8 @@
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
+    <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonLatestExpectedDeliveryDateCondition.cs" />
+    <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\IStoreManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
@@ -1129,6 +1131,7 @@
       <DependentUpon>ChannelAdvisorSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
+    <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
@@ -1137,6 +1140,8 @@
     <Compile Include="Stores\StoreFilterRepository.cs" />
     <Compile Include="Stores\StoreFilterRepositorySaveResult.cs" />
     <Compile Include="Stores\StoreManagerWrapper.cs" />
+    <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinder.cs" />
+    <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinder.cs" />
     <Compile Include="UI\Controls\ResizingRichTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3342,6 +3347,7 @@
     <Compile Include="Stores\Platforms\Newegg\WizardPages\NeweggAccountPage.Designer.cs">
       <DependentUpon>NeweggAccountPage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\PropertyChangedHandler.cs" />
     <Compile Include="UI\Utility\ActiveEnumerationBindingSource.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -10337,10 +10343,13 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.5.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.0.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.1.3.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
     <None Include="Resources\calendar_31.png" />
@@ -10979,7 +10988,7 @@
     <Folder Include="UI\Editors\" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.26437\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.30808\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

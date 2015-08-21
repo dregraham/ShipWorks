@@ -4,6 +4,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using System.Reflection;
+using ShipWorks.Core.UI;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
