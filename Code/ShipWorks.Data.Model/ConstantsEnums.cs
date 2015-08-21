@@ -4915,8 +4915,8 @@ namespace ShipWorks.Data.Model
 		StoreID,
 		///<summary>MagentoTrackingEmails. </summary>
 		MagentoTrackingEmails,
-		///<summary>MagentoConnect. </summary>
-		MagentoConnect,
+		///<summary>MagentoVersion. </summary>
+		MagentoVersion,
 		/// <summary></summary>
 		AmountOfFields
 	}

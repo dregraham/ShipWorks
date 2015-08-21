@@ -13,6 +13,7 @@ using System.Net;
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Net;
 using System.Xml;
+using ShipWorks.Stores.Platforms.Magento.Enums;
 
 namespace ShipWorks.Stores.Platforms.Magento
 {
@@ -39,7 +40,22 @@ namespace ShipWorks.Stores.Platforms.Magento
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             storeCodeTextBox.Text = magentoStore.ModuleOnlineStoreCode;
 
-            radioMagentoConnect.Checked = magentoStore.MagentoConnect;
+           
+
+            switch ((MagentoVersion)magentoStore.MagentoVersion)
+            {
+                case MagentoVersion.PhpFile:
+                    radioMagentoConnect.Checked = false;
+                    break;
+                case MagentoVersion.MagentoConnect:
+                    radioMagentoConnect.Checked = true;
+                    break;
+                case MagentoVersion.MagentoTwo:
+                    throw new NotImplementedException("Magento Two is not yet supported");
+                default:
+                    throw new NotImplementedException("Unknown Magento Version");
+            }
+
         }
 
         /// <summary>
@@ -49,7 +65,10 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             magentoStore.ModuleOnlineStoreCode = storeCodeTextBox.Text;
-            magentoStore.MagentoConnect = radioMagentoConnect.Checked;
+            if (radioMagentoConnect.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.PhpFile;
+            }
 
             return base.SaveToEntity(store);
         }
@@ -116,7 +135,7 @@ namespace ShipWorks.Stores.Platforms.Magento
         /// </summary>
         protected override bool ConnectionVerificationNeeded(GenericModuleStoreEntity genericStore)
         {
-            if (genericStore.Fields[(int)MagentoStoreFieldIndex.MagentoConnect].IsChanged)
+            if (genericStore.Fields[(int)MagentoStoreFieldIndex.MagentoVersion].IsChanged)
             {
                 return true;
             }
