@@ -1,4 +1,5 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public GetEligibleShippingServices GetRates(AmazonAccountEntity account, AmazonShipmentEntity amazonShipment)
         {
-            
+            throw new NotImplementedException();
         }
     }
 }
