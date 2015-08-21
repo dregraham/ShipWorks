@@ -38,7 +38,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
             IsMultiValued = DistinctPropertyValues.Count() > 1;
 
             // If it's not multi valued, set the Text property
-            if (!IsMultiValued)
+            if (DistinctPropertyValues.Any() && !IsMultiValued)
             {
                 PropertyValue = DistinctPropertyValues.First();
             }
@@ -57,6 +57,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
             {
                 handler.Set(() => PropertyValue, ref propertyValue, value);
                 IsMultiValued = false;
+                Save();
             }
         }
 
