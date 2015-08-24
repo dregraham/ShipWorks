@@ -168,5 +168,9 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
         [Description("RRD EPS (ePacket Service)")]
         RrdEpsePacketService = 225,
+
+        [Description("RRD Generic")]
+        RrdGeneric = 226,
+
     }
 }
