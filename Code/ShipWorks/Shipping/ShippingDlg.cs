@@ -1145,6 +1145,7 @@ namespace ShipWorks.Shipping
             }
             
             newServiceControl.Initialize();
+            newServiceControl.Width = serviceControlArea.Width;
             return newServiceControl;
         }
 
