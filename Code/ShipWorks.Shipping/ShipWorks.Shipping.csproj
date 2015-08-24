@@ -74,7 +74,10 @@
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServices.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
@@ -117,7 +120,7 @@
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.30808\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

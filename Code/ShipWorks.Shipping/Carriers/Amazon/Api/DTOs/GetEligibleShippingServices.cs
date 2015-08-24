@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
 {
@@ -17,7 +18,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     public class GetEligibleShippingServicesResponse
     {
         [XmlElement(ElementName = "shippingServiceList")]
-        public ShippingServiceList ShippingServiceList { get; set; }
+        public List<ShippingService> ShippingServiceList { get; set; }
 
         [XmlElement(ElementName = "temporarilyUnavailableCarrierList")]
         public TemporarilyUnavailableCarrierList TemporarilyUnavailableCarrierList { get; set; }
@@ -30,7 +31,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
     public class Rate
     {
         [XmlElement(ElementName = "amount")]
-        public string Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [XmlElement(ElementName = "currencyCode")]
         public string CurrencyCode { get; set; }
@@ -67,18 +68,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public ShippingServiceOptions ShippingServiceOptions { get; set; }
     }
 
-    [XmlRoot(ElementName = "shippingServiceList")]
-    public class ShippingServiceList
-    {
-        [XmlElement(ElementName = "shippingService")]
-        public ShippingService ShippingService { get; set; }
-    }
-
     [XmlRoot(ElementName = "shippingServiceOptions")]
     public class ShippingServiceOptions
     {
         [XmlElement(ElementName = "CarrierWillPickUp")]
-        public string CarrierWillPickUp { get; set; }
+        public bool CarrierWillPickUp { get; set; }
 
         [XmlElement(ElementName = "deliveryExperience")]
         public string DeliveryExperience { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using ShipWorks.Core.UI;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls.MultiValueBinders
 {
@@ -47,6 +48,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         /// <summary>
         /// The text value to display.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public TProperty PropertyValue
         {
             get
@@ -64,6 +66,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         /// <summary>
         /// Returns true if the number of distinct text values is greater than 1.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool IsMultiValued
         {
             get

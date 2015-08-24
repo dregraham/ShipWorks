@@ -99,6 +99,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             weight.DataBindings.Clear();
             weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight));
             weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued));
+
+            service.DataBindings.Clear();
+            service.DataBindings.Add("DataSource", viewModel, "ServicesAvailable");
+            service.DataBindings.Add("SelectedItem", viewModel, "Service");
+            service.DataBindings.Add("MultiValued", viewModel, "ServiceIsMultiValued");
         }
 
         /// <summary>
@@ -173,24 +178,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             string text = string.Empty;
 
-            //if (service.MultiValued || carrier.MultiValued)
-            //{
-            //    text = "(Multiple)";
-            //}
-            //else
-            //{
-            //    text = carrier.Text;
+            if (service.MultiValued) // || carrier.MultiValued)
+            {
+                text = "(Multiple)";
+            }
+            else
+            {
+                text = service.Text;
 
-            //    if (service.Text.Length > 0)
-            //    {
-            //        if (text.Length > 0)
-            //        {
-            //            text += ", ";
-            //        }
+                if (service.Text.Length > 0)
+                {
+                    if (text.Length > 0)
+                    {
+                        text += ", ";
+                    }
 
-            //        text += service.Text;
-            //    }
-            //}
+                    text += service.Text;
+                }
+            }
 
             sectionShipment.ExtraText = text;
         }

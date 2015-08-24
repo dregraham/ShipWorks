@@ -46,9 +46,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        public GetEligibleShippingServices GetRates(AmazonAccountEntity account, AmazonShipmentEntity amazonShipment)
+        public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails)
         {
-            throw new NotImplementedException();
+            throw new System.NotImplementedException();
         }
     }
 }

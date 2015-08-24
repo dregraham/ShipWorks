@@ -106,6 +106,7 @@
     <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModelTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonCredentialsTest.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModelTest.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,7 +132,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5711.30808\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
     <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
