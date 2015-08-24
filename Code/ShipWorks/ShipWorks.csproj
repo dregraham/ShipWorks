@@ -1167,7 +1167,11 @@
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonEarliestExpectedDeliveryDateCondition.cs" />
     <Compile Include="Stores\IStoreManager.cs" />
     <Compile Include="Stores\Platforms\Amazon\CoreExtensions\Filters\AmazonIsPrimeCondition.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsResponseHandler.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

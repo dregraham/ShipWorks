@@ -458,6 +458,8 @@
     <Compile Include="Shipping\ShipSense\Packaging\KnowledgebasePackageChangeSetXmlWriterTest.cs" />
     <Compile Include="Shipping\ShipSense\ShipSenseSynchronizerTest.cs" />
     <Compile Include="SqlServer\FilterTests.cs" />
+    <Compile Include="Stores\Amazon\AmazonMwsResponseHandlerTest.cs" />
+    <Compile Include="Stores\Amazon\AmazonMwsWebClientSettingsTest.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />

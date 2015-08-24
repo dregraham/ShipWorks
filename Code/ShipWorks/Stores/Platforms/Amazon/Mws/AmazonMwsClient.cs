@@ -35,68 +35,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     {
         static readonly ILog log = LogManager.GetLogger(typeof(AmazonMwsClient));
 
-        // Default base namespace for Amazon requests and responses
-        private static string endpointNamespace = "https://mws.amazonservices.com";
-
-        /// <summary>
-        /// HTTP endpoint of the Amazon service
-        /// </summary>
-        private string Endpoint
-        {
-            get 
-            {
-                switch (Store.AmazonApiRegion)
-                {
-                    case "US":
-                        return "https://mws.amazonservices.com";
-                    case "CA":
-                        return "https://mws.amazonservices.ca";
-                    case "MX":
-                        return "https://mws.amazonservices.com.mx";
-                    default:
-                        return "https://mws.amazonservices.co.uk";
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets the access key id that should be used for the current store
-        /// </summary>
-        private string InterapptiveAccessKeyID
-        {
-            get
-            {
-                return IsNorthAmericanStore ? 
-                    "FMrhIncQWseTBwglDs00lVdXyPVgObvu" : 
-                    "6bFMt0mymaWE0aWiaWT3SGs9LjvI//db";
-            }
-        }
-
-        /// <summary>
-        /// Gets the secret key that should be used for the current store
-        /// </summary>
-        private string InterapptiveSecretKey
-        {
-            get
-            {
-                return IsNorthAmericanStore ? 
-                    "JIX6YaY03qfP5LO31sssIzlVV2kAskmIPw/mj7X+M3EQpsyocKz062su7+INVas5" : 
-                    "JjHvzq+MGZuxJu9EkjDv0QGSNQC/FYFg4lSe5PP5HMHRinkOWJhMLPeRH2057Ohd";
-            }
-        }
-
-        /// <summary>
-        /// Is the current store in North America?
-        /// </summary>
-        private bool IsNorthAmericanStore
-        {
-            get 
-            { 
-                return Store.AmazonApiRegion == "US" || Store.AmazonApiRegion == "CA" || Store.AmazonApiRegion == "MX"; 
-            }
-        }
-
         public const int MaxItemsPerProductDetailsRequest = 5;
+
+        // MWS settings class
+        AmazonMwsWebClientSettings mwsSettings;
 
         // the store/account we are working with
         AmazonStoreEntity store;
@@ -112,8 +54,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public AmazonMwsClient(AmazonStoreEntity store, IProgressReporter progress)
         {
-            this.store = store;
 
+            AmazonMwsConnection mwsConnection = new AmazonMwsConnection()
+            {
+                MerchantId = store.MerchantID,
+                AuthToken = store.AuthToken,
+                AmazonApiRegion = store.AmazonApiRegion
+            };
+
+            this.store = store;
+            this.mwsSettings = new AmazonMwsWebClientSettings(mwsConnection);
             this.throttler = new AmazonMwsRequestThrottle();
             this.progress = progress;
         }
@@ -146,7 +96,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             IHttpResponseReader responseReader = ExecuteRequest(request, AmazonMwsApiCall.GetServiceStatus);
 
             // check the response for fatal errors
-            RaiseErrors(AmazonMwsApiCall.GetServiceStatus, responseReader);
+            AmazonMwsResponseHandler.RaiseErrors(AmazonMwsApiCall.GetServiceStatus, responseReader, mwsSettings);
 
             // read the service status, and log it
             AmazonMwsServiceStatus serviceStatus = ReadServiceStatus(AmazonMwsApiCall.GetServiceStatus, responseReader);
@@ -211,9 +161,9 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             List<AmazonMwsMarketplace> marketplaces = new List<AmazonMwsMarketplace>();
 
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(new NameTable());
-            namespaceManager.AddNamespace("amz", GetApiNamespace(apiCall).NamespaceName);
+            namespaceManager.AddNamespace("amz", mwsSettings.GetApiNamespace(apiCall).NamespaceName);
 
-            XNamespace amz = GetApiNamespace(apiCall).NamespaceName;
+            XNamespace amz = mwsSettings.GetApiNamespace(apiCall).NamespaceName;
 
             foreach (var xElement in xDocument.XPathSelectElements("//amz:ListMarketplaces/amz:Marketplace", namespaceManager))
             {
@@ -279,7 +229,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 // make the call
                 IHttpResponseReader response = ExecuteRequest(request, apiCall);
-                var xpath = GetXPathNavigator(response, apiCall);
+                var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, apiCall, mwsSettings);
 
                 // find the token for the next request
                 nextToken = ReadNextToken(xpath);
@@ -327,7 +277,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 // execute the request
                 IHttpResponseReader response = ExecuteRequest(request, apiCall);
-                var xpath = GetXPathNavigator(response, apiCall);
+                var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, apiCall, mwsSettings);
 
                 // find the token for the next request
                 nextToken = ReadNextToken(xpath);
@@ -367,11 +317,11 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             // execute the request
             IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetMatchingProductForId);            
-            var xpath = GetXPathNavigator(response, AmazonMwsApiCall.GetMatchingProductForId);
+            var xpath = AmazonMwsResponseHandler.GetXPathNavigator(response, AmazonMwsApiCall.GetMatchingProductForId, mwsSettings);
             
             // Add the additional namespace so weight, image URL, and other data about the 
             // product can be extracted
-            xpath.Namespaces.AddNamespace("details", string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd", GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
+            xpath.Namespaces.AddNamespace("details", string.Format("http://mws.amazonservices.com/schema/Products/{0}/default.xsd", mwsSettings.GetApiVersion(AmazonMwsApiCall.GetMatchingProductForId)));
 
             // done
             return xpath;
@@ -415,7 +365,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             // extract the feed submission ID for logging
             string responseText = response.ReadResult();
 
-            XNamespace ns = GetApiNamespace(AmazonMwsApiCall.SubmitFeed);
+            XNamespace ns = mwsSettings.GetApiNamespace(AmazonMwsApiCall.SubmitFeed);
             XDocument xdoc = XDocument.Parse(responseText);
 
             string feedSubmissionId = (string) xdoc.Descendants(ns + "FeedSubmissionId").FirstOrDefault();
@@ -615,7 +565,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 // a simple GET against the MWS url provides xml containing the server time
                 HttpRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-                submitter.Uri = new Uri(Endpoint);
+                submitter.Uri = new Uri(mwsSettings.Endpoint);
                 submitter.Verb = HttpVerb.Get;
 
                 using (IHttpResponseReader reader = submitter.GetResponse())
@@ -671,12 +621,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 DateTime timestamp = DateTime.UtcNow;
 
-                string endpointPath = GetApiEndpointPath(amazonMwsApiCall);
+                string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
-                request.Uri = new Uri(Endpoint + endpointPath);
+                request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
                 request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
 
-                request.Variables.Add("Action", GetActionName(amazonMwsApiCall));
+                request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
 
                 // For the ListParticipations call, this is exactly the data we are trying to find
                 if (amazonMwsApiCall != AmazonMwsApiCall.ListMarketplaceParticipations)
@@ -693,8 +643,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 request.Variables.Add("SignatureMethod", "HmacSHA256");
                 request.Variables.Add("SignatureVersion", "2");
                 request.Variables.Add("Timestamp", FormatDate(timestamp));
-                request.Variables.Add("Version", GetApiVersion(amazonMwsApiCall));
-                request.Variables.Add("AWSAccessKeyId", Decrypt(InterapptiveAccessKeyID));
+                request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
+                request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
 
                 // now construct the signature parameter
                 string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
@@ -705,7 +655,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
 
                 // sign the string and add it to the request
-                string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(InterapptiveSecretKey), SigningAlgorithm.SHA256);
+                string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
                 request.Variables.Add("Signature", signature);
 
                 // add a User Agent header
@@ -716,7 +666,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
                 log.InfoFormat("Submitting request for {0}", amazonMwsApiCall);
 
-                ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Amazon, GetActionName(amazonMwsApiCall));
+                ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall));
 
                 // log the request
                 logger.LogRequest(request);
@@ -737,7 +687,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 logger.LogResponse(response.ReadResult());
 
                 // check response for errors
-                RaiseErrors(amazonMwsApiCall, response);
+                AmazonMwsResponseHandler.RaiseErrors(amazonMwsApiCall, response, mwsSettings);
 
                 return response;
             }
@@ -774,7 +724,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
             {
                 IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetAuthToken);
 
-                XPathNamespaceNavigator responseNavigator = GetXPathNavigator(response, AmazonMwsApiCall.GetAuthToken);
+                XPathNamespaceNavigator responseNavigator = AmazonMwsResponseHandler.GetXPathNavigator(response, AmazonMwsApiCall.GetAuthToken, mwsSettings);
                 XPathNavigator selectSingleNode = responseNavigator.SelectSingleNode("//amz:MWSAuthToken");
                 if (selectSingleNode == null)
                 {
@@ -829,55 +779,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 }
             }
         }
-
-        /// <summary>
-        /// Get an XPathNavigator for the given response
-        /// </summary>
-        private static XPathNamespaceNavigator GetXPathNavigator(IHttpResponseReader response, AmazonMwsApiCall apiCall)
-        {
-            // create an XML Document for return to the caller
-            string responseXml = response.ReadResult();
-            XmlDocument xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(responseXml);
-
-            // pre-load the appropriate namespace for xpath querying using the prefix "amz:"
-            XPathNamespaceNavigator xpath = new XPathNamespaceNavigator(xmlDocument);
-            xpath.Namespaces.AddNamespace("amz", GetApiNamespace(apiCall).NamespaceName);
-
-            return xpath;
-        }
-
-        /// <summary>
-        /// Raise AmazonExceptions for errors returned to us in the response XML
-        /// </summary>
-        private static void RaiseErrors(AmazonMwsApiCall api, IHttpResponseReader reader)
-        {
-            XNamespace ns = GetApiNamespace(api);
-
-            string responseText = reader.ReadResult();
-            XDocument xdoc = XDocument.Parse(responseText);
-
-            var error = (from e in xdoc.Descendants(ns + "Error")
-                         select new
-                         {
-                             Code = (string)e.Element(ns + "Code"),
-                             Message = (string)e.Element(ns + "Message")
-                         }).FirstOrDefault();
-
-            if (error != null)
-            {
-                throw new AmazonException(error.Code, error.Message, null);
-            }
-        }
+        
 
         /// <summary>
         /// Reads the status of the Amazon MWS api out of a GetServiceStatus repsonse
         /// </summary>
-        private static AmazonMwsServiceStatus ReadServiceStatus(AmazonMwsApiCall api, IHttpResponseReader reader)
+        private AmazonMwsServiceStatus ReadServiceStatus(AmazonMwsApiCall api, IHttpResponseReader reader)
         {
             try
             {
-                XNamespace ns = GetApiNamespace(api);
+                XNamespace ns = mwsSettings.GetApiNamespace(api);
 
                 string responseText = reader.ReadResult();
                 XDocument xdoc = XDocument.Parse(responseText);
@@ -934,31 +845,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         }
 
         /// <summary>
-        /// Gets the XNamespace value for a particular API
-        /// </summary>
-        private static XNamespace GetApiNamespace(AmazonMwsApiCall api)
-        {
-            string apiNamespace = string.Empty;
-            if (api == AmazonMwsApiCall.SubmitFeed)
-            {
-                // thanks Amazon for not sticking to a scheme
-                apiNamespace = String.Format("http://mws.amazonaws.com/doc/{0}/", GetApiVersion(api));
-            }
-            else if (api == AmazonMwsApiCall.GetMatchingProductForId)
-            {
-                apiNamespace = string.Format("http://mws.amazonservices.com/schema/Products/{0}", GetApiVersion(api));
-            }
-            else
-            {
-                apiNamespace = endpointNamespace + GetApiEndpointPath(api);
-            }
-
-            
-
-            return apiNamespace;
-        }
-
-        /// <summary>
         /// Formats a date to make it appropriate/safe for Amazon
         /// </summary>
         private static string FormatDate(DateTime dateTime)
@@ -974,100 +860,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             return SecureText.Decrypt(encrypted, "Interapptive");
         }
-
-        /// <summary>
-        /// Gets the API endpoint path
-        /// </summary>
-        private static string GetApiEndpointPath(AmazonMwsApiCall amazonMwsApiCall)
-        {
-            string apiName = "";
-            string version = "";
-
-            switch (amazonMwsApiCall)
-            {
-                case AmazonMwsApiCall.GetServiceStatus:
-                case AmazonMwsApiCall.ListOrderItems:
-                case AmazonMwsApiCall.ListOrderItemsByNextToken:
-                case AmazonMwsApiCall.ListOrders:
-                case AmazonMwsApiCall.ListOrdersByNextToken:
-                    apiName = "Orders";
-                    version = GetApiVersion(amazonMwsApiCall);
-                    break;
-                case AmazonMwsApiCall.SubmitFeed:
-                    break;
-                case AmazonMwsApiCall.ListMarketplaceParticipations:
-                case AmazonMwsApiCall.GetAuthToken:
-                    apiName = "Sellers";
-                    version = GetApiVersion(amazonMwsApiCall);
-                    break;
-                case AmazonMwsApiCall.GetMatchingProductForId:
-                    apiName = "Products";
-                    version = GetApiVersion(amazonMwsApiCall);
-                    break;
-                default:
-                    throw new InvalidOperationException(String.Format("Unhandled AmazonMwsApiCall value in GetApiEndpointPath: {0}", amazonMwsApiCall));
-            }
-
-            string path = string.Format("/{0}/{1}", apiName, version);
-            path = path.Replace(@"//", @"/");
-
-            return path;
-        }
-
-        /// <summary>
-        /// Gets the Action parameter value for an API call 
-        /// </summary>
-        public static string GetActionName(AmazonMwsApiCall amazonMwsApiCall)
-        {
-            switch (amazonMwsApiCall)
-            {
-                case AmazonMwsApiCall.GetServiceStatus:
-                    return "GetServiceStatus";
-                case AmazonMwsApiCall.ListOrderItems:
-                    return "ListOrderItems";
-                case AmazonMwsApiCall.ListOrderItemsByNextToken:
-                    return "ListOrderItemsByNextToken";
-                case AmazonMwsApiCall.ListOrders:
-                    return "ListOrders";
-                case AmazonMwsApiCall.ListOrdersByNextToken:
-                    return "ListOrdersByNextToken";
-                case AmazonMwsApiCall.SubmitFeed:
-                    return "SubmitFeed";
-                case AmazonMwsApiCall.ListMarketplaceParticipations:
-                    return "ListMarketplaceParticipations";
-                case AmazonMwsApiCall.GetMatchingProductForId:
-                    return "GetMatchingProductForId";
-                case AmazonMwsApiCall.GetAuthToken:
-                    return "GetAuthToken";
-                default:
-                    throw new InvalidOperationException(string.Format("Unhandled AmazonMwsApiCall '{0}'", amazonMwsApiCall));
-            }
-        }
-
-        /// <summary>
-        /// Gets the api version for each call
-        /// </summary>
-        private static string GetApiVersion(AmazonMwsApiCall amazonMwsApiCall)
-        {
-            switch (amazonMwsApiCall)
-            {
-                case AmazonMwsApiCall.GetServiceStatus:
-                case AmazonMwsApiCall.ListOrderItems:
-                case AmazonMwsApiCall.ListOrderItemsByNextToken:
-                case AmazonMwsApiCall.ListOrders:
-                case AmazonMwsApiCall.ListOrdersByNextToken:
-                    return "2013-09-01";
-                case AmazonMwsApiCall.SubmitFeed:
-                    return "2009-01-01";
-                case AmazonMwsApiCall.ListMarketplaceParticipations:
-                case AmazonMwsApiCall.GetAuthToken:
-                    return "2011-07-01";
-                case AmazonMwsApiCall.GetMatchingProductForId:
-                    return "2011-10-01";
-                default:
-                    throw new InvalidOperationException(String.Format("Unhandled AmazonMwsApiCall value in GetApiVersion: {0}", amazonMwsApiCall));
-            }
-        }
+        
 
         /// <summary>
         /// Dispose
