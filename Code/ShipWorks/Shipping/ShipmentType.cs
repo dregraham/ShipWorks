@@ -314,7 +314,7 @@ namespace ShipWorks.Shipping
         {
             if (IoC.Current.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode))
             {
-                IoC.Current.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl));
+                return IoC.Current.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl));
             }
 
             throw new NotImplementedException("Either override InternalCreateServiceControl or register one with the IoC container");

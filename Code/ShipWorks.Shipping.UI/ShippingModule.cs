@@ -56,6 +56,10 @@ namespace ShipWorks.Shipping.UI
                 .ExternallyOwned();
 
             builder.RegisterType<AmazonServiceViewModel>();
+
+            builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Amazon)
+                .SingleInstance();
         }
     }
 }
