@@ -266,7 +266,7 @@ namespace ShipWorks.Stores.Platforms.Magento
                     // for connecting to our Magento Connect Extenion via SOAP
                     return new MagentoConnectWebClient(magentoStore);
                 case MagentoVersion.MagentoTwo:
-                    throw new NotImplementedException("Magento Two is not yet supported");
+                    return new MagentoTwoWebClient(magentoStore);
                 default:
                     throw new NotImplementedException("Magento Version not supported");
             }

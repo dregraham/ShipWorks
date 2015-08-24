@@ -51,7 +51,8 @@ namespace ShipWorks.Stores.Platforms.Magento
                     radioMagentoConnect.Checked = true;
                     break;
                 case MagentoVersion.MagentoTwo:
-                    throw new NotImplementedException("Magento Two is not yet supported");
+                    radioMagentoConnect.Checked = false;
+                    break;
                 default:
                     throw new NotImplementedException("Unknown Magento Version");
             }
