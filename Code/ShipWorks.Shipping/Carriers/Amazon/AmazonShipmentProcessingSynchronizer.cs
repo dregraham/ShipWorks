@@ -15,13 +15,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonShipmentProcessingSynchronizer"/> class.
         /// </summary>
-        public AmazonShipmentProcessingSynchronizer()
-            : this(new AmazonAccountManager())
-        { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AmazonShipmentProcessingSynchronizer"/> class.
-        /// </summary>
         /// <param name="amazonAccountManager">The account manager.</param>
         public AmazonShipmentProcessingSynchronizer(IAmazonAccountManager amazonAccountManager)
         {

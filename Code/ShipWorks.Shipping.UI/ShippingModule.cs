@@ -46,10 +46,6 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
-                .AsSelf()
-                .ExternallyOwned();
-
             builder.RegisterType<AmazonServiceControl>()
                 .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel))
                 .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
