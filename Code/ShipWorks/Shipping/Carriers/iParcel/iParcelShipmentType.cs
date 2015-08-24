@@ -590,11 +590,11 @@ namespace ShipWorks.Shipping.Carriers.iParcel
                 throw new NotFoundException("Primary package not found.");
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new iParcelShipmentProcessingSynchronizer();
         }

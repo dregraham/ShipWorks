@@ -1089,11 +1089,11 @@ namespace ShipWorks.Shipping.Carriers.UPS
                 throw new ShippingException(ex.Message, ex);
             }
         }
-        
+
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
             return new UpsShipmentProcessingSynchronizer();
         }

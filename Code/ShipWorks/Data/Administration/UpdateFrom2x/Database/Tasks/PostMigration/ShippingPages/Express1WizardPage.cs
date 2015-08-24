@@ -70,7 +70,7 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnConfigureClick(object sender, EventArgs e)
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 // We could have gotten through the "Signup" phase - which means we're not pending anymore, but still have not been fully Configured
                 // if they canceled before getting there endicia account# emailed to them.

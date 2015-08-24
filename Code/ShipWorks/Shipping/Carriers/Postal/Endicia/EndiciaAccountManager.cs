@@ -195,7 +195,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// </summary>
         public static bool DisplaySetupWizard(IWin32Window owner, EndiciaReseller endiciaReseller)
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 ShipmentType shipmentType = endiciaReseller == EndiciaReseller.Express1 ?
                     new Express1EndiciaShipmentType() :

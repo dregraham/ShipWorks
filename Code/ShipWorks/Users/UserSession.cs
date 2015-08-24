@@ -172,9 +172,12 @@ namespace ShipWorks.Users
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
 
-            foreach (IInitializeForCurrentSession service in IoC.Current.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                service.InitializeForCurrentSession();
+                foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+                {
+                    service.InitializeForCurrentSession();
+                }
             }
         }
 

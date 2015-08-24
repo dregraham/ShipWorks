@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public static DialogResult RunWizard(IWin32Window owner, ShipmentType shipmentType)
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (ShipmentTypeSetupWizardForm wizard = shipmentType.CreateSetupWizard(lifetimeScope))
                 {

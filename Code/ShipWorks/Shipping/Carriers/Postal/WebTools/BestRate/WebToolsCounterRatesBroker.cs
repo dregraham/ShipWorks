@@ -101,7 +101,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.WebTools.BestRate
         /// </summary>
         private bool DisplaySetupWizard()
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (Form setupWizard = actualPostalShipmentType.CreateSetupWizard(lifetimeScope))
                 {

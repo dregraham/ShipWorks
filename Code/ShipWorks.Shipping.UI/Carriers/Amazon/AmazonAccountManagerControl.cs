@@ -70,7 +70,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             edit.Enabled = enabled;
             delete.Enabled = enabled;
 
-            bool allowAccountRegistration = IoC.Current.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Amazon).IsAccountRegistrationAllowed;
+            bool allowAccountRegistration = false;
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                allowAccountRegistration = lifetimeScope.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Amazon).IsAccountRegistrationAllowed;
+            }
 
             if (!allowAccountRegistration)
             {
@@ -106,7 +111,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
                 return;
             }
 
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (AmazonAccountEditorDlg dialog = lifetimeScope.Resolve<AmazonAccountEditorDlg>())
                 {
@@ -129,7 +134,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnAdd(object sender, EventArgs e)
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (ShipmentTypeSetupWizardForm dlg = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon))
                 {
@@ -146,7 +151,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         private void OnDelete(object sender, EventArgs e)
         {
-            GridRow row = (GridRow) sandGrid.SelectedElements[0];
+            GridRow row = (GridRow)sandGrid.SelectedElements[0];
             AmazonAccountEntity shipper = (AmazonAccountEntity)row.Tag;
 
             // By default we are just asking if they want to delete

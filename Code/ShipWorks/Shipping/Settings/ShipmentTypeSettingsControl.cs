@@ -18,6 +18,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Templates.Printing;
 using log4net;
 using ShipWorks.ApplicationCore;
+using Autofac;
 
 namespace ShipWorks.Shipping.Settings
 {
@@ -45,12 +46,11 @@ namespace ShipWorks.Shipping.Settings
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeSettingsControl(ShipmentType shipmentType)
+        public ShipmentTypeSettingsControl(ShipmentType shipmentType, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
 
-            lifetimeScope = IoC.Current.BeginLifetimeScope();
-
+            this.lifetimeScope = lifetimeScope;
             this.shipmentType = shipmentType;
 
             // Hide 

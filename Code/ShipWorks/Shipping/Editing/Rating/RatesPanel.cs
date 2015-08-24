@@ -16,6 +16,8 @@ using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Policies;
 using ShipWorks.Stores;
 using ShipWorks.Shipping.Settings;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -375,9 +377,12 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
             else
             {
-                using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs))
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
-                    dialog.ShowDialog(this);
+                    using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs, lifetimeScope))
+                    {
+                        dialog.ShowDialog(this);
+                    }
                 }
             }
         }

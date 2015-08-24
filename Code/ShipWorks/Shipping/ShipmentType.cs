@@ -252,16 +252,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        public ServiceControlBase CreateServiceControl(RateControl rateControl)
-        {
-            return CreateServiceControl(rateControl, IoC.Current);
-        }
-
-        /// <summary>
-        /// Creates the UserControl that is used to edit service options for the shipment type
-        /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         public ServiceControlBase CreateServiceControl(RateControl rateControl, ILifetimeScope lifetimeScope)
         {
             ServiceControlBase serviceControlBase = null;
@@ -274,7 +264,9 @@ namespace ShipWorks.Shipping
             {
                 try
                 {
-                    serviceControlBase = InternalCreateServiceControl(rateControl);
+                    serviceControlBase = lifetimeScope.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode) ?
+                        lifetimeScope.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl)) : 
+                        InternalCreateServiceControl(rateControl);
 
                     break;
                 }
@@ -312,11 +304,6 @@ namespace ShipWorks.Shipping
         /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
         protected virtual ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
         {
-            if (IoC.Current.IsRegisteredWithKey<ServiceControlBase>(ShipmentTypeCode))
-            {
-                return IoC.Current.ResolveKeyed<ServiceControlBase>(ShipmentTypeCode, TypedParameter.From(rateControl));
-            }
-
             throw new NotImplementedException("Either override InternalCreateServiceControl or register one with the IoC container");
         }
 
@@ -1144,9 +1131,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <returns>The updates shipment (or shipments) that is ready to be processed. A null value may
         /// be returned to indicate that processing should be halted completely.</returns>
-        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate)
+        public virtual List<ShipmentEntity> PreProcess(ShipmentEntity shipment, Func<CounterRatesProcessingArgs, DialogResult> counterRatesProcessing, RateResult selectedRate, ILifetimeScope lifetimeScope)
         {
-            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer();
+            IShipmentProcessingSynchronizer synchronizer = GetProcessingSynchronizer(lifetimeScope);
             ShipmentTypePreProcessor preProcessor = new ShipmentTypePreProcessor();
             
             return preProcessor.Run(synchronizer, shipment, counterRatesProcessing, selectedRate);
@@ -1163,9 +1150,9 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
         /// </summary>
-        public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
+        protected virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer()
         {
-            return GetProcessingSynchronizer(IoC.Current);
+            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
         }
 
         /// <summary>
@@ -1173,12 +1160,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual IShipmentProcessingSynchronizer GetProcessingSynchronizer(ILifetimeScope lifetimeScope)
         {
-            if (lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode))
-            {
-                return lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode);
-            }
-
-            throw new NotImplementedException("Either override GetProcessingSynchronizer or register one with the IoC container");
+            return lifetimeScope.IsRegisteredWithKey<IShipmentProcessingSynchronizer>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode) :
+                GetProcessingSynchronizer();
         }
 
         /// <summary>

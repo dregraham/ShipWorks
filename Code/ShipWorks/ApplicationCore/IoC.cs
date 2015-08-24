@@ -13,8 +13,19 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Get the current IoC container
         /// </summary>
-        public static IContainer Current { get; private set; }
+        private static IContainer current;
 
+        /// <summary>
+        /// Begin a lifetime scope from which dependencies can be resolved
+        /// </summary>
+        public static ILifetimeScope BeginLifetimeScope()
+        {
+            return current.BeginLifetimeScope();
+        }
+
+        /// <summary>
+        /// Initialize the IoC container
+        /// </summary>
         public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
@@ -29,7 +40,7 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            Current = builder.Build();
+            current = builder.Build();
         }
     }
 }
