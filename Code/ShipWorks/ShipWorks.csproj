@@ -779,6 +779,7 @@
     <Compile Include="Shipping\Carriers\AccountManagerBase.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonAccountManager.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonOptionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -814,6 +815,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonAccountManagerControl.Designer.cs">
       <DependentUpon>AmazonAccountManagerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shipping\Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Amazon\IAmazonAccountManager.cs" />
@@ -1171,6 +1173,7 @@
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsIsPrime.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsResponseHandler.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\AmazonMwsWebClientSettings.cs" />
+    <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsWebClientSettings.cs" />
     <Compile Include="Stores\Platforms\Amazon\Mws\IAmazonMwsConnection.cs" />
     <Compile Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.cs">
       <SubType>UserControl</SubType>

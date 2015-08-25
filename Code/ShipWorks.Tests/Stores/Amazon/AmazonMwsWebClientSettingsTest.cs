@@ -10,10 +10,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void Endpoint_WithUnknownAmazonApiRegion_ReturnsUkEndpoint()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "unknown"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "unknown");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -23,10 +20,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void Endpoint_WithUsAmazonApiRegion_ReturnsUsEndpoint()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "US"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "US");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -36,10 +30,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void Endpoint_WithMxAmazonApiRegion_ReturnsMxEndpoint()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "MX"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "MX");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -50,10 +41,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void Endpoint_WithCaAmazonApiRegion_ReturnsCaEndpoint()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "CA"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "CA");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -63,11 +51,8 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void InterapptiveAccessKeyID_WithNorthAmericaApiRegion_ReturnsNorthAmericaInterapptiveAccessKeyID()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "US"
-            };
-
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "US");
+   
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
             Assert.AreEqual("FMrhIncQWseTBwglDs00lVdXyPVgObvu", testObject.InterapptiveAccessKeyID);
@@ -76,10 +61,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void InterapptiveAccessKeyID_WithNonNorthAmericaApiRegion_ReturnsNonNorthAmericaInterapptiveAccessKeyID()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "UK"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("","","UK");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -89,10 +71,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void InterapptiveSecretKey_WithNorthAmericaApiRegion_ReturnsNorthAmericaInterapptiveSecretKey()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
-            {
-                AmazonApiRegion = "US"
-            };
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "US");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -102,7 +81,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void InterapptiveSecretKey_WithNonNorthAmericaApiRegion_ReturnsNonNorthAmericaInterapptiveSecretKey()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection()
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "")
             {
                 AmazonApiRegion = "UK"
             };
@@ -115,7 +94,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetApiEndpointPath_WithOrdersAPICall_ReturnsOrdersEndpoint()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
             
@@ -125,7 +104,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetActionName_WithOrdersAPICall_ReturnsOrdersActioon()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -135,7 +114,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetApiNamespace_WithOrdersAPICall_ReturnsOrdersActioon()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -145,7 +124,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetApiNamespace_ForEachAmazonMwsApiCall_DoesNotThrowException()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -158,7 +137,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetActionName_ForEachAmazonMwsApiCall_DoesNotThrowException()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 
@@ -171,7 +150,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestMethod]
         public void GetApiVersion_ForEachAmazonMwsApiCall_DoesNotThrowException()
         {
-            AmazonMwsConnection testConnection = new AmazonMwsConnection();
+            AmazonMwsConnection testConnection = new AmazonMwsConnection("", "", "");
 
             AmazonMwsWebClientSettings testObject = new AmazonMwsWebClientSettings(testConnection);
 

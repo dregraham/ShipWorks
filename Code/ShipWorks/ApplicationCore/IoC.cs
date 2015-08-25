@@ -50,6 +50,12 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<AmazonRates>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
+                .As<IAmazonMwsWebClientSettingsFactory>();
+
             builder.RegisterType<AmazonCredentials>()
                 .AsSelf()
                 .As<IAmazonCredentials>();

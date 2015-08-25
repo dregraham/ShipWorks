@@ -6,14 +6,14 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// <summary>
     /// Class for handeling Amazon MWS API Related Settings
     /// </summary>
-    public class AmazonMwsWebClientSettings
+    public class AmazonMwsWebClientSettings : IAmazonMwsWebClientSettings
     {
         // mwsEntity to get settings from
-        IAmazonMwsConnection mwsConnection;
+        public IAmazonMwsConnection Connection;
 
         public AmazonMwsWebClientSettings(IAmazonMwsConnection mwsConnection)
         {
-            this.mwsConnection = mwsConnection;
+            this.Connection = mwsConnection;
         }
 
         // Default base namespace for Amazon requests and responses
@@ -26,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get
             {
-                switch (mwsConnection.AmazonApiRegion)
+                switch (Connection.AmazonApiRegion)
                 {
                     case "US":
                         return "https://mws.amazonservices.com";
@@ -73,7 +73,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             get
             {
-                return mwsConnection.AmazonApiRegion == "US" || mwsConnection.AmazonApiRegion == "CA" || mwsConnection.AmazonApiRegion == "MX";
+                return Connection.AmazonApiRegion == "US" || Connection.AmazonApiRegion == "CA" || Connection.AmazonApiRegion == "MX";
             }
         }
 

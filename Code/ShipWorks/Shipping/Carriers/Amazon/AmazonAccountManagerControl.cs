@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             edit.Enabled = enabled;
             delete.Enabled = enabled;
 
-            bool allowAccountRegistration = new AmazonShipmentType().IsAccountRegistrationAllowed;
+            bool allowAccountRegistration = IoC.Current.ResolveKeyed<ShipmentType>(ShipmentTypeCode.Amazon).IsAccountRegistrationAllowed;
 
             if (!allowAccountRegistration)
             {

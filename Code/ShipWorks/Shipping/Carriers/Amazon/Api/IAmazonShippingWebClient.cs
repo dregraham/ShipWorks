@@ -1,5 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -16,6 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails);
+        GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings);
     }
 }

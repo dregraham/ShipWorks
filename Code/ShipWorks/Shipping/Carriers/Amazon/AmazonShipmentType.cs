@@ -23,6 +23,13 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
+        Func<IAmazonRates> amazonRatesFactory;
+
+        public AmazonShipmentType(Func<IAmazonRates> amazonRatesFactory)
+        {
+            this.amazonRatesFactory = amazonRatesFactory;
+        }
+
         /// <summary>
         /// Shipment type code
         /// </summary>
@@ -166,7 +173,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            AmazonRates amazonRates = new AmazonRates();
+            IAmazonRates amazonRates = amazonRatesFactory();
 
             return amazonRates.GetRates(shipment);
         }

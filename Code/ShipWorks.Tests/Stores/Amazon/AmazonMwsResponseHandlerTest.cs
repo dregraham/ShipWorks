@@ -29,12 +29,7 @@ namespace ShipWorks.Tests.Stores.Amazon
         [TestInitialize]
         public void Initialize()
         {
-            mwsConnection = new AmazonMwsConnection()
-            {
-                MerchantId = "",
-                AmazonApiRegion = "US",
-                AuthToken = ""
-            };
+            mwsConnection = new AmazonMwsConnection("", "US", "");
 
             mwsSettings = new AmazonMwsWebClientSettings(mwsConnection);
 
