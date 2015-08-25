@@ -104,7 +104,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
         {
-            return GetType(typeCode, IoC.BeginLifetimeScope());
+            return GetType(typeCode, IoC.UnsafeGlobalLifetimeScope);
         }
 
         /// <summary>

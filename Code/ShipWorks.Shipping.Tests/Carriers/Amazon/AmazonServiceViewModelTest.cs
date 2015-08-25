@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 {
+    [Trait("Carrier", "Amazon")]
     public class AmazonServiceViewModelTest
     {
         [Fact]

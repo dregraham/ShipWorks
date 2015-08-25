@@ -10,6 +10,7 @@ using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 {
+    [Trait("Carrier", "Amazon")]
     public class AmazonCredentialsTest
     {
         [Fact]

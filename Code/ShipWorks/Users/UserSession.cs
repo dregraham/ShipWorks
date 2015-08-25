@@ -171,13 +171,10 @@ namespace ShipWorks.Users
             ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            
+            foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
             {
-                foreach (IInitializeForCurrentSession service in lifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
-                {
-                    service.InitializeForCurrentSession();
-                }
+                service.InitializeForCurrentSession();
             }
         }
 

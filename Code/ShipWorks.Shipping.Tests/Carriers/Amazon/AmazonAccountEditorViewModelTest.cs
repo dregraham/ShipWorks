@@ -8,6 +8,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon
 {
+    [Trait("Carrier", "Amazon")]
     public class AmazonAccountEditorViewModelTest
     {
         [Fact]

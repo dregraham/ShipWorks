@@ -16,6 +16,20 @@ namespace ShipWorks.ApplicationCore
         private static IContainer current;
 
         /// <summary>
+        /// Get the current global lifetime scope
+        /// </summary>
+        /// <remarks>This should ONLY be used in situations where a new lifetime scope cannot be created or disposed.
+        /// Any dependency resolved through this will NEVER be released, which could cause a memory leak if the dependency
+        /// is not marked as ExternallyOwned or SingleInstance</remarks>
+        public static ILifetimeScope UnsafeGlobalLifetimeScope
+        {
+            get
+            {
+                return current;
+            }
+        }
+
+        /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
         public static ILifetimeScope BeginLifetimeScope()

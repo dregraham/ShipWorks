@@ -10,6 +10,7 @@ using Xunit;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon.Api
 {
+    [Trait("Carrier", "Amazon")]
     public class AmazonRateTests
     {
         GetEligibleShippingServices fakedRateResponse;
