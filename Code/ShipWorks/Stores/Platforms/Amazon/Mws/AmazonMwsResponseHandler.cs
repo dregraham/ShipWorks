@@ -12,13 +12,23 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// <summary>
     /// Handels api responses from MWS API
     /// </summary>
-    public class AmazonMwsResponseHandler
+    public static class AmazonMwsResponseHandler
     {
         /// <summary>
         /// Get an XPathNavigator for the given response
         /// </summary>
         public static XPathNamespaceNavigator GetXPathNavigator(IHttpResponseReader response, AmazonMwsApiCall apiCall, AmazonMwsWebClientSettings mwsSettings)
         {
+            if(response == null) 
+            {
+                throw new ArgumentNullException("response");
+            }
+
+            if (mwsSettings == null)
+            {
+                throw new ArgumentNullException("mwsSettings");
+            }
+
             // create an XML Document for return to the caller
             string responseXml = response.ReadResult();
             XmlDocument xmlDocument = new XmlDocument();
@@ -36,6 +46,16 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// </summary>
         public static void RaiseErrors(AmazonMwsApiCall api, IHttpResponseReader reader, AmazonMwsWebClientSettings mwsSettings)
         {
+            if (mwsSettings == null)
+            {
+                throw new ArgumentNullException("mwsSettings");
+            }
+
+            if (reader == null)
+            {
+                throw new ArgumentNullException("reader");
+            }
+
             XNamespace ns = mwsSettings.GetApiNamespace(api);
 
             string responseText = reader.ReadResult();

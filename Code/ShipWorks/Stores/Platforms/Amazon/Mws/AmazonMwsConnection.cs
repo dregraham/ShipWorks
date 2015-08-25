@@ -11,6 +11,13 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
     /// </summary>
     public class AmazonMwsConnection : IAmazonMwsConnection
     {
+        public AmazonMwsConnection(string merchantId, string authToken, string amazonApiRegion)
+        {
+            this.MerchantId = merchantId;
+            this.AuthToken = authToken;
+            this.AmazonApiRegion = amazonApiRegion;
+        }
+
         /// <summary>
         /// Amazon account Merchant ID (aka Seller ID)
         /// </summary>

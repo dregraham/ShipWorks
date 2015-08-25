@@ -55,12 +55,12 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         public AmazonMwsClient(AmazonStoreEntity store, IProgressReporter progress)
         {
 
-            AmazonMwsConnection mwsConnection = new AmazonMwsConnection()
+            if (store == null)
             {
-                MerchantId = store.MerchantID,
-                AuthToken = store.AuthToken,
-                AmazonApiRegion = store.AmazonApiRegion
-            };
+                throw new ArgumentNullException("store");
+            }
+
+            AmazonMwsConnection mwsConnection = new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.AmazonApiRegion);
 
             this.store = store;
             this.mwsSettings = new AmazonMwsWebClientSettings(mwsConnection);
