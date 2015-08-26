@@ -55,9 +55,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <returns></returns>
         public AmazonMwsWebClientSettings Create(string merchantId, string authToken, string apiRegion)
         {
-            if (!string.IsNullOrWhiteSpace(merchantId) &&
-                !string.IsNullOrWhiteSpace(authToken) &&
-                !string.IsNullOrWhiteSpace(apiRegion))
+            if (string.IsNullOrWhiteSpace(merchantId) &&
+                string.IsNullOrWhiteSpace(authToken) &&
+                string.IsNullOrWhiteSpace(apiRegion))
             {
                 throw new ArgumentException("Cannot pass empty string to Amazon Mws Connection");
             }

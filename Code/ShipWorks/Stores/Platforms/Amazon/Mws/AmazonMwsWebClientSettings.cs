@@ -134,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
                 case AmazonMwsApiCall.GetEligibleShippingServices:
-                    apiName = "shipment";
+                    apiName = "Shipment";
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
                 default:
