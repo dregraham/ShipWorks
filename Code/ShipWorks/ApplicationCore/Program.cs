@@ -73,7 +73,7 @@ namespace ShipWorks
         /// </summary>
         public static string AppFileName
         {
-            get { return Assembly.GetExecutingAssembly().Location; }
+            get { return Assembly.GetEntryAssembly().Location; }
         }
 
         /// <summary>
