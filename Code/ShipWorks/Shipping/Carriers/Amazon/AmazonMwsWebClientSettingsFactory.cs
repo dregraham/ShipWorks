@@ -42,5 +42,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             return new AmazonMwsWebClientSettings(new AmazonMwsConnection(store.MerchantID, store.AuthToken, store.AmazonApiRegion));
         }
+
+        /// <summary>
+        /// Creates an instance of AmazonMwsWebClientSettings from an AmazonStoreEntity
+        /// </summary>
+        /// <param name="store"></param>
+        /// <returns></returns>
+        public AmazonMwsWebClientSettings Create(string merchantId, string authToken, string apiRegion)
+        {
+            if (!string.IsNullOrWhiteSpace(merchantId) &&
+                !string.IsNullOrWhiteSpace(authToken) &&
+                !string.IsNullOrWhiteSpace(apiRegion))
+            {
+                throw new ArgumentException("Cannot pass empty string to Amazon Mws Connection");
+            }
+
+            return new AmazonMwsWebClientSettings(new AmazonMwsConnection(merchantId, authToken, apiRegion));
+        }
     }
 }

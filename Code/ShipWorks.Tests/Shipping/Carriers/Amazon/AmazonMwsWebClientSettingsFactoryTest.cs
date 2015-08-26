@@ -19,15 +19,6 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
     [TestClass]
     public class AmazonMwsWebClientSettingsFactoryTest
     {
-        //[TestMethod]
-        //public void Create_ThrowsExceptionWhen_OrderIsNull()
-        //{
-        //    using (var mock = AutoMock.GetLoose())
-        //    {
-
-        //    }
-        //}
-
         [TestMethod]
         public void Create_ReturnsAmazonMwsWebClientSettings_FromStore()
         {

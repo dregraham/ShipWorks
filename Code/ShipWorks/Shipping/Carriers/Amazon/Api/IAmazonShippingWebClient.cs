@@ -12,11 +12,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the given credentials
         /// </summary>
-        AmazonValidateCredentialsResponse ValidateCredentials(string merchantId, string authToken);
+        AmazonValidateCredentialsResponse ValidateCredentials(AmazonMwsWebClientSettings mwsSettings);
 
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings);
+        GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings);
     }
 }

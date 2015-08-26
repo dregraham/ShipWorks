@@ -97,6 +97,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     return "2011-07-01";
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     return "2011-10-01";
+                case AmazonMwsApiCall.GetEligibleShippingServices:
+                    return "2015-06-01";
                 default:
                     throw new InvalidOperationException(String.Format("Unhandled AmazonMwsApiCall value in GetApiVersion: {0}", amazonMwsApiCall));
             }
@@ -129,6 +131,10 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     break;
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     apiName = "Products";
+                    version = GetApiVersion(amazonMwsApiCall);
+                    break;
+                case AmazonMwsApiCall.GetEligibleShippingServices:
+                    apiName = "shipment";
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
                 default:
@@ -166,6 +172,8 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     return "GetMatchingProductForId";
                 case AmazonMwsApiCall.GetAuthToken:
                     return "GetAuthToken";
+                case AmazonMwsApiCall.GetEligibleShippingServices:
+                    return "GetEligibleShippingServices";
                 default:
                     throw new InvalidOperationException(string.Format("Unhandled AmazonMwsApiCall '{0}'", amazonMwsApiCall));
             }

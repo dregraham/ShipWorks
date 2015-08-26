@@ -179,6 +179,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
+        /// Amazon supports rates
+        /// </summary>
+        public override bool SupportsGetRates
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
         protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)

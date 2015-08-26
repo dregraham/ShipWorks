@@ -17,6 +17,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private readonly PropertyChangedHandler handler;
         private readonly IAmazonShippingWebClient webClient;
         private readonly IStoreManager storeManager;
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         private string merchantId;
         private string authToken;
@@ -24,10 +25,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Constructor
         /// </summary>
-        public AmazonCredentials(IAmazonShippingWebClient webClient, IStoreManager storeManager)
+        public AmazonCredentials(IAmazonShippingWebClient webClient, IStoreManager storeManager, IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             handler = new PropertyChangedHandler(PropertyChanged);
 
+            this.settingsFactory = settingsFactory;
             this.webClient = webClient;
             this.storeManager = storeManager;
         }
@@ -90,7 +92,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         {
             if (!string.IsNullOrWhiteSpace(MerchantId) && !string.IsNullOrWhiteSpace(AuthToken))
             {
-                AmazonValidateCredentialsResponse response = webClient.ValidateCredentials(MerchantId, AuthToken);
+                AmazonValidateCredentialsResponse response = webClient.ValidateCredentials(settingsFactory.Create(MerchantId, AuthToken, "US"));
 
                 Success = response.Success;
                 Message = response.Message;
