@@ -45,10 +45,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             
             AddShipmentRequestDetails(request, requestDetails);
-            
-            GetEligibleShippingServices services = new GetEligibleShippingServices();
-            
-            IHttpResponseReader response = ExecuteRequest(request, AmazonMwsApiCall.GetEligibleShippingServices, mwsSettings);
+                        
+            ExecuteRequest(request, AmazonMwsApiCall.GetEligibleShippingServices, mwsSettings);
 
             throw new NotImplementedException();
         }
@@ -60,7 +58,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
+        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
         {
             DateTime timestamp = DateTime.UtcNow;
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
@@ -93,7 +91,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         /// <param name="request"></param>
         /// <param name="requestDetails"></param>
-        private void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Address Info
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
@@ -142,7 +140,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="request"></param>
         /// <param name="amazonMwsApiCall"></param>
         /// <param name="mwsSettings"></param>
-        private void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
         {
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
