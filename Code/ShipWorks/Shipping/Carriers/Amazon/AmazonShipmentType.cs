@@ -174,8 +174,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
             IAmazonRates amazonRates = amazonRatesFactory();
-
-            return amazonRates.GetRates(shipment);
+            return GetCachedRates<AmazonShipperException>(shipment, amazonRates.GetRates);
         }
 
         /// <summary>

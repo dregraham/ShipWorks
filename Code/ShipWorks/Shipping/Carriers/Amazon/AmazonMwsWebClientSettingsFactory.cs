@@ -28,6 +28,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             AmazonAccountEntity account = accountManager.GetAccount(shipment.AmazonAccountID);
 
+            if (account == null)
+            {
+                throw new AmazonShipperException("Amazon shipping account no longer exists");
+            }
+
             return new AmazonMwsWebClientSettings(new AmazonMwsConnection(account.MerchantID, account.AuthToken, "US"));
         }
 
