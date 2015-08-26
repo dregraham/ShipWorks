@@ -71,6 +71,7 @@
     <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
     <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
     <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

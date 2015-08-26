@@ -5,6 +5,7 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -14,14 +15,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     public class AmazonRates : IAmazonRates
     {
         private readonly IAmazonShippingWebClient webClient;
+        private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
         /// <param name="webClient">The web client.</param>
-        public AmazonRates(IAmazonShippingWebClient webClient)
+        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory)
         {
             this.webClient = webClient;
+            this.settingsFactory = settingsFactory;
         }
 
         /// <summary>
@@ -38,7 +41,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
 
-            GetEligibleShippingServices response = webClient.GetRates(requestDetails);
+            GetEligibleShippingServices response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
             return GetRateGroupFromResponse(response);
         }

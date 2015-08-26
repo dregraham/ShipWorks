@@ -1425,8 +1425,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             return new Credentials
             {
                 IntegrationID = integrationID,
-                Username = account==null ? "" : account.Username,
-                Password = account==null ? "" : SecureText.Decrypt(account.Password, account.Username)
+                Username = account == null ? "" : account.Username,
+                Password = account == null ? "" : SecureText.Decrypt(account.Password, account.Username)
             };
         }
     }

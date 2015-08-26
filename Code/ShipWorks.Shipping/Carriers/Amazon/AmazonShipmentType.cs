@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Data.Model.HelperClasses;
+using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -17,10 +21,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     public class AmazonShipmentType : ShipmentType
     {
         IAmazonAccountManager accountManager;
+		Func<IAmazonRates> amazonRatesFactory;
 
-        public AmazonShipmentType(IAmazonAccountManager accountManager)
+        public AmazonShipmentType(IAmazonAccountManager accountManager, Func<IAmazonRates> amazonRatesFactory)
         {
             this.accountManager = accountManager;
+            this.amazonRatesFactory = amazonRatesFactory;
         }
 
         /// <summary>
@@ -139,6 +145,45 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             amazonShipment.CarrierWillPickUp = false;
 
             base.ConfigureNewShipment(shipment);
+        }
+
+        /// <summary>
+        /// Gets the rates.
+        /// </summary>
+        public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            IAmazonRates amazonRates = amazonRatesFactory();
+
+            return amazonRates.GetRates(shipment);
+        }
+
+        /// <summary>
+        /// Gets the fields used for rating a shipment.
+        /// </summary>
+        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        {
+            List<IEntityField2> fields = base.GetRatingFields(shipment).ToList();
+
+            fields.AddRange
+                (
+                    new List<IEntityField2>()
+                    {
+                        shipment.Amazon.Fields[AmazonShipmentFields.AmazonAccountID.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.CarrierName.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.CarrierWillPickUp.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DateMustArriveBy.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DeclaredValue.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DeliveryExperience.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DimsAddWeight.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DimsHeight.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DimsLength.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.DimsWeight.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.ShippingServiceID.FieldIndex],
+                        shipment.Amazon.Fields[AmazonShipmentFields.ShippingServiceName.FieldIndex]
+                    }
+                );
+
+            return fields;
         }
     }
 }

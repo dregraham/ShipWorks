@@ -7,6 +7,8 @@ using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Editing.Rating;
 using Xunit;
+using ShipWorks.Shipping.Carriers.Amazon;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Shipping.Tests.Carriers.Amazon.Api
 {
@@ -16,7 +18,9 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.Api
         GetEligibleShippingServices fakedRateResponse;
         AmazonRates testObject;
         ShipmentEntity shipment;
+        AmazonMwsWebClientSettings mwsSettings;
         Mock<IAmazonShippingWebClient> webClient;
+        Mock<IAmazonMwsWebClientSettingsFactory> mwsSettingsFactory;
 
         public AmazonRateTests()
         {
@@ -61,12 +65,17 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.Api
                 AmazonOrderItemCode = "42",
                 Quantity = 5
             });
+
+            mwsSettings = new AmazonMwsWebClientSettings(new AmazonMwsConnection("", "", ""));
+
+            mwsSettingsFactory = new Mock<IAmazonMwsWebClientSettingsFactory>();
+            mwsSettingsFactory.Setup(s => s.Create(It.IsAny<AmazonShipmentEntity>())).Returns(mwsSettings);
             
             webClient = new Mock<IAmazonShippingWebClient>();
-            webClient.Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>()))
+            webClient.Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
                 .Returns(fakedRateResponse);
 
-            testObject = new AmazonRates(webClient.Object);
+            testObject = new AmazonRates(webClient.Object, mwsSettingsFactory.Object);
         }
 
         [Fact]
@@ -80,10 +89,11 @@ namespace ShipWorks.Shipping.Tests.Carriers.Amazon.Api
         public void AmazonRate_GetRates_CorrectShipmentInfoSentToClient_Test()
         {
             testObject.GetRates(shipment);
+
             webClient.Verify(
                 a => a.GetRates(
-                    It.Is<ShipmentRequestDetails>(p => p.AmazonOrderId == "10"))
-                );
+                    It.Is<ShipmentRequestDetails>(p => p.AmazonOrderId == "10"),mwsSettings
+                ));
         }
     }
 }

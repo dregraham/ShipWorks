@@ -56,6 +56,12 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
                 .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Amazon)
                 .SingleInstance();
+
+            builder.RegisterType<AmazonRates>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
+                .As<IAmazonMwsWebClientSettingsFactory>();
         }
     }
 }

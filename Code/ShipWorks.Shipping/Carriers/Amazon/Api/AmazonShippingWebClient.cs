@@ -1,5 +1,4 @@
-﻿using System;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
@@ -40,13 +39,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     return AmazonValidateCredentialsResponse.Failed(ex.Message);
                 }
             }
-
         }
 
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails)
+        public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
         {
             throw new System.NotImplementedException();
         }
