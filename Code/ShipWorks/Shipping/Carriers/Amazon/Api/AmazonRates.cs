@@ -10,6 +10,8 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.Editing.Rating;
 using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -118,15 +120,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static List<Item> GetItemList(OrderEntity order)
         {
+            List<AmazonOrderItemEntity> amazonOrderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.AmazonOrderItemEntity).Cast<AmazonOrderItemEntity>().ToList();
+
             List<Item> items = new List<Item>();
             
-            foreach (OrderItemEntity orderItemEntity in order.OrderItems)
+            foreach (AmazonOrderItemEntity amazonOrderItem in amazonOrderItems)
             {
-                AmazonOrderItemEntity orderItem = (AmazonOrderItemEntity) orderItemEntity;
-
                 Item item = new Item();
-                item.OrderItemId = orderItem.AmazonOrderItemCode;
-                item.Quantity = (int) orderItem.Quantity;
+                item.OrderItemId = amazonOrderItem.AmazonOrderItemCode;
+                item.Quantity = (int)amazonOrderItem.Quantity;
                 items.Add(item);
             }
 

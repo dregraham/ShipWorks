@@ -94,19 +94,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
             // Address Info
-            request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
-            request.Variables.Add("ShipmentRequestDetails.ShipmentFromAddress.Name", requestDetails.ShipFromAddress.Name);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine3", requestDetails.ShipFromAddress.AddressLine3);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.City", requestDetails.ShipFromAddress.City);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
+            
 
-            // Item Info
-            // Keep track of item index for the parameter name
-            int i = 0;
+            request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
+
+            int i = 1;
             foreach (Item item in requestDetails.ItemList)
             {
                 string orderItemIdParameter = String.Format("ShipmentRequestDetails.ItemList.Item.{0}.OrderItemId", i);
@@ -117,20 +109,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
                 i++;
             }
+            
+            //request.Variables.Add("ShipmentRequestDetails.ShipmentFromAddress.Name", requestDetails.ShipFromAddress.Name);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
+            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine3", requestDetails.ShipFromAddress.AddressLine3);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.City", requestDetails.ShipFromAddress.City);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
+            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
 
             // Package Info
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
+
             request.Variables.Add("ShipmentRequestDetails.weight.Value", requestDetails.Weight.ToString());
             request.Variables.Add("ShipmentRequestDetails.weight.Unit", "ounces");
-
-            // Service Info
-            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
             
-            // TODO documentation does not contain info about this but it is in the example query string
-            //request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.SaturdayDelivery", "");
         }
 
         /// <summary>
@@ -155,7 +152,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // sign the string and add it to the request
             string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
             request.Variables.Add("Signature", signature);
-
         }
 
         /// <summary>
