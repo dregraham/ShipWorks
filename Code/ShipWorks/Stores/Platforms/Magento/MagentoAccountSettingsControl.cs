@@ -45,13 +45,13 @@ namespace ShipWorks.Stores.Platforms.Magento
             switch ((MagentoVersion)magentoStore.MagentoVersion)
             {
                 case MagentoVersion.PhpFile:
-                    radioMagentoConnect.Checked = false;
+                    radioModuleDirect.Checked = true;
                     break;
                 case MagentoVersion.MagentoConnect:
                     radioMagentoConnect.Checked = true;
                     break;
                 case MagentoVersion.MagentoTwo:
-                    radioMagentoConnect.Checked = false;
+                    radioMagentoTwo.Checked = true;
                     break;
                 default:
                     throw new NotImplementedException("Unknown Magento Version");
@@ -66,11 +66,21 @@ namespace ShipWorks.Stores.Platforms.Magento
         {
             MagentoStoreEntity magentoStore = (MagentoStoreEntity)store;
             magentoStore.ModuleOnlineStoreCode = storeCodeTextBox.Text;
-            if (radioMagentoConnect.Checked)
+
+            if (radioModuleDirect.Checked)
             {
                 magentoStore.MagentoVersion = (int)MagentoVersion.PhpFile;
             }
 
+            if (radioMagentoConnect.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoConnect;
+            }
+
+            if (radioMagentoTwo.Checked)
+            {
+                magentoStore.MagentoVersion = (int)MagentoVersion.MagentoTwo;
+            }
             return base.SaveToEntity(store);
         }
 

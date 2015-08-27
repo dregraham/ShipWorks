@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">10.0</VisualStudioVersion>
+    <PostConversionRemoveFromScc>
+    </PostConversionRemoveFromScc>
+    <PostConversionAddToScc>
+    </PostConversionAddToScc>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateSqlClrDdl>False</GenerateSqlClrDdl>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>Database</OutputType>
+    <NoStandardLibraries>false</NoStandardLibraries>
+    <AssemblyName>ShipWorks.SqlServer</AssemblyName>
+    <RootNamespace>ShipWorks.SqlServer</RootNamespace>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
+    <PermissionSet>SAFE</PermissionSet>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation>C:\GitCC\Trunk\Backup\Code\ShipWorks.SqlServer\</UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <CodeAnalysisModuleSuppressionsFile>AnalysisSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ConnectionString />
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql100DatabaseSchemaProvider</DSP>
+    <Name>ShipWorks.SqlServer</Name>
+    <ProjectVersion>4.0</ProjectVersion>
+    <ProjectGuid>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</ProjectGuid>
+    <IncludeSchemaNameInFileName>False</IncludeSchemaNameInFileName>
+    <GenerateDatabaseFile>False</GenerateDatabaseFile>
+    <GenerateCreateScript>False</GenerateCreateScript>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <DefaultSchema>dbo</DefaultSchema>
+    <SqlServerVerification>False</SqlServerVerification>
+    <TargetLanguage>CS</TargetLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>
+    </DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <DefineConstants>
+    </DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\ActionQueueStepDeleteTrigger.cs" />
+    <Compile Include="Actions\ActionQueueStepUpdateTrigger.cs" />
+    <Compile Include="AnalysisSuppressions.cs" />
+    <Compile Include="Common\Data\ObjectReferenceManager.cs" />
+    <Compile Include="Common\Data\SqlAppLockUtility.cs" />
+    <Compile Include="Common\Filters\BuiltinFilter.cs" />
+    <Compile Include="Common\Filters\FilterCountStatus.cs" />
+    <Compile Include="Common\Filters\FilterNodePurpose.cs" />
+    <Compile Include="Common\Filters\FilterTarget.cs" />
+    <Compile Include="Data\Auditing\AuditColumnInfo.cs" />
+    <Compile Include="Data\Auditing\AuditTableInfo.cs" />
+    <Compile Include="Data\Auditing\AuditTriggers.cs" />
+    <Compile Include="Data\Auditing\AuditService.cs" />
+    <Compile Include="Data\GetEntityTableNumber.cs" />
+    <Compile Include="Data\Grid\ValidateGridLayouts.cs" />
+    <Compile Include="Data\Labels\NoteLabelTrigger.cs" />
+    <Compile Include="Data\Labels\OrderItemAttributeLabelTrigger.cs" />
+    <Compile Include="Data\Labels\OrderChargeLabelTrigger.cs" />
+    <Compile Include="Data\Labels\CustomerLabelTrigger.cs" />
+    <Compile Include="Data\Labels\OrderItemLabelTrigger.cs" />
+    <Compile Include="Data\Labels\OrderLabelTrigger.cs" />
+    <Compile Include="Data\Labels\ShipmentLabelTrigger.cs" />
+    <Compile Include="Data\Labels\StoreLabelTrigger.cs" />
+    <Compile Include="Data\Labels\TemplateFolderLabelTrigger.cs" />
+    <Compile Include="Data\Labels\TemplateLabelTrigger.cs" />
+    <Compile Include="Data\Rollups\EbayOrderItemRollupTrigger.cs" />
+    <Compile Include="Data\Rollups\OrderItemRollupTrigger.cs" />
+    <Compile Include="Data\Rollups\OrderRollupTrigger.cs" />
+    <Compile Include="Data\Rollups\RollupColumn.cs" />
+    <Compile Include="Data\Rollups\RollupMethod.cs" />
+    <Compile Include="Data\Rollups\RollupUtility.cs" />
+    <Compile Include="Email\EmailOutboundDeleteTrigger.cs" />
+    <Compile Include="Filters\CalculateUpdateFilterCounts.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtySearsOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyBuyDotComOrderItem.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyNeweggOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyEtsyOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyShopifyOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyFedExShipment.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyPostalShipment.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyProStoresOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyPayPalOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyOrderMotionOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyMarketplaceAdvisorOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyEbayOrderItem.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyEbayOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyChannelAdvisorOrderItem.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyChannelAdvisorOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyAmazonOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyDownloadDetail.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyOrderPaymentDetail.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyEmailOutbound.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyPrintResult.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyNote.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyUpsShipment.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterNodeColumnMaskTable.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterNodeColumnMaskUtility.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterNodeContentDirtyUtility.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterNodeJoinType.cs" />
+    <Compile Include="Filters\FilterCountCheckpoint.cs" />
+    <Compile Include="Filters\FilterCountCheckpointState.cs" />
+    <Compile Include="Filters\FilterCountUpdater.cs" />
+    <Compile Include="Filters\GetFilterNodeLayoutID.cs" />
+    <Compile Include="Filters\GetFilterNodeLevels.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyEmailOutboundRelation.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyShipment.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyOrderCharge.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyCustomer.cs" />
+    <Compile Include="Filters\ActiveCalculationUtility.cs" />
+    <Compile Include="Filters\CalculateInitialFilterCounts.cs" />
+    <Compile Include="Filters\DeleteAbandonedFilterCounts.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyOrder.cs" />
+    <Compile Include="Filters\DirtyCounts\FilterDirtyOrderItem.cs" />
+    <Compile Include="Filters\TreeManagement\FilterNodeColumnSettingsDeleted.cs" />
+    <Compile Include="Filters\TreeManagement\FilterNodeLayoutDirty.cs" />
+    <Compile Include="Filters\TreeManagement\FilterSequenceLayoutDirty.cs" />
+    <Compile Include="Filters\ValidateFilterLayouts.cs" />
+    <Compile Include="Filters\GetFilterSequenceLayoutID.cs" />
+    <Compile Include="General\Functions\BitwiseAnd.cs" />
+    <Compile Include="General\Functions\DatePart.cs" />
+    <Compile Include="General\Functions\DateToUniversalTime.cs" />
+    <Compile Include="General\Functions\GetTransactionID.cs" />
+    <Compile Include="General\Functions\RegexMatch.cs" />
+    <Compile Include="General\UserContext.cs" />
+    <Compile Include="General\UtilityFunctions.cs" />
+    <Compile Include="Properties\AssemblyInfoCommon.cs" />
+    <Compile Include="Shipping\UpsPackageDeleteTrigger.cs" />
+    <Compile Include="Shipping\FedExPackageDeleteTrigger.cs" />
+    <Compile Include="Shipping\ShipmentDeleteTrigger.cs" />
+    <Compile Include="Templates\GetTemplateFullName.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\GetTemplateDescendantsOfFolder.cs" />
+    <Compile Include="Templates\PrintResultDeleteTrigger.cs" />
+    <Compile Include="Templates\TemplateDeleteTrigger.cs" />
+    <Compile Include="Templates\TemplateUserSettingsTrigger.cs" />
+    <Compile Include="Users\GetComputerID.cs" />
+    <Compile Include="Users\GetUserID.cs" />
+    <Compile Include="Actions\ActionDeleteTrigger.cs" />
+    <Compile Include="Purge\PurgeAuditProcedure.cs" />
+    <Compile Include="Purge\PurgeLabelsProcedure.cs" />
+    <Compile Include="Purge\PurgeScriptRunner.cs" />
+    <Compile Include="Purge\PurgePrintResultProcedure.cs" />
+    <Compile Include="Purge\PurgeEmailOutboundProcedure.cs" />
+    <Compile Include="Common\Data\SqlLockException.cs" />
+    <Compile Include="Purge\PurgeAbandonedResources.cs" />
+    <Compile Include="Data\Auditing\AuditState.cs" />
+    <Compile Include="Shipping\ResetShipSenseProcedure.cs" />
+    <Compile Include="Shipping\ShipSenseKnowledgebaseUpdateTrigger.cs" />
+    <Compile Include="Shipping\OrderShipmentShipSenseStatusTrigger.cs" />
+    <Compile Include="Shipping\OrderShipSenseRecognitionStatusTrigger.cs" />
+    <Compile Include="Shipping\ShipmentShipSenseProcedure.cs" />
+    <Compile Include="Maintenance\RebuildTableIndex.cs" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\..\Build\AnalysisDictionary.xml">
+      <Link>Properties\AnalysisDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Actions\" />
+    <Folder Include="Common\" />
+    <Folder Include="Common\Data\" />
+    <Folder Include="Common\Filters\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\Auditing\" />
+    <Folder Include="Data\Grid\" />
+    <Folder Include="Data\Labels\" />
+    <Folder Include="Data\Rollups\" />
+    <Folder Include="Email\" />
+    <Folder Include="Filters\" />
+    <Folder Include="Filters\DirtyCounts\" />
+    <Folder Include="Filters\TreeManagement\" />
+    <Folder Include="General\" />
+    <Folder Include="General\Functions\" />
+    <Folder Include="Properties\" />
+    <Folder Include="Shipping\" />
+    <Folder Include="Templates\" />
+    <Folder Include="Users\" />
+    <Folder Include="Purge" />
+    <Folder Include="Maintenance" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties DebugDemeanorAllSatelliteAssemblies="False" DebugDemeanorExcludedAssemblyNamesCount="0" DebugDemeanorAdditionalAssemblyNamesCount="0" DebugDemeanorOut="Demeanor" DebugDemeanorNoParameters="False" DebugDemeanorForceParameters="False" DebugDemeanorApplication="False" DebugDemeanorInsitu="False" DebugDemeanorExcludeRegularExpCount="0" DebugDemeanorExcludeCount="0" DebugDemeanorReportName="" DebugDemeanorEnableReport="False" DebugDemeanorCompilerControlledAccessibility="False" DebugDemeanorObfuscateAllTypes="False" DebugDemeanorRootAssemblyFileName="" DebugDemeanorFlow="None" DebugDemeanorNames="Alpha" DebugDemeanorNoLogo="False" DebugDemeanorNoSerializable="False" DebugDemeanorNoResources="False" DebugDemeanorNoEnumerations="False" DebugDemeanorNoEvents="False" DebugDemeanorNoProperties="False" DebugDemeanorNoMethods="False" DebugDemeanorNoFields="False" DebugDemeanorNoTypes="False" DebugOverloadOnStatic="False" DebugDemeanorEncryptStrings="False" DebugDemeanorVerbose="True" DebugDemeanorPrefix="" DebugDemeanorConfigFile="" DebugDemeanorKeyContainer="" DebugDemeanorKeyFile="" DebugDemeanorObfuscationEnabled="False" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
