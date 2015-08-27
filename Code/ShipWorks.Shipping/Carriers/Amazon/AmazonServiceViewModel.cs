@@ -30,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonServiceViewModel()
         {
-            handler = new PropertyChangedHandler(PropertyChanged);
+            handler = new PropertyChangedHandler(() => PropertyChanged);
         }
 
         /// <summary>

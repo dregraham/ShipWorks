@@ -521,6 +521,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityExtensionsTests.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\CheckboxMultiValueBinderTest.cs" />
     <Compile Include="UI\Controls\MultiValueBinders\GenericMultiValueBinderTest.cs" />
+    <Compile Include="UI\PropertyChangedHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Core\Certificates\cert_key_pem.txt" />

@@ -25,7 +25,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonAccountEditorViewModel(IAmazonCredentials credentials, IAmazonAccountManager accountManager)
         {
-            handler = new PropertyChangedHandler(PropertyChanged);
+            handler = new PropertyChangedHandler(() => PropertyChanged);
 
             this.accountManager = accountManager;
 

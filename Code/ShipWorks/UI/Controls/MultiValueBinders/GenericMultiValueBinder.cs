@@ -30,7 +30,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         /// <param name="updateFunc">Action that updates each of the items in dataSource.</param>
         public GenericMultiValueBinder(IEnumerable<TDataSource> dataSource, Func<TDataSource, TProperty> selectFunc, Action<TDataSource, TProperty> updateFunc)
         {
-            handler = new PropertyChangedHandler(PropertyChanged);
+            handler = new PropertyChangedHandler(() => PropertyChanged);
             this.dataSource = dataSource;
             this.selectFunc = selectFunc;
             this.updateFunc = updateFunc;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace ShipWorks.Core.UI
 {
@@ -7,28 +8,30 @@ namespace ShipWorks.Core.UI
     /// </summary>
     public class PropertyChangedHandler
     {
-        private readonly PropertyChangedEventHandler onPropertyChanged;
+        private readonly Func<PropertyChangedEventHandler> getPropertyChanged;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PropertyChangedHandler(PropertyChangedEventHandler onPropertyChanged)
+        public PropertyChangedHandler(Func<PropertyChangedEventHandler> getPropertyChanged)
         {
-            this.onPropertyChanged = onPropertyChanged;
+            this.getPropertyChanged = getPropertyChanged;
         }
 
         /// <summary>
         /// Set the value of a field for a property
         /// </summary>
-        public void Set<T>(string name, ref T field, T value)
+        public bool Set<T>(string name, ref T field, T value)
         {
             if (Equals(field, value))
             {
-                return;
+                return false;
             }
 
             field = value;
             OnPropertyChanged(name);
+
+            return true;
         }
 
         /// <summary>
@@ -36,11 +39,7 @@ namespace ShipWorks.Core.UI
         /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = onPropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            getPropertyChanged()?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

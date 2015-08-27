@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public AmazonCredentials(IAmazonShippingWebClient webClient, IStoreManager storeManager)
         {
-            handler = new PropertyChangedHandler(PropertyChanged);
+            handler = new PropertyChangedHandler(() => PropertyChanged);
 
             this.webClient = webClient;
             this.storeManager = storeManager;
