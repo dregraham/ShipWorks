@@ -10,6 +10,9 @@ using System.Reflection;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
 using log4net;
+using System.Text.RegularExpressions;
+using System.Text;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -41,7 +44,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
         {
-
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             
             AddShipmentRequestDetails(request, requestDetails);
@@ -60,30 +62,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="mwsSettings"></param>
         private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
         {
-            DateTime timestamp = DateTime.UtcNow;
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
             request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
             request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
-
-            request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
-
-
-            request.Variables.Add("SellerId", mwsSettings.Connection.MerchantId);
-            request.Variables.Add("MWSAuthToken", mwsSettings.Connection.AuthToken);
-
-            request.Variables.Add("SignatureMethod", "HmacSHA256");
-            request.Variables.Add("SignatureVersion", "2");
-            request.Variables.Add("Timestamp", FormatDate(timestamp));
-            request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
+            
             request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
-
-            // add a User Agent header
-            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
-
-            // business logic failures are handled through status codes
-            request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
-
+            request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
+            request.Variables.Add("MWSAuthToken", mwsSettings.Connection.AuthToken);
+            request.Variables.Add("SellerId", mwsSettings.Connection.MerchantId);
         }
         
         /// <summary>
@@ -93,11 +80,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="requestDetails"></param>
         private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
         {
-            // Address Info
-            
-
+            // Order ID
             request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
-
+            
+            // Item Info
             int i = 1;
             foreach (Item item in requestDetails.ItemList)
             {
@@ -110,11 +96,22 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 i++;
             }
             
-            //request.Variables.Add("ShipmentRequestDetails.ShipmentFromAddress.Name", requestDetails.ShipFromAddress.Name);
+            // From Address Info
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Name", requestDetails.ShipFromAddress.Name);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
-            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine3", requestDetails.ShipFromAddress.AddressLine3);
+
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine2))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
+            }
+
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine3))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine3", requestDetails.ShipFromAddress.AddressLine3);
+            }
+
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.City", requestDetails.ShipFromAddress.City);
+            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.StateOrProvinceCode", requestDetails.ShipFromAddress.StateOrProvinceCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
             //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
@@ -124,10 +121,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
+            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString());
+            request.Variables.Add("ShipmentRequestDetails.Weight.Unit", "ounces");
 
-            request.Variables.Add("ShipmentRequestDetails.weight.Value", requestDetails.Weight.ToString());
-            request.Variables.Add("ShipmentRequestDetails.weight.Unit", "ounces");
-            
+            // ShippingServiceOptions
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+
+            //if (requestDetails.MustArriveByDate != null)
+            //{
+            //    request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
+            //}
         }
 
         /// <summary>
@@ -139,13 +143,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="mwsSettings"></param>
         private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
         {
+            request.Variables.Add("SignatureMethod", "HmacSHA256");
+            request.Variables.Add("SignatureVersion", "2");
+            request.Variables.Add("Timestamp", FormatDate(DateTime.UtcNow));
+            request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
+
             string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
 
             // now construct the signature parameter
             string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
-            string queryString = QueryStringUtility.GetQueryString(
-                request.Variables.OrderBy(v => v.Name, StringComparer.Ordinal),
-                QueryStringEncodingCasing.Upper);
+            string queryString = request.Variables
+                .OrderBy(v => v.Name, StringComparer.Ordinal)
+                .Select(v => v.Name + "=" + AmazonMwsUtility.SignatureEncode(v.Value, false))
+                .Aggregate((x,y) => x + "&" + y);
 
             string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
 
@@ -162,9 +172,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             // Adds our amazon credentials and other parameters
             // required for each api call
             ConfigureRequest(request, amazonMwsApiCall, mwsSettings);
-            
+
             // Signes the request
             AddSignature(request, amazonMwsApiCall, mwsSettings);
+
+            //request.Variables.Sort(v => v.Name);
+
+            // add a User Agent header
+            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+
+            // business logic failures are handled through status codes
+            request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
 
             try
             {
@@ -193,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (Exception ex)
             {
-                throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
+                throw WebHelper.TranslateWebException(ex, typeof(AmazonShipperException));
             }
         }
 
