@@ -22,7 +22,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
-        private GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType> deliveryExperienceBinder;
+        private IMultiValue<AmazonDeliveryExperienceType> deliveryExperienceBinder;
         private GenericMultiValueBinder<ShipmentEntity, string> shippingServiceNameBinder;
         private List<string> servicesAvailable;
 
@@ -80,13 +80,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Event for property changed handling
         /// </summary>
-        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(sender, e);
-            }
-        }
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e) => 
+            PropertyChanged?.Invoke(sender, e);
 
         /// <summary>
         /// Save
@@ -143,30 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// DeliveryExperience display text
         /// </summary>
-        [Obfuscation(Exclude = true)]
-        public AmazonDeliveryExperienceType DeliveryExperience
-        {
-            get
-            {
-                return deliveryExperienceBinder.PropertyValue;
-            }
-            set
-            {
-                deliveryExperienceBinder.PropertyValue = value; 
-            }
-        }
-
-        /// <summary>
-        /// DeliveryExperience is multi valued.
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool DeliveryConfirmationIsMultiValued
-        {
-            get
-            {
-                return deliveryExperienceBinder.IsMultiValued;
-            }
-        }
+        public IMultiValue<AmazonDeliveryExperienceType> DeliveryExperience => deliveryExperienceBinder;
 
         /// <summary>
         /// DateMustArriveBy display text

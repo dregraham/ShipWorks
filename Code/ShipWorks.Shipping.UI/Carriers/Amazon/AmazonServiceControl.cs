@@ -96,8 +96,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void CreateUiBindings()
         {
             deliveryConfirmation.DataBindings.Clear();
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel, nameof(viewModel.DeliveryExperience), false, DataSourceUpdateMode.OnPropertyChanged);
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel, nameof(viewModel.DeliveryConfirmationIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.PropertyValue), false, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel.DeliveryExperience, nameof(viewModel.DeliveryExperience.IsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             carrierWillPickUp.DataBindings.Clear();
             carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.Checked), viewModel, nameof(viewModel.CarrierWillPickUp), false, DataSourceUpdateMode.OnPropertyChanged);

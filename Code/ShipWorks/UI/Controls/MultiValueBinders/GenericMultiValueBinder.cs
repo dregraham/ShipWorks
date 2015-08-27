@@ -7,12 +7,35 @@ using System.Reflection;
 
 namespace ShipWorks.UI.Controls.MultiValueBinders
 {
+    public interface IMultiValue<T> : INotifyPropertyChanged
+    {
+        [Obfuscation(Exclude = true)]
+        T PropertyValue
+        {
+            get; set;
+        }
+
+        /// <summary>
+        /// Returns true if the number of distinct text values is greater than 1.
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        bool IsMultiValued
+        {
+            get;
+        }
+
+        /// <summary>
+        /// If the dataSource is not multi valued, saves Text to each of the items and updates IsMultiValued appropriately.
+        /// </summary>
+        void Save();
+    }
+
     /// <summary>
     /// Class to help bind UI controls with a list of items.
     /// </summary>
     /// <typeparam name="TDataSource">The list of items on which to bind.</typeparam>
     /// <typeparam name="TProperty">The type of the property on which will be bound.</typeparam>
-    public class GenericMultiValueBinder<TDataSource, TProperty> : INotifyPropertyChanged
+    public class GenericMultiValueBinder<TDataSource, TProperty> : IMultiValue<TProperty>
     {
         private PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
