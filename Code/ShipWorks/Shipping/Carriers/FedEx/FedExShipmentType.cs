@@ -1153,47 +1153,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             }
         }
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-            
-            fields.AddRange
-            (
-                new List<IEntityField2>()
-                {
-                    shipment.FedEx.Fields[FedExShipmentFields.FedExAccountID.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.WeightUnitType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.Signature.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.Service.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.PackagingType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.DropoffType.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.OriginResidentialDetermination.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostHubID.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostIndicia.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SmartPostEndorsement.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.SaturdayDelivery.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.CodEnabled.FieldIndex],
-                    shipment.FedEx.Fields[FedExShipmentFields.NonStandardContainer.FieldIndex]
-                }
-            );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (FedExPackageEntity package in shipment.FedEx.Packages)
+            get
             {
-                fields.Add(package.Fields[FedExPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsLength.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DimsWidth.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.ContainsAlcohol.FieldIndex]);
-                fields.Add(package.Fields[FedExPackageFields.DryIceWeight.FieldIndex]);
-            }
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(FedExShipmentFields.FedExAccountID);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.WeightUnitType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.Signature);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.Service);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.PackagingType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.DropoffType);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.OriginResidentialDetermination);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostHubID);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostIndicia);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.SmartPostEndorsement);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.CodEnabled);
+                ratingField.ShipmentFields.Add(FedExShipmentFields.NonStandardContainer);
+
+                ratingField.PackageFields.Add(FedExPackageFields.DimsWeight);
+                ratingField.PackageFields.Add(FedExPackageFields.DeclaredValue);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsLength);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsHeight);
+                ratingField.PackageFields.Add(FedExPackageFields.DimsWidth);
+                ratingField.PackageFields.Add(FedExPackageFields.ContainsAlcohol);
+                ratingField.PackageFields.Add(FedExPackageFields.DryIceWeight);
+
+                return ratingField;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.FedEx.Packages);
         }
 
         /// <summary>

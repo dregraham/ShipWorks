@@ -252,7 +252,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
 #endregion
 
-        #region DeliveryConfirmation
+        #region DeliveryExperience
 
         [Fact]
         public void DeliveryConfirmationIsMultiValued_WithDistinctValues_ReturnsFalse()
@@ -308,7 +308,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
             }
         }
 
@@ -327,7 +327,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience);
             }
         }
 
@@ -346,7 +346,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
             }
         }
 
@@ -359,7 +359,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
             }
         }
 
@@ -378,10 +378,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                testObject.DeliveryConfirmation = AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature;
+                testObject.DeliveryExperience = AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature;
                 testObject.Save(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience);
 
                 shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, s.Amazon.DeliveryExperience));
             }
@@ -402,10 +402,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                testObject.DeliveryConfirmation = AmazonDeliveryExperienceType.NoTracking;
+                testObject.DeliveryExperience = AmazonDeliveryExperienceType.NoTracking;
                 testObject.Save(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryConfirmation);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
 
                 shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.NoTracking, s.Amazon.DeliveryExperience));
             }
@@ -413,7 +413,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
 #endregion
 
-        #region MustArriveByDate
+        #region DateMustArriveBy
 
         [Fact]
         public void MustArriveByDateIsMultiValued_WithDistinctValues_ReturnsFalse()
@@ -430,7 +430,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.False(testObject.MustArriveByDateIsMultiValued);
+                Assert.False(testObject.DateMustArriveByIsMultiValued);
             }
         }
 
@@ -450,7 +450,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.True(testObject.MustArriveByDateIsMultiValued);
+                Assert.True(testObject.DateMustArriveByIsMultiValued);
             }
         }
 
@@ -469,7 +469,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(new DateTime(2000, 1, 1), testObject.MustArriveByDate);
+                Assert.Equal(new DateTime(2000, 1, 1), testObject.DateMustArriveBy);
             }
         }
 
@@ -488,7 +488,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(DateTime.Now.AddDays(1), testObject.MustArriveByDate);
+                Assert.Equal(DateTime.Now.AddDays(1), testObject.DateMustArriveBy);
             }
         }
 
@@ -501,7 +501,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(DateTime.Now.AddDays(1), testObject.MustArriveByDate);
+                Assert.Equal(DateTime.Now.AddDays(1), testObject.DateMustArriveBy);
             }
         }
 
@@ -520,10 +520,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                testObject.MustArriveByDate = new DateTime(2015, 8, 21);
+                testObject.DateMustArriveBy = new DateTime(2015, 8, 21);
                 testObject.Save(shipments);
 
-                Assert.Equal(new DateTime(2015, 8, 21), testObject.MustArriveByDate);
+                Assert.Equal(new DateTime(2015, 8, 21), testObject.DateMustArriveBy);
 
                 shipments.ForEach(s => Assert.Equal((new DateTime(2015, 8, 21)).Date.AddHours(12), s.Amazon.DateMustArriveBy));
             }

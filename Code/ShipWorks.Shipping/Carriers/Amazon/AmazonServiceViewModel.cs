@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using ShipWorks.Data.Model.EntityClasses;
@@ -18,11 +19,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     {
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
-        private GenericMultiValueBinder<ShipmentEntity, DateTime> mustArriveByDateBinder;
+        private GenericMultiValueBinder<ShipmentEntity, DateTime> dateMustArriveBy;
         private GenericMultiValueBinder<ShipmentEntity, double> weightBinder;
         private CheckboxMultiValueBinder<ShipmentEntity> carrierWillPickUpBinder;
-        private GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType> deliveryConfirmationBinder;
-        private GenericMultiValueBinder<ShipmentEntity, string> serviceBinder;
+        private GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType> deliveryExperienceBinder;
+        private GenericMultiValueBinder<ShipmentEntity, string> shippingServiceNameBinder;
         private List<string> servicesAvailable;
 
         /// <summary>
@@ -43,25 +44,48 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             ServicesAvailable = availableServices.Distinct().ToList();
 
             // Build a multi value binder for each of the UI controls.
-            mustArriveByDateBinder = new GenericMultiValueBinder<ShipmentEntity, DateTime>(shipments,
+            dateMustArriveBy = new GenericMultiValueBinder<ShipmentEntity, DateTime>(shipments,
+                nameof(DateMustArriveBy),
                 entity => entity.Amazon.DateMustArriveBy,
                 (entity, value) => entity.Amazon.DateMustArriveBy = value.Date.AddHours(12));
 
             weightBinder = new GenericMultiValueBinder<ShipmentEntity, double>(shipments,
+                nameof(ContentWeight),
                 entity => entity.ContentWeight,
                 (entity, value) => entity.ContentWeight = value);
 
             carrierWillPickUpBinder = new CheckboxMultiValueBinder<ShipmentEntity>(shipments,
+                nameof(CarrierWillPickUp),
                 entity => entity.Amazon.CarrierWillPickUp,
                 (entity, value) => entity.Amazon.CarrierWillPickUp = value);
 
-            deliveryConfirmationBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType>(shipments,
+            deliveryExperienceBinder = new GenericMultiValueBinder<ShipmentEntity, AmazonDeliveryExperienceType>(shipments,
+                nameof(DeliveryExperience),
                 entity => (AmazonDeliveryExperienceType)entity.Amazon.DeliveryExperience,
                 (entity, value) => entity.Amazon.DeliveryExperience = (int)value);
 
-            serviceBinder = new GenericMultiValueBinder<ShipmentEntity, string>(shipments,
+            shippingServiceNameBinder = new GenericMultiValueBinder<ShipmentEntity, string>(shipments,
+                nameof(ShippingServiceName),
                 entity => entity.Amazon.ShippingServiceName,
                 (entity, value) => entity.Amazon.ShippingServiceName = value);
+
+            // Wire up the property changed event so we can update rates.
+            dateMustArriveBy.PropertyChanged += OnPropertyChanged;
+            weightBinder.PropertyChanged += OnPropertyChanged;
+            carrierWillPickUpBinder.PropertyChanged += OnPropertyChanged;
+            deliveryExperienceBinder.PropertyChanged += OnPropertyChanged;
+            shippingServiceNameBinder.PropertyChanged += OnPropertyChanged;
+        }
+
+        /// <summary>
+        /// Event for property changed handling
+        /// </summary>
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(sender, e);
+            }
         }
 
         /// <summary>
@@ -69,11 +93,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public void Save(List<ShipmentEntity> shipments)
         {
-            mustArriveByDateBinder.Save();
+            dateMustArriveBy.Save();
             weightBinder.Save();
             carrierWillPickUpBinder.Save();
-            deliveryConfirmationBinder.Save();
-            serviceBinder.Save();
+            deliveryExperienceBinder.Save();
+            shippingServiceNameBinder.Save();
         }
 
         /// <summary>
@@ -86,12 +110,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 return carrierWillPickUpBinder.PropertyValue;
             }
-            set { carrierWillPickUpBinder.PropertyValue = value; }
+            set
+            {
+                carrierWillPickUpBinder.PropertyValue = value;
+            }
         }
 
         /// <summary>
         /// CarrierWillPickUp is multi valued.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool CarrierWillPickUpIsMultiValued
         {
             get
@@ -113,63 +141,63 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// DeliveryConfirmation display text
+        /// DeliveryExperience display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public AmazonDeliveryExperienceType DeliveryConfirmation
+        public AmazonDeliveryExperienceType DeliveryExperience
         {
             get
             {
-                return deliveryConfirmationBinder.PropertyValue;
+                return deliveryExperienceBinder.PropertyValue;
             }
             set
             {
-                deliveryConfirmationBinder.PropertyValue = value; 
+                deliveryExperienceBinder.PropertyValue = value; 
             }
         }
 
         /// <summary>
-        /// DeliveryConfirmation is multi valued.
+        /// DeliveryExperience is multi valued.
         /// </summary>
         [Obfuscation(Exclude = true)]
         public bool DeliveryConfirmationIsMultiValued
         {
             get
             {
-                return deliveryConfirmationBinder.IsMultiValued;
+                return deliveryExperienceBinder.IsMultiValued;
             }
         }
 
         /// <summary>
-        /// MustArriveByDate display text
+        /// DateMustArriveBy display text
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public DateTime MustArriveByDate
+        public DateTime DateMustArriveBy
         {
             get
             {
-                if (mustArriveByDateBinder.PropertyValue >= new DateTime(1980, 1, 1))
+                if (dateMustArriveBy.PropertyValue >= new DateTime(1980, 1, 1))
                 {
-                    return mustArriveByDateBinder.PropertyValue;
+                    return dateMustArriveBy.PropertyValue;
                 }
 
                 return DateTime.Now.AddDays(1);
             }
             set
             {
-                mustArriveByDateBinder.PropertyValue = value; 
+                dateMustArriveBy.PropertyValue = value; 
             }
         }
 
         /// <summary>
-        /// MustArriveByDate is multi valued.
+        /// DateMustArriveBy is multi valued.
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public bool MustArriveByDateIsMultiValued
+        public bool DateMustArriveByIsMultiValued
         {
             get
             {
-                return mustArriveByDateBinder.IsMultiValued;
+                return dateMustArriveBy.IsMultiValued;
             }
         }
 
@@ -183,7 +211,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             {
                 return weightBinder.PropertyValue;
             }
-            set { weightBinder.PropertyValue = value; }
+            set     { weightBinder.PropertyValue = value; }
         }
 
         /// <summary>
@@ -199,30 +227,32 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Service display text
+        /// ShippingServiceName display text
         /// </summary>
-        public string Service
+        [Obfuscation(Exclude = true)]
+        public string ShippingServiceName
         {
             get
             {
-                return serviceBinder.PropertyValue;
+                return shippingServiceNameBinder.PropertyValue;
             }
-            set { serviceBinder.PropertyValue = value; }
+            set { shippingServiceNameBinder.PropertyValue = value; }
         }
 
         /// <summary>
-        /// Service is multi valued.
+        /// ShippingServiceName is multi valued.
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool ServiceIsMultiValued
         {
             get
             {
-                return serviceBinder.IsMultiValued;
+                return shippingServiceNameBinder.IsMultiValued;
             }
         }
 
         /// <summary>
-        /// Service display text
+        /// ShippingServiceName display text
         /// </summary>
         [Obfuscation(Exclude = true)]
         public List<string> ServicesAvailable

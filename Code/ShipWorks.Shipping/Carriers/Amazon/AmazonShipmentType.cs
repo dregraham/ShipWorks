@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
@@ -146,44 +147,82 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             base.ConfigureNewShipment(shipment);
         }
-
+		
         /// <summary>
-        /// Gets the rates.
+        /// Returns the Amazon shipment rating fields
         /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            IAmazonRates amazonRates = amazonRatesFactory();
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            return amazonRates.GetRates(shipment);
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.AmazonAccountID);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierName);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeliveryExperience);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.CarrierWillPickUp);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DateMustArriveBy);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DeclaredValue);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.InsuranceValue);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceID);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceName);
+                ratingField.ShipmentFields.Add(AmazonShipmentFields.ShippingServiceOfferID);
+
+                return ratingField;
+            }
         }
 
         /// <summary>
-        /// Gets the fields used for rating a shipment.
+        /// Indicates if the shipment service type supports getting rates
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override bool SupportsGetRates
         {
-            List<IEntityField2> fields = base.GetRatingFields(shipment).ToList();
+            get { return true; }
+        }
 
-            fields.AddRange
-                (
-                    new List<IEntityField2>()
-                    {
-                        shipment.Amazon.Fields[AmazonShipmentFields.AmazonAccountID.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.CarrierName.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.CarrierWillPickUp.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DateMustArriveBy.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DeclaredValue.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DeliveryExperience.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DimsAddWeight.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DimsHeight.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DimsLength.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.DimsWeight.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.ShippingServiceID.FieldIndex],
-                        shipment.Amazon.Fields[AmazonShipmentFields.ShippingServiceName.FieldIndex]
-                    }
-                );
+        ///// <summary>
+        ///// Gets the rates.
+        ///// </summary>
+        //public override RateGroup GetRates(ShipmentEntity shipment)
+        //{
+        //    IAmazonRates amazonRates = amazonRatesFactory();
 
-            return fields;
+        //    return amazonRates.GetRates(shipment);
+        //}
+
+        /// <summary>
+        /// Get a list of rates for the FedEx shipment
+        /// </summary>
+        public override RateGroup GetRates(ShipmentEntity shipment)
+        {
+            RateGroup rates = GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
+
+            return rates;
+        }
+
+        /// <summary>
+        /// Get a list of rates for the FedEx shipment from the FedEx API
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            Thread.Sleep(2000);
+
+            List<RateResult> rates = new List<RateResult>()
+            {
+                new RateResult("Fast!" + DateTime.Now, "1", (decimal)shipment.ContentWeight, new object()),
+                new RateResult("Fast and Cheap!", "1", (decimal)shipment.ContentWeight/2.0M, new object()),
+            };
+
+            return new RateGroup(rates);
         }
     }
 }

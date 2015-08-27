@@ -24,6 +24,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void DerivesFromGenericMultiValueBinder_IsTrue()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -35,6 +36,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void CheckStateValue_WhenIsMultiValuedIsTrue_ReturnsIndeterminate()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -45,6 +47,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void CheckStateValue_WhenIsMultiValuedIsFalse_AndAllValuesAreTrue_ReturnsChecked()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -57,6 +60,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void CheckStateValue_WhenIsMultiValuedIsFalse_AndAllValuesAreFalse_ReturnsUnChecked()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 

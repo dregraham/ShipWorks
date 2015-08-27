@@ -656,26 +656,24 @@ namespace ShipWorks.Shipping.Carriers.BestRate
             shipment.RequestedLabelFormat = shipment.BestRate.RequestedLabelFormat;
         }
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            fields.AddRange
-                (
-                    new List<IEntityField2>
-                    {
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsAddWeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsHeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsLength.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWeight.FieldIndex],
-                        shipment.BestRate.Fields[BestRateShipmentFields.DimsWidth.FieldIndex]
-                    }
-                );
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(BestRateShipmentFields.DimsWeight);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>

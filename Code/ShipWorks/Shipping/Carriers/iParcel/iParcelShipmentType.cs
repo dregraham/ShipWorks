@@ -1107,37 +1107,43 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
-                {
-                    shipment.IParcel.Fields[IParcelShipmentFields.IParcelAccountID.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.IsDeliveryDutyPaid.FieldIndex],
-                    shipment.Order.Fields[OrderFields.OrderTotal.FieldIndex],
-                    shipment.Order.Fields[OrderFields.RollupItemCount.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.TrackByEmail.FieldIndex],
-                    shipment.IParcel.Fields[IParcelShipmentFields.TrackBySMS.FieldIndex],
-                }
-            );
-
-            // Grab all the fields for all the package in this shipment
-            foreach (IParcelPackageEntity package in shipment.IParcel.Packages)
+            get
             {
-                fields.Add(package.Fields[IParcelPackageFields.Weight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsWeight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsWidth.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DimsHeight.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.DeclaredValue.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.InsuranceValue.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.Insurance.FieldIndex]);
-                fields.Add(package.Fields[IParcelPackageFields.InsurancePennyOne.FieldIndex]);
-            }
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.IParcelAccountID);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.IsDeliveryDutyPaid);
+                ratingField.ShipmentFields.Add(OrderFields.OrderTotal);
+                ratingField.ShipmentFields.Add(OrderFields.RollupItemCount);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackByEmail);
+                ratingField.ShipmentFields.Add(IParcelShipmentFields.TrackBySMS);
+
+                ratingField.ShipmentFields.Add(IParcelPackageFields.Weight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWeight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsWidth);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsHeight);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DimsLength);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.DeclaredValue);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.InsuranceValue);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.Insurance);
+                ratingField.ShipmentFields.Add(IParcelPackageFields.InsurancePennyOne);
+
+                return ratingField;
+            }
+        }
+
+        /// <summary>
+        /// Gets the rating hash based on the shipment's configuration.
+        /// </summary>
+        public override string GetRatingHash(ShipmentEntity shipment)
+        {
+            return RatingFields.GetRatingHash(shipment, shipment.IParcel.Packages);
         }
 
         /// <summary>

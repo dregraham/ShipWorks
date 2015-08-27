@@ -18,7 +18,7 @@ namespace ShipWorks.UI.Controls.MultiValueBinders
         /// <param name="dataSource">Generic list of items on which to bind.</param>
         /// <param name="selectFunc">Function that returns a property value of TDataSource.  This is used to determine if the dataSource has distinct values. </param>
         /// <param name="updateFunc">Action that updates each of the items in dataSource.</param>
-        public CheckboxMultiValueBinder(IEnumerable<TDataSource> dataSource, Func<TDataSource, bool> selectFunc, Action<TDataSource, bool> updateFunc) : base(dataSource, selectFunc, updateFunc)
+        public CheckboxMultiValueBinder(IEnumerable<TDataSource> dataSource, string propertyName, Func<TDataSource, bool> selectFunc, Action<TDataSource, bool> updateFunc) : base(dataSource, propertyName, selectFunc, updateFunc)
         {
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -43,6 +44,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping
 {
@@ -1010,47 +1012,51 @@ namespace ShipWorks.Shipping
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
         public abstract IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment);
 
-        /// <summary>
-        /// Gets the fields used for rating a shipment.
-        /// </summary>
-        protected virtual IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        protected RatingFields ratingField = null;
+        public virtual RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>()
-	        {
-	            shipment.Fields[ShipmentFields.ShipmentType.FieldIndex],
-	            shipment.Fields[ShipmentFields.ContentWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.TotalWeight.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipmentCost.FieldIndex],
-	            shipment.Fields[ShipmentFields.CustomsValue.FieldIndex],
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-                shipment.Fields[ShipmentFields.ShipDate.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ShipCountryCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialDetermination.FieldIndex],
-	            shipment.Fields[ShipmentFields.ResidentialResult.FieldIndex],
+                ratingField = new RatingFields();
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentType);
+                ratingField.ShipmentFields.Add(ShipmentFields.ContentWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.TotalWeight);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipmentCost);
+                ratingField.ShipmentFields.Add(ShipmentFields.CustomsValue);
 
-	            shipment.Fields[ShipmentFields.OriginOriginID.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCompany.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet1.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet2.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStreet3.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCity.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginStateProvCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginPostalCode.FieldIndex],
-	            shipment.Fields[ShipmentFields.OriginCountryCode.FieldIndex],
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipDate);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ShipCountryCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialDetermination);
+                ratingField.ShipmentFields.Add(ShipmentFields.ResidentialResult);
 
-	            shipment.Fields[ShipmentFields.ReturnShipment.FieldIndex],
-	            shipment.Fields[ShipmentFields.Insurance.FieldIndex],
-	            shipment.Fields[ShipmentFields.InsuranceProvider.FieldIndex]
-	        };
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginOriginID);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCompany);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet1);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet2);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStreet3);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCity);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginStateProvCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginPostalCode);
+                ratingField.ShipmentFields.Add(ShipmentFields.OriginCountryCode);
+                
+                ratingField.ShipmentFields.Add(ShipmentFields.ReturnShipment);
+                ratingField.ShipmentFields.Add(ShipmentFields.Insurance);
+                ratingField.ShipmentFields.Add(ShipmentFields.InsuranceProvider);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>
@@ -1058,19 +1064,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public virtual string GetRatingHash(ShipmentEntity shipment)
         {
-            StringBuilder valueToBeHashed = new StringBuilder();
-            IEnumerable<IEntityField2> ratingFields = GetRatingFields(shipment);
-
-            foreach (IEntityField2 field in ratingFields)
-            {
-                valueToBeHashed.Append(field.CurrentValue ?? string.Empty);
-            }
-
-            using (SHA256Managed sha256 = new SHA256Managed())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(valueToBeHashed.ToString()));
-                return Convert.ToBase64String(bytes);
-            }
+            return RatingFields.GetRatingHash(shipment);
         }
 
         /// <summary>

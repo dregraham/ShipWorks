@@ -598,29 +598,30 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
-
-            fields.AddRange
-            (
-                new List<IEntityField2>()
+            get
+            {
+                if (ratingField != null)
                 {
-                    shipment.OnTrac.Fields[OnTracShipmentFields.OnTracAccountID.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.CodAmount.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.CodType.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.SaturdayDelivery.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DeclaredValue.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.PackagingType.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsAddWeight.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsHeight.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsLength.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWidth.FieldIndex],
-                    shipment.OnTrac.Fields[OnTracShipmentFields.DimsWeight.FieldIndex],
+                    return ratingField;
                 }
-            );
 
-            return fields;
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.OnTracAccountID);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodAmount);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.CodType);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.SaturdayDelivery);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DeclaredValue);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.PackagingType);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(OnTracShipmentFields.DimsWeight);
+
+                return ratingField;
+            }
         }
 
         /// <summary>

@@ -42,6 +42,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void IsMultiValued_WithOnePropertyValue_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -52,6 +53,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void IsMultiValued_WithAllDifferentPropertyValues_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -62,6 +64,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void IsMultiValued_WithSomeSamePropertyValues_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -72,6 +75,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void IsMultiValued_WithEmptyDataSource_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(Enumerable.Empty<GenericMultiValueBinderDto<int, string>>(),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -82,6 +86,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void IsMultiValued_WithSingleItemDataSource_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -92,6 +97,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void PropertyValue_ForObjectPropertyType_WithEmptyDataSource_ReturnsNull()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string> testObject2 = new GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string>(Enumerable.Empty<GenericMultiValueBinderDto<string, string>>(),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -102,6 +108,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void SetPropertyValueWithSameDataSourceValue_AndAllDistinctDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -114,6 +121,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void SetPropertyValueWithDifferentDataSourceValue_AndAllDifferentDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -126,6 +134,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void SetPropertyValueWithDifferentDataSourceValue_AndMixedDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -138,6 +147,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void SetPropertyValue_WithSingleItemDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
@@ -150,6 +160,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void Save_AndAllDistinctDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 
@@ -162,6 +173,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void Save_AndAllDifferentDataSource_IsMultiValued_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 
@@ -174,6 +186,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
         public void SaveWithNewPropertyValue_AndAllDistinctDataSource_PropertyValueIsNewValue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 

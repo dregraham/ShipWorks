@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -53,6 +54,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override void LoadShipments(IEnumerable<ShipmentEntity> shipments, bool enableEditing, bool enableShippingAddress)
         {
+            SuspendRateCriteriaChangeEvent();
+            SuspendShipSenseFieldChangeEvent();
+
             List<ShipmentEntity> shipmentsAsList = shipments.ToList();
             base.LoadShipments(shipmentsAsList, enableEditing, enableShippingAddress);
 
@@ -67,8 +71,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             UpdateInsuranceDisplay();
 
             UpdateSectionDescription();
-        }
 
+            viewModel.PropertyChanged += OnViewModelPropertyChanged;
+
+            ResumeRateCriteriaChangeEvent();
+            ResumeShipSenseFieldChangeEvent();
+        }
+        /// <summary>
+        /// Loads available dimensions for shipments
+        /// </summary>
         private void LoadDimensions(List<ShipmentEntity> shipments)
         {
             List<DimensionsAdapter> dimensions = new List<DimensionsAdapter>();
@@ -85,25 +96,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         private void CreateUiBindings()
         {
             deliveryConfirmation.DataBindings.Clear();
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel, nameof(viewModel.DeliveryConfirmation));
-            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel, nameof(viewModel.DeliveryConfirmationIsMultiValued));
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.SelectedValue), viewModel, nameof(viewModel.DeliveryExperience), false, DataSourceUpdateMode.OnPropertyChanged);
+            deliveryConfirmation.DataBindings.Add(nameof(deliveryConfirmation.MultiValued), viewModel, nameof(viewModel.DeliveryConfirmationIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             carrierWillPickUp.DataBindings.Clear();
-            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.Checked), viewModel, nameof(viewModel.CarrierWillPickUp));
-            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState));
-            
+            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.Checked), viewModel, nameof(viewModel.CarrierWillPickUp), false, DataSourceUpdateMode.OnPropertyChanged);
+            carrierWillPickUp.DataBindings.Add(nameof(carrierWillPickUp.CheckState), viewModel, nameof(viewModel.CarrierWillPickUpCheckState), false, DataSourceUpdateMode.OnPropertyChanged);
+
             mustArriveByDate.DataBindings.Clear();
-            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.Text), viewModel, nameof(viewModel.MustArriveByDate));
-            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.MultiValued), viewModel, nameof(viewModel.MustArriveByDateIsMultiValued));
+            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.Text), viewModel, nameof(viewModel.DateMustArriveBy), false, DataSourceUpdateMode.OnPropertyChanged);
+            mustArriveByDate.DataBindings.Add(nameof(mustArriveByDate.MultiValued), viewModel, nameof(viewModel.DateMustArriveByIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             weight.DataBindings.Clear();
-            weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight));
-            weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued));
+            weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);
+            weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             service.DataBindings.Clear();
-            service.DataBindings.Add("DataSource", viewModel, "ServicesAvailable");
-            service.DataBindings.Add("SelectedItem", viewModel, "Service");
-            service.DataBindings.Add("MultiValued", viewModel, "ServiceIsMultiValued");
+            service.DataBindings.Add(nameof(service.DataSource), viewModel, nameof(viewModel.ServicesAvailable), false, DataSourceUpdateMode.OnPropertyChanged);
+            service.DataBindings.Add(nameof(service.SelectedItem), viewModel, nameof(viewModel.ShippingServiceName), false, DataSourceUpdateMode.OnPropertyChanged);
+            service.DataBindings.Add(nameof(service.MultiValued), viewModel, nameof(viewModel.ServiceIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         /// <summary>
@@ -125,8 +136,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             viewModel.Load(LoadedShipments);
 
             weight.DataBindings.Clear();
-            weight.DataBindings.Add("Weight", viewModel, "ContentWeight");
-            weight.DataBindings.Add("MultiValued", viewModel, "ContentWeightIsMultiValued");
+            weight.DataBindings.Add(nameof(weight.Weight), viewModel, nameof(viewModel.ContentWeight), false, DataSourceUpdateMode.OnPropertyChanged);
+            weight.DataBindings.Add(nameof(weight.MultiValued), viewModel, nameof(viewModel.ContentWeightIsMultiValued), false, DataSourceUpdateMode.OnPropertyChanged);
 
             // Start the dimensions control listening to weight changes
             dimensionsControl.ShipmentWeightBox = weight;
@@ -201,16 +212,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         }
 
         /// <summary>
-        /// Some aspect of the shipment that affects ShipSense has changed
+        /// Event handler for view model property changed.
+        /// If property name matches a rating field name, RaiseRateCriteriaChanged() is called. 
         /// </summary>
-        private void OnShipSenseFieldChanged(object sender, EventArgs e)
+        protected void OnViewModelPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            RaiseShipSenseFieldChanged();
-        }
-
-        private void OnRateCriteriaChanged(object sender, EventArgs e)
-        {
-
+            ShipmentType shipmentType = ShipmentTypeManager.GetType(ShipmentTypeCode);
+            
+            if (shipmentType.RatingFields.FieldsContainName(propertyChangedEventArgs.PropertyName))
+            {
+                RaiseRateCriteriaChanged();
+            }
         }
     }
 }
