@@ -69,14 +69,18 @@ namespace ShipWorks.Stores.Platforms.Magento
             HttpXmlVariableRequestSubmitter xmlRequest = new HttpXmlVariableRequestSubmitter();
             xmlRequest.Uri = new Uri(Store.ModuleUrl + "/orders/update");
 
-            XElement body = new XElement("Request");
+            XElement requestXml = new XElement("request");
+
+            XElement body = new XElement("data");
 
             foreach (HttpVariable var in request.Variables)
             {
                 body.Add(new XElement(var.Name, var.Value));
             }
 
-            xmlRequest.Variables.Add(string.Empty, body.ToString());
+            requestXml.Add(body);
+
+            xmlRequest.Variables.Add(string.Empty, requestXml.ToString());
 
             return ProcessRequestInternal(xmlRequest, "UpdateOrder");
         }
