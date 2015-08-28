@@ -11,6 +11,7 @@ using System.Collections;
 using SandContextPopup = Divelements.SandRibbon.ContextPopup;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using SandMenu = Divelements.SandRibbon.Menu;
+using ShipWorks.Filters.Content.Conditions;
 
 namespace ShipWorks.Filters.Content.Editors
 {
@@ -81,7 +82,15 @@ namespace ShipWorks.Filters.Content.Editors
         /// </summary>
         public void InitializeFromEnumType(Type enumType)
         {
-            InitializeFromEnumList(Enum.GetValues(enumType));
+            if (enumType.Name == typeof(DateOperator).Name)
+            {
+                EnumList<DateOperator> enumList = EnumHelper.GetEnumList<DateOperator>();
+                InitializeFromEnumList(enumList.Select(e => e.Value).ToArray());
+            }
+            else
+            {
+                InitializeFromEnumList(Enum.GetValues(enumType));
+            }
         }
 
         /// <summary>

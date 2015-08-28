@@ -41,10 +41,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
 
             UsageType = new AccountType();
             
-            FirstCodewordType = new CodewordType2();
+            FirstCodewordType = new CodewordType();
             FirstCodewordValue = string.Empty;
 
-            SecondCodewordType = new CodewordType2();
+            SecondCodewordType = new CodewordType();
             SecondCodewordValue = string.Empty;
 
             PhysicalAddress = new Address();
@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// Gets or sets the first type of the codeword.
         /// </summary>
         /// <value>The first type of the codeword.</value>
-        public CodewordType2 FirstCodewordType { get; set; }
+        public CodewordType FirstCodewordType { get; set; }
 
         /// <summary>
         /// Gets or sets the first code word value.
@@ -108,7 +108,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// Gets or sets the type of the second codeword.
         /// </summary>
         /// <value>The type of the second codeword.</value>
-        public CodewordType2 SecondCodewordType { get; set; }
+        public CodewordType SecondCodewordType { get; set; }
 
         /// <summary>
         /// Gets or sets the second codeword value.

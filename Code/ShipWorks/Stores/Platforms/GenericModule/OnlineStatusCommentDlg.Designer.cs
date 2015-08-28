@@ -112,7 +112,7 @@
             this.Name = "oscOnlineStatusCommentDlg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Set Online Status";
+            this.Text = "Set Store Status";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.OnLoad);
             this.ResumeLayout(false);

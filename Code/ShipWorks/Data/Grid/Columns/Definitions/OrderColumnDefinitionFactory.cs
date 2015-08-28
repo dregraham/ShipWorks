@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
@@ -14,17 +13,13 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.Enums;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
 using ShipWorks.Stores.Platforms.Ebay.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Ebay.Enums;
 using ShipWorks.Stores.Platforms.PayPal;
 using ShipWorks.Stores.Platforms.ProStores.CoreExtensions.Grid;
-using ShipWorks.Stores.Platforms.ChannelAdvisor;
 using ShipWorks.Stores.Platforms.ChannelAdvisor.CoreExtensions.Grid;
-using ShipWorks.Stores.Platforms.Newegg.Enums;
 using ShipWorks.Stores.Platforms.Newegg.CoreExtensions.Grid;
 using ShipWorks.Stores.Platforms.Shopify.Enums;
-using ShipWorks.Stores.Platforms;
 using ShipWorks.Properties;
 using ShipWorks.Shipping.ShipSense;
 
@@ -45,11 +40,78 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
 
             GridColumnDefinitionCollection definitions = new GridColumnDefinitionCollection
                 {
+                    new GridColumnDefinition("{33BBD10C-63E1-4f8c-9EFD-05875DCAA9A9}", true, 
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"}, 
+                        "Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
+                        OrderFields.OrderDate)
+                    {
+                        DefaultWidth = 100
+                    },
+
+                    new GridColumnDefinition("{BCBE522D-76E6-4a37-90A3-50BA62E51DC2}", true,
+                        new GridStoreDisplayType(StoreProperty.StoreName) { ShowIcon = true }, "Store Name", new GridStoreDisplayType.DisplayData { StoreText = "My Store", StoreIcon = StoreIcons.genericmodule },
+                        OrderFields.StoreID,
+                        StoreFields.StoreName)
+                    {
+                        DefaultWidth = 100
+                    },
+
                     new GridColumnDefinition("{13E940CA-945B-4c23-83F5-50F758AD4456}", true, 
-                        new GridOrderNumberDisplayType(), "Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.GenericModule),
+                        new GridOrderNumberDisplayType { ShowStoreIcon = false }, "Order #", GridOrderNumberDisplayType.SampleData(StoreTypeCode.GenericModule),
                         OrderFields.OrderNumberComplete, 
                         OrderFields.OrderNumber) { DefaultWidth = 75 },
 
+                    new GridColumnDefinition("{E0E6E248-30BE-4eb7-B486-891321313207}", true,
+                        new GridTextDisplayType()
+                            .Decorate(new GridRollupDecorator(OrderFields.RollupItemCount))
+                                .Decorate(new GridStoreSpecificHyperlinkDecorator()), "Item Name", "Dress Shirt",
+                        OrderFields.RollupItemName)
+                    {
+                        DefaultWidth = 150
+                    },
+
+                    new GridColumnDefinition("{5999DE0A-A38C-4627-A0B9-DF7B3D0F60CC}", true,
+                        new GridTextDisplayType().Decorate(new GridRollupDecorator(OrderFields.RollupItemCount) { MultipleVariedFormat = "#" }), "Qty", "3",
+                        OrderFields.RollupItemQuantity)
+                    {
+                        DefaultWidth = 40
+                    },
+
+                    new GridColumnDefinition("{0600A750-E364-4042-A301-9E777E413394}", true,
+                        new GridNoteDisplayType(), "Notes", 2,
+                        OrderFields.RollupNoteCount) { DefaultWidth = 40 },
+
+                    new GridColumnDefinition("{0614E4C9-AE87-4f77-A759-5E6D44FDD821}", true,
+                        new GridTextDisplayType(), "Requested Shipping", "UPS Ground",
+                        OrderFields.RequestedShipping),
+
+                    new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
+                        new GridCountryDisplayType() { ShowFlag = true, AbbreviationFormat = AbbreviationFormat.Abbreviated }, "S: Country", "US",
+                        OrderFields.ShipCountryCode)
+                    {
+                        DefaultWidth = 60
+                    },
+
+                    new GridColumnDefinition("{008B6234-DB5F-40e0-9B18-AF34CC2FD7BA}", true,
+                        new GridTextDisplayType(), "S: First Name", "John",
+                        OrderFields.ShipFirstName),
+
+                    new GridColumnDefinition("{8775E5C5-0634-40e9-9940-492D36CDEDD7}", true,
+                        new GridTextDisplayType(), "S: Last Name", "Smith",
+                        OrderFields.ShipLastName),
+
+                    new GridColumnDefinition("{4DEE3C8C-B54B-496b-BD39-429509ECA791}", true,
+                        new GridTextDisplayType(), "Store Status", "Pending",
+                        OrderFields.OnlineStatus)
+                        {
+                            DefaultWidth = 80,
+                            ApplicableTest = data => StoreManager.GetStoreTypeInstances().Any(st => st.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus))
+                        },
+
+                    new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
+                        new GridMoneyDisplayType(), "Total", 1024.18m,
+                        OrderFields.OrderTotal),
+                        
                     new GridColumnDefinition("{B65D5682-EEE7-40FC-BE26-06F9D5A16ABE}", true,
                         new NeweggInvoiceNumberDisplayType(), "Invoice #", "87448975", 
                         NeweggOrderFields.InvoiceNumber)
@@ -89,6 +151,22 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                     new GridColumnDefinition("{74CFD9FC-21DF-45D6-8F58-E1F72901EE44}", true,
                         new GridEnumDisplayType<AmazonMwsIsPrime>(EnumSortMethod.Description), "Amazon Prime", AmazonMwsIsPrime.Yes,
                         AmazonOrderFields.IsPrime)
+                        {
+                            StoreTypeCode = StoreTypeCode.Amazon
+                        },
+
+                    new GridColumnDefinition("{D529CF7A-B27B-4C0C-97A0-8E72FA966B71}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"}, 
+                        "Latest Delivery", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
+                        AmazonOrderFields.LatestExpectedDeliveryDate)
+                        {
+                            StoreTypeCode = StoreTypeCode.Amazon
+                        },
+
+                    new GridColumnDefinition("{1D15FDDE-6D09-4B74-BB34-32031EB89C08}", true,
+                        new GridDateDisplayType { UseDescriptiveDates = true, TimeDisplayFormat = TimeDisplayFormat.None, DateFormat = "MMMM dd, yyyy"}, 
+                        "Earliest Delivery", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
+                        AmazonOrderFields.EarliestExpectedDeliveryDate)
                         {
                             StoreTypeCode = StoreTypeCode.Amazon
                         },
@@ -149,11 +227,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Ebay
                         },
 
-                    new GridColumnDefinition("{33BBD10C-63E1-4f8c-9EFD-05875DCAA9A9}", true, 
-                        new GridDateDisplayType(), "Date", DateTimeUtility.ParseEnUS("03/04/2001 1:30 PM").ToUniversalTime(),
-                        OrderFields.OrderDate),
-
-                    new GridColumnDefinition("{AAE328FA-95E4-4846-9D85-CD8A6214E6B0}", true,
+                    new GridColumnDefinition("{AAE328FA-95E4-4846-9D85-CD8A6214E6B0}",
                         new GridDateDisplayType(), "Last Modified (Online)", DateTimeUtility.ParseEnUS("11/28/2007 7:32 AM").ToUniversalTime(),
                         OrderFields.OnlineLastModified)
                         { 
@@ -163,7 +237,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             } 
                         },
 
-                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}", true,
+                    new GridColumnDefinition("{8E082567-DEBA-4F43-ACFD-A8C184526D8B}",
                         new GridEnumDisplayType<ShipSenseOrderRecognitionStatus>(EnumSortMethod.Description),
                         "ShipSense", ShipSenseOrderRecognitionStatus.Recognized,
                         OrderFields.ShipSenseRecognitionStatus),
@@ -210,21 +284,11 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             DefaultWidth = 135,
                             StoreTypeCode = StoreTypeCode.ProStores
                         },
-                    new GridColumnDefinition("{BCBE522D-76E6-4a37-90A3-50BA62E51DC2}",
-                        new GridStoreDisplayType(StoreProperty.StoreName), "Store Name", new GridStoreDisplayType.DisplayData { StoreText = "My Store", StoreIcon = StoreIcons.genericmodule },
-                        OrderFields.StoreID,
-                        StoreFields.StoreName),
 
                     new GridColumnDefinition("{D82CB513-4956-48ac-B2BB-5D0AC45F4CE4}",
                         new GridStoreDisplayType(StoreProperty.StoreType), "Store Type", new GridStoreDisplayType.DisplayData { StoreText = "Magento", StoreIcon = StoreIcons.magento },
                         OrderFields.StoreID,
                         CreateStoreTypeSortField()),
-
-                    new GridColumnDefinition("{E0E6E248-30BE-4eb7-B486-891321313207}",
-                        new GridTextDisplayType()
-                            .Decorate(new GridRollupDecorator(OrderFields.RollupItemCount))
-                                .Decorate(new GridStoreSpecificHyperlinkDecorator()), "Item Name", "Dress Shirt",
-                        OrderFields.RollupItemName),
 
                     new GridColumnDefinition("{EEECA57B-8BF5-4703-888F-E95930652010}",
                         new GridTextDisplayType()
@@ -240,28 +304,9 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType().Decorate(new GridRollupDecorator(OrderFields.RollupItemCount)), "Item Location", "Shelf 2A",
                         OrderFields.RollupItemLocation),
 
-                    new GridColumnDefinition("{5999DE0A-A38C-4627-A0B9-DF7B3D0F60CC}",
-                        new GridTextDisplayType().Decorate(new GridRollupDecorator(OrderFields.RollupItemCount)), "Item Quantity", "3",
-                        OrderFields.RollupItemQuantity),
-
-                    new GridColumnDefinition("{0600A750-E364-4042-A301-9E777E413394}", true,
-                        new GridNoteDisplayType(), "Notes", 2,
-                        OrderFields.RollupNoteCount) { DefaultWidth = 40 },
-
-                    new GridColumnDefinition("{9407F718-C4B6-4d19-96D7-975BF73F84AA}", true,
+                    new GridColumnDefinition("{9407F718-C4B6-4d19-96D7-975BF73F84AA}",
                         new GridTextDisplayType(), "Local Status", "Backordered",
                         OrderFields.LocalStatus) { DefaultWidth = 80 },
-
-                    new GridColumnDefinition("{4DEE3C8C-B54B-496b-BD39-429509ECA791}", true,
-                        new GridTextDisplayType(), "Online Status", "Pending",
-                        OrderFields.OnlineStatus)
-                        {
-                            DefaultWidth = 80,
-                            ApplicableTest = (data) =>
-                            { 
-                                return StoreManager.GetStoreTypeInstances().Any(st => st.GridOnlineColumnSupported(OnlineGridColumnSupport.OnlineStatus));
-                            }
-                        },
 
                     new GridColumnDefinition("{B5362720-6411-46DC-993D-E1E71386EE3E}", true,
                         new GridEnumDisplayType<ShopifyPaymentStatus>(EnumSortMethod.Description), "Payment Status", ShopifyPaymentStatus.Paid,
@@ -317,25 +362,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                             StoreTypeCode = StoreTypeCode.Sears
                         },
 
-                    new GridColumnDefinition("{0614E4C9-AE87-4f77-A759-5E6D44FDD821}", true,
-                        new GridTextDisplayType(), "Requested Shipping", "UPS Ground",
-                        OrderFields.RequestedShipping),
-
                     new GridColumnDefinition("{C34521DE-001F-41BA-8BE6-FFF6593CE43A}",
                         new GridWeightDisplayType(), "Total Weight", 2.3,
                         OrderFields.RollupItemTotalWeight),
 
-                    new GridColumnDefinition("{008B6234-DB5F-40e0-9B18-AF34CC2FD7BA}",
-                        new GridTextDisplayType(), "S: First Name", "John",
-                        OrderFields.ShipFirstName),
-
                     new GridColumnDefinition("{DDBC14E2-90B1-4eba-97F1-1A9A4EC0AA08}",
                         new GridTextDisplayType(), "S: Middle Name", "Edward",
                         OrderFields.ShipMiddleName),
-
-                    new GridColumnDefinition("{8775E5C5-0634-40e9-9940-492D36CDEDD7}", true,
-                        new GridTextDisplayType(), "S: Last Name", "Smith",
-                        OrderFields.ShipLastName),
 
                     new GridColumnDefinition("{68FC2428-94E4-4b99-B23A-2921A6F3D267}",
                         new GridTextDisplayType(), "S: Company", "Interapptive, Inc.",
@@ -366,10 +399,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "S: Postal Code", "63132",
                         OrderFields.ShipPostalCode),
 
-                    new GridColumnDefinition("{8E9F3D01-98CF-4574-9CF0-9A6A7FE5C86E}", true,
-                        new GridCountryDisplayType() { ShowFlag = true }, "S: Country", "US",
-                        OrderFields.ShipCountryCode),
-
                     new GridColumnDefinition("{6113F98C-D82D-44ba-900D-3EA50F2078CC}",
                         new GridTextDisplayType(), "S: Phone", "1-314-555-0554",
                         OrderFields.ShipPhone),
@@ -386,13 +415,13 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         new GridTextDisplayType(), "S: Website", "www.interapptive.com",
                         OrderFields.ShipWebsite),
 
-                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}",  true,
+                    new GridColumnDefinition("{B1ECCC57-1135-48C8-B438-D2B31637AA9A}",
                         new GridEnumDisplayType<AddressValidationStatusType>(EnumSortMethod.Description),
                         "S: Validation Status", AddressValidationStatusType.Valid,
                         OrderFields.ShipAddressValidationStatus) 
                         { DefaultWidth = 100 },
 
-                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}", true,
+                    new GridColumnDefinition("{8E8261DD-3950-4A63-B58D-BF18607C7EC9}",
                         new GridActionDisplayType(shippingAddressSelector.DisplayValidationSuggestionLabel, 
                             shippingAddressSelector.ShowAddressOptionMenu, shippingAddressSelector.IsValidationSuggestionLinkEnabled), 
                         "S: Validation Suggestions", "2 Suggestions",
@@ -630,11 +659,6 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             StoreTypeCode = StoreTypeCode.OrderMotion
                         },
-
-                    new GridColumnDefinition("{6766679C-B0FC-4cdb-B3F8-A73AD4DE87EB}", true,
-                        new GridMoneyDisplayType(), "Total", 1024.18m,
-                        OrderFields.OrderTotal), 
-
                 };
 
             return definitions;
