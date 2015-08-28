@@ -197,6 +197,7 @@
     <Compile Include="Shipping\Carriers\Amazon\AmazonCredentialsTest.cs" />
     <Compile Include="Shipping\Carriers\Amazon\AmazonAccountEditorViewModelTest.cs" />
     <Compile Include="Shipping\Carriers\Amazon\Api\AmazonRateTests.cs" />
+    <Compile Include="Shipping\Carriers\Amazon\Api\GetEligibleShippingServicesResponseTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateBrokerSettingsTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventsDescriptionTest.cs" />
     <Compile Include="Shipping\Carriers\BestRate\BestRateEventTypesExtensionTest.cs" />
@@ -588,6 +589,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Shipping\Carriers\Amazon\Api\Artifacts\GetEligibleShippingServicesResponse.xml" />
     <Content Include="Shipping\Carriers\Postal\Usps\BestRate\Usps_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

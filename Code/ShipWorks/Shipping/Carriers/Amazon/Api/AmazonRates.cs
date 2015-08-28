@@ -12,6 +12,7 @@ using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.HelperClasses;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -47,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
 
-            GetEligibleShippingServices response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
             return GetRateGroupFromResponse(response);
         }
@@ -55,12 +56,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rate group from response.
         /// </summary>
-        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServices response)
+        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
         {
             List<RateResult> rateResults = new List<RateResult>();
 
-            List<ShippingService> serviceList = response.GetEligibleShippingServicesResponse.ShippingServiceList;
-            foreach (ShippingService shippingService in serviceList)
+            ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
+            foreach (ShippingService shippingService in serviceList.ShippingService)
             {
                 AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
                 RateResult rateResult = new RateResult(shippingService.ShippingServiceName,"",shippingService.Rate.Amount, tag);
@@ -120,7 +121,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static List<Item> GetItemList(OrderEntity order)
         {
-            List<AmazonOrderItemEntity> amazonOrderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.AmazonOrderItemEntity).Cast<AmazonOrderItemEntity>().ToList();
+            List<AmazonOrderItemEntity> amazonOrderItems = null;
+
+            if (order.OrderItems == null || !order.OrderItems.Any())
+            {
+                amazonOrderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.AmazonOrderItemEntity).Cast<AmazonOrderItemEntity>().ToList();
+            }
+            else
+            {
+                amazonOrderItems = order.OrderItems.Select(i => (AmazonOrderItemEntity)i).ToList();
+            }
 
             List<Item> items = new List<Item>();
             

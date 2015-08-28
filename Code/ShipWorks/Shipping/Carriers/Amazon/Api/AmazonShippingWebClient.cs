@@ -13,6 +13,9 @@ using log4net;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Collections.Generic;
+using System.Xml.XPath;
+using System.Xml.Linq;
+using System.Xml;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -40,19 +43,45 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         }
 
         /// <summary>
-        /// Gets the rates.
+        /// Gets Rates
         /// </summary>
-        public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
+        /// <param name="requestDetails"></param>
+        /// <param name="mwsSettings"></param>
+        /// <returns></returns>
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
         {
+            AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
+
             HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
             
+            // Add Shipment Information XML
             AddShipmentRequestDetails(request, requestDetails);
-                        
-            ExecuteRequest(request, AmazonMwsApiCall.GetEligibleShippingServices, mwsSettings);
-
-            throw new NotImplementedException();
+            
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            
+            // Deserialize 
+            return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
         }
 
+        /// <summary>
+        /// Deserializes the response XML
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        private static T DeserializeResponse<T>(string xml)
+        {
+            try
+            {
+                return SerializationUtility.DeserializeFromXml<T>(xml);
+            }
+            catch (Exception ex)
+            {
+                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
+            }
+        }
 
         /// <summary>
         /// Configures the request with required parameters
@@ -95,11 +124,16 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
                 i++;
             }
-            
-            // From Address Info
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Name", requestDetails.ShipFromAddress.Name);
-            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
 
+            // From Address Info
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Name))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Name", requestDetails.ShipFromAddress.Name);
+            }
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine1))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
+            }
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine2))
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
@@ -111,11 +145,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
 
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.City", requestDetails.ShipFromAddress.City);
-            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.StateOrProvinceCode", requestDetails.ShipFromAddress.StateOrProvinceCode);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.StateOrProvinceCode", requestDetails.ShipFromAddress.StateOrProvinceCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
-            //request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
-
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Phone))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
+            }
+            
             // Package Info
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString());
             request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString());
@@ -128,10 +165,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
             request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
 
-            //if (requestDetails.MustArriveByDate != null)
-            //{
-            //    request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
-            //}
+            if (requestDetails.MustArriveByDate != null)
+            {
+                request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
+            }
         }
 
         /// <summary>
@@ -154,7 +191,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
             string queryString = request.Variables
                 .OrderBy(v => v.Name, StringComparer.Ordinal)
-                .Select(v => v.Name + "=" + AmazonMwsUtility.SignatureEncode(v.Value, false))
+                .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
                 .Aggregate((x,y) => x + "&" + y);
 
             string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
@@ -175,9 +212,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             // Signes the request
             AddSignature(request, amazonMwsApiCall, mwsSettings);
-
-            //request.Variables.Sort(v => v.Name);
-
+            
             // add a User Agent header
             request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
 
@@ -208,6 +243,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
                     return response;
                 }
+            }
+            catch (AmazonException ex)
+            {
+                // Found an error in the respons, throw it as an AmazonShipperException
+                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
             }
             catch (Exception ex)
             {

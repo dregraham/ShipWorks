@@ -7,38 +7,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     /// <summary>
     /// Class containing Mws related utilities
     /// </summary>
-    public static class AmazonMwsUtility
+    public static class AmazonMwsSignature
     {
-        /** Match one back-slash. */
-        static readonly Regex backSlashPtn = new Regex(@"\\");
-
-        /** Match one equal character. */
-        private static readonly Regex equalPtn = new Regex(@"=");
-
-        /** Match one forward-slash. */
-        private static readonly Regex forwardSlashPtn = new Regex("/");
-
         /** Match one right parenthesis character. */
         private static readonly Regex lParenPtn = new Regex(@"\(");
 
-        /** Match leading and/or trailing white spaces. */
-        private static readonly Regex outerWhiteSpacesPtn = new Regex(@"\A(\s)+|(\s)+\z");
-
         /** Match one right parenthesis character. */
         private static readonly Regex rParenPtn = new Regex(@"\)");
-
-        /** Match one semicolon character. */
-        private static readonly Regex semicolonPtn = new Regex(";");
-
-        /** Match one or more white spaces. */
-        private static readonly Regex whiteSpacesPtn = new Regex("\\s+");
-
-        /** Default character encoding. */
-        static readonly Encoding defaultEncoding = Encoding.UTF8;
-
-        /** Match a + character. */
-        private static readonly Regex plusPtn = new Regex(@"\+");
-
+        
         /** Match a ! character. */
         private static readonly Regex exlamationPoint = new Regex(@"\!");
 
@@ -60,7 +36,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <param name="value"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public static string SignatureEncode(string value, bool path)
+        public static string Encode(string value, bool path)
         {
             try
             {
@@ -72,7 +48,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             }
             catch (NotSupportedException e)
             {
-                throw new SystemException("Unsupported encoding", e);
+                throw new AmazonShipperException("Unsupported Signature Encoding", e);
             }
             value = ReplaceAll(value, asteriskPtn, "%2A");
             value = ReplaceAll(value, pct7EPtn, "~");

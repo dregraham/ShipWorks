@@ -84,7 +84,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         {
             switch (amazonMwsApiCall)
             {
-                
+                case AmazonMwsApiCall.GetServiceStatus:
                 case AmazonMwsApiCall.ListOrderItems:
                 case AmazonMwsApiCall.ListOrderItemsByNextToken:
                 case AmazonMwsApiCall.ListOrders:
@@ -97,7 +97,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     return "2011-07-01";
                 case AmazonMwsApiCall.GetMatchingProductForId:
                     return "2011-10-01";
-                case AmazonMwsApiCall.GetServiceStatus:
                 case AmazonMwsApiCall.GetEligibleShippingServices:
                     return "2015-06-01";
                 default:
@@ -115,6 +114,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
 
             switch (amazonMwsApiCall)
             {
+                case AmazonMwsApiCall.GetServiceStatus:
                 case AmazonMwsApiCall.ListOrderItems:
                 case AmazonMwsApiCall.ListOrderItemsByNextToken:
                 case AmazonMwsApiCall.ListOrders:
@@ -133,7 +133,6 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                     apiName = "Products";
                     version = GetApiVersion(amazonMwsApiCall);
                     break;
-                case AmazonMwsApiCall.GetServiceStatus:
                 case AmazonMwsApiCall.GetEligibleShippingServices:
                     apiName = "MerchantFulfillment";
                     version = GetApiVersion(amazonMwsApiCall);

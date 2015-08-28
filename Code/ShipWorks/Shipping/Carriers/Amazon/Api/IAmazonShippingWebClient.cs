@@ -17,6 +17,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings);
+        GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings);
     }
 }
