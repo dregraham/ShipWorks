@@ -13,6 +13,7 @@ using ShipWorks.Stores.Platforms.Amazon.Mws;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.HelperClasses;
+using System.Drawing;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -65,10 +66,33 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             {
                 AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
                 RateResult rateResult = new RateResult(shippingService.ShippingServiceName,"",shippingService.Rate.Amount, tag);
+                rateResult.ProviderLogo = GetProviderLogo(shippingService);
                 rateResults.Add(rateResult);
             }
 
             return new RateGroup(rateResults);
+        }
+
+        /// <summary>
+        /// Determine which carrier the ShippingService belongs to 
+        /// Return the logo of that carrier returns Null if we cannot
+        /// find a match for the carrier
+        /// </summary>
+        /// <param name="shippingService"></param>
+        /// <returns></returns>
+        private static Image GetProviderLogo(ShippingService shippingService)
+        {
+            switch (shippingService.CarrierName.ToLower())
+            {
+                case "ups":
+                    return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);
+                case "fedex":
+                    return EnumHelper.GetImage(ShipmentTypeCode.FedEx);
+                case "usps":
+                    return EnumHelper.GetImage(ShipmentTypeCode.Usps);
+                default:
+                    return EnumHelper.GetImage(ShipmentTypeCode.None);
+            }
         }
 
         /// <summary>
