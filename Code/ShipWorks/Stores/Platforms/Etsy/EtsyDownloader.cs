@@ -18,6 +18,7 @@ using log4net;
 using Newtonsoft.Json.Linq;
 using Interapptive.Shared.Net;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 

@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using System.Globalization;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Infopia
 {

@@ -19,6 +19,7 @@ using ShipWorks.Data.Model.HelperClasses;
 using System.Globalization;
 using ShipWorks.UI;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 using ShipWorks.Data.Model;
 using log4net;

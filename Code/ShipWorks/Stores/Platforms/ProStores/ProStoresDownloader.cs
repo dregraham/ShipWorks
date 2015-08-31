@@ -15,6 +15,7 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.ProStores
 {

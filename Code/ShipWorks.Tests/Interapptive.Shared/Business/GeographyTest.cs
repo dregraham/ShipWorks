@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Business

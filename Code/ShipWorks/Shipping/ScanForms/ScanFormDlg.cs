@@ -8,6 +8,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
 
 namespace ShipWorks.Shipping.ScanForms

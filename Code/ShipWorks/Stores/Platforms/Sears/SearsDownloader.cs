@@ -13,6 +13,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data;
 using ShipWorks.Data.Model;
 using SD.LLBLGen.Pro.ORMSupportClasses;

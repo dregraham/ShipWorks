@@ -19,6 +19,7 @@ using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Net;
 using System.Web;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.Postal.WebTools
 {

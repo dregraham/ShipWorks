@@ -13,6 +13,7 @@ using Interapptive.Shared.Utility;
 using Interapptive.Shared.Net;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.ShopSite
 {
