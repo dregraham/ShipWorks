@@ -4019,6 +4019,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
         private string nameField;
         
         /// <remarks/>
+        [CLSCompliant(false)]
         public uint id {
             get {
                 return this.idField;
@@ -4783,8 +4784,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.WebServices {
                 this.codewordTypeField = value;
             }
         }
-        
+
         /// <remarks/>
+        [CLSCompliant(false)]
         public uint Value {
             get {
                 return this.valueField;

@@ -138,6 +138,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// DeliveryExperience display text
         /// </summary>
+        [Obfuscation(Exclude = true)]
         public IMultiValue<AmazonDeliveryExperienceType> DeliveryExperience => deliveryExperienceBinder;
 
         /// <summary>
