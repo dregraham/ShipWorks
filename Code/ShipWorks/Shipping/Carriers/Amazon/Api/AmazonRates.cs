@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
-using ShipWorks.Shipping.Carriers.FedEx.WebServices.OpenShip;
 using ShipWorks.Shipping.Editing.Rating;
 using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
-using ShipWorks.Data;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.HelperClasses;
 using System.Drawing;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -24,15 +18,17 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
     {
         private readonly IAmazonShippingWebClient webClient;
         private readonly IAmazonMwsWebClientSettingsFactory settingsFactory;
+        private readonly IOrderManager orderManager;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AmazonRates"/> class.
         /// </summary>
         /// <param name="webClient">The web client.</param>
-        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory)
+        public AmazonRates(IAmazonShippingWebClient webClient,  IAmazonMwsWebClientSettingsFactory settingsFactory, IOrderManager orderManager)
         {
             this.webClient = webClient;
             this.settingsFactory = settingsFactory;
+            this.orderManager = orderManager;
         }
 
         /// <summary>
@@ -40,13 +36,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         public RateGroup GetRates(ShipmentEntity shipment)
         {
+            orderManager.PopulateOrderDetails(shipment);
             AmazonOrderEntity order = shipment.Order as AmazonOrderEntity;
 
             if (order == null)
             {
                 throw new AmazonShipperException("Not an Amazon Order");
             }
-
+            
             ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
 
             GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
@@ -65,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             foreach (ShippingService shippingService in serviceList.ShippingService)
             {
                 AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
-                RateResult rateResult = new RateResult(shippingService.ShippingServiceName,"",shippingService.Rate.Amount, tag);
+                RateResult rateResult = new RateResult(shippingService.ShippingServiceName, "", shippingService.Rate.Amount, tag);
                 rateResult.ProviderLogo = GetProviderLogo(shippingService);
                 rateResults.Add(rateResult);
             }
@@ -100,7 +97,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private ShipmentRequestDetails CreateGetRatesRequest(ShipmentEntity shipment, AmazonOrderEntity order)
         {
-            ShipmentRequestDetails requestDetails = new ShipmentRequestDetails()
+            return new ShipmentRequestDetails()
             {
                 AmazonOrderId = order.AmazonOrderID,
                 Insurance = shipment.Amazon.DeclaredValue.HasValue ?
@@ -138,8 +135,6 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                 },
                 Weight = shipment.TotalWeight
             };
-
-            return requestDetails;
         }
 
         /// <summary>
@@ -147,28 +142,14 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static List<Item> GetItemList(OrderEntity order)
         {
-            List<AmazonOrderItemEntity> amazonOrderItems = null;
-
-            if (order.OrderItems == null || !order.OrderItems.Any())
-            {
-                amazonOrderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.AmazonOrderItemEntity).Cast<AmazonOrderItemEntity>().ToList();
-            }
-            else
-            {
-                amazonOrderItems = order.OrderItems.Select(i => (AmazonOrderItemEntity)i).ToList();
-            }
-
-            List<Item> items = new List<Item>();
-            
-            foreach (AmazonOrderItemEntity amazonOrderItem in amazonOrderItems)
-            {
-                Item item = new Item();
-                item.OrderItemId = amazonOrderItem.AmazonOrderItemCode;
-                item.Quantity = (int)amazonOrderItem.Quantity;
-                items.Add(item);
-            }
-
-            return items;
+            return order.OrderItems
+                .OfType<AmazonOrderItemEntity>()
+                .Select(x => new Item
+                {
+                    OrderItemId = x.AmazonOrderItemCode,
+                    Quantity = (int) x.Quantity
+                })
+                .ToList();
         }
     }
 }
