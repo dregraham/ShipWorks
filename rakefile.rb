@@ -35,7 +35,7 @@ task :rebuild, [:forCI] => ["build:clean", "build:debug"]
 namespace :build do
 	desc "Restore nuget packages"
 	task :restore do
-		`build/nuget.exe restore ShipWorks.sln -ConfigFile nuget.config`
+		`build/nuget.exe restore ShipWorks.sln -Verbosity Detailed -Source \\\\intfs01\\development\\nuget -Source https://api.nuget.org/v3/index.json`
 	end
 
 	desc "no-op"
