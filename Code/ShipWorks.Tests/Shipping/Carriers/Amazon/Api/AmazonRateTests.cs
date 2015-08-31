@@ -13,6 +13,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq.Expressions;
 using System.Collections.Generic;
+using ShipWorks.Shipping.Carriers.Amazon.Enums;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -20,9 +21,44 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
     public class AmazonRateTests
     {
         [TestMethod]
+        public void GetRates_SendsOrderId_ToAmazonApi()
+        {
+            VerifyApiRequest((s, o) => o.AmazonOrderID = "123", x => x.AmazonOrderId == "123");
+        }
+
+        [TestMethod]
         public void GetRates_SendsShipmentWeight_ToAmazonApi()
         {
             VerifyApiRequest((s, o) => s.TotalWeight = 1.23, x => x.Weight == 1.23);
+        }
+
+        [TestMethod]
+        public void GetRates_SendsInsurance_ToAmazonApiWhenDeclaredValueIsSet()
+        {
+            VerifyApiRequest((s, o) => s.Amazon.DeclaredValue = 12,
+            x => x.Insurance.Amount == 12 &&
+                x.Insurance.CurrencyCode == "USD");
+        }
+
+        [TestMethod]
+        public void GetRates_SendsNullInsurance_ToAmazonApiWhenDeclaredValueIsNotSet()
+        {
+            VerifyApiRequest((s, o) => s.Amazon.DeclaredValue = null, x => x.Insurance == null);
+        }
+
+        [TestMethod]
+        public void GetRates_SendsOrderItems_ToAmazonApi()
+        {
+            VerifyApiRequest((s, o) =>
+            {
+                o.OrderItems.Add(new AmazonOrderItemEntity
+                {
+                    AmazonOrderItemCode = "abc123",
+                    Quantity = 2
+                });
+            },
+            x => x.ItemList[0].OrderItemId == "abc123" &&
+                x.ItemList[0].Quantity == 2);
         }
 
         [TestMethod]
@@ -37,6 +73,46 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             x => x.PackageDimensions.Height == 3 &&
                 x.PackageDimensions.Length == 4 &&
                 x.PackageDimensions.Width == 2);
+        }
+
+        [TestMethod]
+        public void GetRates_SendsShipmentAddress_ToAmazonApi()
+        {
+            VerifyApiRequest((s, o) =>
+            {
+                s.OriginStreet1 = "1 Memorial Dr.";
+                s.OriginStreet2 = "Suite 2000";
+                s.OriginStreet3 = "Baz";
+                s.OriginCity = "St. Louis";
+                s.OriginCountryCode = "US";
+                s.OriginPhone = "314-555-1234";
+                s.OriginUnparsedName = "John Doe";
+                s.OriginPostalCode = "63102";
+                s.OriginStateProvCode = "MO";
+                s.OriginEmail = "foo@example.com";
+            },
+            x => x.ShipFromAddress.AddressLine1 == "1 Memorial Dr." &&
+                x.ShipFromAddress.AddressLine2 == "Suite 2000" &&
+                x.ShipFromAddress.AddressLine3 == "Baz" &&
+                x.ShipFromAddress.City == "St. Louis" &&
+                x.ShipFromAddress.CountryCode == "US" &&
+                x.ShipFromAddress.Phone == "314-555-1234" &&
+                x.ShipFromAddress.Name == "John Doe" &&
+                x.ShipFromAddress.PostalCode == "63102" &&
+                x.ShipFromAddress.StateOrProvinceCode == "MO" &&
+                x.ShipFromAddress.Email == "foo@example.com");
+        }
+
+        [TestMethod]
+        public void GetRates_SendsShippingServiceOptions_ToAmazonApi()
+        {
+            VerifyApiRequest((s, o) =>
+            {
+                s.Amazon.DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithoutSignature;
+                s.Amazon.CarrierWillPickUp = true;
+            },
+            x => x.ShippingServiceOptions.DeliveryExperience == "DeliveryConfirmationWithoutSignature" &&
+                x.ShippingServiceOptions.CarrierWillPickUp == true);
         }
 
         [TestMethod]
@@ -82,7 +158,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         public void GetRates_ReturnsRateWithDefaultCarrierName_WhenApiReturnsOneServiceWithNullCarrierName()
         {
             GetEligibleShippingServicesResponse response = ResponseWithService(() => new ShippingService {
-                Rate = new Rate { Amount = 1 }, CarrierName = null
+                Rate = new Rate { Amount = 1 },
+                ShippingServiceName = null
             });
 
             using (var mock = AutoMock.GetLoose())
@@ -97,6 +174,35 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 RateResult rateResult = result.Rates.FirstOrDefault();
 
                 Assert.AreEqual("Unknown", rateResult.Description);
+            }
+        }
+
+        [TestMethod]
+        public void GetRates_ReturnsValidRate_WhenApiReturnsOneValidService()
+        {
+            GetEligibleShippingServicesResponse response = ResponseWithService(() => new ShippingService
+            {
+                Rate = new Rate { Amount = 2.34m },
+                ShippingServiceName = "UPS",
+                ShippingServiceId = "Foo",
+                ShippingServiceOfferId = "Bar"
+            });
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+                RateResult rateResult = result.Rates.FirstOrDefault();
+
+                Assert.AreEqual("UPS", rateResult.Description);
+                Assert.AreEqual(2.34m, rateResult.Amount);
+                Assert.AreEqual("Foo", ((AmazonRateTag)rateResult.Tag).ShippingServiceId);
+                Assert.AreEqual("Bar", ((AmazonRateTag)rateResult.Tag).ShippingServiceOfferId);
             }
         }
 
@@ -211,7 +317,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
         //    }
         //}
 
-        private void VerifyApiRequest(Action<ShipmentEntity, OrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
+        private void VerifyApiRequest(Action<ShipmentEntity, AmazonOrderEntity> configureInput, Expression<Func<ShipmentRequestDetails, bool>> verifyCall)
         {
             ShipmentEntity shipment = SampleShipment;
             configureInput(shipment, shipment.Order as AmazonOrderEntity);
