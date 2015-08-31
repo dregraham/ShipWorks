@@ -150,9 +150,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
                 CreditCardType = CreditCardType.Visa,
                 ExpirationDate = DateTime.Now.AddYears(3)
             };
-            registration.FirstCodewordType = CodewordType2.MothersMaidenName;
+            registration.FirstCodewordType = CodewordType.MothersMaidenName;
             registration.FirstCodewordValue = "mom";
-            registration.SecondCodewordType = CodewordType2.PetsName;
+            registration.SecondCodewordType = CodewordType.PetsName;
             registration.SecondCodewordValue = "Max";
             registration.Email = "some.one@shipworks.com";
             registration.MachineInfo = new MachineInfo() { IPAddress = "127.0.0.1" };
@@ -160,9 +160,9 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal.Usps
             registration.Password = "abc123456xyz";
             registration.RegistrationType = PostalAccountRegistrationType.Expedited;
             registration.PhysicalAddress = registration.CreditCard.BillingAddress;
-            registration.FirstCodewordType = CodewordType2.Last4DriversLicense;
+            registration.FirstCodewordType = CodewordType.Last4DriversLicense;
             registration.FirstCodewordValue = "9933";
-            registration.SecondCodewordType = CodewordType2.FirstCarsMakeModel;
+            registration.SecondCodewordType = CodewordType.FirstCarsMakeModel;
             registration.SecondCodewordValue = "Foo Bar";
             return registration;
         }

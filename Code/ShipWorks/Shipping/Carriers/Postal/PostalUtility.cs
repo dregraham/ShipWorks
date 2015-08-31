@@ -64,7 +64,8 @@ namespace ShipWorks.Shipping.Carriers.Postal
                 {
                     PostalServiceType.RrdIpa,
                     PostalServiceType.RrdIsal,
-                    PostalServiceType.RrdEpsePacketService
+                    PostalServiceType.RrdEpsePacketService,
+                    PostalServiceType.RrdGeneric
                 }
             },
         };
