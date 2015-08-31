@@ -814,8 +814,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             {
                 BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = new BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType.CreatedDate, 
                     DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow, 
-                    BigCommerceConstants.OrdersPageSize, 1);
+                    DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow)
+                    { 
+                        PageSize = BigCommerceConstants.OrdersPageSize, 
+                        Page = 1
+                    };
                 
                 GetOrderCount(orderSearchCriteria);
             }
