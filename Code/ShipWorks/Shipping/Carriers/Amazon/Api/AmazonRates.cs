@@ -59,11 +59,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             List<RateResult> rateResults = new List<RateResult>();
 
             ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
-            foreach (ShippingService shippingService in serviceList.ShippingService)
+            foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
             {
+                string shippingServiceName = shippingService.ShippingServiceName ?? "Unknown";
                 AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
-                RateResult rateResult = new RateResult(shippingService.ShippingServiceName, "", shippingService.Rate.Amount, tag);
-                rateResult.ProviderLogo = GetProviderLogo(shippingService);
+                RateResult rateResult = new RateResult(shippingServiceName, "", shippingService.Rate.Amount, tag);
+                rateResult.ProviderLogo = GetProviderLogo(shippingServiceName);
                 rateResults.Add(rateResult);
             }
 
@@ -77,9 +78,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         /// <param name="shippingService"></param>
         /// <returns></returns>
-        private static Image GetProviderLogo(ShippingService shippingService)
+        private static Image GetProviderLogo(string shippingServiceName)
         {
-            switch (shippingService.CarrierName.ToLower())
+            switch (shippingServiceName.ToLower())
             {
                 case "ups":
                     return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);

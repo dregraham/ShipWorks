@@ -12,6 +12,7 @@ using Interapptive.Shared.Utility;
 using System.IO;
 using System.Reflection;
 using System.Linq.Expressions;
+using System.Collections.Generic;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
 {
@@ -36,6 +37,67 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
             x => x.PackageDimensions.Height == 3 &&
                 x.PackageDimensions.Length == 4 &&
                 x.PackageDimensions.Width == 2);
+        }
+
+        [TestMethod]
+        public void GetRates_ReturnsThreeRates_WhenApiResponseHasThreeServices()
+        {
+            GetEligibleShippingServicesResponse response = ResponseWithServices(() => Enumerable.Range(1, 3)
+                .Select(x => new ShippingService { Rate = new Rate { Amount = x } }));
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+
+                Assert.AreEqual(3, result.Rates.Count);
+            }
+        }
+
+        [TestMethod]
+        public void GetRates_ReturnsNoRates_WhenApiReturnsOneServiceWithNullRate()
+        {
+            GetEligibleShippingServicesResponse response = ResponseWithService(() => new ShippingService());
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+
+                Assert.AreEqual(0, result.Rates.Count);
+            }
+        }
+
+        [TestMethod]
+        public void GetRates_ReturnsRateWithDefaultCarrierName_WhenApiReturnsOneServiceWithNullCarrierName()
+        {
+            GetEligibleShippingServicesResponse response = ResponseWithService(() => new ShippingService {
+                Rate = new Rate { Amount = 1 }, CarrierName = null
+            });
+
+            using (var mock = AutoMock.GetLoose())
+            {
+                mock.Mock<IAmazonShippingWebClient>()
+                    .Setup(w => w.GetRates(It.IsAny<ShipmentRequestDetails>(), It.IsAny<AmazonMwsWebClientSettings>()))
+                    .Returns(response);
+
+                AmazonRates testObject = mock.Create<AmazonRates>();
+
+                RateGroup result = testObject.GetRates(SampleShipment);
+                RateResult rateResult = result.Rates.FirstOrDefault();
+
+                Assert.AreEqual("Unknown", rateResult.Description);
+            }
         }
 
         [TestMethod]
@@ -167,6 +229,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon.Api
                 mock.Mock<IAmazonShippingWebClient>()
                     .Verify(x => x.GetRates(It.Is(verifyCall), It.IsAny<AmazonMwsWebClientSettings>()));
             }
+        }
+
+        public GetEligibleShippingServicesResponse ResponseWithServices(Func<IEnumerable<ShippingService>> serviceCreator)
+        {
+            return new GetEligibleShippingServicesResponse
+            {
+                GetEligibleShippingServicesResult = new GetEligibleShippingServicesResult
+                {
+                    ShippingServiceList = new ShippingServiceList
+                    {
+                        ShippingService = serviceCreator().ToList()
+                    }
+                }
+            };
+        }
+
+        public GetEligibleShippingServicesResponse ResponseWithService(Func<ShippingService> serviceCreator)
+        {
+            return ResponseWithServices(() => new[] { serviceCreator() });
         }
 
         public GetEligibleShippingServicesResponse ValidResponse

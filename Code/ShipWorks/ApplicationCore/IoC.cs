@@ -8,6 +8,7 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -81,6 +82,10 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<ShippingSettingsWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<OrderManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
