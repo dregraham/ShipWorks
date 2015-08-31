@@ -234,7 +234,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = 
                 new BigCommerceWebClientOrderSearchCriteria(orderDateSearchType, 
                     modifiedDateStartingPoint.Value, modifiedDateEndPoint,
-                    createdDateStartingPoint.Value, createdDateEndPoint);
+                    createdDateStartingPoint.Value, createdDateEndPoint)
+                {
+                    PageSize = BigCommerceConstants.OrdersPageSize,
+                    Page = 1
+                };
 
             // Create the order search criteria
             return orderSearchCriteria;

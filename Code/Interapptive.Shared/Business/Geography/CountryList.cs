@@ -30,7 +30,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static IList<string> Countries
         {
-            get { return countries.Keys; }
+            get { return new List<string>(countries.Keys); }
         }
 
         /// <summary>
