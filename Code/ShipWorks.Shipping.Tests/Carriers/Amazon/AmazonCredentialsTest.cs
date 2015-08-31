@@ -7,6 +7,7 @@ using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Stores;
 using Xunit;
+using ShipWorks.Stores.Platforms.Amazon.Mws;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 {
@@ -162,6 +163,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IAmazonShippingWebClient> webClient = mock.Mock<IAmazonShippingWebClient>();
+                Mock<IAmazonMwsWebClientSettingsFactory> settingsFactory = mock.Mock<IAmazonMwsWebClientSettingsFactory>();
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
 
@@ -169,7 +171,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.AuthToken = "Bar";
                 testObject.Validate();
 
-                webClient.Verify(x => x.ValidateCredentials("Foo", "Bar"));
+                AmazonMwsWebClientSettings settings = settingsFactory.Object.Create("Foo", "Bar", "US");
+
+                webClient.Verify(x => x.ValidateCredentials(settings));
             }
         }
 
@@ -179,14 +183,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 Mock<IAmazonShippingWebClient> webClient = mock.Mock<IAmazonShippingWebClient>();
+                Mock<IAmazonMwsWebClientSettingsFactory> settingsFactory = mock.Mock<IAmazonMwsWebClientSettingsFactory>();
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
+
 
                 testObject.MerchantId = string.Empty;
                 testObject.AuthToken = "Bar";
                 testObject.Validate();
 
-                webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                webClient.Verify(x => x.ValidateCredentials(It.IsAny<AmazonMwsWebClientSettings>()), Times.Never);
                 Assert.Equal("MerchantId and AuthToken are required", testObject.Message);
                 Assert.Equal(false, testObject.Success);
             }
@@ -205,7 +211,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                 testObject.AuthToken = string.Empty;
                 testObject.Validate();
 
-                webClient.Verify(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+                webClient.Verify(x => x.ValidateCredentials(It.IsAny<AmazonMwsWebClientSettings>()), Times.Never);
                 Assert.Equal("MerchantId and AuthToken are required", testObject.Message);
                 Assert.Equal(false, testObject.Success);
             }
@@ -217,7 +223,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()))
+                    .Setup(x => x.ValidateCredentials(It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(AmazonValidateCredentialsResponse.Succeeded);
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();
@@ -237,7 +243,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
             using (var mock = AutoMock.GetLoose())
             {
                 mock.Mock<IAmazonShippingWebClient>()
-                    .Setup(x => x.ValidateCredentials(It.IsAny<string>(), It.IsAny<string>()))
+                    .Setup(x => x.ValidateCredentials(It.IsAny<AmazonMwsWebClientSettings>()))
                     .Returns(AmazonValidateCredentialsResponse.Failed("Error message"));
 
                 AmazonCredentials testObject = mock.Create<AmazonCredentials>();

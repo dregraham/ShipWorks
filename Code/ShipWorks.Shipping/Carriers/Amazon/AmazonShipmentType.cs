@@ -152,9 +152,25 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         public override RateGroup GetRates(ShipmentEntity shipment)
         {
-            IAmazonRates amazonRates = amazonRatesFactory();
+            
+            return GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
+        }
 
+        /// <summary>
+        /// Gets rates from the Amazon API
+        /// </summary>
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
+        {
+            IAmazonRates amazonRates = amazonRatesFactory();
             return amazonRates.GetRates(shipment);
+        }
+
+        /// <summary>
+        /// Amazon supports rates
+        /// </summary>
+        public override bool SupportsGetRates
+        {
+            get { return true; }
         }
 
         /// <summary>

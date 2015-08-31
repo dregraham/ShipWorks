@@ -5,7 +5,10 @@ using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Shipping.Carriers.Amazon.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using Address = ShipWorks.Shipping.Carriers.Amazon.Api.DTOs.Address;
-using ShipWorks.Stores.Platforms.Amazon.Mws;
+using ShipWorks.Data;
+using ShipWorks.Data.Model;
+using System.Drawing;
+using System.Linq;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -41,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
 
             ShipmentRequestDetails requestDetails = CreateGetRatesRequest(shipment, order);
 
-            GetEligibleShippingServices response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
+            GetEligibleShippingServicesResponse response = webClient.GetRates(requestDetails, settingsFactory.Create(shipment.Amazon));
 
             return GetRateGroupFromResponse(response);
         }
@@ -49,19 +52,42 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Gets the rate group from response.
         /// </summary>
-        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServices response)
+        private static RateGroup GetRateGroupFromResponse(GetEligibleShippingServicesResponse response)
         {
             List<RateResult> rateResults = new List<RateResult>();
 
-            List<ShippingService> serviceList = response.GetEligibleShippingServicesResponse.ShippingServiceList;
-            foreach (ShippingService shippingService in serviceList)
+            ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
+            foreach (ShippingService shippingService in serviceList.ShippingService)
             {
                 AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
                 RateResult rateResult = new RateResult(shippingService.ShippingServiceName,"",shippingService.Rate.Amount, tag);
+                rateResult.ProviderLogo = GetProviderLogo(shippingService);
                 rateResults.Add(rateResult);
             }
 
             return new RateGroup(rateResults);
+        }
+
+        /// <summary>
+        /// Determine which carrier the ShippingService belongs to 
+        /// Return the logo of that carrier returns Null if we cannot
+        /// find a match for the carrier
+        /// </summary>
+        /// <param name="shippingService"></param>
+        /// <returns></returns>
+        private static Image GetProviderLogo(ShippingService shippingService)
+        {
+            switch (shippingService.CarrierName.ToLower())
+            {
+                case "ups":
+                    return EnumHelper.GetImage(ShipmentTypeCode.UpsOnLineTools);
+                case "fedex":
+                    return EnumHelper.GetImage(ShipmentTypeCode.FedEx);
+                case "usps":
+                    return EnumHelper.GetImage(ShipmentTypeCode.Usps);
+                default:
+                    return EnumHelper.GetImage(ShipmentTypeCode.None);
+            }
         }
 
         /// <summary>
@@ -114,13 +140,24 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// </summary>
         private static List<Item> GetItemList(OrderEntity order)
         {
+            List<AmazonOrderItemEntity> amazonOrderItems = null;
+
+            if (order.OrderItems == null || !order.OrderItems.Any())
+            {
+                amazonOrderItems = DataProvider.GetRelatedEntities(order.OrderID, EntityType.AmazonOrderItemEntity).Cast<AmazonOrderItemEntity>().ToList();
+            }
+            else
+            {
+                amazonOrderItems = order.OrderItems.Select(i => (AmazonOrderItemEntity)i).ToList();
+            }
+
             List<Item> items = new List<Item>();
             
-            foreach (AmazonOrderItemEntity orderItem in order.OrderItems)
+            foreach (AmazonOrderItemEntity amazonOrderItem in amazonOrderItems)
             {
                 Item item = new Item();
-                item.OrderItemId = orderItem.AmazonOrderItemCode;
-                item.Quantity = (int) orderItem.Quantity;
+                item.OrderItemId = amazonOrderItem.AmazonOrderItemCode;
+                item.Quantity = (int)amazonOrderItem.Quantity;
                 items.Add(item);
             }
 
