@@ -70,15 +70,15 @@ namespace Interapptive.Shared.Utility
 
                 return Encoding.UTF8.GetString(plainBytes);
             }
-            catch (FormatException)
+            catch (Exception ex)
             {
-                log.ErrorFormat("Failed to decrypt '{0}'.", cipher);
-                return string.Empty;
-            }
-            catch (CryptographicException)
-            {
-                log.ErrorFormat("Failed to decrypt '{0}'.", cipher);
-                return string.Empty;
+                if (ex is FormatException || ex is CryptographicException)
+                {
+                    log.ErrorFormat("Failed to decrypt '{0}'.", cipher);
+                    return string.Empty;
+                }
+
+                throw;
             }
         }
 
