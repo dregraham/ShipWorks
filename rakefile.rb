@@ -38,6 +38,9 @@ namespace :build do
 		`build/nuget.exe restore ShipWorks.sln`
 	end
 
+	desc "no-op"
+	task :analyze
+
 	desc "Cleans the ShipWorks solution"
 	msbuild :clean do |msb|
 		print "Cleaning solution...\r\n\r\n"
