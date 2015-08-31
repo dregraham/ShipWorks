@@ -1358,7 +1358,7 @@ namespace ShipWorks
             this.contextOrderOnlineUpdate.Name = "contextOrderOnlineUpdate";
             this.gridMenuLayoutProvider.SetPermission(this.contextOrderOnlineUpdate, ShipWorks.Users.Security.PermissionType.OrdersEditStatus);
             this.contextOrderOnlineUpdate.Size = new System.Drawing.Size(237, 22);
-            this.contextOrderOnlineUpdate.Text = "Update Online";
+            this.contextOrderOnlineUpdate.Text = "Update Store";
             this.contextOrderOnlineUpdate.DropDownOpening += new System.EventHandler(this.OnUpdateOnlineMenuOpening);
             // 
             // orderContextUpdateOnlineEbay

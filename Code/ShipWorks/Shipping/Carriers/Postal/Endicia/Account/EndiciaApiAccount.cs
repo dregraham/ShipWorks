@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia.Account
             }
 
             // Nothing to refund
-            if (shipment.Postal.Endicia.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
+            if (shipment.Postal.NoPostage && shipment.Postal.Endicia.TransactionID == 0)
             {
                 log.WarnFormat("No refund being required from Endicia for non-postage shipment. {0}", shipment.ShipmentID);
                 return;

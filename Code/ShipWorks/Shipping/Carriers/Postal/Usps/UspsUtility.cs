@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
             {ServiceType.RRDIPA, PostalServiceType.RrdIpa},
             {ServiceType.RRDISAL, PostalServiceType.RrdIsal},
             {ServiceType.RRDEPKT, PostalServiceType.RrdEpsePacketService},
+            {ServiceType.RRDGNRC, PostalServiceType.RrdGeneric},
 			{ServiceType.DHLPG, PostalServiceType.DhlParcelGround},
             {ServiceType.DHLPE, PostalServiceType.DhlParcelExpedited},
             {ServiceType.DHLPPE, PostalServiceType.DhlParcelPlusExpedited},
@@ -210,7 +211,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the service is an Asendia service type; otherwise, <c>false</c>.</returns>
         public static bool IsAsendiaServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.AsendiaIsal || serviceType == PostalServiceType.AsendiaIpa || serviceType == PostalServiceType.AsendiaGeneric || serviceType == PostalServiceType.AsendiaePacket;
+            return serviceType == PostalServiceType.AsendiaIsal || 
+                serviceType == PostalServiceType.AsendiaIpa || 
+                serviceType == PostalServiceType.AsendiaGeneric ||
+                serviceType == PostalServiceType.AsendiaePacket;
         }
 
         /// <summary>
@@ -220,7 +224,10 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a Globegistics service type; otherwise, <c>false</c>.</returns>
         public static bool IsGlobegisticsServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.GlobegisticsGeneric || serviceType == PostalServiceType.GlobegisticsIpa || serviceType == PostalServiceType.GlobegisticsIsal|| serviceType == PostalServiceType.GlobegisticsePacket;
+            return serviceType == PostalServiceType.GlobegisticsGeneric || 
+                serviceType == PostalServiceType.GlobegisticsIpa || 
+                serviceType == PostalServiceType.GlobegisticsIsal|| 
+                serviceType == PostalServiceType.GlobegisticsePacket;
         }
 
         /// <summary>
@@ -230,17 +237,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a InternationalBondedCouriers service type; otherwise, <c>false</c>.</returns>
         public static bool IsInternationalBondedCouriersServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.InternationalBondedCouriersIpa || serviceType == PostalServiceType.InternationalBondedCouriersIsal || serviceType == PostalServiceType.InternationalBondedCouriersePacket;
+            return serviceType == PostalServiceType.InternationalBondedCouriersIpa || 
+                serviceType == PostalServiceType.InternationalBondedCouriersIsal || 
+                serviceType == PostalServiceType.InternationalBondedCouriersePacket;
         }
 
         /// <summary>
-        /// Determines whether the specified service type is a Globegistics service type.
+        /// Determines whether the specified service type is a RRDonnelly service type.
         /// </summary>
         /// <param name="serviceType">Type of the service.</param>
-        /// <returns><c>true</c> if the serivce is a Globegistics service type; otherwise, <c>false</c>.</returns>
+        /// <returns><c>true</c> if the serivce is a RRDonnelly service type; otherwise, <c>false</c>.</returns>
         public static bool IsRrDonnellyServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.RrdIpa || serviceType == PostalServiceType.RrdIsal || serviceType == PostalServiceType.GlobegisticsIsal || serviceType == PostalServiceType.RrdEpsePacketService;
+            return serviceType == PostalServiceType.RrdIpa || 
+                serviceType == PostalServiceType.RrdIsal || 
+                serviceType == PostalServiceType.RrdEpsePacketService  ||
+                serviceType == PostalServiceType.RrdGeneric;
         }
 
         /// <summary>
@@ -250,7 +262,8 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
         /// <returns><c>true</c> if the serivce is a DHL international service type; otherwise, <c>false</c>.</returns>
         public static bool IsInternationalDhlServiceType(PostalServiceType serviceType)
         {
-            return serviceType == PostalServiceType.DhlPacketIpa || serviceType == PostalServiceType.DhlPacketIsal;
+            return serviceType == PostalServiceType.DhlPacketIpa || 
+                serviceType == PostalServiceType.DhlPacketIsal;
         }
     }
 }

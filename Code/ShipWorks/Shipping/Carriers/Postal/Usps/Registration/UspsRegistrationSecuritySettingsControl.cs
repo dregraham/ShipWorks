@@ -40,7 +40,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the first type of the security question.
         /// </summary>
-        public CodewordType2 FirstSecurityQuestionType
+        public CodewordType FirstSecurityQuestionType
         {
             get { return GetSelectedCodewordType(firstCodewordType); }
         }
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// <summary>
         /// Gets the type of the second security question.
         /// </summary>
-        public CodewordType2 SecondSecurityQuestionType
+        public CodewordType SecondSecurityQuestionType
         {
             get { return GetSelectedCodewordType(secondCodewordType); }
         }
@@ -74,7 +74,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         /// </summary>
         /// <param name="comboBox">The combo box.</param>
         /// <returns>The CodewordType.</returns>
-        private CodewordType2 GetSelectedCodewordType(ComboBox comboBox)
+        private CodewordType GetSelectedCodewordType(ComboBox comboBox)
         {
             CodewordDropdownItem selectedItem = comboBox.SelectedItem as CodewordDropdownItem;
 
@@ -91,16 +91,16 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Registration
         {
             List<CodewordDropdownItem> securityQuestions = new List<CodewordDropdownItem>();
             
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.BirthCity, "What is your city of birth?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.Last4DriversLicense, "What are the last 4 digits of your driver's license number?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.Last4SocialSecurityNumber, "What are the last 4 digits of your social security number?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.MothersMaidenName, "What is your mother's maiden name?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.PetsName, "What is your pet's name?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FathersBirthplace, "What is your father's birthplace?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FirstCarsMakeModel, "What is the make and model of your first car?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.FirstSchoolsName, "What is name of the first school you attended?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.HighSchoolMascot, "What was your high school mascot?"));
-            securityQuestions.Add(new CodewordDropdownItem(CodewordType2.StreetName, "What is your street name?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.BirthCity, "What is your city of birth?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.Last4DriversLicense, "What are the last 4 digits of your driver's license number?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.Last4SocialSecurityNumber, "What are the last 4 digits of your social security number?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.MothersMaidenName, "What is your mother's maiden name?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.PetsName, "What is your pet's name?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.FathersBirthplace, "What is your father's birthplace?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.FirstCarsMakeModel, "What is the make and model of your first car?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.FirstSchoolsName, "What is name of the first school you attended?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.HighSchoolMascot, "What was your high school mascot?"));
+            securityQuestions.Add(new CodewordDropdownItem(CodewordType.StreetName, "What is your street name?"));
 
             comboBox.Items.Add("Choose one");
             comboBox.Items.AddRange(securityQuestions.ToArray());

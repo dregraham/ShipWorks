@@ -118,7 +118,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                     endiciaAccount.ApplyMultiValue(shipment.Postal.Endicia.EndiciaAccountID);
 
                     hidePostage.ApplyMultiCheck(shipment.Postal.Endicia.StealthPostage);
-                    noPostage.ApplyMultiCheck(shipment.Postal.Endicia.NoPostage);
+                    noPostage.ApplyMultiCheck(shipment.Postal.NoPostage);
 
                     rubberStamp1.ApplyMultiText(shipment.Postal.Memo1);
                     rubberStamp2.ApplyMultiText(shipment.Postal.Memo2);
@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
                 endiciaAccount.ReadMultiValue(v => shipment.Postal.Endicia.EndiciaAccountID = (long) v);
 
                 hidePostage.ReadMultiCheck(c => shipment.Postal.Endicia.StealthPostage = c);
-                noPostage.ReadMultiCheck(c => shipment.Postal.Endicia.NoPostage = c);
+                noPostage.ReadMultiCheck(c => shipment.Postal.NoPostage = c);
 
                 rubberStamp1.ReadMultiText(t => shipment.Postal.Memo1 = t);
                 rubberStamp2.ReadMultiText(t => shipment.Postal.Memo2 = t);

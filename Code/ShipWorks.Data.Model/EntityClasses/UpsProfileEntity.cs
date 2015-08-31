@@ -1026,7 +1026,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The CostCenter property of the Entity UpsProfile<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "UpsProfile"."CostCenter"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 30<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String CostCenter
 		{
@@ -1103,7 +1103,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> The UspsPackageID property of the Entity UpsProfile<br/><br/>
 		/// </summary>
 		/// <remarks>Mapped on  table field: "UpsProfile"."UspsPackageID"<br/>
-		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 50<br/>
+		/// Table field type characteristics (type, precision, scale, length): NVarChar, 0, 0, 100<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
 		public virtual System.String UspsPackageID
 		{

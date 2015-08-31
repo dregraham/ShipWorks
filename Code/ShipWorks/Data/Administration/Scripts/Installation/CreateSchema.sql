@@ -702,7 +702,9 @@ CREATE TABLE [dbo].[AmazonOrder]
 [AmazonOrderID] [varchar] (32) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [AmazonCommission] [money] NOT NULL,
 [FulfillmentChannel] [int] NOT NULL,
-[IsPrime] [int] NOT NULL
+[IsPrime] [int] NOT NULL,
+[EarliestExpectedDeliveryDate] [datetime] NULL,
+[LatestExpectedDeliveryDate] [datetime] NULL
 )
 GO
 PRINT N'Creating primary key [PK_AmazonOrder] on [dbo].[AmazonOrder]'
@@ -720,6 +722,14 @@ GO
 PRINT N'Creating index [IX_Auto_IsPrime] on [dbo].[AmazonOrder]'
 GO
 CREATE NONCLUSTERED INDEX [IX_Auto_IsPrime] ON [dbo].[AmazonOrder] ([IsPrime])
+GO
+PRINT N'Creating index [IX_Auto_EarliestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_EarliestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([EarliestExpectedDeliveryDate])
+GO
+PRINT N'Creating index [IX_Auto_LatestExpectedDeliveryDate] on [dbo].[AmazonOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_LatestExpectedDeliveryDate] ON [dbo].[AmazonOrder] ([LatestExpectedDeliveryDate])
 GO
 PRINT N'Creating [dbo].[OrderItem]'
 GO
@@ -1255,7 +1265,8 @@ CREATE TABLE [dbo].[ChannelAdvisorStore]
 [StoreID] [bigint] NOT NULL,
 [AccountKey] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ProfileID] [int] NOT NULL,
-[AttributesToDownload] [xml] NOT NULL
+[AttributesToDownload] [xml] NOT NULL,
+[ConsolidatorAsUsps] [bit] NOT NULL
 )
 GO
 PRINT N'Creating primary key [PK_ChannelAdvisorStore] on [dbo].[ChannelAdvisorStore]'
@@ -1517,7 +1528,8 @@ CREATE TABLE [dbo].[PostalProfile]
 [EntryFacility] [int] NULL,
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[NoPostage] [bit] NULL
 )
 GO
 PRINT N'Creating primary key [PK_PostalProfile] on [dbo].[PostalProfile]'
@@ -1531,7 +1543,6 @@ CREATE TABLE [dbo].[EndiciaProfile]
 [ShippingProfileID] [bigint] NOT NULL,
 [EndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NULL,
-[NoPostage] [bit] NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ScanBasedReturn] [bit] NULL
 )
@@ -1595,7 +1606,8 @@ CREATE TABLE [dbo].[PostalShipment]
 [EntryFacility] [int] NOT NULL,
 [Memo1] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [Memo2] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+[Memo3] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[NoPostage] [bit] NOT NULL CONSTRAINT [DF_PostalProfile_NoPostage] DEFAULT ((0))
 )
 GO
 PRINT N'Creating primary key [PK_PostalShipment] on [dbo].[PostalShipment]'
@@ -1610,7 +1622,6 @@ CREATE TABLE [dbo].[EndiciaShipment]
 [EndiciaAccountID] [bigint] NOT NULL,
 [OriginalEndiciaAccountID] [bigint] NULL,
 [StealthPostage] [bit] NOT NULL,
-[NoPostage] [bit] NOT NULL,
 [ReferenceID] [nvarchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [TransactionID] [int] NULL,
 [RefundFormID] [int] NULL,
@@ -3509,14 +3520,14 @@ CREATE TABLE [dbo].[UpsShipment]
 [PaperlessAdditionalDocumentation] [bit] NOT NULL,
 [ShipperRelease] [bit] NOT NULL,
 [CarbonNeutral] [bit] NOT NULL,
-[CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[CostCenter] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [IrregularIndicator] [int] NOT NULL,
 [Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargeType] [int] NOT NULL,
 [ShipmentChargeAccount] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
-[UspsPackageID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
+[UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL,
 [RequestedLabelFormat] [int] NOT NULL
 )
 GO
@@ -3595,14 +3606,14 @@ CREATE TABLE [dbo].[UpsProfile]
 [ShipperRelease] [bit] NULL,
 [CarbonNeutral] [bit] NULL,
 [CommercialPaperlessInvoice] [bit] NULL,
-[CostCenter] [nvarchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
+[CostCenter] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [IrregularIndicator] [int] NULL,
 [Cn22Number] [nvarchar] (255) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ShipmentChargeType] [int] NULL,
 [ShipmentChargeAccount] [varchar] (10) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ShipmentChargePostalCode] [nvarchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
 [ShipmentChargeCountryCode] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[UspsPackageID] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+[UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 )
 GO
 PRINT N'Creating primary key [PK_UpsProfile] on [dbo].[UpsProfile]'
@@ -5374,6 +5385,10 @@ GO
 PRINT N'Creating primary key [PK_GrouponOrder] on [dbo].[GrouponOrder]'
 GO
 ALTER TABLE [dbo].[GrouponOrder] ADD CONSTRAINT [PK_GrouponOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+PRINT N'Creating index [IX_Auto_GrouponOrderID] on [dbo].[GrouponOrder]'
+GO
+CREATE NONCLUSTERED INDEX [IX_Auto_GrouponOrderID] ON [dbo].[GrouponOrder] ([GrouponOrderID])
 GO
 PRINT N'Creating [dbo].[GrouponOrderItem]'
 GO

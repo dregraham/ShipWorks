@@ -386,6 +386,10 @@ namespace ShipWorks.Data.Model
 		FulfillmentChannel,
 		///<summary>IsPrime. </summary>
 		IsPrime,
+		///<summary>EarliestExpectedDeliveryDate. </summary>
+		EarliestExpectedDeliveryDate,
+		///<summary>LatestExpectedDeliveryDate. </summary>
+		LatestExpectedDeliveryDate,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -1379,6 +1383,8 @@ namespace ShipWorks.Data.Model
 		ProfileID,
 		///<summary>AttributesToDownload. </summary>
 		AttributesToDownload,
+		///<summary>ConsolidatorAsUsps. </summary>
+		ConsolidatorAsUsps,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -2552,8 +2558,6 @@ namespace ShipWorks.Data.Model
 		EndiciaAccountID,
 		///<summary>StealthPostage. </summary>
 		StealthPostage,
-		///<summary>NoPostage. </summary>
-		NoPostage,
 		///<summary>ReferenceID. </summary>
 		ReferenceID,
 		///<summary>ScanBasedReturn. </summary>
@@ -2602,8 +2606,6 @@ namespace ShipWorks.Data.Model
 		OriginalEndiciaAccountID,
 		///<summary>StealthPostage. </summary>
 		StealthPostage,
-		///<summary>NoPostage. </summary>
-		NoPostage,
 		///<summary>ReferenceID. </summary>
 		ReferenceID,
 		///<summary>TransactionID. </summary>
@@ -6961,6 +6963,8 @@ namespace ShipWorks.Data.Model
 		Memo2,
 		///<summary>Memo3. </summary>
 		Memo3,
+		///<summary>NoPostage. </summary>
+		NoPostage,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -7014,6 +7018,8 @@ namespace ShipWorks.Data.Model
 		Memo2,
 		///<summary>Memo3. </summary>
 		Memo3,
+		///<summary>NoPostage. </summary>
+		NoPostage,
 		/// <summary></summary>
 		AmountOfFields
 	}
