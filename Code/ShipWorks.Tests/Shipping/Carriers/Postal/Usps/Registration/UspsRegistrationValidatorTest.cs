@@ -31,11 +31,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                 UserName = "RonMexico",
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
-                
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.MothersMaidenName,
+
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType.PetsName,
                 SecondCodewordValue = "Fighting",
 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address()
@@ -66,10 +66,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps.Registration
                 Password = "H3RP35",
                 Email = "ron@mexico.com",
 
-                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.MothersMaidenName,
+                FirstCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType.MothersMaidenName,
                 FirstCodewordValue = "Dog",
 
-                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType2.PetsName,
+                SecondCodewordType = ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.CodewordType.PetsName,
                 SecondCodewordValue = "Fighting",
 
                 PhysicalAddress = new ShipWorks.Shipping.Carriers.Postal.Usps.WebServices.Address()

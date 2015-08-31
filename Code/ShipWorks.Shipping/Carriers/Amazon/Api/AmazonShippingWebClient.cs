@@ -1,7 +1,13 @@
-﻿using ShipWorks.Data.Model.EntityClasses;
+﻿using System;
 using ShipWorks.Shipping.Carriers.Amazon.Api.DTOs;
 using ShipWorks.Stores.Platforms.Amazon;
 using ShipWorks.Stores.Platforms.Amazon.Mws;
+using Interapptive.Shared.Net;
+using System.Linq;
+using System.Net;
+using System.Reflection;
+using Interapptive.Shared.Utility;
+using ShipWorks.ApplicationCore.Logging;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Api
 {
@@ -13,40 +19,253 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
         /// <summary>
         /// Validate the given credentials
         /// </summary>
-        public AmazonValidateCredentialsResponse ValidateCredentials(string merchantId, string authToken)
+        public AmazonValidateCredentialsResponse ValidateCredentials(AmazonMwsWebClientSettings mwsSettings)
         {
-            // Create a fake store instance because the current
-            // AmazonMwsClient requires a store to be passed
-            // use US api 
-            AmazonStoreEntity fakeStore = new AmazonStoreEntity() 
+            try
             {
-                MerchantID = merchantId, 
-                AuthToken = authToken,
-                AmazonApiRegion = "US"
-            };
-
-            using (AmazonMwsClient client = new AmazonMwsClient(fakeStore))
+                // Request a list of marketplaces to test credentials
+                ExecuteRequest(new HttpVariableRequestSubmitter(), AmazonMwsApiCall.ListMarketplaceParticipations, mwsSettings);
+                return AmazonValidateCredentialsResponse.Succeeded();
+            }
+            catch (AmazonException ex)
             {
-                try
-                {
-                    // Request a list of marketplaces to test credentials
-                    client.GetMarketplaces();
-                    return AmazonValidateCredentialsResponse.Succeeded();
-                }
-                catch (AmazonException ex)
-                {
-                    // Something must be wrong with the credentails 
-                    return AmazonValidateCredentialsResponse.Failed(ex.Message);
-                }
+                // Something must be wrong with the credentails 
+                return AmazonValidateCredentialsResponse.Failed(ex.Message);
             }
         }
 
         /// <summary>
-        /// Gets the rates.
+        /// Gets Rates
         /// </summary>
-        public GetEligibleShippingServices GetRates(ShipmentRequestDetails requestDetails, IAmazonMwsWebClientSettings mwsSettings)
+        /// <param name="requestDetails"></param>
+        /// <param name="mwsSettings"></param>
+        /// <returns></returns>
+        public GetEligibleShippingServicesResponse GetRates(ShipmentRequestDetails requestDetails, AmazonMwsWebClientSettings mwsSettings)
         {
-            throw new System.NotImplementedException();
+            AmazonMwsApiCall call = AmazonMwsApiCall.GetEligibleShippingServices;
+
+            HttpVariableRequestSubmitter request = new HttpVariableRequestSubmitter();
+            
+            // Add Shipment Information XML
+            AddShipmentRequestDetails(request, requestDetails);
+            
+            // Get Response
+            IHttpResponseReader response = ExecuteRequest(request, call, mwsSettings);
+            
+            // Deserialize 
+            return DeserializeResponse<GetEligibleShippingServicesResponse>(response.ReadResult());
+        }
+
+        /// <summary>
+        /// Deserializes the response XML
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="value"></param>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        private static T DeserializeResponse<T>(string xml)
+        {
+            try
+            {
+                return SerializationUtility.DeserializeFromXml<T>(xml);
+            }
+            catch (Exception ex)
+            {
+                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
+            }
+        }
+
+        /// <summary>
+        /// Configures the request with required parameters
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="amazonMwsApiCall"></param>
+        /// <param name="mwsSettings"></param>
+        private static void ConfigureRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall,  AmazonMwsWebClientSettings mwsSettings)
+        {
+            string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
+
+            request.Uri = new Uri(mwsSettings.Endpoint + endpointPath);
+            request.VariableEncodingCasing = QueryStringEncodingCasing.Upper;
+            
+            request.Variables.Add("AWSAccessKeyId", Decrypt(mwsSettings.InterapptiveAccessKeyID));
+            request.Variables.Add("Action", mwsSettings.GetActionName(amazonMwsApiCall));
+            request.Variables.Add("MWSAuthToken", mwsSettings.Connection.AuthToken);
+            request.Variables.Add("SellerId", mwsSettings.Connection.MerchantId);
+        }
+        
+        /// <summary>
+        /// Adds Shipment Details to the request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="requestDetails"></param>
+        private static void AddShipmentRequestDetails(HttpVariableRequestSubmitter request, ShipmentRequestDetails requestDetails)
+        {
+            // Order ID
+            request.Variables.Add("ShipmentRequestDetails.AmazonOrderId", requestDetails.AmazonOrderId);
+            
+            // Item Info
+            int i = 1;
+            foreach (Item item in requestDetails.ItemList)
+            {
+                string orderItemIdParameter = String.Format("ShipmentRequestDetails.ItemList.Item.{0}.OrderItemId", i);
+                string quantityParameter = String.Format("ShipmentRequestDetails.ItemList.Item.{0}.Quantity", i);
+
+                request.Variables.Add(orderItemIdParameter,item.OrderItemId);
+                request.Variables.Add(quantityParameter,item.Quantity.ToString());
+
+                i++;
+            }
+
+            // From Address Info
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Name))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Name", requestDetails.ShipFromAddress.Name);
+            }
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine1))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine1", requestDetails.ShipFromAddress.AddressLine1);
+            }
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine2))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine2", requestDetails.ShipFromAddress.AddressLine2);
+            }
+
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.AddressLine3))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.AddressLine3", requestDetails.ShipFromAddress.AddressLine3);
+            }
+
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.City", requestDetails.ShipFromAddress.City);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.StateOrProvinceCode", requestDetails.ShipFromAddress.StateOrProvinceCode);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
+            request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Email))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Email", requestDetails.ShipFromAddress.Email);
+            }
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Phone))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);
+            }
+            
+            // Package Info
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Length", requestDetails.PackageDimensions.Length.ToString());
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Width", requestDetails.PackageDimensions.Width.ToString());
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Height", requestDetails.PackageDimensions.Height.ToString());
+            request.Variables.Add("ShipmentRequestDetails.PackageDimensions.Unit", "inches");
+            request.Variables.Add("ShipmentRequestDetails.Weight.Value", (requestDetails.Weight * 16).ToString());
+            request.Variables.Add("ShipmentRequestDetails.Weight.Unit", "ounces");
+
+            // ShippingServiceOptions
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.CarrierWillPickUp", requestDetails.ShippingServiceOptions.CarrierWillPickUp.ToString().ToLower());
+            request.Variables.Add("ShipmentRequestDetails.ShippingServiceOptions.DeliveryExperience", requestDetails.ShippingServiceOptions.DeliveryExperience);
+
+            if (requestDetails.MustArriveByDate != null)
+            {
+                request.Variables.Add("ShipmentRequestDetails.MustArriveByDate", FormatDate(requestDetails.MustArriveByDate.Value));
+            }
+        }
+
+        /// <summary>
+        /// Adds Signature to the request
+        /// Required by Amazon MWS Api
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="amazonMwsApiCall"></param>
+        /// <param name="mwsSettings"></param>
+        private static void AddSignature(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        {
+            request.Variables.Add("SignatureMethod", "HmacSHA256");
+            request.Variables.Add("SignatureVersion", "2");
+            request.Variables.Add("Timestamp", FormatDate(DateTime.UtcNow));
+            request.Variables.Add("Version", mwsSettings.GetApiVersion(amazonMwsApiCall));
+
+            string endpointPath = mwsSettings.GetApiEndpointPath(amazonMwsApiCall);
+
+            // now construct the signature parameter
+            string verbString = request.Verb == HttpVerb.Get ? "GET" : "POST";
+            string queryString = request.Variables
+                .OrderBy(v => v.Name, StringComparer.Ordinal)
+                .Select(v => v.Name + "=" + AmazonMwsSignature.Encode(v.Value, false))
+                .Aggregate((x,y) => x + "&" + y);
+
+            string parameterString = String.Format("{0}\n{1}\n{2}\n{3}", verbString, request.Uri.Host, endpointPath, queryString);
+
+            // sign the string and add it to the request
+            string signature = RequestSignature.CreateRequestSignature(parameterString, Decrypt(mwsSettings.InterapptiveSecretKey), SigningAlgorithm.SHA256);
+            request.Variables.Add("Signature", signature);
+        }
+
+        /// <summary>
+        /// Executes a request 
+        /// </summary>
+        private IHttpResponseReader ExecuteRequest(HttpVariableRequestSubmitter request, AmazonMwsApiCall amazonMwsApiCall, AmazonMwsWebClientSettings mwsSettings)
+        {
+            // Adds our amazon credentials and other parameters
+            // required for each api call
+            ConfigureRequest(request, amazonMwsApiCall, mwsSettings);
+
+            // Signes the request
+            AddSignature(request, amazonMwsApiCall, mwsSettings);
+            
+            // add a User Agent header
+            request.Headers.Add("x-amazon-user-agent", String.Format("ShipWorks/{0} (Language=.NET)", Assembly.GetExecutingAssembly().GetName().Version));
+
+            // business logic failures are handled through status codes
+            request.AllowHttpStatusCodes(new HttpStatusCode[] { HttpStatusCode.BadRequest });
+
+            try
+            {
+                ApiLogEntry logger = new ApiLogEntry(ApiLogSource.Amazon, mwsSettings.GetActionName(amazonMwsApiCall));
+
+                // log the request
+                logger.LogRequest(request);
+
+                // Feed uploads are a combination of querystring params AND POST data, which isn't handled by typical request logging
+                AmazonMwsFeedRequestSubmitter feedRequest = request as AmazonMwsFeedRequestSubmitter;
+                if (feedRequest != null)
+                {
+                    logger.LogRequestSupplement(feedRequest.GetPostContent(), "FeedDocument", "xml");
+                }
+
+                using (IHttpResponseReader response = request.GetResponse())
+                {
+                    // log the response
+                    logger.LogResponse(response.ReadResult());
+
+                    // check response for errors
+                    AmazonMwsResponseHandler.RaiseErrors(amazonMwsApiCall, response, mwsSettings);
+
+                    return response;
+                }
+            }
+            catch (AmazonException ex)
+            {
+                // Found an error in the respons, throw it as an AmazonShipperException
+                throw new AmazonShipperException(ex.Message, (AmazonShipperException)ex.InnerException);
+            }
+            catch (Exception ex)
+            {
+                throw WebHelper.TranslateWebException(ex, typeof(AmazonShipperException));
+            }
+        }
+
+        /// <summary>
+        /// Formats a date to make it appropriate/safe for Amazon
+        /// </summary>
+        private static string FormatDate(DateTime dateTime)
+        {
+            // not including milliseconds
+            return dateTime.ToString("yyyy-MM-ddTHH:mm:ssZ");
+        }
+
+        /// <summary>
+        /// Returns the decrypted Interapptive Developer Access Key
+        /// </summary>
+        private static string Decrypt(string encrypted)
+        {
+            return SecureText.Decrypt(encrypted, "Interapptive");
         }
     }
 }

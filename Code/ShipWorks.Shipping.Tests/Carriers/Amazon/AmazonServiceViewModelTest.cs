@@ -269,7 +269,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.False(testObject.DeliveryConfirmationIsMultiValued);
+                Assert.False(testObject.DeliveryExperience.IsMultiValued);
             }
         }
 
@@ -285,11 +285,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.NoTracking}},
                     new ShipmentEntity() {Amazon = new AmazonShipmentEntity() {DeliveryExperience = (int)AmazonDeliveryExperienceType.DeliveryConfirmationWithAdultSignature}}
                 };
-
-
+                
                 testObject.Load(shipments);
 
-                Assert.True(testObject.DeliveryConfirmationIsMultiValued);
+                Assert.True(testObject.DeliveryExperience.IsMultiValued);
             }
         }
 
@@ -308,7 +307,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
@@ -327,7 +326,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
@@ -346,7 +345,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
@@ -359,7 +358,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(Enumerable.Empty<ShipmentEntity>().ToList());
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
             }
         }
 
@@ -378,10 +377,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                testObject.DeliveryExperience = AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature;
+                testObject.DeliveryExperience.PropertyValue = AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature;
                 testObject.Save(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, testObject.DeliveryExperience.PropertyValue);
 
                 shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.DeliveryConfirmationWithSignature, s.Amazon.DeliveryExperience));
             }
@@ -402,10 +401,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.Amazon
 
                 testObject.Load(shipments);
 
-                testObject.DeliveryExperience = AmazonDeliveryExperienceType.NoTracking;
+                testObject.DeliveryExperience.PropertyValue = AmazonDeliveryExperienceType.NoTracking;
                 testObject.Save(shipments);
 
-                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience);
+                Assert.Equal(AmazonDeliveryExperienceType.NoTracking, testObject.DeliveryExperience.PropertyValue);
 
                 shipments.ForEach(s => Assert.Equal((int)AmazonDeliveryExperienceType.NoTracking, s.Amazon.DeliveryExperience));
             }

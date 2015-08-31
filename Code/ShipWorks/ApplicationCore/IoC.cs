@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
+using ShipWorks.Stores.Content;
 using System.Reflection;
 
 namespace ShipWorks.ApplicationCore
@@ -51,6 +52,10 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<ShippingSettingsWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<OrderManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

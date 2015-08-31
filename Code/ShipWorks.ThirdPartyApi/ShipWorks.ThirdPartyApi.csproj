@@ -653,7 +653,7 @@
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\StoreShippingMethodOption1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv46.wsdl" />
+    <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl" />
     <None Include="Web References\Shipping.Carriers.Postal.Usps.WebServices\TrackingEvent1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -2091,10 +2091,10 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>ShipWorks_Shipping_Carriers_FedEx_WebServices_AddressValidation_AddressValidationService</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv46.wsdl">
+    <WebReferenceUrl Include="C:\work\ShipWorks3x\Code\ShipWorks.ThirdPartyApi\Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\Shipping.Carriers.Postal.Usps.WebServices\</RelPath>
-      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks\Shipping\Carriers\Postal\Usps\Wsdl\swsimv46.wsdl</UpdateFromURL>
+      <UpdateFromURL>C:\work\ShipWorks3x\Code\ShipWorks.ThirdPartyApi\Web References\Shipping.Carriers.Postal.Usps.WebServices\swsimv49.wsdl</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
       <CachedDynamicPropName>

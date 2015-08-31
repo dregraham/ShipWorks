@@ -75,7 +75,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelAddress);
             this.sectionRecipient.ContentPanel.Controls.Add(this.labelResidentialCommercial);
             this.sectionRecipient.ContentPanel.Controls.Add(this.personControl);
-            this.sectionRecipient.Location = new System.Drawing.Point(3, 5);
+            this.sectionRecipient.Location = new System.Drawing.Point(3, 34);
             this.sectionRecipient.Size = new System.Drawing.Size(381, 24);
             this.sectionRecipient.TabIndex = 1;
             this.sectionRecipient.Visible = false;
@@ -88,7 +88,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // sectionReturns
             // 
-            this.sectionReturns.Location = new System.Drawing.Point(3, 378);
+            this.sectionReturns.Location = new System.Drawing.Point(3, 407);
             this.sectionReturns.Size = new System.Drawing.Size(381, 24);
             this.sectionReturns.Visible = false;
             // 
@@ -110,12 +110,12 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionShipment.ContentPanel.Controls.Add(this.deliveryConfirmation);
             this.sectionShipment.ContentPanel.Controls.Add(this.labelService);
             this.sectionShipment.ContentPanel.Controls.Add(this.service);
-            this.sectionShipment.Location = new System.Drawing.Point(3, 34);
+            this.sectionShipment.Location = new System.Drawing.Point(3, 63);
             this.sectionShipment.Size = new System.Drawing.Size(381, 310);
             // 
             // sectionLabelOptions
             // 
-            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 349);
+            this.sectionLabelOptions.Location = new System.Drawing.Point(3, 378);
             this.sectionLabelOptions.Size = new System.Drawing.Size(381, 24);
             this.sectionLabelOptions.Visible = false;
             // 
@@ -171,7 +171,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.sectionFrom.ContentPanel.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
             this.sectionFrom.ExpandedHeight = 487;
             this.sectionFrom.ExtraText = "";
-            this.sectionFrom.Location = new System.Drawing.Point(3, 407);
+            this.sectionFrom.Location = new System.Drawing.Point(3, 5);
             this.sectionFrom.Name = "sectionFrom";
             this.sectionFrom.SectionName = "From";
             this.sectionFrom.SettingsKey = "6306b47c-8029-44bc-8b97-9b9eb001a61a";
@@ -198,7 +198,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.insuranceControl.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.insuranceControl.Location = new System.Drawing.Point(22, 227);
             this.insuranceControl.Name = "insuranceControl";
-            this.insuranceControl.Size = new System.Drawing.Size(419, 48);
+            this.insuranceControl.Size = new System.Drawing.Size(415, 48);
             this.insuranceControl.TabIndex = 12;
             // 
             // dimensionsControl
@@ -243,7 +243,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // deliveryConfirmation
             // 
-            this.deliveryConfirmation.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.deliveryConfirmation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.deliveryConfirmation.FormattingEnabled = true;
             this.deliveryConfirmation.Location = new System.Drawing.Point(91, 176);
             this.deliveryConfirmation.Name = "deliveryConfirmation";
@@ -253,7 +253,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             // 
             // service
             // 
-            this.service.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.service.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.service.FormattingEnabled = true;
             this.service.Location = new System.Drawing.Point(91, 7);
             this.service.Name = "service";
@@ -309,11 +309,11 @@ namespace ShipWorks.Shipping.Carriers.Amazon
             this.Controls.Add(this.sectionFrom);
             this.Name = "AmazonServiceControl";
             this.Size = new System.Drawing.Size(387, 440);
+            this.Controls.SetChildIndex(this.sectionReturns, 4);
+            this.Controls.SetChildIndex(this.sectionLabelOptions, 3);
+            this.Controls.SetChildIndex(this.sectionShipment, 1);
+            this.Controls.SetChildIndex(this.sectionRecipient, 2);
             this.Controls.SetChildIndex(this.sectionFrom, 0);
-            this.Controls.SetChildIndex(this.sectionReturns, 0);
-            this.Controls.SetChildIndex(this.sectionLabelOptions, 0);
-            this.Controls.SetChildIndex(this.sectionShipment, 0);
-            this.Controls.SetChildIndex(this.sectionRecipient, 0);
             ((System.ComponentModel.ISupportInitialize)(this.sectionRecipient.ContentPanel)).EndInit();
             this.sectionRecipient.ContentPanel.ResumeLayout(false);
             this.sectionRecipient.ContentPanel.PerformLayout();

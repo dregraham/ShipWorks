@@ -46,6 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api.DTOs
         public string StateOrProvinceCode { get; set; }
         public string PostalCode { get; set; }
         public string CountryCode { get; set; }
+        public string Email { get; set; }
         public string Phone { get; set; }
     }
 }

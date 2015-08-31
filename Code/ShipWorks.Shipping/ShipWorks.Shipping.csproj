@@ -46,6 +46,14 @@
     <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
     <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
@@ -60,6 +68,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -76,10 +85,11 @@
     <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
     <Compile Include="Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
-    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServices.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
     <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
     <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
