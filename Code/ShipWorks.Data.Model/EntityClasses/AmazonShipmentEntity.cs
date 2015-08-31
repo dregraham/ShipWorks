@@ -590,7 +590,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="resetFKFields">if set to true it will also reset the FK fields pointing to the related entity</param>
 		private void DesetupSyncShipment(bool signalRelatedEntity, bool resetFKFields)
 		{
-			base.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", AmazonShipmentEntity.Relations.ShipmentEntityUsingShipmentID, true, signalRelatedEntity, "Amazon", false, new int[] { (int)AmazonShipmentFieldIndex.ShipmentID } );
+			base.PerformDesetupSyncRelatedEntity( _shipment, new PropertyChangedEventHandler( OnShipmentPropertyChanged ), "Shipment", AmazonShipmentEntity.Relations.ShipmentEntityUsingShipmentID, true, signalRelatedEntity, "AmazonShipment", false, new int[] { (int)AmazonShipmentFieldIndex.ShipmentID } );
 			_shipment = null;
 		}
 		
@@ -951,7 +951,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 					SetupSyncShipment(value);
 					if((SerializationHelper.Optimization == SerializationOptimization.Fast) && (value!=null))
 					{
-						value.SetRelatedEntity(this, "Amazon");
+						value.SetRelatedEntity(this, "AmazonShipment");
 					}
 				}
 				else
@@ -970,7 +970,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 						if(_shipment!=value)
 						{
 							IEntity2 relatedEntity = (IEntity2)value;
-							relatedEntity.SetRelatedEntity(this, "Amazon");
+							relatedEntity.SetRelatedEntity(this, "AmazonShipment");
 							SetupSyncShipment(relatedEntity);
 						}
 					}
