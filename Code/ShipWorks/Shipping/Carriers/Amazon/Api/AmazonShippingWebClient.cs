@@ -148,6 +148,10 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.StateOrProvinceCode", requestDetails.ShipFromAddress.StateOrProvinceCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.PostalCode", requestDetails.ShipFromAddress.PostalCode);
             request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.CountryCode", requestDetails.ShipFromAddress.CountryCode);
+            if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Email))
+            {
+                request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Email", requestDetails.ShipFromAddress.Email);
+            }
             if (!string.IsNullOrWhiteSpace(requestDetails.ShipFromAddress.Phone))
             {
                 request.Variables.Add("ShipmentRequestDetails.ShipFromAddress.Phone", requestDetails.ShipFromAddress.Phone);

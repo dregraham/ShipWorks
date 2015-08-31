@@ -127,7 +127,9 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
                     Phone = shipment.OriginPhone,
                     Name = shipment.OriginUnparsedName,
                     PostalCode = shipment.OriginPostalCode,
-                    StateOrProvinceCode = shipment.OriginStateProvCode
+                    StateOrProvinceCode = shipment.OriginStateProvCode,
+                    Email = shipment.OriginEmail
+                    
                 },
                 ShippingServiceOptions = new ShippingServiceOptions()
                 {
