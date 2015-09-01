@@ -23,6 +23,7 @@ using ShipWorks.Data.Connection;
 using Interapptive.Shared.UI;
 using ShipWorks.UI.Utility;
 using System.Collections;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Editions;
 using ShipWorks.Stores;
 using ShipWorks.Editions.Brown;

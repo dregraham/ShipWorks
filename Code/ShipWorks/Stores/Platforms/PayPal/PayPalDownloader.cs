@@ -16,6 +16,7 @@ using ShipWorks.Stores.Platforms.PayPal.WebServices;
 using ShipWorks.Stores.Content;
 using System.Data.SqlTypes;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Stores.Platforms.PayPal

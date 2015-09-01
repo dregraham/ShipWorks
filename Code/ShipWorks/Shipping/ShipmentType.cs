@@ -44,6 +44,7 @@ using ShipWorks.Shipping.Carriers.BestRate;
 using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers;
 
 namespace ShipWorks.Shipping

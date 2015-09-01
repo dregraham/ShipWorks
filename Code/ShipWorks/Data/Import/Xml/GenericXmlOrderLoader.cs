@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using Interapptive.Shared.Utility;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Stores.Communication;
 
 namespace ShipWorks.Data.Import.Xml

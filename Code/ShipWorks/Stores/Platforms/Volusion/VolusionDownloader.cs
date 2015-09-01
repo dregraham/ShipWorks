@@ -14,6 +14,7 @@ using Interapptive.Shared.Business;
 using System.Text.RegularExpressions;
 using log4net;
 using System.Globalization;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Volusion
 {

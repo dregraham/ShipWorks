@@ -4,6 +4,7 @@ using System.Text;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Content;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Data.Import.Spreadsheet.OrderSchema

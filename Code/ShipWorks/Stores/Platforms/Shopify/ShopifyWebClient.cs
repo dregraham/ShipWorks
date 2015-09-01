@@ -20,6 +20,7 @@ using System.Text;
 using Interapptive.Shared.Collections;
 using ShipWorks.Shipping;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {

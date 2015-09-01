@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Utility;
 using ShipWorks.Data.Model.EntityClasses;
 

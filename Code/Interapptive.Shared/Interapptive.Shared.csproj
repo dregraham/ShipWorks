@@ -101,7 +101,9 @@
     <Compile Include="AssemblyDateAttribute.cs" />
     <Compile Include="Business\AddressAdapter.cs" />
     <Compile Include="Business\AddressCasing.cs" />
-    <Compile Include="Business\Geography.cs" />
+    <Compile Include="Business\Geography\CountryFlags.cs" />
+    <Compile Include="Business\Geography\CountryList.cs" />
+    <Compile Include="Business\Geography\Geography.cs" />
     <Compile Include="Business\IAddressAdapter.cs" />
     <Compile Include="Business\PersonAdapter.cs" />
     <Compile Include="Business\PersonName.cs" />

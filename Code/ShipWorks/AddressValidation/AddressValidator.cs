@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using log4net;
 using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
