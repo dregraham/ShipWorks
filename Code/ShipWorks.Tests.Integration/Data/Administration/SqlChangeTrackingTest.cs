@@ -25,7 +25,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Data.Administration
             executionMode = new Mock<ExecutionMode>();
             executionMode.Setup(m => m.IsUISupported).Returns(true);
 
-            initializer = new ShipWorksInitializer(executionMode.Object);
+            initializer = new ShipWorksInitializer(executionMode.Object, null);
 
             testObject = new SqlChangeTracking();
         }

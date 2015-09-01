@@ -31,15 +31,16 @@ namespace ShipWorks.Tests.Integration.MSTest
         /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
         /// </summary>
         public ShipWorksInitializer()
-            : this (null)
+            : this (null, null)
         { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShipWorksInitializer"/> class.
         /// </summary>
         /// <param name="executionMode">The instance of execution mode to use when initializing dependencies.</param>
+        /// <param name="additionalInitialization">If any additional calls need to be made for initialization, pass them through this Action.</param>
         /// <exception cref="System.Exception">A 'shipworks' account with password 'shipworks' needs to be created.</exception>
-        public ShipWorksInitializer(ExecutionMode executionMode)
+        public ShipWorksInitializer(ExecutionMode executionMode, Action additionalInitialization)
         {
             Guid swInstance = GetShipWorksInstance();
 
@@ -66,6 +67,11 @@ namespace ShipWorks.Tests.Integration.MSTest
                 UserManager.InitializeForCurrentUser();
 
                 UserSession.InitializeForCurrentDatabase(executionMode);
+
+                if (additionalInitialization != null)
+                {
+                    additionalInitialization();
+                }
 
                 if (!UserSession.Logon("shipworks", "shipworks", true))
                 {

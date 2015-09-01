@@ -30,6 +30,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
     public abstract class PostalPrototypeFixture
     {
         private readonly Mock<ExecutionMode> executionMode;
+        private readonly ShipWorksInitializer shipWorksInitializer;
 
         public PostalPrototypeFixture()
         {
@@ -47,45 +48,19 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.Postal
             // Need to comment out Debug.Assert statements in ShipWorks.Data.Caching.EntityCacheChangeMonitor
             // to avoid errors resulting from an assertion that the MainForm is running
 
-            Guid swInstance = ShipWorksInitializer.GetShipWorksInstance();
-
             // Mock an execution mode for the various dependencies that use the execution
             // mode to determine at whether the UI is running
             executionMode = new Mock<ExecutionMode>();
             executionMode.Setup(m => m.IsUIDisplayed).Returns(false);
             executionMode.Setup(m => m.IsUISupported).Returns(true);
 
-            if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
-            {
-                ApplicationCore.ShipWorksSession.Initialize(swInstance);
-                SqlSession.Initialize();
-
-                Console.WriteLine(SqlSession.Current.Configuration.DatabaseName);
-                Console.WriteLine(SqlSession.Current.Configuration.ServerInstance);
-
-                DataProvider.InitializeForApplication(executionMode.Object);
-                AuditProcessor.InitializeForApplication();
-
-                UspsAccountManager.InitializeForCurrentSession();
-                ShippingSettings.InitializeForCurrentDatabase();
-                ShippingProfileManager.InitializeForCurrentSession();
-                ShippingDefaultsRuleManager.InitializeForCurrentSession();
-                ShippingProviderRuleManager.InitializeForCurrentSession();
-
-                StoreManager.InitializeForCurrentSession();
-
-                UserManager.InitializeForCurrentUser();
-
-                UserSession.InitializeForCurrentDatabase(executionMode.Object);
-                UserSession.Logon("shipworks", "shipworks", true);
-
-                ShippingManager.InitializeForCurrentDatabase();
-                LogSession.Initialize();
-
-                TemplateManager.InitializeForCurrentSession();
-
-                ShippingOriginManager.InitializeForCurrentSession();
-            }
+            shipWorksInitializer = new ShipWorksInitializer(executionMode.Object, () =>
+                {
+                    DataProvider.InitializeForApplication(executionMode.Object);
+                    UspsAccountManager.InitializeForCurrentSession();
+                    ShippingOriginManager.InitializeForCurrentSession();
+                }
+            );
         }
 
         public string TestID { get; set; }
