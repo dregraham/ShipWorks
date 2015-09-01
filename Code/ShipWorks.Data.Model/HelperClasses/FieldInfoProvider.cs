@@ -2530,14 +2530,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipperRelease", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.ShipperRelease, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "CarbonNeutral", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.CarbonNeutral, 0, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "CommercialPaperlessInvoice", typeof(Nullable<System.Boolean>), false, false, false, true,  (int)UpsProfileFieldIndex.CommercialPaperlessInvoice, 0, 0, 0);
-			base.AddElementFieldInfo("UpsProfileEntity", "CostCenter", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CostCenter, 30, 0, 0);
+			base.AddElementFieldInfo("UpsProfileEntity", "CostCenter", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.CostCenter, 100, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "IrregularIndicator", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.IrregularIndicator, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfileEntity", "Cn22Number", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.Cn22Number, 255, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargeType", typeof(Nullable<System.Int32>), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargeType, 0, 0, 10);
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargeAccount", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargeAccount, 10, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargePostalCode", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargePostalCode, 20, 0, 0);
 			base.AddElementFieldInfo("UpsProfileEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
-			base.AddElementFieldInfo("UpsProfileEntity", "UspsPackageID", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.UspsPackageID, 50, 0, 0);
+			base.AddElementFieldInfo("UpsProfileEntity", "UspsPackageID", typeof(System.String), false, false, false, true,  (int)UpsProfileFieldIndex.UspsPackageID, 100, 0, 0);
 		}
 		/// <summary>Inits UpsProfilePackageEntity's FieldInfo objects</summary>
 		private void InitUpsProfilePackageEntityInfos()
@@ -2607,14 +2607,14 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("UpsShipmentEntity", "PaperlessAdditionalDocumentation", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.PaperlessAdditionalDocumentation, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipperRelease", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipperRelease, 0, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "CarbonNeutral", typeof(System.Boolean), false, false, false, false,  (int)UpsShipmentFieldIndex.CarbonNeutral, 0, 0, 0);
-			base.AddElementFieldInfo("UpsShipmentEntity", "CostCenter", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.CostCenter, 30, 0, 0);
+			base.AddElementFieldInfo("UpsShipmentEntity", "CostCenter", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.CostCenter, 100, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "IrregularIndicator", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.IrregularIndicator, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "Cn22Number", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.Cn22Number, 255, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargeType", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargeType, 0, 0, 10);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargeAccount", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargeAccount, 10, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargePostalCode", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargePostalCode, 20, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "ShipmentChargeCountryCode", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.ShipmentChargeCountryCode, 50, 0, 0);
-			base.AddElementFieldInfo("UpsShipmentEntity", "UspsPackageID", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsPackageID, 50, 0, 0);
+			base.AddElementFieldInfo("UpsShipmentEntity", "UspsPackageID", typeof(System.String), false, false, false, false,  (int)UpsShipmentFieldIndex.UspsPackageID, 100, 0, 0);
 			base.AddElementFieldInfo("UpsShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)UpsShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 		}
 		/// <summary>Inits UserEntity's FieldInfo objects</summary>

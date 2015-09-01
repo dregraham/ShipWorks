@@ -761,25 +761,26 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 // Cost
                 RatedShipmentDetail ratedShipmentDetail = GetRateReplyDetail(rateDetail);
 
-                decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
-                if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
-                {
-                    cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    decimal cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetCharge.Amount;
+                    if (shipment.AdjustedOriginCountryCode().ToUpper() == "CA" && ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.AmountSpecified)
+                    {
+                        cost = ratedShipmentDetail.ShipmentRateDetail.TotalNetFedExCharge.Amount;
+                    }
+
+                    // Add the shipworks rate object
+                    results.Add(new RateResult(
+                        EnumHelper.GetDescription(serviceType),
+                        transitDays == 0 ? string.Empty : transitDays.ToString(),
+                        cost,
+                        new FedExRateSelection(serviceType))
+                    {
+                        ExpectedDeliveryDate = deliveryDate,
+                        ServiceLevel = GetServiceLevel(serviceType, transitDays),
+                        ShipmentType = ShipmentTypeCode.FedEx,
+                        ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
+                    });
                 }
 
-                // Add the shipworks rate object
-                results.Add(new RateResult(
-                                EnumHelper.GetDescription(serviceType),
-                                transitDays == 0 ? string.Empty : transitDays.ToString(),
-                                cost,
-                                new FedExRateSelection(serviceType))
-                {
-                    ExpectedDeliveryDate = deliveryDate,
-                    ServiceLevel = GetServiceLevel(serviceType, transitDays),
-                    ShipmentType = ShipmentTypeCode.FedEx,
-                    ProviderLogo = EnumHelper.GetImage(ShipmentTypeCode.FedEx)
-                });
-            }
 
             return results;
         }
@@ -789,6 +790,18 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// </summary>
         private RatedShipmentDetail GetRateReplyDetail(RateReplyDetail rateDetail)
         {
+            if (rateDetail.ActualRateTypeSpecified)
+            {
+                ReturnedRateType actualRateType = rateDetail.ActualRateType;
+                RatedShipmentDetail actualRate = rateDetail.RatedShipmentDetails.FirstOrDefault(detail => detail.ShipmentRateDetail.RateTypeSpecified && detail.ShipmentRateDetail.RateType == actualRateType);
+                if (actualRate != null)
+                {
+                    return actualRate;
+                }
+            }
+
+            // Not sure if this is required. I suspect there to always be an actual rate and a corresponding ratedShipmentDetail. This
+            // is here if I get confirmation for this from FedEx.
             RatedShipmentDetail ratedShipmentDetail = rateDetail.RatedShipmentDetails.FirstOrDefault(IsPreferredRequestedRateType) ??
                                                         rateDetail.RatedShipmentDetails.FirstOrDefault(IsSecondaryRequestedRateType)??
                                                       rateDetail.RatedShipmentDetails[0];
@@ -808,7 +821,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
                 detail.ShipmentRateDetail.RateType == preferredRateType;
         }
 
-
         /// <summary>
         /// Is the rated shipment detail a fallback type requested by the customer
         /// </summary>
@@ -821,7 +833,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
             return detail.ShipmentRateDetail.RateTypeSpecified &&
                 detail.ShipmentRateDetail.RateType == secondaryRequestedRateType;
         }
-
 
         /// <summary>
         /// Gets the service level.

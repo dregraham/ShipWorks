@@ -1013,7 +1013,7 @@ namespace ShipWorks.Shipping
         {
             ServiceControlBase newServiceControl = GetServiceControlForShipments(shipments, shipmentType);
 
-            forceRecreateServiceControl = false;
+            forceRecreateServiceControl = true;
 
             // If there is a service control, load the data into it before making it visible
             if (newServiceControl != null)
@@ -1145,6 +1145,7 @@ namespace ShipWorks.Shipping
             }
             
             newServiceControl.Initialize();
+            newServiceControl.Width = serviceControlArea.Width;
             return newServiceControl;
         }
 
