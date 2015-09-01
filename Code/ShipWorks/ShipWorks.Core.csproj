@@ -637,7 +637,6 @@
     <Compile Include="ApplicationCore\Services\Hosting\IServiceHost.cs" />
     <Compile Include="ApplicationCore\ExecutionMode\UserInterfaceExecutionMode.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceConfiguration.cs" />
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceInstaller.cs" />
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceHost.cs" />
     <Compile Include="ApplicationCore\Help\SubmitHelpRequestDlg.cs">
       <SubType>Form</SubType>
@@ -1220,12 +1219,6 @@
     </Compile>
     <Compile Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.Designer.cs">
       <DependentUpon>WindowsServiceCredentialsDlg.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.Designer.cs">
-      <DependentUpon>MasterInstaller.cs</DependentUpon>
     </Compile>
     <Compile Include="ApplicationCore\Services\Commands\InstallServicesCommand.cs" />
     <Compile Include="ApplicationCore\Services\Commands\UninstallServicesCommand.cs" />
@@ -6418,9 +6411,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\WindowsServiceCredentialsDlg.resx">
       <DependentUpon>WindowsServiceCredentialsDlg.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ApplicationCore\Services\Hosting\Windows\MasterInstaller.resx">
-      <DependentUpon>MasterInstaller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplicationCore\Services\UI\ServiceStartHelpDlg.resx">
       <DependentUpon>ServiceStartHelpDlg.cs</DependentUpon>
