@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -56,6 +57,10 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterType<OrderManager>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<DateTimeProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

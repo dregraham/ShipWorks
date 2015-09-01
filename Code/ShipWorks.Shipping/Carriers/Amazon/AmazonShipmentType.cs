@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
@@ -12,6 +11,7 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Editing.Rating;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Amazon
 {
@@ -20,36 +20,30 @@ namespace ShipWorks.Shipping.Carriers.Amazon
     /// </summary>
     public class AmazonShipmentType : ShipmentType
     {
-        IAmazonAccountManager accountManager;
-        Func<IAmazonRates> amazonRatesFactory;
+        readonly IAmazonAccountManager accountManager;
+        readonly Func<IAmazonRates> amazonRatesFactory;
+        readonly IDateTimeProvider dateTimeProvider;
 
-        public AmazonShipmentType(IAmazonAccountManager accountManager, Func<IAmazonRates> amazonRatesFactory)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public AmazonShipmentType(IAmazonAccountManager accountManager, IDateTimeProvider dateTimeProvider, Func<IAmazonRates> amazonRatesFactory)
         {
             this.accountManager = accountManager;
             this.amazonRatesFactory = amazonRatesFactory;
+            this.dateTimeProvider = dateTimeProvider;
         }
 
         /// <summary>
         /// Shipment type code
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get
-            {
-                return ShipmentTypeCode.Amazon;
-            }
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Amazon;
 
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
-        {
-            return new List<IPackageAdapter>()
-            {
-                new NullPackageAdapter()
-            };
-        }
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
+            new List<IPackageAdapter> { new NullPackageAdapter() };
 
         /// <summary>
         /// Ensures that the carrier specific data for the shipment, such as the FedEx data, are loaded for the shipment.  If the data
@@ -66,20 +60,15 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return string.Format("{0} {1}", shipment.Amazon.CarrierName, shipment.Amazon.ShippingServiceName);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            $"{shipment.Amazon.CarrierName} {shipment.Amazon.ShippingServiceName}";
 
         /// <summary>
         /// Get detailed information about the parcel in a generic way that can be used accross shipment types
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Amazon, null),
@@ -112,10 +101,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of an IBestRateShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            return new NullShippingBroker();
-        }
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) =>
+            new NullShippingBroker();
 
         /// <summary>
         /// Create and Initialize a new shipment
@@ -128,14 +115,8 @@ namespace ShipWorks.Shipping.Carriers.Amazon
 
             // TODO: Remove or replace this if statement when we decide how to handle non-Amazon orders.
             Debug.Assert(amazonOrder != null);
-            if (amazonOrder == null)
-            {
-                amazonShipment.DateMustArriveBy = DateTime.Now.AddDays(2);
-            }
-            else
-            {
-                amazonShipment.DateMustArriveBy = amazonOrder.LatestExpectedDeliveryDate ?? DateTime.Now.AddDays(2);
-            }
+
+            amazonShipment.DateMustArriveBy = amazonOrder?.LatestExpectedDeliveryDate ?? dateTimeProvider.Now.AddDays(2);
 
             // TODO: This should probably be removed when we have amazon profiles...
             long accountID = accountManager.Accounts.Any() ? accountManager.Accounts.First().AmazonAccountID : 0;
@@ -150,28 +131,19 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// <summary>
         /// Gets the rates.
         /// </summary>
-        public override RateGroup GetRates(ShipmentEntity shipment)
-        {
-
-            return GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
-        }
+        public override RateGroup GetRates(ShipmentEntity shipment) => 
+            GetCachedRates<AmazonShipperException>(shipment, GetRatesFromApi);
 
         /// <summary>
         /// Gets rates from the Amazon API
         /// </summary>
-        private RateGroup GetRatesFromApi(ShipmentEntity shipment)
-        {
-            IAmazonRates amazonRates = amazonRatesFactory();
-            return amazonRates.GetRates(shipment);
-        }
+        private RateGroup GetRatesFromApi(ShipmentEntity shipment) =>
+            amazonRatesFactory().GetRates(shipment);
 
         /// <summary>
         /// Amazon supports rates
         /// </summary>
-        public override bool SupportsGetRates
-        {
-            get { return true; }
-        }
+        public override bool SupportsGetRates => true;
 
         /// <summary>
         /// Gets the fields used for rating a shipment.
