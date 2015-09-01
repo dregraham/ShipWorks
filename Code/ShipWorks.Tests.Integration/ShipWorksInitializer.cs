@@ -15,6 +15,8 @@ using ShipWorks.Users;
 using ShipWorks.Users.Audit;
 using log4net;
 using ShipWorks.ApplicationCore.ExecutionMode;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Startup;
 
 namespace ShipWorks.Tests.Integration.MSTest
 {
@@ -43,6 +45,7 @@ namespace ShipWorks.Tests.Integration.MSTest
 
             if (ApplicationCore.ShipWorksSession.ComputerID == Guid.Empty)
             {
+                ContainerInitializer.Initialize();
 
                 ApplicationCore.ShipWorksSession.Initialize(swInstance);
                 SqlSession.Initialize();

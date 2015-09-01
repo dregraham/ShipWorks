@@ -12,7 +12,7 @@ namespace ShipWorks.Startup
         [STAThread]
         static void Main(string[] args)
         {
-            IoC.Initialize(typeof(ShippingModule).Assembly);
+            ContainerInitializer.Initialize();
 
             ShipWorks.Program.Main();
         }
