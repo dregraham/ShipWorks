@@ -177,6 +177,8 @@ Name: {commonappdata}\Interapptive; Permissions: everyone-modify; Check: not Com
 //----------------------------------------------------------------
 #include "DotNetDownloadPage.iss"
 #include "DotNetInstallPage.iss";
+#include "KB2468871DownloadPage.iss";
+#include "KB2468871InstallPage.iss";
 #include "SystemChecks.iss"
 #include "Guid.iss"
 
@@ -313,6 +315,8 @@ begin
   LastPageID := wpLicense;
   LastPageID := CreateDotNetDownloadPage(LastPageID);
   LastPageID := CreateDotNetInstallPage(LastPageID);
+  LastPageID := CreateKB2468871DownloadPage(LastPageID);
+  LastPageID := CreateKB2468871InstallPage(LastPageID);
 end;
 
 //----------------------------------------------------------------
