@@ -96,12 +96,9 @@
     <Rule Id="S1301" Action="None" />
     <Rule Id="S131" Action="None" />
     <Rule Id="S1313" Action="None" />
-    <Rule Id="S1656" Action="None" />
     <Rule Id="S1694" Action="None" />
     <Rule Id="S1699" Action="None" />
     <Rule Id="S1764" Action="None" />
-    <Rule Id="S1848" Action="None" />
-    <Rule Id="S1854" Action="None" />
     <Rule Id="S1862" Action="None" />
     <Rule Id="S1871" Action="None" />
     <Rule Id="S1905" Action="None" />
@@ -133,22 +130,14 @@
     <Rule Id="S2934" Action="None" />
     <Rule Id="S2952" Action="None" />
     <Rule Id="S2953" Action="None" />
-    <Rule Id="S2955" Action="None" />
     <Rule Id="S2971" Action="None" />
     <Rule Id="S2995" Action="None" />
-    <Rule Id="S2996" Action="None" />
     <Rule Id="S2997" Action="None" />
-    <Rule Id="S3005" Action="None" />
     <Rule Id="S3052" Action="None" />
-    <Rule Id="S3169" Action="None" />
     <Rule Id="S3172" Action="None" />
     <Rule Id="S3215" Action="None" />
-    <Rule Id="S3217" Action="None" />
     <Rule Id="S3218" Action="None" />
-    <Rule Id="S3234" Action="None" />
-    <Rule Id="S3235" Action="None" />
     <Rule Id="S3237" Action="None" />
-    <Rule Id="S3244" Action="None" />
     <Rule Id="S3249" Action="None" />
     <Rule Id="S907" Action="None" />
     <Rule Id="S927" Action="None" />
@@ -157,5 +146,9 @@
     <Rule Id="S1481" Action="None" />
     <Rule Id="S1172" Action="None" />
     <Rule Id="S108" Action="None" />
+    <Rule Id="S2692" Action="None" />
+    <Rule Id="S3217" Action="None" />
+    <Rule Id="S1854" Action="None" />
+    <Rule Id="S1848" Action="None" />
   </Rules>
 </RuleSet>

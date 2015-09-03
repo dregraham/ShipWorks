@@ -55,9 +55,11 @@ namespace ShipWorks.UI.Controls.Html
             {
                 foreach (HtmlApi.IHTMLImgElement img in elements)
                 {
+#pragma warning disable S1656 // Variables should not be self-assigned
                     // Seems silly, but forces them to explicitly appear in the html
                     img.width = img.width;
                     img.height = img.height;
+#pragma warning restore S1656 // Variables should not be self-assigned
                 }
             }
         }
