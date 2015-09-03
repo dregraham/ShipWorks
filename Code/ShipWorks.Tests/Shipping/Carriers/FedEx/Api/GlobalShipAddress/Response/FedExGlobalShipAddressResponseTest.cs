@@ -1,5 +1,5 @@
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -8,7 +8,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
 {
-    [TestClass]
     public class FedExGlobalShipAddressResponseTest
     {
         private FedExGlobalShipAddressResponse testObject;
@@ -16,8 +15,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
         private SearchLocationsReply reply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExGlobalShipAddressResponseTest()
         {
             reply = new SearchLocationsReply()
             {
@@ -29,7 +27,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
                     {
                         DistanceAndLocationDetails = new []
                         {
-                            new DistanceAndLocationDetail(), 
+                            new DistanceAndLocationDetail(),
                             new DistanceAndLocationDetail()
                         }
                     }
@@ -41,8 +39,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
             testObject = new FedExGlobalShipAddressResponse(reply, carrierRequest.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
             reply.Notifications = new[]
@@ -52,26 +49,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Response
                    Message = "message"
                }
             };
-            reply.HighestSeverity=NotificationSeverityType.FAILURE;
+            reply.HighestSeverity = NotificationSeverityType.FAILURE;
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Process_ErrorThrown_NoLocationFound()
         {
             reply.ResultsReturned = "0";
 
-            testObject.Process();
+            Assert.Throws<CarrierException>(() => testObject.Process());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_TwoAddressesReturned_Test()
         {
             testObject.Process();
 
-            Assert.AreEqual(2,testObject.DistanceAndLocationDetails.Count());
+            Assert.Equal(2, testObject.DistanceAndLocationDetails.Count());
         }
     }
 }

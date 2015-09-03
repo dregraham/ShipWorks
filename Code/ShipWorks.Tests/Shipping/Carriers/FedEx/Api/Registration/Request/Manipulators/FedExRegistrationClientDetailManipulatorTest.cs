@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,12 +10,11 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExRegistrationClientDetailManipulatorTest
     {
         private FedExRegistrationClientDetailManipulator testObject;
 
-        private Mock<ICarrierSettingsRepository> settingsRepository;        
+        private Mock<ICarrierSettingsRepository> settingsRepository;
 
         private Mock<CarrierRequest> versionCaptureCarrierRequest;
         private VersionCaptureRequest nativeVersionCapture;
@@ -28,14 +27,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegistrationClientDetailManipulatorTest()
         {
             account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
             settingsRepository = new Mock<ICarrierSettingsRepository>();
-            
-            nativeVersionCapture = new VersionCaptureRequest { ClientDetail = new ClientDetail()};
+
+            nativeVersionCapture = new VersionCaptureRequest { ClientDetail = new ClientDetail() };
 
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeVersionCapture);
             versionCaptureCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
@@ -50,42 +48,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             subscriptionCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeSubscription);
             subscriptionCarrierRequest.Setup(r => r.CarrierAccountEntity).Returns(account);
 
-            
+
             testObject = new FedExRegistrationClientDetailManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndNotRegisterWebCspUserRequest_AndNotSubscriptionRequest_Test()
         {
             // Setup the native request to be an unexpected type
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionReply());
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
 
 
         #region Version Capture Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_WhenRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
@@ -93,7 +88,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             versionCaptureCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNull__AndRequestIsVersionCapture_Test()
         {
             // Only setup is  to set the detail to null value
@@ -102,17 +97,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             ClientDetail detail = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNotNull_AndRequestIsVersionCapture_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             ClientDetail detail = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         #endregion Version Capture Request Tests
@@ -121,7 +116,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Register Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_WhenRequestIsRegisterCspUser_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
@@ -129,7 +124,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             registerCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNull__AndRequestIsRegisterCspUser_Test()
         {
             // Only setup is  to set the detail to null value
@@ -138,17 +133,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(registerCarrierRequest.Object);
 
             ClientDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNotNull_AndRequestIsRegisterCspUser_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(registerCarrierRequest.Object);
 
             ClientDetail detail = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         #endregion Register Request Tests
@@ -156,7 +151,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Subscription Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_WhenRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
@@ -164,7 +159,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             subscriptionCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNull__AndRequestIsSubscription_Test()
         {
             // Only setup is  to set the detail to null value
@@ -173,17 +168,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             ClientDetail detail = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenClientDetailIsNotNull_AndRequestIsSubscription_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             ClientDetail detail = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
         #endregion Subscription Request Tests

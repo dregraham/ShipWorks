@@ -86,7 +86,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Express1
 
             ShipmentType shipmentType = express1Settings.ShipmentType;
 
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (Form setupDlg = shipmentType.CreateSetupWizard(lifetimeScope))
                 {

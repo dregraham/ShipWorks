@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators
 {
-    [TestClass]
     public class UpsInvoiceRegistrationInvoiceInfoManipulatorTest
     {
         UpsInvoiceRegistrationInvoiceInfoManipulator testObject;
@@ -25,8 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
         private Mock<CarrierRequest> mockRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationInvoiceInfoManipulatorTest()
         {
             invoiceAuthorization = new UpsOltInvoiceAuthorizationData()
             {
@@ -51,15 +49,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             testObject = new UpsInvoiceRegistrationInvoiceInfoManipulator(invoiceAuthorization);           
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CurrencyCodeIsSetToUsd_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("USD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
+            Assert.Equal("USD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountCountryIsCanada_CurrencyCodeIsSetToCad_Test()
         {
             mockRequest
@@ -71,39 +69,39 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
             testObject.Manipulate(request);
 
-            Assert.AreEqual("CAD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
+            Assert.Equal("CAD", registerRequest.ShipperAccount.InvoiceInfo.CurrencyCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_InvoiceNumberIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(invoiceAuthorization.InvoiceNumber, registerRequest.ShipperAccount.InvoiceInfo.InvoiceNumber);
+            Assert.Equal(invoiceAuthorization.InvoiceNumber, registerRequest.ShipperAccount.InvoiceInfo.InvoiceNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_InvoiceDateIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("20090927", registerRequest.ShipperAccount.InvoiceInfo.InvoiceDate);
+            Assert.Equal("20090927", registerRequest.ShipperAccount.InvoiceInfo.InvoiceDate);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_InvoiceAmount_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("42.42", registerRequest.ShipperAccount.InvoiceInfo.InvoiceAmount);
+            Assert.Equal("42.42", registerRequest.ShipperAccount.InvoiceInfo.InvoiceAmount);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ControlIdIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(invoiceAuthorization.ControlID, registerRequest.ShipperAccount.InvoiceInfo.ControlID);
+            Assert.Equal(invoiceAuthorization.ControlID, registerRequest.ShipperAccount.InvoiceInfo.ControlID);
         }
     }
 }

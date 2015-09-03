@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
-    [TestClass]
     public class FedExCloseDateManipulatorTest
     {
         private FedExCloseDateManipulator testObject;
@@ -17,8 +16,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
         private Mock<CarrierRequest> carrierRequest;
         private GroundCloseRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCloseDateManipulatorTest()
         {
             nativeRequest = new GroundCloseRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeRequest);
@@ -26,48 +24,44 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject = new FedExCloseDateManipulator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
-            // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotGroundCloseRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseRequest());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsCloseDate_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TimeUpToWhichShipmentsAreToBeClosed > DateTime.Now.AddSeconds(-2));
+            Assert.True(nativeRequest.TimeUpToWhichShipmentsAreToBeClosed > DateTime.Now.AddSeconds(-2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CloseDateIsSpecified_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsTrue(nativeRequest.TimeUpToWhichShipmentsAreToBeClosedSpecified);
+            Assert.True(nativeRequest.TimeUpToWhichShipmentsAreToBeClosedSpecified);
         }
     }
 }

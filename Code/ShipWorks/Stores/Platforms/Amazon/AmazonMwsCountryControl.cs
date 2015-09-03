@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 

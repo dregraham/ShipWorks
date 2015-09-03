@@ -204,7 +204,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps
                     throw new ArgumentOutOfRangeException("uspsResellerType");
             }
 
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (Form dlg = shipmentType.CreateSetupWizard(lifetimeScope))
                 {

@@ -72,7 +72,7 @@ namespace ShipWorks.Shipping.Settings
             }
             else
             {
-                using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     if (SetupShipmentType(this, shipmentType.ShipmentTypeCode, shipmentType.CreateSetupWizard(lifetimeScope)))
                     {

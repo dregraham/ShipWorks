@@ -1,6 +1,6 @@
 ﻿using Interapptive.Shared.Utility;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Actions;
 using ShipWorks.Actions.Tasks.Common;
@@ -15,9 +15,8 @@ using System.Xml;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class RebuildTableIndexTaskTest
-    {        
+    {
         private RebuildTableIndexTask testObject;
 
         private Mock<IIndexMonitor> indexMonitor;
@@ -27,16 +26,15 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         private ActionTaskEntity actionTaskEntity;
         private readonly DateTime DefaultStartDateTimeInUtc = new DateTime(2014, 7, 13, 2, 0, 0, DateTimeKind.Utc);
 
-        [TestInitialize]
-        public void Intitialize()
+        public RebuildTableIndexTaskTest()
         {
             indexMonitor = new Mock<IIndexMonitor>();
             indexMonitor.Setup(m => m.GetIndexesToRebuild())
                         .Returns
                         (
                             new List<TableIndex>
-                            { 
-                                new TableIndex() { IndexName = "Index1", TableName = "Table1" }, 
+                            {
+                                new TableIndex() { IndexName = "Index1", TableName = "Table1" },
                                 new TableIndex() {IndexName = "Index2", TableName = "Table2"}
                             }
                         );
@@ -55,7 +53,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                                   </DailyActionSchedule>
                                   <TimeoutInMinutes value=""120"" />
                                 </Settings>";
-            
+
             actionTaskEntity = new ActionTaskEntity()
             {
                 Action = new ActionEntity(),
@@ -63,7 +61,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
                 TaskIdentifier = "RebuildTableIndex"
             };
 
-            testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);            
+            testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);
 
             ActionQueueEntity queueEntity = new ActionQueueEntity();
             queueEntity.ActionVersion = GetBytes("167C");
@@ -72,7 +70,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             stepEntity.TaskSettings = string.Format(taskSettingTemplate, XmlConvert.ToString(DefaultStartDateTimeInUtc, XmlDateTimeSerializationMode.Utc));
 
             actionStepContext = new ActionStepContext(queueEntity, stepEntity, null);
-            
+
         }
 
         static byte[] GetBytes(string str)
@@ -82,80 +80,80 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             return bytes;
         }
 
-        [TestMethod]
+        [Fact]
         public void InputRequirement_ReturnsNone_Test()
         {
-            Assert.AreEqual(ActionTaskInputRequirement.None, testObject.InputRequirement);
+            Assert.Equal(ActionTaskInputRequirement.None, testObject.InputRequirement);
         }
 
-        [TestMethod]
+        [Fact]
         public void TimeoutInMinutes_IsDefaultedTo120_Test()
         {
             testObject = new RebuildTableIndexTask(indexMonitor.Object, dateTimeProvider.Object, log.Object);
 
-            Assert.AreEqual(120, testObject.TimeoutInMinutes);
+            Assert.Equal(120, testObject.TimeoutInMinutes);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsTrue_WhenTriggerTypeIsScheduled_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.Scheduled);
 
-            Assert.IsTrue(isAllowed);
+            Assert.True(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsDownloadFinished_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.DownloadFinished);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsFilterContentChanged_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.FilterContentChanged);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsOrderDownloaded_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.OrderDownloaded);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentProcessed_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.ShipmentProcessed);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsShipmentVoided_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.ShipmentVoided);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsAllowedForTrigger_ReturnsFalse_WhenTriggerTypeIsUserInitiated_Test()
         {
             bool isAllowed = testObject.IsAllowedForTrigger(ActionTriggerType.UserInitiated);
 
-            Assert.IsFalse(isAllowed);
+            Assert.False(isAllowed);
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneHour_Test()
         {
-            DateTime elapsedByOneHourDate = DefaultStartDateTimeInUtc.AddHours(testObject.TimeoutInMinutes/60 + 1);
+            DateTime elapsedByOneHourDate = DefaultStartDateTimeInUtc.AddHours(testObject.TimeoutInMinutes / 60 + 1);
             dateTimeProvider.Setup(date => date.UtcNow).Returns(elapsedByOneHourDate);
 
             testObject.Run(new List<long>(), actionStepContext);
@@ -163,7 +161,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMinute_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddMinutes(testObject.TimeoutInMinutes + 1);
@@ -174,7 +172,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneSecond_Test()
         {
             DateTime elapsedByOneSecondDate = DefaultStartDateTimeInUtc.AddSeconds(testObject.TimeoutInMinutes * 60 + 1);
@@ -185,7 +183,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_DoesNotFetchIndexes_WhenScheduledEndTimeHasLapsed_ByOneMillisecond_Test()
         {
             DateTime elapsedByOneMillisecondDate = DefaultStartDateTimeInUtc.AddMilliseconds(testObject.TimeoutInMinutes * 60000 + 1);
@@ -196,7 +194,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_FetchesIndexes_WhenScheduledEndTimeHasNotLapsed_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -207,7 +205,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.GetIndexesToRebuild(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsAllIndexesNeedingRebuilt_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -218,7 +216,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.Info("The following indexes need to be rebuilt: Table1.Index1, Table2.Index2"), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsMessageWhenNoIndexesNeedRebuilt_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -231,7 +229,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.Info("No indexes need to be rebuilt at this time."), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_RebuildsEachIndex_WhenThereIsOnlyOneIndexToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -244,7 +242,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.RebuildIndex(It.IsAny<TableIndex>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsEachRebuiltIndex_WhenThereIsOnlyOneIndexToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -257,7 +255,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.InfoFormat("Rebuilding index {0}", It.IsAny<TableIndex>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereIsOnlyOneIndexToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -270,7 +268,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_RebuildsEachIndex_WhenThereAreMultipleIndexesToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -281,7 +279,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             indexMonitor.Verify(m => m.RebuildIndex(It.IsAny<TableIndex>()), Times.Exactly(2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsEachRebuiltIndex_WhenThereAreMultipleIndexesToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -292,7 +290,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.InfoFormat("Rebuilding index {0}", It.IsAny<TableIndex>()), Times.Exactly(2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsEachRebuiltIndexAfterCompletion_WhenThereAreMultipleIndexesToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -303,7 +301,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Exactly(2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_MovesToNextIndex_WhenIndexFails_AndThereAreMultipleIndexesToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -311,14 +309,14 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             int count = 0;
             indexMonitor.Setup(m => m.RebuildIndex(It.IsAny<TableIndex>()))
-                        .Callback(() => 
-                        { 
+                        .Callback(() =>
+                        {
                             // Throw an exception the first time rebuild is called
-                            if (count == 0) 
-                            { 
-                                count++; 
-                                throw new Exception(); 
-                            } 
+                            if (count == 0)
+                            {
+                                count++;
+                                throw new Exception();
+                            }
                         });
 
             testObject.Run(new List<long>(), actionStepContext);
@@ -327,7 +325,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.InfoFormat("Finished rebuilding index {0} ({1} ms)", It.IsAny<TableIndex>(), It.IsAny<long>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsException_WhenIndexFails_AndThereAreMultipleIndexesToRebuild_Test()
         {
             DateTime elapsedByOneMinuteDate = DefaultStartDateTimeInUtc.AddSeconds(-5);
@@ -351,16 +349,15 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             log.Verify(l => l.Error(It.IsAny<string>(), It.IsAny<Exception>()), Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [Fact]
         public void Run_ThrowsException_WhenUnableToObtainIndexesToRebuild_Test()
         {
             indexMonitor.Setup(m => m.GetIndexesToRebuild()).Throws(new Exception("Mocked exception"));
 
-            testObject.Run(new List<long>(), actionStepContext);
+            Assert.Throws<Exception>(() => testObject.Run(new List<long>(), actionStepContext));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_LogsException_WhenUnableToObtainIndexesToRebuild_Test()
         {
             try
@@ -375,11 +372,10 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void CreateEditor_ThrowsInvalidOperationException_Test()
         {
-            testObject.CreateEditor();
+            Assert.Throws<InvalidOperationException>(() => testObject.CreateEditor());
         }
     }
 }

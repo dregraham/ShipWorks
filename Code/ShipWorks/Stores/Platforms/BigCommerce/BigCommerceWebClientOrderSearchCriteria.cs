@@ -18,34 +18,14 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
         /// <param name="lastModifiedToDateTimeUtc">The UTC date for the end of the order modified date range</param>
         /// <param name="lastCreatedFromDateTimeUtc">The UTC date for the start of the order create date range</param>
         /// <param name="lastCreatedToDateTimeUtc">The UTC date for the end of the order create date range</param>
-        /// <param name="pageSize">The size of the page of results to return.</param>
-        /// <param name="page">The page of results to return.</param>
         public BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType orderDateSearchType, DateTime lastModifiedFromDateTimeUtc, DateTime lastModifiedToDateTimeUtc,
-            DateTime lastCreatedFromDateTimeUtc, DateTime lastCreatedToDateTimeUtc, 
-			int pageSize, int page)
+            DateTime lastCreatedFromDateTimeUtc, DateTime lastCreatedToDateTimeUtc)
         {
             OrderDateSearchType = orderDateSearchType;
             LastModifiedFromDate = lastModifiedFromDateTimeUtc;
             LastModifiedToDate = lastModifiedToDateTimeUtc;
             LastCreatedFromDate = lastCreatedFromDateTimeUtc;
             LastCreatedToDate = lastCreatedToDateTimeUtc;
-            PageSize = pageSize;
-            Page = page;
-        }
-
-        /// <summary>
-        /// Constructor and sets the searach criteria, converting paramaters as needed for the api
-        /// Defaults page size to BigCommerceConstants.OrdersPageSize, and page number to 1
-        /// </summary>
-        /// <param name="orderDateSearchType">The date search type to perform, Created by date or modified date</param>
-        /// <param name="lastModifiedFromDateTimeUtc">The UTC date for the start of the order modified date range</param>
-        /// <param name="lastModifiedToDateTimeUtc">The UTC date for the end of the order modified date range</param>
-        /// <param name="lastCreatedFromDateTimeUtc">The UTC date for the start of the order create date range</param>
-        /// <param name="lastCreatedToDateTimeUtc">The UTC date for the end of the order create date range</param>
-        public BigCommerceWebClientOrderSearchCriteria(BigCommerceWebClientOrderDateSearchType orderDateSearchType, DateTime lastModifiedFromDateTimeUtc, DateTime lastModifiedToDateTimeUtc,
-            DateTime lastCreatedFromDateTimeUtc, DateTime lastCreatedToDateTimeUtc) :
-            this(orderDateSearchType, lastModifiedFromDateTimeUtc, lastModifiedToDateTimeUtc, lastCreatedFromDateTimeUtc, lastCreatedToDateTimeUtc, BigCommerceConstants.OrdersPageSize, 1)
-        {
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExRegistrationVersionManipulatorTest
     {
         private FedExRegistrationVersionManipulator testObject;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private SubscriptionRequest nativeSubscription;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRegistrationVersionManipulatorTest()
         {
             nativeVersionCapture = new VersionCaptureRequest { Version = new VersionId() };
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeVersionCapture);
@@ -39,70 +37,67 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject = new FedExRegistrationVersionManipulator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotVersionCaptureRequest_AndNotRegisterWebCspUserRequest_AndNotSubscriptionRequest_Test()
         {
             // Setup the native request to be an unexpected type
             versionCaptureCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionReply());
 
-            testObject.Manipulate(versionCaptureCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(versionCaptureCarrierRequest.Object));
         }
 
 
         #region Version Capture Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToFcas_AndRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             VersionId version = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual("fcas", version.ServiceId);
+            Assert.Equal("fcas", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo3_AndRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             VersionId version = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(6, version.Major);
+            Assert.Equal(6, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_AndRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             VersionId version = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(0, version.Minor);
+            Assert.Equal(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo1_AndRequestIsVersionCapture_Test()
         {
             testObject.Manipulate(versionCaptureCarrierRequest.Object);
 
             VersionId version = ((VersionCaptureRequest)versionCaptureCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(1, version.Intermediate);
+            Assert.Equal(1, version.Intermediate);
         }
 
         #endregion Version Capture Request Tests
@@ -110,40 +105,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Registration Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToFcas_AndRequestIsRegistration_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
             VersionId version = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual("fcas", version.ServiceId);
+            Assert.Equal("fcas", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo3_AndRequestIsRegistration_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
             VersionId version = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(6, version.Major);
+            Assert.Equal(6, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_AndRequestIsRegistration_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
             VersionId version = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(0, version.Minor);
+            Assert.Equal(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo1_AndRequestIsRegistration_Test()
         {
             testObject.Manipulate(registerCarrierRequest.Object);
 
             VersionId version = ((RegisterWebCspUserRequest)registerCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(1, version.Intermediate);
+            Assert.Equal(1, version.Intermediate);
         }
 
         #endregion Registration Capture Request Tests
@@ -152,40 +147,40 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
 
         #region Registration Request Tests
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsServiceIdToFcas_AndRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             VersionId version = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual("fcas", version.ServiceId);
+            Assert.Equal("fcas", version.ServiceId);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMajorTo3_AndRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             VersionId version = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(6, version.Major);
+            Assert.Equal(6, version.Major);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsMinorTo0_AndRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             VersionId version = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(0, version.Minor);
+            Assert.Equal(0, version.Minor);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsIntermediateTo1_AndRequestIsSubscription_Test()
         {
             testObject.Manipulate(subscriptionCarrierRequest.Object);
 
             VersionId version = ((SubscriptionRequest)subscriptionCarrierRequest.Object.NativeRequest).Version;
-            Assert.AreEqual(1, version.Intermediate);
+            Assert.Equal(1, version.Intermediate);
         }
 
         #endregion Registration Capture Request Tests

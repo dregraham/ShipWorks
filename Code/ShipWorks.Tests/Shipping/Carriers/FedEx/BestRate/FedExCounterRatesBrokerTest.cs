@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Interapptive.Shared.Net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 {
-    [TestClass]
     public class FedExCounterRatesBrokerTest
     {
         private FedExCounterRatesBroker testObject;
@@ -23,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
         private Mock<ICredentialStore> credentialStore;
         private Mock<ICertificateInspector> certificateInspector;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCounterRatesBrokerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<FedExAccountEntity>>();
 
@@ -39,7 +37,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
             testObject = new FedExCounterRatesBroker(fedExShipmentType.Object, accountRepository.Object, settingsRepository.Object, certificateInspector.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsSettingsRepository_Test()
         {
             ShipmentEntity shipment = new ShipmentEntity
@@ -51,10 +49,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
            
             testObject.GetBestRates(shipment, brokerExceptions);
 
-            Assert.AreEqual(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
+            Assert.Equal(settingsRepository.Object, fedExShipmentType.Object.SettingsRepository);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetBestRates_SetsCertificateInspector_Test()
         {
             List<BrokerException> brokerExceptions = new List<BrokerException>();
@@ -65,7 +63,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.BestRate
 
             testObject.GetBestRates(shipment, brokerExceptions);
 
-            Assert.AreEqual(certificateInspector.Object, testObject.ShipmentType.CertificateInspector);
+            Assert.Equal(certificateInspector.Object, testObject.ShipmentType.CertificateInspector);
         }
 
     }

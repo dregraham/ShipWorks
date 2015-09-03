@@ -10,7 +10,7 @@
   </logRotator>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.7.4">
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.8.9">
       <taskName>Run integration tests</taskName>
       <stageName>Stage 2: Integration test</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
@@ -22,7 +22,7 @@
   <blockBuildWhenUpstreamBuilding>true</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
-  <customWorkspace>C:\jenkins-builds\@@BRANCH_NAME@@</customWorkspace>
+  <customWorkspace>C:\jenkins-builds\spike-amazon-assembly</customWorkspace>
   <builders>
     <hudson.tasks.Shell>
       <command>rake test:integration[ContinuousIntegration]</command>
@@ -30,7 +30,7 @@
   </builders>
   <publishers>
     <hudson.tasks.BuildTrigger>
-      <childProjects>@@FEATURE_NAME@@-internal-installer</childProjects>
+      <childProjects>spike-amazon-assembly-internal-installer</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>
@@ -41,17 +41,43 @@
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
-      <parsingRulesPath>C:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
+      <parsingRulesPath>c:\jenkins-builds\ShipWorksParseRules.txt</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
-    <hudson.plugins.mstest.MSTestPublisher plugin="mstest@0.7">
-      <testResultsFile>TestResults/integration-results.trx</testResultsFile>
-    </hudson.plugins.mstest.MSTestPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.8">
+    <xunit plugin="xunit@1.96">
+      <types>
+        <XUnitDotNetTestType>
+          <pattern>TestResults/integration.xml</pattern>
+          <skipNoTestFiles>false</skipNoTestFiles>
+          <failIfNotNew>true</failIfNotNew>
+          <deleteOutputFiles>true</deleteOutputFiles>
+          <stopProcessingIfError>true</stopProcessingIfError>
+        </XUnitDotNetTestType>
+      </types>
+      <thresholds>
+        <org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
+          <unstableThreshold></unstableThreshold>
+          <unstableNewThreshold></unstableNewThreshold>
+          <failureThreshold></failureThreshold>
+          <failureNewThreshold></failureNewThreshold>
+        </org.jenkinsci.plugins.xunit.threshold.FailedThreshold>
+        <org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
+          <unstableThreshold></unstableThreshold>
+          <unstableNewThreshold></unstableNewThreshold>
+          <failureThreshold></failureThreshold>
+          <failureNewThreshold></failureNewThreshold>
+        </org.jenkinsci.plugins.xunit.threshold.SkippedThreshold>
+      </thresholds>
+      <thresholdMode>1</thresholdMode>
+      <extraConfiguration>
+        <testTimeMargin>3000</testTimeMargin>
+      </extraConfiguration>
+    </xunit>
+    <hudson.tasks.Mailer plugin="mailer@1.15">
       <recipients>t.hughes@shipworks.com k.croke@shipworks.com a.benz@shipworks.com m.mulaosmanovic@shipworks.com</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>false</sendToIndividuals>
     </hudson.tasks.Mailer>
-	<hudson.plugins.growl.GrowlPublisher plugin="growl@1.1">
+    <hudson.plugins.growl.GrowlPublisher plugin="growl@1.1">
       <IP>10.1.10.121,10.1.10.109</IP>
     </hudson.plugins.growl.GrowlPublisher>
   </publishers>

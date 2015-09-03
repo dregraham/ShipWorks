@@ -287,7 +287,37 @@ namespace ShipWorks.Data
             return entityField.CurrentValue;
         }
 
+        /// <summary>
+        /// Get the value of the given field for the specified entity.  This overloaded version will also check depending relations if requested.  For example,
+        /// if a ShipmentEntity is passed in but the field is a FedExField, it will try to find shipment.FedEx's field.
+        /// </summary>
+        public static object GetFieldValue(EntityBase2 entity, EntityField2 field, bool checkDependingRelations)
+        {
+            // Try to get the field value on this entity.
+            object fieldValue = GetFieldValue(entity, field);
 
+            // If the field wasn't found and checking depending relations was requested, do so
+            if (checkDependingRelations && fieldValue == null)
+            {
+                // Get the lest of depending entities
+                List<IEntity2> entitiesToSearch = entity.GetDependingRelatedEntities();
+
+                // Try to find the value for each depending entity
+                foreach (IEntity2 entity2 in entitiesToSearch)
+                {
+                    fieldValue = GetFieldValue(entity2 as EntityBase2, field, true);
+
+                    // If the value isn't null, we found it.  Break and return the value.
+                    if (fieldValue != null)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return fieldValue;
+        }
+        
         /// <summary>
         /// Find a chain of relations that goes from the given entity to the given entity. OneToMany relationships are considered.
         /// Returns null if no such chain is found. Many to Many relationships are never considered.

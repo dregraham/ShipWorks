@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Autofac.Extras.Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.UI.Controls.MultiValueBinders;
+using Xunit;
 
 namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
 {
@@ -22,8 +16,7 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
             Property2 = p2;
         }
     }
-
-    [TestClass]
+    
     public class GenericMultiValueBinderTest
     {
         protected List<GenericMultiValueBinderDto<int, string>> allDistinctValuesDataSource = new List<GenericMultiValueBinderDto<int, string>>()
@@ -45,149 +38,162 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
                 new GenericMultiValueBinderDto<int, string>(1, "one")
             };
 
-        [TestMethod]
+        [Fact]
         public void IsMultiValued_WithOnePropertyValue_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(false, testObject.IsMultiValued);
+            Assert.Equal(false, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMultiValued_WithAllDifferentPropertyValues_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(true, testObject.IsMultiValued);
+            Assert.Equal(true, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMultiValued_WithSomeSamePropertyValues_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(true, testObject.IsMultiValued);
+            Assert.Equal(true, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMultiValued_WithEmptyDataSource_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(Enumerable.Empty<GenericMultiValueBinderDto<int, string>>(),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(false, testObject.IsMultiValued);
+            Assert.Equal(false, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void IsMultiValued_WithSingleItemDataSource_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(false, testObject.IsMultiValued);
+            Assert.Equal(false, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void PropertyValue_ForObjectPropertyType_WithEmptyDataSource_ReturnsNull()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string> testObject2 = new GenericMultiValueBinder<GenericMultiValueBinderDto<string, string>, string>(Enumerable.Empty<GenericMultiValueBinderDto<string, string>>(),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.IsNull(testObject2.PropertyValue);
+            Assert.Null(testObject2.PropertyValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyValueWithSameDataSourceValue_AndAllDistinctDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = allDistinctValuesDataSource.First().Property1;
 
-            Assert.IsFalse(testObject.IsMultiValued);
+            Assert.False(testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyValueWithDifferentDataSourceValue_AndAllDifferentDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = 99999992;
 
-            Assert.IsFalse(testObject.IsMultiValued);
+            Assert.False(testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyValueWithDifferentDataSourceValue_AndMixedDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = 99999992;
 
-            Assert.IsFalse(testObject.IsMultiValued);
+            Assert.False(testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void SetPropertyValue_WithSingleItemDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(mixedWithSomeSameValuesDataSource.GetRange(1, 1),
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = 99999992;
 
-            Assert.AreEqual(false, testObject.IsMultiValued);
+            Assert.Equal(false, testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_AndAllDistinctDataSource_IsMultiValued_ReturnsFalse()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 
             testObject.Save();
 
-            Assert.IsFalse(testObject.IsMultiValued);
+            Assert.False(testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_AndAllDifferentDataSource_IsMultiValued_ReturnsTrue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 
             testObject.Save();
 
-            Assert.IsTrue(testObject.IsMultiValued);
+            Assert.True(testObject.IsMultiValued);
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveWithNewPropertyValue_AndAllDistinctDataSource_PropertyValueIsNewValue()
         {
             GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int> testObject = new GenericMultiValueBinder<GenericMultiValueBinderDto<int, string>, int>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => s.Property1 = v);
 
             testObject.PropertyValue = 3;
             testObject.Save();
 
-            Assert.AreEqual(3, testObject.PropertyValue);
+            Assert.Equal(3, testObject.PropertyValue);
         }
     }
 }

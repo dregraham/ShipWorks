@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;

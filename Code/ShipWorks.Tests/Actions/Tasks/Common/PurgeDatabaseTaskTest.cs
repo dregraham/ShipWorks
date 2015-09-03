@@ -5,7 +5,7 @@ using System.Data.Common;
 using System.Data.SqlTypes;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Actions.Tasks;
 using ShipWorks.Actions.Tasks.Common;
@@ -13,7 +13,6 @@ using ShipWorks.Data.Connection;
 
 namespace ShipWorks.Tests.Actions.Tasks.Common
 {
-    [TestClass]
     public class PurgeDatabaseTaskTest
     {
         private readonly string auditScript = EnumHelper.GetApiValue(PurgeDatabaseType.Audit);
@@ -22,7 +21,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
         private readonly string printResultScript = EnumHelper.GetApiValue(PurgeDatabaseType.PrintJobs);
         private readonly string abandonedResourcesScript = EnumHelper.GetApiValue(PurgeDatabaseType.AbandonedResources);
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldNotExecuteAnyScripts_WhenNoPurgesAreSelected()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -34,7 +33,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldRunAllSelectedScripts_WhenTaskHasNoTimeout()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -54,7 +53,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldRunSelectedScripts_WhenTaskHasNoTimeout()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -71,7 +70,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldStopRunning_WhenTimeoutHasElapsed()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -97,7 +96,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(auditScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldRunScriptsInCorrectOrder_WhenAllAreSelected()
         {
             List<string> calledPurges = new List<string>();
@@ -115,14 +114,14 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            Assert.AreEqual(labelScript, calledPurges[0]);
-            Assert.AreEqual(printResultScript, calledPurges[1]);
-            Assert.AreEqual(emailScript, calledPurges[2]);
-            Assert.AreEqual(auditScript, calledPurges[3]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[4]);
+            Assert.Equal(labelScript, calledPurges[0]);
+            Assert.Equal(printResultScript, calledPurges[1]);
+            Assert.Equal(emailScript, calledPurges[2]);
+            Assert.Equal(auditScript, calledPurges[3]);
+            Assert.Equal(abandonedResourcesScript, calledPurges[4]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldRunScriptsInCorrectOrder_WhenOnlySomeAreSelected()
         {
             List<string> calledPurges = new List<string>();
@@ -138,12 +137,12 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
 
             testObject.Run(null, null);
 
-            Assert.AreEqual(printResultScript, calledPurges[0]);
-            Assert.AreEqual(auditScript, calledPurges[1]);
-            Assert.AreEqual(abandonedResourcesScript, calledPurges[2]);
+            Assert.Equal(printResultScript, calledPurges[0]);
+            Assert.Equal(auditScript, calledPurges[1]);
+            Assert.Equal(abandonedResourcesScript, calledPurges[2]);
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldPassRetentionDateToRunScript()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
@@ -160,7 +159,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), expectedDate, It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Exactly(2)); 
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldPassSqlTimeoutToRunScript_WhenStopLongPurgesIsTrue()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = new Mock<ISqlPurgeScriptRunner>();
@@ -177,7 +176,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), expectedDate, It.IsAny<int>()), Times.Exactly(2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldPassMaxDateAsTimeToRunScript_WhenStopLongPurgesIsFalse()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -192,7 +191,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(It.IsAny<string>(), It.IsAny<DateTime>(), null, It.IsAny<int>()), Times.Exactly(2));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldThrowActionTaskRunException_WhenSqlExceptionIsCaught()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -205,17 +204,17 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             try
             {
                 testObject.Run(null, null);
-                Assert.Fail("ActionTaskRunException should have been thrown.");
+                Assert.False(true, "ActionTaskRunException should have been thrown.");
             }
             catch (ActionTaskRunException ex)
             {
                 // Ensure a successful test since the correct exception was thrown.
-                Assert.IsInstanceOfType(ex.InnerException, typeof(ExceptionCollection));
-                Assert.IsInstanceOfType(((ExceptionCollection)ex.InnerException).Exceptions[0], typeof(DbException));
+                Assert.IsAssignableFrom<ExceptionCollection>(ex.InnerException);
+                Assert.IsAssignableFrom<DbException>(((ExceptionCollection)ex.InnerException).Exceptions[0]);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldRunSecondPurge_WhenFirstPurgeThrowsException()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -240,7 +239,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.RunScript(printResultScript, It.IsAny<DateTime>(), It.IsAny<DateTime?>(), It.IsAny<int>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldThrowAggregatedException_WhenPurgesThrowsExceptions()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -261,15 +260,15 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             }
             catch (ActionTaskRunException ex)
             {
-                Assert.IsTrue(ex.Message.ToLower().Contains("label"));
-                Assert.IsTrue(ex.Message.ToLower().Contains("email"));
-                Assert.IsInstanceOfType(ex.InnerException, typeof (ExceptionCollection));
+                Assert.True(ex.Message.ToLower().Contains("label"));
+                Assert.True(ex.Message.ToLower().Contains("email"));
+                Assert.IsAssignableFrom<ExceptionCollection>(ex.InnerException);
                 ExceptionCollection exceptions = (ExceptionCollection) ex.InnerException;
-                Assert.AreEqual(2, exceptions.Exceptions.OfType<DbException>().Count());
+                Assert.Equal(2, exceptions.Exceptions.OfType<DbException>().Count());
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DeserializeXml_ShouldDeserializeCorrectly()
         {
             // Create a new purge database task to serialize
@@ -286,15 +285,15 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             PurgeDatabaseTask testObject = new PurgeDatabaseTask();
             testObject.Initialize(serializedObject);
             
-            Assert.AreEqual(true, testObject.CanTimeout);
-            Assert.AreEqual(8, testObject.TimeoutInHours);
-            Assert.AreEqual(19, testObject.RetentionPeriodInDays);
-            Assert.AreEqual(2, testObject.Purges.Count);
-            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Audit));
-            Assert.IsTrue(testObject.Purges.Contains(PurgeDatabaseType.Email));
+            Assert.Equal(true, testObject.CanTimeout);
+            Assert.Equal(8, testObject.TimeoutInHours);
+            Assert.Equal(19, testObject.RetentionPeriodInDays);
+            Assert.Equal(2, testObject.Purges.Count);
+            Assert.True(testObject.Purges.Contains(PurgeDatabaseType.Audit));
+            Assert.True(testObject.Purges.Contains(PurgeDatabaseType.Email));
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldShrinkDatabase_WhenRequested()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -307,7 +306,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldNotShrinkDatabase_WhenNotRequested()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -320,7 +319,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldNotShrinkDatabase_WhenRequestedButTimeoutHasElapsed()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;
@@ -338,7 +337,7 @@ namespace ShipWorks.Tests.Actions.Tasks.Common
             scriptRunner.Verify(x => x.ShrinkDatabase(), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Run_ShouldShrinkDatabase_WhenTimeoutHasElapsedButCanTimeoutIsFalse()
         {
             Mock<ISqlPurgeScriptRunner> scriptRunner = MockedScriptRunner;

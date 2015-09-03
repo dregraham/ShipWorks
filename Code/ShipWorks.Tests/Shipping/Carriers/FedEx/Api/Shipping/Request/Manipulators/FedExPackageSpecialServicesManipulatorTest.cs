@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExPackageSpecialServicesManipulatorTest
     {
         private const string signatureRelease = "SigRelNum";
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private Mock<CarrierRequest> carrierRequest;
         private FedExAccountEntity account;
         
-        [TestInitialize]
-        public void Initiliaze()
+        public FedExPackageSpecialServicesManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             shipmentEntity.FedEx.Packages[0].ContainsAlcohol = false;
@@ -39,24 +37,24 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExPackageSpecialServicesManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SignatureOptionAdded_FedExShipmentSignatureSetToNoSignature_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 FedExSignatureType.NoSignature,
-                (FedExSignatureType)shipmentEntity.FedEx.Signature, "Test Shipment built by BuildFedExShipmentEntity not initialized to no signature");
+                (FedExSignatureType)shipmentEntity.FedEx.Signature);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 SignatureOptionType.NO_SIGNATURE_REQUIRED,
                 ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SignatureOptionDetail.OptionType);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 signatureRelease,
                 ((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SignatureOptionDetail.SignatureReleaseNumber);
 
-            Assert.IsTrue(((ProcessShipmentRequest) carrierRequest.Object.NativeRequest)
+            Assert.True(((ProcessShipmentRequest) carrierRequest.Object.NativeRequest)
                 .RequestedShipment
                 .RequestedPackageLineItems[0]
                 .SpecialServicesRequested
@@ -64,16 +62,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 .Contains(PackageSpecialServiceType.SIGNATURE_OPTION));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SignatureOptionNotAdded_FedExShipmentSignatureSetToServiceDefault_Test()
         {
             shipmentEntity.FedEx.Signature = (int) FedExSignatureType.ServiceDefault;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNull(((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SignatureOptionDetail);
+            Assert.Null(((ProcessShipmentRequest) carrierRequest.Object.NativeRequest).RequestedShipment.RequestedPackageLineItems[0].SpecialServicesRequested.SignatureOptionDetail);
 
-            Assert.IsFalse(((ProcessShipmentRequest)carrierRequest.Object.NativeRequest)
+            Assert.False(((ProcessShipmentRequest)carrierRequest.Object.NativeRequest)
                 .RequestedShipment
                 .RequestedPackageLineItems[0]
                 .SpecialServicesRequested
@@ -81,7 +79,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
                 .Contains(PackageSpecialServiceType.SIGNATURE_OPTION));
         }
         
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackageWithAlcoholIsOne_ShipmentPackageEntityHasOneAlcoholPackageAndRequestSpecialServicesRequestedIsNull_Test()
         {
             shipmentEntity.FedEx.Packages.RemoveAt(1);
@@ -92,10 +90,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, AlcholCount());
+            Assert.Equal(1, AlcholCount());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackageWithAlcoholIsOne_ShipmentPackageEntityHasOneAlcoholPackageAndSpecialServiceTypesIsNull_Test()
         {
             shipmentEntity.FedEx.Packages.RemoveAt(1);
@@ -107,20 +105,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, AlcholCount());
+            Assert.Equal(1, AlcholCount());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackageWithAlcoholIsZero_ShipmentPackageEntityHasZeroAlcoholPackage_Test()
         {
             shipmentEntity.FedEx.Packages.RemoveAt(1);
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(0, AlcholCount());
+            Assert.Equal(0, AlcholCount());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackageWithAlcoholIsOne_ShipmentPackageEntityHasOneAlcoholPackage_Test()
         {
             shipmentEntity.FedEx.Packages.RemoveAt(1);
@@ -128,25 +126,25 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, AlcholCount());
+            Assert.Equal(1, AlcholCount());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackagesWithAlcoholIsZero_ShipmentPackageEntityHasZeroAlcoholPackages_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(0, AlcholCount());
+            Assert.Equal(0, AlcholCount());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AlcoholPackagesWithAlcoholIsOne_ShipmentPackageEntityHasOneAlcoholPackages_Test()
         {
             shipmentEntity.FedEx.Packages[0].ContainsAlcohol = true;
 
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.AreEqual(1, AlcholCount());
+            Assert.Equal(1, AlcholCount());
         }
 
         /// <summary>

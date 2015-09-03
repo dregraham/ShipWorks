@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A5EB7A6B-1600-4BE2-AED6-3284C4E7987C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ShipWorks.Shipping</RootNamespace>
+    <AssemblyName>ShipWorks.Shipping</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\..\Build\Interapptive.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <DelaySign>true</DelaySign>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Properties\interapptive_public.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Mail, Version=1.0.4086.0, Culture=neutral, PublicKeyToken=1c4638788972655d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\Rebex.Mail.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.DQE.SqlServer.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.DQE.SqlServer.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.LinqSupportClasses.NET35, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.LinqSupportClasses.NET35.dll</HintPath>
+    </Reference>
+    <Reference Include="SD.LLBLGen.Pro.ORMSupportClasses.NET20, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ca73b74ba4e3ff27, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Components\SD.LLBLGen.Pro.ORMSupportClasses.NET20.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Carriers\Amazon\AmazonAccountEditorViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\AmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\AmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Carriers\Amazon\AmazonServiceViewModel.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentProcessingSynchronizer.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipmentType.cs" />
+    <Compile Include="Carriers\Amazon\AmazonShipperException.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonMwsSignature.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\AmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\AmazonRateTag.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\GetEligibleShippingServicesResponse.cs" />
+    <Compile Include="Carriers\Amazon\Api\DTOs\ShipmentRequestDetails.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonRates.cs" />
+    <Compile Include="Carriers\Amazon\Api\IAmazonShippingWebClient.cs" />
+    <Compile Include="Carriers\Amazon\Api\OperationResponse.cs" />
+    <Compile Include="Carriers\Amazon\Enums\AmazonDeliveryExperienceType.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonAccountManager.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonCredentials.cs" />
+    <Compile Include="Carriers\Amazon\IAmazonMwsWebClientSettingsFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
+      <Project>{1e53a000-fdeb-4e9e-8be0-19cdc14a0282}</Project>
+      <Name>Interapptive.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Adapter\ShipWorks.Data.Adapter.csproj">
+      <Project>{d5eb1eb5-dd70-4461-9377-b462031837dc}</Project>
+      <Name>ShipWorks.Data.Adapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Data.Model\ShipWorks.Data.Model.csproj">
+      <Project>{6f05267c-1883-4526-8d83-e46b7b2d2faf}</Project>
+      <Name>ShipWorks.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.Shared\ShipWorks.Shared.csproj">
+      <Project>{dfcf14ea-6596-4b9c-b743-d7ce9e5f4348}</Project>
+      <Name>ShipWorks.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks.SqlServer\ShipWorks.SqlServer.sqlproj">
+      <Project>{d9fba556-68e0-4961-a400-636a9a6bc7bc}</Project>
+      <Name>ShipWorks.SqlServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ShipWorks\ShipWorks.Core.csproj">
+      <Project>{02653371-c0dc-4d70-949d-60d37c69f781}</Project>
+      <Name>ShipWorks.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\interapptive_public.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

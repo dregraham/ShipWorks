@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Microsoft.Win32;
 using System.IO;
 using Interapptive.Shared;
@@ -10,19 +10,17 @@ using Interapptive.Shared.Win32;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class RegistryTests
     {
         RegistryHelper registry = new RegistryHelper(@"Software\ShipWorks\UnitTests");
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void ReadIntWithNullKey()
         {
-            RegistryHelper.GetValue((RegistryKey) null, null, 0);
+            Assert.Throws<ArgumentNullException>(() => RegistryHelper.GetValue((RegistryKey) null, null, 0));
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntWithNonexistent()
         {
             int defaultValue = 10;
@@ -30,11 +28,11 @@ namespace ShipWorks.Tests.Core
             using (RegistryKey key = registry.CreateKey("Testing"))
             {
                 int read = RegistryHelper.GetValue(key, "Missing", defaultValue);
-                Assert.AreEqual(defaultValue, read);
+                Assert.Equal(defaultValue, read);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromStringFromPath()
         {
             int value = 10;
@@ -50,11 +48,11 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(value, read);
+                Assert.Equal(value, read);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromString()
         {
             int value = 10;
@@ -70,11 +68,11 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(value, read);
+                Assert.Equal(value, read);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromNonPath()
         {
             int value = 103;
@@ -83,11 +81,10 @@ namespace ShipWorks.Tests.Core
             // Read it back
             int read = registry.GetValue("DoesNotExist", keyName, value);
 
-            Assert.AreEqual(value, read);
+            Assert.Equal(value, read);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void ReadIntFromBadString()
         {
             int deafultValue = 10;
@@ -100,7 +97,7 @@ namespace ShipWorks.Tests.Core
                 try
                 {
                     // Read it back
-                    int read = RegistryHelper.GetValue(key, keyName, deafultValue);
+                    Assert.Throws<FormatException>(() => RegistryHelper.GetValue(key, keyName, deafultValue));
                 }
                 finally
                 {
@@ -110,7 +107,7 @@ namespace ShipWorks.Tests.Core
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ReadIntFromConvertible()
         {
             int deafultValue = 1024;
@@ -126,7 +123,7 @@ namespace ShipWorks.Tests.Core
                 // Cleanup
                 key.DeleteValue(keyName);
 
-                Assert.AreEqual(deafultValue, read);
+                Assert.Equal(deafultValue, read);
             }
         }
     }

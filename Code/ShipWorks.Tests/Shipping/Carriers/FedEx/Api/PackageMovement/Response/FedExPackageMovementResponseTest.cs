@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.PackageMovement;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
 {
-    [TestClass]
     public class FedExPackageMovementResponseTest
     {
         FedExPackageMovementResponse testObject;
@@ -15,14 +14,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
 
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExPackageMovementResponseTest()
         {
 
             reply = new PostalCodeInquiryReply()
             {
                 HighestSeverity = NotificationSeverityType.SUCCESS,
-                Notifications = new []
+                Notifications = new[]
                 {
                     new Notification()
                     {
@@ -40,24 +38,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.PackageMovement.Response
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_LocationIdWillBeSet_ReplyWillShowSuccessAndLocation_Test()
         {
             testObject.Process();
 
-            Assert.AreEqual(reply.ExpressDescription.LocationId, testObject.LocationID);
+            Assert.Equal(reply.ExpressDescription.LocationId, testObject.LocationID);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ExceptionWillBeThrown_ReplyWillContainErrorInHighestSeverity_Test()
         {
-            reply.HighestSeverity=NotificationSeverityType.FAILURE;
+            reply.HighestSeverity = NotificationSeverityType.FAILURE;
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
-
-
-
     }
 }

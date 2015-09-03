@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Interapptive.Shared.Pdf;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Rebex.Mail;
 
 namespace ShipWorks.Tests.Interapptive.Shared.Pdf
@@ -15,11 +15,10 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
     /// <summary>
     /// Test class to verify that the WeightUtility method(s) work correctly.
     /// </summary>
-    [TestClass]
     public class PdfDocumentTest
     {
         // Verify that a one to one conversion works correctly
-        [TestMethod]
+        [Fact]
         public void Convert_SinglePagePdf_ReturnsOneImageStream_Test()
         {
             List<Stream> images = new List<Stream>();
@@ -41,7 +40,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                     }
                 }
 
-                Assert.AreEqual(1, images.Count);
+                Assert.Equal(1, images.Count);
             }
             finally
             {
@@ -53,7 +52,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
         }
 
         // Verify that a multipage conversion works correctly
-        [TestMethod]
+        [Fact]
         public void Convert_MultiPagePdf_ReturnsSingleImageStream_Test()
         {
             List<Stream> images = new List<Stream>();
@@ -72,7 +71,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                 }
 
                 // Since we're converting to TIFF there should only be one image for the entire PDF
-                Assert.AreEqual(1, images.Count);
+                Assert.Equal(1, images.Count);
             }
             finally
             {
@@ -83,7 +82,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void ToImages_ReturnsPngImages_Test()
         {
             List<ImageFormat> formats;
@@ -111,7 +110,7 @@ namespace ShipWorks.Tests.Interapptive.Shared.Pdf
                     }
                 }
 
-                Assert.IsTrue(formats.All(f => f.Equals(ImageFormat.Png)));
+                Assert.True(formats.All(f => f.Equals(ImageFormat.Png)));
             }
         }
     }

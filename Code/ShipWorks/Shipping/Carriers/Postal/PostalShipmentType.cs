@@ -465,27 +465,28 @@ namespace ShipWorks.Shipping.Carriers.Postal
         /// <summary>
         /// Gets the fields used for rating a shipment.
         /// </summary>
-        protected override IEnumerable<IEntityField2> GetRatingFields(ShipmentEntity shipment)
+        public override RatingFields RatingFields
         {
-            List<IEntityField2> fields = new List<IEntityField2>(base.GetRatingFields(shipment));
+            get
+            {
+                if (ratingField != null)
+                {
+                    return ratingField;
+                }
 
-            fields.AddRange
-                (
-                    new List<IEntityField2>()
-                    {
-                        shipment.Postal.Fields[PostalShipmentFields.PackagingType.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsHeight.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsLength.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsWidth.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsAddWeight.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.DimsWeight.FieldIndex],                        
-                        shipment.Postal.Fields[PostalShipmentFields.NonMachinable.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.NonRectangular.FieldIndex],
-                        shipment.Postal.Fields[PostalShipmentFields.InsuranceValue.FieldIndex]
-                    }
-                );
+                ratingField = base.RatingFields;
+                ratingField.ShipmentFields.Add(PostalShipmentFields.PackagingType);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsHeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsLength);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWidth);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsAddWeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.DimsWeight);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.NonMachinable);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.NonRectangular);
+                ratingField.ShipmentFields.Add(PostalShipmentFields.InsuranceValue);
 
-            return fields;
+                return ratingField;
+            }
         }
 
         /// <summary>

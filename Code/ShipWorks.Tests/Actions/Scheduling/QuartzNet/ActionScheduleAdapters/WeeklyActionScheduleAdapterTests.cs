@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.QuartzNet.ActionScheduleAdapters;
 using System;
@@ -7,7 +7,6 @@ using System.Linq;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 {
-    [TestClass]
     public class WeeklyActionScheduleAdapterTests
     {
 
@@ -16,14 +15,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
         WeeklyActionScheduleAdapter target;
 
-        [TestInitialize]
-        public void Initialize()
+        public WeeklyActionScheduleAdapterTests()
         {
             target = new WeeklyActionScheduleAdapter();
         }
 
 
-        [TestMethod]
+        [Fact]
         public void FiresAtStartTimeOfDay()
         {
             var schedule = new WeeklyActionSchedule {
@@ -34,12 +32,12 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
             var fireTimes = schedule.ComputeFireTimes(target, 5);
 
-            Assert.IsTrue(fireTimes.All(
+            Assert.True(fireTimes.All(
                 x => x.ToUniversalTime().TimeOfDay == schedule.StartDateTimeInUtc.TimeOfDay
             ));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresOnSpecifiedLocalDays()
         {
             var schedule = new WeeklyActionSchedule {
@@ -50,12 +48,12 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
 
             var fireTimes = schedule.ComputeFireTimes(target, 6);
 
-            Assert.IsTrue(fireTimes.All(
+            Assert.True(fireTimes.All(
                 x => schedule.ExecuteOnDays.Contains(x.ToLocalTime().DayOfWeek)
             ));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequency()
         {
             var schedule = new WeeklyActionSchedule
@@ -71,10 +69,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals.All(x => x.TotalDays == 7 * schedule.FrequencyInWeeks));
+            Assert.True(intervals.All(x => x.TotalDays == 7 * schedule.FrequencyInWeeks));
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequencyWhenDstEnds()
         {
             var schedule = new WeeklyActionSchedule
@@ -90,13 +88,13 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals[0] == ThreeWeeks);
-            Assert.IsTrue(intervals[1] == ThreeWeeks.Add(OneHour));
-            Assert.IsTrue(intervals[2] == ThreeWeeks);
-            Assert.IsTrue(intervals[3] == ThreeWeeks);
+            Assert.True(intervals[0] == ThreeWeeks);
+            Assert.True(intervals[1] == ThreeWeeks.Add(OneHour));
+            Assert.True(intervals[2] == ThreeWeeks);
+            Assert.True(intervals[3] == ThreeWeeks);
         }
 
-        [TestMethod]
+        [Fact]
         public void FiresAtSpecifiedFrequencyWhenDstStarts()
         {
             var schedule = new WeeklyActionSchedule
@@ -112,10 +110,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet.ActionScheduleAdapters
                 .Zip(fireTimes, (x, x0) => x - x0)
                 .ToArray();
 
-            Assert.IsTrue(intervals[0] == ThreeWeeks);
-            Assert.IsTrue(intervals[1] == ThreeWeeks.Subtract(OneHour));
-            Assert.IsTrue(intervals[2] == ThreeWeeks);
-            Assert.IsTrue(intervals[3] == ThreeWeeks);
+            Assert.True(intervals[0] == ThreeWeeks);
+            Assert.True(intervals[1] == ThreeWeeks.Subtract(OneHour));
+            Assert.True(intervals[2] == ThreeWeeks);
+            Assert.True(intervals[3] == ThreeWeeks);
         }
     }
 }

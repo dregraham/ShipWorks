@@ -1,10 +1,9 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class OneTimeActionScheduleTest
     {
 
@@ -15,7 +14,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             testObject = new OneTimeActionSchedule();
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_IsTopOfTheHour_Test()
         {
             DateTime utcNow = DateTime.UtcNow;
@@ -23,34 +22,34 @@ namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
             DateTime topOfHour = utcNow.AddMinutes(60 - utcNow.Minute);
 
             // Make sure the time is between before the call and after the call.
-            Assert.AreEqual(topOfHour.Hour, testObject.StartDateTimeInUtc.Hour);
+            Assert.Equal(topOfHour.Hour, testObject.StartDateTimeInUtc.Hour);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_HourIsIncremented_Test()
         {
             DateTime utcNow = DateTime.UtcNow;
 
             if (utcNow.Hour < 23)
             {
-                Assert.AreEqual(testObject.StartDateTimeInUtc.Hour, utcNow.Hour + 1);
+                Assert.Equal(testObject.StartDateTimeInUtc.Hour, utcNow.Hour + 1);
             }
             else
             {
-                Assert.AreEqual(0, testObject.StartDateTimeInUtc.Hour);
+                Assert.Equal(0, testObject.StartDateTimeInUtc.Hour);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_MinuteIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Minute);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Minute);
         }
 
-        [TestMethod]
+        [Fact]
         public void StartDateTimeInUtc_SecondIsZero_Test()
         {
-            Assert.AreEqual(0, testObject.StartDateTimeInUtc.Second);
+            Assert.Equal(0, testObject.StartDateTimeInUtc.Second);
         }
     }
 }

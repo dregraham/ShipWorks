@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore.Logging;
@@ -233,7 +234,11 @@ namespace ShipWorks.Stores.Platforms.BigCommerce
             BigCommerceWebClientOrderSearchCriteria orderSearchCriteria = 
                 new BigCommerceWebClientOrderSearchCriteria(orderDateSearchType, 
                     modifiedDateStartingPoint.Value, modifiedDateEndPoint,
-                    createdDateStartingPoint.Value, createdDateEndPoint);
+                    createdDateStartingPoint.Value, createdDateEndPoint)
+                {
+                    PageSize = BigCommerceConstants.OrdersPageSize,
+                    Page = 1
+                };
 
             // Create the order search criteria
             return orderSearchCriteria;

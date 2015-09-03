@@ -7,6 +7,7 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Drawing;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {

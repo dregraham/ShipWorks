@@ -10,6 +10,7 @@ using Divelements.SandGrid;
 using Divelements.SandGrid.Specialized;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Ebay.OrderCombining
 {

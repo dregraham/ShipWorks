@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace ShipWorks
 {
-    static class Program
+    public static class Program
     {
         // Indicates if the application is shutting down due to an exception
         static bool isCrashing = false;
@@ -73,7 +73,7 @@ namespace ShipWorks
         /// </summary>
         public static string AppFileName
         {
-            get { return Assembly.GetExecutingAssembly().Location; }
+            get { return Assembly.GetEntryAssembly().Location; }
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace ShipWorks
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             // These come first regardless of ExecutionMode. Even the ServiceExecutionMode uses UI to prompt for credentials.
             Application.SetCompatibleTextRenderingDefault(false);

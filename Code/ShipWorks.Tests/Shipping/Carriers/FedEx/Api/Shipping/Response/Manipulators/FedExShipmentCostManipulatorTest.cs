@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
@@ -8,7 +8,6 @@ using log4net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
-    [TestClass]
     public class FedExShipmentCostManipulatorTest
     {
         private FedExShipResponse fedExShipResponse;
@@ -19,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         private ProcessShipmentReply nativeResponse;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipmentCostManipulatorTest()
         {
             mockLog = new Mock<ILog>();
             mockLog.Setup(log => log.WarnFormat(It.IsAny<string>(), 77));
@@ -33,28 +31,28 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             fedExShipResponse = new FedExShipResponse(nativeResponse, carrierRequest.Object, BuildFedExShipmentEntity.SetupBaseShipmentEntity(), null, null);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ActualRateCostAddedToShipment_ActualRateTypeMatchesIncludedShipRateDetail()
         {
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_UsesTotalNetFedExCharge_OriginIsCA()
         {
             fedExShipResponse.Shipment.OriginCountryCode = "CA";
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[1].TotalNetFedExCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FirstRateCostAddedToShipment_ActualRateTypeDoesNotMatchIncludedShipRateDetail()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.RATED_LIST_SHIPMENT;
@@ -62,11 +60,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
+            Assert.Equal(nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShippingCostLoggedAsZeroAndWarningLogged_NoShipmentRatingInformation()
         {
             //fedExShipResponse.Reply.CompletedShipmentDetail.ShipmentRating = null;
@@ -74,12 +72,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(0, fedExShipResponse.Shipment.ShipmentCost);
+            Assert.Equal(0, fedExShipResponse.Shipment.ShipmentCost);
 
             mockLog.Verify(log => log.WarnFormat(It.IsAny<string>(), (long) 77), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ShippingCostLoggedAsTotalNetFedExCharge_OriginIsCanada()
         {
             nativeResponse.CompletedShipmentDetail.ShipmentRating.ActualRateType = ReturnedRateType.PREFERRED_LIST_SHIPMENT;
@@ -88,7 +86,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
 
             testObject.Manipulate(fedExShipResponse);
 
-            Assert.AreEqual(
+            Assert.Equal(
                 nativeResponse.CompletedShipmentDetail.ShipmentRating.ShipmentRateDetails[0].TotalNetFedExCharge.Amount,
                 fedExShipResponse.Shipment.ShipmentCost);
         }

@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
-using Autofac.Extras.Moq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.UI.Controls.MultiValueBinders;
+using Xunit;
 
 namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
 {
-    [TestClass]
     public class CheckboxMultiValueBinderTest 
     {
         private List<GenericMultiValueBinderDto<bool, string>> allDistinctValuesDataSource = new List<GenericMultiValueBinderDto<bool, string>>()
@@ -28,49 +20,53 @@ namespace ShipWorks.Tests.UI.Controls.MultiValueBinders
                 new GenericMultiValueBinderDto<bool, string>(true, "one")
             };
 
-        [TestMethod]
+        [Fact]
         public void DerivesFromGenericMultiValueBinder_IsTrue()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             // Verify that CheckboxMultiValueBinder is a child of GenericMultiValueBinder
-            Assert.IsTrue(testObject is GenericMultiValueBinder<GenericMultiValueBinderDto<bool, string>, bool>);
+            Assert.True(testObject is GenericMultiValueBinder<GenericMultiValueBinderDto<bool, string>, bool>);
         }
 
-        [TestMethod]
+        [Fact]
         public void CheckStateValue_WhenIsMultiValuedIsTrue_ReturnsIndeterminate()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDifferentValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
-            Assert.AreEqual(testObject.CheckStateValue, CheckState.Indeterminate);
+            Assert.Equal(testObject.CheckStateValue, CheckState.Indeterminate);
         }
 
-        [TestMethod]
+        [Fact]
         public void CheckStateValue_WhenIsMultiValuedIsFalse_AndAllValuesAreTrue_ReturnsChecked()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = true;
 
-            Assert.AreEqual(CheckState.Checked, testObject.CheckStateValue);
+            Assert.Equal(CheckState.Checked, testObject.CheckStateValue);
         }
 
-        [TestMethod]
+        [Fact]
         public void CheckStateValue_WhenIsMultiValuedIsFalse_AndAllValuesAreFalse_ReturnsUnChecked()
         {
             CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>> testObject = new CheckboxMultiValueBinder<GenericMultiValueBinderDto<bool, string>>(allDistinctValuesDataSource,
+                "Property1",
                 s => s.Property1,
                 (s, v) => { s.Property1 = v; });
 
             testObject.PropertyValue = false;
 
-            Assert.AreEqual(CheckState.Unchecked, testObject.CheckStateValue);
+            Assert.Equal(CheckState.Unchecked, testObject.CheckStateValue);
         }
     }
 }

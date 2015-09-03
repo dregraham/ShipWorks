@@ -10,34 +10,16 @@ namespace Interapptive.Shared.Utility
         /// <summary>
         /// Gets the current date and time
         /// </summary>
-        public DateTime Now
-        {
-            get
-            {
-                return DateTime.Now;
-            }
-        }
+        public DateTime Now => DateTime.Now;
 
         /// <summary>
         /// Gets the current UTC date and time
         /// </summary>
-        public DateTime UtcNow
-        {
-            get
-            {
-                return DateTime.UtcNow;
-            }
-        }
+        public DateTime UtcNow => DateTime.UtcNow;
 
         /// <summary>
         /// Gets the current date, with time set to 00:00:00
         /// </summary>
-        public DateTime Today
-        {
-            get
-            {
-                return DateTime.Today;
-            }
-        }
+        public DateTime Today => DateTime.Today;
     }
 }

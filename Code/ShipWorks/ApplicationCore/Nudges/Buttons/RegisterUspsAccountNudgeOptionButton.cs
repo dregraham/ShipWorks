@@ -25,7 +25,7 @@ namespace ShipWorks.ApplicationCore.Nudges.Buttons
         {
             if (HostForm != null)
             {
-                using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
                 {
                     UspsShipmentType shipmentType = new UspsShipmentType();
                     using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))

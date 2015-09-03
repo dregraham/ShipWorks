@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
 {
-    [TestClass]
     public class FedExRateRequestTest
     {
         private FedExRateRequest testObject;
@@ -26,8 +25,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRateRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity() { ReferencePO = "testPO" };
@@ -63,7 +61,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             testObject = new FedExRateRequest(manipulators, shipmentEntity, fedExService.Object, responseFactory.Object, settingsRepository.Object);
         }
         
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_DelegatesToRepositoryForAccount_Test()
         {
             object obj = testObject.CarrierAccountEntity;
@@ -73,18 +71,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             settingsRepository.Verify(r => r.GetAccount(testObject.ShipmentEntity), Times.Once());
         }
         
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
         public void CarrierAccountEntity_IsAccountRetrievedFromRepository_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -95,7 +93,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToFedExService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -105,7 +103,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request
             fedExService.Verify(s => s.GetRates(testObject.NativeRequest as RateRequest, shipmentEntity), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingRateResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()

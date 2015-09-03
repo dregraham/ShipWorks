@@ -1,14 +1,9 @@
 ﻿using Autofac;
-using Autofac.Core;
-using Autofac.Core.Activators.Reflection;
-using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Amazon;
-using ShipWorks.Shipping.Carriers.Amazon.Api;
-using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.Editing.Rating;
+using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using System.Reflection;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -18,66 +13,42 @@ namespace ShipWorks.ApplicationCore
     public static class IoC
     {
         /// <summary>
-        /// Static constructor
+        /// Get the current IoC container
         /// </summary>
-        static IoC()
+        private static IContainer current;
+
+        /// <summary>
+        /// Get the current global lifetime scope
+        /// </summary>
+        /// <remarks>This should ONLY be used in situations where a new lifetime scope cannot be created or disposed.
+        /// Any dependency resolved through this will NEVER be released, which could cause a memory leak if the dependency
+        /// is not marked as ExternallyOwned or SingleInstance</remarks>
+        public static ILifetimeScope UnsafeGlobalLifetimeScope
         {
-            Current = BuildContainer();
+            get
+            {
+                return current;
+            }
         }
 
         /// <summary>
-        /// Get the current IoC container
+        /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
-        public static IContainer Current { get; private set; }
+        public static ILifetimeScope BeginLifetimeScope()
+        {
+            return current.BeginLifetimeScope();
+        }
 
         /// <summary>
-        /// Build the main IoC container
+        /// Initialize the IoC container
         /// </summary>
-        /// <returns></returns>
-        private static IContainer BuildContainer()
+        public static void Initialize(params Assembly[] assemblies)
         {
             var builder = new ContainerBuilder();
 
-            //builder.RegisterAssemblyTypes(typeof(IoC).Assembly)
-            //    .AsSelf()
-            //    .AsImplementedInterfaces()
-            //    .InstancePerLifetimeScope();
-            
-            builder.RegisterType<AmazonShippingWebClient>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
+            builder.RegisterAssemblyModules(assemblies);
 
             builder.RegisterType<StoreManagerWrapper>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
-            builder.RegisterType<AmazonRates>()
-                .AsImplementedInterfaces();
-
-            builder.RegisterType<AmazonMwsWebClientSettingsFactory>()
-                .As<IAmazonMwsWebClientSettingsFactory>();
-
-            builder.RegisterType<AmazonCredentials>()
-                .AsSelf()
-                .As<IAmazonCredentials>();
-
-            builder.RegisterType<AmazonShipmentSetupWizard>()
-                .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Amazon)
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<AmazonAccountEditorDlg>();
-            builder.RegisterType<AmazonAccountEditorViewModel>();
-
-            builder.RegisterType<AmazonSettingsControl>()
-                .Keyed<SettingsControlBase>(ShipmentTypeCode.Amazon)
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<AmazonShipmentType>()
-                .AsSelf()
-                .Keyed<ShipmentType>(ShipmentTypeCode.Amazon)
-                .SingleInstance();
-
-            builder.RegisterType<AmazonAccountManager>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -89,18 +60,11 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterType<AmazonShipmentProcessingSynchronizer>()
-                .AsSelf()
-                .ExternallyOwned();
+            builder.RegisterType<DateTimeProvider>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
 
-            builder.RegisterType<AmazonServiceControl>()
-                .UsingConstructor(typeof(RateControl), typeof(AmazonServiceViewModel))
-                .Keyed<ServiceControlBase>(ShipmentTypeCode.Amazon)
-                .ExternallyOwned();
-
-            builder.RegisterType<AmazonServiceViewModel>();
-
-            return builder.Build();
+            current = builder.Build();
         }
     }
 }

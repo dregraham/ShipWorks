@@ -7,6 +7,7 @@ using System.Linq;
 using Common.Logging;
 using ComponentFactory.Krypton.Toolkit;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using Microsoft.Web.Services3.Referral;

@@ -429,9 +429,17 @@ namespace ShipWorks.Stores.Platforms.Ebay
                     break;
             }
 
-            carrierCode = carrierType.ToString();
-
             // Now check for any specialty cases.
+            carrierCode = GetCarrierCodeForSpecialtyCases(carrierType, useUpsMailInnovationsCarrierType);
+        }
+
+        /// <summary>
+        /// Determine carrier code for specialty cases like UPS MI and DHL
+        /// </summary>
+        private static string GetCarrierCodeForSpecialtyCases(ShippingCarrierCodeType carrierType, bool useUpsMailInnovationsCarrierType)
+        {
+            string carrierCode = carrierType.ToString();
+
             if (useUpsMailInnovationsCarrierType)
             {
                 carrierCode = "UPS-MI";
@@ -440,6 +448,8 @@ namespace ShipWorks.Stores.Platforms.Ebay
             {
                 carrierCode = "DHL Global Mail";
             }
+
+            return carrierCode;
         }
     }
 }

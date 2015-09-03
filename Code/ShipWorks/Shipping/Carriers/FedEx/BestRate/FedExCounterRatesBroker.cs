@@ -120,7 +120,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.BestRate
         /// </summary>
         private bool DisplaySetupWizard()
         {
-            using (ILifetimeScope lifetimeScope = IoC.Current.BeginLifetimeScope())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 using (Form setupWizard = ShipmentType.CreateSetupWizard(lifetimeScope))
                 {

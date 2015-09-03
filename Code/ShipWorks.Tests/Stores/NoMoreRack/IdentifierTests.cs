@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms;
 
 namespace ShipWorks.Tests.Stores.NoMoreRack
 {
-    [TestClass]
     public class IdentifierTests
     {
         /// <summary>
@@ -31,16 +30,16 @@ namespace ShipWorks.Tests.Stores.NoMoreRack
 
             StoreType storeType = StoreTypeManager.GetType(nmrStore);
 
-            Assert.AreEqual(identifier, storeType.LicenseIdentifier);
+            Assert.Equal(identifier, storeType.LicenseIdentifier);
         }
 
-        [TestMethod]
+        [Fact]
         public void InternalLicenseIdentifier_ReturnsNoMoreRack_WhenModuleUrlIsChoxi()
         {
             DoTest("http://staging.vendor-api.choxi.com/api/v1/shipworks/60");
         }
 
-        [TestMethod]
+        [Fact]
         public void InternalLicenseIdentifier_ReturnsNoMoreRack_WhenModuleUrlIsNoMoreRack()
         {
             DoTest("http://staging.vendor-api.nomorerack.com/api/v1/shipworks/60");

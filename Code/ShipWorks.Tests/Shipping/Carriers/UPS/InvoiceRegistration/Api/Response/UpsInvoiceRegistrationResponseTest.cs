@@ -3,7 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
@@ -13,7 +13,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 {
-    [TestClass]
     public class UpsInvoiceRegistrationResponseTest
     {
         private UpsInvoiceRegistrationResponse testObject;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 
         private List<Mock<ICarrierResponseManipulator>> manipulators;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationResponseTest()
         {
             carrierRequest = new Mock<CarrierRequest>();
 
@@ -45,12 +43,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
 
             manipulators = new List<Mock<ICarrierResponseManipulator>> { manipulator };
 
-            testObject=new UpsInvoiceRegistrationResponse(
+            testObject = new UpsInvoiceRegistrationResponse(
                 nativeResponse,
-                carrierRequest.Object,manipulators.Select(x=>x.Object).ToList());
+                carrierRequest.Object, manipulators.Select(x => x.Object).ToList());
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_DelegatesToManipulators_WhenThereIsOneManipulator_Test()
         {
             testObject.Process();
@@ -61,13 +59,12 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Response
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsApiException))]
+        [Fact]
         public void Process_UpsApiException_WhenResponseStatusIsFailure_Test()
         {
             nativeResponse.Response.ResponseStatus.Code = EnumHelper.GetApiValue(UpsInvoiceRegistrationResponseStatusCode.Failed);
 
-            testObject.Process();
+            Assert.Throws<UpsApiException>(() => testObject.Process());
         }
     }
 }

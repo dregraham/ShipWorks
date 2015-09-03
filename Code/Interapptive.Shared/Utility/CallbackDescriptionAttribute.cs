@@ -76,7 +76,7 @@ namespace Interapptive.Shared.Utility
         private void ReflectObjectAndMember()
         {
             // Get the type defined by className.
-            Assembly assembly = Assembly.Load("ShipWorks");
+            Assembly assembly = Assembly.Load("ShipWorks.Core");
             Type type = assembly.GetType(className);
 
             // Create an instance of the type.
