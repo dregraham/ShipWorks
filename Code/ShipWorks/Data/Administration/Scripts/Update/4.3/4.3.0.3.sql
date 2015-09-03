@@ -14,6 +14,6 @@ SET ANSI_PADDING, ANSI_WARNINGS, CONCAT_NULL_YIELDS_NULL, ARITHABORT, QUOTED_IDE
 GO
 PRINT N'Altering [dbo].[UpsProfile]'
 GO
-ALTER TABLE [dbo].[UpsProfile] ALTER COLUMN [CostCenter] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
-ALTER TABLE [dbo].[UpsProfile] ALTER COLUMN [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL
+ALTER TABLE [dbo].[UpsProfile] ALTER COLUMN [CostCenter] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
+ALTER TABLE [dbo].[UpsProfile] ALTER COLUMN [UspsPackageID] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL
 GO
