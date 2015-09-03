@@ -681,7 +681,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(amazonMwsApiCall, request, progress);
 
                 IHttpResponseReader response = 
-                    throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest<HttpRequestSubmitter, IHttpResponseReader>);
+                    throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest);
 
                 // log the response
                 logger.LogResponse(response.ReadResult());
@@ -743,8 +743,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
                 throw WebHelper.TranslateWebException(ex, typeof(AmazonException));
             }
         }
-
-
+        
         /// <summary>
         /// Submit an Amazon request, throttled so we don't over-call
         /// </summary>
@@ -752,7 +751,7 @@ namespace ShipWorks.Stores.Platforms.Amazon.Mws
         /// <typeparam name="THttpResponseReader">Needed by the throttler.  The type of the response that will be received by the api via throttler.</typeparam>
         /// <param name="request">The actual request to make.</param>
         /// <returns>HttpResponseReader received from the call</returns>
-        private IHttpResponseReader MakeRequest<THttpRequestSubmitter, THttpResponseReader>(THttpRequestSubmitter request)
+        private IHttpResponseReader MakeRequest<THttpRequestSubmitter>(THttpRequestSubmitter request)
             where THttpRequestSubmitter : HttpRequestSubmitter
         {
             if (request == null)

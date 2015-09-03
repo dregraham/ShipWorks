@@ -80,18 +80,11 @@
     <Rule Id="CA2242" Action="Warning" />
   </Rules>
   <Rules AnalyzerId="SonarLint" RuleNamespace="SonarLint">
-    <Rule Id="S105" Action="None" />
-    <Rule Id="S1066" Action="None" />
-    <Rule Id="S108" Action="None" />
-    <Rule Id="S1109" Action="None" />
-    <Rule Id="S1116" Action="None" />
-    <Rule Id="S1117" Action="None" />
     <Rule Id="S1118" Action="None" />
     <Rule Id="S1121" Action="None" />
     <Rule Id="S1125" Action="None" />
     <Rule Id="S1145" Action="None" />
     <Rule Id="S1155" Action="None" />
-    <Rule Id="S1172" Action="None" />
     <Rule Id="S1186" Action="None" />
     <Rule Id="S121" Action="None" />
     <Rule Id="S1226" Action="None" />
@@ -103,10 +96,8 @@
     <Rule Id="S1301" Action="None" />
     <Rule Id="S131" Action="None" />
     <Rule Id="S1313" Action="None" />
-    <Rule Id="S1481" Action="None" />
     <Rule Id="S1656" Action="None" />
     <Rule Id="S1694" Action="None" />
-    <Rule Id="S1697" Action="None" />
     <Rule Id="S1699" Action="None" />
     <Rule Id="S1764" Action="None" />
     <Rule Id="S1848" Action="None" />
@@ -117,7 +108,6 @@
     <Rule Id="S1940" Action="None" />
     <Rule Id="S1994" Action="None" />
     <Rule Id="S2070" Action="None" />
-    <Rule Id="S2123" Action="None" />
     <Rule Id="S2197" Action="None" />
     <Rule Id="S2223" Action="None" />
     <Rule Id="S2225" Action="None" />
@@ -126,7 +116,6 @@
     <Rule Id="S2278" Action="None" />
     <Rule Id="S2290" Action="None" />
     <Rule Id="S2306" Action="None" />
-    <Rule Id="S2326" Action="None" />
     <Rule Id="S2328" Action="None" />
     <Rule Id="S2330" Action="None" />
     <Rule Id="S2357" Action="None" />
@@ -135,12 +124,7 @@
     <Rule Id="S2486" Action="None" />
     <Rule Id="S2551" Action="None" />
     <Rule Id="S2681" Action="None" />
-    <Rule Id="S2692" Action="None" />
     <Rule Id="S2696" Action="None" />
-    <Rule Id="S2737" Action="None" />
-    <Rule Id="S2743" Action="None" />
-    <Rule Id="S2757" Action="None" />
-    <Rule Id="S2758" Action="None" />
     <Rule Id="S2760" Action="None" />
     <Rule Id="S2761" Action="None" />
     <Rule Id="S2930" Action="None" />
@@ -168,5 +152,10 @@
     <Rule Id="S3249" Action="None" />
     <Rule Id="S907" Action="None" />
     <Rule Id="S927" Action="None" />
+    <Rule Id="S1066" Action="None" />
+    <Rule Id="S1117" Action="None" />
+    <Rule Id="S1481" Action="None" />
+    <Rule Id="S1172" Action="None" />
+    <Rule Id="S108" Action="None" />
   </Rules>
 </RuleSet>

@@ -100,7 +100,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
             {
                 RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(ShopifyWebClientApiCall.IsRealShopifyShopUrlName, requestSubmitter, null);
 
-                using (IHttpResponseReader respReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest<HttpRequestSubmitter, IHttpResponseReader>))
+                using (IHttpResponseReader respReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest))
                 {
                     string pageText = respReader.ReadResult();
                     logEntry.LogResponse(pageText, "html");
@@ -505,7 +505,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
                     RequestThrottleParameters requestThrottleArgs = new RequestThrottleParameters(action, request, progressReporter);
 
                     // Ask for the response
-                    using (IHttpResponseReader responseReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest<HttpRequestSubmitter, IHttpResponseReader>))
+                    using (IHttpResponseReader responseReader = throttler.ExecuteRequest<HttpRequestSubmitter, IHttpResponseReader>(requestThrottleArgs, MakeRequest))
                     {
                         // Read the result
                         string response = responseReader.ReadResult();
@@ -531,7 +531,7 @@ namespace ShipWorks.Stores.Platforms.Shopify
         /// <typeparam name="THttpResponseReader">Needed by the throttler.  The type of the response that will be received by the api via throttler.</typeparam>
         /// <param name="request">The actual request to make.</param>
         /// <returns>HttpResponseReader received from the call</returns>
-        private static IHttpResponseReader MakeRequest<THttpRequestSubmitter, THttpResponseReader>(THttpRequestSubmitter request)
+        private static IHttpResponseReader MakeRequest<THttpRequestSubmitter>(THttpRequestSubmitter request)
             where THttpRequestSubmitter : HttpRequestSubmitter
         {
             if (request == null)
