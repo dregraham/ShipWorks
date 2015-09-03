@@ -144,6 +144,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.InstaStore: return new Platforms.InstanteStore.InstanteStoreStoreType(store);
                 case StoreTypeCode.OrderBot: return new Platforms.OrderBot.OrderBotStoreType(store);
                 case StoreTypeCode.OpenSky: return new Platforms.OpenSky.OpenSkyStoreType(store);
+                case StoreTypeCode.LemonStand: return new Platforms.LemonStand.LemonStandStoreType(store);
             }
 
             throw new InvalidOperationException("Invalid store type.");

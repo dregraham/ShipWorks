@@ -28,11 +28,11 @@ namespace ShipWorks.Data.Model.EntityClasses
 	// __LLBLGENPRO_USER_CODE_REGION_END
 
 	/// <summary>
-	/// Entity class which represents the entity 'ExcludedPackageType'.<br/><br/>
+	/// Entity class which represents the entity 'LemonStandStore'.<br/><br/>
 	/// 
 	/// </summary>
 	[Serializable]
-	public partial class ExcludedPackageTypeEntity : CommonEntityBase, ISerializable
+	public partial class LemonStandStoreEntity : StoreEntity, ISerializable
 		// __LLBLGENPRO_USER_CODE_REGION_START AdditionalInterfaces
 		// __LLBLGENPRO_USER_CODE_REGION_END	
 	{
@@ -51,8 +51,12 @@ namespace ShipWorks.Data.Model.EntityClasses
 		private static Dictionary<string, Dictionary<string, string>>	_fieldsCustomProperties;
 
 		/// <summary>All names of fields mapped onto a relation. Usable for in-memory filtering</summary>
-		public static partial class MemberNames
+		public static new partial class MemberNames
 		{
+
+
+
+
 
 
 
@@ -61,61 +65,55 @@ namespace ShipWorks.Data.Model.EntityClasses
 		#endregion
 		
 		/// <summary> Static CTor for setting up custom property hashtables. Is executed before the first instance of this entity class or derived classes is constructed. </summary>
-		static ExcludedPackageTypeEntity()
+		static LemonStandStoreEntity()
 		{
 			SetupCustomPropertyHashtables();
 		}
 
 		/// <summary> CTor</summary>
-		public ExcludedPackageTypeEntity():base("ExcludedPackageTypeEntity")
+		public LemonStandStoreEntity()
 		{
-			InitClassEmpty(null, CreateFields());
+			SetName("LemonStandStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
 		/// <remarks>For framework usage.</remarks>
 		/// <param name="fields">Fields object to set as the fields for this entity.</param>
-		public ExcludedPackageTypeEntity(IEntityFields2 fields):base("ExcludedPackageTypeEntity")
+		public LemonStandStoreEntity(IEntityFields2 fields):base(fields)
 		{
-			InitClassEmpty(null, fields);
+			SetName("LemonStandStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="validator">The custom validator object for this ExcludedPackageTypeEntity</param>
-		public ExcludedPackageTypeEntity(IValidator validator):base("ExcludedPackageTypeEntity")
+		/// <param name="validator">The custom validator object for this LemonStandStoreEntity</param>
+		public LemonStandStoreEntity(IValidator validator):base(validator)
 		{
-			InitClassEmpty(validator, CreateFields());
+			SetName("LemonStandStoreEntity");
 		}
 				
 
 		/// <summary> CTor</summary>
-		/// <param name="shipmentType">PK value for ExcludedPackageType which data should be fetched into this ExcludedPackageType object</param>
-		/// <param name="packageType">PK value for ExcludedPackageType which data should be fetched into this ExcludedPackageType object</param>
+		/// <param name="storeID">PK value for LemonStandStore which data should be fetched into this LemonStandStore object</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ExcludedPackageTypeEntity(System.Int32 shipmentType, System.Int32 packageType):base("ExcludedPackageTypeEntity")
+		public LemonStandStoreEntity(System.Int64 storeID):base(storeID)
 		{
-			InitClassEmpty(null, CreateFields());
-			this.ShipmentType = shipmentType;
-			this.PackageType = packageType;
+			SetName("LemonStandStoreEntity");
 		}
 
 		/// <summary> CTor</summary>
-		/// <param name="shipmentType">PK value for ExcludedPackageType which data should be fetched into this ExcludedPackageType object</param>
-		/// <param name="packageType">PK value for ExcludedPackageType which data should be fetched into this ExcludedPackageType object</param>
-		/// <param name="validator">The custom validator object for this ExcludedPackageTypeEntity</param>
+		/// <param name="storeID">PK value for LemonStandStore which data should be fetched into this LemonStandStore object</param>
+		/// <param name="validator">The custom validator object for this LemonStandStoreEntity</param>
 		/// <remarks>The entity is not fetched by this constructor. Use a DataAccessAdapter for that.</remarks>
-		public ExcludedPackageTypeEntity(System.Int32 shipmentType, System.Int32 packageType, IValidator validator):base("ExcludedPackageTypeEntity")
+		public LemonStandStoreEntity(System.Int64 storeID, IValidator validator):base(storeID, validator)
 		{
-			InitClassEmpty(validator, CreateFields());
-			this.ShipmentType = shipmentType;
-			this.PackageType = packageType;
+			SetName("LemonStandStoreEntity");
 		}
 
 		/// <summary> Protected CTor for deserialization</summary>
 		/// <param name="info"></param>
 		/// <param name="context"></param>
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		protected ExcludedPackageTypeEntity(SerializationInfo info, StreamingContext context) : base(info, context)
+		protected LemonStandStoreEntity(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 			if(SerializationHelper.Optimization != SerializationOptimization.Fast) 
 			{
@@ -135,7 +133,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <param name="fieldIndex">The fieldindex.</param>
 		protected override void PerformDesyncSetupFKFieldChange(int fieldIndex)
 		{
-			switch((ExcludedPackageTypeFieldIndex)fieldIndex)
+			switch((LemonStandStoreFieldIndex)fieldIndex)
 			{
 				default:
 					base.PerformDesyncSetupFKFieldChange(fieldIndex);
@@ -164,6 +162,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				default:
+						base.SetRelatedEntityProperty(propertyName, entity);
 					break;
 			}
 		}
@@ -173,13 +172,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
 		public override RelationCollection GetRelationsForFieldOfType(string fieldName)
 		{
-			return ExcludedPackageTypeEntity.GetRelationsForField(fieldName);
+			return LemonStandStoreEntity.GetRelationsForField(fieldName);
 		}
 
 		/// <summary>Gets the relation objects which represent the relation the fieldName specified is mapped on. </summary>
 		/// <param name="fieldName">Name of the field mapped onto the relation of which the relation objects have to be obtained.</param>
 		/// <returns>RelationCollection with relation object(s) which represent the relation the field is maped on</returns>
-		public static RelationCollection GetRelationsForField(string fieldName)
+		public static new RelationCollection GetRelationsForField(string fieldName)
 		{
 			RelationCollection toReturn = new RelationCollection();
 			switch(fieldName)
@@ -189,7 +188,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				default:
-
+					toReturn = StoreEntity.GetRelationsForField(fieldName);
 					break;				
 			}
 			return toReturn;
@@ -227,6 +226,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				default:
+					base.SetRelatedEntity(relatedEntity, fieldName);
 					break;
 			}
 		}
@@ -244,6 +244,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 				default:
+					base.UnsetRelatedEntity(relatedEntity, fieldName, signalRelatedEntityManyToOne);
 					break;
 			}
 		}
@@ -254,6 +255,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntity2> toReturn = new List<IEntity2>();
 
+			toReturn.AddRange(base.GetDependingRelatedEntities());
 			return toReturn;
 		}
 		
@@ -265,6 +267,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 			List<IEntity2> toReturn = new List<IEntity2>();
 
 
+			toReturn.AddRange(base.GetDependentRelatedEntities());
 			return toReturn;
 		}
 		
@@ -274,11 +277,34 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			List<IEntityCollection2> toReturn = new List<IEntityCollection2>();
 
-
+			toReturn.AddRange(base.GetMemberEntityCollections());
 			return toReturn;
 		}
 		
-
+		/// <summary>Gets the inheritance info for this entity, if applicable (it's then overriden) or null if not.</summary>
+		/// <returns>InheritanceInfo object if this entity is in a hierarchy of type TargetPerEntity, or null otherwise</returns>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override IInheritanceInfo GetInheritanceInfo()
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetInheritanceInfo("LemonStandStoreEntity", false);
+		}
+		
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public new static IPredicateExpression GetEntityTypeFilter()
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("LemonStandStoreEntity", false);
+		}
+		
+		/// <summary>Gets a predicateexpression which filters on this entity</summary>
+		/// <param name="negate">Flag to produce a NOT filter, (true), or a normal filter (false). </param>
+		/// <returns>ready to use predicateexpression</returns>
+		/// <remarks>Only useful in entity fetches.</remarks>
+		public new static IPredicateExpression GetEntityTypeFilter(bool negate)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().GetEntityTypeFilter("LemonStandStoreEntity", negate);
+		}
 
 		/// <summary>ISerializable member. Does custom serialization so event handlers do not get serialized. Serializes members of this entity class and uses the base class' implementation to serialize the rest.</summary>
 		/// <param name="info"></param>
@@ -303,7 +329,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the current value is NULL, use <see cref="TestCurrentFieldValueForNull"/> for that.</summary>
 		/// <param name="fieldIndex">Index of the field to test if that field was NULL in the persistent storage</param>
 		/// <returns>true if the field with the passed in index was NULL in the persistent storage, false otherwise</returns>
-		public bool TestOriginalFieldValueForNull(ExcludedPackageTypeFieldIndex fieldIndex)
+		public bool TestOriginalFieldValueForNull(LemonStandStoreFieldIndex fieldIndex)
 		{
 			return base.Fields[(int)fieldIndex].IsNull;
 		}
@@ -312,17 +338,25 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// Should not be used for testing if the original value (read from the db) is NULL</summary>
 		/// <param name="fieldIndex">Index of the field to test if its currentvalue is null/undefined</param>
 		/// <returns>true if the field's value isn't defined yet, false otherwise</returns>
-		public bool TestCurrentFieldValueForNull(ExcludedPackageTypeFieldIndex fieldIndex)
+		public bool TestCurrentFieldValueForNull(LemonStandStoreFieldIndex fieldIndex)
 		{
 			return base.CheckIfCurrentFieldValueIsNull((int)fieldIndex);
 		}
-
+		
+		/// <summary>Determines whether this entity is a subType of the entity represented by the passed in enum value, which represents a value in the ShipWorks.Data.Model.EntityType enum</summary>
+		/// <param name="typeOfEntity">Type of entity.</param>
+		/// <returns>true if the passed in type is a supertype of this entity, otherwise false</returns>
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override bool CheckIfIsSubTypeOf(int typeOfEntity)
+		{
+			return InheritanceInfoProviderSingleton.GetInstance().CheckIfIsSubTypeOf("LemonStandStoreEntity", ((ShipWorks.Data.Model.EntityType)typeOfEntity).ToString());
+		}
 				
 		/// <summary>Gets a list of all the EntityRelation objects the type of this instance has.</summary>
 		/// <returns>A list of all the EntityRelation objects the type of this instance has. Hierarchy relations are excluded.</returns>
 		public override List<IEntityRelation> GetAllRelations()
 		{
-			return new ExcludedPackageTypeRelations().GetAllRelations();
+			return new LemonStandStoreRelations().GetAllRelations();
 		}
 		
 
@@ -332,9 +366,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 	
 		
 		/// <summary>Creates entity fields object for this entity. Used in constructor to setup this entity in a polymorphic scenario.</summary>
-		protected virtual IEntityFields2 CreateFields()
+		protected override IEntityFields2 CreateFields()
 		{
-			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.ExcludedPackageTypeEntity);
+			return EntityFieldsFactory.CreateEntityFieldsObject(ShipWorks.Data.Model.EntityType.LemonStandStoreEntity);
 		}
 
 		/// <summary>
@@ -349,7 +383,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary>Creates a new instance of the factory related to this entity</summary>
 		protected override IEntityFactory2 CreateEntityFactory()
 		{
-			return EntityFactoryCache2.GetEntityFactory(typeof(ExcludedPackageTypeEntityFactory));
+			return EntityFactoryCache2.GetEntityFactory(typeof(LemonStandStoreEntityFactory));
 		}
 #if !CF
 		/// <summary>Adds the member collections to the collections queue (base first)</summary>
@@ -395,7 +429,7 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <returns>Dictionary with per name the related referenced data element, which can be an entity collection or an entity or null</returns>
 		public override Dictionary<string, object> GetRelatedData()
 		{
-			Dictionary<string, object> toReturn = new Dictionary<string, object>();
+			Dictionary<string, object> toReturn = base.GetRelatedData();
 
 
 
@@ -410,21 +444,22 @@ namespace ShipWorks.Data.Model.EntityClasses
 
 
 
+			base.AddInternalsToContext();
 		}
 
 		/// <summary> Initializes the class members</summary>
-		protected virtual void InitClassMembers()
+		protected override void InitClassMembers()
 		{
+			base.InitClassMembers();
 
 
 
 
 
-			PerformDependencyInjection();
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassMembers
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			OnInitClassMembersComplete();
+
 		}
 
 		#region Custom Property Hashtable Setup
@@ -437,43 +472,46 @@ namespace ShipWorks.Data.Model.EntityClasses
 			Dictionary<string, string> fieldHashtable = null;
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("ShipmentType", fieldHashtable);
+			_fieldsCustomProperties.Add("StoreID", fieldHashtable);
 			fieldHashtable = new Dictionary<string, string>();
 
-			_fieldsCustomProperties.Add("PackageType", fieldHashtable);
+			_fieldsCustomProperties.Add("APIKey", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("Token", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("StoreURL", fieldHashtable);
 		}
 		#endregion
 
 
 
 		/// <summary> Initializes the class with empty data, as if it is a new Entity.</summary>
-		/// <param name="validator">The validator object for this ExcludedPackageTypeEntity</param>
+		/// <param name="validator">The validator object for this LemonStandStoreEntity</param>
 		/// <param name="fields">Fields of this entity</param>
-		protected virtual void InitClassEmpty(IValidator validator, IEntityFields2 fields)
+		protected override void InitClassEmpty(IValidator validator, IEntityFields2 fields)
 		{
-			OnInitializing();
-			base.Fields = fields;
-			base.IsNew=true;
-			base.Validator = validator;
-			InitClassMembers();
+
+			base.InitClassEmpty(validator, fields);
 
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START InitClassEmpty
 			// __LLBLGENPRO_USER_CODE_REGION_END
 
-			OnInitialized();
+
 		}
 
 		#region Class Property Declarations
 		/// <summary> The relations object holding all relations of this entity with other entity classes.</summary>
-		public  static ExcludedPackageTypeRelations Relations
+		public new static LemonStandStoreRelations Relations
 		{
-			get	{ return new ExcludedPackageTypeRelations(); }
+			get	{ return new LemonStandStoreRelations(); }
 		}
 		
 		/// <summary> The custom properties for this entity type.</summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
-		public  static Dictionary<string, string> CustomProperties
+		public new static Dictionary<string, string> CustomProperties
 		{
 			get { return _customProperties;}
 		}
@@ -487,13 +525,13 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, string> CustomPropertiesOfType
 		{
-			get { return ExcludedPackageTypeEntity.CustomProperties;}
+			get { return LemonStandStoreEntity.CustomProperties;}
 		}
 
 		/// <summary> The custom properties for the fields of this entity type. The returned Hashtable contains per fieldname a hashtable of name-value
 		/// pairs. </summary>
 		/// <remarks>The data returned from this property should be considered read-only: it is not thread safe to alter this data at runtime.</remarks>
-		public  static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
+		public new static Dictionary<string, Dictionary<string, string>> FieldsCustomProperties
 		{
 			get { return _fieldsCustomProperties;}
 		}
@@ -503,29 +541,51 @@ namespace ShipWorks.Data.Model.EntityClasses
 		[Browsable(false), XmlIgnore]
 		public override Dictionary<string, Dictionary<string, string>> FieldsCustomPropertiesOfType
 		{
-			get { return ExcludedPackageTypeEntity.FieldsCustomProperties;}
+			get { return LemonStandStoreEntity.FieldsCustomProperties;}
 		}
 
-		/// <summary> The ShipmentType property of the Entity ExcludedPackageType<br/><br/>
+		/// <summary> The StoreID property of the Entity LemonStandStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ExcludedPackageType"."ShipmentType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// <remarks>Mapped on  table field: "LemonStandStore"."StoreID"<br/>
+		/// Table field type characteristics (type, precision, scale, length): BigInt, 19, 0, 0<br/>
 		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int32 ShipmentType
+		public override System.Int64 StoreID
 		{
-			get { return (System.Int32)GetValue((int)ExcludedPackageTypeFieldIndex.ShipmentType, true); }
-			set	{ SetValue((int)ExcludedPackageTypeFieldIndex.ShipmentType, value); }
+			get { return (System.Int64)GetValue((int)LemonStandStoreFieldIndex.StoreID, true); }
+			set	{ SetValue((int)LemonStandStoreFieldIndex.StoreID, value); }
 		}
 
-		/// <summary> The PackageType property of the Entity ExcludedPackageType<br/><br/>
+		/// <summary> The APIKey property of the Entity LemonStandStore<br/><br/>
 		/// </summary>
-		/// <remarks>Mapped on  table field: "ExcludedPackageType"."PackageType"<br/>
-		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
-		/// Table field behavior characteristics (is nullable, is PK, is identity): false, true, false</remarks>
-		public virtual System.Int32 PackageType
+		/// <remarks>Mapped on  table field: "LemonStandStore"."APIKey"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String APIKey
 		{
-			get { return (System.Int32)GetValue((int)ExcludedPackageTypeFieldIndex.PackageType, true); }
-			set	{ SetValue((int)ExcludedPackageTypeFieldIndex.PackageType, value); }
+			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.APIKey, true); }
+			set	{ SetValue((int)LemonStandStoreFieldIndex.APIKey, value); }
+		}
+
+		/// <summary> The Token property of the Entity LemonStandStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "LemonStandStore"."Token"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String Token
+		{
+			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.Token, true); }
+			set	{ SetValue((int)LemonStandStoreFieldIndex.Token, value); }
+		}
+
+		/// <summary> The StoreURL property of the Entity LemonStandStore<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "LemonStandStore"."StoreURL"<br/>
+		/// Table field type characteristics (type, precision, scale, length): VarChar, 0, 0, 255<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): false, false, false</remarks>
+		public virtual System.String StoreURL
+		{
+			get { return (System.String)GetValue((int)LemonStandStoreFieldIndex.StoreURL, true); }
+			set	{ SetValue((int)LemonStandStoreFieldIndex.StoreURL, value); }
 		}
 
 
@@ -536,20 +596,20 @@ namespace ShipWorks.Data.Model.EntityClasses
 		/// <summary> Gets the type of the hierarchy this entity is in. </summary>
 		protected override InheritanceHierarchyType LLBLGenProIsInHierarchyOfType
 		{
-			get { return InheritanceHierarchyType.None;}
+			get { return InheritanceHierarchyType.TargetPerEntity;}
 		}
 		
 		/// <summary> Gets or sets a value indicating whether this entity is a subtype</summary>
 		protected override bool LLBLGenProIsSubType
 		{
-			get { return false;}
+			get { return true;}
 		}
 		
 		/// <summary>Returns the ShipWorks.Data.Model.EntityType enum value for this entity.</summary>
 		[Browsable(false), XmlIgnore]
 		public override int LLBLGenProEntityTypeValue 
 		{ 
-			get { return (int)ShipWorks.Data.Model.EntityType.ExcludedPackageTypeEntity; }
+			get { return (int)ShipWorks.Data.Model.EntityType.LemonStandStoreEntity; }
 		}
 		#endregion
 

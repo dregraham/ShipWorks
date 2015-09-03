@@ -1100,6 +1100,24 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandOrder.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandAccountSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandAccountSettingsControl.Designer.cs">
+      <DependentUpon>LemonStandAccountSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandDownloader.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandException.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandOrderIdentifier.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandStoreType.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandWebClient.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\WizardPages\LemonStandAccountPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Stores\Platforms\LemonStand\WizardPages\LemonStandAccountPage.Designer.cs">
+      <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stores\Platforms\Newegg\Enums\NeweggChannelType.cs" />
     <Compile Include="Stores\Platforms\OpenSky\OpenSkyStoreType.cs" />
     <Compile Include="Stores\Platforms\OrderBot\OrderBotStoreType.cs" />
@@ -7775,6 +7793,12 @@
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\LemonStand\LemonStandAccountSettingsControl.resx">
+      <DependentUpon>LemonStandAccountSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Stores\Platforms\LemonStand\WizardPages\LemonStandAccountPage.resx">
+      <DependentUpon>LemonStandAccountPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Controls\ResizingRichTextBox.resx">
       <DependentUpon>ResizingRichTextBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -11264,6 +11288,7 @@
     <None Include="Resources\instastore.png" />
     <None Include="Resources\choxi.png" />
     <None Include="Resources\instantestore.png" />
+    <None Include="Resources\lemonstand.png" />
     <Content Include="Resources\message32.png" />
     <Content Include="Resources\message_ok.png" />
     <None Include="Resources\note2_32.png" />

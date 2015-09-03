@@ -90,6 +90,8 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddEntityInfo("GrouponStoreEntity", "StoreEntity", new GrouponStoreRelations(), new GrouponStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("InfopiaOrderItemEntity", "OrderItemEntity", new InfopiaOrderItemRelations(), new InfopiaOrderItemEntityFactory(),  (18-18));
 			base.AddEntityInfo("InfopiaStoreEntity", "StoreEntity", new InfopiaStoreRelations(), new InfopiaStoreEntityFactory(),  (30-30));
+			base.AddEntityInfo("LemonStandOrderEntity", "OrderEntity", new LemonStandOrderRelations(), new LemonStandOrderEntityFactory(),  (73-73));
+			base.AddEntityInfo("LemonStandStoreEntity", "StoreEntity", new LemonStandStoreRelations(), new LemonStandStoreEntityFactory(),  (30-30));
 			base.AddEntityInfo("MagentoOrderEntity", "OrderEntity", new MagentoOrderRelations(), new MagentoOrderEntityFactory(),  (73-73));
 			base.AddEntityInfo("MagentoStoreEntity", "GenericModuleStoreEntity", new MagentoStoreRelations(), new MagentoStoreEntityFactory(),  (50-50));
 			base.AddEntityInfo("MarketplaceAdvisorOrderEntity", "OrderEntity", new MarketplaceAdvisorOrderRelations(), new MarketplaceAdvisorOrderEntityFactory(),  (73-73));

@@ -1908,7 +1908,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedPackageType
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -1920,7 +1919,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewExcludedPackageTypeUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -3215,6 +3213,96 @@ namespace ShipWorks.Data.Model.FactoryClasses
 		}
 		
 
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty LemonStandOrderEntity objects.</summary>
+	[Serializable]
+	public partial class LemonStandOrderEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public LemonStandOrderEntityFactory() : base("LemonStandOrderEntity", ShipWorks.Data.Model.EntityType.LemonStandOrderEntity) { }
+
+		/// <summary>Creates a new, empty LemonStandOrderEntity object.</summary>
+		/// <returns>A new, empty LemonStandOrderEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new LemonStandOrderEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrder
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new LemonStandOrderEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new LemonStandOrderEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<LemonStandOrderEntity>(this);
+		}
+		
+		/// <summary>Creates the hierarchy fields for the entity to which this factory belongs.</summary>
+		/// <returns>IEntityFields2 object with the fields of all the entities in teh hierarchy of this entity or the fields of this entity if the entity isn't in a hierarchy.</returns>
+		public override IEntityFields2 CreateHierarchyFields() 
+		{
+			return new EntityFields2(InheritanceInfoProviderSingleton.GetInstance().GetHierarchyFields("LemonStandOrderEntity"), InheritanceInfoProviderSingleton.GetInstance(), null);
+		}
+		#region Included Code
+
+		#endregion
+	}	
+	/// <summary>Factory to create new, empty LemonStandStoreEntity objects.</summary>
+	[Serializable]
+	public partial class LemonStandStoreEntityFactory : EntityFactoryBase2 {
+		/// <summary>CTor</summary>
+		public LemonStandStoreEntityFactory() : base("LemonStandStoreEntity", ShipWorks.Data.Model.EntityType.LemonStandStoreEntity) { }
+
+		/// <summary>Creates a new, empty LemonStandStoreEntity object.</summary>
+		/// <returns>A new, empty LemonStandStoreEntity object.</returns>
+		public override IEntity2 Create() {
+			IEntity2 toReturn = new LemonStandStoreEntity();
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandStore
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new LemonStandStoreEntity instance but uses a special constructor which will set the Fields object of the new IEntity2 instance to the passed in fields object.</summary>
+		/// <param name="fields">Populated IEntityFields2 object for the new IEntity2 to create</param>
+		/// <returns>Fully created and populated (due to the IEntityFields2 object) IEntity2 object</returns>
+		public override IEntity2 Create(IEntityFields2 fields) {
+			IEntity2 toReturn = new LemonStandStoreEntity(fields);
+			
+			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandStoreUsingFields
+			// __LLBLGENPRO_USER_CODE_REGION_END
+			return toReturn;
+		}
+		
+		/// <summary>Creates a new generic EntityCollection(Of T) for the entity to which this factory belongs.</summary>
+		/// <returns>ready to use generic EntityCollection(Of T) with this factory set as the factory</returns>
+		public override IEntityCollection2 CreateEntityCollection()
+		{
+			return new EntityCollection<LemonStandStoreEntity>(this);
+		}
+		
+		/// <summary>Creates the hierarchy fields for the entity to which this factory belongs.</summary>
+		/// <returns>IEntityFields2 object with the fields of all the entities in teh hierarchy of this entity or the fields of this entity if the entity isn't in a hierarchy.</returns>
+		public override IEntityFields2 CreateHierarchyFields() 
+		{
+			return new EntityFields2(InheritanceInfoProviderSingleton.GetInstance().GetHierarchyFields("LemonStandStoreEntity"), InheritanceInfoProviderSingleton.GetInstance(), null);
+		}
 		#region Included Code
 
 		#endregion
@@ -7142,6 +7230,12 @@ namespace ShipWorks.Data.Model.FactoryClasses
 					break;
 				case ShipWorks.Data.Model.EntityType.LabelSheetEntity:
 					factoryToUse = new LabelSheetEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderEntity:
+					factoryToUse = new LemonStandOrderEntityFactory();
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
+					factoryToUse = new LemonStandStoreEntityFactory();
 					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					factoryToUse = new MagentoOrderEntityFactory();

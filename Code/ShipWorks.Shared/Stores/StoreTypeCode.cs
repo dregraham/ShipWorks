@@ -349,6 +349,11 @@ namespace ShipWorks.Stores
         [Description("OpenSky")]
         [StoreTypeIdentity("OPENSKY", "SKY")]
         [StoreTypeIcon("opensky")]
-        OpenSky = 67
+        OpenSky = 67,
+        
+        [Description("LemonStand")]
+        [StoreTypeIdentity("LEMONSTAND", "LEM")]
+        [StoreTypeIcon("lemonstand")]
+        LemonStand = 68
     }
 }

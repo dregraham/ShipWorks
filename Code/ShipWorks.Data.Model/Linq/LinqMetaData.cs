@@ -292,6 +292,12 @@ namespace ShipWorks.Data.Model.Linq
 				case ShipWorks.Data.Model.EntityType.LabelSheetEntity:
 					toReturn = this.LabelSheet;
 					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandOrderEntity:
+					toReturn = this.LemonStandOrder;
+					break;
+				case ShipWorks.Data.Model.EntityType.LemonStandStoreEntity:
+					toReturn = this.LemonStandStore;
+					break;
 				case ShipWorks.Data.Model.EntityType.MagentoOrderEntity:
 					toReturn = this.MagentoOrder;
 					break;
@@ -1029,6 +1035,18 @@ namespace ShipWorks.Data.Model.Linq
 		public DataSource2<LabelSheetEntity> LabelSheet
 		{
 			get { return new DataSource2<LabelSheetEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandOrderEntity instances in the database.</summary>
+		public DataSource2<LemonStandOrderEntity> LemonStandOrder
+		{
+			get { return new DataSource2<LemonStandOrderEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
+		}
+		
+		/// <summary>returns the datasource to use in a Linq query when targeting LemonStandStoreEntity instances in the database.</summary>
+		public DataSource2<LemonStandStoreEntity> LemonStandStore
+		{
+			get { return new DataSource2<LemonStandStoreEntity>(_adapterToUse, new ElementCreator(), _customFunctionMappings, _contextToUse); }
 		}
 		
 		/// <summary>returns the datasource to use in a Linq query when targeting MagentoOrderEntity instances in the database.</summary>
