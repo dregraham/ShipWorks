@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Interapptive.Shared.Utility;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
@@ -46,8 +47,6 @@ namespace ShipWorks.ApplicationCore
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterAssemblyModules(assemblies);
-
             builder.RegisterType<StoreManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
@@ -63,6 +62,12 @@ namespace ShipWorks.ApplicationCore
             builder.RegisterType<DateTimeProvider>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterGeneric(typeof(AccountManagerBase<>))
+                .AsSelf()
+                .SingleInstance();
+
+            builder.RegisterAssemblyModules(assemblies);
 
             current = builder.Build();
         }

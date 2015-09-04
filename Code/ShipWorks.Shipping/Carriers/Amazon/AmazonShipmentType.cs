@@ -60,7 +60,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon
         /// Get the carrier specific description of the shipping service used. The carrier specific data must already exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment) =>
+        public override string GetServiceDescription(ShipmentEntity shipment) => 
             $"{shipment.Amazon.CarrierName} {shipment.Amazon.ShippingServiceName}";
 
         /// <summary>

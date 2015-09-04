@@ -558,10 +558,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual void OnWeightChanged()
         {
-            if (WeightChanged != null)
-            {
-                WeightChanged(this, EventArgs.Empty);
-            }
+            WeightChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.ApplicationCore.Services;
 using NDesk.Options;
 using System.Collections.Generic;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks
 {
@@ -99,6 +100,8 @@ namespace ShipWorks
             MessageHelper.Initialize("ShipWorks");
 
             SetupUnhandledExceptionHandling();
+
+            AuditDisplayFormatAttribute.Register();
 
             try
             {

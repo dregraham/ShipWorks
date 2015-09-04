@@ -61,7 +61,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Api
             ShippingServiceList serviceList = response.GetEligibleShippingServicesResult.ShippingServiceList;
             foreach (ShippingService shippingService in serviceList.ShippingService.Where(x => x.Rate != null))
             {
-                AmazonRateTag tag = new AmazonRateTag() { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
+                AmazonRateTag tag = new AmazonRateTag { ShippingServiceId = shippingService.ShippingServiceId, ShippingServiceOfferId = shippingService.ShippingServiceOfferId };
                 RateResult rateResult = new RateResult(shippingService.ShippingServiceName ?? "Unknown", "", shippingService.Rate.Amount, tag);
                 rateResult.ProviderLogo = GetProviderLogo(shippingService.CarrierName ?? string.Empty);
                 rateResults.Add(rateResult);

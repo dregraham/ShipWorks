@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using Interapptive.Shared.Utility;
+using ShipWorks.Users.Audit;
 
 namespace ShipWorks.Shipping.Carriers.Amazon.Enums
 {
@@ -8,6 +9,7 @@ namespace ShipWorks.Shipping.Carriers.Amazon.Enums
     /// Valid Amazon delivery experience values
     /// </summary>
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = false, StripAfterObfuscation = false)]
+    [AuditDisplayFormat(AuditDisplayFormat.Formats.AmazonDeliveryExperienceType)]
     public enum AmazonDeliveryExperienceType
     {
         [Description("No Tracking")]

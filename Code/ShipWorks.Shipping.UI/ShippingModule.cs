@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Carriers.Amazon;
 using ShipWorks.Shipping.Carriers.Amazon.Api;
 using ShipWorks.Shipping.Editing;
@@ -44,6 +46,7 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<AmazonAccountManager>()
                 .AsImplementedInterfaces()
+                .As<AccountManagerBase<AmazonAccountEntity>>()
                 .SingleInstance();
 
             builder.RegisterType<AmazonServiceControl>()
