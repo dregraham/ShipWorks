@@ -82,7 +82,6 @@ namespace ShipWorks.Data
             entitySeedValues[EntityType.UpsAccountEntity] = 56;
             entitySeedValues[EntityType.FedExPackageEntity] = 61;
             entitySeedValues[EntityType.EndiciaAccountEntity] = 66;
-            entitySeedValues[EntityType.AmazonAccountEntity] = 70;
             entitySeedValues[EntityType.ScanFormBatchEntity] = 95;
             entitySeedValues[EntityType.ServiceStatusEntity] = 96;
         }

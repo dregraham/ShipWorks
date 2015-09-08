@@ -208,55 +208,6 @@ namespace ShipWorks.Data.Model
 
 
 	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonAccount.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonAccountFieldIndex:int
-	{
-		///<summary>AmazonAccountID. </summary>
-		AmazonAccountID,
-		///<summary>RowVersion. </summary>
-		RowVersion,
-		///<summary>MerchantID. </summary>
-		MerchantID,
-		///<summary>AuthToken. </summary>
-		AuthToken,
-		///<summary>Description. </summary>
-		Description,
-		///<summary>FirstName. </summary>
-		FirstName,
-		///<summary>MiddleName. </summary>
-		MiddleName,
-		///<summary>LastName. </summary>
-		LastName,
-		///<summary>Company. </summary>
-		Company,
-		///<summary>Street1. </summary>
-		Street1,
-		///<summary>Street2. </summary>
-		Street2,
-		///<summary>Street3. </summary>
-		Street3,
-		///<summary>City. </summary>
-		City,
-		///<summary>StateProvCode. </summary>
-		StateProvCode,
-		///<summary>PostalCode. </summary>
-		PostalCode,
-		///<summary>CountryCode. </summary>
-		CountryCode,
-		///<summary>Phone. </summary>
-		Phone,
-		///<summary>Email. </summary>
-		Email,
-		///<summary>Website. </summary>
-		Website,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
 	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonASIN.
 	/// </summary>
     [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
@@ -494,53 +445,6 @@ namespace ShipWorks.Data.Model
 		ASIN,
 		///<summary>ConditionNote. </summary>
 		ConditionNote,
-		/// <summary></summary>
-		AmountOfFields
-	}
-
-
-	/// <summary>
-	/// Index enum to fast-access EntityFields in the IEntityFields collection for the entity: AmazonShipment.
-	/// </summary>
-    [Obfuscation(Feature = "PreserveLiteralFields", Exclude = false, StripAfterObfuscation = false)]
-	public enum AmazonShipmentFieldIndex:int
-	{
-		///<summary>ShipmentID. </summary>
-		ShipmentID,
-		///<summary>AmazonAccountID. </summary>
-		AmazonAccountID,
-		///<summary>CarrierName. </summary>
-		CarrierName,
-		///<summary>ShippingServiceName. </summary>
-		ShippingServiceName,
-		///<summary>ShippingServiceID. </summary>
-		ShippingServiceID,
-		///<summary>ShippingServiceOfferID. </summary>
-		ShippingServiceOfferID,
-		///<summary>InsuranceValue. </summary>
-		InsuranceValue,
-		///<summary>DimsProfileID. </summary>
-		DimsProfileID,
-		///<summary>DimsLength. </summary>
-		DimsLength,
-		///<summary>DimsWidth. </summary>
-		DimsWidth,
-		///<summary>DimsHeight. </summary>
-		DimsHeight,
-		///<summary>DimsWeight. </summary>
-		DimsWeight,
-		///<summary>DimsAddWeight. </summary>
-		DimsAddWeight,
-		///<summary>DateMustArriveBy. </summary>
-		DateMustArriveBy,
-		///<summary>DeliveryExperience. </summary>
-		DeliveryExperience,
-		///<summary>CarrierWillPickUp. </summary>
-		CarrierWillPickUp,
-		///<summary>DeclaredValue. </summary>
-		DeclaredValue,
-		///<summary>AmazonUniqueShipmentID. </summary>
-		AmazonUniqueShipmentID,
 		/// <summary></summary>
 		AmountOfFields
 	}
@@ -10547,16 +10451,12 @@ namespace ShipWorks.Data.Model
 		ActionQueueStepEntity,
 		///<summary>ActionTask</summary>
 		ActionTaskEntity,
-		///<summary>AmazonAccount</summary>
-		AmazonAccountEntity,
 		///<summary>AmazonASIN</summary>
 		AmazonASINEntity,
 		///<summary>AmazonOrder</summary>
 		AmazonOrderEntity,
 		///<summary>AmazonOrderItem</summary>
 		AmazonOrderItemEntity,
-		///<summary>AmazonShipment</summary>
-		AmazonShipmentEntity,
 		///<summary>AmazonStore</summary>
 		AmazonStoreEntity,
 		///<summary>AmeriCommerceStore</summary>

@@ -180,9 +180,8 @@ namespace ShipWorks.Shipping
                 case ShipmentTypeCode.Express1Endicia: return 9;
                 case ShipmentTypeCode.OnTrac: return 10;
                 case ShipmentTypeCode.iParcel: return 11;
-                case ShipmentTypeCode.Amazon: return 12;
-                case ShipmentTypeCode.Other: return 13;
-                case ShipmentTypeCode.None: return 14;
+                case ShipmentTypeCode.Other: return 12;
+                case ShipmentTypeCode.None: return 13;
             }
 
             throw new InvalidOperationException("Unhandled shipment type in GetSortValue");
