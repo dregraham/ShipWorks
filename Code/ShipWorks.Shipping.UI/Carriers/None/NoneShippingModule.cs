@@ -1,15 +1,13 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Carriers.None;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Editing;
-using ShipWorks.Shipping.UI.Carriers.Other;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping.UI.Carriers.None
 {
     /// <summary>
-    /// IoC registration module for this assembly
+    /// IoC registration module for the None shipment type
     /// </summary>
-    public class ShippingModule : Module
+    public class NoneShippingModule : Module
     {
         /// <summary>
         /// Load the module configuration

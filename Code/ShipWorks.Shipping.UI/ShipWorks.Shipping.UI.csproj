@@ -88,6 +88,26 @@
     <Compile Include="Carriers\None\NoneServiceControl.Designer.cs">
       <DependentUpon>NoneServiceControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\None\NoneShippingModule.cs" />
+    <Compile Include="Carriers\Other\OtherProfileControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherProfileControl.Designer.cs">
+      <DependentUpon>OtherProfileControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherServiceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherServiceControl.Designer.cs">
+      <DependentUpon>OtherServiceControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherSetupWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherSetupWizard.Designer.cs">
+      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShippingModule.cs" />
   </ItemGroup>
@@ -134,6 +154,15 @@
   <ItemGroup>
     <EmbeddedResource Include="Carriers\None\NoneServiceControl.resx">
       <DependentUpon>NoneServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherProfileControl.resx">
+      <DependentUpon>OtherProfileControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherServiceControl.resx">
+      <DependentUpon>OtherServiceControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
+      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

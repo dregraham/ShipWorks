@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping.Carriers.Other
     /// <summary>
     /// "Other" (custom) ShipmentType implementation
     /// </summary>
-    class OtherShipmentType : ShipmentType
+    public class OtherShipmentType : ShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value
@@ -37,32 +37,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         public override ShipmentTypeCode ShipmentTypeCode
         {
             get { return ShipmentTypeCode.Other; }
-        }
-
-        /// <summary>
-        /// Create the Setup Wizard used to setup the "Other" shipment type
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new OtherSetupWizard();
-        }
-
-        /// <summary>
-        /// Create the control needed to edit service options for the type
-        /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
-        {
-            return new OtherServiceControl(rateControl);
-        }
-
-        /// <summary>
-        /// Create the control needed to edit the profile settings for the type
-        /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new OtherProfileControl();
         }
 
         /// <summary>

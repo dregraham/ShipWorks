@@ -858,8 +858,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4691,18 +4689,6 @@
     <Compile Include="Shipping\Settings\ShipmentAutomationControl.Designer.cs">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.Designer.cs">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.Designer.cs">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalConfirmationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsContentType.cs" />
     <Compile Include="Shipping\Settings\Origin\ShipmentOriginControl.cs">
@@ -4992,13 +4978,6 @@
     <Compile Include="Shipping\Carriers\MultiSelectServiceControl.Designer.cs">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.Designer.cs">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManager.cs" />
     <Compile Include="Shipping\Settings\ShipmentBlankPhoneOption.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResult.cs" />
@@ -9096,15 +9075,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShipmentAutomationControl.resx">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherProfileControl.resx">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherServiceControl.resx">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherSetupWizard.resx">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\Origin\ShipmentOriginControl.resx">
       <DependentUpon>ShipmentOriginControl.cs</DependentUpon>

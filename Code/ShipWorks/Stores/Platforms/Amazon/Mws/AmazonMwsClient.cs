@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -18,11 +17,9 @@ using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Stores.Communication.Throttling;
-using ShipWorks.Stores.Platforms.BigCommerce;
 using log4net;
 
 namespace ShipWorks.Stores.Platforms.Amazon.Mws

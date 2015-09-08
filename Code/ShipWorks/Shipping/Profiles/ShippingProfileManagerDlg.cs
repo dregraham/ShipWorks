@@ -15,6 +15,8 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.UI;
 using ShipWorks.ApplicationCore.MessageBoxes;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Profiles
 {
@@ -178,12 +180,7 @@ namespace ShipWorks.Shipping.Profiles
             ShippingProfileEntity profile = (ShippingProfileEntity) sandGrid.SelectedElements[0].Tag;
             initialProfileID = profile.ShippingProfileID;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
-            {
-                dlg.ShowDialog(this);
-
-                LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
-            }
+            EditProfile(profile);
         }
 
         /// <summary>
@@ -204,15 +201,7 @@ namespace ShipWorks.Shipping.Profiles
             profile.ShipmentType = (int) SelectedShipmentType;
             profile.ShipmentTypePrimary = false;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
-            {
-                if (dlg.ShowDialog(this) == DialogResult.OK)
-                {
-                    initialProfileID = profile.ShippingProfileID;
-
-                    LoadProfiles((ShipmentTypeCode) profile.ShipmentType);
-                }
-            }
+            EditProfile(profile);
         }
 
         /// <summary>
@@ -242,6 +231,22 @@ namespace ShipWorks.Shipping.Profiles
 
             ShippingProfileManager.CheckForChangesNeeded();
             LoadProfiles();
+        }
+
+        /// <summary>
+        /// Edit the specified profile
+        /// </summary>
+        private void EditProfile(ShippingProfileEntity profile)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile, lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
+            }
+
+            LoadProfiles((ShipmentTypeCode)profile.ShipmentType);
         }
     }
 }

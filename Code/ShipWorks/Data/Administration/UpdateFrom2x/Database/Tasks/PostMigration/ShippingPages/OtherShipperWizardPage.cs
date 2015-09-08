@@ -1,20 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.UI.Wizard;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data.Model.EntityClasses;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 using ShipWorks.Data.Adapter.Custom;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigration.ShippingPages
 {
@@ -59,14 +51,17 @@ namespace ShipWorks.Data.Administration.UpdateFrom2x.Database.Tasks.PostMigratio
         /// </summary>
         private void OnConfigureClick(object sender, EventArgs e)
         {
-            using (OtherSetupWizard wizard = new OtherSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                if (wizard.ShowDialog(this) == DialogResult.OK)
+                using (ShipmentTypeSetupWizardForm wizard = lifetimeScope.ResolveKeyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Other))
                 {
-                    // record that Other is now configured
-                    ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
+                    if (wizard.ShowDialog(this) == DialogResult.OK)
+                    {
+                        // record that Other is now configured
+                        ShippingSettings.MarkAsConfigured(ShipmentTypeCode.Other);
 
-                    ShowConfiguredUI();
+                        ShowConfiguredUI();
+                    }
                 }
             }
         }

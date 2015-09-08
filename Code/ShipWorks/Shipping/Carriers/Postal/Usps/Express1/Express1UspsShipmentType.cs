@@ -117,11 +117,11 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Express1
 
             return new Express1SetupWizard(postageDialog, accountManagerControl, optionsControl, registration, UspsAccountManager.Express1Accounts);
         }
-        
+
         /// <summary>
         /// Create the UserControl used to handle USPS w/ Express1 profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new Express1UspsProfileControl();
         }
