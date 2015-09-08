@@ -2570,6 +2570,10 @@ namespace ShipWorks
                 MessageHelper.ShowMessage(this, "The customer has been deleted.");
             }
 
+            // Activate the orders grid
+            dockableWindowOrderFilters.Open();
+            orderFilterTree.Focus();
+
             // Ensure the customer grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(customer));
