@@ -46,9 +46,9 @@ namespace ShipWorks.Common.Threading
 
         #region class OperationState
 
-        class OperationState<U>
+        class OperationState<TState>
         {
-            public List<U> Items;
+            public List<TState> Items;
             public object UserState;
 
             public ProgressProvider ProgressProvider;
@@ -56,7 +56,7 @@ namespace ShipWorks.Common.Threading
             public Func<IProgressReporter, List<T>> Initializer;
             public ProgressItem InitializerProgress;
 
-            public BackgroundExecutorCallback<U> Worker;
+            public BackgroundExecutorCallback<TState> Worker;
             public ProgressItem WorkProgress;
 
             public ProgressDisplayDelayer DisplayDelayer;

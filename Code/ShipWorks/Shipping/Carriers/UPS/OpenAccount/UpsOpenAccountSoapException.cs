@@ -5,41 +5,35 @@ using System.Xml.Linq;
 using System;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
 {
     [Serializable]
     public class UpsOpenAccountSoapException : CarrierException
     {
-        private string message;
-
         /// <summary>
         /// Constructor
         /// </summary>
-        public UpsOpenAccountSoapException(SoapException soapFault)
-            :
-                base(string.Empty, soapFault)
+        public UpsOpenAccountSoapException(SoapException soapFault) :
+            base(ParseException(soapFault), soapFault)
         {
-            ParseException(soapFault);
+
         }
 
         /// <summary>
-        /// The user displayable exception message
+        /// Serialization constructor
         /// </summary>
-        public override string Message
-        {
-            get
-            {
-                return message;
-            }
-        }
+        protected UpsOpenAccountSoapException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
+        { }
 
         /// <summary>
         /// Extract the numeric errror code from the USPS exception
         /// </summary>
-        private void ParseException(SoapException ex)
+        private static string ParseException(SoapException ex)
         {
-            message = "";
+            string message = "";
 
             if (ex.Detail != null && ex.Detail.FirstChild != null)
             {
@@ -97,6 +91,8 @@ namespace ShipWorks.Shipping.Carriers.UPS.OpenAccount
                     message += ".";
                 }
             }
+
+            return message;
         }
     }
 }
