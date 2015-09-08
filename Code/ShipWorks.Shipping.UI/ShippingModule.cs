@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Carriers.None;
+using ShipWorks.Shipping.Editing;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -12,7 +14,15 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            // Add any shipping module IoC registrations here
+            builder.RegisterType<NoneShipmentType>()
+                .Keyed<ShipmentType>(ShipmentTypeCode.None);
+
+            builder.RegisterType<NoneServiceControl>()
+                .Keyed<ServiceControlBase>(ShipmentTypeCode.None);
+
+            builder.RegisterType<NoneShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.None)
+                .SingleInstance();
         }
     }
 }

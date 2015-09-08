@@ -9,7 +9,6 @@ using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
-using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.BestRate;
 using ShipWorks.Shipping.Editing.Enums;
@@ -18,6 +17,7 @@ using ShipWorks.Stores;
 using ShipWorks.Shipping.Settings;
 using Autofac;
 using ShipWorks.ApplicationCore;
+using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.Shipping.Editing.Rating
 {
@@ -256,7 +256,12 @@ namespace ShipWorks.Shipping.Editing.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(shipmentType ?? new NoneShipmentType(), ex));
+                            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+                            {
+                                ShipmentType exceptionShipmentType = shipmentType ?? 
+                                    lifetimeScope.ResolveKeyed<Owned<ShipmentType>>(ShipmentTypeCode.None).Value;
+                                rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
+                            }
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);

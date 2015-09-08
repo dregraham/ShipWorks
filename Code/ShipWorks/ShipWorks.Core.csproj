@@ -4992,13 +4992,6 @@
     <Compile Include="Shipping\Carriers\MultiSelectServiceControl.Designer.cs">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.Designer.cs">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneShipmentType.cs" />
     <Compile Include="Shipping\Carriers\Other\OtherServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -9023,9 +9016,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\MultiSelectServiceControl.resx">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\None\NoneServiceControl.resx">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.resx">
       <DependentUpon>EndiciaAccountEditorDlg.cs</DependentUpon>
