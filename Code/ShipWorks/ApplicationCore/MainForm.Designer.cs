@@ -106,6 +106,8 @@ namespace ShipWorks
             this.dockableWindowShipments = new TD.SandDock.DockableWindow();
             this.panelShipments = new ShipWorks.Stores.Content.Panels.ShipmentsPanel();
             this.dockableWindowMap = new TD.SandDock.DockableWindow();
+            this.panelShipment = new ShipWorks.Shipping.ShipmentPanel();
+            this.dockableWindowShipment = new TD.SandDock.DockableWindow();
             this.panelMap = new ShipWorks.Stores.Content.Panels.MapPanel();
             this.dockableWindowStreetView = new TD.SandDock.DockableWindow();
             this.panelStreetView = new ShipWorks.Stores.Content.Panels.MapPanel();
@@ -835,6 +837,7 @@ namespace ShipWorks
             this.dockContainer1.Controls.Add(this.dockableWindowPrinted);
             this.dockContainer1.Controls.Add(this.dockableWindowMap);
             this.dockContainer1.Controls.Add(this.dockableWindowStreetView);
+            this.dockContainer1.Controls.Add(this.dockableWindowShipment);
             this.dockContainer1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dockContainer1.LayoutSystem = new TD.SandDock.SplitLayoutSystem(new System.Drawing.SizeF(250F, 400F), System.Windows.Forms.Orientation.Vertical, new TD.SandDock.LayoutSystemBase[] {
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(349.4023F, 400F), new TD.SandDock.DockControl[] {
@@ -842,6 +845,7 @@ namespace ShipWorks
                         ((TD.SandDock.DockControl)(this.dockableWindowItems)),
                         ((TD.SandDock.DockControl)(this.dockableWindowCharges)),
                         ((TD.SandDock.DockControl)(this.dockableWindowMap)),
+                        ((TD.SandDock.DockControl)(this.dockableWindowShipment)),
                         ((TD.SandDock.DockControl)(this.dockableWindowStreetView)),
                         ((TD.SandDock.DockControl)(this.dockableWindowPaymentDetails))}, this.dockableWindowMap))),
             ((TD.SandDock.LayoutSystemBase)(new TD.SandDock.ControlLayoutSystem(new System.Drawing.SizeF(337.3859F, 400F), new TD.SandDock.DockControl[] {
@@ -975,6 +979,29 @@ namespace ShipWorks
             this.panelShipments.Name = "panelShipments";
             this.panelShipments.Size = new System.Drawing.Size(363, 168);
             this.panelShipments.TabIndex = 1;
+            // 
+            // dockableWindowMap
+            // 
+            this.dockableWindowShipment.BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat;
+            this.dockableWindowShipment.Controls.Add(this.panelShipment);
+            this.dockableWindowShipment.Guid = new System.Guid("574C96CC-5D02-4689-9463-4FB4DBCE22AD");
+            this.dockableWindowShipment.Location = new System.Drawing.Point(0, 25);
+            this.dockableWindowShipment.Name = "dockableWindowShipment";
+            this.dockableWindowShipment.ShowOptions = false;
+            this.dockableWindowShipment.Size = new System.Drawing.Size(378, 170);
+            this.dockableWindowShipment.TabImage = global::ShipWorks.Properties.Resources.add16;
+            this.dockableWindowShipment.TabIndex = 0;
+            this.dockableWindowShipment.Text = "Shipment";
+            // 
+            // panelShipment
+            // 
+            this.panelShipment.BackColor = System.Drawing.Color.White;
+            this.panelShipment.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelShipment.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panelShipment.Location = new System.Drawing.Point(1, 1);
+            this.panelShipment.Name = "panelShipment";
+            this.panelShipment.Size = new System.Drawing.Size(376, 168);
+            this.panelShipment.TabIndex = 1;
             // 
             // dockableWindowMap
             // 
@@ -2964,6 +2991,8 @@ namespace ShipWorks
         private ShipWorks.Stores.Content.Panels.PaymentDetailsPanel panelPaymentDetail;
         private ShipWorks.Stores.Content.Panels.OrderItemsPanel panelItems;
         private ShipWorks.Stores.Content.Panels.ShipmentsPanel panelShipments;
+        private ShipWorks.Shipping.ShipmentPanel panelShipment;
+        private TD.SandDock.DockableWindow dockableWindowShipment;
         private ShipWorks.Stores.Content.Panels.MapPanel panelMap;
         private ShipWorks.Stores.Content.Panels.MapPanel panelStreetView;
         private TD.SandDock.DockableWindow dockableWindowEmail;

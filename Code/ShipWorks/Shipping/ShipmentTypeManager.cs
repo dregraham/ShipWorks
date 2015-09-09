@@ -159,7 +159,7 @@ namespace ShipWorks.Shipping
                 return lifetimeScope.ResolveKeyed<ShipmentType>(typeCode);
             }
 
-            throw new InvalidOperationException("Invalid shipment type.");
+            throw new InvalidOperationException($"Invalid shipment type {typeCode}.");
         }
 
         /// <summary>

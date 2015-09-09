@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using System.Windows;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -13,6 +14,8 @@ namespace ShipWorks.Shipping.UI
         protected override void Load(ContainerBuilder builder)
         {
             // Add any shipping module IoC registrations here
+            builder.RegisterType<ShipmentPanelControl>()
+                .Keyed<UIElement>(WpfScreens.ShipmentPanel);
         }
     }
 }

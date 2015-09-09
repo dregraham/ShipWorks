@@ -169,6 +169,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Components\Quartz.dll</HintPath>
@@ -276,13 +278,16 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\ActionConcurrencyException.cs" />
@@ -1112,6 +1117,12 @@
     <Compile Include="Shipping\Settings\ShippingSettingsWrapper.cs" />
     <Compile Include="Shipping\Settings\UspsAutomaticExpeditedChangedMessage.cs" />
     <Compile Include="Shipping\AdjustedAddressExtensions.cs" />
+    <Compile Include="Shipping\ShipmentPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Shipping\ShipmentPanel.Designer.cs">
+      <DependentUpon>ShipmentPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shipping\ShippingManagerWrapper.cs" />
     <Compile Include="Stores\Content\IOrderUtility.cs" />
     <Compile Include="Stores\Content\OrderUtilityWrapper.cs" />
@@ -7723,6 +7734,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\EnumCheckboxControl.resx">
       <DependentUpon>EnumCheckboxControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Shipping\ShipmentPanel.resx">
+      <DependentUpon>ShipmentPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Stores\Platforms\ChannelAdvisor\ChannelAdvisorConsolidatorSettingsControl.resx">
       <DependentUpon>ChannelAdvisorConsolidatorSettingsControl.cs</DependentUpon>
