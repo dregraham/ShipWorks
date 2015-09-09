@@ -1,0 +1,46 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <VisualBrush x:Key="MultipleValuesTextBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+        <VisualBrush.Visual>
+            <Label Content="(Multiple Values)" Foreground="Gray" />
+        </VisualBrush.Visual>
+    </VisualBrush>
+    <Style x:Key="Header" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Margin" Value="4,0,0,4"></Setter>
+    </Style>
+    <Style x:Key="GridLabel" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="Margin" Value="0,2,0,0"></Setter>
+    </Style>
+    <Style TargetType="Grid">
+        <Setter Property="Margin" Value="0,0,4,15" />
+    </Style>
+    <Style TargetType="TextBox">
+        <Setter Property="Margin" Value="4,0,0,4" />
+        <Style.Triggers>
+            <!--<Trigger Property="service:MultiValue.HasMultipleValues" Value="True">
+                <Setter Property="Background" Value="{StaticResource MultipleValuesTextBrush}" />
+            </Trigger>-->
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="ComboBox">
+        <Setter Property="Margin" Value="4,0,0,4" />
+        <Style.Triggers>
+            <!--<Trigger Property="service:MultiValue.HasMultipleValues" Value="True">
+                <Setter Property="Background" Value="{StaticResource MultipleValuesTextBrush}" />
+            </Trigger>-->
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="White" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style TargetType="Border">
+        <Setter Property="Margin" Value="0,0,0,8" />
+    </Style>
+    <!--<valueConverters:MultiValueColorConverter x:Key="MultiValueColorConverter" />-->
+</ResourceDictionary>

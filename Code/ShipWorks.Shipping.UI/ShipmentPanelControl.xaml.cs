@@ -13,9 +13,6 @@ namespace ShipWorks.Shipping.UI
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            MessageBox.Show("Hello!");
-        }
+        public object ViewModel { get { return (object)DataContext; } set { DataContext = value; } }
     }
 }
