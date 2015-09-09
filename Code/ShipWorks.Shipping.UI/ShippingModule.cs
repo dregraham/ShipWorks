@@ -13,7 +13,6 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            // Add any shipping module IoC registrations here
             builder.RegisterType<ShipmentPanelControl>()
                 .Keyed<UIElement>(WpfScreens.ShipmentPanel);
         }

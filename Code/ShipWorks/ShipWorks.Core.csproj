@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <Import Project="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\build\System.Runtime.InteropServices.Analyzers.props" Condition="Exists('..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\build\System.Runtime.InteropServices.Analyzers.props')" />
+  <Import Project="..\..\packages\System.Runtime.Analyzers.1.0.1\build\System.Runtime.Analyzers.props" Condition="Exists('..\..\packages\System.Runtime.Analyzers.1.0.1\build\System.Runtime.Analyzers.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -47,6 +49,8 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -863,8 +867,6 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\Carriers\OnTrac\OnTracShipmentProcessingSynchronizer.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherPackageAdapter.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalPackagePickerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -4702,18 +4704,6 @@
     <Compile Include="Shipping\Settings\ShipmentAutomationControl.Designer.cs">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherProfileControl.Designer.cs">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherSetupWizard.Designer.cs">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
-    </Compile>
     <Compile Include="Shipping\Carriers\Postal\PostalConfirmationType.cs" />
     <Compile Include="Shipping\Carriers\Postal\PostalCustomsContentType.cs" />
     <Compile Include="Shipping\Settings\Origin\ShipmentOriginControl.cs">
@@ -5003,20 +4993,6 @@
     <Compile Include="Shipping\Carriers\MultiSelectServiceControl.Designer.cs">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneServiceControl.Designer.cs">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\None\NoneShipmentType.cs" />
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherServiceControl.Designer.cs">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Shipping\Carriers\Other\OtherShipmentType.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManager.cs" />
     <Compile Include="Shipping\Settings\ShipmentBlankPhoneOption.cs" />
     <Compile Include="Shipping\Editing\Rating\RateResult.cs" />
@@ -9038,9 +9014,6 @@
     <EmbeddedResource Include="Shipping\Carriers\MultiSelectServiceControl.resx">
       <DependentUpon>MultiSelectServiceControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\None\NoneServiceControl.resx">
-      <DependentUpon>NoneServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Carriers\Postal\Endicia\EndiciaAccountEditorDlg.resx">
       <DependentUpon>EndiciaAccountEditorDlg.cs</DependentUpon>
     </EmbeddedResource>
@@ -9120,15 +9093,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\ShipmentAutomationControl.resx">
       <DependentUpon>ShipmentAutomationControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherProfileControl.resx">
-      <DependentUpon>OtherProfileControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherServiceControl.resx">
-      <DependentUpon>OtherServiceControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Shipping\Carriers\Other\OtherSetupWizard.resx">
-      <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Shipping\Settings\Origin\ShipmentOriginControl.resx">
       <DependentUpon>ShipmentOriginControl.cs</DependentUpon>
@@ -10997,9 +10961,22 @@
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\..\packages\InterapptiveAnalyzers.1.0.5714.23531\analyzers\dotnet\cs\InterapptiveAnalyzers.dll" />
-    <Analyzer Include="..\..\packages\SonarLint.1.1.1\tools\analyzers\C#\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.0.1\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.Common.dll" />
+    <Analyzer Include="..\..\packages\Microsoft.AnalyzerPowerPack.1.0.1\analyzers\dotnet\cs\Microsoft.AnalyzerPowerPack.CSharp.dll" />
+    <Analyzer Include="..\..\packages\SonarLint.1.2.0\tools\analyzers\C#\SonarLint.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
+    <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\System.Runtime.Analyzers.1.0.1\build\System.Runtime.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\System.Runtime.Analyzers.1.0.1\build\System.Runtime.Analyzers.props'))" />
+    <Error Condition="!Exists('..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\build\System.Runtime.InteropServices.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\build\System.Runtime.InteropServices.Analyzers.props'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

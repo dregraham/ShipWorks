@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 
 namespace ShipWorks.Stores.Platforms.BuyDotCom
 {
@@ -33,6 +31,15 @@ namespace ShipWorks.Stores.Platforms.BuyDotCom
         /// </summary>
         public BuyDotComException(string message, Exception inner)
             : base(message, inner)
+        {
+
+        }
+
+        /// <summary>
+        /// Serialization constructor
+        /// </summary>
+        protected BuyDotComException(SerializationInfo serializationInfo, StreamingContext streamingContext) : 
+            base(serializationInfo, streamingContext)
         {
 
         }

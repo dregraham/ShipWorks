@@ -148,7 +148,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Endicia
         /// <summary>
         /// Create the UserControl used to handle Endicia profiles
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new EndiciaProfileControl(EndiciaReseller);
         }

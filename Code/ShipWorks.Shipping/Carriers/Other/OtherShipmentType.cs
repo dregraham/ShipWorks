@@ -1,96 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Common.IO.Hardware.Printers;
-using ShipWorks.Filters.Content.Conditions.Shipments;
-using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping.Settings;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Shipping.ShipSense.Packaging;
-using ShipWorks.Templates.Processing.TemplateXml;
-using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Editing;
-using System.Windows.Forms;
 using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.UI.Wizard;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
     /// <summary>
     /// "Other" (custom) ShipmentType implementation
     /// </summary>
-    class OtherShipmentType : ShipmentType
+    public class OtherShipmentType : ShipmentType
     {
         /// <summary>
         /// The ShipmentTypeCode enumeration value
         /// </summary>
-        public override ShipmentTypeCode ShipmentTypeCode
-        {
-            get { return ShipmentTypeCode.Other; }
-        }
-
-        /// <summary>
-        /// Create the Setup Wizard used to setup the "Other" shipment type
-        /// </summary>
-        public override ShipmentTypeSetupWizardForm CreateSetupWizard()
-        {
-            return new OtherSetupWizard();
-        }
-
-        /// <summary>
-        /// Create the control needed to edit service options for the type
-        /// </summary>
-        /// <param name="rateControl">A handle to the rate control so the selected rate can be updated when
-        /// a change to the shipment, such as changing the service type, matches a rate in the control</param>
-        protected override ServiceControlBase InternalCreateServiceControl(RateControl rateControl)
-        {
-            return new OtherServiceControl(rateControl);
-        }
-
-        /// <summary>
-        /// Create the control needed to edit the profile settings for the type
-        /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
-        {
-            return new OtherProfileControl();
-        }
+        public override ShipmentTypeCode ShipmentTypeCode => ShipmentTypeCode.Other;
 
         /// <summary>
         /// Gets the package adapter for the shipment.
         /// </summary>
-        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment)
-        {
-            return new List<IPackageAdapter>()
-            {
-                new OtherPackageAdapter(shipment)
-            };
-        }
+        public override IEnumerable<IPackageAdapter> GetPackageAdapters(ShipmentEntity shipment) =>
+            new List<IPackageAdapter> { new OtherPackageAdapter(shipment) };
 
         /// <summary>
         /// Ensures that the Other specific data for the shipment is loaded.  If the data already exists nothing is done, it is not refreshed.
         /// </summary>
-        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
-        {
+        public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent) =>
             ShipmentTypeDataService.LoadShipmentData(this, shipment, shipment, "Other", typeof(OtherShipmentEntity), refreshIfPresent);
-        }
 
         /// <summary>
         /// Ensure the carrier specific profile data is created and loaded for the given profile
         /// </summary>
-        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent)
-        {
+        public override void LoadProfileData(ShippingProfileEntity profile, bool refreshIfPresent) =>
             ShipmentTypeDataService.LoadProfileData(profile, "Other", typeof(OtherProfileEntity), refreshIfPresent);
-        }
 
         /// <summary>
         /// ShipWorks typically auto-updates the ShipDate on unprocessed shipments to be Today at 
@@ -105,10 +54,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// <summary>
         /// For 'Other' we just use return as a marker
         /// </summary>
-        public override bool SupportsReturns
-        {
-            get { return true; }
-        }
+        public override bool SupportsReturns => true;
 
         /// <summary>
         /// Get the default profile for the shipment type
@@ -155,20 +101,15 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// Get the carrier specific description of the shipping service used.  The carrier specific data must exist
         /// when this method is called.
         /// </summary>
-        public override string GetServiceDescription(ShipmentEntity shipment)
-        {
-            return string.Format("{0} {1}", shipment.Other.Carrier, shipment.Other.Service);
-        }
+        public override string GetServiceDescription(ShipmentEntity shipment) =>
+            $"{shipment.Other.Carrier} {shipment.Other.Service}";
 
         /// <summary>
         /// Get the parcel data for the shipment
         /// </summary>
         public override ShipmentParcel GetParcelDetail(ShipmentEntity shipment, int parcelIndex)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
             return new ShipmentParcel(shipment, null,
                 new InsuranceChoice(shipment, shipment, shipment.Other, null),
@@ -176,24 +117,16 @@ namespace ShipWorks.Shipping.Carriers.Other
         }
 
         /// <summary>
-        /// Gets the processing synchronizer to be used during the PreProcessing of a shipment.
-        /// </summary>
-        protected override IShipmentProcessingSynchronizer GetProcessingSynchronizer()
-        {
-            return new OtherShipmentProcessingSynchronizer();
-        }
-
-        /// <summary>
         /// Process the shipment
         /// </summary>
         public override void ProcessShipment(ShipmentEntity shipment)
         {
-            if (shipment.Other.Carrier.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(shipment.Other.Carrier))
             {
                 throw new ShippingException("No carrier is specified.");
             }
 
-            if (shipment.Other.Service.Trim().Length == 0)
+            if (string.IsNullOrWhiteSpace(shipment.Other.Service))
             {
                 throw new ShippingException("No service is specified.");
             }
@@ -214,9 +147,6 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         /// <param name="shipment">The shipment.</param>
         /// <returns>An instance of a NullShippingBroker.</returns>
-        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment)
-        {
-            return new NullShippingBroker();
-        }
+        public override IBestRateShippingBroker GetShippingBroker(ShipmentEntity shipment) => new NullShippingBroker();
     }
 }

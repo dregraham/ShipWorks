@@ -96,7 +96,7 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         /// <summary>
         /// Create the UserControl used to edit OnTrac profiles.
         /// </summary>
-        public override ShippingProfileControlBase CreateProfileControl()
+        protected override ShippingProfileControlBase CreateProfileControl()
         {
             return new OnTracProfileControl();
         }

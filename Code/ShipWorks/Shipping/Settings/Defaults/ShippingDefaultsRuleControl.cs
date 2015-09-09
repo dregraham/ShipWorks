@@ -13,6 +13,8 @@ using ShipWorks.Shipping.Profiles;
 using ShipWorks.Data.Connection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using log4net;
+using Autofac;
+using ShipWorks.ApplicationCore;
 
 namespace ShipWorks.Shipping.Settings.Defaults
 {
@@ -234,9 +236,12 @@ namespace ShipWorks.Shipping.Settings.Defaults
             ToolStripMenuItem menuItem = (ToolStripMenuItem) sender;
             ShippingProfileEntity profile = (ShippingProfileEntity) menuItem.Tag;
 
-            using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingProfileEditorDlg dlg = new ShippingProfileEditorDlg(profile, lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
 
             UpdateProfileDisplay(profile);

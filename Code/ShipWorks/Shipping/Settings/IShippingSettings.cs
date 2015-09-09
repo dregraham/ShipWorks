@@ -1,3 +1,5 @@
+using ShipWorks.Data.Model.EntityClasses;
+
 namespace ShipWorks.Shipping.Settings
 {
     /// <summary>
@@ -9,5 +11,10 @@ namespace ShipWorks.Shipping.Settings
         /// Marks the given ShipmentTypeCode as completely configured
         /// </summary>
         void MarkAsConfigured(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Fetch the current shipping settings
+        /// </summary>
+        ShippingSettingsEntity Fetch();
     }
 }

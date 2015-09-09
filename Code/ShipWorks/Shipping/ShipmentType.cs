@@ -347,11 +347,24 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Create the UserControl that is used to edit a profile for the service
         /// </summary>
-        public virtual ShippingProfileControlBase CreateProfileControl()
+        protected virtual ShippingProfileControlBase CreateProfileControl()
         {
             return null;
         }
-        
+
+        /// <summary>
+        /// Create the setup wizard form that will walk the user through setting up the shipment type.  Can return
+        /// null if the shipment type does not require setup
+        /// </summary>
+        /// <remarks>This overload will use the current lifetime scope to resolve the wizard if it is registered.
+        /// If it is not, it will fall back to the other version of this method</remarks>
+        public virtual ShippingProfileControlBase CreateProfileControl(ILifetimeScope lifetimeScope)
+        {
+            return lifetimeScope.IsRegisteredWithKey<ShippingProfileControlBase>(ShipmentTypeCode) ?
+                lifetimeScope.ResolveKeyed<ShippingProfileControlBase>(ShipmentTypeCode) :
+                CreateProfileControl();
+        }
+
         /// <summary>
         /// Uses the ExcludedServiceTypeRepository implementation to get the service types that have 
         /// been excluded for this shipment type. The integer values are intended to correspond to 

@@ -8,9 +8,7 @@ using ShipWorks.Editions;
 using ShipWorks.Shipping.Carriers.BestRate;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.None;
 using ShipWorks.Shipping.Carriers.OnTrac;
-using ShipWorks.Shipping.Carriers.Other;
 using ShipWorks.Shipping.Carriers.Postal;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
@@ -134,12 +132,6 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.PostalWebTools:
                     return new PostalWebShipmentType();
-
-                case ShipmentTypeCode.Other:
-                    return new OtherShipmentType();
-
-                case ShipmentTypeCode.None:
-                    return new NoneShipmentType();
 
                 case ShipmentTypeCode.OnTrac:
                     return new OnTracShipmentType();

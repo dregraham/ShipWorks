@@ -1,0 +1,36 @@
+﻿using Autofac;
+using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.Editing;
+using ShipWorks.Shipping.Profiles;
+using ShipWorks.Shipping.Settings;
+
+namespace ShipWorks.Shipping.UI.Carriers.Other
+{
+    /// <summary>
+    /// IoC registration module for the Other shipment type
+    /// </summary>
+    public class OtherShippingModule : Module
+    {
+        /// <summary>
+        /// Load the module configuration
+        /// </summary>
+        protected override void Load(ContainerBuilder builder)
+        {
+            builder.RegisterType<OtherShipmentType>()
+                .Keyed<ShipmentType>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<OtherServiceControl>()
+                .Keyed<ServiceControlBase>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<OtherShipmentProcessingSynchronizer>()
+                .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.Other)
+                .SingleInstance();
+
+            builder.RegisterType<OtherSetupWizard>()
+                .Keyed<ShipmentTypeSetupWizardForm>(ShipmentTypeCode.Other);
+
+            builder.RegisterType<OtherProfileControl>()
+                .Keyed<ShippingProfileControlBase>(ShipmentTypeCode.Other);
+        }
+    }
+}
