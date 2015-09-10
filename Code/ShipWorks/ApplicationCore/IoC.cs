@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
@@ -65,6 +66,10 @@ namespace ShipWorks.ApplicationCore
 
             builder.RegisterGeneric(typeof(AccountManagerBase<>))
                 .AsSelf()
+                .SingleInstance();
+
+            builder.RegisterInstance(Messenger.Current)
+                .AsImplementedInterfaces()
                 .SingleInstance();
 
             builder.RegisterAssemblyModules(assemblies);

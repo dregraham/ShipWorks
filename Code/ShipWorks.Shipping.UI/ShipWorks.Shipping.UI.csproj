@@ -158,6 +158,7 @@
     <Compile Include="ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ShipmentTypeProvider.cs" />
     <Compile Include="ShippingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

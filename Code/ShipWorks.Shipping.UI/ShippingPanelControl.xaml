@@ -34,7 +34,7 @@
                 <TextBlock>Carrier:</TextBlock>
 
                 <ComboBox Grid.Column="1"
-                          ItemsSource="{Binding ShipmentTypes}"
+                          ItemsSource="{Binding Available, Source={x:Static local:ShipmentTypeProvider.Current}}"
                           SelectedItem="{Binding SelectedShipmentType}"
                           Text="{Binding ShipmentTypeName}" />
             </Grid>

@@ -306,7 +306,16 @@ namespace ShipWorks.Shipping.Settings
             using (SqlAdapter adapter = new SqlAdapter(true))
             {
                 ShippingSettingsEntity settings = ShippingSettings.Fetch();
+                List<int> existingExcludedTypes = settings.ExcludedTypes.ToList();
                 settings.ExcludedTypes = panelProviders.UnselectedShipmentTypes.Select(x => (int)x.ShipmentTypeCode).ToArray();
+
+                List<int> typesAdded = existingExcludedTypes.Except(settings.ExcludedTypes).ToList();
+                List<int> typesRemoved = settings.ExcludedTypes.Except(existingExcludedTypes).ToList();
+
+                if (typesRemoved.Any() || typesAdded.Any())
+                {
+                    Messenger.Current.Send(new EnabledCarriersChangedMessage(this, typesAdded, typesRemoved));
+                }
 
                 settings.BlankPhoneOption =
                     (int)

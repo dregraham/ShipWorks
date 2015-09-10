@@ -21,6 +21,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShippingPanelConfigurator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ShipmentTypeProvider>();
         }
     }
 }

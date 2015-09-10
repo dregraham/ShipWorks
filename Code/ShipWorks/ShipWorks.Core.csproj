@@ -1102,6 +1102,7 @@
       <DependentUpon>RequestedLabelFormatProfileControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
+    <Compile Include="Shipping\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
