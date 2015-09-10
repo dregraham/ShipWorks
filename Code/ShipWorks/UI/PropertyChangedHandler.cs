@@ -9,13 +9,25 @@ namespace ShipWorks.Core.UI
     public class PropertyChangedHandler
     {
         private readonly Func<PropertyChangedEventHandler> getPropertyChanged;
+        private readonly Func<PropertyChangingEventHandler> getPropertyChanging;
+        private readonly object source;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public PropertyChangedHandler(Func<PropertyChangedEventHandler> getPropertyChanged)
+        public PropertyChangedHandler(object source, Func<PropertyChangedEventHandler> getPropertyChanged) : this(source, getPropertyChanged, () => null)
         {
+
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public PropertyChangedHandler(object source, Func<PropertyChangedEventHandler> getPropertyChanged, Func<PropertyChangingEventHandler> getPropertyChanging)
+        {
+            this.source = source;
             this.getPropertyChanged = getPropertyChanged;
+            this.getPropertyChanging = getPropertyChanging;
         }
 
         /// <summary>
@@ -28,6 +40,7 @@ namespace ShipWorks.Core.UI
                 return false;
             }
 
+            OnPropertyChanging(name);
             field = value;
             OnPropertyChanged(name);
 
@@ -37,9 +50,17 @@ namespace ShipWorks.Core.UI
         /// <summary>
         /// Raise the property changed event
         /// </summary>
+        protected virtual void OnPropertyChanging(string propertyName)
+        {
+            getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Raise the property changed event
+        /// </summary>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            getPropertyChanged()?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            getPropertyChanged()?.Invoke(source, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

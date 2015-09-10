@@ -10,18 +10,20 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelControl()
+        public ShippingPanelControl(ShippingPanelViewModel viewModel)
         {
             InitializeComponent();
+
+            DataContext = viewModel;
         }
 
-        /// <summary>
-        /// Model associated with this view
-        /// </summary>
-        public ShippingPanelViewModel ViewModel
-        {
-            get { return (ShippingPanelViewModel)DataContext; }
-            set { DataContext = value; }
-        }
+        ///// <summary>
+        ///// Model associated with this view
+        ///// </summary>
+        //public ShippingPanelViewModel ViewModel
+        //{
+        //    get { return (ShippingPanelViewModel)DataContext; }
+        //    set { DataContext = value; }
+        //}
     }
 }
