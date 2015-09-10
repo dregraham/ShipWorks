@@ -5,29 +5,37 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using System.Windows;
+using ShipWorks.Data.Model.EntityClasses;
+using System;
 
-namespace ShipWorks.Shipping
+namespace ShipWorks.Shipping.UI
 {
-    public enum WpfScreens
-    {
-        ShipmentPanel
-    }
-
+    /// <summary>
+    /// Shipment panel container
+    /// </summary>
     public partial class ShipmentPanel : UserControl, IDockingPanelContent
     {
+        ShipmentPanelControl shipmentPanelControl;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentPanel()
         {
             InitializeComponent();
         }
 
-        protected override void OnCreateControl()
+        /// <summary>
+        /// Handle control load event
+        /// </summary>
+        protected override void OnLoad(EventArgs e)
         {
-            base.OnCreateControl();
+            base.OnLoad(e);
 
-            elementHost1.Child = IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<UIElement>(WpfScreens.ShipmentPanel);
+            shipmentPanelControl = new ShipmentPanelControl();
+            shipmentPanelelementHost.Child = shipmentPanelControl;
         }
-
+        
         public EntityType EntityType => EntityType.ShipmentEntity;
 
         public FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Shipments };
@@ -36,7 +44,9 @@ namespace ShipWorks.Shipping
 
         public void ChangeContent(IGridSelection selection)
         {
-            //throw new NotImplementedException();
+            ShipmentPanelViewModel model = IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentPanelViewModel>();
+            model.LoadOrder(new OrderEntity());
+            shipmentPanelControl.ViewModel = model;
         }
 
         public void LoadState()

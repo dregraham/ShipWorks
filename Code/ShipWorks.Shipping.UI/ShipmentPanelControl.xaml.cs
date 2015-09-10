@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -8,11 +7,21 @@ namespace ShipWorks.Shipping.UI
     /// </summary>
     public partial class ShipmentPanelControl : UserControl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentPanelControl()
         {
             InitializeComponent();
         }
 
-        public object ViewModel { get { return (object)DataContext; } set { DataContext = value; } }
+        /// <summary>
+        /// Model associated with this view
+        /// </summary>
+        public ShipmentPanelViewModel ViewModel
+        {
+            get { return (ShipmentPanelViewModel)DataContext; }
+            set { DataContext = value; }
+        }
     }
 }

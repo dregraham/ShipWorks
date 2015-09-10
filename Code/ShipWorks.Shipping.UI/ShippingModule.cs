@@ -13,8 +13,11 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<ShipmentPanelControl>()
-                .Keyed<UIElement>(WpfScreens.ShipmentPanel);
+            builder.RegisterType<ShipmentPanelRegistration>()
+                .AsImplementedInterfaces()
+                .PreserveExistingDefaults();
+
+            builder.RegisterType<ShipmentPanelViewModel>();
         }
     }
 }

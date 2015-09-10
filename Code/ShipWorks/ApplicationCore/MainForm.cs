@@ -124,6 +124,14 @@ namespace ShipWorks
         {
             InitializeComponent();
 
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                foreach (IRegisterDockableWindow registration in lifetimeScope.Resolve<IEnumerable<IRegisterDockableWindow>>())
+                {
+                    registration.Register(sandDockManager);
+                }
+            }
+
             // Create the heartbeat
             heartBeat = new UIHeartbeat(this);
 
@@ -132,6 +140,7 @@ namespace ShipWorks
         }
 
         #region Initialization \ Shutdown
+        
 
         /// <summary>
         /// Form is loading, this is before its visible
@@ -139,7 +148,7 @@ namespace ShipWorks
         private void OnLoad(object sender, EventArgs e)
         {
             log.Info("Loading main application window.");
-
+            
             DataProvider.InitializeForApplication();
             DataProvider.EntityChangeDetected += new EventHandler(OnEntityChangeDetected);
 
