@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Shipping
@@ -22,6 +23,15 @@ namespace ShipWorks.Shipping
         public void UpdateLabelFormatOfUnprocessedShipments(ShipmentTypeCode shipmentTypeCode)
         {
             ShippingManager.UpdateLabelFormatOfUnprocessedShipments(shipmentTypeCode);
+        }
+
+        /// <summary>
+        /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
+        /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
+        /// </summary>
+        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone)
+        {
+            return ShippingManager.GetShipments(orderID, createIfNone);
         }
     }
 }

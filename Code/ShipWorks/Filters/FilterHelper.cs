@@ -38,7 +38,7 @@ namespace ShipWorks.Filters
     /// <summary>
     /// Utility class for filters
     /// </summary>
-    public static class FilterHelper
+    public static class FilterHelper 
     {
         static readonly ILog log = LogManager.GetLogger(typeof(FilterHelper));
 
