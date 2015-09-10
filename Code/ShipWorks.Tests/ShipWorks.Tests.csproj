@@ -441,6 +441,7 @@
     <Compile Include="SqlServer\FilterTests.cs" />
     <Compile Include="Stores\Amazon\EnsClientTest.cs" />
     <Compile Include="Stores\Amazon\MwsClientTests.cs" />
+    <Compile Include="Stores\BigCommerce\BigCommerceProductImageCacheTest.cs" />
     <Compile Include="Stores\BrightPearl\BrightPearlUtilityTest.cs" />
     <Compile Include="Stores\BuyDotcom\BuyDotComOnlineUpdaterTest.cs" />
     <Compile Include="Stores\ChannelAdvisor\ChannelAdvisorOnlineUpdaterTest.cs" />
