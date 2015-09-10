@@ -1653,7 +1653,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress {
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://fedex.com/ws/gsai/v2")]
     public partial class Distance {
         
-        private decimal valueField;
+        private double valueField;
         
         private bool valueFieldSpecified;
         
@@ -1662,7 +1662,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.WebServices.GlobalShipAddress {
         private bool unitsFieldSpecified;
         
         /// <remarks/>
-        public decimal Value {
+        public double Value {
             get {
                 return this.valueField;
             }

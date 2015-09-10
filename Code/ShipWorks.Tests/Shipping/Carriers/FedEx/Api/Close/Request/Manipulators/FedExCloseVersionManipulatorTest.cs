@@ -107,7 +107,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCarrierRequest.Object);
 
             VersionId version = ((SmartPostCloseRequest)smartPostCarrierRequest.Object.NativeRequest).Version;
-            Assert.Equal(3, version.Major);
+            Assert.Equal(4, version.Major);
         }
 
         [Fact]

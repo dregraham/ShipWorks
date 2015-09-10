@@ -8108,7 +8108,7 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.0.9.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\3.10\3.10.1.1.sql" />
     <None Include="packages.config" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.2.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.2.sql" />
     <None Include="Properties\interapptive_public.snk" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -10370,11 +10370,12 @@
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.3.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.4.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.2\4.2.0.5.sql" />
-    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.1.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.1.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.2.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.0.3.sql" />
+    <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.3.0.sql" />
     <EmbeddedResource Include="Data\Administration\Scripts\Update\4.3\4.3.2.0.sql" />
     <Content Include="Resources\add.png" />
     <None Include="Resources\blank16.png" />
