@@ -144,6 +144,7 @@
     <Compile Include="Properties\AssemblyInfoCommon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Properties\interapptive_public.snk" />
   </ItemGroup>
   <ItemGroup>
