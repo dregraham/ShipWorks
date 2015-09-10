@@ -111,8 +111,10 @@
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
+    <Compile Include="IShippingPanelConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentPanelViewModel.cs" />
+    <Compile Include="ShippingPanelConfigurator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">
