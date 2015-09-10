@@ -129,7 +129,9 @@
     <Compile Include="Custom\EntityClasses\EtsyOrderEntity.cs" />
     <Compile Include="Custom\EntityClasses\FedExAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\InsurancePolicyEntity.cs" />
+    <Compile Include="Custom\EntityClasses\iParcelAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
+    <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />
     <Compile Include="Custom\EntityClasses\EmailAccountEntity.cs" />
@@ -143,9 +145,12 @@
     <Compile Include="Custom\EntityClasses\TemplateFolderEntity.cs" />
     <Compile Include="Custom\ActiveTableInheritanceInfoProvider.cs" />
     <Compile Include="Custom\EntityClasses\ThreeDCartStoreEntity.cs" />
+    <Compile Include="Custom\EntityClasses\UpsAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\UserEntity.cs" />
+    <Compile Include="Custom\EntityClasses\UspsAccountEntity.cs" />
     <Compile Include="Custom\EntityPersistedAction.cs" />
     <Compile Include="Custom\EntityPersistedEvent.cs" />
+    <Compile Include="Custom\ICarrierAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Custom\EntityClasses\FilterNodeEntity.cs" />
     <AppDesigner Include="Properties\" />
