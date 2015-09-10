@@ -216,15 +216,16 @@ namespace :db do
 		dropSqlText = "
 			USE master;
 			go
-			ALTER DATABASE [{database_name}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+			ALTER DATABASE [{DBNAME}] SET SINGLE_USER WITH ROLLBACK IMMEDIATE
 			go
-			ALTER DATABASE [{database_name}] SET MULTI_USER;
+			ALTER DATABASE [{DBNAME}] SET MULTI_USER;
 			go
 			
 			-- Now it's safe to drop the database without any open connections
-			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '#{database_name}')
-				DROP DATABASE [#{database_name}] "
+			IF EXISTS (SELECT NAME FROM master.dbo.sysdatabases WHERE name = '{DBNAME}')
+				DROP DATABASE [{DBNAME}] "
 
+		dropSqlText = dropSqlText.gsub(/{DBNAME}/, database_name)
 		execute_sql full_instance, dropSqlText, "Drop seed database"
 
 		# Use the create database in the ShipWorks project, to guarantee it is the same as the one used 
@@ -298,6 +299,8 @@ namespace :db do
 				# Get the connection string we'll be using from the test config file
 				xml.xpath("//SqlSession/Server/Instance")[0].content = full_instance[:server]
 				xml.xpath("//SqlSession/Server/Database")[0].content = database_name
+				puts "server:   " + full_instance[:server]
+				puts "database: " + database_name
 			end
 		end
 	end
