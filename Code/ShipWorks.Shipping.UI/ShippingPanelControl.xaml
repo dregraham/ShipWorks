@@ -54,6 +54,12 @@
                     <local:AddressControl />
                 </Expander>
             </Border>
+            <Border>
+                <Expander Header="Shipment Details"
+                            Style="{StaticResource ExpanderStyle}">
+                    <local:ShipmentControl />
+                </Expander>
+            </Border>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="75" />

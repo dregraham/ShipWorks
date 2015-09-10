@@ -155,6 +155,9 @@
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="ExpanderState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ShipmentControl.xaml.cs">
+      <DependentUpon>ShipmentControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShippingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -233,6 +236,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AddressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ShipmentControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
