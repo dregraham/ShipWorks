@@ -9,9 +9,9 @@ using ShipWorks.Data.Utility;
 namespace ShipWorks.Shipping.UI
 {
 
-    /// <summary
+    /// <summary>
     /// View model for use by AddressControl
-    /// </summary
+    /// </summary>
     public class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
         private string fullName;
@@ -36,9 +36,9 @@ namespace ShipWorks.Shipping.UI
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
-        /// <summary
+        /// <summary>
         /// Full name
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string FullName
         {
@@ -46,9 +46,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(FullName), ref fullName, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// Company name
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string CompanyName
         {
@@ -56,9 +56,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(CompanyName), ref companyName, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// Street
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string Street
         {
@@ -66,9 +66,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(Street), ref street, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// City
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string City
         {
@@ -76,9 +76,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(City), ref city, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// State
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string State
         {
@@ -86,9 +86,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(State), ref state, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// PostalCode
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string PostalCode
         {
@@ -96,9 +96,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(PostalCode), ref postalCode, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// Country
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string Country
         {
@@ -106,9 +106,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(Country), ref country, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// EmailAddress
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string EmailAddress
         {
@@ -116,9 +116,9 @@ namespace ShipWorks.Shipping.UI
             set { handler.Set(nameof(EmailAddress), ref emailAddress, value); }
         }
 
-        /// <summary
+        /// <summary>
         /// PhoneNumber
-        /// </summary
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string PhoneNumber
         {
@@ -142,9 +142,9 @@ namespace ShipWorks.Shipping.UI
             PhoneNumber = person.Phone;
         }
 
-        /// <summary
+        /// <summary>
         /// Save the current values to the specified person adapter
-        /// </summary
+        /// </summary>
         public void SaveToEntity(PersonAdapter person)
         {
             SaveStreet(person, Street);
@@ -158,9 +158,9 @@ namespace ShipWorks.Shipping.UI
             person.Phone = PhoneNumber;
         }
 
-        /// <summary
+        /// <summary>
         /// Save the street to the specified adapter
-        /// </summary
+        /// </summary>
         private static void SaveStreet(PersonAdapter person, string value)
         {
             int maxStreet1 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet1);
@@ -195,9 +195,9 @@ namespace ShipWorks.Shipping.UI
             person.Street3 = line3;
         }
 
-        /// <summary
+        /// <summary>
         /// Save the full name to the specified person
-        /// </summary
+        /// </summary>
         private static void SaveFullName(PersonAdapter person, string value)
         {
             PersonName name = PersonName.Parse(value);
