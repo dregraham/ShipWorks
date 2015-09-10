@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using System.Windows;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -17,7 +16,7 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
-            builder.RegisterType<ShipmentPanelViewModel>();
+            builder.RegisterType<ShippingPanelViewModel>();
         }
     }
 }

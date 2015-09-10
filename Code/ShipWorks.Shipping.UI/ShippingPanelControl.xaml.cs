@@ -5,12 +5,12 @@ namespace ShipWorks.Shipping.UI
     /// <summary>
     /// Interaction logic for ShipmentPanelControl.xaml
     /// </summary>
-    public partial class ShipmentPanelControl : UserControl
+    public partial class ShippingPanelControl : UserControl
     {
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentPanelControl()
+        public ShippingPanelControl()
         {
             InitializeComponent();
         }
@@ -18,9 +18,9 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Model associated with this view
         /// </summary>
-        public ShipmentPanelViewModel ViewModel
+        public ShippingPanelViewModel ViewModel
         {
-            get { return (ShipmentPanelViewModel)DataContext; }
+            get { return (ShippingPanelViewModel)DataContext; }
             set { DataContext = value; }
         }
     }

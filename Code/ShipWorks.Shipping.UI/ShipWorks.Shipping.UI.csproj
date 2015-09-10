@@ -154,14 +154,14 @@
     </Compile>
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShipmentPanel.cs">
+    <Compile Include="ShippingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ShipmentPanel.Designer.cs">
-      <DependentUpon>ShipmentPanel.cs</DependentUpon>
+    <Compile Include="ShippingPanel.Designer.cs">
+      <DependentUpon>ShippingPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="ShipmentPanelControl.xaml.cs">
-      <DependentUpon>ShipmentPanelControl.xaml</DependentUpon>
+    <Compile Include="ShippingPanelControl.xaml.cs">
+      <DependentUpon>ShippingPanelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShipmentPanelRegistration.cs" />
     <Compile Include="ShippingModule.cs" />
@@ -225,8 +225,8 @@
     <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ShipmentPanel.resx">
-      <DependentUpon>ShipmentPanel.cs</DependentUpon>
+    <EmbeddedResource Include="ShippingPanel.resx">
+      <DependentUpon>ShippingPanel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -234,7 +234,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ShipmentPanelControl.xaml">
+    <Page Include="ShippingPanelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

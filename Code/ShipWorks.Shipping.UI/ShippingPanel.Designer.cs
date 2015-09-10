@@ -1,6 +1,6 @@
 ﻿namespace ShipWorks.Shipping.UI
 {
-    partial class ShipmentPanel
+    partial class ShippingPanel
     {
         /// <summary> 
         /// Required designer variable.

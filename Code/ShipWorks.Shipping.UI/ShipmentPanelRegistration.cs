@@ -16,7 +16,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         public void Register(SandDockManager dockManager)
         {
-            ShipmentPanel panelShipment = new ShipmentPanel
+            ShippingPanel panelShipment = new ShippingPanel
             {
                 BackColor = Color.White,
                 Dock = DockStyle.Fill,

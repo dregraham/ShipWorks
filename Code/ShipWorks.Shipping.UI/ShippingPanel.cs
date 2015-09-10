@@ -13,14 +13,14 @@ namespace ShipWorks.Shipping.UI
     /// <summary>
     /// Shipment panel container
     /// </summary>
-    public partial class ShipmentPanel : UserControl, IDockingPanelContent
+    public partial class ShippingPanel : UserControl, IDockingPanelContent
     {
         ShipmentPanelControl shipmentPanelControl;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentPanel()
+        public ShippingPanel()
         {
             InitializeComponent();
         }
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.UI
 
         public void ChangeContent(IGridSelection selection)
         {
-            ShipmentPanelViewModel model = IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentPanelViewModel>();
+            ShippingPanelViewModel model = IoC.UnsafeGlobalLifetimeScope.Resolve<ShippingPanelViewModel>();
             model.LoadOrder(new OrderEntity());
             shipmentPanelControl.ViewModel = model;
         }
