@@ -12,13 +12,13 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanelShipmentLoader));
 
-        private ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader;
+        private IShipmentLoader shipmentLoader;
         private IValidator<ShipmentEntity> addressValidator;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public ShippingPanelShipmentLoader(ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader, IValidator<ShipmentEntity> addressValidator)
+        public ShippingPanelShipmentLoader(IShipmentLoader shipmentLoader, IValidator<ShipmentEntity> addressValidator)
         {
             this.shipmentLoader = shipmentLoader;
             this.addressValidator = addressValidator;
@@ -36,7 +36,10 @@ namespace ShipWorks.Shipping
 
             ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await shipmentLoader.LoadAsync(order);
 
-            await addressValidator.ValidateAsync(shipmentPanelLoadedShipment.Shipment);
+            if (shipmentPanelLoadedShipment.Shipment != null)
+            {
+                await addressValidator.ValidateAsync(shipmentPanelLoadedShipment.Shipment);
+            }
 
             return shipmentPanelLoadedShipment;
         }

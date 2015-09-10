@@ -23,6 +23,18 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<ShipmentTypeProvider>();
+
+            builder.RegisterType<ShipmentLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShippingPanelShipmentLoader>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentAddressValidator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

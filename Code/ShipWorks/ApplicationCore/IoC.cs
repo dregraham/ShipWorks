@@ -1,6 +1,9 @@
 ﻿using Autofac;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
+using ShipWorks.AddressValidation;
+using ShipWorks.Filters;
+using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
@@ -69,6 +72,22 @@ namespace ShipWorks.ApplicationCore
                 .SingleInstance();
 
             builder.RegisterInstance(Messenger.Current)
+                .AsImplementedInterfaces()
+                .SingleInstance();
+            
+            builder.RegisterType<FilterHelperWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ValidatedAddressManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<StampsAddressValidationWebClient>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShippingManagerWrapper>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

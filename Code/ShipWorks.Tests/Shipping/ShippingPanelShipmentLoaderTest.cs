@@ -16,7 +16,7 @@ namespace ShipWorks.Tests.Shipping
         private ShippingPanelShipmentLoader testObject;
         private OrderEntity orderEntity;
         private ShipmentEntity shipmentEntity;
-        private Mock<ILoader<ShippingPanelLoadedShipment, OrderEntity>> shipmentLoader;
+        private Mock<IShipmentLoader> shipmentLoader;
         private Mock<IValidator<ShipmentEntity>> validator;
 
         public ShippingPanelShipmentLoaderTest()
@@ -32,7 +32,7 @@ namespace ShipWorks.Tests.Shipping
                 Exception = null
             };
 
-            shipmentLoader = new Mock<ILoader<ShippingPanelLoadedShipment, OrderEntity>>();
+            shipmentLoader = new Mock<IShipmentLoader>();
             shipmentLoader.Setup(s => s.LoadAsync(It.IsAny<OrderEntity>())).Returns(Task.FromResult(shippingPanelLoadedShipment));
 
             var tcs = new TaskCompletionSource<bool>();

@@ -1,30 +1,18 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using log4net;
-using ShipWorks.AddressValidation;
-using ShipWorks.Common.Threading;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
-using ShipWorks.Stores;
-using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using System.Reflection;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Loads a shipment for an order.  
     /// </summary>
-    public class ShipmentLoader : ILoader<ShippingPanelLoadedShipment, OrderEntity>
+    public class ShipmentLoader : IShipmentLoader
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentLoader));
 

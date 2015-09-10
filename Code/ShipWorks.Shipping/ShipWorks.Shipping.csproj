@@ -112,6 +112,7 @@
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
+    <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="IShippingPanelConfigurator.cs" />

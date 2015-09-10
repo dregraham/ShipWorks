@@ -25,10 +25,5 @@ namespace ShipWorks.Shipping
         /// Wraps ShippingSettings.AutoCreateShipments
         /// </summary>
         bool AutoCreateShipments { get; }
-
-        /// <summary>
-        /// Get a list of available shipment types
-        /// </summary>
-        IEnumerable<ShipmentType> AvailableShipmentTypes { get; }
     }
 }

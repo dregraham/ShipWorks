@@ -42,10 +42,5 @@ namespace ShipWorks.Shipping
                 return ShippingSettings.Fetch().AutoCreateShipments;
             }
         }
-
-        /// <summary>
-        /// Get a list of available shipment types
-        /// </summary>
-        public IEnumerable<ShipmentType> AvailableShipmentTypes => ShipmentTypeManager.EnabledShipmentTypes;
     }
 }

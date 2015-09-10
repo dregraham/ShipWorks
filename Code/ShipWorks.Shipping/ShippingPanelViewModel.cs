@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping
 {
@@ -19,6 +20,7 @@ namespace ShipWorks.Shipping
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
+        private ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -26,26 +28,23 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(IShippingPanelConfigurator configurator)
+        public ShippingPanelViewModel(IShippingPanelConfigurator configurator, ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
-            shipmentTypes = new ObservableCollection<ShipmentType>(configurator.AvailableShipmentTypes);
+            this.shipmentLoader = shipmentLoader;
         }
 
         /// <summary>
         /// Load the shipment from the given order
         /// </summary>
-        public void LoadOrder(OrderEntity orderEntity)
+        public async Task LoadOrder(OrderEntity orderEntity)
         {
-            SelectedShipmentType = ShipmentTypes.FirstOrDefault();
-            Origin.Load(new Interapptive.Shared.Business.PersonAdapter(orderEntity, "Ship"));
-        }
+            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderEntity);
 
-        /// <summary>
-        /// Gets a list of available shipment types
-        /// </summary>
-        public ObservableCollection<ShipmentType> ShipmentTypes => shipmentTypes;
+            //SelectedShipmentType = ShipmentTypes.FirstOrDefault();
+            Origin.Load(loadedShipment.Shipment.OriginPerson);
+        }
 
         /// <summary>
         /// Selected shipment type for the current shipment
