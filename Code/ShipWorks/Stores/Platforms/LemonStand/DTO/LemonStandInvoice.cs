@@ -1,0 +1,29 @@
+﻿using Newtonsoft.Json;
+using System.Reflection;
+
+namespace ShipWorks.Stores.Platforms.LemonStand.DTO
+{
+    class LemonStandInvoice
+    {
+        [JsonProperty("id")]
+        public string ID { get; set; }
+
+        [JsonProperty("number")]
+        public string Number { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("total")]
+        public string Total { get; set; }
+
+        [JsonProperty("created_at")]
+        public string CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        public string UpdatedAt { get; set; }
+
+        [JsonProperty("shipments")]
+        public LemonStandShipment Shipments { get; set; }
+    }
+}

@@ -1100,7 +1100,15 @@
     <Compile Include="Stores\Platforms\Choxi\ChoxiTemplate.cs" />
     <Compile Include="Stores\Platforms\Groupon\CoreExtensions\Filters\GrouponOrderIdCondition.cs" />
     <Compile Include="Stores\Platforms\InstanteStore\InstanteStoreStoreType.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\CoreExtensions\Actions\LemonStandShipmentUploadTask.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\CoreExtensions\Filters\LemonStandOrderIdCondition.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandBillingAddress.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandCustomer.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandInvoice.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandItem.cs" />
     <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandOrder.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandShipment.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\DTO\LemonStandShippingAddress.cs" />
     <Compile Include="Stores\Platforms\LemonStand\LemonStandAccountSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1109,6 +1117,7 @@
     </Compile>
     <Compile Include="Stores\Platforms\LemonStand\LemonStandDownloader.cs" />
     <Compile Include="Stores\Platforms\LemonStand\LemonStandException.cs" />
+    <Compile Include="Stores\Platforms\LemonStand\LemonStandOnlineUpdater.cs" />
     <Compile Include="Stores\Platforms\LemonStand\LemonStandOrderIdentifier.cs" />
     <Compile Include="Stores\Platforms\LemonStand\LemonStandStoreType.cs" />
     <Compile Include="Stores\Platforms\LemonStand\LemonStandWebClient.cs" />

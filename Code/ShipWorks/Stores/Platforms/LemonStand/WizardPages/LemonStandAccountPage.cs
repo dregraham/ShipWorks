@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
                 LemonStandWebClient client = new LemonStandWebClient(store);
                 //Check to see if we have access to Groupon with the new creds
                 //Ask for some orders
-                client.GetOrders(DateTime.UtcNow, 1);
+                client.GetOrders();
             }
             catch (LemonStandException ex)
             {
@@ -62,8 +62,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
                 e.NextPage = this;
                 return;
             }
-
-            //GrouponTemplate.InstallGrouponTemplate();
         }
 
         /// <summary>

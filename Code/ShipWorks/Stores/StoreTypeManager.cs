@@ -147,7 +147,7 @@ namespace ShipWorks.Stores
                 case StoreTypeCode.LemonStand: return new Platforms.LemonStand.LemonStandStoreType(store);
             }
 
-            throw new InvalidOperationException("Invalid store type.");
+            throw new InvalidOperationException("Invalid store type. " + typeCode);
         }
 
         /// <summary>

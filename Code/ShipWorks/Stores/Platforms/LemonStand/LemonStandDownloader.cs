@@ -11,11 +11,14 @@ using Newtonsoft.Json.Linq;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
-using ShipWorks.Stores.Platforms.Groupon.DTO;
+using ShipWorks.Stores.Platforms.LemonStand.DTO;
 using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
+    /// <summary>
+    /// Downloader for LemonStand
+    /// </summary>
     class LemonStandDownloader : StoreDownloader
     {
         public LemonStandDownloader(StoreEntity store)
@@ -23,19 +26,34 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
 
         }
-
+        /// <summary>
+        /// Download orders from LemonStand
+        /// </summary>
+        /// <exception cref="DownloadException">
+        /// </exception>
         protected override void Download()
         {
-
             Progress.Detail = "Downloading New Orders...";
 
             LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity)Store);
-
-            DateTime start = DateTime.UtcNow.AddDays(-7);
-
+           
             try
             {
-                do
+
+                // check for cancellation
+                if (Progress.IsCancelRequested)
+                {
+                    return;
+                }
+
+                //get orders from LemonStand 
+                JToken result = client.GetOrders();
+
+                // get JSON result objects into a list
+                IList<JToken> jsonOrders = result["data"].Children().ToList();
+                int expectedCount = jsonOrders.Count;
+                //Load orders 
+                foreach (JToken jsonOrder in jsonOrders)
                 {
                     // check for cancellation
                     if (Progress.IsCancelRequested)
@@ -43,38 +61,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         return;
                     }
 
-                    int currentPage = 1;
-                    int numberOfPages = 1;
-                    do
-                    {
-                        //Grab orders 
-                        JToken result = client.GetOrders(start, currentPage);
+                    LoadOrder(jsonOrder, client);
 
-                        //Update numberOfPages
-                        numberOfPages = (int)result["meta"]["no_of_pages"];
-
-                        // get JSON result objects into a list
-                        IList<JToken> jsonOrders = result["data"].Children().ToList();
-
-                        //Load orders 
-                        foreach (JToken jsonOrder in jsonOrders)
-                        {
-                            // check for cancellation
-                            if (Progress.IsCancelRequested)
-                            {
-                                return;
-                            }
-
-                            LoadOrder(jsonOrder);
-                        }
-
-                        currentPage++;
-
-                    } while (currentPage <= numberOfPages);
-
-                    start = start.AddHours(23);
-
-                } while (start <= DateTime.UtcNow);
+                    // set the progress detail
+                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
+                    Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
+                    
+                }            
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
@@ -88,170 +81,165 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new DownloadException(ex.Message, ex);
             }
-        }
+            }
 
             /// <summary>
-        /// LoadORder from JToken
+        /// Load Order from JToken
         /// </summary>
-        private void LoadOrder(JToken jsonOrder)
+        private void LoadOrder(JToken jsonOrder, LemonStandWebClient client)
         {
-            string orderid = jsonOrder["orderid"].ToString();
-            LemonStandOrderEntity order = (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderid));
+            //                              order
+            //                          /     |      \
+            //                    invoices  customer  items 
+            //                      /         |          \
+            //                shipment  billing_address  product 
+            //                  /
+            //          shipment_address
 
-            //Order Item Status
-            string status = jsonOrder["line_items"].Children().First()["status"].ToString() ?? "";
+            //Deserialize Json Order into order DTO
+            LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
+            int orderID = int.Parse(lsOrder.ID);
+            LemonStandOrderEntity order = (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));            
+            
+            order.OnlineStatus = lsOrder.Status;            
 
-            // Order already exists or is new and of status open
-            if (!order.IsNew || status == "open")
+            // Only load new orders
+            if (order.IsNew) {                
+
+                order.OrderDate = getDate(lsOrder.CreatedAt);
+                order.OnlineLastModified = getDate(lsOrder.UpdatedAt);
+                order.OrderNumber = int.Parse(lsOrder.Number);
+                
+                // Need invoice id to get shipment information
+                LemonStandInvoice invoice = JsonConvert.DeserializeObject<LemonStandInvoice>(jsonOrder.SelectToken("invoices.data").Children().First().ToString());
+                
+                // Get shipment information and set requested shipping
+                JToken jsonShipment = client.GetShipment(invoice.ID);
+                LemonStandShipment shipment = JsonConvert.DeserializeObject<LemonStandShipment>(jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
+
+                order.RequestedShipping = shipment.ShippingService.ToString();
+
+                // Get shipping address from shipment
+                JToken jsonShippingAddress = client.GetShippingAddress(shipment.ID);
+                LemonStandShippingAddress shippingAddress = JsonConvert.DeserializeObject<LemonStandShippingAddress>(jsonShippingAddress.SelectToken("data.shipping_address.data").ToString());
+            
+                // Get customer information and billing address
+                LemonStandCustomer customer = JsonConvert.DeserializeObject<LemonStandCustomer>(jsonOrder.SelectToken("customer.data").ToString());
+                JToken jsonBillingAddress = client.GetBillingAddress(customer.ID);
+                LemonStandBillingAddress billingAddress = JsonConvert.DeserializeObject<LemonStandBillingAddress>(jsonBillingAddress.SelectToken("data.billing_addresses.data").Children().First().ToString());
+
+                string email = customer.Email;
+
+                // Load shipping and billing address
+                LoadAddressInfo(order, shippingAddress, billingAddress, email);
+
+                // Load order items
+                LoadItems(jsonOrder, client, order);
+
+                order.OrderTotal = decimal.Parse(lsOrder.SubtotalPaid);
+            }
+            
+            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder");
+            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+        }
+
+        /// <summary>
+        /// Converts LemonStand date to UTC
+        /// </summary>
+        /// <param name="date">The date from LemonStand</param>
+        /// <returns>DateTime in UTC</returns>
+        private DateTime getDate(string date) 
+        {
+            DateTime result = DateTime.UtcNow;
+            
+            DateTime.TryParse(date, out result);
+
+            return result.ToUniversalTime();
+        }
+
+        /// <summary>
+        /// Loads Shipping and Billing address into the order entity
+        /// </summary>
+        private static void LoadAddressInfo(LemonStandOrderEntity order, LemonStandShippingAddress shipAddress, LemonStandBillingAddress billAddress, string email)
+        {
+            PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
+            PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
+
+            shipAdapter.Email = email;
+            shipAdapter.FirstName = shipAddress.FirstName;
+            shipAdapter.LastName = shipAddress.LastName;
+            shipAdapter.Street1 = shipAddress.StreetAddress;            
+            shipAdapter.City = shipAddress.City;
+            shipAdapter.StateProvCode = Geography.GetStateProvCode(shipAddress.State);
+            shipAdapter.PostalCode = shipAddress.PostalCode;
+            shipAdapter.CountryCode = Geography.GetCountryCode(shipAddress.Country);
+            shipAdapter.Phone = shipAddress.Phone;
+
+            billAdapter.Email = email;
+            billAdapter.FirstName = billAddress.FirstName;
+            billAdapter.LastName = billAddress.LastName;
+            billAdapter.Street1 = billAddress.StreetAddress;
+            billAdapter.City = billAddress.City;
+            billAdapter.StateProvCode = Geography.GetStateProvCode(billAddress.State);
+            billAdapter.PostalCode = billAddress.PostalCode;
+            billAdapter.CountryCode = Geography.GetCountryCode(billAddress.Country);
+            billAdapter.Phone = billAddress.Phone;            
+        }
+
+        /// <summary>
+        /// Loads the order items.
+        /// </summary>
+        /// <param name="jsonOrder">The json order.</param>
+        /// <param name="client">The client.</param>
+        /// <param name="order">The order.</param>
+        private void LoadItems(JToken jsonOrder, LemonStandWebClient client, LemonStandOrderEntity order)
+        {
+            //List of order items
+            IList<JToken> jsonItems = jsonOrder.SelectToken("items.data").Children().ToList();
+            foreach (JToken jsonItem in jsonItems)
             {
-                order.OnlineStatus = GetOrderStatusName(status);
-                order.OnlineStatusCode = GetOrderStatusName(status);
+                string productID = jsonItem.SelectToken("shop_product_id").ToString();
 
-                // set the progress detail
-                Progress.Detail = String.Format("Processing order {0}...", QuantitySaved + 1);
+                JToken jsonProduct = client.GetProduct(productID);
 
-                //Order Date
-                DateTime orderDate = GetDate(jsonOrder["date"].ToString());
-                order.OrderDate = orderDate;
-                order.OnlineLastModified = orderDate;
-
-                //Order Address
-                GrouponCustomer customer = JsonConvert.DeserializeObject<GrouponCustomer>(jsonOrder["customer"].ToString());
-                LoadAddressInfo(order, customer);
-
-                //Order requestedshipping
-                order.RequestedShipping = jsonOrder["shipping"]["method"].ToString();
-
-                //Order is new and its status is open
-                if (order.IsNew)
-                {
-                    // The order number format seemed to change on 2015-06-03 so that it no longer is guaranteed to have any numeric components
-                    order.OrderNumber = GetNextOrderNumber();
-
-                    //Unit of measurement used for weight  
-                    string itemWeightUnit = jsonOrder["shipping"].Value<string>("product_weight_unit") ?? "";
-
-                    //List of order items
-                    IList<JToken> jsonItems = jsonOrder["line_items"].Children().ToList();
-                    foreach (JToken jsonItem in jsonItems)
-                    {
-                        //Deserialized into grouponitem
-                        GrouponItem item = JsonConvert.DeserializeObject<GrouponItem>(jsonItem.ToString());
-                        LoadItem(order, item, itemWeightUnit);
-                    }
-
-                    //OrderTotal
-                    order.OrderTotal = (decimal)jsonOrder["amount"]["total"];
-                }
-
-                SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "GrouponStoreDownloader.LoadOrder");
-                retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+                //Deserialize into LemonStand item
+                LemonStandItem product = JsonConvert.DeserializeObject<LemonStandItem>(jsonProduct.SelectToken("data").ToString());
+                product.Quantity = jsonItem.SelectToken("quantity").ToString();
+                LoadItem(order, product);
             }
         }
 
         /// <summary>
         /// Load an order item
         /// </summary>
-        private void LoadItem(GrouponOrderEntity order, GrouponItem grouponItem, string itemWeightUnit)
+        private void LoadItem(LemonStandOrderEntity order, LemonStandItem product)
         {
-            GrouponOrderItemEntity item = (GrouponOrderItemEntity)InstantiateOrderItem(order);
+            OrderItemEntity item = InstantiateOrderItem(order);
 
-            double itemWeight = (String.IsNullOrWhiteSpace(grouponItem.Weight)) ? 0 : Convert.ToDouble(grouponItem.Weight);
+            //"data": [{
+            //    "id": 1,
+            //    "shop_order_id": 1,
+            //    "shop_product_id": 1,
+            //    "shop_tax_class_id": 1,
+            //    "name": "Baseball cap",
+            //    "description": null,
+            //    "quantity": 1,
+            //    "original_price": 39.99,
+            //    "price": 39.99,
+            //    "base_price": 39.99,
+            //    "cost": null,
+            //    "discount": 0,
+            //    "total": 39.99,
+            //    "options": null,
+            //    "extras": null
+            //}]
 
-            item.SKU = grouponItem.Sku;
-            item.Code = grouponItem.FulfillmentLineitemId;
-            item.Name = grouponItem.Name;
-            item.Weight = GetWeight(itemWeight, itemWeightUnit);
-            item.UnitPrice = Convert.ToDecimal(grouponItem.UnitPrice);
-            item.Quantity = Convert.ToInt16(grouponItem.Quantity);
-
-            //Groupon fields
-            item.Permalink = grouponItem.Permalink;
-            item.ChannelSKUProvided = grouponItem.ChannelSkuProvided;
-            item.FulfillmentLineItemID = grouponItem.FulfillmentLineitemId;
-            item.BomSKU = grouponItem.BomSku;
-            item.GrouponLineItemID = grouponItem.GrouponLineitemId;
-        }
-
-        /// <summary>
-        /// Loads Shipping and Billing address into the order entity
-        /// </summary>
-        private static void LoadAddressInfo(GrouponOrderEntity order, GrouponCustomer customer)
-        {
-            PersonAdapter shipAdapter = new PersonAdapter(order, "Ship");
-            PersonAdapter billAdapter = new PersonAdapter(order, "Bill");
-
-            PersonName name = PersonName.Parse(customer.Name);
-            shipAdapter.NameParseStatus = PersonNameParseStatus.Simple;
-            shipAdapter.FirstName = name.First;
-            shipAdapter.MiddleName = name.Middle;
-            shipAdapter.LastName = name.Last;
-            shipAdapter.Street1 = customer.Address1;
-            shipAdapter.Street2 = customer.Address2;
-            shipAdapter.City = customer.City;
-            //Groupon can send "null" as the state, check for null test and use blank instead 
-            shipAdapter.StateProvCode = Geography.GetStateProvCode(customer.State);
-            shipAdapter.PostalCode = customer.Zip;
-            shipAdapter.CountryCode = Geography.GetCountryCode(customer.Country);
-            shipAdapter.Phone = customer.Phone;
-
-            //Groupon does not provide a bill to address so we copy from shipping to billing
-            PersonAdapter.Copy(shipAdapter, billAdapter);
-        }
-
-        /// <summary>
-        /// convert to lbs from Groupon weight
-        /// </summary>
-        private static double GetWeight(double weight, string itemWeightUnit)
-        {
-            //Groupon sometimes sends weight in ounches, convert from ounches to lbs in that case
-            switch (itemWeightUnit)
-            {
-                case "ounces":
-                    return WeightUtility.Convert(WeightUnitOfMeasure.Ounces, WeightUnitOfMeasure.Pounds, weight);
-                default:
-                    return weight;
-            }
-        }
-
-        /// <summary>
-        /// Remove UTC from end of Groupon date time string
-        /// </summary>
-        private static DateTime GetDate(string date)
-        {
-            int TimeZonePos = date.IndexOf("UTC");
-
-            if (TimeZonePos > 0)
-            {
-                return DateTime.Parse(date.Substring(0, TimeZonePos));
-            }
-            else
-            {
-                return DateTime.Parse(date);
-            }
-        }
-
-        /// <summary>
-        /// Get the display name for the given order status code
-        /// </summary>
-        public static string GetOrderStatusName(string orderStatus)
-        {
-            switch (orderStatus)
-            {
-                case "ship": return "Shipped";
-                case "open": return "Open";
-            }
-
-            return orderStatus;
-        }
-
-
-
-
-
-
-
-            throw new NotImplementedException();
-        }
+            item.SKU = product.Sku;
+            item.Code = product.ID;
+            item.Name = product.Name;
+            item.Weight = (String.IsNullOrWhiteSpace(product.Weight)) ? 0 : Convert.ToDouble(product.Weight);
+            item.UnitPrice = Convert.ToDecimal(product.BasePrice);
+            item.Quantity = Convert.ToInt16(product.Quantity);
+        }        
     }
 }

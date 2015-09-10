@@ -283,6 +283,23 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
+		/// <summary>Returns a new IEntityRelation object, between OrderEntity and LemonStandOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
+		/// Order.OrderID - LemonStandOrder.OrderID
+		/// </summary>
+		internal IEntityRelation RelationToSubTypeLemonStandOrderEntity
+		{
+			get
+			{
+				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
+
+				relation.AddEntityFieldPair(OrderFields.OrderID, LemonStandOrderFields.OrderID);
+	
+	
+	
+				relation.IsHierarchyRelation=true;
+				return relation;
+			}
+		}
 		/// <summary>Returns a new IEntityRelation object, between OrderEntity and MagentoOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
 		/// Order.OrderID - MagentoOrder.OrderID
 		/// </summary>
@@ -453,23 +470,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 				return relation;
 			}
 		}
-		/// <summary>Returns a new IEntityRelation object, between OrderEntity and LemonStandOrderEntity over the 1:1 relation they have, which is used to build a target per entity hierarchy, and is using the relation between the fields:
-		/// Order.OrderID - LemonStandOrder.OrderID
-		/// </summary>
-		internal IEntityRelation RelationToSubTypeLemonStandOrderEntity
-		{
-			get
-			{
-				IEntityRelation relation = new EntityRelation(SD.LLBLGen.Pro.ORMSupportClasses.RelationType.OneToOne, true);
-
-				relation.AddEntityFieldPair(OrderFields.OrderID, LemonStandOrderFields.OrderID);
-	
-	
-	
-				relation.IsHierarchyRelation=true;
-				return relation;
-			}
-		}
 		/// <summary>Returns the relation object the entity, to which this relation factory belongs, has with the subtype with the specified name</summary>
 		/// <param name="subTypeEntityName">name of direct subtype which is a subtype of the current entity through the relation to return.</param>
 		/// <returns>relation which makes the current entity a supertype of the subtype entity with the name specified, or null if not applicable/found</returns>
@@ -491,6 +491,8 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeEtsyOrderEntity;
 				case "GrouponOrderEntity":
 					return this.RelationToSubTypeGrouponOrderEntity;
+				case "LemonStandOrderEntity":
+					return this.RelationToSubTypeLemonStandOrderEntity;
 				case "MagentoOrderEntity":
 					return this.RelationToSubTypeMagentoOrderEntity;
 				case "MarketplaceAdvisorOrderEntity":
@@ -511,8 +513,6 @@ namespace ShipWorks.Data.Model.RelationClasses
 					return this.RelationToSubTypeShopifyOrderEntity;
 				case "YahooOrderEntity":
 					return this.RelationToSubTypeYahooOrderEntity;
-				case "LemonStandOrderEntity":
-					return this.RelationToSubTypeLemonStandOrderEntity;
 				default:
 					return null;
 			}

@@ -42,6 +42,39 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 	    //}]
 
         [JsonProperty("id")]
-        public string OrderId { get; set; }
+        public string ID { get; set; }
+
+        [JsonProperty("shop_order_id")]
+        public string ShopOrderId { get; set; }
+        
+        [JsonProperty("shop_order_status_id")]
+        public string ShopOrderStatusId { get; set; }
+
+        [JsonProperty("shop_customer_id")]
+        public string ShopCustomerId { get; set; }
+
+        [JsonProperty("status")]
+        public string Status { get; set; }
+
+        [JsonProperty("number")]
+        public string Number { get; set; }
+
+        [JsonProperty("subtotal_paid")]
+        public string SubtotalPaid { get; set; }
+
+        [JsonProperty("total")]
+        public string Total { get; set; }
+
+        [JsonProperty("status_updated_at")]
+        public string StatusUpdatedAt { get; set; }
+
+        [JsonProperty("created_at")]
+        public string CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        public string UpdatedAt { get; set; }
+
+        [JsonProperty("invoices")]
+        public LemonStandInvoice Invoices { get; set; }
     }
 }

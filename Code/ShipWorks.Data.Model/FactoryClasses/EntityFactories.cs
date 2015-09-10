@@ -3230,7 +3230,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrder
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		
@@ -3242,7 +3241,6 @@ namespace ShipWorks.Data.Model.FactoryClasses
 			
 			// __LLBLGENPRO_USER_CODE_REGION_START CreateNewLemonStandOrderUsingFields
 			// __LLBLGENPRO_USER_CODE_REGION_END
-			
 			return toReturn;
 		}
 		

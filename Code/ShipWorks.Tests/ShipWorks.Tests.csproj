@@ -585,6 +585,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
+    <Folder Include="Stores\LemonStand\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExSingleMatch.cer" />

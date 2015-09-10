@@ -54,7 +54,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LemonStandWebClient client = new LemonStandWebClient(lemonStandStore);
                     //Check to see if we have access to Groupon with the new creds
                     //Ask for some orders
-                    client.GetOrders(DateTime.UtcNow, 1);
+                    client.GetOrders();
 
                     return true;
                 }

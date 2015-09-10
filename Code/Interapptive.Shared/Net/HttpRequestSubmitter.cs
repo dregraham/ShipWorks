@@ -308,6 +308,10 @@ namespace Interapptive.Shared.Net
                     webRequest.Method = "PUT";
                     break;
 
+                case HttpVerb.Patch:
+                    webRequest.Method = "PATCH";
+                    break;
+
                 default:
                     throw new InvalidOperationException("Invalid request verb: " + requestVerb);
             }

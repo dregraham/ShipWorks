@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using Interapptive.Shared.Net;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
-using ShipWorks.Stores.Platforms.Groupon.DTO;
 using System.Net;
 
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
-    class LemonStandWebClient
+    public class LemonStandWebClient
     {
         //LemonStand API endpoint
         private static string LemonStandEndpoint = "https://shipworks.lemonstand.com/api/v2";
-        //private string apiKey = "7hMk9yBK4sRdV9SGC2m0KGQYytlWjirWRDN2E6jH";
-        //private string accessToken = "mR5xLW3j1lChB6QPOm1UN5lAT6tq6zIUZUZtgQwr";
+        private static string accessToken = "mR5xLW3j1lChB6QPOm1UN5lAT6tq6zIUZUZtgQwr";
 
-        private string dateFormat = "yyyy-MM-ddthh:mm:ssZ";
 
         private readonly LemonStandStoreEntity store;
 
@@ -31,29 +27,126 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Download orders from LemonStand
+        /// Get all orders from LemonStand
         /// </summary>
-        public JToken GetOrders(DateTime updatedAtMin, int page) 
+        /// <returns>Orders in Json</returns>
+        public JToken GetOrders() 
         { 
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-            submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer mR5xLW3j1lChB6QPOm1UN5lAT6tq6zIUZUZtgQwr");
-            DateTime end = updatedAtMin.AddHours(23);
 
-            ConfigureGetRequest(submitter, updatedAtMin, end, "orders", page);
+            ConfigureGetRequest(submitter, "orders?sort=updated_at&order=desc&embed=invoices.shipment.shipping_address,customer.billing_address,items.product");
 
             return ProcessRequest(submitter, "GetOrders");
+        }
+        /// <summary>
+        /// Gets a single order with invoice information.
+        /// </summary>
+        /// <param name="orderId">The LemonStand order ID</param>
+        /// <returns>Order in Json</returns>
+        public JToken GetOrderInvoice(string orderId)
+        {
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
+            ConfigureGetRequest(submitter, "order/" + orderId + "?embed=invoices");
+
+            return ProcessRequest(submitter, "GetOrderInvoice");
+        }
+        /// <summary>
+        /// Gets the shipment.
+        /// </summary>
+        /// <param name="invoiceId">The LemonStand invoice id</param>
+        /// <returns>Shipment in Json</returns>
+        public JToken GetShipment(string invoiceId) {
+
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+
+            ConfigureGetRequest(submitter, "invoices/" + invoiceId + "?embed=shipments");
+
+            return ProcessRequest(submitter, "GetShipment");
+            
         }
 
-        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, DateTime updatedAtMin, DateTime updatedAtMax, string operationName, int page)
+        /// <summary>
+        /// Gets the shipping address.
+        /// </summary>
+        /// <param name="shipmentId">The LemonStand shipment id</param>
+        /// <returns>Shipping Address in Json</returns>
+        public JToken GetShippingAddress(string shipmentId) {
+
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+
+            ConfigureGetRequest(submitter, "shipment/" + shipmentId + "?embed=shipping_address");
+
+            return ProcessRequest(submitter, "GetShippingAddress");
+        }
+
+        /// <summary>
+        /// Gets the billing address.
+        /// </summary>
+        /// <param name="customerId">The LemonStand customer id</param>
+        /// <returns>Billing Address in Json</returns>
+        public JToken GetBillingAddress(string customerId) {
+
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+
+            ConfigureGetRequest(submitter, "customer/" + customerId + "?embed=billing_addresses");
+
+            return ProcessRequest(submitter, "GetBillingAddress");
+        
+        }
+
+        /// <summary>
+        /// Gets the product.
+        /// </summary>
+        /// <param name="productId">The LemonStand product id</param>
+        /// <returns>Product in Json</returns>
+        public JToken GetProduct(string productId) {
+
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+
+            ConfigureGetRequest(submitter, "product/" + productId);
+
+            return ProcessRequest(submitter, "GetBillingAddress");
+        
+        }
+
+
+        /// <summary>
+        /// Uploads tracking number and order status to LemonStand
+        /// </summary>
+        /// <param name="trackingNumber">The tracking number.</param>
+        /// <param name="shipmentId">The LemonStand shipment id.</param>
+        /// <param name="onlineStatus">The online order status.</param>
+        /// <param name="orderNumber">The LemonStand order number.</param>
+        public void UploadShipmentDetails(string trackingNumber, string shipmentId, string onlineStatus, string orderNumber)
         {
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            
+            parameters.Add("tracking_code", trackingNumber);
+            ConfigurePostRequest(submitter, "shipment/" + shipmentId + "/trackingcode/" , parameters);
+            ProcessRequest(submitter, "UploadShipmentDetails");
+
+
+            submitter = new HttpVariableRequestSubmitter();
+            parameters.Clear();
+            
+            parameters.Add("status", onlineStatus);
+            ConfigurePatchRequest(submitter, "order/" + orderNumber, parameters);
+            ProcessRequest(submitter, "UploadShipmentDetails");
+        }
+
+        /// <summary>
+        /// Setup a get request.
+        /// </summary>
+        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, string operationName)
+        {
+            submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
+
             submitter.Verb = HttpVerb.Get;
 
             submitter.Uri = new Uri(LemonStandEndpoint + "/" + operationName);
-            submitter.Variables.Add("sort", "updated_at");
-            //submitter.Variables.Add("updated_at_min", updatedAtMin.ToString(dateFormat));
-            //submitter.Variables.Add("updated_at_max", updatedAtMax.ToString(dateFormat));
-            //submitter.Variables.Add("page", page.ToString());
+            
         }
 
         /// <summary>
@@ -61,9 +154,34 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
         {
+
+            submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
+
             submitter.Verb = HttpVerb.Post;
 
             submitter.Uri = new Uri(LemonStandEndpoint + "/" + operationName);
+
+            submitter.AllowHttpStatusCodes(HttpStatusCode.Created);
+
+            foreach (KeyValuePair<string, string> parameter in parameters)
+            {
+                submitter.Variables.Add(parameter.Key, parameter.Value);
+            }
+        }
+
+        /// <summary>
+        /// Setup a patch request 
+        /// </summary>
+        private static void ConfigurePatchRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
+        {
+
+            submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
+
+            submitter.Verb = HttpVerb.Patch;
+
+            submitter.Uri = new Uri(LemonStandEndpoint + "/" + operationName);
+
+            submitter.AllowHttpStatusCodes(HttpStatusCode.Created);
 
             foreach (KeyValuePair<string, string> parameter in parameters)
             {

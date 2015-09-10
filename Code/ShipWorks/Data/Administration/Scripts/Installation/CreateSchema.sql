@@ -5420,6 +5420,42 @@ PRINT N'Adding foreign keys to [dbo].[GrouponStore]'
 GO
 ALTER TABLE [dbo].[GrouponStore] ADD CONSTRAINT [FK_GrouponStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
 GO
+
+PRINT N'Creating [dbo].[LemonStandStore]'
+GO
+CREATE TABLE [dbo].[LemonStandStore]
+(
+	[StoreID] [bigint] NOT NULL,
+	[APIKey] [varchar](255) NOT NULL,
+	[Token] [varchar](255) NOT NULL,
+	[StoreURL] [varchar](255) NOT NULL,
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandStore] on [dbo].[LemonStandStore]'
+GO
+ALTER TABLE [dbo].[LemonStandStore] ADD CONSTRAINT [PK_LemonStandStore] PRIMARY KEY CLUSTERED  ([StoreID])
+GO
+PRINT N'Adding foreign keys to [dbo].[LemonStandStore]'
+GO
+ALTER TABLE [dbo].[LemonStandStore] ADD CONSTRAINT [FK_LemonStandStore_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([StoreID])
+GO
+
+PRINT N'Creating [dbo].[LemonStandOrder]'
+GO
+CREATE TABLE [dbo].[LemonStandOrder]
+(
+[OrderID] [bigint] NOT NULL,
+[LemonStandOrderID] [nvarchar] (50) NOT NULL
+)
+GO
+PRINT N'Creating primary key [PK_LemonStandOrder] on [dbo].[LemonStandOrder]'
+GO
+ALTER TABLE [dbo].[LemonStandOrder] ADD CONSTRAINT [PK_LemonStandOrder] PRIMARY KEY CLUSTERED  ([OrderID])
+GO
+
+
+
+
 PRINT N'Creating extended properties'
 GO
 EXEC sp_addextendedproperty N'AuditFormat', N'0', 'SCHEMA', N'dbo', 'TABLE', N'BigCommerceStore', 'COLUMN', N'ApiToken'

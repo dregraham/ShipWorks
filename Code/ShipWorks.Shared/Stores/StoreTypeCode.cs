@@ -201,12 +201,12 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("solidcommerce")]
         SolidCommerce = 37,
 
-		[Description("Brightpearl")]
+        [Description("Brightpearl")]
         [StoreTypeIdentity("BRIGHTPEARL", "BTP")]
         [StoreTypeIcon("brightpearl")]
         Brightpearl = 38,
-		
-		[Description("OrderDesk")]
+
+        [Description("OrderDesk")]
         [StoreTypeIdentity("ORDERDESK", "ORD")]
         [StoreTypeIcon("orderdesk")]
         OrderDesk = 39,
@@ -251,17 +251,17 @@ namespace ShipWorks.Stores
         [StoreTypeIcon("channelsale")]
         ChannelSale = 47,
 
-		[Description("Fortune3")]
+        [Description("Fortune3")]
         [StoreTypeIdentity("FORTUNE3", "FT3")]
         [StoreTypeIcon("fortune3")]
         Fortune3 = 48,
-		
+
         [Description("LiveSite")]
         [StoreTypeIdentity("LIVESITE", "LST")]
         [StoreTypeIcon("livesite")]
         LiveSite = 49,
-		
-		[Description("SureDone")]
+
+        [Description("SureDone")]
         [StoreTypeIdentity("SUREDONE", "SDN")]
         [StoreTypeIcon("suredone")]
         SureDone = 50,
@@ -275,7 +275,7 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("NOPCOMMERCE", "NOP")]
         [StoreTypeIcon("nopcommerce")]
         nopCommerce = 52,
-		
+
         [Description("Lime Light CRM")]
         [StoreTypeIdentity("LIMELIGHTCRM", "LLC")]
         [StoreTypeIcon("limelightcrm")]
@@ -290,7 +290,7 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("SELLEREXPRESS", "SEE")]
         [StoreTypeIcon("sellerexpress")]
         SellerExpress = 55,
-		
+
         [Description("Powersport Support")]
         [StoreTypeIdentity("POWERSPORTSSUPPORT", "PSS")]
         [StoreTypeIcon("powersportssupport")]
@@ -325,8 +325,8 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("GROUPON", "GON")]
         [StoreTypeIcon("groupon")]
         Groupon = 62,
-		
-		[Description("StageBloc")]
+
+        [Description("StageBloc")]
         [StoreTypeIdentity("STAGEBLOC", "STG")]
         [StoreTypeIcon("stagebloc")]
         StageBloc = 63,
@@ -350,10 +350,12 @@ namespace ShipWorks.Stores
         [StoreTypeIdentity("OPENSKY", "SKY")]
         [StoreTypeIcon("opensky")]
         OpenSky = 67,
-        
+
         [Description("LemonStand")]
         [StoreTypeIdentity("LEMONSTAND", "LEM")]
         [StoreTypeIcon("lemonstand")]
         LemonStand = 68
+
+        
     }
 }

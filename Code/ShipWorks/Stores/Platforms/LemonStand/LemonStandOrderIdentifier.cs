@@ -4,7 +4,10 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
-    class LemonStandOrderIdentifier : OrderIdentifier
+    /// <summary>
+    /// Uniquely identifies an LemonStand Store order in the database
+    /// </summary>
+    public class LemonStandOrderIdentifier : OrderIdentifier
     {
         // LemonStandStore's Order ID
         private readonly string lemonStandStoreOrderId = "";
