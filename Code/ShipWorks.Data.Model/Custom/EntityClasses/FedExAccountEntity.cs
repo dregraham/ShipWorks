@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -20,6 +21,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// <summary>
         /// Get the shipment type to which this account applies
         /// </summary>
-        public int ShipmentType => 6;
+        public ShipmentTypeCode ShipmentType => ShipmentTypeCode.FedEx;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -16,6 +17,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the shipment type to which this account applies
         /// </summary>
         /// <remarks>Assume Usps unless explicitly marked as Express1</remarks>
-        public int ShipmentType => UspsReseller == 1 ? 13 : 15;
+        public ShipmentTypeCode ShipmentType => UspsReseller == 1 ? ShipmentTypeCode.Express1Usps : ShipmentTypeCode.Usps;
     }
 }

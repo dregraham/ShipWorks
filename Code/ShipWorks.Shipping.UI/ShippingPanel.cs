@@ -7,6 +7,9 @@ using ShipWorks.ApplicationCore;
 using Autofac;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
+using ShipWorks.Data;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -45,9 +48,11 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public void ChangeContent(IGridSelection selection)
+        public async void ChangeContent(IGridSelection selection)
         {
-            viewModel.LoadOrder(new OrderEntity());
+            OrderEntity entity = await TaskEx.Run(() => DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity);
+
+            viewModel.LoadOrder(entity);
         }
 
         public void LoadState()

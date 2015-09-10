@@ -29,7 +29,7 @@ namespace Interapptive.Shared.Business.Geography
         /// </summary>
         public static IList<string> Countries
         {
-            get { return CountryList.Countries; }
+            get { return CountryList.CountryNames; }
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Indicates if the given foreign country code is a US international territory
         /// </summary>
-        public static bool IsUSInternationalTerritory(this IAddressAdapter address)
+        public static bool IsUSInternationalTerritory(IAddressAdapter address)
         {
             return CountryList.IsUSInternationalTerritory(address);
         }
@@ -59,7 +59,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Indicates if the given foreign country code is a specific US international territory
         /// </summary>
-        public static bool IsUSInternationalTerritory(this IAddressAdapter address, string territory)
+        public static bool IsUSInternationalTerritory(IAddressAdapter address, string territory)
         {
             return CountryList.IsUSInternationalTerritory(address, territory);
         }

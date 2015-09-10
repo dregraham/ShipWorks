@@ -1,8 +1,6 @@
-﻿using ShipWorks.ApplicationCore;
-using ShipWorks.Core.UI;
+﻿using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
+using ShipWorks.Shipping.UI;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -19,28 +17,20 @@ namespace ShipWorks.Shipping
         private ShipmentType selectedShipmentType;
         private ObservableCollection<ShipmentType> shipmentTypes;
         private PropertyChangedHandler handler;
+        private AddressViewModel origin;
+        private AddressViewModel destination;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
-        public ShippingPanelViewModel()
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public ShippingPanelViewModel(IShippingPanelConfigurator configurator)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-            shipmentTypes = new ObservableCollection<ShipmentType>(new ShipmentType[] {
-                new FedExShipmentType(),
-                new UspsShipmentType()
-            });
 
-            //selectedShipmentType = shipmentTypes.FirstOrDefault();
-            //PropertyChanged += ShippingPanelViewModel_PropertyChanged;
-        }
-
-        private void ShippingPanelViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            //throw new System.NotImplementedException();
-
-            var foo = e.PropertyName;
-            //Console.WriteLine("")
+            shipmentTypes = new ObservableCollection<ShipmentType>(configurator.AvailableShipmentTypes);
         }
 
         /// <summary>
@@ -49,10 +39,17 @@ namespace ShipWorks.Shipping
         public void LoadOrder(OrderEntity orderEntity)
         {
             SelectedShipmentType = ShipmentTypes.FirstOrDefault();
+            Origin.Load(new Interapptive.Shared.Business.PersonAdapter(orderEntity, "Ship"));
         }
 
+        /// <summary>
+        /// Gets a list of available shipment types
+        /// </summary>
         public ObservableCollection<ShipmentType> ShipmentTypes => shipmentTypes;
 
+        /// <summary>
+        /// Selected shipment type for the current shipment
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public ShipmentType SelectedShipmentType
         {
@@ -66,14 +63,18 @@ namespace ShipWorks.Shipping
             }
         }
 
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public bool SupportsMultiplePackages
         {
             get { return supportsMultiplePackages; }
-            set {
-                handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value);
-                //PropertyChanged(this, new PropertyChangedEventArgs(nameof(SupportsMultiplePackages)));
-            }
+            set { handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value); }
         }
+
+        public AddressViewModel Origin => origin ?? (origin = new AddressViewModel());
+
+        public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
     }
 }

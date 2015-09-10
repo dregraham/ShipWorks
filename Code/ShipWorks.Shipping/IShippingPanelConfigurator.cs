@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Users.Security;
 
@@ -28,5 +25,10 @@ namespace ShipWorks.Shipping
         /// Wraps ShippingSettings.AutoCreateShipments
         /// </summary>
         bool AutoCreateShipments { get; }
+
+        /// <summary>
+        /// Get a list of available shipment types
+        /// </summary>
+        IEnumerable<ShipmentType> AvailableShipmentTypes { get; }
     }
 }

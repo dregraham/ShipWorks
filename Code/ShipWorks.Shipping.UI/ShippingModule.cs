@@ -17,6 +17,10 @@ namespace ShipWorks.Shipping.UI
                 .PreserveExistingDefaults();
 
             builder.RegisterType<ShippingPanelViewModel>();
+
+            builder.RegisterType<ShippingPanelConfigurator>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

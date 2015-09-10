@@ -1,4 +1,5 @@
 ﻿using ShipWorks.Data.Model.Custom;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Data.Model.EntityClasses
 {
@@ -22,6 +23,6 @@ namespace ShipWorks.Data.Model.EntityClasses
         /// Get the shipment type to which this account applies
         /// </summary>
         /// <remarks>Assume Endicia unless explicitly marked as Express1</remarks>
-        public int ShipmentType => EndiciaReseller == 1 ? 9 : 2;
+        public ShipmentTypeCode ShipmentType => EndiciaReseller == 1 ? ShipmentTypeCode.Express1Endicia : ShipmentTypeCode.Endicia;
     }
 }

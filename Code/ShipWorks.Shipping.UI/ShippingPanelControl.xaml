@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
-    xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -41,13 +40,17 @@
             </Grid>
             <Border>
                 <Expander Header="From"
-                              Style="{StaticResource ExpanderStyle}">
+                          IsExpanded="{Binding IsOriginExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                          DataContext="{Binding Origin}"
+                          Style="{StaticResource ExpanderStyle}">
                     <local:AddressControl />
                 </Expander>
             </Border>
             <Border>
                 <Expander Header="To"
-                            Style="{StaticResource ExpanderStyle}">
+                          IsExpanded="{Binding IsDestinationExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
+                          DataContext="{Binding Destination}"
+                          Style="{StaticResource ExpanderStyle}">
                     <local:AddressControl />
                 </Expander>
             </Border>

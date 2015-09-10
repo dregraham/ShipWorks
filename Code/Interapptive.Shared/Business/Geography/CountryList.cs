@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Drawing;
-using Interapptive.Shared.Properties;
-using System.Collections;
 using Interapptive.Shared.Utility;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Interapptive.Shared.Business.Geography
 {
     /// <summary>
     /// Maintains countries
     /// </summary>
-    internal static class CountryList
+    public static class CountryList
     {
         static SortedList<string, string> countries = new SortedList<string, string>(StringComparer.InvariantCultureIgnoreCase);
 
@@ -28,10 +24,16 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Returns a readonly list of Country names
         /// </summary>
-        public static IList<string> Countries
+        public static IList<string> CountryNames
         {
             get { return new List<string>(countries.Keys); }
         }
+
+        /// <summary>
+        /// Returns a readonly list of countries
+        /// </summary>
+        public static IEnumerable<KeyValuePair<string, string>> Countries => 
+            new ReadOnlyCollection<KeyValuePair<string, string>>(countries.ToList());
 
         /// <summary>
         /// Get the code of the country with the given name.  If not found, the original name is returned.

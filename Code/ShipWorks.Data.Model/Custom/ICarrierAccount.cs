@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Data.Model.Custom
+﻿using ShipWorks.Shipping;
+
+namespace ShipWorks.Data.Model.Custom
 {
     /// <summary>
     /// Allow carrier accounts to be used interchangably
@@ -18,6 +20,6 @@
         /// <summary>
         /// Get the shipment type to which this account applies
         /// </summary>
-        int ShipmentType { get; }
+        ShipmentTypeCode ShipmentType { get; }
     }
 }

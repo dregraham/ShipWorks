@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
+             xmlns:geography="clr-namespace:Interapptive.Shared.Business.Geography;assembly=Interapptive.Shared"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="380" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ServiceControlStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <local:StateProvinceConverter x:Key="StateProvinceConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <StackPanel>
@@ -66,7 +68,7 @@
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Style="{StaticResource GridLabel}">State \ Prov:</TextBlock>
             <ComboBox Grid.Row="2" Grid.Column="1"
-                      ItemsSource="{Binding States}"
+                      ItemsSource="{Binding SelectedValue,ElementName=CountryComboBox,Converter={StaticResource StateProvinceConverter}}"
                       Text="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
 
             <TextBlock Grid.Row="3" Grid.Column="0"
@@ -77,8 +79,11 @@
             <TextBlock Grid.Row="4" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Country:</TextBlock>
             <ComboBox Grid.Row="4" Grid.Column="1"
-                      ItemsSource="{Binding Countries}"
-                      Text="{Binding Country, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></ComboBox>
+                      x:Name="CountryComboBox"
+                      DisplayMemberPath="Key"
+                      SelectedValuePath="Value"
+                      SelectedValue="{Binding Country}"
+                      ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"></ComboBox>
         </Grid>
 
         <TextBlock Style="{StaticResource Header}">Contact Information</TextBlock>

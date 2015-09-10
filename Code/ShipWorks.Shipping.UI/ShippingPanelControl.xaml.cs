@@ -16,14 +16,5 @@ namespace ShipWorks.Shipping.UI
 
             DataContext = viewModel;
         }
-
-        ///// <summary>
-        ///// Model associated with this view
-        ///// </summary>
-        //public ShippingPanelViewModel ViewModel
-        //{
-        //    get { return (ShippingPanelViewModel)DataContext; }
-        //    set { DataContext = value; }
-        //}
     }
 }

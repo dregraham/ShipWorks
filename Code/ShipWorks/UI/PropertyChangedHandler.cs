@@ -15,7 +15,8 @@ namespace ShipWorks.Core.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public PropertyChangedHandler(object source, Func<PropertyChangedEventHandler> getPropertyChanged) : this(source, getPropertyChanged, () => null)
+        public PropertyChangedHandler(object source, Func<PropertyChangedEventHandler> getPropertyChanged) : 
+            this(source, getPropertyChanged, () => null)
         {
 
         }
@@ -50,17 +51,13 @@ namespace ShipWorks.Core.UI
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        protected virtual void OnPropertyChanging(string propertyName)
-        {
+        protected virtual void OnPropertyChanging(string propertyName) =>
             getPropertyChanging()?.Invoke(source, new PropertyChangingEventArgs(propertyName));
-        }
 
         /// <summary>
         /// Raise the property changed event
         /// </summary>
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
+        protected virtual void OnPropertyChanged(string propertyName) =>
             getPropertyChanged()?.Invoke(source, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
