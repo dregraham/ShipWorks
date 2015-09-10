@@ -1,4 +1,6 @@
 ﻿using System.Windows.Forms;
+using Autofac;
+using ShipWorks.ApplicationCore;
 using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Shipping.Settings
@@ -13,9 +15,12 @@ namespace ShipWorks.Shipping.Settings
         /// </summary>
         public static DialogResult RunWizard(IWin32Window owner, ShipmentType shipmentType)
         {
-            using (ShipmentTypeSetupWizardForm wizard = shipmentType.CreateSetupWizard())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                return wizard.ShowDialog(owner);
+                using (ShipmentTypeSetupWizardForm wizard = shipmentType.CreateSetupWizard(lifetimeScope))
+                {
+                    return wizard.ShowDialog(owner);
+                }
             }
         }
 

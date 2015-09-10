@@ -74,7 +74,7 @@ namespace Interapptive.Shared.Net.OAuth
 
         public override int GetHashCode()
         {
-            if (Left != null && Right != null)
+            if (!Left.Equals(default(T1)) && !Right.Equals(default(T2)))
             {
                 return Left.GetHashCode() ^ Right.GetHashCode();
             }

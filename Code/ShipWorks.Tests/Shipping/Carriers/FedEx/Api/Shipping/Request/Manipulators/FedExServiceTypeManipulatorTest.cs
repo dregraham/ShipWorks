@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulators
 {
-    [TestClass]
     public class FedExServiceTypeManipulatorTest
     {
         private FedExServiceTypeManipulator testObject;
@@ -18,8 +17,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
         private ProcessShipmentRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExServiceTypeManipulatorTest()
         {
             shipmentEntity = BuildFedExShipmentEntity.SetupRequestShipmentEntity();
             shipmentEntity.FedEx.Service = (int)FedExServiceType.PriorityOvernight;
@@ -30,13 +28,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Request.Manipulat
             testObject = new FedExServiceTypeManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExServiceTypeManipulator_ReturnsServiceType_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.ServiceType, ServiceType.PRIORITY_OVERNIGHT);
+            Assert.Equal(nativeRequest.RequestedShipment.ServiceType, ServiceType.PRIORITY_OVERNIGHT);
         }
     }
 }

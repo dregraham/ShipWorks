@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Xml.Linq;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;

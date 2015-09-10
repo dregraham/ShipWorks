@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Newegg;
 using ShipWorks.Stores.Platforms.Newegg.Net;
 using ShipWorks.Data.Model.EntityClasses;
@@ -16,7 +16,6 @@ namespace ShipWorks.Tests.Stores.Newegg
     /// <summary>
     /// Summary description for NeweggWebClientTest
     /// </summary>
-    [TestClass]
     public class NeweggWebClientTest
     {
         private IRequestFactory requestFactory;
@@ -34,8 +33,7 @@ namespace ShipWorks.Tests.Stores.Newegg
         private OtherShipmentEntity otherShipmentEntity;
 
 
-        [TestInitialize]
-        public void Initialize()
+        public NeweggWebClientTest()
         {
             this.requestFactory = new ShipWorks.Tests.Stores.Newegg.Mocked.Success.MockRequestFactory();
             this.store = new NeweggStoreEntity();
@@ -53,16 +51,16 @@ namespace ShipWorks.Tests.Stores.Newegg
             testObject = new NeweggWebClient(store, requestFactory);
         }
         
-        [TestMethod]
+        [Fact]
         public void AreCredentialsValid_ReturnsTrue_WhenAValidResponseIsReceived_Test()
         {
             // The initialization method has configured our test object (NeweggWebClient)
             // to always return a valid response (via our mocked request factory) regardless 
             // of the store entity's configuration
-            Assert.IsTrue(testObject.AreCredentialsValid());
+            Assert.True(testObject.AreCredentialsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void AreCredentialsValid_ReturnsFalse_WhenAnInvalidResponseIsReceived_Test()
         {
             // We're going to override the default configuration that was setup in the 
@@ -70,10 +68,10 @@ namespace ShipWorks.Tests.Stores.Newegg
             this.requestFactory = new ShipWorks.Tests.Stores.Newegg.Mocked.Failure.MockRequestFactory();
             testObject = new NeweggWebClient(store, requestFactory);
 
-            Assert.IsFalse(testObject.AreCredentialsValid());
+            Assert.False(testObject.AreCredentialsValid());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenEndiciaAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -81,10 +79,10 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("DHL", carrierCode);
+            Assert.Equal("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsDhl_WhenUspsAndDhlServiceUsed_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -92,10 +90,10 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Usps);
 
-            Assert.AreEqual("DHL", carrierCode);
+            Assert.Equal("DHL", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenEndiciaAndFirstClass_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -103,10 +101,10 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("USPS", carrierCode);
+            Assert.Equal("USPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsConsolidator_WhenEndiciaAndConsolidator_Test()
         {
             postalShipmentEntity.Endicia = endiciaShipmentEntity;
@@ -114,10 +112,10 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Endicia);
 
-            Assert.AreEqual("Consolidator", carrierCode);
+            Assert.Equal("Consolidator", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUsps_WhenUspsAndFirstClass_Test()
         {
             postalShipmentEntity.Usps = uspsShipmentEntity;
@@ -125,32 +123,32 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Usps);
 
-            Assert.AreEqual("USPS", carrierCode);
+            Assert.Equal("USPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsSpecifiedCarrier_WhenOtherShipmentType_Test()
         {
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.Other);
 
-            Assert.AreEqual(otherShipmentEntity.Carrier, carrierCode);
+            Assert.Equal(otherShipmentEntity.Carrier, carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUps_WhenUpsAndGround_Test()
         {
             shipmentEntity.Ups = upsEntity;
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsOnLineTools);
 
-            Assert.AreEqual("UPS", carrierCode);
+            Assert.Equal("UPS", carrierCode);
 
             carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsWorldShip);
 
-            Assert.AreEqual("UPS", carrierCode);
+            Assert.Equal("UPS", carrierCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void GetCarrierCode_ReturnsUpsMi_WhenUpsAndUpsMiService_Test()
         {
             upsEntity.Service = (int) UpsServiceType.UpsMailInnovationsFirstClass;
@@ -158,11 +156,11 @@ namespace ShipWorks.Tests.Stores.Newegg
 
             string carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsOnLineTools);
 
-            Assert.AreEqual("UPS MI", carrierCode);
+            Assert.Equal("UPS MI", carrierCode);
 
             carrierCode = RunCarrierCodeTest(ShipmentTypeCode.UpsWorldShip);
 
-            Assert.AreEqual("UPS MI", carrierCode);
+            Assert.Equal("UPS MI", carrierCode);
         }
 
         private string RunCarrierCodeTest(ShipmentTypeCode shipmentTypeCode)

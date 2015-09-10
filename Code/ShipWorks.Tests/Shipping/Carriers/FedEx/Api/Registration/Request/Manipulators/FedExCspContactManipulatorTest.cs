@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manipulators
 {
-    [TestClass]
     public class FedExCspContactManipulatorTest
     {
         private FedExCspContactManipulator testObject;
@@ -19,8 +18,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
         private RegisterWebUserRequest nativeRequest;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCspContactManipulatorTest()
         {
             account = new FedExAccountEntity
             {
@@ -40,69 +38,66 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Request.Manip
             testObject = new FedExCspContactManipulator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotRegisterWebCspUserRequest_Test()
         {
             // Setup the native request to be an unexpected type
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SubscriptionRequest());
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(carrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsBillingAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // The act of actually setting the individual fields of the billing address is deferred to
             // another object, so we just want to make sure it is not empty
-            Assert.IsNotNull(nativeRequest.ShippingAddress);
+            Assert.NotNull(nativeRequest.ShippingAddress);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_ContactIsNotNull_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
-            Assert.IsNotNull(nativeRequest.UserContactAndAddress);
+            Assert.NotNull(nativeRequest.UserContactAndAddress);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsContactAddress_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // The act of actually setting the individual fields of the contact address is deferred to
             // another object, so we just want to make sure it is not empty
-            Assert.IsNotNull(nativeRequest.UserContactAndAddress.Address);
+            Assert.NotNull(nativeRequest.UserContactAndAddress.Address);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsContactPerson_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // The act of actually setting the individual fields of the contact info is deferred to
             // another object, so we just want to make sure it is not empty
-            Assert.IsNotNull(nativeRequest.UserContactAndAddress.Contact);
+            Assert.NotNull(nativeRequest.UserContactAndAddress.Contact);
         }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using System.Xml;
 using System.Xml.XPath;
 using Interapptive.Shared;
@@ -9,14 +9,12 @@ using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Tests.Core
 {
-    [TestClass]
     public class XPathUtilityTests
     {
         static XmlDocument xmlDocument;
         static XPathNavigator xpath;
 
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        static XPathUtilityTests()
         {
             string xml = @"
                 <Root>
@@ -40,150 +38,143 @@ namespace ShipWorks.Tests.Core
             xpath = xmlDocument.CreateNavigator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void EvaluateNullXpath()
         {
-            XPathUtility.Evaluate(null, "Whatever", "Nothing");
+            Assert.Throws<ArgumentNullException>(() => XPathUtility.Evaluate(null, "Whatever", "Nothing"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void EvaluateNullNodePath()
         {
-            XPathUtility.Evaluate(xpath, null, "Nothing");
+            Assert.Throws<ArgumentNullException>(() => XPathUtility.Evaluate(xpath, null, "Nothing"));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Car/Color", "Black");
 
-            Assert.AreEqual("Blue", result);
+            Assert.Equal("Blue", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingString()
         {
             string result = XPathUtility.Evaluate(xpath, "//EmptyString", "NonEmtpy");
 
-            Assert.AreEqual(string.Empty, result);
+            Assert.Equal(string.Empty, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDefaultString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Does/Not/Exist", "MyDefault");
 
-            Assert.AreEqual("MyDefault", result);
+            Assert.Equal("MyDefault", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateNodeSetString()
         {
             string result = XPathUtility.Evaluate(xpath, "//Color", "Multiple");
 
             // Just returns the first
-            Assert.AreEqual("Blue", result);
+            Assert.Equal("Blue", result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateInt()
         {
             int result = XPathUtility.Evaluate(xpath, "//Truck/Wheels", 2);
 
-            Assert.AreEqual(18, result);
+            Assert.Equal(18, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingInt()
         {
             int result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 4);
 
-            Assert.AreEqual(4, result);
+            Assert.Equal(4, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void EvaluateNonInt()
         {
-            XPathUtility.Evaluate(xpath, "//Car/Color", 12);
+            Assert.Throws<FormatException>(() => XPathUtility.Evaluate(xpath, "//Car/Color", 12));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDecimal()
         {
             decimal result = XPathUtility.Evaluate(xpath, "//Car/MPG", 1.25m);
 
-            Assert.AreEqual(31.34m, result);
+            Assert.Equal(31.34m, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void EvaluateNonDecimal()
         {
-            XPathUtility.Evaluate(xpath, "//Car/Color", 12.5m);
+            Assert.Throws<FormatException>(() => XPathUtility.Evaluate(xpath, "//Car/Color", 12.5m));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingDecimal()
         {
             decimal result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 4.5m);
 
-            Assert.AreEqual(4.5m, result);
+            Assert.Equal(4.5m, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void EvaluateDecimalAsInt()
         {
-            int result = XPathUtility.Evaluate(xpath, "//Car/MPG", 1);
+            Assert.Throws<FormatException>(() => XPathUtility.Evaluate(xpath, "//Car/MPG", 1));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateDouble()
         {
             double result = XPathUtility.Evaluate(xpath, "//Truck/MPG", 1.25);
 
-            Assert.AreEqual(12.25, result);
+            Assert.Equal(12.25, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void EvaluateNonDouble()
         {
-            XPathUtility.Evaluate(xpath, "//Car/Color", 12.5);
+            Assert.Throws<FormatException>(() => XPathUtility.Evaluate(xpath, "//Car/Color", 12.5));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingDouble()
         {
             double result = XPathUtility.Evaluate(xpath, "//Van/Nothing", 8.98);
 
-            Assert.AreEqual(8.98, result);
+            Assert.Equal(8.98, result);
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateBool()
         {
             bool result = XPathUtility.Evaluate(xpath, "//Truck/Diesel", false);
 
-            Assert.AreEqual(true, result);
+            Assert.Equal(true, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
+        [Fact]
         public void EvaluateNonBool()
         {
-            XPathUtility.Evaluate(xpath, "//Car/Color", true);
+            Assert.Throws<FormatException>(() => XPathUtility.Evaluate(xpath, "//Car/Color", true));
         }
 
-        [TestMethod]
+        [Fact]
         public void EvaluateMissingBool()
         {
             bool result = XPathUtility.Evaluate(xpath, "//Van/Nothing", true);
 
-            Assert.AreEqual(true, result);
+            Assert.Equal(true, result);
         }
     }
 }

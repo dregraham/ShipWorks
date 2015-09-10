@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Carriers.UPS.OnLineTools.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.Manipulators
 {
-    [TestClass]
     public class UpsInvoiceRegistrationShipperInfoManipulatorTest
     {
         UpsInvoiceRegistrationShipperInfoManipulator testObject;
@@ -23,8 +22,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
 
         private RegisterRequest registerRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsInvoiceRegistrationShipperInfoManipulatorTest()
         {
             upsAccount = new UpsAccountEntity()
             {
@@ -42,36 +40,36 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.InvoiceRegistration.Api.Request.
             testObject = new UpsInvoiceRegistrationShipperInfoManipulator(upsAccount);           
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountNameIsInterapptive_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual("Interapptive", registerRequest.ShipperAccount.AccountName);
+            Assert.Equal("Interapptive", registerRequest.ShipperAccount.AccountName);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_AccountNumberIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.AccountNumber, registerRequest.ShipperAccount.AccountNumber);
+            Assert.Equal(upsAccount.AccountNumber, registerRequest.ShipperAccount.AccountNumber);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PostalCodeIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.PostalCode, registerRequest.ShipperAccount.PostalCode);
+            Assert.Equal(upsAccount.PostalCode, registerRequest.ShipperAccount.PostalCode);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CountryCodeIsSet_Test()
         {
             testObject.Manipulate(request);
 
-            Assert.AreEqual(upsAccount.CountryCode, registerRequest.ShipperAccount.CountryCode);
+            Assert.Equal(upsAccount.CountryCode, registerRequest.ShipperAccount.CountryCode);
         }
     }
 }

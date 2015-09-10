@@ -11,6 +11,7 @@ using SD.LLBLGen.Pro.ORMSupportClasses;
 using System.Diagnostics;
 using ShipWorks.Shipping.Carriers.UPS.Enums;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Insurance;
 using ShipWorks.Shipping.Settings;
 

@@ -11,7 +11,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate
     public class BestRateScope : IDisposable
     {
         [ThreadStatic]
-        static bool active = false;
+        static bool active;
 
         /// <summary>
         /// Constructor - initiates the scope

@@ -12,6 +12,7 @@ using log4net;
 using System.Diagnostics;
 using ShipWorks.ApplicationCore;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.UPS.OnLineTools.Api
 {

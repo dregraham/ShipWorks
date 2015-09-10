@@ -13,6 +13,7 @@ using Interapptive.Shared.Business;
 using Interapptive.Shared.Enums;
 using ShipWorks.Stores.Platforms.Groupon.DTO;
 using System.Reflection;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Groupon
 {

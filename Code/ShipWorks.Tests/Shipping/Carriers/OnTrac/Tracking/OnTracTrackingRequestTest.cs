@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Shipping.Carriers.OnTrac;
@@ -12,7 +12,6 @@ using ShipWorks.Shipping.Tracking;
 
 namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 {
-    [TestClass]
     public class OnTracTrackingRequestTest
     {
         Mock<IHttpResponseReader> mockedHttpResponseReader;
@@ -25,8 +24,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
 
         TrackingShipmentList validOnTracResponse;
 
-        [TestInitialize]
-        public void Initialize()
+        public OnTracTrackingRequestTest()
         {
             //Setup mock object that holds response from request
             mockedHttpResponseReader = new Mock<IHttpResponseReader>();
@@ -78,20 +76,20 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             };
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_ResultDeserializedProperly_WhenParametersAndResultsAreValid_Test()
         {
             var trackingResult = RunSuccessfullRequestTracking();
 
             //Verify the xml deseralized correctly
-            Assert.IsTrue(trackingResult.Details.Count == 2);
-            Assert.AreEqual(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.AreEqual(
+            Assert.True(trackingResult.Details.Count == 2);
+            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
+            Assert.Equal(
                 trackingResult.Summary,
                 "<b>First Event Desc</b> on 1/01/2012 2:30 AM ");
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_RequestLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -99,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedLogger.Verify(x => x.LogRequest(It.IsAny<HttpRequestSubmitter>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_ResponseLogged_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
@@ -107,23 +105,23 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedLogger.Verify(x => x.LogResponse(It.IsAny<string>()));
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_UriInCorrectFormat_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
 
             //Validate URI was in correct format given the parameters
-            Assert.AreEqual(
+            Assert.Equal(
                 "https://www.shipontrac.net/OnTracTestWebServices/OnTracServices.svc/v2/37/shipments?pw=testpass&tn=123456&requestType=track",
                 mockedSubmitter.Object.Uri.ToString());
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_RequestUsingHttpVerbGet_WhenParametersAndResultsAreValid_Test()
         {
             RunSuccessfullRequestTracking();
 
-            Assert.AreEqual(HttpVerb.Get, mockedSubmitter.Object.Verb);
+            Assert.Equal(HttpVerb.Get, mockedSubmitter.Object.Verb);
         }
 
         TrackingResult RunSuccessfullRequestTracking()
@@ -138,8 +136,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             return trackingResult;
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracException))]
+        [Fact]
         public void RequestTracking_ThrowsException_WhenReturnedXmlIsInvalid_Test()
         {
             //fake string response from OnTrac
@@ -148,10 +145,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(invalidFakedResponseXml);
 
             //Get result
-            testObject.GetTrackingResults("123456");
+            Assert.Throws<OnTracException>(() => testObject.GetTrackingResults("123456"));
         }
 
-        [TestMethod]
+        [Fact]
         public void RequestTracking_GetsTrackingInfo_WhenPackageNotDelivered_Test()
         {
             validOnTracResponse.Shipments[0].Delivered = false;
@@ -164,14 +161,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             //Get result
             TrackingResult trackingResult = testObject.GetTrackingResults("123456");
 
-            Assert.IsTrue(trackingResult.Details.Count == 2);
-            Assert.AreEqual(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.AreEqual(
+            Assert.True(trackingResult.Details.Count == 2);
+            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
+            Assert.Equal(
                 trackingResult.Summary,
                 "<b>First Event Desc</b><br/><span style='color: rgb(80, 80, 80);'>Should arrive: 1/02/2012 12:00 AM</span>");
         }
 
-        [TestMethod]
+        [Fact]
         public void TrackShipment_GetsTrackingInfoWithSignature_WhenPackageSignedAndDelivered_Test()
         {
             validOnTracResponse.Shipments[0].POD = "Bob";
@@ -183,15 +180,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             //Get result
             TrackingResult trackingResult = testObject.GetTrackingResults("123456");
 
-            Assert.IsTrue(trackingResult.Details.Count == 2);
-            Assert.AreEqual(trackingResult.Details.First().Activity, "First Event Desc");
-            Assert.AreEqual(
+            Assert.True(trackingResult.Details.Count == 2);
+            Assert.Equal(trackingResult.Details.First().Activity, "First Event Desc");
+            Assert.Equal(
                 trackingResult.Summary,
                 "<b>First Event Desc</b> on 1/01/2012 2:30 AM <br/><span style='color: rgb(80, 80, 80);'>Signed by: Bob</span>");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracApiErrorException))]
+        [Fact]
         public void TrackShipment_ThrowsException_WhenError_Test()
         {
             validOnTracResponse.Error = "Error!";
@@ -200,11 +196,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(validOnTracResponseString);
 
             //Get result
-            testObject.GetTrackingResults("123456");
+            Assert.Throws<OnTracApiErrorException>(() => testObject.GetTrackingResults("123456"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracException))]
+        [Fact]
         public void TrackShipment_ThrowsException_WhenNoShipments_Test()
         {
             validOnTracResponse.Shipments = new TrackingShipment[0];
@@ -213,11 +208,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(validOnTracResponseString);
 
             //Get result
-            testObject.GetTrackingResults("123456");
+            Assert.Throws<OnTracException>(() => testObject.GetTrackingResults("123456"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(OnTracException))]
+        [Fact]
         public void TrackShipment_ThrowsException_WhenNoEvents_Test()
         {
             validOnTracResponse.Shipments.First().Events = new Event[0];
@@ -226,7 +220,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.OnTrac.Tracking
             mockedHttpResponseReader.Setup(x => x.ReadResult()).Returns(validOnTracResponseString);
 
             //Get result
-            testObject.GetTrackingResults("123456");
+            Assert.Throws<OnTracException>(() => testObject.GetTrackingResults("123456"));
         }
     }
 }

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
 {
-    [TestClass]
     public class FedExVoidRequestTest
     {
         private FedExVoidRequest testObject;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
         private ShipmentEntity shipmentEntity;
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVoidRequestTest()
         {
             shipmentEntity = new ShipmentEntity();
             account = new FedExAccountEntity {AccountNumber = "1234", MeterNumber = "45453"};
@@ -56,19 +54,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
         }
 
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_IsNotNull_Test()
         {
-            Assert.IsNotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.NotNull(testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void CarrierAccountEntity_ReturnsAccountProvidedInConstructor_Test()
         {
-            Assert.AreEqual(account, testObject.CarrierAccountEntity as FedExAccountEntity);
+            Assert.Equal(account, testObject.CarrierAccountEntity as FedExAccountEntity);
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToManipulators_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -79,7 +77,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
             secondManipulator.Verify(m => m.Manipulate(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToFedExService_Test()
         {
             // No additional setup needed since it was performed in Initialize()
@@ -89,7 +87,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Void.Request
             fedExService.Verify(s => s.Void(testObject.NativeRequest as DeleteShipmentRequest), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Submit_DelegatesToResponseFactory_WhenCreatingVoidResponse_Test()
         {
             // No additional setup needed since it was performed in Initialize()

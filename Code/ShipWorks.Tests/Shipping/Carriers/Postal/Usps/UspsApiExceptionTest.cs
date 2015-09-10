@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Web.Services.Protocols;
 using System.Xml;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net;
+using Xunit;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 {
-    [TestClass]
     public class UspsApiExceptionTest
     {
-        [TestMethod]
+        [Fact]
         public void Message_WebServiceNamespaceIsRemoved_WhenSoapException()
         {
             string errorMessage = string.Format("An error occurred.  {0}  Something bad.", WebServiceNamespace);
@@ -23,7 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Usps
 
             string message = testObject.Message;
 
-            Assert.AreEqual("An error occurred.    Something bad.", message);
+            Assert.Equal("An error occurred.    Something bad.", message);
         }
 
         /// <summary>

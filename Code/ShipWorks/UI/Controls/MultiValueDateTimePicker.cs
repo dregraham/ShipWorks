@@ -7,6 +7,7 @@ using Interapptive.Shared;
 using System.Drawing;
 using System.ComponentModel;
 using Interapptive.Shared.Win32;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls
 {
@@ -22,6 +23,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(false)]
+        [Obfuscation(Exclude = true)]
         public bool MultiValued
         {
             get

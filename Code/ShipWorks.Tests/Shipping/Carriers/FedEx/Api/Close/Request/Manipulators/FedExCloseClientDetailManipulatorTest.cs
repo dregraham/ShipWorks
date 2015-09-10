@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -9,7 +9,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Close;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 {
-    [TestClass]
     public class FedExCloseClientDetailManipulatorTest
     {
         private FedExCloseClientDetailManipulator testObject;
@@ -23,10 +22,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
         private FedExAccountEntity account;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExCloseClientDetailManipulatorTest()
         {
-            account = new FedExAccountEntity {AccountNumber = "12345", MeterNumber = "67890"};
+            account = new FedExAccountEntity { AccountNumber = "12345", MeterNumber = "67890" };
 
             nativeGroundCloseRequest = new GroundCloseRequest { ClientDetail = new ClientDetail() };
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), nativeGroundCloseRequest);
@@ -39,34 +37,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject = new FedExCloseClientDetailManipulator();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(groundCloseCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCloseCarrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotGroundCloseRequest_AndIsNotSmartPostCloseRequest_Test()
         {
             // Setup the native request to be an unexpected type
             groundCloseCarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new SmartPostCloseReply());
 
-            testObject.Manipulate(groundCloseCarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(groundCloseCarrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_ForGroundClose_Test()
         {
             testObject.Manipulate(groundCloseCarrierRequest.Object);
@@ -74,7 +69,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             groundCloseCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNull_ForGroundClose_Test()
         {
             // Only setup is  to set the detail to null value
@@ -83,17 +78,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(groundCloseCarrierRequest.Object);
 
             ClientDetail detail = ((GroundCloseRequest)groundCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNotNull_ForGroundClose_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(groundCloseCarrierRequest.Object);
 
             ClientDetail detail = ((GroundCloseRequest)groundCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
 
@@ -102,7 +97,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
 
 
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_DelegatesToRequestForFedExAccount_ForSmartPostClose_Test()
         {
             testObject.Manipulate(smartPostCloseCarrierRequest.Object);
@@ -110,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             smartPostCloseCarrierRequest.Verify(r => r.CarrierAccountEntity, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNull_ForSmartPostClose_Test()
         {
             // Only setup is  to set the detail to null value
@@ -119,17 +114,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Close.Request.Manipulators
             testObject.Manipulate(smartPostCloseCarrierRequest.Object);
 
             ClientDetail detail = ((SmartPostCloseRequest)smartPostCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsClientDetail_WhenWebAuthenticationDetailsIsNotNull_ForSmartPostClose_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(smartPostCloseCarrierRequest.Object);
 
             ClientDetail detail = ((SmartPostCloseRequest)smartPostCloseCarrierRequest.Object.NativeRequest).ClientDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
     }
 }

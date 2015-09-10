@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.XPath;
+using Autofac;
 using Interapptive.Shared.Data;
 using Interapptive.Shared.Utility;
 using log4net;
@@ -169,6 +171,11 @@ namespace ShipWorks.Users
             ShippingProviderRuleManager.InitializeForCurrentSession();
             OnTracAccountManager.InitializeForCurrentSession();
             iParcelAccountManager.InitializeForCurrentSession();
+            
+            foreach (IInitializeForCurrentSession service in IoC.UnsafeGlobalLifetimeScope.Resolve<IEnumerable<IInitializeForCurrentSession>>())
+            {
+                service.InitializeForCurrentSession();
+            }
         }
 
         /// <summary>

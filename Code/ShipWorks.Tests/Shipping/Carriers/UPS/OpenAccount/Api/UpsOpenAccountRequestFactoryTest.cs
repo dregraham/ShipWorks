@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.UPS.OpenAccount.Api;
@@ -9,41 +9,39 @@ using ShipWorks.Shipping.Carriers.UPS.WebServices.OpenAccount;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount.Api
 {
-    [TestClass]
     public class UpsOpenAccountRequestFactoryTest
     {
         private UpsOpenAccountRequestFactory testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsOpenAccountRequestFactoryTest()
         {
             testObject = new UpsOpenAccountRequestFactory(new UpsAccountEntity());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_ReturnsUpsOpenAccountRequest_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest());
 
-            Assert.IsInstanceOfType(request, typeof(UpsOpenAccountRequest));
+            Assert.IsAssignableFrom<UpsOpenAccountRequest>(request);
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_PopulatesManipulators_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 
             // This will obviously need to change as manipulators are added in the factory and also serve as a
             // reminder that to write the tests to ensure the manipulator type is present in the list
-            Assert.AreEqual(1, request.Manipulators.Count());
+            Assert.Equal(1, request.Manipulators.Count());
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateOpenAccountRequest_AddsUpsOpenAccountAddEndUserInformation_Test()
         {
             CarrierRequest request = testObject.CreateOpenAccountRequest(new OpenAccountRequest()) as UpsOpenAccountRequest;
 
-            Assert.IsTrue(request.Manipulators.Count(m => m.GetType() == typeof(UpsOpenAccountAddEndUserInformation)) == 1);
+            Assert.True(request.Manipulators.Count(m => m.GetType() == typeof(UpsOpenAccountAddEndUserInformation)) == 1);
         }
     }
 }

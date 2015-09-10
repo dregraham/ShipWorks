@@ -1,24 +1,154 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="Interapptive Ruleset" Description="This is based off of Microsoft All Rules and supresses certain rules that do not make sense for ShipWorks.  It also contains custom Interapptive rules." ToolsVersion="10.0">
-  <RuleHintPaths>
-    <Path>.\Interapptive.FxCopRules.dll</Path>
-  </RuleHintPaths>
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1001" Action="Warning" />
     <Rule Id="CA1002" Action="None" />
     <Rule Id="CA1003" Action="None" />
+    <Rule Id="CA1009" Action="Warning" />
     <Rule Id="CA1011" Action="None" />
+    <Rule Id="CA1016" Action="Warning" />
     <Rule Id="CA1020" Action="None" />
     <Rule Id="CA1026" Action="None" />
     <Rule Id="CA1032" Action="None" />
+    <Rule Id="CA1033" Action="Warning" />
+    <Rule Id="CA1049" Action="Warning" />
+    <Rule Id="CA1060" Action="Warning" />
+    <Rule Id="CA1061" Action="Warning" />
+    <Rule Id="CA1063" Action="Warning" />
+    <Rule Id="CA1065" Action="Warning" />
     <Rule Id="CA1300" Action="None" />
+    <Rule Id="CA1301" Action="Warning" />
     <Rule Id="CA1303" Action="None" />
     <Rule Id="CA1304" Action="None" />
     <Rule Id="CA1305" Action="None" />
     <Rule Id="CA1306" Action="None" />
+    <Rule Id="CA1400" Action="Warning" />
+    <Rule Id="CA1401" Action="Warning" />
+    <Rule Id="CA1403" Action="Warning" />
+    <Rule Id="CA1404" Action="Warning" />
+    <Rule Id="CA1405" Action="Warning" />
+    <Rule Id="CA1410" Action="Warning" />
+    <Rule Id="CA1415" Action="Warning" />
     <Rule Id="CA1502" Action="None" />
     <Rule Id="CA1709" Action="None" />
+    <Rule Id="CA1821" Action="Warning" />
+    <Rule Id="CA1900" Action="Warning" />
+    <Rule Id="CA1901" Action="Warning" />
+    <Rule Id="CA2002" Action="Warning" />
+    <Rule Id="CA2100" Action="Warning" />
+    <Rule Id="CA2101" Action="Warning" />
+    <Rule Id="CA2108" Action="Warning" />
+    <Rule Id="CA2111" Action="Warning" />
+    <Rule Id="CA2112" Action="Warning" />
+    <Rule Id="CA2114" Action="Warning" />
+    <Rule Id="CA2116" Action="Warning" />
+    <Rule Id="CA2117" Action="Warning" />
+    <Rule Id="CA2122" Action="Warning" />
+    <Rule Id="CA2123" Action="Warning" />
+    <Rule Id="CA2124" Action="Warning" />
+    <Rule Id="CA2126" Action="Warning" />
+    <Rule Id="CA2131" Action="Warning" />
+    <Rule Id="CA2132" Action="Warning" />
+    <Rule Id="CA2133" Action="Warning" />
+    <Rule Id="CA2134" Action="Warning" />
+    <Rule Id="CA2137" Action="Warning" />
+    <Rule Id="CA2138" Action="Warning" />
+    <Rule Id="CA2140" Action="Warning" />
+    <Rule Id="CA2141" Action="Warning" />
+    <Rule Id="CA2146" Action="Warning" />
+    <Rule Id="CA2147" Action="Warning" />
+    <Rule Id="CA2149" Action="Warning" />
+    <Rule Id="CA2200" Action="Warning" />
     <Rule Id="CA2202" Action="None" />
+    <Rule Id="CA2207" Action="Warning" />
     <Rule Id="CA2210" Action="None" />
+    <Rule Id="CA2212" Action="Warning" />
+    <Rule Id="CA2213" Action="Warning" />
+    <Rule Id="CA2214" Action="Warning" />
+    <Rule Id="CA2216" Action="Warning" />
+    <Rule Id="CA2220" Action="Warning" />
+    <Rule Id="CA2229" Action="Warning" />
+    <Rule Id="CA2231" Action="Warning" />
+    <Rule Id="CA2232" Action="Warning" />
+    <Rule Id="CA2235" Action="Warning" />
+    <Rule Id="CA2236" Action="Warning" />
+    <Rule Id="CA2237" Action="Warning" />
+    <Rule Id="CA2238" Action="Warning" />
+    <Rule Id="CA2240" Action="Warning" />
+    <Rule Id="CA2241" Action="Warning" />
+    <Rule Id="CA2242" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="SonarLint" RuleNamespace="SonarLint">
+    <Rule Id="S1118" Action="None" />
+    <Rule Id="S1121" Action="None" />
+    <Rule Id="S1125" Action="None" />
+    <Rule Id="S1145" Action="None" />
+    <Rule Id="S1155" Action="None" />
+    <Rule Id="S1186" Action="None" />
+    <Rule Id="S121" Action="None" />
+    <Rule Id="S1226" Action="None" />
+    <Rule Id="S1227" Action="None" />
+    <Rule Id="S1244" Action="None" />
+    <Rule Id="S125" Action="None" />
+    <Rule Id="S126" Action="None" />
+    <Rule Id="S127" Action="None" />
+    <Rule Id="S1301" Action="None" />
+    <Rule Id="S131" Action="None" />
+    <Rule Id="S1313" Action="None" />
+    <Rule Id="S1694" Action="None" />
+    <Rule Id="S1699" Action="None" />
+    <Rule Id="S1764" Action="None" />
+    <Rule Id="S1862" Action="None" />
+    <Rule Id="S1871" Action="None" />
+    <Rule Id="S1905" Action="None" />
+    <Rule Id="S1940" Action="None" />
+    <Rule Id="S1994" Action="None" />
+    <Rule Id="S2070" Action="None" />
+    <Rule Id="S2197" Action="None" />
+    <Rule Id="S2223" Action="None" />
+    <Rule Id="S2225" Action="None" />
+    <Rule Id="S2228" Action="None" />
+    <Rule Id="S2234" Action="None" />
+    <Rule Id="S2278" Action="None" />
+    <Rule Id="S2290" Action="None" />
+    <Rule Id="S2306" Action="None" />
+    <Rule Id="S2328" Action="None" />
+    <Rule Id="S2330" Action="None" />
+    <Rule Id="S2357" Action="None" />
+    <Rule Id="S2387" Action="None" />
+    <Rule Id="S2437" Action="None" />
+    <Rule Id="S2486" Action="None" />
+    <Rule Id="S2551" Action="None" />
+    <Rule Id="S2681" Action="None" />
+    <Rule Id="S2696" Action="None" />
+    <Rule Id="S2760" Action="None" />
+    <Rule Id="S2761" Action="None" />
+    <Rule Id="S2930" Action="None" />
+    <Rule Id="S2931" Action="None" />
+    <Rule Id="S2933" Action="None" />
+    <Rule Id="S2934" Action="None" />
+    <Rule Id="S2952" Action="None" />
+    <Rule Id="S2953" Action="None" />
+    <Rule Id="S2971" Action="None" />
+    <Rule Id="S2995" Action="None" />
+    <Rule Id="S2997" Action="None" />
+    <Rule Id="S3052" Action="None" />
+    <Rule Id="S3172" Action="None" />
+    <Rule Id="S3215" Action="None" />
+    <Rule Id="S3218" Action="None" />
+    <Rule Id="S3237" Action="None" />
+    <Rule Id="S3249" Action="None" />
+    <Rule Id="S907" Action="None" />
+    <Rule Id="S927" Action="None" />
+    <Rule Id="S1066" Action="None" />
+    <Rule Id="S1117" Action="None" />
+    <Rule Id="S1481" Action="None" />
+    <Rule Id="S1172" Action="None" />
+    <Rule Id="S108" Action="None" />
+    <Rule Id="S2692" Action="None" />
+    <Rule Id="S3217" Action="None" />
+    <Rule Id="S1854" Action="None" />
+    <Rule Id="S1848" Action="None" />
   </Rules>
 </RuleSet>

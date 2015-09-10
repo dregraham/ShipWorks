@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Registration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
 {
-    [TestClass]
     public class FedExVersionCaptureResponseTest
     {
         private FedExVersionCaptureResponse testObject;
@@ -15,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
         private VersionCaptureReply reply;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExVersionCaptureResponseTest()
         {
 
             reply = new VersionCaptureReply()
@@ -35,19 +33,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Registration.Response
             testObject = new FedExVersionCaptureResponse(reply, carrierRequest.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void Process_NoErrorThrown_NoErrorInReply_Test()
         {
             testObject.Process();
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(FedExApiCarrierException))]
+        [Fact]
         public void Process_ErrorThrown_ErrorInReply_Test()
         {
-            reply.HighestSeverity=NotificationSeverityType.FAILURE;
+            reply.HighestSeverity = NotificationSeverityType.FAILURE;
 
-            testObject.Process();
+            Assert.Throws<FedExApiCarrierException>(() => testObject.Process());
         }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Track;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulators
 {
-    [TestClass]
     public class FedExTrackingWebAuthenticationDetailManipulatorTest
     {
         private FedExTrackingWebAuthenticationDetailManipulator testObject;
@@ -21,8 +20,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
         private Mock<CarrierRequest> CarrierRequest;
         private TrackRequest nativeRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExTrackingWebAuthenticationDetailManipulatorTest()
         {
             shippingSettings = new ShippingSettingsEntity { FedExPassword = "password", FedExUsername = "username" };
 
@@ -35,34 +33,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject = new FedExTrackingWebAuthenticationDetailManipulator(settingsRepository.Object);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException))]
+        [Fact]
         public void Manipulate_ThrowsArgumentNullException_WhenCarrierRequestIsNull_Test()
         {
-            testObject.Manipulate(null);
+            Assert.Throws<ArgumentNullException>(() => testObject.Manipulate(null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNull_Test()
         {
             // Setup the native request to be null
             CarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), null);
 
-            testObject.Manipulate(CarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(CarrierRequest.Object));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(CarrierException))]
+        [Fact]
         public void Manipulate_ThrowsCarrierException_WhenNativeRequestIsNotTrackRequest_Test()
         {
             // Setup the native request to be an unexpected type
             CarrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), new ShipmentEntity(), new FedExAccountEntity());
 
-            testObject.Manipulate(CarrierRequest.Object);
+            Assert.Throws<CarrierException>(() => testObject.Manipulate(CarrierRequest.Object));
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNull_ForTracking_Test()
         {
             // Only setup is  to set the detail to null value
@@ -71,17 +66,17 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Tracking.Request.Manipulat
             testObject.Manipulate(CarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((TrackRequest)CarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetsWebAuthenticationDetail_WhenWebAuthenticationDetailsIsNotNull_ForTracking_Test()
         {
             // No additional setup since everything is in the Initialize method
             testObject.Manipulate(CarrierRequest.Object);
 
             WebAuthenticationDetail detail = ((TrackRequest)CarrierRequest.Object.NativeRequest).WebAuthenticationDetail;
-            Assert.IsNotNull(detail);
+            Assert.NotNull(detail);
         }
     }
 }

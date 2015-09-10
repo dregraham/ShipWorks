@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using Quartz.Impl.Triggers;
 using ShipWorks.Actions.Scheduling.QuartzNet;
@@ -16,7 +16,6 @@ using ShipWorks.Actions.Scheduling;
 
 namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 {
-    [TestClass]
     public class QuartzSchedulingEngineTest
     {
         QuartzSchedulingEngine testObject;
@@ -25,8 +24,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         private Mock<IActionScheduleAdapter> scheduleAdapter;
         private Mock<ILog> log;
 
-        [TestInitialize]
-        public void Initialize()
+        public QuartzSchedulingEngineTest()
         {
             scheduler = new Mock<Quartz.IScheduler>();
 
@@ -43,7 +41,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Schedule_DelegatesToScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
@@ -54,7 +52,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.ScheduleJob(It.IsAny<IJobDetail>(), It.IsAny<ISimpleTrigger>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_RemovesExistingJob_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
@@ -71,7 +69,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_LogsPreparationInfoMessage_WhenJobIsExisting_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
@@ -88,7 +86,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.InfoFormat("The {0} action (ID {1}) is an existing scheduled job. Preparing to update the action by removing it and re-adding it with the updated settings.", action.Name, action.ActionID), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_LogsRemovalInfoMessage_WhenJobIsExisting_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
@@ -105,7 +103,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.InfoFormat("The {0} scheduled action (ID {1}) has been removed. The job and its triggers and/or calenders for the action have been deleted.", action.Name, action.ActionID), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_DoesNotRemoveJob_WhenJobIsNew_Test()
         {
             // Setup to return null to simulate the job does not exist
@@ -119,7 +117,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_LogsScheduledInfoMessage_WhenJobIsExisting_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
@@ -136,7 +134,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.InfoFormat("The {0} action (ID {1}) has been scheduled.", action.Name, action.ActionID), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Schedule_ShutsdownScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
@@ -147,7 +145,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void IsExistingJob_DelegatesToScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
@@ -157,25 +155,25 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.GetJobDetail(It.IsAny<JobKey>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void IsExistingJob_ReturnsFalse_WhenSchedulerReturnsNull_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns<IJobDetail>(null);
 
-            Assert.IsFalse(testObject.HasExistingSchedule(new ActionEntity()));
+            Assert.False(testObject.HasExistingSchedule(new ActionEntity()));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsExistingJob_ReturnsTrue_WhenReturnsNonNull_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
 
             ActionEntity action = new ActionEntity { ActionID = 1 };
 
-            Assert.IsTrue(testObject.HasExistingSchedule(action));
+            Assert.True(testObject.HasExistingSchedule(action));
         }
 
-        [TestMethod]
+        [Fact]
         public void IsExistingJob_ShutsdownScheduler_Test()
         {
             ActionEntity action = new ActionEntity { ActionID = 1 };
@@ -185,7 +183,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DelegatesToSchedulerForTriggers_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>()))
@@ -202,7 +200,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.GetTriggersOfJob(It.IsAny<JobKey>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DoesNotDelegateToSchedulerForTriggers_WhenActionIsNull_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>()))
@@ -219,7 +217,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.GetTriggersOfJob(It.IsAny<JobKey>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DelegatesToSchedulerToUnscheduleJob_WithOneTrigger_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>()))
@@ -236,7 +234,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.UnscheduleJob(It.IsAny<TriggerKey>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DelegatesToSchedulerToUnscheduleJob_WithMultipleTriggers_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>()))
@@ -255,7 +253,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.UnscheduleJob(It.IsAny<TriggerKey>()), Times.Exactly(3));
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DelegatesToSchedulerToUnscheduleJob_WithZeroTriggers_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
@@ -265,7 +263,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.UnscheduleJob(It.IsAny<TriggerKey>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DoesNotDelegateToSchedulerToUnscheduleJob_WhenActionIsNull_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
@@ -275,7 +273,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.UnscheduleJob(It.IsAny<TriggerKey>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DelegatesToSchedulerToDeleteJob_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
@@ -285,7 +283,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_DoesNotDelegateToSchedulerToDeleteJob_WhenActionIsNull_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
@@ -295,7 +293,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.DeleteJob(It.IsAny<JobKey>()), Times.Never());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_LogsRemovalInfoMessage_WhenJobIsExisting_Test()
         {
             scheduler.Setup(s => s.GetJobDetail(It.IsAny<JobKey>())).Returns(new JobDetailImpl());
@@ -312,7 +310,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             log.Verify(l => l.InfoFormat("The {0} scheduled action (ID {1}) has been removed. The job and its triggers and/or calenders for the action have been deleted.", action.Name, action.ActionID), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void Unschedule_ShutsdownScheduler_Test()
         {
             scheduler.Setup(s => s.GetTriggersOfJob(It.IsAny<JobKey>())).Returns(new List<ITrigger>());
@@ -322,7 +320,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(s => s.Shutdown(true), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStartScheduler()
         {
             testObject.RunAsync(CancellationToken.None);
@@ -330,7 +328,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.Start(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void CanStopScheduler()
         {
             var canceller = new CancellationTokenSource();
@@ -341,10 +339,10 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
 
             scheduler.Verify(x => x.Shutdown(true), Times.Once());
 
-            Assert.IsTrue(task.IsCanceled);
+            Assert.True(task.IsCanceled);
         }
 
-        [TestMethod]
+        [Fact]
         public void AdaptedScheduleBuilderIsAppliedToTrigger()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
@@ -364,7 +362,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.ScheduleJob(It.IsAny<IJobDetail>(), trigger.Object), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void AdaptedCalendarIsAddedToSchedulerWithJobName()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
@@ -386,7 +384,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.AddCalendar(jobName, quartzCalendar, true, true), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void AdaptedCalendarIsAppliedToTrigger()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
@@ -412,7 +410,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             );
         }
 
-        [TestMethod]
+        [Fact]
         public void CalendarIsDeletedWhenJobIsDeleted()
         {
             scheduler.Setup(x => x.GetTriggersOfJob(It.IsAny<JobKey>()))
@@ -429,7 +427,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.DeleteCalendar(jobName), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void CalendarIsNotOrphanedIfJobSchedulingFails()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
@@ -456,7 +454,7 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             scheduler.Verify(x => x.DeleteCalendar(calendarName), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void ExceptionIsThrownWhenTriggerWillNeverFire()
         {
             var actionSchedule = new Mock<ActionSchedule>().Object;
@@ -473,11 +471,11 @@ namespace ShipWorks.Tests.Actions.Scheduling.QuartzNet
             try
             {
                 testObject.Schedule(new ActionEntity { ActionID = 2 }, actionSchedule);
-                Assert.Fail("Did not throw expected exception.");
+                Assert.False(true, "Did not throw expected exception.");
             }
             catch (SchedulingException ex)
             {
-                Assert.AreEqual("Based on the configured schedule, the action will never execute.", ex.Message);
+                Assert.Equal("Based on the configured schedule, the action will never execute.", ex.Message);
             }
         }
     }

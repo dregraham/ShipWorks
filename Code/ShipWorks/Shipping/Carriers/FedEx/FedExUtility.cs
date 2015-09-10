@@ -17,6 +17,7 @@ using Interapptive.Shared.Net;
 using System.Xml;
 using ShipWorks.Shipping.Settings;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Shipping.Carriers.FedEx
 {

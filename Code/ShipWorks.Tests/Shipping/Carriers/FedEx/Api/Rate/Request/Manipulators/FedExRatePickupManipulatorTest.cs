@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRatePickupManipulatorTest
     {
         private FedExRatePickupManipulator testObject;
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private RateRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRatePickupManipulatorTest()
         {
             shipmentEntity = new ShipmentEntity();
             shipmentEntity.FedEx = new FedExShipmentEntity();
@@ -34,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRatePickupManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffRequestCourrier_Test()
         {
             shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.RequestCourier;
@@ -42,10 +40,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(DropoffType.REQUEST_COURIER, nativeRequest.RequestedShipment.DropoffType);
+            Assert.Equal(DropoffType.REQUEST_COURIER, nativeRequest.RequestedShipment.DropoffType);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_FedExPickupManipulator_ReturnsRequestedDropoffStation_Test()
         {
             shipmentEntity.FedEx.DropoffType = (int)FedExDropoffType.Station;
@@ -53,16 +51,16 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(DropoffType.STATION, nativeRequest.RequestedShipment.DropoffType);
+            Assert.Equal(DropoffType.STATION, nativeRequest.RequestedShipment.DropoffType);
         }
         
-        [TestMethod]
+        [Fact]
         public void Manipulate_DropoffTypeSpecifiedIsTrue_Test()
         {
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.IsTrue(nativeRequest.RequestedShipment.DropoffTypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.DropoffTypeSpecified);
         }
     }
 }

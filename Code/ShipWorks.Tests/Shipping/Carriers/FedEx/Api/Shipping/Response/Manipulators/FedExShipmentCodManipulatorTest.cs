@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping.Carriers.Api;
 using ShipWorks.Shipping.Carriers.FedEx.Api.Shipping.Response;
@@ -7,7 +7,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Ship;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipulators
 {
-    [TestClass]
     public class FedExShipmentCodManipulatorTest
     {
         private FedExShipmentCodManipulator testObject;
@@ -15,8 +14,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
         private FedExShipResponse fedExShipResponse;
         private Mock<CarrierRequest> carrierRequest;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShipmentCodManipulatorTest()
         {
             carrierRequest = new Mock<CarrierRequest>(null, null);
 
@@ -26,14 +24,14 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping.Response.Manipula
             testObject = new FedExShipmentCodManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_CodTrackingNumberAndFormIDAddedToShipment_ResponseIncludesCodTrackingInfo()
         {
             testObject.Manipulate(fedExShipResponse);
 
             ProcessShipmentReply nativeResponse = fedExShipResponse.NativeResponse as ProcessShipmentReply;
-            Assert.AreEqual(fedExShipResponse.Shipment.FedEx.CodTrackingNumber, nativeResponse.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
-            Assert.AreEqual(fedExShipResponse.Shipment.FedEx.CodTrackingFormID, nativeResponse.CompletedShipmentDetail.MasterTrackingId.FormId);
+            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingNumber, nativeResponse.CompletedShipmentDetail.MasterTrackingId.TrackingNumber);
+            Assert.Equal(fedExShipResponse.Shipment.FedEx.CodTrackingFormID, nativeResponse.CompletedShipmentDetail.MasterTrackingId.FormId);
         }
     }
 }

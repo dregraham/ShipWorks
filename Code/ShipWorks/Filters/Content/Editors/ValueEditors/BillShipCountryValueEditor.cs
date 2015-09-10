@@ -10,6 +10,7 @@ using Interapptive.Shared;
 using System.Text.RegularExpressions;
 using Interapptive.Shared.Utility;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Filters.Content.Editors.ValueEditors
 {

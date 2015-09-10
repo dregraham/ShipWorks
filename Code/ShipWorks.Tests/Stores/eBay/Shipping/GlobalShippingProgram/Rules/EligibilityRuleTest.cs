@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores.Platforms.Ebay.Shipping.GlobalShippingProgram.Rules;
 using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
 {
-    [TestClass]
     public class EligibilityRuleTest
     {
         private EligibilityRule testObject;
@@ -18,29 +17,29 @@ namespace ShipWorks.Tests.Stores.eBay.Shipping.GlobalShippingProgram.Rules
             testObject = new EligibilityRule();
         }
 
-        [TestMethod]
+        [Fact]
         public void Evaluate_ReturnsTrue_WhenIsEligibleForGlobalShippingIsTrue_Test()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = true;
 
-            Assert.IsTrue(testObject.Evaluate(ebayOrder));
+            Assert.True(testObject.Evaluate(ebayOrder));
         }
 
-        [TestMethod]
+        [Fact]
         public void Evaluate_ReturnsFalse_WhenIsEligibleForGlobalShippingIsFalse_Test()
         {
             EbayOrderEntity ebayOrder = new EbayOrderEntity();
             ebayOrder.GspEligible = false;
 
-            Assert.IsFalse(testObject.Evaluate(ebayOrder));
+            Assert.False(testObject.Evaluate(ebayOrder));
         }
 
-        [TestMethod]
+        [Fact]
         public void Evaluate_ReturnsFalse_WhenOrderIsNull_Test()
         {
             EbayOrderEntity ebayOrder = null;
-            Assert.IsFalse(testObject.Evaluate(ebayOrder));
+            Assert.False(testObject.Evaluate(ebayOrder));
         }
     }
 }

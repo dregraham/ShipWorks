@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Carriers.FedEx.WebServices.Rate;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
 {
-    [TestClass]
     public class FedExRatePackagingTypeManipulatorTest
     {
         private FedExRatePackagingTypeManipulator testObject;
@@ -19,10 +18,9 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
         private RateRequest nativeRequest;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExRatePackagingTypeManipulatorTest()
         {
-            shipmentEntity = new ShipmentEntity{ FedEx = new FedExShipmentEntity() };
+            shipmentEntity = new ShipmentEntity { FedEx = new FedExShipmentEntity() };
 
             nativeRequest = new RateRequest();
             carrierRequest = new Mock<CarrierRequest>(new List<ICarrierRequestManipulator>(), shipmentEntity, nativeRequest);
@@ -30,18 +28,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject = new FedExRatePackagingTypeManipulator();
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box;
 
             testObject.Manipulate(carrierRequest.Object);
-            
+
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIs10KgBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box10Kg;
@@ -49,10 +47,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_10KG_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_10KG_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIs25KgBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Box25Kg;
@@ -60,10 +58,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_25KG_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_25KG_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsCustom_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Custom;
@@ -71,10 +69,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.YOUR_PACKAGING);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.YOUR_PACKAGING);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsEnvelope_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Envelope;
@@ -82,10 +80,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_ENVELOPE);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_ENVELOPE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsPak_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Pak;
@@ -93,10 +91,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_PAK);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_PAK);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsTube_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
@@ -104,10 +102,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_TUBE);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_TUBE);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsSmallBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.SmallBox;
@@ -115,10 +113,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_SMALL_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_SMALL_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsMediumBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.MediumBox;
@@ -126,10 +124,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_MEDIUM_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_MEDIUM_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsLargeBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.LargeBox;
@@ -137,10 +135,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_LARGE_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_LARGE_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_SetFedExPackagingType_WhenPackageIsExtraLargeBox_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.ExtraLargeBox;
@@ -148,10 +146,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.AreEqual(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_EXTRA_LARGE_BOX);
+            Assert.Equal(nativeRequest.RequestedShipment.PackagingType, PackagingType.FEDEX_EXTRA_LARGE_BOX);
         }
 
-        [TestMethod]
+        [Fact]
         public void Manipulate_PackagingTypeSpecifiedIsTrue_Test()
         {
             shipmentEntity.FedEx.PackagingType = (int)FedExPackagingType.Tube;
@@ -159,16 +157,15 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Rate.Request.Manipulators
             testObject.Manipulate(carrierRequest.Object);
 
             // Make sure we got a the same values back
-            Assert.IsTrue(nativeRequest.RequestedShipment.PackagingTypeSpecified);
+            Assert.True(nativeRequest.RequestedShipment.PackagingTypeSpecified);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Fact]
         public void Manipulate_ThrowsException_WhenPackageTypeIsUnknown_Test()
         {
             shipmentEntity.FedEx.PackagingType = 43;
 
-            testObject.Manipulate(carrierRequest.Object);
+            Assert.Throws<InvalidOperationException>(() => testObject.Manipulate(carrierRequest.Object));
         }
     }
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers;
@@ -7,29 +7,27 @@ using ShipWorks.Shipping.Carriers.iParcel;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 {
-    [TestClass]
     public class iParcelShipmentProcessingSynchronizerTest
     {
         private iParcelShipmentProcessingSynchronizer testObject;
 
         private Mock<ICarrierAccountRepository<IParcelAccountEntity>> accountRepository;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelShipmentProcessingSynchronizerTest()
         {
             accountRepository = new Mock<ICarrierAccountRepository<IParcelAccountEntity>>();
 
             testObject = new iParcelShipmentProcessingSynchronizer(accountRepository.Object);
         }
 
-        [TestMethod]
+        [Fact]
         public void HasAccounts_DelegatesToRepository_Test()
         {
             bool hasAccounts = testObject.HasAccounts;
             accountRepository.Verify(r => r.Accounts, Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void SaveAccountToShipment_SetsAccountID_UsingFirstAccount_Test()
         {
             List<IParcelAccountEntity> iParcelAccounts = new List<IParcelAccountEntity>()
@@ -48,20 +46,19 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.SaveAccountToShipment(shipment);
 
-            Assert.AreEqual(123, shipment.IParcel.IParcelAccountID);
+            Assert.Equal(123, shipment.IParcel.IParcelAccountID);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(iParcelException))]
+        [Fact]
         public void SaveAccountToShipment_ThrowsiParcelException_WhenNoAccounts_Test()
         {
             accountRepository.Setup(r => r.Accounts).Returns(new List<IParcelAccountEntity>());
 
-            testObject.SaveAccountToShipment(new ShipmentEntity());
+            Assert.Throws<iParcelException>(() => testObject.SaveAccountToShipment(new ShipmentEntity()));
         }
 
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsAccountID_WhenOneAccount_Test()
         {
             List<IParcelAccountEntity> accounts = new List<IParcelAccountEntity>()
@@ -78,10 +75,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.IParcel.IParcelAccountID);
+            Assert.Equal(123, shipment.IParcel.IParcelAccountID);
         }
 
-        [TestMethod]
+        [Fact]
         public void ReplaceInvalidAccount_SetsToFirstAccountID_WhenTwoAccounts_Test()
         {
             List<IParcelAccountEntity> accounts = new List<IParcelAccountEntity>()
@@ -99,7 +96,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.iParcel
 
             testObject.ReplaceInvalidAccount(shipment);
 
-            Assert.AreEqual(123, shipment.IParcel.IParcelAccountID);
+            Assert.Equal(123, shipment.IParcel.IParcelAccountID);
         }
 
     }

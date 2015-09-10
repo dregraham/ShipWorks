@@ -20,6 +20,7 @@ using log4net;
 using Interapptive.Shared.Net;
 using System.Drawing;
 using System.Xml;
+using Interapptive.Shared.Business.Geography;
 using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.Postal.Usps;
 

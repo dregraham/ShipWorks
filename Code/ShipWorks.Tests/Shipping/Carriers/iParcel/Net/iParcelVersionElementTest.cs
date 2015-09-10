@@ -1,33 +1,31 @@
 ﻿using System.Xml.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Shipping.Carriers.iParcel.Net;
 
 namespace ShipWorks.Tests.Shipping.Carriers.iParcel.Net
 {
-    [TestClass]
     public class iParcelVersionElementTest
     {
         private iParcelVersionElement testObject;
 
-        [TestInitialize]
-        public void Initialize()
+        public iParcelVersionElementTest()
         {
             testObject = new iParcelVersionElement();
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_AddsVersionElement_Test()
         {
             XElement element = testObject.Build();
 
-            Assert.AreEqual("Version", element.Name);
+            Assert.Equal("Version", element.Name);
         }
 
-        [TestMethod]
+        [Fact]
         public void Build_VersionNumber_Test()
         {
             XElement element = testObject.Build();
-            Assert.AreEqual("3.3", element.Value);
+            Assert.Equal("3.3", element.Value);
         }
     }
 }

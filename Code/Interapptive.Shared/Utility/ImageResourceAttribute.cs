@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Resources;
 using System.Reflection;
@@ -15,6 +13,11 @@ namespace Interapptive.Shared.Utility
     [AttributeUsage(AttributeTargets.All)]
     public class ImageResourceAttribute : Attribute
     {
+        private static readonly Lazy<Assembly> primaryAssembly = 
+            new Lazy<Assembly>(() => AppDomain.CurrentDomain
+                .GetAssemblies()
+                .SingleOrDefault(a => a.GetName().Name == "ShipWorks.Core")); 
+
         private string resourceKey;
         private string resourceSet;
 
@@ -50,18 +53,19 @@ namespace Interapptive.Shared.Utility
         {
             get
             {
-
-                Assembly primaryAssembly = Assembly.GetEntryAssembly();
+                Assembly resourceAssembly = primaryAssembly.Value;
 
                 // The only reason this will be null is if we are in a unit test.
-                if (primaryAssembly == null || primaryAssembly.FullName.ToUpper(CultureInfo.InvariantCulture).Contains("MSTEST"))
+                if (resourceAssembly == null || resourceAssembly.FullName.ToUpper(CultureInfo.InvariantCulture).Contains("MSTEST"))
                 {
                     return new Bitmap(1, 1);
                 }
 
-                string primaryResources = string.IsNullOrEmpty(resourceSet) ? string.Format("{0}.Properties.Resources", primaryAssembly.GetName().Name) : resourceSet;
+                string primaryResources = string.IsNullOrEmpty(resourceSet) ? 
+                    "ShipWorks.Properties.Resources" : 
+                    resourceSet;
 
-                ResourceManager resman = new ResourceManager(primaryResources, primaryAssembly);
+                ResourceManager resman = new ResourceManager(primaryResources, resourceAssembly);
 
                 object result = resman.GetObject(ResourceKey);
                 if (result == null)

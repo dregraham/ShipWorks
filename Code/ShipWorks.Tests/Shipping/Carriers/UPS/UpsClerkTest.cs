@@ -1,5 +1,5 @@
 ﻿using System.Web.Services.Protocols;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Api;
@@ -18,7 +18,6 @@ using ShipWorks.Shipping.Carriers.UPS.InvoiceRegistration;
 
 namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
 {
-    [TestClass]
     public class UpsClerkTest
     {
         private UpsClerk testObject;
@@ -29,7 +28,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
         private Mock<ICarrierResponse> openAccountCarrierResponse;
         private Mock<IUpsOpenAccountRequestFactory> openAccountRequestFactory;
         private Mock<IUpsInvoiceRegistrationRequestFactory> invoiceRegistrationRequestFactory;
-        
+
 
         private UpsOltInvoiceAuthorizationData authorizationData;
 
@@ -41,8 +40,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
         UpsWebServiceException upsWebService9570100Exception = new UpsWebServiceException("9570100");
         UpsWebServiceException upsWebService100Exception = new UpsWebServiceException("100");
 
-        [TestInitialize]
-        public void Initialize()
+        public UpsClerkTest()
         {
             openAccountCarrierResponse = new Mock<ICarrierResponse>();
             openAccountCarrierResponse.Setup(r => r.NativeResponse).Returns(nativeOpenAccountResponse);
@@ -54,8 +52,8 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             openAccountRequestFactory = new Mock<IUpsOpenAccountRequestFactory>();
             openAccountRequestFactory.Setup(f => f.CreateOpenAccountRequest(It.IsAny<OpenAccountRequest>())).Returns(openAccountRequest.Object);
 
-            upsAccount=new UpsAccountEntity();
-            
+            upsAccount = new UpsAccountEntity();
+
             authorizationData = new UpsOltInvoiceAuthorizationData
             {
                 ControlID = "1234ABCD",
@@ -74,33 +72,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             invoiceRegistrationRequestFactory.Setup(f => f.CreateInvoiceRegistrationRequest(It.IsAny<UpsAccountEntity>(), It.IsAny<UpsOltInvoiceAuthorizationData>()))
                                              .Returns(invoiceRegistrationCarrierRequest.Object);
 
-            testObject = new UpsClerk(openAccountRequestFactory.Object,invoiceRegistrationRequestFactory.Object);
+            testObject = new UpsClerk(openAccountRequestFactory.Object, invoiceRegistrationRequestFactory.Object);
         }
 
         #region "Open Account Tests"
-        [TestMethod]
+        [Fact]
         public void OpenAccount_ThrowsNoError_ResponseContainsNoAddressCandidates_Test()
         {
             testObject.OpenAccount(new OpenAccountRequest());
         }
         #endregion
 
-        [TestMethod]
-        [ExpectedException(typeof (UpsException))]
+        [Fact]
         public void RegisterAccount_ThrowsUpsException_WhenAuthorizatioInvoiceIsNull_Test()
         {
-            testObject.RegisterAccount(new UpsAccountEntity(), null);
+            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), null));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsException))]
+        [Fact]
         public void RegisterAccount_ThrowsUpsException_WhenInvoiceNumberNotProvided_Test()
         {
             authorizationData.InvoiceNumber = string.Empty;
-            testObject.RegisterAccount(new UpsAccountEntity(), authorizationData);
+            Assert.Throws<UpsException>(() => testObject.RegisterAccount(new UpsAccountEntity(), authorizationData));
         }
 
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_DelegatesToInvoiceRegistrationRequest_Test()
         {
             UpsAccountEntity account = new UpsAccountEntity();
@@ -109,7 +105,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             invoiceRegistrationCarrierRequest.Verify(r => r.Submit(), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_DelegatesToInvoiceRegistrationResponse_Test()
         {
             UpsAccountEntity account = new UpsAccountEntity();
@@ -118,8 +114,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             invoiceRegistrationCarrierResponse.Verify(r => r.Process(), Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsWebServiceException))]
+        [Fact]
         public void RegisterAccount_ThrowsUpsWebServiceException_WhenRegistrationFails_AndErrorCodeIsNot9570100_Test()
         {
             // Setup to simulate a soap exception being thrown
@@ -127,11 +122,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
                                              .Throws(upsWebService100Exception);
 
             UpsAccountEntity account = new UpsAccountEntity();
-            
-            testObject.RegisterAccount(account, authorizationData);
+
+            Assert.Throws<UpsWebServiceException>(() => testObject.RegisterAccount(account, authorizationData));
         }
 
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_AttemptsThreeTimes_WhenErrorCodeIs9570100_Test()
         {
             // Setup to simulate a soap exception being thrown
@@ -139,7 +134,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
                                              .Throws(upsWebService9570100Exception);
 
             UpsAccountEntity account = new UpsAccountEntity();
-            
+
             try
             {
                 testObject.RegisterAccount(account, authorizationData);
@@ -151,20 +146,18 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsException))]
+        [Fact]
         public void RegisterAccount_ThrowsUpsException_WhenErrorCodeIs9570100_Test()
         {
             invoiceRegistrationCarrierRequest.Setup(c => c.Submit())
                                   .Throws(upsWebService9570100Exception);
 
             UpsAccountEntity account = new UpsAccountEntity();
-            
-            testObject.RegisterAccount(account, authorizationData);
+
+            Assert.Throws<UpsException>(() => testObject.RegisterAccount(account, authorizationData));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UpsWebServiceException))]
+        [Fact]
         public void RegisterAccount_ThrowsUpsWebServiceExcetion_WhenErrorCodeIsNot9570100_Test()
         {
             // Setup to simulate a soap exception being thrown
@@ -173,10 +166,10 @@ namespace ShipWorks.Tests.Shipping.Carriers.UPS.OpenAccount
 
             UpsAccountEntity account = new UpsAccountEntity();
 
-            testObject.RegisterAccount(account, authorizationData);
+            Assert.Throws<UpsWebServiceException>(() => testObject.RegisterAccount(account, authorizationData));
         }
 
-        [TestMethod]
+        [Fact]
         public void RegisterAccount_DoesNotMakeAdditionalAttempts_WhenErrorCodeIsNot9570100_Test()
         {
 

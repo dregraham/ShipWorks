@@ -1,38 +1,37 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Actions.Scheduling.ActionSchedules;
 using ShipWorks.Actions.Scheduling.ActionSchedules.Enums;
 
 namespace ShipWorks.Tests.Actions.Scheduling.ActionSchedules
 {
-    [TestClass]
     public class ActionScheduleFactoryTest
     {
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsOneTimeActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.OneTime), typeof(OneTimeActionSchedule));
+            Assert.IsAssignableFrom<OneTimeActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.OneTime));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsHourlyTimeActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Hourly), typeof(HourlyActionSchedule));
+            Assert.IsAssignableFrom<HourlyActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Hourly));
         }
 
-        [TestMethod]
+        [Fact]
         public void CreateActionSchedule_ReturnsDailyActionSchedule_Test()
         {
-            Assert.IsInstanceOfType(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Daily), typeof(DailyActionSchedule));
+            Assert.IsAssignableFrom<DailyActionSchedule>(ActionScheduleFactory.CreateActionSchedule(ActionScheduleType.Daily));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Fact]
         public void CreateActionSchedule_ThrowsArgumentOutOfRangeException_Test()
         {
+
             // This test will pass until the next schedule type is added (i.e. the failure will be a 
             // "reminder" to add/edit these tests as factory is changed)
-            ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 5);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ActionScheduleFactory.CreateActionSchedule((ActionScheduleType) 5));
         }
     }
 }

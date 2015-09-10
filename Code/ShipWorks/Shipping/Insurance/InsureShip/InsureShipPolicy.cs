@@ -133,7 +133,7 @@ namespace ShipWorks.Shipping.Insurance.InsureShip
 
                     InsureShipException insureShipException = new InsureShipException(errorMessage);
 
-                    log.Info(errorMessage,insureShipException);
+                    log.Info(errorMessage, insureShipException);
                     throw insureShipException;
                 }
             }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers.BestRate.RateGroupFiltering;
@@ -11,21 +11,19 @@ using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 {
-    [TestClass]
     public class BestRateNonExistentShipmentTypeFootnoteFilterTest
     {
         private BestRateNonExistentShipmentTypeFootnoteFilter testObject;
         private Mock<IExpress1SettingsFacade> settings;
 
-        [TestInitialize]
-        public void Initialize()
+        public BestRateNonExistentShipmentTypeFootnoteFilterTest()
         {
             settings = new Mock<IExpress1SettingsFacade>();
 
             testObject = new BestRateNonExistentShipmentTypeFootnoteFilter();
         }
 
-        [TestMethod]
+        [Fact]
         public void Filter_RemovesFootnoteFactories_ForShipmentTypesNotInRates_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -51,11 +49,11 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
             // Shouldn't have any footnote factories that aren't for USPS
-            Assert.IsFalse(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
+            Assert.False(filteredRateGroup.FootnoteFactories.Any(f => f.ShipmentType.ShipmentTypeCode != ShipmentTypeCode.Usps));
         }
 
 
-        [TestMethod]
+        [Fact]
         public void Filter_RetainsFootnoteFactories_ForShipmentTypesInRates_Test()
         {
             List<RateResult> rates = new List<RateResult>
@@ -80,7 +78,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.BestRate.RateGroupFiltering
 
             RateGroup filteredRateGroup = testObject.Filter(rateGroup);
 
-            Assert.AreEqual(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
+            Assert.Equal(ShipmentTypeCode.Usps, filteredRateGroup.FootnoteFactories.First().ShipmentType.ShipmentTypeCode);
         }
     }
 }

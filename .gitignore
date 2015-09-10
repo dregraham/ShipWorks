@@ -18,6 +18,8 @@ x64/
 [Bb]in/
 [Oo]bj/
 
+!Components/x64
+
 # MSTest test Results
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -75,9 +77,6 @@ _TeamCity*
 # NCrunch
 *.ncrunch*
 .*crunch*.local.xml
-
-# Installshield output folder
-[Ee]xpress/
 
 # DocProject is a documentation generator add-in
 DocProject/buildhelp/

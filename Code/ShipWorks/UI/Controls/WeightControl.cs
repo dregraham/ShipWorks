@@ -18,6 +18,7 @@ using ShipWorks.UI.Controls.Design;
 using Interapptive.Shared.IO.Hardware.Scales;
 using ShipWorks.Common.Threading;
 using Interapptive.Shared.Business;
+using System.Reflection;
 
 namespace ShipWorks.UI.Controls
 {
@@ -110,6 +111,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(0)]
+        [Obfuscation(Exclude = true)]
         public double Weight
         {
             get
@@ -142,6 +144,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(false)]
+        [Obfuscation(Exclude = true)]
         public bool MultiValued
         {
             get { return textBox.MultiValued; }
@@ -555,10 +558,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         protected virtual void OnWeightChanged()
         {
-            if (WeightChanged != null)
-            {
-                WeightChanged(this, EventArgs.Empty);
-            }
+            WeightChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>

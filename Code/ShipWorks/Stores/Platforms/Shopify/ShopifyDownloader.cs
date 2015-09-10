@@ -20,6 +20,7 @@ using ShipWorks.Users;
 using log4net;
 using ShipWorks.Common.Threading;
 using System.Diagnostics;
+using Interapptive.Shared.Business.Geography;
 
 namespace ShipWorks.Stores.Platforms.Shopify
 {

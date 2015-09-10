@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Common.Net;
 using System.IO;
 using System.Reflection;
@@ -14,7 +14,6 @@ namespace ShipWorks.Tests.Core.Certificates
     /// <summary>
     /// Fixture for exercising SSL client certificate mangement and conversions.
     /// </summary>
-    [TestClass]
     public class ClientCertificateTests
     {
         delegate void TestBodyDelegate(string certificateFile);
@@ -38,7 +37,7 @@ namespace ShipWorks.Tests.Core.Certificates
                     }
                 }
 
-                Assert.Fail("Unable to locate certificate {0} in the Certificate Store.", subject);
+                Assert.False(true, $"Unable to locate certificate {subject} in the Certificate Store.");
             }
             finally
             {
@@ -55,7 +54,7 @@ namespace ShipWorks.Tests.Core.Certificates
             string contents = "";
             using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(typeof(ClientCertificateTests), "cert_key_pem.txt"))
             {
-                Assert.IsNotNull(stream, "Unable to load test certificate data.");
+                Assert.NotNull(stream);
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -81,7 +80,7 @@ namespace ShipWorks.Tests.Core.Certificates
         }
 
 
-        [TestMethod]
+        [Fact]
         public void FromPemFile()
         {
             UsingTestCertificate(pemFile =>
@@ -89,11 +88,11 @@ namespace ShipWorks.Tests.Core.Certificates
                 ClientCertificate certificate = new ClientCertificate();
                 certificate.LoadFromPemFile(pemFile);
 
-                Assert.IsNotNull(certificate.X509Certificate);
+                Assert.NotNull(certificate.X509Certificate);
             });
         }
 
-        [TestMethod]
+        [Fact]
         public void AddToStore()
         {
             UsingTestCertificate(pemFile =>
@@ -106,7 +105,7 @@ namespace ShipWorks.Tests.Core.Certificates
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void SerializationTest()
         {
             UsingTestCertificate(pemFile =>
@@ -119,11 +118,11 @@ namespace ShipWorks.Tests.Core.Certificates
                     ClientCertificate copy = new ClientCertificate();
                     copy.Import(savedBytes);
 
-                    Assert.AreEqual(certificate, copy);
+                    Assert.Equal(certificate, copy);
                 });
         }
 
-        [TestMethod]
+        [Fact]
         public void PrivateKeyImportExportSuccessTest()
         {
             UsingTestCertificate(pemFile =>
@@ -136,10 +135,10 @@ namespace ShipWorks.Tests.Core.Certificates
                 ClientCertificate copy = new ClientCertificate();
                 copy.Import(savedBytes);
 
-                Assert.AreEqual(certificate, copy);
+                Assert.Equal(certificate, copy);
 
-                Assert.IsNotNull(copy.X509Certificate.PrivateKey);
-                Assert.IsTrue(copy.X509Certificate.PrivateKey.KeySize > 0);
+                Assert.NotNull(copy.X509Certificate.PrivateKey);
+                Assert.True(copy.X509Certificate.PrivateKey.KeySize > 0);
             });
         }
     }

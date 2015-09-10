@@ -12,7 +12,7 @@ namespace ShipWorks.UI.Controls
     /// </summary>
     public class MultiValueTextBox : TextBox
     {
-        bool isMultiValued = false;
+        private bool isMultiValued = false;
 
         /// <summary>
         /// Constructor
@@ -27,7 +27,7 @@ namespace ShipWorks.UI.Controls
         /// </summary>
         [Category("Appearance")]
         [DefaultValue(false)]
-        public bool MultiValued
+        public virtual bool MultiValued
         {
             get
             {

@@ -91,6 +91,7 @@ using SandButton = Divelements.SandRibbon.Button;
 using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
+using Autofac;
 
 namespace ShipWorks
 {
@@ -2571,6 +2572,10 @@ namespace ShipWorks
                 MessageHelper.ShowMessage(this, "The customer has been deleted.");
             }
 
+            // Activate the orders grid
+            dockableWindowOrderFilters.Open();
+            orderFilterTree.Focus();
+
             // Ensure the customer grid is active
             orderFilterTree.SelectedFilterNode = FilterLayoutContext.Current.GetSharedLayout(FilterTarget.Orders).FilterNode;
             gridControl.LoadSearchCriteria(QuickLookupCriteria.CreateOrderLookupDefinition(customer));
@@ -3282,9 +3287,12 @@ namespace ShipWorks
         /// </summary>
         private void OnShippingSettings(object sender, EventArgs e)
         {
-            using (ShippingSettingsDlg dlg = new ShippingSettingsDlg())
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                using (ShippingSettingsDlg dlg = new ShippingSettingsDlg(lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
+                }
             }
         }
 
@@ -3405,14 +3413,17 @@ namespace ShipWorks
             // The Tag property hold the value of whether to show shipping, tracking, or insurance
             InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
 
-            // Show the shipping window.  
-            using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay))
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
-                dlg.ShowDialog(this);
+                // Show the shipping window.  
+                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay, lifetimeScope))
+                {
+                    dlg.ShowDialog(this);
 
-                // We always check for new server messages after shipping, since if there was a shipping problem
-                // it could be we put out a server message related to it.
-                DashboardManager.DownloadLatestServerMessages();
+                    // We always check for new server messages after shipping, since if there was a shipping problem
+                    // it could be we put out a server message related to it.
+                    DashboardManager.DownloadLatestServerMessages();
+                }
             }
         }
 

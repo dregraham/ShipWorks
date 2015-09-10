@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Interapptive.Shared.Net;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Api;
@@ -13,7 +13,6 @@ using ShipWorks.Tests.Shipping.Carriers.FedEx.Api.Shipping;
 
 namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
 {
-    [TestClass]
     public class FedExShippingClerkFactoryTest
     {
         private Mock<ICarrierSettingsRepository> settingsRepository;
@@ -24,8 +23,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
         private Mock<ILabelRepository> labelRepository;
         private ShipmentEntity shipmentEntity;
 
-        [TestInitialize]
-        public void Initialize()
+        public FedExShippingClerkFactoryTest()
         {
             log = new Mock<ILog>();
             log.Setup(l => l.Info(It.IsAny<string>()));
@@ -63,27 +61,27 @@ namespace ShipWorks.Tests.Shipping.Carriers.FedEx.Api
             shipmentEntity.FedEx.SmartPostHubID = "5571";
         }
 
-        [TestMethod]
+        [Fact]
         public void FedExShippingClerkReturned_WhenNullShipmentRequested_Test()
         {
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(null, settingsRepository.Object);
 
-            Assert.IsTrue(shippingClerk is FedExShippingClerk);
+            Assert.True(shippingClerk is FedExShippingClerk);
         }
 
-        [TestMethod]
+        [Fact]
         public void FakeFimsShippingClerkReturned_WhenUseTestServerAndFimsShipmentRequested_Test()
         {
             settingsRepository.Setup(s => s.UseTestServer).Returns(true);
             shipmentEntity.FedEx.Service = (int) FedExServiceType.FedExFims;
             IFedExShippingClerk shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
 
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
+            Assert.True(shippingClerk is FimsShippingClerk);
 
             shipmentEntity.FedEx.Service = (int)FedExServiceType.FedExFims;
             shippingClerk = FedExShippingClerkFactory.CreateShippingClerk(shipmentEntity, settingsRepository.Object);
 
-            Assert.IsTrue(shippingClerk is FimsShippingClerk);
+            Assert.True(shippingClerk is FimsShippingClerk);
         }
     }
 }

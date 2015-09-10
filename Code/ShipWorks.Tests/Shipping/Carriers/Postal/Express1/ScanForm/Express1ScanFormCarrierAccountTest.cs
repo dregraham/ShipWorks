@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using log4net;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
@@ -11,7 +11,6 @@ using ShipWorks.Shipping.ScanForms;
 
 namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 {
-    [TestClass]
     public class Express1ScanFormCarrierAccountTest
     {
         private Express1EndiciaScanFormCarrierAccount testObject;
@@ -20,8 +19,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
         private string errorMessageFromLogger;
 
-        [TestInitialize]
-        public void Initialize()
+        public Express1ScanFormCarrierAccountTest()
         {
             EndiciaAccountEntity accountEntity = new EndiciaAccountEntity()
             {
@@ -34,7 +32,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             logger = new Mock<ILog>();
             logger
                 .Setup(l => l.Error(It.IsAny<string>()))
-                .Callback((object errorMessage) => errorMessageFromLogger = (string) errorMessage);
+                .Callback((object errorMessage) => errorMessageFromLogger = (string)errorMessage);
 
             Mock<IScanFormShipmentTypeName> scanFormShipmentTypeName = new Mock<IScanFormShipmentTypeName>();
             scanFormShipmentTypeName
@@ -45,31 +43,31 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
         }
 
 
-        [TestMethod]
+        [Fact]
         public void GetGateway_ReturnsExpress1ScanFormGateway_Test()
         {
-            Assert.IsInstanceOfType(testObject.GetGateway(), typeof(Express1EndiciaScanFormGateway));
+            Assert.IsAssignableFrom<Express1EndiciaScanFormGateway>(testObject.GetGateway());
         }
 
-        [TestMethod]
+        [Fact]
         public void ShippingCarrierName_Test()
         {
-            Assert.AreEqual("USPS (Express1 for Endicia)", testObject.ShippingCarrierName);
-        }
-        
-        [TestMethod]
-        public void ShipmentTypeCode_Test()
-        {
-            Assert.AreEqual(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
-        }
-        
-        [TestMethod]
-        public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
-        {
-            Assert.IsInstanceOfType(testObject.GetPrinter(), typeof(DefaultScanFormPrinter));
+            Assert.Equal("USPS (Express1 for Endicia)", testObject.ShippingCarrierName);
         }
 
-        [TestMethod]
+        [Fact]
+        public void ShipmentTypeCode_Test()
+        {
+            Assert.Equal(ShipmentTypeCode.Express1Endicia, testObject.ShipmentTypeCode);
+        }
+
+        [Fact]
+        public void GetPrinter_ReturnsDefaultScanFormPrinter_Test()
+        {
+            Assert.IsAssignableFrom<DefaultScanFormPrinter>(testObject.GetPrinter());
+        }
+
+        [Fact]
         public void GetExistingScanFormBatches_DelegatesToRepository_Test()
         {
             testObject.GetExistingScanFormBatches();
@@ -77,7 +75,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.GetExistingScanFormBatches(testObject), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEligibleShipmentIDs_DelegatesToRepository_Test()
         {
             testObject.GetEligibleShipmentIDs();
@@ -85,7 +83,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.GetShipmentIDs(It.IsAny<RelationPredicateBucket>()), Times.Once());
         }
 
-        [TestMethod]
+        [Fact]
         public void GetEligibleShipmentIDs_Bucket_Test()
         {
             testObject.GetEligibleShipmentIDs();
@@ -104,7 +102,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_DelegatesToRepository_Test()
         {
             ScanFormBatch batch = new ScanFormBatch(null, null, null);
@@ -113,14 +111,13 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
             repository.Verify(r => r.Save(batch), Times.Once());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ShippingException))]
+        [Fact]
         public void Save_ThrowsShippingException_WhenScanFormBatchIsNull_Test()
         {
-            testObject.Save(null);
+            Assert.Throws<ShippingException>(() => testObject.Save(null));
         }
 
-        [TestMethod]
+        [Fact]
         public void Save_LogsMessage_WhenScanFormEntityIsNull_Test()
         {
             try
@@ -133,7 +130,7 @@ namespace ShipWorks.Tests.Shipping.Carriers.Postal.Express1.ScanForm
 
             // Verify the correct message was logged
             const string expectedMessage = "ShipWorks was unable to create a SCAN form through USPS (Express1 for Endicia) at this time. Please try again later. (A null scan form batch tried to be saved.)";
-            Assert.AreEqual(expectedMessage,errorMessageFromLogger);
+            Assert.Equal(expectedMessage, errorMessageFromLogger);
         }
     }
 }

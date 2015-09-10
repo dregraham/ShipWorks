@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api.GlobalShipAddress.Request.Manipu
                 {
                     Units = DistanceUnits.MI,
                     UnitsSpecified = true,
-                    Value = 500.0,
+                    Value = 500.0M,
                     ValueSpecified = true
                 }
             };

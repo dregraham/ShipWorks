@@ -1,46 +1,44 @@
 ﻿using System;
 using Interapptive.Shared.Messaging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using Moq;
 
 namespace ShipWorks.Tests.Interapptive.Shared
 {
-    [TestClass]
     public class MessengerTest
     {
         private Messenger messenger;
 
-        [TestInitialize]
-        public void Initialize()
+        public MessengerTest()
         {
             messenger = new Messenger();
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallAnything_WhenNoHandlersAreSetup()
         {
             messenger.Send(new TestMessage());
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallHandler_WhenHandlerIsForDifferentMessage()
         {
             bool wasCalled = false;
             messenger.Handle<TestMessage>(this, x => wasCalled = true);
             messenger.Send(Mock.Of<IShipWorksMessage>());
-            Assert.IsFalse(wasCalled);
+            Assert.False(wasCalled);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_GetsCalled_OnMessageSend()
         {
             bool wasCalled = false;
             messenger.Handle<TestMessage>(this, x => wasCalled = true);
             messenger.Send(new TestMessage());
-            Assert.IsTrue(wasCalled);
+            Assert.True(wasCalled);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithTwoHandlers_BothGetCalled()
         {
             bool wasCalled1 = false;
@@ -48,11 +46,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger.Handle<TestMessage>(this, x => wasCalled1 = true);
             messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
             messenger.Send(new TestMessage());
-            Assert.IsTrue(wasCalled1);
-            Assert.IsTrue(wasCalled2);
+            Assert.True(wasCalled1);
+            Assert.True(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithExistingHandler_ReturnsExistingToken()
         {
             using (DisposableHandler handler = new DisposableHandler())
@@ -60,11 +58,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
                 MessengerToken firstToken = messenger.Handle(handler, handler.Handler);
                 MessengerToken secondToken = messenger.Handle(handler, handler.Handler);
 
-                Assert.AreEqual(firstToken, secondToken);
+                Assert.Equal(firstToken, secondToken);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_WithExistingHandler_CallsHandlerOnceOnSend()
         {
             using (DisposableHandler handler = new DisposableHandler())
@@ -73,11 +71,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
                 messenger.Handle(handler, handler.Handler);
                 messenger.Send(new TestMessage());
 
-                Assert.AreEqual(1, handler.Calls);
+                Assert.Equal(1, handler.Calls);
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_HandlerDoesNotGetCalled_WhenRemoved()
         {
             bool wasCalled1 = false;
@@ -86,11 +84,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
             messenger.Remove(token);
             messenger.Send(new TestMessage());
-            Assert.IsFalse(wasCalled1);
-            Assert.IsTrue(wasCalled2);
+            Assert.False(wasCalled1);
+            Assert.True(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Handle_HandlerDoesNotGetCalled_WhenRemovedByReference()
         {
             bool wasCalled1 = false;
@@ -102,11 +100,11 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger.Handle<TestMessage>(this, x => wasCalled2 = true);
             messenger.Remove(this, handler1);
             messenger.Send(new TestMessage());
-            Assert.IsFalse(wasCalled1);
-            Assert.IsTrue(wasCalled2);
+            Assert.False(wasCalled1);
+            Assert.True(wasCalled2);
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotThrow_WhenHandlerHasBeenDisposed()
         {
             DisposableHandler handler = new DisposableHandler();
@@ -116,7 +114,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             messenger.Send(new TestMessage());
         }
 
-        [TestMethod]
+        [Fact]
         public void Send_DoesNotCallMethod_WhenObjectHasBeenCollected()
         {
             bool wasCalled = false;
@@ -129,7 +127,7 @@ namespace ShipWorks.Tests.Interapptive.Shared
             GC.WaitForPendingFinalizers();
 
             messenger.Send(new TestMessage());
-            Assert.IsFalse(wasCalled);
+            Assert.False(wasCalled);
         }
 
         private class TestMessage : IShipWorksMessage

@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Xunit;
 using ShipWorks.Stores;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Platforms;
 
 namespace ShipWorks.Tests.Stores.osCommerce
 {
-    [TestClass]
     public class IdentifierTests
     {
         /// <summary>
@@ -31,60 +30,60 @@ namespace ShipWorks.Tests.Stores.osCommerce
 
             StoreType storeType = StoreTypeManager.GetType(oscStore);
 
-            Assert.AreEqual(identifier, storeType.LicenseIdentifier);
+            Assert.Equal(identifier, storeType.LicenseIdentifier);
         }
 
-        [TestMethod]
+        [Fact]
         public void TestShipWorksPhp()
         {
             DoTest("www.interapptive.com/osc/admin/shipworks.php");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestXyzPhp()
         {
             DoTest("https://www.interapptive.com/osc/admin/xyz.php");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestAbcExtension()
         {
             DoTest("http://www.interapptive.com/OSC/ABC.PhP");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestNoExtension()
         {
             DoTest("www.interapptive.com/OSC/ADMIN/ABC");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestWithAdmin()
         {
             DoTest("www.interapptive.com/osc/admin/dont.matter");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestWithoutAdmin()
         {
             DoTest("https://www.interapptive.com/osc/dont.matter");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestMultiLevelShipWorksPhp()
         {
             DoTest("www.interapptive.com/osc/mysite/whoever/shipworks.php", "www.interapptive.com/osc/mysite/whoever/", "1.0.0.0");
             DoTest("www.interapptive.com/osc/mysite/whoever/shipworks.php", "www.interapptive.com/osc/mysite/whoever/", "1.1.0.0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestMultiLevelSomethingElse()
         {
             DoTest("www.interapptive.com/osc/admin/mysite/whoever/shipworks.php", "www.interapptive.com/osc/admin/mysite/whoever/", "1.0.0.0");
             DoTest("www.interapptive.com/osc/admin/mysite/whoever/shipworks.php", "www.interapptive.com/osc/admin/mysite/whoever/", "1.1.0.0");
         }
 
-        [TestMethod]
+        [Fact]
         public void TestTwoAdmins()
         {
             DoTest("www.interapptive.com/osc/admin/mysite/whoever/admin/donk", "www.interapptive.com/osc/admin/mysite/whoever/", "1.0.0.0");

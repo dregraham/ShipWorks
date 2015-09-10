@@ -462,12 +462,9 @@ namespace ShipWorks.Actions
             ActionTask actionTask = ActionManager.InstantiateTask(step.TaskIdentifier, step.TaskSettings);
 
             // If the task reads filter contents as a part of its execution, and we've not yet made sure filters are updated, we need to do it now
-            if (!skipStep && actionTask.ReadsFilterContents && !filtersUpdated)
+            if (!skipStep && actionTask.ReadsFilterContents && !filtersUpdated && !FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion))
             {
-                if (!FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromMinutes(1), queue.QueueVersion))
-                {
-                    throw new ActionRunnerFilterUpdateException("Filters were busy updating and the step was postponed.");
-                }
+                throw new ActionRunnerFilterUpdateException("Filters were busy updating and the step was postponed.");
             }
 
             using (AuditBehaviorScope auditScope = new AuditBehaviorScope(AuditBehaviorUser.SuperUser, GetAuditStepReason(step)))
