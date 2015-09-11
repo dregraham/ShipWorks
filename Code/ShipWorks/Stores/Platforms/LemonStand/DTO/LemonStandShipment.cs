@@ -3,10 +3,9 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
-    class LemonStandShipment
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    public class LemonStandShipment
     {
-
-
     //    "data": {
     //    "id": 1,
     //    "shop_shipment_id": null,
@@ -43,8 +42,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
     //        }
     //    }
     //}
-
-
         [JsonProperty("id")]
         public string ID { get; set; }
         

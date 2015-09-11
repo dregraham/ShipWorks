@@ -52,6 +52,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 // get JSON result objects into a list
                 IList<JToken> jsonOrders = result["data"].Children().ToList();
                 int expectedCount = jsonOrders.Count;
+
                 //Load orders 
                 foreach (JToken jsonOrder in jsonOrders)
                 {
@@ -81,9 +82,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 throw new DownloadException(ex.Message, ex);
             }
-            }
+        }
 
-            /// <summary>
+        /// <summary>
         /// Load Order from JToken
         /// </summary>
         private void LoadOrder(JToken jsonOrder, LemonStandWebClient client)
@@ -104,8 +105,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             order.OnlineStatus = lsOrder.Status;            
 
             // Only load new orders
-            if (order.IsNew) {                
-
+            if (order.IsNew) 
+            {                
                 order.OrderDate = getDate(lsOrder.CreatedAt);
                 order.OnlineLastModified = getDate(lsOrder.UpdatedAt);
                 order.OrderNumber = int.Parse(lsOrder.Number);

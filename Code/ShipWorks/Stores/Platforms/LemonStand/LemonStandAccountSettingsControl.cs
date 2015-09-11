@@ -22,10 +22,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandStoreEntity lemonStandStore = store as LemonStandStoreEntity;
             if (lemonStandStore == null)
             {
-                throw new ArgumentException("A non GenericStore store was passed to GrouponStore account settings.");
+                throw new ArgumentException("A non GenericStore store was passed to LemonStand store account settings.");
             }
             storeURLTextBox.Text = lemonStandStore.StoreURL;
-            apiKeyTextBox.Text = lemonStandStore.APIKey;
             accessTokenTextBox.Text = lemonStandStore.Token;
         }
 
@@ -37,11 +36,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             LemonStandStoreEntity lemonStandStore = store as LemonStandStoreEntity;
             if (lemonStandStore == null)
             {
-                throw new ArgumentException("A non GenericStore store was passed to GrouponStore account settings.");
+                throw new ArgumentException("A non GenericStore store was passed to LemonStand store account settings.");
             }
 
             lemonStandStore.StoreURL = storeURLTextBox.Text;
-            lemonStandStore.APIKey = apiKeyTextBox.Text;
             lemonStandStore.Token = accessTokenTextBox.Text;
 
             // see if we need to test the settings because they changed in some way

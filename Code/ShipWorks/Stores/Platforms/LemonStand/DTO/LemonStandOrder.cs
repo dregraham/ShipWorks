@@ -3,7 +3,8 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
-    class LemonStandOrder
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    public class LemonStandOrder
     {
         //"data": [{
         //"id": 1,

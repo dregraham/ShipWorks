@@ -23,21 +23,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
 
             LemonStandStoreEntity store = GetStore<LemonStandStoreEntity>();
 
-            
+
             store.StoreURL = storeURLTextbox.Text;
-            store.APIKey = apiKeyTextbox.Text;
             store.Token = accessTokenTextbox.Text;
 
             if (storeURLTextbox.Text.Length == 0) 
             {
                 MessageHelper.ShowError(this, "Please enter your Store URL");
-                e.NextPage = this;
-                return;
-            }
-
-            if (apiKeyTextbox.Text.Length == 0)
-            {
-                MessageHelper.ShowError(this, "Please enter your API Key");
                 e.NextPage = this;
                 return;
             }
@@ -52,7 +44,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
             try
             {
                 LemonStandWebClient client = new LemonStandWebClient(store);
-                //Check to see if we have access to Groupon with the new creds
+                //Check to see if we have access to LemonStand with the new creds
                 //Ask for some orders
                 client.GetOrders();
             }

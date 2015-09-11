@@ -3,9 +3,9 @@ using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 {
-    class LemonStandShippingAddress
+    [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
+    public class LemonStandShippingAddress
     {
-
         [JsonProperty("first_name")]
         public string FirstName { get; set; }
 

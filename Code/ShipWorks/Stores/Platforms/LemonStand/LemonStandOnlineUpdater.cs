@@ -60,10 +60,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 string shipmentId = GetShipmentId(client, shipment);
 
                 client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
-
-            }
-
-            
+            }            
         }
 
         /// <summary>
@@ -88,8 +85,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="client">The web client.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>shipment id</returns>
-        private string GetShipmentId(LemonStandWebClient client, ShipmentEntity shipmentEntity) {
-
+        private string GetShipmentId(LemonStandWebClient client, ShipmentEntity shipmentEntity) 
+        {
             LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
 
             string orderId = order.OrderNumber.ToString();
