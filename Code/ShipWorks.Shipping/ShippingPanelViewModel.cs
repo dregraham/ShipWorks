@@ -1,11 +1,15 @@
-﻿using ShipWorks.Core.UI;
+﻿using System;
+using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using ShipWorks.Data;
 
 namespace ShipWorks.Shipping
 {
@@ -20,7 +24,7 @@ namespace ShipWorks.Shipping
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
-        private ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader;
+        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -28,7 +32,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(IShippingPanelConfigurator configurator, ILoader<ShippingPanelLoadedShipment, OrderEntity> shipmentLoader)
+        public ShippingPanelViewModel(IShippingPanelConfigurator configurator, ILoader<ShippingPanelLoadedShipment> shipmentLoader)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
@@ -38,12 +42,23 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipment from the given order
         /// </summary>
-        public async Task LoadOrder(OrderEntity orderEntity)
+        //public async Task LoadOrder(OrderEntity orderEntity)
+        public async Task LoadOrder(long orderID)
         {
-            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderEntity);
+            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderID);
+
+            if (loadedShipment.Shipment == null)
+            {
+                // No shipment was created.  Show a message and return.
+                // TODO: Show a message
+
+                return;
+            }
 
             //SelectedShipmentType = ShipmentTypes.FirstOrDefault();
             Origin.Load(loadedShipment.Shipment.OriginPerson);
+
+            Destination.Load(loadedShipment.Shipment.ShipPerson);
         }
 
         /// <summary>

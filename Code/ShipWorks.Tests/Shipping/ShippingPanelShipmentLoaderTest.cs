@@ -33,7 +33,7 @@ namespace ShipWorks.Tests.Shipping
             };
 
             shipmentLoader = new Mock<IShipmentLoader>();
-            shipmentLoader.Setup(s => s.LoadAsync(It.IsAny<OrderEntity>())).Returns(Task.FromResult(shippingPanelLoadedShipment));
+            shipmentLoader.Setup(s => s.LoadAsync(It.IsAny<long>())).Returns(Task.FromResult(shippingPanelLoadedShipment));
 
             var tcs = new TaskCompletionSource<bool>();
             tcs.SetResult(true);
@@ -47,7 +47,7 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public async void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity.OrderID);
 
             Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
             Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);

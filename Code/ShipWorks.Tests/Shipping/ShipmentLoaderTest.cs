@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public async void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity.OrderID);
 
             Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
             Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);

@@ -33,16 +33,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipment asychronously.
         /// </summary>
-        /// <param name="order"></param>
+        /// <param name="orderID"></param>
         /// <returns></returns>
-        public async Task<ShippingPanelLoadedShipment> LoadAsync(OrderEntity order)
+        public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order");
-            }
-
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = LoadShipments(order.OrderID);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = LoadShipments(orderID);
 
             return shipmentPanelLoadedShipment;
         }

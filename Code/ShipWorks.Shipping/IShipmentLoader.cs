@@ -5,6 +5,6 @@ namespace ShipWorks.Shipping
 {
     public interface IShipmentLoader
     {
-        Task<ShippingPanelLoadedShipment> LoadAsync(OrderEntity order);
+        Task<ShippingPanelLoadedShipment> LoadAsync(long orderID);
     }
 }

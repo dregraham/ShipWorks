@@ -11,12 +11,11 @@ namespace ShipWorks.Shipping
     /// Interface for classes that need to load something
     /// </summary>
     /// <typeparam name="TResult">The resulting type of a load operation.</typeparam>
-    /// <typeparam name="TEntity">The object from which something should be loaded.</typeparam>
-    public interface ILoader<TResult, TEntity>
+    public interface ILoader<TResult> 
     {
         /// <summary>
         /// Asyc load method.
         /// </summary>
-        Task<TResult> LoadAsync(TEntity entity);
+        Task<TResult> LoadAsync(long entityID);
     }
 }

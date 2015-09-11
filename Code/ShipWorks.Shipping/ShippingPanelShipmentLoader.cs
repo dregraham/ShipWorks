@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Loads a shipment for the order.  If allowed, and no shipment exists, one will be created.  Also validates the shipment addresses.
     /// </summary>
-    public class ShippingPanelShipmentLoader : ILoader<ShippingPanelLoadedShipment, OrderEntity>
+    public class ShippingPanelShipmentLoader : ILoader<ShippingPanelLoadedShipment>
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanelShipmentLoader));
 
@@ -27,14 +27,9 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Load the shipment results asychronously.
         /// </summary>
-        public async Task<ShippingPanelLoadedShipment> LoadAsync(OrderEntity order)
+        public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
         {
-            if (order == null)
-            {
-                throw new ArgumentNullException("order");
-            }
-
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await shipmentLoader.LoadAsync(order);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await shipmentLoader.LoadAsync(orderID);
 
             if (shipmentPanelLoadedShipment.Shipment != null)
             {

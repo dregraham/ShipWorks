@@ -48,11 +48,9 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public async void ChangeContent(IGridSelection selection)
+        public void ChangeContent(IGridSelection selection)
         {
-            OrderEntity entity = await TaskEx.Run(() => DataProvider.GetEntity(selection.Keys.FirstOrDefault()) as OrderEntity);
-
-            viewModel.LoadOrder(entity);
+            viewModel.LoadOrder(selection.Keys.FirstOrDefault());
         }
 
         public void LoadState()
