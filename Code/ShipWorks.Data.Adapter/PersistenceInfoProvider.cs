@@ -1058,7 +1058,7 @@ namespace ShipWorks.Data.Adapter
 		/// <summary>Inits FedExShipmentEntity's mappings</summary>
 		private void InitFedExShipmentEntityMappings()
 		{
-			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 151 );
+			base.AddElementMapping( "FedExShipmentEntity", "ShipWorksLocal", @"dbo", "FedExShipment", 152 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "ShipmentID", "ShipmentID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 0 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "FedExAccountID", "FedExAccountID", false, (int)SqlDbType.BigInt, 0, 0, 19, false, "", null, typeof(System.Int64), 1 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "MasterFormID", "MasterFormID", false, (int)SqlDbType.VarChar, 4, 0, 0, false, "", null, typeof(System.String), 2 );
@@ -1210,6 +1210,7 @@ namespace ShipWorks.Data.Adapter
 			base.AddElementFieldMapping( "FedExShipmentEntity", "RequestedLabelFormat", "RequestedLabelFormat", false, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 148 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "FimsAirWaybill", "FimsAirWaybill", true, (int)SqlDbType.NVarChar, 50, 0, 0, false, "", null, typeof(System.String), 149 );
 			base.AddElementFieldMapping( "FedExShipmentEntity", "ReturnsClearance", "ReturnsClearance", false, (int)SqlDbType.Bit, 0, 0, 0, false, "", null, typeof(System.Boolean), 150 );
+			base.AddElementFieldMapping( "FedExShipmentEntity", "MaskedData", "MaskedData", true, (int)SqlDbType.Int, 0, 0, 10, false, "", null, typeof(System.Int32), 151 );
 		}
 		/// <summary>Inits FilterEntity's mappings</summary>
 		private void InitFilterEntityMappings()

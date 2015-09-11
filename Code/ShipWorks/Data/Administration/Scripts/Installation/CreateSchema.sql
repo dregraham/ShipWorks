@@ -1817,7 +1817,8 @@ CREATE TABLE [dbo].[FedExShipment]
 [LinearUnitType] [int] NOT NULL,
 [RequestedLabelFormat] [int] NOT NULL,
 [FimsAirWaybill] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL,
-[ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0))
+[ReturnsClearance] [bit] NOT NULL CONSTRAINT [DF_FedExShipment_ReturnsClearance] DEFAULT ((0)),
+[MaskedData] [int] NULL
 )
 GO
 PRINT N'Creating primary key [PK_FedExShipment] on [dbo].[FedExShipment]'

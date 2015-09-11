@@ -25,6 +25,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
         public string SmartPostCustomerManifestId { get; set; }
         public string SmartPostTransactionType { get; set; }
         public string SmartPostLabelStockType { get; set; }
+        public string MaskedData { get; set; }
 
         /// <summary>
         /// Creates the shipment.
@@ -78,6 +79,11 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
                 case "RETURN_SERVICE":
                     shipment.FedEx.SmartPostEndorsement = (int)FedExSmartPostEndorsement.ReturnService;
                     break;
+            }
+
+            if (MaskedData == "SECONDARY_BARCODE")
+            {
+                shipment.FedEx.MaskedData = (int) FedExMaskedDataType.SecondaryBarcode;
             }
 
             return shipment;
@@ -137,6 +143,7 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ShippingChargesPayment.Payor.CountryCode", PropertyName = "ResponsiblePartyCountryCode", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "SpecialServicesRequested.ReturnShipmentDetail.ReturnType", PropertyName = "ReturnType", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Transaction Type", PropertyName = "SmartPostTransactionType", SpreadsheetColumnIndex = -1 });
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "RequestedShipment.LabelSpecification.CustomerSpecifiedDetail.MaskedData", PropertyName = "MaskedData", SpreadsheetColumnIndex = -1 });
                 }
 
                 return smartPostColumnPropertyMap;

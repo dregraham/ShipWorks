@@ -941,6 +941,9 @@ namespace ShipWorks.Data.Model.EntityClasses
 			fieldHashtable = new Dictionary<string, string>();
 
 			_fieldsCustomProperties.Add("ReturnsClearance", fieldHashtable);
+			fieldHashtable = new Dictionary<string, string>();
+
+			_fieldsCustomProperties.Add("MaskedData", fieldHashtable);
 		}
 		#endregion
 
@@ -2719,6 +2722,17 @@ namespace ShipWorks.Data.Model.EntityClasses
 		{
 			get { return (System.Boolean)GetValue((int)FedExShipmentFieldIndex.ReturnsClearance, true); }
 			set	{ SetValue((int)FedExShipmentFieldIndex.ReturnsClearance, value); }
+		}
+
+		/// <summary> The MaskedData property of the Entity FedExShipment<br/><br/>
+		/// </summary>
+		/// <remarks>Mapped on  table field: "FedExShipment"."MaskedData"<br/>
+		/// Table field type characteristics (type, precision, scale, length): Int, 10, 0, 0<br/>
+		/// Table field behavior characteristics (is nullable, is PK, is identity): true, false, false</remarks>
+		public virtual Nullable<System.Int32> MaskedData
+		{
+			get { return (Nullable<System.Int32>)GetValue((int)FedExShipmentFieldIndex.MaskedData, false); }
+			set	{ SetValue((int)FedExShipmentFieldIndex.MaskedData, value); }
 		}
 
 		/// <summary> Gets the EntityCollection with the related entities of type 'FedExPackageEntity' which are related to this entity via a relation of type '1:n'.

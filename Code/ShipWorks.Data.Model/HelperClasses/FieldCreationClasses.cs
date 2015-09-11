@@ -7582,6 +7582,11 @@ namespace ShipWorks.Data.Model.HelperClasses
 		{
 			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.ReturnsClearance);}
 		}
+		/// <summary>Creates a new FedExShipmentEntity.MaskedData field instance</summary>
+		public static EntityField2 MaskedData
+		{
+			get { return (EntityField2)EntityFieldFactory.Create(FedExShipmentFieldIndex.MaskedData);}
+		}
 	}
 
 	/// <summary>Field Creation Class for entity FilterEntity</summary>

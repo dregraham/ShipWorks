@@ -1159,6 +1159,7 @@ namespace ShipWorks.Data.Model.HelperClasses
 			base.AddElementFieldInfo("FedExShipmentEntity", "RequestedLabelFormat", typeof(System.Int32), false, false, false, false,  (int)FedExShipmentFieldIndex.RequestedLabelFormat, 0, 0, 10);
 			base.AddElementFieldInfo("FedExShipmentEntity", "FimsAirWaybill", typeof(System.String), false, false, false, true,  (int)FedExShipmentFieldIndex.FimsAirWaybill, 50, 0, 0);
 			base.AddElementFieldInfo("FedExShipmentEntity", "ReturnsClearance", typeof(System.Boolean), false, false, false, false,  (int)FedExShipmentFieldIndex.ReturnsClearance, 0, 0, 0);
+			base.AddElementFieldInfo("FedExShipmentEntity", "MaskedData", typeof(Nullable<System.Int32>), false, false, false, true,  (int)FedExShipmentFieldIndex.MaskedData, 0, 0, 10);
 		}
 		/// <summary>Inits FilterEntity's FieldInfo objects</summary>
 		private void InitFilterEntityInfos()

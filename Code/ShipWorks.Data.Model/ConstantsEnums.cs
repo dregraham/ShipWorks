@@ -3504,6 +3504,8 @@ namespace ShipWorks.Data.Model
 		FimsAirWaybill,
 		///<summary>ReturnsClearance. </summary>
 		ReturnsClearance,
+		///<summary>MaskedData. </summary>
+		MaskedData,
 		/// <summary></summary>
 		AmountOfFields
 	}
