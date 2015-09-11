@@ -1,6 +1,6 @@
 ﻿using System;
-using ShipWorks.Stores.Content;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {

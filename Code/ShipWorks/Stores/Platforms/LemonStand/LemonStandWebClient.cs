@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using ShipWorks.Data.Model.EntityClasses;
+using System.Net;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json.Linq;
 using ShipWorks.ApplicationCore.Logging;
-using System.Net;
-
+using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
-    public class LemonStandWebClient
+    public class LemonStandWebClient : ILemonStandWebClient
     {
         //LemonStand API endpoint
         private static string lemonStandEndpoint;
@@ -53,6 +52,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             return ProcessRequest(submitter, "GetOrderInvoice");
         }
+
         /// <summary>
         /// Gets the shipment.
         /// </summary>
@@ -125,7 +125,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             ConfigurePostRequest(submitter, "shipment/" + shipmentId + "/trackingcode/" , parameters);
             ProcessRequest(submitter, "UploadShipmentDetails");
 
-
             submitter = new HttpVariableRequestSubmitter();
             parameters.Clear();
             
@@ -140,11 +139,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, string operationName)
         {
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
-
             submitter.Verb = HttpVerb.Get;
-
-            submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
-            
+            submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);            
         }
 
         /// <summary>
@@ -153,11 +149,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
         {
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
-
             submitter.Verb = HttpVerb.Post;
-
             submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
-
             submitter.AllowHttpStatusCodes(HttpStatusCode.Created);
 
             foreach (KeyValuePair<string, string> parameter in parameters)
@@ -172,11 +165,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private static void ConfigurePatchRequest(HttpVariableRequestSubmitter submitter, string operationName, Dictionary<string, string> parameters)
         {
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
-
             submitter.Verb = HttpVerb.Patch;
-
             submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
-
             submitter.AllowHttpStatusCodes(HttpStatusCode.Created);
 
             foreach (KeyValuePair<string, string> parameter in parameters)

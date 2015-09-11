@@ -1,21 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Data;
-using ShipWorks.Data.Connection;
 using log4net;
-using ShipWorks.Stores.Content;
-using ShipWorks.Shipping;
-using ShipWorks.Stores.Platforms.LemonStand;
-using ShipWorks.Stores.Platforms.LemonStand.DTO;
-using System.Threading;
-using Interapptive.Shared.Utility;
 using Newtonsoft.Json.Linq;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Content;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -27,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(LemonStandOnlineUpdater));
 
-        // the store this instance for
+        // the store this instance is for
         private readonly LemonStandStoreEntity store;
 
         /// <summary>
@@ -43,20 +31,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
-            List<string> trackingList = new List<string>();
-
             LemonStandWebClient client = new LemonStandWebClient(store);
 
             foreach (long orderKey in orderKeys)
             {
                 ShipmentEntity shipment = OrderUtility.GetLatestActiveShipment(orderKey);
-                OrderEntity order = shipment.Order;
+
                 // Check to see if shipment exists
                 if (shipment == null)
                 {
                     log.InfoFormat("Not uploading orderid {0} has no items.", orderKey);
                     continue;
                 }
+
+                OrderEntity order = shipment.Order;
                 string shipmentId = GetShipmentId(client, shipment);
 
                 client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
@@ -71,24 +59,26 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             string tracking = shipment.TrackingNumber;
             OrderEntity order = shipment.Order;
             order.OnlineStatus = "Shipped";
+
             if (tracking != null)
             {
                 LemonStandWebClient client = new LemonStandWebClient(store);
                 string shipmentId = GetShipmentId(client, shipment);
+
                 client.UploadShipmentDetails(tracking, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
             }
         }
 
         /// <summary>
-        /// Gets the shipment id
+        /// Gets the LemonStand shipment ID as it is required to upload tracking information
         /// </summary>
         /// <param name="client">The web client.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
-        /// <returns>shipment id</returns>
+        /// <returns>LemonStand API Shipment ID</returns>
         private string GetShipmentId(LemonStandWebClient client, ShipmentEntity shipmentEntity) 
         {
             LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
-
+            
             string orderId = order.OrderNumber.ToString();
             // use order id to get invoice
             JToken invoice = client.GetOrderInvoice(orderId);

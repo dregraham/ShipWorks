@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using log4net;
+using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.ApplicationCore.Interaction;
+using ShipWorks.Common.Threading;
+using ShipWorks.Data;
 using ShipWorks.Data.Administration;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data;
+using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
 using ShipWorks.Filters.Content;
 using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Filters.Content.Conditions.Orders;
-using ShipWorks.Stores.Management;
-using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
-using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
-using ShipWorks.UI.Wizard;
 using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Content;
-using ShipWorks.Stores.Platforms.LemonStand.WizardPages;
+using ShipWorks.Stores.Management;
 using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Actions;
-using ShipWorks.ApplicationCore.Interaction;
-using ShipWorks.Common.Threading;
-using log4net;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model.HelperClasses;
-using Interapptive.Shared.Net;
-using System.Windows.Forms;
+using ShipWorks.Stores.Platforms.LemonStand.CoreExtensions.Filters;
+using ShipWorks.Stores.Platforms.LemonStand.WizardPages;
+using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
+using ShipWorks.UI.Wizard;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -31,7 +29,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// </summary>
     class LemonStandStoreType : StoreType
     {
-
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(LemonStandStoreType));
 
@@ -72,7 +69,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-
             MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
             commands.Add(command);
 

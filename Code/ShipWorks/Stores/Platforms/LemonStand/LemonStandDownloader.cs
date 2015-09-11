@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using ShipWorks.Data.Administration.Retry;
-using ShipWorks.Stores.Communication;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Connection;
+using Interapptive.Shared.Business;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Interapptive.Shared.Utility;
-using Interapptive.Shared.Business;
-using Interapptive.Shared.Enums;
+using ShipWorks.Data.Administration.Retry;
+using ShipWorks.Data.Connection;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Stores.Communication;
 using ShipWorks.Stores.Platforms.LemonStand.DTO;
-using System.Reflection;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
@@ -24,8 +21,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public LemonStandDownloader(StoreEntity store)
             : base(store)
         {
-
         }
+
         /// <summary>
         /// Download orders from LemonStand
         /// </summary>
@@ -66,13 +63,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                     // set the progress detail
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
-                    Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);
-                    
+                    Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);                    
                 }            
 
                 Progress.Detail = "Done";
                 Progress.PercentComplete = 100;
-
             }
             catch (LemonStandException ex)
             {
