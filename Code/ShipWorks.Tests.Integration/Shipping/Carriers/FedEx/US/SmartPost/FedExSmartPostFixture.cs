@@ -33,11 +33,8 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
         /// <returns></returns>
         public override ShipmentEntity CreateShipment()
         {
-            CustomerReferenceType = "customer_reference";
-
             ShipmentEntity shipment = base.CreateShipment();
 
-            shipment.FedEx.ReferenceCustomer = string.Empty;
             shipment.FedEx.ReferenceInvoice = string.Empty;
 
             // FedEx doesn't allow the ref field to be over 30 characters...truncate
@@ -103,9 +100,14 @@ namespace ShipWorks.Tests.Integration.MSTest.Shipping.Carriers.FedEx.US.SmartPos
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.ClientDetail.AccountNumber", PropertyName = "FedExAccountNumber", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.PackageCount", PropertyName = "PackageCount", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.ShipTimestamp", PropertyName = "ShipTimestamp", SpreadsheetColumnIndex = -1 });
-                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.SpecialServicesRequested.ReturnShipmentDetail.ReturnType", PropertyName = "ReturnType", SpreadsheetColumnIndex = -1 });
-                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.CustomerReferences.Value", PropertyName = "ReturnRmaNumber", SpreadsheetColumnIndex = -1 });
-                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.CustomerReferences.CustomerReferenceType", PropertyName = "ReturnRmaReason", SpreadsheetColumnIndex = -1 });
+
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.SpecialServicesRequested.ReturnShipmentDetail.ReturnType", PropertyName = nameof(ReturnType), SpreadsheetColumnIndex = -1 });
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.SpecialServicesRequested.ReturnShipmentDetail.Rma.Reason", PropertyName = nameof(ReturnRmaReason), SpreadsheetColumnIndex = -1 });
+
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.SpecialServicesRequested.ReturnShipmentDetail.Rma.Number", PropertyName = nameof(ReturnRmaNumber), SpreadsheetColumnIndex = -1 });
+
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.CustomerReferences.Value", PropertyName = nameof(CustomerReferenceValue), SpreadsheetColumnIndex = -1 });
+                    smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.RequestedShipment.RequestedPackageLineItems.CustomerReferences.CustomerReferenceType", PropertyName = nameof(CustomerReferenceType), SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.SpecialServicesRequested.SpecialServiceTypes", PropertyName = "SpecialServiceType1", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "ProcessShipmentRequest.TransactionDetail.CustomerTransactionId", PropertyName = "CustomerTransactionId", SpreadsheetColumnIndex = -1 });
                     smartPostColumnPropertyMap.Add(new ColumnPropertyMapDefinition { SpreadsheetColumnName = "Recipient.Address..CountryCode", PropertyName = "RecipientCountryCode", SpreadsheetColumnIndex = -1 });
