@@ -7,7 +7,8 @@
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="888" d:DesignWidth="300"
+             SnapsToDevicePixels="True">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
