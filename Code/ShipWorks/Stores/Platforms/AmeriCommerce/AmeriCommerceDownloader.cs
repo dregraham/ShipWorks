@@ -127,7 +127,7 @@ namespace ShipWorks.Stores.Platforms.AmeriCommerce
             order.OnlineStatus = statusProvider.GetCodeName((int) order.OnlineStatusCode);
 
             // shipping
-            order.RequestedShipping = String.Format("{0} {1}", orderTrans.ShippingProviderServiceName, orderTrans.shippingMethodName);
+            order.RequestedShipping = orderTrans.shippingMethodName;
 
             // address information
             LoadAddressInfo(client, order, orderTrans);
