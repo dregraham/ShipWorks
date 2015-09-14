@@ -92,7 +92,7 @@ namespace ShipWorks.Shipping
         private List<ShipmentEntity> loadedShipmentEntities;
         private bool cancelProcessing;
 
-        private readonly System.Windows.Forms.Timer getRatesTimer = new System.Windows.Forms.Timer();
+        private readonly Timer getRatesTimer = new Timer();
         private BackgroundWorker getRatesBackgroundWorker;
         private const int getRatesDebounceTime = 500;
 
@@ -103,7 +103,7 @@ namespace ShipWorks.Shipping
 
         private readonly ShipSenseSynchronizer shipSenseSynchronizer;
 
-        private readonly System.Windows.Forms.Timer shipSenseChangedTimer = new System.Windows.Forms.Timer();
+        private readonly Timer shipSenseChangedTimer = new Timer();
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
         private readonly CarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
@@ -113,26 +113,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments, ILifetimeScope lifetimeScope)
-            : this(shipments, InitialShippingTabDisplay.Shipping, lifetimeScope)
-        {}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ShippingDlg"/> class. This is intended
-        /// to be used when a rate has been selected outside of the shipping dialog.
-        /// </summary>
-        public ShippingDlg(ShipmentEntity shipment, RateSelectedEventArgs preSelectedRateEventArgs, ILifetimeScope lifetimeScope)
-            : this(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Shipping, lifetimeScope)
-        {
-            this.preSelectedRateEventArgs = preSelectedRateEventArgs;
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public ShippingDlg(List<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay, ILifetimeScope lifetimeScope)
+        public ShippingDlg(OpenShippingDialogMessage message, ILifetimeScope lifetimeScope)
         {
             InitializeComponent();
+
+            preSelectedRateEventArgs = message.RateSelectedEventArgs;
+            List <ShipmentEntity> shipments = message.Shipments.ToList();
 
             this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, nameof(shipments));
@@ -150,7 +136,7 @@ namespace ShipWorks.Shipping
             // Security
             panelSettingsButtons.Visible = UserSession.Security.HasPermission(PermissionType.ShipmentsManageSettings);
 
-            this.initialDisplay = initialDisplay;
+            initialDisplay = message.InitialDisplay;
 
             rateControl.Initialize(new FootnoteParameters(()=> LoadSelectedShipments(false) , GetStoreForCurrentShipment));
 
@@ -308,7 +294,8 @@ namespace ShipWorks.Shipping
             if (requestedShippingText.Length == 0)
 	        {
 		        requestedShipping.Visible = false;
-	        }else
+	        }
+            else
 	        {
                 requestedShipping.Visible = true;
 		        requestedShipping.Text = String.Format("{0}{1}","Requested Shipping: ",requestedShippingText);

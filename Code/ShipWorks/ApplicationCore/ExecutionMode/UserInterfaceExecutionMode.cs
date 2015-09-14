@@ -265,7 +265,7 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 // Show the shipping window.  
-                using (ShippingDlg dlg = new ShippingDlg(message.Shipments.ToList(), message.InitialDisplay, lifetimeScope))
+                using (ShippingDlg dlg = new ShippingDlg(message, lifetimeScope))
                 {
                     dlg.ShowDialog(Program.MainForm);
                 }
