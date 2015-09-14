@@ -57,7 +57,6 @@ namespace ShipWorks.Shipping.UI
             ShipDate = shipment.ShipDate;
             TotalWeight = shipment.TotalWeight;
             Insurance = shipment.Insurance;
-
         }
     }
 }
