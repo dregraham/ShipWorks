@@ -415,7 +415,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildServiceTypeDictionary(ShipmentEntity shipment) 
+        public virtual Dictionary<int, string> BuildServiceTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
             => new Dictionary<int, string>();
 
         /// <summary>
@@ -468,7 +468,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildPackageTypeDictionary(ShipmentEntity shipment)
+        public virtual Dictionary<int, string> BuildPackageTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository)
             => new Dictionary<int, string>();
 
         /// <summary>
