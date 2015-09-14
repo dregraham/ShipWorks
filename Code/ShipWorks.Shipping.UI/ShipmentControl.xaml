@@ -33,17 +33,13 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="40">Service:</TextBlock>
-            <ComboBox Grid.Row="0" Grid.Column="1"
-                      ItemsSource="{Binding Services}"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}" Width="40">Service:</TextBlock>
+
+            <!--TODO: MAP SERVICE-->
+            <ComboBox Grid.Row="0" Grid.Column="1"/>
 
 
-            <TextBlock Grid.Row="1" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="53">Ship date:</TextBlock>
-
-
+            <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource GridLabel}" Width="53">Ship date:</TextBlock>
             <Grid Grid.Row="1" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -53,36 +49,23 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <DatePicker Grid.Row="0" Grid.Column="0"/>
-                <CheckBox Grid.Row="0" Grid.Column="1"
-                          VerticalAlignment="Center"/>
-                <Label Grid.Row="0" Grid.Column="2">
-                    Saturday Delivery
-                </Label>
+
+                <!--ShipDate-->
+                <DatePicker Grid.Row="0" Grid.Column="0" Margin="4 0 0 0" SelectedDate="{Binding ShipDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
 
+            <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource GridLabel}" Width="51">Packages:</TextBlock>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Services}"/>
 
+            <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource GridLabel}" Width="56">Packaging:</TextBlock>
+            <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Services}" />
 
-
-            <TextBlock Grid.Row="2" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="51">Packages:</TextBlock>
-            <ComboBox Grid.Row="2" Grid.Column="1"
-                      ItemsSource="{Binding Services}"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
-            <TextBlock Grid.Row="3" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="56">Packaging:</TextBlock>
-            <ComboBox Grid.Row="3" Grid.Column="1"
-                      ItemsSource="{Binding Services}"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
-            <TextBlock Grid.Row="4" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="40">Weight:</TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}" Width="40">Weight:</TextBlock>
             <TextBox Grid.Row="4" Grid.Column="1"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="64">Dimensions:</TextBlock>
-            <ComboBox Grid.Row="5" Grid.Column="1"
-                      ItemsSource="{Binding Services}"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                     Text="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}" Width="64">Dimensions:</TextBlock>
+            <ComboBox Grid.Row="5" Grid.Column="1"/>
 
 
             <!--
@@ -98,15 +81,9 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <TextBox Grid.Column="0"
-                         Margin="5 0 5 0"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBox Grid.Column="1"
-                         Margin="5 0 5 0"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBox Grid.Column="2"
-                         Margin="5 0 5 0"
-                      Text="{Binding Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBox Grid.Column="0" Margin="5 0 5 0"/>
+                <TextBox Grid.Column="1" Margin="5 0 5 0"/>
+                <TextBox Grid.Column="2" Margin="5 0 5 0"/>
             </Grid>
 
             <!--
@@ -121,27 +98,23 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0"
-                       Style="{StaticResource GridLabel}">Add to weight</TextBlock>
+                <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Add to weight</TextBlock>
                 <CheckBox Grid.Column="1" HorizontalAlignment="Center"/>
-
             </Grid>
 
             <!--
                 Insurance
             -->
-            <TextBlock Grid.Row="9" Grid.Column="0"
-                       Style="{StaticResource GridLabel}" Width="53">Insurance:</TextBlock>
+            <TextBlock Grid.Row="9" Grid.Column="0" Style="{StaticResource GridLabel}" Width="53">Insurance:</TextBlock>
             <Grid Grid.Row="9" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="*" />
-
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <CheckBox Grid.Column="0"/>
+                <CheckBox Grid.Column="0" IsChecked="{Binding Insurance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <TextBlock Grid.Column="1"/>
             </Grid>
 
@@ -154,21 +127,10 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Column="0" 
-                            Style="{StaticResource GridLabel}">
-                    Insured Value:
-                </TextBlock>
-                <TextBox Grid.Column="1"
-                         VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="2" 
-                           FontSize="8"
-                           VerticalAlignment="Center">
-                    Add coverage for the first $100
-                </TextBlock>
+                <TextBlock Grid.Column="0" Style="{StaticResource GridLabel}">Insured Value:</TextBlock>
+                <TextBox Grid.Column="1" VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="2" FontSize="8" VerticalAlignment="Center">Add coverage for the first $100</TextBlock>
             </Grid>
-
-
         </Grid>
-
     </StackPanel>
 </UserControl>

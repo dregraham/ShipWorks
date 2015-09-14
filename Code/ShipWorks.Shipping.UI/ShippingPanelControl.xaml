@@ -56,6 +56,7 @@
             </Border>
             <Border>
                 <Expander Header="Shipment Details"
+                          DataContext="{Binding Shipment}"
                             Style="{StaticResource ExpanderStyle}">
                     <local:ShipmentControl />
                 </Expander>

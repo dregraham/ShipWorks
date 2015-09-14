@@ -24,6 +24,7 @@ namespace ShipWorks.Shipping
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
+        private ShipmentViewModel shipment;
         private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -59,6 +60,8 @@ namespace ShipWorks.Shipping
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
+
+            Shipment.Load(loadedShipment.Shipment);
         }
 
         /// <summary>
@@ -90,5 +93,7 @@ namespace ShipWorks.Shipping
         public AddressViewModel Origin => origin ?? (origin = new AddressViewModel());
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
+
+        public ShipmentViewModel Shipment => shipment ?? (shipment = new ShipmentViewModel());
     }
 }

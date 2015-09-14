@@ -118,6 +118,7 @@
     <Compile Include="IShippingPanelConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
+    <Compile Include="ShipmentViewModel.cs" />
     <Compile Include="ShippingPanelViewModel.cs" />
     <Compile Include="ShipmentLoader.cs" />
     <Compile Include="ShippingPanelLoadedShipmentResult.cs" />
