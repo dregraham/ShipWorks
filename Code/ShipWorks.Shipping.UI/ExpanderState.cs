@@ -11,6 +11,8 @@ namespace ShipWorks.Shipping.UI
     {
         private const string OriginKey = "{1EEA4267-BE5E-4550-A9A2-4CE855FF77E6}";
         private const string DestinationKey = "{38D40A3F-7886-4295-9804-8BF69E45F702}";
+        private const string DetailsKey = "{A02BA03E-D768-4152-94F8-65BD8951C750}";
+        private const string CustomsKey = "{E254D445-5F07-455C-8E34-DCA0214ACAD3}";
 
         static readonly ExpanderState current = new ExpanderState();
 
@@ -60,6 +62,40 @@ namespace ShipWorks.Shipping.UI
             {
                 CollapsibleGroupControl.SaveCollapsedState(DestinationKey, !value);
                 RaisePropertyChanged(nameof(IsDestinationExpanded));
+            }
+        }
+
+        /// <summary>
+        /// IsDetailsExpanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsDetailsExpanded
+        {
+            get
+            {
+                return !CollapsibleGroupControl.GetCollapsedState(DetailsKey, false);
+            }
+            set
+            {
+                CollapsibleGroupControl.SaveCollapsedState(DetailsKey, !value);
+                RaisePropertyChanged(nameof(IsDetailsExpanded));
+            }
+        }
+
+        /// <summary>
+        /// IsCustomsExpanded
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsCustomsExpanded
+        {
+            get
+            {
+                return !CollapsibleGroupControl.GetCollapsedState(CustomsKey, false);
+            }
+            set
+            {
+                CollapsibleGroupControl.SaveCollapsedState(CustomsKey, !value);
+                RaisePropertyChanged(nameof(IsCustomsExpanded));
             }
         }
 
