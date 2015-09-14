@@ -90,6 +90,7 @@ using SandComboBox = Divelements.SandRibbon.ComboBox;
 using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks
 {
@@ -3407,12 +3408,7 @@ namespace ShipWorks
         /// </summary>
         void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
         {
-            if (this.IsDisposed)
-            {
-                return;
-            }
-
-            if (e.Cancelled)
+            if (IsDisposed || e.Cancelled)
             {
                 return;
             }
@@ -3420,18 +3416,11 @@ namespace ShipWorks
             // The Tag property hold the value of whether to show shipping, tracking, or insurance
             InitialShippingTabDisplay initialDisplay = (InitialShippingTabDisplay) ((ShipmentsLoader) sender).Tag;
 
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                // Show the shipping window.  
-                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, initialDisplay, lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
+            Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments, initialDisplay));
 
-                    // We always check for new server messages after shipping, since if there was a shipping problem
-                    // it could be we put out a server message related to it.
-                    DashboardManager.DownloadLatestServerMessages();
-                }
-            }
+            // We always check for new server messages after shipping, since if there was a shipping problem
+            // it could be we put out a server message related to it.
+            DashboardManager.DownloadLatestServerMessages();
         }
 
         /// <summary>

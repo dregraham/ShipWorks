@@ -382,13 +382,7 @@ namespace ShipWorks.Shipping.Editing.Rating
             }
             else
             {
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    using (ShippingDlg dialog = new ShippingDlg(shipment, rateSelectedEventArgs, lifetimeScope))
-                    {
-                        dialog.ShowDialog(this);
-                    }
-                }
+                Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, rateSelectedEventArgs));
             }
         }
     }

@@ -1,8 +1,6 @@
-﻿using System.Reflection;
-using Interapptive.Shared.Data;
+﻿using Interapptive.Shared.Data;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data;
-using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using log4net;
 using ShipWorks.ApplicationCore.Crashes;
 using ShipWorks.ApplicationCore.Interaction;
@@ -10,7 +8,6 @@ using ShipWorks.Data.Connection;
 using ShipWorks.UI;
 using ShipWorks.Users;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
@@ -20,9 +17,12 @@ using ShipWorks.UI.Controls;
 using ActiproSoftware.SyntaxEditor;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1.Net;
 using ShipWorks.Stores;
+using Autofac;
+using Interapptive.Shared.Messaging;
+using ShipWorks.Shipping;
+using System.Linq;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -160,6 +160,11 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             DataResourceManager.RegisterResourceCacheCleanup();
             DataPath.RegisterTempFolderCleanup();
             LogSession.RegisterLogCleanup();
+
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                lifetimeScope.Resolve<IMessenger>().Handle<OpenShippingDialogMessage>(this, HandleOpenShippingDialogMessage);
+            }
         }
 
         /// <summary>
@@ -234,6 +239,37 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             // Application.Exit does not guaranteed that the windows close.  It only tries.  If an exception
             // gets thrown, or they set e.Cancel = true, they won't have closed.
             Application.ExitThread();
+        }
+
+        /// <summary>
+        /// Handle the open shipping dialog message
+        /// </summary>
+        /// <param name="obj"></param>
+        private void HandleOpenShippingDialogMessage(OpenShippingDialogMessage message)
+        {
+            if (MainForm.InvokeRequired)
+            {
+                MainForm.Invoke((Action)(() => OpenShippingDialog(message)));
+            }
+            else
+            {
+                OpenShippingDialog(message);
+            }
+        }
+
+        /// <summary>
+        /// Open the shipping dialog
+        /// </summary>
+        private void OpenShippingDialog(OpenShippingDialogMessage message)
+        {
+            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
+            {
+                // Show the shipping window.  
+                using (ShippingDlg dlg = new ShippingDlg(message.Shipments.ToList(), message.InitialDisplay, lifetimeScope))
+                {
+                    dlg.ShowDialog(Program.MainForm);
+                }
+            }
         }
     }
 }

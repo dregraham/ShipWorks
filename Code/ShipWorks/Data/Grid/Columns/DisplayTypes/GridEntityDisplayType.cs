@@ -30,6 +30,7 @@ using Interapptive.Shared.UI;
 using ShipWorks.Data.Grid.Columns.DisplayTypes.Decorators;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Data.Grid.Columns.DisplayTypes
 {
@@ -320,13 +321,7 @@ namespace ShipWorks.Data.Grid.Columns.DisplayTypes
                             }
                             else
                             {
-                                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                                {
-                                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, lifetimeScope))
-                                    {
-                                        dlg.ShowDialog(owner);
-                                    }
-                                }
+                                Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
                             }
                         }
                         break;

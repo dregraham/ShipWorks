@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 using Divelements.SandGrid;
 using ShipWorks.ApplicationCore;
 using Autofac;
+using Interapptive.Shared.Messaging;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -231,13 +232,7 @@ namespace ShipWorks.Stores.Content.Panels
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
                 ValidatedAddressManager.ValidateShipment(shipment, new AddressValidator());
 
-                using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                {
-                    using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, lifetimeScope))
-                    {
-                        dlg.ShowDialog(this);
-                    }
-                }
+                Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
             }
             catch (SqlForeignKeyException)
             {
@@ -355,13 +350,7 @@ namespace ShipWorks.Stores.Content.Panels
                 ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope()) { 
-                        // Show the shipping window
-                        using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Tracking, lifetimeScope))
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
+                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, InitialShippingTabDisplay.Tracking));
 
                     ReloadContent();
                 }
@@ -378,14 +367,7 @@ namespace ShipWorks.Stores.Content.Panels
                 ShipmentEntity shipment = ShippingManager.GetShipment(entityGrid.Selection.Keys.First());
                 if (shipment != null)
                 {
-                    using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                    {
-                        // Show the shipping window
-                        using (ShippingDlg dlg = new ShippingDlg(new List<ShipmentEntity> { shipment }, InitialShippingTabDisplay.Insurance, lifetimeScope))
-                        {
-                            dlg.ShowDialog(this);
-                        }
-                    }
+                    Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }, InitialShippingTabDisplay.Insurance));
 
                     ReloadContent();
                 }
@@ -413,24 +395,12 @@ namespace ShipWorks.Stores.Content.Panels
         /// </summary>
         void OnShipOrdersLoadShipmentsCompleted(object sender, ShipmentsLoadedEventArgs e)
         {
-            if (IsDisposed)
+            if (IsDisposed || e.Cancelled)
             {
                 return;
             }
 
-            if (e.Cancelled)
-            {
-                return;
-            }
-
-            using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-            {
-                // Show the shipping window
-                using (ShippingDlg dlg = new ShippingDlg(e.Shipments, lifetimeScope))
-                {
-                    dlg.ShowDialog(this);
-                }
-            }
+            Messenger.Current.Send(new OpenShippingDialogMessage(this, e.Shipments));
 
             ReloadContent();
         }
