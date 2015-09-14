@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Interapptive.Shared.Messaging;
 using ShipWorks.ApplicationCore;
+using ShipWorks.UI.Controls.Design;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -12,13 +13,15 @@ namespace ShipWorks.Shipping.UI
     /// </summary>
     public class ShipmentTypeProvider
     {
-        private static ShipmentTypeProvider current = IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
-        
+        private static ShipmentTypeProvider current = DesignModeDetector.IsDesignerHosted() ? 
+            null : 
+            IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
+
         /// <summary>
         /// Get the current instance of the shipment type provider
         /// </summary>
         public static ShipmentTypeProvider Current => current;
-
+        
         /// <summary>
         /// Constructor
         /// </summary>
