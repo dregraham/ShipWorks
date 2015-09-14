@@ -413,6 +413,12 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public virtual Dictionary<int, string> BuildServiceTypeDictionary(ShipmentEntity shipment) 
+            => new Dictionary<int, string>();
+
+        /// <summary>
         /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
         /// been excluded for this shipment type. The integer values are intended to correspond to 
         /// the appropriate enumeration values of the specific shipment type (i.e. the integer values 
@@ -458,6 +464,12 @@ namespace ShipWorks.Shipping
         {
             return Enumerable.Empty<int>();
         }
+
+        /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public virtual Dictionary<int, string> BuildPackageTypeDictionary(ShipmentEntity shipment)
+            => new Dictionary<int, string>();
 
         /// <summary>
         /// Gets the package adapter for the shipment.
