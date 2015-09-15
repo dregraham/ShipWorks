@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Reflection;
 using ShipWorks.Data.Utility;
 
-namespace ShipWorks.Shipping.UI
+namespace ShipWorks.Shipping
 {
 
     /// <summary>
@@ -15,14 +15,14 @@ namespace ShipWorks.Shipping.UI
     public class AddressViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
         private string fullName;
-        private string phoneNumber;
-        private string emailAddress;
-        private string country;
+        private string phone;
+        private string email;
+        private string countryCode;
         private string postalCode;
-        private string state;
+        private string stateProvCode;
         private string city;
         private string street;
-        private string companyName;
+        private string company;
 
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -50,10 +50,10 @@ namespace ShipWorks.Shipping.UI
         /// Company name
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string CompanyName
+        public string Company
         {
-            get { return companyName; }
-            set { handler.Set(nameof(CompanyName), ref companyName, value); }
+            get { return company; }
+            set { handler.Set(nameof(Company), ref company, value); }
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace ShipWorks.Shipping.UI
         /// State
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string State
+        public string StateProvCode
         {
-            get { return state; }
-            set { handler.Set(nameof(State), ref state, value); }
+            get { return stateProvCode; }
+            set { handler.Set(nameof(StateProvCode), ref stateProvCode, value); }
         }
 
         /// <summary>
@@ -100,30 +100,30 @@ namespace ShipWorks.Shipping.UI
         /// Country
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string Country
+        public string CountryCode
         {
-            get { return country; }
-            set { handler.Set(nameof(Country), ref country, value); }
+            get { return countryCode; }
+            set { handler.Set(nameof(CountryCode), ref countryCode, value); }
         }
 
         /// <summary>
         /// EmailAddress
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string EmailAddress
+        public string Email
         {
-            get { return emailAddress; }
-            set { handler.Set(nameof(EmailAddress), ref emailAddress, value); }
+            get { return email; }
+            set { handler.Set(nameof(Email), ref email, value); }
         }
 
         /// <summary>
         /// PhoneNumber
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public string PhoneNumber
+        public string Phone
         {
-            get { return phoneNumber; }
-            set { handler.Set(nameof(PhoneNumber), ref phoneNumber, value); }
+            get { return phone; }
+            set { handler.Set(nameof(Phone), ref phone, value); }
         }
 
         /// <summary>
@@ -132,14 +132,14 @@ namespace ShipWorks.Shipping.UI
         public void Load(PersonAdapter person)
         {
             FullName = new PersonName(person).FullName;
-            CompanyName = person.Company;
+            Company = person.Company;
             Street = person.StreetAll;
             City = person.City;
-            State = Geography.GetStateProvName(person.StateProvCode);
+            StateProvCode = Geography.GetStateProvName(person.StateProvCode);
             PostalCode = person.PostalCode;
-            Country = person.CountryCode;
-            EmailAddress = person.Email;
-            PhoneNumber = person.Phone;
+            CountryCode = person.CountryCode;
+            Email = person.Email;
+            Phone = person.Phone;
         }
 
         /// <summary>
@@ -149,13 +149,13 @@ namespace ShipWorks.Shipping.UI
         {
             SaveStreet(person, Street);
             SaveFullName(person, FullName);
-            person.Company = CompanyName;
+            person.Company = Company;
             person.City = City;
             person.PostalCode = PostalCode;
-            person.StateProvCode = Geography.GetStateProvCode(State);
-            person.CountryCode = Country;
-            person.Email = EmailAddress;
-            person.Phone = PhoneNumber;
+            person.StateProvCode = Geography.GetStateProvCode(StateProvCode);
+            person.CountryCode = CountryCode;
+            person.Email = Email;
+            person.Phone = Phone;
         }
 
         /// <summary>

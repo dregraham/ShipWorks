@@ -1126,6 +1126,7 @@
     </Compile>
     <Compile Include="Shipping\IShippingDialogInteraction.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
+    <Compile Include="Shipping\ShipmentChangedMessage.cs" />
     <Compile Include="Shipping\OpenShippingDialogMessage.cs" />
     <Compile Include="Shipping\Profiles\IShippingProfileManager.cs" />
     <Compile Include="Shipping\Profiles\ShippingProfileManagerWrapper.cs" />

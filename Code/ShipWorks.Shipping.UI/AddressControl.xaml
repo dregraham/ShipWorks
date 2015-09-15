@@ -35,7 +35,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Company:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
-                     Text="{Binding CompanyName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
 
         <TextBlock Style="{StaticResource Header}">Address</TextBlock>
@@ -69,7 +69,7 @@
                        Style="{StaticResource GridLabel}">State \ Prov:</TextBlock>
             <ComboBox Grid.Row="2" Grid.Column="1"
                       ItemsSource="{Binding SelectedValue,ElementName=CountryComboBox,Converter={StaticResource StateProvinceConverter}}"
-                      Text="{Binding State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
+                      Text="{Binding StateProvCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEditable="True" />
 
             <TextBlock Grid.Row="3" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Postal Code:</TextBlock>
@@ -82,7 +82,7 @@
                       x:Name="CountryComboBox"
                       DisplayMemberPath="Key"
                       SelectedValuePath="Value"
-                      SelectedValue="{Binding Country}"
+                      SelectedValue="{Binding CountryCode}"
                       ItemsSource="{Binding Source={x:Static geography:CountryList.Countries}, Mode=OneTime}"></ComboBox>
         </Grid>
 
@@ -100,12 +100,12 @@
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Style="{StaticResource GridLabel}">Email:</TextBlock>
             <TextBox Grid.Row="0" Grid.Column="1"
-                     Text="{Binding EmailAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <TextBlock Grid.Row="1" Grid.Column="0"
                         Style="{StaticResource GridLabel}">Phone:</TextBlock>
             <TextBox Grid.Row="1" Grid.Column="1"
-                     Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
     </StackPanel>
 </UserControl>

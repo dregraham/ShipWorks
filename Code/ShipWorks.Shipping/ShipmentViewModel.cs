@@ -58,5 +58,16 @@ namespace ShipWorks.Shipping.UI
             TotalWeight = shipment.TotalWeight;
             Insurance = shipment.Insurance;
         }
+
+        /// <summary>
+        /// Save UI values to the shipment
+        /// </summary>
+        public void Save(ShipmentEntity shipment)
+        {
+            shipment.ShipDate = ShipDate;
+            shipment.TotalWeight = TotalWeight;
+            shipment.Insurance = Insurance;
+        }
+
     }
 }
