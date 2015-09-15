@@ -3,7 +3,8 @@
     public enum LogActionType
     {
         GetRates,
-        ExtendedLogging,
+        // USPS Stamps.com
+        CleanseAddress,
         Other
     }
 }

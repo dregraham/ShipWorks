@@ -482,7 +482,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
             address.State = PostalUtility.AdjustState(person.CountryCode, person.StateProvCode);
             address.Country = person.AdjustedCountryCode(ShipmentTypeCode.Usps);
 
-            using (SwsimV49 webService = CreateWebService("CleanseAddress", LogActionType.CleanseAddress))
+            using (SwsimV49 webService = CreateWebService("CleanseAddress"))
             {
                 bool addressMatch;
                 bool cityStateZipOk;
