@@ -149,7 +149,7 @@ namespace ShipWorks.ApplicationCore.Logging
             {
                 case LogActionType.GetRates:
                     return logOptions.LogRateCalls;
-                case LogActionType.CleanseAddress:
+                case LogActionType.ExtendedLogging:
                     return !IsPrivateLoggingEncrypted;
                 default:
                     return true;
