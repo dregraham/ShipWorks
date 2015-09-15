@@ -6,6 +6,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 using Interapptive.Shared.Business;
+using Interapptive.Shared.Collections;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -132,6 +133,48 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        {
+            // The service types need to to be loaded based on the overridden shipment data to account
+            // for various shipping programs/rules offered by stores (i.e. eBay GSP)
+            List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
+
+            bool allDomestic = overriddenShipments.All(IsDomestic);
+            bool allInternational = overriddenShipments.None(IsDomestic);
+            bool allCanada = overriddenShipments.All(shipment => shipment.AdjustedShipCountryCode() == "CA");
+
+            // If they are all of the same service class, we can load the service classes
+            if (allDomestic || allInternational || allCanada)
+            {
+                List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (FedExServiceType)s).ToList();
+
+                // Get a list of all valid service types for the shipments
+                List<FedExServiceType> validServiceTypes = FedExUtility.GetValidServiceTypes(overriddenShipments);
+
+                // load shipment types that are valid and enabled (avaialbeServices)
+                List<FedExServiceType> fedExServiceTypes = validServiceTypes.Intersect(availableServices).ToList();
+
+                if (shipments.Any())
+                {
+                    // Always include the service type that the shipment is currently configured in the 
+                    // event the shipment was configured prior to a service being excluded
+                    // Always include the service that the shipments are currently configured with
+                    // Only if the service type is a validServiceType
+                    IEnumerable<FedExServiceType> loadedServices = shipments.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes).Distinct();
+                    fedExServiceTypes = fedExServiceTypes.Union(loadedServices).ToList();
+                }
+
+                return fedExServiceTypes.ToDictionary(s => (int) s, s => EnumHelper.GetDescription(s));
+            }
+            else
+            {
+                return new Dictionary<int, string>();
+            }
+        }
+
+        /// <summary>
         /// Gets the Package types that have been available for this shipment type (i.e have not 
         /// been excluded). The integer values are intended to correspond to the appropriate 
         /// enumeration values of the specific shipment type (i.e. the integer values would 
@@ -141,6 +184,38 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         {
             List<int> allPackageTypes = Enum.GetValues(typeof(FedExPackagingType)).Cast<int>().ToList();
             return allPackageTypes.Except(GetExcludedPackageTypes(repository));
+        }
+
+        /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            List<FedExServiceType> distinctShipmentTypes = shipments.Select(shipment => (FedExServiceType) shipment.FedEx.Service).Distinct().ToList();
+
+            if (distinctShipmentTypes.Count()==1)
+            {
+                List<FedExPackagingType> validPackagingTypes = FedExUtility.GetValidPackagingTypes(distinctShipmentTypes.First());
+
+                IEnumerable<FedExPackagingType> availablePackageTypes = new FedExShipmentType()
+                    .GetAvailablePackageTypes()
+                    .Union(shipments.Select(x => x.FedEx)
+                        .Where(x => x != null)
+                        .Select(x => x.PackagingType))
+                    .Cast<FedExPackagingType>();
+
+                return validPackagingTypes
+                    .Intersect(availablePackageTypes)
+                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault())
+                    .ToDictionary(p => (int) p, p => EnumHelper.GetDescription(p));
+            }
+            else
+            {
+                return new Dictionary<int, string>()
+                {
+                    { (int) FedExPackagingType.Custom, EnumHelper.GetDescription(FedExPackagingType.Custom) }
+                };
+            }
         }
 
         /// <summary>

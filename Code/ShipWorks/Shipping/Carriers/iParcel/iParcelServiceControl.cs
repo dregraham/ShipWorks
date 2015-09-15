@@ -146,15 +146,15 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         /// </summary>
         private void BindServiceDropdown()
         {
+            service.DisplayMember = "Key";
+            service.ValueMember = "Value";
+
             iParcelShipmentType shipmentType = new iParcelShipmentType();
             List<iParcelServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes().Select(s => (iParcelServiceType) s).ToList();
 
             // Always include the service that the shipments are currently configured with
             IEnumerable<iParcelServiceType> loadedServices = LoadedShipments.Select(s => (iParcelServiceType) s.IParcel.Service).Distinct();
             availableServiceTypes = availableServiceTypes.Union(loadedServices).ToList();
-
-            service.DisplayMember = "Key";
-            service.ValueMember = "Value";
 
             service.DataSource = ActiveEnumerationBindingSource.Create<iParcelServiceType>
                 (

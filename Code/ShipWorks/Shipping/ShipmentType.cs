@@ -415,8 +415,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildServiceTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
+        public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
             => new Dictionary<int, string>();
+
+        /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments)
+            => BuildServiceTypeDictionary(shipments, new ExcludedServiceTypeRepository());
 
         /// <summary>
         /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
@@ -468,8 +474,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildPackageTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        public virtual Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
             => new Dictionary<int, string>();
+
+        /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments)
+            => BuildPackageTypeDictionary(shipments, new ExcludedPackageTypeRepository());
 
         /// <summary>
         /// Gets the package adapter for the shipment.

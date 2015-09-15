@@ -170,8 +170,7 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Grab a list of overridden shipments to work with because we
             // need to check with the store  to see if anything about the shipment was overridden in case
             // it may have effected the shipping services available (i.e. the eBay GSP program)
-            List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
-            LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
+            List<ShipmentEntity> overriddenShipments = LoadedShipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
 
             // Determine if all shipments will have the same destination service types
             foreach (ShipmentEntity overriddenShipment in overriddenShipments)
@@ -202,48 +201,9 @@ namespace ShipWorks.Shipping.Carriers.UPS
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
-            List<UpsServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (UpsServiceType)s).ToList();
-
-            // If a distinct on country code only returns a count of 1, all countries are the same
-            bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.AdjustedShipCountryCode(), s.AdjustedOriginCountryCode())).Distinct().Count() == 1;
-
-            // If they are all of the same service class, we can load the service classes
-            if (allSameCountry)
-            {
-                ShipmentEntity overriddenShipment = overriddenShipments.First();
-
-                var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
-                IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
-
-                // Get a list of service types that are valid for the overriddenShipments
-                List<UpsServiceType> validServiceTypes = carrierServiceManager.GetServices(overriddenShipment)
-                    .Select(s => s.UpsServiceType).ToList();
-
-                // only include service types that are valid and enabled (availalbeServices)
-                List<UpsServiceType> upsServiceTypesToLoad = validServiceTypes.Intersect(availableServices).ToList();
-
-                if (LoadedShipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    // Always include the service that the shipments are currently configured with
-                    // Only if the ServiceType is valid for the shipment type
-                    IEnumerable<UpsServiceType> loadedServices = LoadedShipments.Select(s => (UpsServiceType)s.Ups.Service)
-                        .Intersect(validServiceTypes).Distinct();
-                    upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
-                }
-
-                List<KeyValuePair<string, UpsServiceType>> services = upsServiceTypesToLoad
-                    .Select(type => new KeyValuePair<string, UpsServiceType>(EnumHelper.GetDescription(type), (UpsServiceType) type))
-                    .ToList();
-
-                service.DataSource = services;
-            }
-            else
-            {
-                service.DataSource = new KeyValuePair<string, UpsServiceType>[0];
-            }
-
+            service.DataSource = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildServiceTypeDictionary(LoadedShipments)
+                .Select(entry => new KeyValuePair<string, UpsServiceType>(entry.Value, (UpsServiceType)entry.Key)).ToList();
+            
             // Make it visible if any of them have saturday dates
             saturdayDelivery.Visible = anySaturday;
 

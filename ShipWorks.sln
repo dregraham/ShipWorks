@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 14.0.23107.0
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git status", "git status", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{750D94CC-9D79-42D4-961C-06CE52A837E4}"
 	ProjectSection(SolutionItems) = preProject
 		Build\AnalysisDictionary.xml = Build\AnalysisDictionary.xml
 		rakefile.rb = rakefile.rb
