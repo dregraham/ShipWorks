@@ -120,6 +120,7 @@
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShipmentViewModel.cs" />
     <Compile Include="RatingPanelViewModel.cs" />
+    <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="ShippingPanelViewModel.cs" />
     <Compile Include="ShipmentLoader.cs" />
     <Compile Include="ShippingPanelLoadedShipmentResult.cs" />

@@ -16,7 +16,6 @@ using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
 using ShipWorks.Data.Connection;
-using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
 using ShipWorks.Filters;
@@ -44,23 +43,10 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Window from which all shipments are created
     /// </summary>
-    partial class ShippingDlg : Form, IShippingDialogInteraction
+    partial class ShippingDlg : Form
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingDlg));
-
-        // The singleton list of the current set of shipping errors.
-        private static Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
-
-        /// <summary>
-        /// Messages that should be used when trying to save a shipment
-        /// </summary>
-        readonly static Dictionary<Type, string> exceptionMessages = new Dictionary<Type, string>
-        {
-            { typeof(ORMConcurrencyException), "Another user had recently made changes, so the shipment was not {0}." },
-            { typeof(ObjectDeletedException), "The shipment has been deleted." },
-            { typeof(SqlForeignKeyException), "The shipment has been deleted." },
-        };
 
         // We load shipments asynchronously.  This flag lets us know if that's what we're currently doing, so we don't try to do
         // it reentrantly.
@@ -79,13 +65,8 @@ namespace ShipWorks.Shipping
         // List of shipment types that were "Activated" at the time the UI was loaded.  This is important b\c if it got activated after we loaded the UI from another machine,
         // and we used the "live" value, then we'd think a shipment was currently loaded when really it wasn't.
         private List<ShipmentTypeCode> uiActivatedShipmentTypes = new List<ShipmentTypeCode>();
-        
-        // If the user is processing with best rate and counter rates, they have the option to ignore signing up for
-        // counter rates during the current batch.  This variable will be for tracking that flag.
-        private bool showBestRateCounterRateSetupWizard = true;
 
         private List<ShipmentEntity> loadedShipmentEntities;
-        private bool cancelProcessing;
 
         private readonly Timer getRatesTimer = new Timer();
         private BackgroundWorker getRatesBackgroundWorker;
@@ -102,18 +83,32 @@ namespace ShipWorks.Shipping
         private const int shipSenseChangedDebounceTime = 500;
         private bool shipSenseNeedsUpdated = false;
         private MessengerToken uspsAccountConvertedToken;
+        private readonly IMessenger messenger;
         private ILifetimeScope lifetimeScope;
+        private readonly IShippingManager shippingManager;
+        private Func<IShipmentProcessor> createShipmentProcessor;
+        private ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingDlg(OpenShippingDialogMessage message, ILifetimeScope lifetimeScope)
+        public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager, 
+            IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor, 
+            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher)
         {
             InitializeComponent();
+
+            ErrorManager = errorManager;
+            this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
+            this.messenger = messenger;
+            this.createShipmentProcessor = createShipmentProcessor;
+
+            this.carrierConfigurationShipmentRefresher.RetrieveShipments = FetchShipmentsFromShipmentControl;
 
             preSelectedRateEventArgs = message.RateSelectedEventArgs;
             List <ShipmentEntity> shipments = message.Shipments.ToList();
 
+            this.shippingManager = shippingManager;
             this.lifetimeScope = lifetimeScope;
             MethodConditions.EnsureArgumentIsNotNull(shipments, nameof(shipments));
 
@@ -145,7 +140,7 @@ namespace ShipWorks.Shipping
             shipments.ForEach(ShippingManager.EnsureShipmentLoaded);
             shipSenseSynchronizer = new ShipSenseSynchronizer(shipments);
 
-            uspsAccountConvertedToken = Messenger.Current.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
+            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, OnStampsUspsAutomaticExpeditedChanged);
         }
 
         /// <summary>
@@ -172,31 +167,6 @@ namespace ShipWorks.Shipping
         /// </summary>
         public IEnumerable<ShipmentEntity> FetchShipmentsFromShipmentControl() =>
             shipmentControl.AllRows.Select(x => x.Shipment);
-
-        /// <summary>
-        /// Is there currently an error for the specified shipment id?
-        /// </summary>
-        public bool ShipmentHasError(long shipmentId) => ProcessingErrors.ContainsKey(shipmentId);
-
-        /// <summary>
-        /// Set an error on the processing errors collection
-        /// </summary>
-        public string SetShipmentErrorMessage(long shipmentID, Exception exception, string actionName)
-        {
-            if (exception == null)
-            {
-                return null;
-            }
-
-            string errorMessage;
-            if (exceptionMessages.TryGetValue(exception.GetType(), out errorMessage))
-            {
-                errorMessage = string.Format(errorMessage, actionName);
-                processingErrors[shipmentID] = new ShippingException(errorMessage, exception);
-            }
-
-            return errorMessage;
-        }
 
         /// <summary>
         /// Called when the shipping settings for using USPS has changed. We need to refresh the
@@ -343,7 +313,7 @@ namespace ShipWorks.Shipping
         /// The singleton instance of the processing errors from the last time shipments were processed using the shipping window.  This works
         /// because the shipping window can only be open at most once on the screen.
         /// </summary>
-        public static Dictionary<long, Exception> ProcessingErrors => processingErrors;
+        public static IShippingErrorManager ErrorManager { get; private set; }
 
         /// <summary>
         /// The splitter has moved.
@@ -1558,53 +1528,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, bool forceSave)
         {
-            if (shipments == null || !shipments.Any())
-            {
-                return new Dictionary<ShipmentEntity, Exception>();
-            }
-
             Cursor.Current = Cursors.WaitCursor;
 
-            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
-
-            foreach (ShipmentEntity shipment in shipments)
-            {
-                try
-                {
-                    if (forceSave)
-                    {
-                        // Force the shipment to look dirty to its forced to save.  This is to make sure that if any other
-                        // changes had been made by other users we pick up the concurrency violation.
-                        if (!shipment.IsDirty)
-                        {
-                            shipment.Fields[(int) ShipmentFieldIndex.ShipmentType].IsChanged = true;
-                            shipment.Fields.IsDirty = true;
-                        }
-                    }
-
-                    ShippingManager.SaveShipment(shipment);
-
-                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
-                    {
-                        validatedAddressScope.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
-                        sqlAdapter.Commit();
-                    }
-                }
-                catch (ObjectDeletedException ex)
-                {
-                    errors[shipment] = ex;
-                }
-                catch (SqlForeignKeyException ex)
-                {
-                    errors[shipment] = ex;
-                }
-                catch (ORMConcurrencyException ex)
-                {
-                    errors[shipment] = ex;
-                }
-            }
-
-            return errors;
+            return shippingManager.SaveShipmentsToDatabase(shipments, validatedAddressScope, forceSave);
         }
 
         /// <summary>
@@ -2109,7 +2035,7 @@ namespace ShipWorks.Shipping
                     _e.Result = ShippingManager.GetRates(shipment);
 
                     // Just in case it used to have an error remove it
-                    processingErrors.Remove(shipment.ShipmentID);
+                    ErrorManager.Remove(shipment.ShipmentID);
                 }
                 catch (InvalidRateGroupShippingException ex)
                 {
@@ -2157,7 +2083,7 @@ namespace ShipWorks.Shipping
             List<ShipmentEntity> shipments = EntityUtility.CloneEntityCollection(shipmentControl.SelectedShipments.Where(s => s.Processed && !s.Voided));
 
             // Clear all errors before starting the voiding process.  We'll just show the errors that happen during voiding.
-            processingErrors.Clear();
+            ErrorManager.Clear();
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this,
                 "Voiding Shipments",
@@ -2209,24 +2135,25 @@ namespace ShipWorks.Shipping
                     ShippingManager.VoidShipment(shipmentID);
 
                     // Clear any previous errors
-                    processingErrors.Remove(shipmentID);
+                    ErrorManager.Remove(shipmentID);
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = SetShipmentErrorMessage(shipmentID, ex, "voided");
+                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex, "voided");
                 }
                 catch (ShippingException ex)
                 {
-                    errorMessage = ex.Message;
-                    processingErrors[shipmentID] = ex;
+                    errorMessage = ErrorManager.SetShipmentErrorMessage(shipmentID, ex);
+                    //errorMessage = ex.Message;
+                    //processingErrors[shipmentID] = ex;
                 }
 
                 try
@@ -2240,7 +2167,7 @@ namespace ShipWorks.Shipping
                     if (errorMessage == null)
                     {
                         errorMessage = "The shipment has been deleted.";
-                        processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                        ErrorManager.SetShipmentErrorMessage(shipmentID, new ShippingException(errorMessage, ex));
                     }
                 }
 
@@ -2280,7 +2207,6 @@ namespace ShipWorks.Shipping
         private async Task Process(IEnumerable<ShipmentEntity> shipments)
         {
             Cursor.Current = Cursors.WaitCursor;
-            cancelProcessing = false;
 
             // Save changes to the current selection in memory.  We save to the database later on a per-shipment basis in the background thread.
             SaveChangesToUIDisplayedShipments();
@@ -2289,23 +2215,18 @@ namespace ShipWorks.Shipping
             // the error shouldn't stay
             foreach (ShipmentEntity shipment in shipments.Where(s => s.Processed))
             {
-                processingErrors.Remove(shipment.ShipmentID);
+                ErrorManager.Remove(shipment.ShipmentID);
             }
+            
+            IShipmentProcessor shipmentProcessor = createShipmentProcessor();
 
-            // Filter out the ones we know to be already processed, or are not ready
-            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int) ShipmentTypeCode.None);
-
-            using (ILifetimeScope processLifetimeScope = lifetimeScope.BeginLifetimeScope())
+            shipments = await shipmentProcessor.Process(shipments, carrierConfigurationShipmentRefresher, 
+                rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
+                
+            if (shipmentProcessor.FilteredRates != null)
             {
-                ShipmentProcessor shipmentProcessor = processLifetimeScope.Resolve<ShipmentProcessor>();
-                
-                shipments = await shipmentProcessor.Process(shipments, rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
-                
-                if (shipmentProcessor.FilteredRates != null)
-                {
-                    // The user canceled out of the dialog, so just show the filtered rates
-                    rateControl.LoadRates(shipmentProcessor.FilteredRates);
-                }
+                // The user canceled out of the dialog, so just show the filtered rates
+                rateControl.LoadRates(shipmentProcessor.FilteredRates);
             }
 
             // Apply any changes made during processing to the grid
@@ -2432,7 +2353,7 @@ namespace ShipWorks.Shipping
                                           "Your changes to those shipments were not saved.");
             }
 
-            processingErrors.Clear();
+            ErrorManager.Clear();
 
             validatedAddressScope.Dispose();
         }
@@ -2473,10 +2394,11 @@ namespace ShipWorks.Shipping
         {
             if (disposing)
             {
+                ErrorManager = null;
                 components?.Dispose();
                 validatedAddressScope?.Dispose();
 
-                Messenger.Current.Remove(uspsAccountConvertedToken);
+                messenger.Remove(uspsAccountConvertedToken);
             }
 
             base.Dispose(disposing);

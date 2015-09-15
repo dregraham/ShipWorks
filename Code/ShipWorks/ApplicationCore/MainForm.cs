@@ -3354,17 +3354,20 @@ namespace ShipWorks
         /// </summary>
         private void OnShipOrders(object sender, EventArgs e)
         {
-            if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
-            {
-                MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
-                return;
-            }
+            Messenger.Current.Send(new CreateLabelMessage(this));
 
-            ShipmentsLoader loader = new ShipmentsLoader(this);
-            loader.Tag = InitialShippingTabDisplay.Shipping;
+            //TODO: DO NOT COMMIT THIS CHANGE
+            //if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
+            //{
+            //    MessageHelper.ShowInformation(this, string.Format("You can only ship up to {0} orders at a time.", ShipmentsLoader.MaxAllowedOrders));
+            //    return;
+            //}
 
-            loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            //ShipmentsLoader loader = new ShipmentsLoader(this);
+            //loader.Tag = InitialShippingTabDisplay.Shipping;
+
+            //loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
+            //loader.LoadAsync(gridControl.Selection.OrderedKeys);
         }
 
         /// <summary>

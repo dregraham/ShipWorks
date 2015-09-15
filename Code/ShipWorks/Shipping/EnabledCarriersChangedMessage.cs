@@ -2,6 +2,7 @@
 using Interapptive.Shared.Messaging;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping
 {
@@ -16,8 +17,8 @@ namespace ShipWorks.Shipping
         public EnabledCarriersChangedMessage(object sender, List<int> typesAdded, List<int> typesRemoved)
         {
             Sender = sender;
-            Added = new ReadOnlyCollection<ShipmentTypeCode>(typesAdded.Cast<ShipmentTypeCode>().ToList());
-            Removed = new ReadOnlyCollection<ShipmentTypeCode>(typesRemoved.Cast<ShipmentTypeCode>().ToList());
+            Added = typesAdded.Cast<ShipmentTypeCode>().ToReadOnly();
+            Removed = typesRemoved.Cast<ShipmentTypeCode>().ToReadOnly();
         }
 
         /// <summary>

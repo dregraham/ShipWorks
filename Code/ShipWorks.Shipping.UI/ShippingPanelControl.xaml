@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ShipWorks.Shipping.UI"
+             xmlns:tc="clr-namespace:ShipWorks.Shipping.UI.ValueConverters"
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
@@ -15,6 +16,7 @@
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/ShipWorksExpanderStyle.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/ShipWorks.Shipping.UI;component/Styles/GlobalStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <tc:InvertBooleanConverter x:Key="InvertBooleanConverter" />
             <Style TargetType="Border">
                 <Setter Property="BorderBrush" Value="Gray" />
                 <Setter Property="BorderThickness" Value="1" />
@@ -24,7 +26,8 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" 
+                  IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBooleanConverter}}">
         <StackPanel>
             <Grid>
                 <Grid.ColumnDefinitions>

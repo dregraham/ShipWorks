@@ -6,91 +6,91 @@ using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Profiles;
+using Autofac.Extras.Moq;
 
 namespace ShipWorks.Tests.Shipping
 {
     public class CarrierConfigurationShipmentRefresherTest
     {
-        MockRepository mockRepository;
-        Mock<IMessenger> messengerMock;
-        Mock<IShippingDialogInteraction> shippingDialogMock;
-        Mock<IShippingManager> shippingManagerMock;
-        Mock<IShippingProfileManager> shippingProfileManagerMock;
+        //MockRepository mockRepository;
+        //Mock<IMessenger> messengerMock;
+        //Mock<IShippingDialogInteraction> shippingDialogMock;
+        //Mock<IShippingManager> shippingManagerMock;
+        //Mock<IShippingProfileManager> shippingProfileManagerMock;
 
-        ShippingProfileEntity profile;
+        //ShippingProfileEntity profile;
 
-        ShipmentEntity shipment1;
-        ShipmentEntity shipment2;
-        ShipmentEntity shipment3;
+        //ShipmentEntity shipment1;
+        //ShipmentEntity shipment2;
+        //ShipmentEntity shipment3;
 
-        private List<ShipmentEntity> shipments;
-        private ShipmentEntity processingShipment;
+        //private List<ShipmentEntity> shipments;
+        //private ShipmentEntity processingShipment;
 
-        public CarrierConfigurationShipmentRefresherTest()
-        {
-            mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
-            messengerMock = mockRepository.Create<IMessenger>();
-            shippingDialogMock = mockRepository.Create<IShippingDialogInteraction>();
-            shippingManagerMock = mockRepository.Create<IShippingManager>();
-            shippingProfileManagerMock = mockRepository.Create<IShippingProfileManager>();
+        //public CarrierConfigurationShipmentRefresherTest()
+        //{
+        //    mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = DefaultValue.Mock };
+        //    messengerMock = mockRepository.Create<IMessenger>();
+        //    shippingDialogMock = mockRepository.Create<IShippingDialogInteraction>();
+        //    shippingManagerMock = mockRepository.Create<IShippingManager>();
+        //    shippingProfileManagerMock = mockRepository.Create<IShippingProfileManager>();
 
-            shipment1 = new ShipmentEntity { ShipmentID = 1, ShipmentType = (int)ShipmentTypeCode.Usps };
-            shipment2 = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.Usps };
-            shipment3 = new ShipmentEntity { ShipmentID = 3, ShipmentType = (int)ShipmentTypeCode.Usps };
+        //    shipment1 = new ShipmentEntity { ShipmentID = 1, ShipmentType = (int)ShipmentTypeCode.Usps };
+        //    shipment2 = new ShipmentEntity { ShipmentID = 2, ShipmentType = (int)ShipmentTypeCode.Usps };
+        //    shipment3 = new ShipmentEntity { ShipmentID = 3, ShipmentType = (int)ShipmentTypeCode.Usps };
 
-            shipments = new List<ShipmentEntity>
-            {
-                shipment1, shipment2, shipment3
-            };
+        //    shipments = new List<ShipmentEntity>
+        //    {
+        //        shipment1, shipment2, shipment3
+        //    };
 
-            shippingDialogMock.Setup(x => x.FetchShipmentsFromShipmentControl()).Returns(shipments);
+        //    shippingDialogMock.Setup(x => x.FetchShipmentsFromShipmentControl()).Returns(shipments);
 
-            profile = new ShippingProfileEntity { RequestedLabelFormat = 1 };
+        //    profile = new ShippingProfileEntity { RequestedLabelFormat = 1 };
 
-            shippingProfileManagerMock.Setup(x => x.GetDefaultProfile(It.IsAny<ShipmentTypeCode>())).Returns(profile);
-        }
-
-        [Fact]
-        public void Constructor_ThrowsArgumentNullException_WhenMessengerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(null, shippingDialogMock.Object, shippingProfileManagerMock.Object, shippingManagerMock.Object));
-        }
-
-        [Fact]
-        public void Constructor_ThrowsArgumentNullException_WhenShipmentDialogIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, null, shippingProfileManagerMock.Object, shippingManagerMock.Object));
-        }
-
-        [Fact]
-        public void Constructor_ThrowsArgumentNullException_WhenShippingProfileManagerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, null, shippingManagerMock.Object));
-        }
-
-        [Fact]
-        public void Constructor_ThrowsArgumentNullException_WhenShippingManagerIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CarrierConfigurationShipmentRefresher(messengerMock.Object, shippingDialogMock.Object, shippingProfileManagerMock.Object, null));
-        }
-
+        //    shippingProfileManagerMock.Setup(x => x.GetDefaultProfile(It.IsAny<ShipmentTypeCode>())).Returns(profile);
+        //}
+        
         [Fact]
         public void Constructor_RegistersConfiguringCarrierMessageHandler()
         {
-            CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
-            messengerMock.Verify(x => x.Handle(refresher, It.IsAny<Action<ConfiguringCarrierMessage>>()));
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<CarrierConfigurationShipmentRefresher>();
+
+                mock.Mock<IMessenger>().Verify(x => x.Handle(testObject, It.IsAny<Action<ConfiguringCarrierMessage>>()));
+            }
         }
 
         [Fact]
         public void Constructor_RegistersCarrierConfiguredMessageHandler()
         {
-            CarrierConfigurationShipmentRefresher refresher = CreateRefresher();
-            messengerMock.Verify(x => x.Handle(refresher, It.IsAny<Action<CarrierConfiguredMessage>>()));
+            using (var mock = AutoMock.GetLoose())
+            {
+                var testObject = mock.Create<CarrierConfigurationShipmentRefresher>();
+
+                mock.Mock<IMessenger>().Verify(x => x.Handle(testObject, It.IsAny<Action<CarrierConfiguredMessage>>()));
+            }
         }
 
         [Fact]
         public void HandleConfiguringCarrier_DelegatesSavingAllShipments()
         {
+            using (var mock = AutoMock.GetLoose())
+            {
+                Action<ConfiguringCarrierMessage> messageHandler = null;
+                mock.Mock<IMessenger>()
+                    .Setup(x => x.Handle(It.IsAny<object>(), It.IsAny<Action<CarrierConfiguredMessage>>()))
+                    .Callback((Action<ConfiguringCarrierMessage> x) => messageHandler = x);
+                mock.Mock
+
+                var testObject = mock.Create<CarrierConfigurationShipmentRefresher>();
+                messageHandler(new ConfiguringCarrierMessage(this, ShipmentTypeCode.Usps));
+                
+                mock.Mock<IShippingManager>().Verify(x => x.SaveShipmentsToDatabase(shipments, true));
+            }
+
+
             TestMessenger messenger = new TestMessenger();
             CreateRefresher(messenger);
 

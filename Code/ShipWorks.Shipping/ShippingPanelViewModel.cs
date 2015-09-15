@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data;
+using System.Collections.Generic;
 
 namespace ShipWorks.Shipping
 {
@@ -28,17 +29,23 @@ namespace ShipWorks.Shipping
         private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
+        private bool isProcessed;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
+        public ShippingPanelViewModel()
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
+            
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
         }
@@ -67,7 +74,20 @@ namespace ShipWorks.Shipping
 
             Shipment.Load(loadedShipment.Shipment);
 
+            IsProcessed = loadedShipment.Shipment.Processed;
+
             EnableRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Process the current shipment using the specified processor
+        /// </summary>
+        public async Task ProcessShipment(ShipmentProcessor shipmentProcessor, CarrierConfigurationShipmentRefresher refresher)
+        {
+            Save();
+            IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
+            await LoadOrder(loadedShipment.Shipment.OrderID);
+            IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
         }
 
         /// <summary>
@@ -96,6 +116,16 @@ namespace ShipWorks.Shipping
             set { handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value); }
         }
 
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsProcessed
+        {
+            get { return isProcessed; }
+            set { handler.Set(nameof(IsProcessed), ref isProcessed, value); }
+        }
+
         public AddressViewModel Origin => origin ?? (origin = new AddressViewModel());
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
@@ -107,6 +137,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Save()
         {
+            loadedShipment.Shipment.ShipmentType = (int) SelectedShipmentType.ShipmentTypeCode;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
             Shipment.Save(loadedShipment.Shipment);
