@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Services.Protocols;
@@ -494,9 +493,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 StatusCodes statusCodes;
             	RateV18[] rates;
                 string badAddressMessage = null;
-
-                webService.OnlyLogOnMagicKeys = true;
-
+                
                 try
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
