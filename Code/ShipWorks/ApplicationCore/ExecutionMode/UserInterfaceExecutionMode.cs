@@ -23,6 +23,7 @@ using Autofac;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Shipping;
 using System.Linq;
+using TD.SandDock;
 
 namespace ShipWorks.ApplicationCore.ExecutionMode
 {
@@ -164,7 +165,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
             {
                 lifetimeScope.Resolve<IMessenger>().Handle<OpenShippingDialogMessage>(this, HandleOpenShippingDialogMessage);
-                lifetimeScope.Resolve<IMessenger>().Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
             }
         }
 
@@ -271,23 +271,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
                     dlg.ShowDialog(Program.MainForm);
                 }
             }
-        }
-
-        /// <summary>
-        /// Handle the shipment changed message
-        /// </summary>
-        private void HandleShipmentChangedMessage(ShipmentChangedMessage message)
-        {
-            // TODO: Tell the rate panel to update itself.
-
-            //if (MainForm.InvokeRequired)
-            //{
-            //    MainForm.Invoke((Action)(() => xxxxxxxxxxxxx(message)));
-            //}
-            //else
-            //{
-            //    xxxxxxxxxxxxx(message);
-            //}
         }
 		
         /// <summary>

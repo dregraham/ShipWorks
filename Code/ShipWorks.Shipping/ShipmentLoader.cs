@@ -62,6 +62,10 @@ namespace ShipWorks.Shipping
                 if (shipments.Count == 1)
                 {
                     shipment = shipments.FirstOrDefault();
+
+                    // Make sure the shipment type objects are fully loaded.
+                    ShippingManager.EnsureShipmentLoaded(shipment);
+
                     shipmentPanelLoadedShipment.Shipment = shipment;
                     shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Success;
                 }
