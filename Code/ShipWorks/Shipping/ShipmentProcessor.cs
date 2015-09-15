@@ -23,6 +23,9 @@ using System.Windows.Forms;
 
 namespace ShipWorks.Shipping
 {
+    /// <summary>
+    /// Shared code required to process a set of shipments
+    /// </summary>
     public class ShipmentProcessor
     {
         private Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
@@ -34,10 +37,13 @@ namespace ShipWorks.Shipping
         private readonly ILifetimeScope lifetimeScope;
         private RateResult chosenRate;
         private int shipmentCount;
-        private Action afterConfigureCarrier;
-
+        private Action counterRateCarrierConfiguredWhileProcessing;
+        
         public RateGroup FilteredRates { get; private set; }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public ShipmentProcessor(IShippingDialogInteraction dialogInteraction, Control owner, CarrierConfigurationShipmentRefresher shipmentRefresher, ILifetimeScope lifetimeScope)
         {
             this.dialogInteraction = dialogInteraction;
@@ -51,11 +57,11 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="shipments">List of shipments to process</param>
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
-        /// <param name="afterConfigureCarrier">Execute after a counter rate carrier was configured</param>
+        /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, RateResult chosenRate, Action afterConfigureCarrier)
+        public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
         {
-            this.afterConfigureCarrier = afterConfigureCarrier;
+            this.counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessing;
             this.chosenRate = chosenRate;
 
             cancelProcessing = false;
@@ -316,7 +322,7 @@ namespace ShipWorks.Shipping
 
                     ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
 
-                    afterConfigureCarrier();
+                    counterRateCarrierConfiguredWhileProcessing();
                 }
                 else
                 {
