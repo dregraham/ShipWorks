@@ -12,7 +12,6 @@ using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore;
-using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.IO.Hardware.Printers;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -20,13 +19,8 @@ using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Data.Model.HelperClasses;
-using ShipWorks.Editions;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Carriers;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.BestRate.Setup;
-using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Profiles;
@@ -44,7 +38,6 @@ using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Threading.Tasks;
-using System.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -2387,25 +2380,15 @@ namespace ShipWorks.Shipping
 
             using (ILifetimeScope processLifetimeScope = lifetimeScope.BeginLifetimeScope())
             {
-                CarrierConfigurationShipmentRefresher shipmentRefresher =
-                    processLifetimeScope.Resolve<CarrierConfigurationShipmentRefresher>(new TypedParameter(typeof(IShippingDialogInteraction), this));
-                ShipmentProcessor shipmentProcessor =
-                    processLifetimeScope.Resolve<ShipmentProcessor>(
-                        new TypedParameter(typeof(IShippingDialogInteraction), this),
-                        new TypedParameter(typeof(Control), this));
+                //CarrierConfigurationShipmentRefresher shipmentRefresher =
+                //    processLifetimeScope.Resolve<CarrierConfigurationShipmentRefresher>(new TypedParameter(typeof(IShippingDialogInteraction), this));
+                ShipmentProcessor shipmentProcessor = processLifetimeScope.Resolve<ShipmentProcessor>();
                 
-                shipmentRefresher.ProcessingShipments(shipments);
+                //shipmentRefresher.ProcessingShipments(shipments);
                 
-                shipments = await shipmentProcessor.Process(shipments, rateControl.SelectedRate, () =>
-                {
-                    Invoke((MethodInvoker)delegate
-                    {
-                        ServiceControl.SaveToShipments();
-                        ServiceControl.LoadAccounts();
-                    });
-                });
+                shipments = await shipmentProcessor.Process(shipments, rateControl.SelectedRate, CounterRateCarrierConfiguredWhileProcessing);
 
-                shipmentRefresher.FinishProcessing();
+                //shipmentRefresher.FinishProcessing();
 
                 if (shipmentProcessor.FilteredRates != null)
                 {
@@ -2428,6 +2411,18 @@ namespace ShipWorks.Shipping
             // shipment, so the status of any remaining unprocessed shipments are reflected correctly
             shipSenseSynchronizer.RefreshKnowledgebaseEntries();
             shipSenseSynchronizer.MonitoredShipments.ToList().ForEach(shipSenseSynchronizer.SynchronizeWith);
+        }
+
+        /// <summary>
+        /// Counter rate carrier was configured as a real carrier during processing
+        /// </summary>
+        private void CounterRateCarrierConfiguredWhileProcessing()
+        {
+            Invoke((MethodInvoker)delegate
+            {
+                ServiceControl.SaveToShipments();
+                ServiceControl.LoadAccounts();
+            });
         }
 
         /// <summary>

@@ -11,6 +11,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
 using System.Linq;
 using System.Reflection;
+using System;
 
 namespace ShipWorks.ApplicationCore
 {
@@ -44,6 +45,14 @@ namespace ShipWorks.ApplicationCore
         public static ILifetimeScope BeginLifetimeScope()
         {
             return current.BeginLifetimeScope();
+        }
+
+        /// <summary>
+        /// Begin a lifetime scope from which dependencies can be resolved
+        /// </summary>
+        internal static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction)
+        {
+            return current.BeginLifetimeScope(configurationAction);
         }
 
         /// <summary>

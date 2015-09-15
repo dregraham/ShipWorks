@@ -30,6 +30,7 @@ namespace ShipWorks.Shipping
         private bool cancelProcessing;
         private readonly IShippingDialogInteraction dialogInteraction;
         private readonly Control owner;
+        private readonly CarrierConfigurationShipmentRefresher shipmentRefresher;
         private readonly ILifetimeScope lifetimeScope;
         private RateResult chosenRate;
         private int shipmentCount;
@@ -37,10 +38,11 @@ namespace ShipWorks.Shipping
 
         public RateGroup FilteredRates { get; private set; }
 
-        public ShipmentProcessor(IShippingDialogInteraction dialogInteraction, Control owner, ILifetimeScope lifetimeScope)
+        public ShipmentProcessor(IShippingDialogInteraction dialogInteraction, Control owner, CarrierConfigurationShipmentRefresher shipmentRefresher, ILifetimeScope lifetimeScope)
         {
             this.dialogInteraction = dialogInteraction;
             this.owner = owner;
+            this.shipmentRefresher = shipmentRefresher;
             this.lifetimeScope = lifetimeScope;
         }
         
@@ -61,6 +63,7 @@ namespace ShipWorks.Shipping
             // Create clones to be processed - that way any changes made don't have race conditions with the UI trying to paint with them
             shipments = EntityUtility.CloneEntityCollection(shipments);
             shipmentCount = shipments.Count();
+            shipmentRefresher.ProcessingShipments(shipments);
 
             if (!shipments.Any())
             {
@@ -126,7 +129,9 @@ namespace ShipWorks.Shipping
                 {
                     knowledgebase.RefreshShipSenseStatus(hash, exludedShipmentsFromShipSenseRefresh.Select(s => s.ShipmentID));
                 }
-                
+
+                shipmentRefresher.FinishProcessing();
+
                 completionSource.SetResult(shipments);
             };
 
