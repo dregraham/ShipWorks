@@ -300,7 +300,7 @@ namespace ShipWorks.Shipping
             if (!shipmentType.IsAccountRegistrationAllowed)
             {
                 MessageHelper.ShowWarning(owner, $"Account registration is disabled for {EnumHelper.GetDescription(shipmentType.ShipmentTypeCode)}");
-                result = DialogResult.Cancel;
+                return DialogResult.Cancel;
             }
             
             using (ShipmentTypeSetupWizardForm setupWizard = shipmentType.CreateSetupWizard(lifetimeScope))
