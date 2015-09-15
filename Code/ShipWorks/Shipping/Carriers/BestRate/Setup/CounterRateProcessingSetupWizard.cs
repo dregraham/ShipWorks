@@ -10,7 +10,6 @@ using ShipWorks.Shipping.Settings;
 using ShipWorks.UI.Controls;
 using ShipWorks.UI.Wizard;
 using System.Drawing;
-using System.Globalization;
 
 namespace ShipWorks.Shipping.Carriers.BestRate.Setup
 {
@@ -31,7 +30,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
         /// <param name="filteredRates">The filtered rates.</param>
         /// <param name="selectedRate">The selected rate that is going to be in the "Sign up" section of the wizard.</param>
         /// <param name="shipmentsInBatch">The shipments in the batch.</param>
-        public CounterRateProcessingSetupWizard(RateGroup filteredRates, RateResult selectedRate, IEnumerable<ShipmentEntity> shipmentsInBatch)
+        public CounterRateProcessingSetupWizard(RateGroup filteredRates, RateResult selectedRate, int shipmentCount)
         {
             InitializeComponent();
 
@@ -51,7 +50,7 @@ namespace ShipWorks.Shipping.Carriers.BestRate.Setup
             LoadInitialRateInfo();
             LoadExistingAccountRateInfo();
 
-            if (shipmentsInBatch.Count() <= 1)
+            if (shipmentCount <= 1)
             {
                 // There's only one shipment, so it doesn't make sense to show the UI 
                 // regarding remaining shipments in the batch

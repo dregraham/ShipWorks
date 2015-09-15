@@ -5,9 +5,11 @@ using ShipWorks.AddressValidation;
 using ShipWorks.Filters;
 using ShipWorks.Shipping;
 using ShipWorks.Shipping.Carriers;
+using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
 using ShipWorks.Stores;
 using ShipWorks.Stores.Content;
+using System.Linq;
 using System.Reflection;
 
 namespace ShipWorks.ApplicationCore
@@ -91,7 +93,15 @@ namespace ShipWorks.ApplicationCore
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
-            builder.RegisterAssemblyModules(assemblies);
+            builder.RegisterType<ShipmentProcessor>();
+
+            builder.RegisterType<CarrierConfigurationShipmentRefresher>();
+
+            builder.RegisterType<ShippingProfileManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterAssemblyModules(assemblies.Union(new[] { typeof(IoC).Assembly }).ToArray());
 
             current = builder.Build();
         }

@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.ComponentModel;
-using ShipWorks.Common.Threading;
 using System.Threading;
-using System.Collections;
-using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Common.Threading
 {
@@ -205,7 +200,6 @@ namespace ShipWorks.Common.Threading
             // if configured to do so
             double delaySeconds = delayProgressDialog ? .25 : 0;
             delayer.ShowAfter(owner, TimeSpan.FromSeconds(delaySeconds));
-
         }
 
         /// <summary>

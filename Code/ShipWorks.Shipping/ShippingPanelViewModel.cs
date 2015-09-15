@@ -21,7 +21,6 @@ namespace ShipWorks.Shipping
     {
         private bool supportsMultiplePackages;
         private ShipmentType selectedShipmentType;
-        private ObservableCollection<ShipmentType> shipmentTypes;
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
