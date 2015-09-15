@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// <summary>
     /// LemonStand integration
     /// </summary>
-    class LemonStandStoreType : StoreType
+    public class LemonStandStoreType : StoreType
     {
         // Logger 
         static readonly ILog log = LogManager.GetLogger(typeof(LemonStandStoreType));

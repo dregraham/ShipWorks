@@ -450,6 +450,10 @@
     <Compile Include="Stores\Etsy\EtsyOnlineUpdaterTest.cs" />
     <Compile Include="Stores\GenericStore\IdentifierTests.cs" />
     <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
+    <Compile Include="Stores\LemonStand\FakeLemonStandDownloader.cs" />
+    <Compile Include="Stores\LemonStand\LemonStandDownloaderTest.cs" />
+    <Compile Include="Stores\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Stores\LemonStand\LemonStandWebClientTest.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsResponseSerializerTest.cs" />
@@ -569,6 +573,8 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandSingleOrderJson.js" />
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandJsonOrderResponse.js" />
     <EmbeddedResource Include="Stores\Newegg\Artifacts\OrderDownloadedWithEmptyInvoice.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -585,7 +591,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shipping\Carriers\Postal\WebTools\BestRate\" />
-    <Folder Include="Stores\LemonStand\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Shipping\Carriers\FedEx\Api\FedExSingleMatch.cer" />

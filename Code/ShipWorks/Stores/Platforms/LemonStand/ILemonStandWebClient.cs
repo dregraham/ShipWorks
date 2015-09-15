@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Linq;
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
-    interface ILemonStandWebClient
+    public interface ILemonStandWebClient
     {
         JToken GetBillingAddress(string customerId);
         JToken GetOrderInvoice(string orderId);

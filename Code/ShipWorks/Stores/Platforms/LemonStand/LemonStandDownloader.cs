@@ -16,11 +16,23 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     /// <summary>
     /// Downloader for LemonStand
     /// </summary>
-    class LemonStandDownloader : StoreDownloader
+    public class LemonStandDownloader : StoreDownloader
     {
+
+        private ILemonStandWebClient client;
+        private ISqlAdapterRetry sqlAdapter;
+
         public LemonStandDownloader(StoreEntity store)
+            : this(store, new LemonStandWebClient((LemonStandStoreEntity)store), new SqlAdapterRetry<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder"))         
+        {
+
+        }
+
+        public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
             : base(store)
         {
+            this.client = webClient;
+            this.sqlAdapter = sqlAdapter;
         }
 
         /// <summary>
@@ -31,8 +43,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         protected override void Download()
         {
             Progress.Detail = "Downloading New Orders...";
-
-            LemonStandWebClient client = new LemonStandWebClient((LemonStandStoreEntity)Store);
            
             try
             {
@@ -59,7 +69,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         return;
                     }
 
-                    LoadOrder(jsonOrder, client);
+                    LoadOrder(jsonOrder);
 
                     // set the progress detail
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
@@ -82,7 +92,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Load Order from JToken
         /// </summary>
-        private void LoadOrder(JToken jsonOrder, LemonStandWebClient client)
+        private void LoadOrder(JToken jsonOrder)
+        {
+            LemonStandOrderEntity order = PrepareOrder(jsonOrder);
+
+            sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+        }
+
+        public LemonStandOrderEntity PrepareOrder(JToken jsonOrder)
         {
             //                              order
             //                          /     |      \
@@ -95,34 +112,44 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             //Deserialize Json Order into order DTO
             LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
             int orderID = int.Parse(lsOrder.ID);
-            LemonStandOrderEntity order = (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));            
-            
-            order.OnlineStatus = lsOrder.Status;            
+            LemonStandOrderEntity order =
+                (LemonStandOrderEntity) InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
+
+            order.OnlineStatus = lsOrder.Status;
 
             // Only load new orders
-            if (order.IsNew) 
-            {                
-                order.OrderDate = getDate(lsOrder.CreatedAt);
-                order.OnlineLastModified = getDate(lsOrder.UpdatedAt);
+            if (order.IsNew)
+            {
+                order.OrderDate = GetDate(lsOrder.CreatedAt);
+                order.OnlineLastModified = GetDate(lsOrder.UpdatedAt);
                 order.OrderNumber = int.Parse(lsOrder.Number);
-                
+
                 // Need invoice id to get shipment information
-                LemonStandInvoice invoice = JsonConvert.DeserializeObject<LemonStandInvoice>(jsonOrder.SelectToken("invoices.data").Children().First().ToString());
-                
+                LemonStandInvoice invoice =
+                    JsonConvert.DeserializeObject<LemonStandInvoice>(
+                        jsonOrder.SelectToken("invoices.data").Children().First().ToString());
+
                 // Get shipment information and set requested shipping
                 JToken jsonShipment = client.GetShipment(invoice.ID);
-                LemonStandShipment shipment = JsonConvert.DeserializeObject<LemonStandShipment>(jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
+                LemonStandShipment shipment =
+                    JsonConvert.DeserializeObject<LemonStandShipment>(
+                        jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
 
                 order.RequestedShipping = shipment.ShippingService.ToString();
 
                 // Get shipping address from shipment
                 JToken jsonShippingAddress = client.GetShippingAddress(shipment.ID);
-                LemonStandShippingAddress shippingAddress = JsonConvert.DeserializeObject<LemonStandShippingAddress>(jsonShippingAddress.SelectToken("data.shipping_address.data").ToString());
-            
+                LemonStandShippingAddress shippingAddress =
+                    JsonConvert.DeserializeObject<LemonStandShippingAddress>(
+                        jsonShippingAddress.SelectToken("data.shipping_address.data").ToString());
+
                 // Get customer information and billing address
-                LemonStandCustomer customer = JsonConvert.DeserializeObject<LemonStandCustomer>(jsonOrder.SelectToken("customer.data").ToString());
+                LemonStandCustomer customer =
+                    JsonConvert.DeserializeObject<LemonStandCustomer>(jsonOrder.SelectToken("customer.data").ToString());
                 JToken jsonBillingAddress = client.GetBillingAddress(customer.ID);
-                LemonStandBillingAddress billingAddress = JsonConvert.DeserializeObject<LemonStandBillingAddress>(jsonBillingAddress.SelectToken("data.billing_addresses.data").Children().First().ToString());
+                LemonStandBillingAddress billingAddress =
+                    JsonConvert.DeserializeObject<LemonStandBillingAddress>(
+                        jsonBillingAddress.SelectToken("data.billing_addresses.data").Children().First().ToString());
 
                 string email = customer.Email;
 
@@ -130,21 +157,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 LoadAddressInfo(order, shippingAddress, billingAddress, email);
 
                 // Load order items
-                LoadItems(jsonOrder, client, order);
+                LoadItems(jsonOrder, order);
 
                 order.OrderTotal = decimal.Parse(lsOrder.SubtotalPaid);
             }
-            
-            SqlAdapterRetry<SqlException> retryAdapter = new SqlAdapterRetry<SqlException>(5, -5, "LemonStandStoreDownloader.LoadOrder");
-            retryAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
+            return order;
         }
+
 
         /// <summary>
         /// Converts LemonStand date to UTC
         /// </summary>
         /// <param name="date">The date from LemonStand</param>
         /// <returns>DateTime in UTC</returns>
-        private DateTime getDate(string date) 
+        public DateTime GetDate(string date) 
         {
             DateTime result = DateTime.UtcNow;
             
@@ -188,7 +214,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <param name="jsonOrder">The json order.</param>
         /// <param name="client">The client.</param>
         /// <param name="order">The order.</param>
-        private void LoadItems(JToken jsonOrder, LemonStandWebClient client, LemonStandOrderEntity order)
+        private void LoadItems(JToken jsonOrder, LemonStandOrderEntity order)
         {
             //List of order items
             IList<JToken> jsonItems = jsonOrder.SelectToken("items.data").Children().ToList();

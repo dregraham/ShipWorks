@@ -287,7 +287,7 @@ namespace ShipWorks.Stores.Communication
         /// a new one is initialized, created, and returned.  If the order does exist in the database,
         /// that order is returned.
         /// </summary>
-        protected OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
+        protected virtual OrderEntity InstantiateOrder(OrderIdentifier orderIdentifier)
         {
             if (orderIdentifier == null)
             {
@@ -488,7 +488,7 @@ namespace ShipWorks.Stores.Communication
         /// <summary>
         /// Save the given order that has been downloaded.
         /// </summary>
-        protected void SaveDownloadedOrder(OrderEntity order)
+        protected virtual void SaveDownloadedOrder(OrderEntity order)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
