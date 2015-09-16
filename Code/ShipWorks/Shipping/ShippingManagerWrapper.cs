@@ -36,10 +36,14 @@ namespace ShipWorks.Shipping
         /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
-        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone)
-        {
-            return ShippingManager.GetShipments(orderID, createIfNone);
-        }
+        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone) =>
+            ShippingManager.GetShipments(orderID, createIfNone);
+
+        /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        public void EnsureShipmentLoaded(ShipmentEntity shipment) => 
+            ShippingManager.EnsureShipmentLoaded(shipment);
 
         /// <summary>
         /// Save the shipments to the database
