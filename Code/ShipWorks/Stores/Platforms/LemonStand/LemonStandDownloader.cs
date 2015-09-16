@@ -46,21 +46,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
            
             try
             {
-
-                // check for cancellation
+                // Check for cancellation
                 if (Progress.IsCancelRequested)
                 {
                     return;
                 }
 
-                //get orders from LemonStand 
+                // Get orders from LemonStand 
                 JToken result = client.GetOrders();
 
-                // get JSON result objects into a list
+                // Get JSON result objects into a list
                 IList<JToken> jsonOrders = result["data"].Children().ToList();
                 int expectedCount = jsonOrders.Count;
 
-                //Load orders 
+                // Load orders 
                 foreach (JToken jsonOrder in jsonOrders)
                 {
                     // check for cancellation
@@ -71,7 +70,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                     LoadOrder(jsonOrder);
 
-                    // set the progress detail
+                    // Set the progress detail
                     Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100 * QuantitySaved / expectedCount);                    
                 }            
@@ -92,7 +91,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Load Order from JToken
         /// </summary>
-        private void LoadOrder(JToken jsonOrder)
+        public void LoadOrder(JToken jsonOrder)
         {
             LemonStandOrderEntity order = PrepareOrder(jsonOrder);
 
@@ -135,7 +134,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     JsonConvert.DeserializeObject<LemonStandShipment>(
                         jsonShipment.SelectToken("data.shipments.data").Children().First().ToString());
 
-                order.RequestedShipping = shipment.ShippingService.ToString();
+                order.RequestedShipping = shipment.ShippingService;
 
                 // Get shipping address from shipment
                 JToken jsonShippingAddress = client.GetShippingAddress(shipment.ID);
@@ -212,7 +211,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// Loads the order items.
         /// </summary>
         /// <param name="jsonOrder">The json order.</param>
-        /// <param name="client">The client.</param>
         /// <param name="order">The order.</param>
         private void LoadItems(JToken jsonOrder, LemonStandOrderEntity order)
         {

@@ -12,6 +12,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
     class FakeLemonStandDownloader : LemonStandDownloader
     {
         public LemonStandOrderEntity Order { get; set; }
+        public LemonStandOrderEntity SavedOrder { get; set; }
 
         public FakeLemonStandDownloader(StoreEntity store) : base(store)
         {
@@ -29,7 +30,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
 
         protected override void SaveDownloadedOrder(OrderEntity orderEntity)
         {
-            Order = (LemonStandOrderEntity)orderEntity;
+            SavedOrder = (LemonStandOrderEntity)orderEntity;
         }
     }
 }
