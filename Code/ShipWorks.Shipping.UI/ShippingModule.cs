@@ -35,6 +35,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<RatingPanel>()
+                .AsImplementedInterfaces()
+                .PreserveExistingDefaults();
         }
     }
 }
