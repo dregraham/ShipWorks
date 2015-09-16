@@ -2,15 +2,11 @@
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Data;
 using System.Collections.Generic;
 
 namespace ShipWorks.Shipping
@@ -21,7 +17,7 @@ namespace ShipWorks.Shipping
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
         private bool supportsMultiplePackages;
-        private ShipmentType selectedShipmentType;
+        private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
@@ -30,6 +26,7 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
         private bool isProcessed;
+        private Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -42,10 +39,11 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-            
+
+            this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
         }
@@ -67,7 +65,7 @@ namespace ShipWorks.Shipping
 
             DisableRateCriteriaChanged();
 
-            //SelectedShipmentType = ShipmentTypes.FirstOrDefault();
+            SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
@@ -94,14 +92,14 @@ namespace ShipWorks.Shipping
         /// Selected shipment type for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentType SelectedShipmentType
+        public ShipmentTypeCode SelectedShipmentType
         {
             get { return selectedShipmentType; }
             set
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    SupportsMultiplePackages = selectedShipmentType?.SupportsMultiplePackages ?? false;
+                    SupportsMultiplePackages = shipmentTypeFactory(selectedShipmentType)?.SupportsMultiplePackages ?? false;
                 }
             }
         }
@@ -137,7 +135,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Save()
         {
-            loadedShipment.Shipment.ShipmentType = (int) SelectedShipmentType.ShipmentTypeCode;
+            loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
             Shipment.Save(loadedShipment.Shipment);
