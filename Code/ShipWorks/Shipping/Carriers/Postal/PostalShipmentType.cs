@@ -209,7 +209,7 @@ namespace ShipWorks.Shipping.Carriers.Postal
 
             // A null reference error was being thrown.  Discoverred by Crash Reports.
             // Let's figure out what is null....
-            if (shipment==null)
+            if (shipment == null)
             {
                 throw new ArgumentNullException("shipment");
             }
