@@ -216,6 +216,8 @@ namespace ShipWorks
             ShipWorksDisplay.LoadDefault();
 
             ApplyDisplaySettings();
+
+            ApplyEditingContext();
         }
 
         /// <summary>
@@ -1256,6 +1258,25 @@ namespace ShipWorks
         private void UpdateComandState()
         {
             selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
+
+
+            if (gridControl.Selection.Count > 0)
+            {
+                // Update context here to set contextual tabs
+                switch (gridControl.ActiveFilterTarget)
+                {
+                    case FilterTarget.Customers:
+                        ribbon.SetEditingContext("CUSTOMERS");
+                        break;
+                    case FilterTarget.Orders:
+                        ribbon.SetEditingContext("ORDERS");
+                        break;
+                }
+            }
+            else
+            {
+                ribbon.SetEditingContext("NONE");
+            }
         }
 
         /// <summary>
@@ -1288,6 +1309,13 @@ namespace ShipWorks
                 // the performance of that somehow for massive selections where there is virtual selection.
                 holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
+        }
+
+        private void ApplyEditingContext()
+        {
+            ribbon.EditingContexts.Add(new EditingContext("Order Tools", "ORDERS", System.Drawing.Color.LightBlue));
+
+            ribbonTabShipping.EditingContextReference = "ORDERS";
         }
 
         /// <summary>
