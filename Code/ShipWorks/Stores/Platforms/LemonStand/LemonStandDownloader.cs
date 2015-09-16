@@ -113,9 +113,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 //Deserialize Json Order into order DTO
                 LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
 
-                int resultID = -1;
-                int.TryParse(lsOrder.ID, out resultID);
-                int orderID = resultID;
+                
+                int orderID = int.Parse(lsOrder.ID);
+
                 LemonStandOrderEntity order =
                     (LemonStandOrderEntity)InstantiateOrder(new LemonStandOrderIdentifier(orderID.ToString()));
 
@@ -126,10 +126,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 {
                     order.OrderDate = GetDate(lsOrder.CreatedAt);
                     order.OnlineLastModified = GetDate(lsOrder.UpdatedAt);
-
-                    int resultNumber = -1;
-                    int.TryParse(lsOrder.Number, out resultNumber);
-                    order.OrderNumber = resultNumber;
+                    order.OrderNumber = int.Parse(lsOrder.Number);
 
                     // Need invoice id to get shipment information
                     LemonStandInvoice invoice =
@@ -166,9 +163,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     // Load order items
                     LoadItems(jsonOrder, order);
 
-                    decimal resultTotal = 0;
-                    decimal.TryParse(lsOrder.SubtotalPaid, out resultTotal);
                     order.OrderTotal = decimal.Parse(lsOrder.SubtotalPaid);
+                    
                 }
                 return order;
             }
@@ -191,7 +187,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             if (result == DateTime.MinValue)
             {
-                throw new LemonStandException();
+                throw new LemonStandException("Error loading the date");
             }
             
             return result.ToUniversalTime();

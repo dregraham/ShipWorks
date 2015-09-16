@@ -9,6 +9,9 @@ using ShipWorks.Stores.Platforms.LemonStand;
 
 namespace ShipWorks.Tests.Stores.LemonStand
 {
+    /// <summary>
+    /// Used for unit testing only
+    /// </summary>
     class FakeLemonStandDownloader : LemonStandDownloader
     {
         public LemonStandOrderEntity Order { get; set; }

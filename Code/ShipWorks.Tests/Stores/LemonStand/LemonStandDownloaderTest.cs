@@ -4,9 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using ShipWorks.Common.Threading;
 using ShipWorks.Stores.Platforms.LemonStand;
 using ShipWorks.Data.Administration.Retry;
 using ShipWorks.Data.Model.EntityClasses;
@@ -14,6 +12,10 @@ using ShipWorks.Data.Model.EntityClasses;
 
 namespace ShipWorks.Tests.Stores.LemonStand
 {
+    /// <summary>
+    /// Performs unit testing on the LemonStandDownloader class.
+    /// This test class actually tests a FakeLemonStandDownloader that mocks the inherited dependencies on InstantiateOrder and SaveDownloadedOrders
+    /// </summary>
     [TestClass]
     public class LemonStandDownloaderTest
     {
@@ -29,8 +31,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
         private string badDataOrder;
         private string missingDataOrder;
         private string missingItems;
-        private string missingShipAddress;
-        private string missingBillAddress;
+        
        
         [TestInitialize]
         public void Initialize()
