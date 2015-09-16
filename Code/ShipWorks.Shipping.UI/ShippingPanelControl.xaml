@@ -63,7 +63,7 @@
             <Border>
                 <Expander Header="Shipment Details"
                           IsExpanded="{Binding IsDetailsExpanded, Source={x:Static local:ExpanderState.Current}, Mode=TwoWay, FallbackValue=True}"
-                          DataContext="{Binding Shipment}"
+                          DataContext="{Binding ShipmentViewModel}"
                           Style="{StaticResource ExpanderStyle}">
                     <local:ShipmentControl />
                 </Expander>

@@ -67,6 +67,20 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Called when [need to update services].
+        /// </summary>
+        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdateServices();
+        }
+
+        /// <summary>
+        /// Updates the services.
+        /// </summary>
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(shipmentTypes[selectedShipmentType], loadedShipment.Shipment);
+
+        /// <summary>
         /// Load the shipment from the given order
         /// </summary>
         public async Task LoadOrder(long orderID)
@@ -82,17 +96,37 @@ namespace ShipWorks.Shipping
             }
 
             DisableRateCriteriaChanged();
-
+            DisableNeedToUpdateServices();
+            
             SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            Shipment.Load(loadedShipment.Shipment);
+            ShipmentViewModel.Load(shipmentTypes[SelectedShipmentType], loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
             EnableRateCriteriaChanged();
+            EnableNeedToUpdateServices();
+        }
+
+        /// <summary>
+        /// Enables NeedToUpdateServices event
+        /// </summary>
+        private void EnableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged += OnNeedToUpdateServices;
+            Destination.PropertyChanged += OnNeedToUpdateServices;
+        }
+
+        /// <summary>
+        /// Disables NeedToUpdateServices event
+        /// </summary>
+        private void DisableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdateServices;
+            Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
 
         /// <summary>
@@ -123,6 +157,7 @@ namespace ShipWorks.Shipping
                     }
                     
                     SupportsMultiplePackages = shipmentTypeFactory.GetType(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+                    UpdateServices();
                 }
             }
         }
@@ -151,7 +186,7 @@ namespace ShipWorks.Shipping
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
 
-        public ShipmentViewModel Shipment => shipment ?? (shipment = new ShipmentViewModel());
+        public ShipmentViewModel ShipmentViewModel => shipment ?? (shipment = new ShipmentViewModel());
 
         /// <summary>
         /// Save the UI values to the shipment
@@ -161,7 +196,7 @@ namespace ShipWorks.Shipping
             loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-            Shipment.Save(loadedShipment.Shipment);
+            ShipmentViewModel.Save(loadedShipment.Shipment);
         }
 
         /// <summary>
@@ -198,7 +233,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged += OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged += OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged += OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged += OnRateCriteriaPropertyChanged;
         }
 
         /// <summary>
@@ -208,7 +243,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged -= OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged -= OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged -= OnRateCriteriaPropertyChanged;
         }
     }
 }

@@ -48,7 +48,7 @@ namespace ShipWorks.Tests.Shipping
             {
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
                 
-                testObject.Shipment.TotalWeight = 2.93;
+                testObject.ShipmentViewModel.TotalWeight = 2.93;
                 testObject.Save();
 
                 Assert.Equal(2.93, shipmentEntity.TotalWeight);
@@ -90,7 +90,7 @@ namespace ShipWorks.Tests.Shipping
             {
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
                 
-                testObject.Shipment.TotalWeight = 2.93;
+                testObject.ShipmentViewModel.TotalWeight = 2.93;
                 testObject.Save();
 
                 mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Once);
@@ -135,7 +135,7 @@ namespace ShipWorks.Tests.Shipping
 
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
-                testObject.Shipment.TotalWeight = 2.93;
+                testObject.ShipmentViewModel.TotalWeight = 2.93;
                 testObject.Save();
 
                 mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);

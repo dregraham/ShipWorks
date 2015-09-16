@@ -36,7 +36,8 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource GridLabel}">Service:</TextBlock>
 
             <!--TODO: MAP SERVICE-->
-            <ComboBox Grid.Row="0" Grid.Column="1"/>
+            <ComboBox Grid.Row="0" Grid.Column="1"
+                      ItemsSource="{Binding Services}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
 
 
             <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource GridLabel}">Ship date:</TextBlock>
