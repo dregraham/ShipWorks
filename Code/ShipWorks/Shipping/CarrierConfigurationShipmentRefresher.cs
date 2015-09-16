@@ -26,8 +26,8 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public CarrierConfigurationShipmentRefresher(IMessenger messenger, IShippingProfileManager shippingProfileManager, 
-            IShippingManager shippingManager, IShippingErrorManager errorManager)
+        public CarrierConfigurationShipmentRefresher(IMessenger messenger, IShippingErrorManager errorManager, 
+            IShippingProfileManager shippingProfileManager, IShippingManager shippingManager)
         {
             this.messenger = MethodConditions.EnsureArgumentIsNotNull(messenger, "messenger");
             this.errorManager = MethodConditions.EnsureArgumentIsNotNull(errorManager, nameof(errorManager));
