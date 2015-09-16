@@ -34,7 +34,6 @@ namespace ShipWorks.Shipping
         private readonly IShippingErrorManager errorManager;
         private readonly IShippingManager shippingManager;
         private readonly Control owner;
-        private readonly CarrierConfigurationShipmentRefresher shipmentRefresher;
         private readonly ILifetimeScope lifetimeScope;
         private RateResult chosenRate;
         private int shipmentCount;

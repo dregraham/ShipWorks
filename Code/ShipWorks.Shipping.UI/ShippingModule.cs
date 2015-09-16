@@ -44,6 +44,12 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShippingErrorManager>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<CarrierConfigurationShipmentRefresher>()
+                .AsImplementedInterfaces();
         }
     }
 }

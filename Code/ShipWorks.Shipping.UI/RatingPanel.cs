@@ -51,9 +51,9 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public void ChangeContent(IGridSelection selection)
+        public async void ChangeContent(IGridSelection selection)
         {
-            viewModel.LoadRates(selection.Keys.FirstOrDefault());
+            await viewModel.LoadRates(selection.Keys.FirstOrDefault());
         }
 
         public void LoadState()

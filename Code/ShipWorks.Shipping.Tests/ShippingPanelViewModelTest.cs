@@ -133,7 +133,7 @@ namespace ShipWorks.Tests.Shipping
             {
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
-                testObject.Shipment.TotalWeight = testObject.Shipment.TotalWeight;
+                testObject.Shipment.TotalWeight = 2.93;
                 testObject.Save();
 
                 mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Never);
