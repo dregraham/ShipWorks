@@ -1266,14 +1266,6 @@ namespace ShipWorks
         {
             IEnumerable<DockControl> controls = sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1).ToList();
             IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
-            TaskEx.WhenAll(updateTasks).Wait();
-
-            //foreach (DockControl dockControl in sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1))
-            //{
-            //    tasks.Add(UpdatePanelState(dockControl));
-            //}
-
-            //tasks.
         }
 
         /// <summary>

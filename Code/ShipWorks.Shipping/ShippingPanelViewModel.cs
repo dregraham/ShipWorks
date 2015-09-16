@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
+using Autofac.Features.Indexed;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Shipping
 {
@@ -26,7 +28,8 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
         private bool isProcessed;
-        private Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory;
+        private IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes;
+        private IShippingManager shipmentPersister;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -39,13 +42,28 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, Func<ShipmentTypeCode, ShipmentType> shipmentTypeFactory)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
-            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentPersister = shipmentPersister;
+            this.shipmentTypes = shipmentTypes;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+        }
+
+        /// <summary>
+        /// Save the current shipment to the database
+        /// </summary>
+        public void SaveToDatabase()
+        {
+            if (loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+
+            Save();
+            shipmentPersister.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
         }
 
         /// <summary>
@@ -99,7 +117,10 @@ namespace ShipWorks.Shipping
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    SupportsMultiplePackages = shipmentTypeFactory(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+                    loadedShipment.Shipment.ShipmentTypeCode = value;
+                    shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
+
+                    SupportsMultiplePackages = shipmentTypes[selectedShipmentType]?.SupportsMultiplePackages ?? false;
                 }
             }
         }

@@ -5,9 +5,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
 using System;
-using ShipWorks.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
@@ -55,7 +53,8 @@ namespace ShipWorks.Shipping.UI
 
         public Task ChangeContent(IGridSelection selection)
         {
-            return TaskEx.Run(() => viewModel.LoadOrder(selection.Keys.FirstOrDefault()));
+            viewModel.SaveToDatabase();
+            return viewModel.LoadOrder(selection.Keys.FirstOrDefault());
         }
 
         public void LoadState()

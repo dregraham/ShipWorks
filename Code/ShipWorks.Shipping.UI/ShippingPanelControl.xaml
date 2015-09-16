@@ -39,8 +39,9 @@
 
                 <ComboBox Grid.Column="1"
                           SelectedValuePath="ShipmentTypeCode"
+                          DisplayMemberPath="ShipmentTypeName"
                           ItemsSource="{Binding Available, Source={x:Static local:ShipmentTypeProvider.Current}}"
-                          SelectedItem="{Binding SelectedShipmentType}"
+                          SelectedValue="{Binding SelectedShipmentType}"
                           Text="{Binding ShipmentTypeName}" />
             </Grid>
             <Border>

@@ -19,6 +19,7 @@ using Interapptive.Shared.Business;
 using System.ComponentModel.DataAnnotations;
 using Interapptive.Shared.Business.Geography;
 using Interapptive.Shared.UI;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Data.Controls
 {
@@ -1152,7 +1153,7 @@ namespace ShipWorks.Data.Controls
         private void ValidateAddress(AddressAdapter address, object executorState, BackgroundIssueAdder<AddressAdapter> issueAdder)
         {
             AddressValidator validator = new AddressValidator();
-            validator.Validate(address, true, (addressEntity, entities) =>
+            Task task = validator.ValidateAsync(address, true, (addressEntity, entities) =>
             {
                 shouldSaveAddressSuggestions = true;
 
@@ -1168,6 +1169,8 @@ namespace ShipWorks.Data.Controls
                     validatedAddresses.AddRange(entities);   
                 }
             });
+
+            task.Wait();
         }
 
         /// <summary>
