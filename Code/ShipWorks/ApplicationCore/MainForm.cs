@@ -1259,10 +1259,24 @@ namespace ShipWorks
         {
             selectionDependentEnabler.UpdateCommandState(gridControl.Selection.Count, gridControl.ActiveFilterTarget);
 
+            //// Grab the Shipment Dock
+            DockControl shipmentDock = sandDockManager.GetDockControls().FirstOrDefault(d => d.Name == "dockableWindowShipment");
+            
+            // If the shipmentdoc is open set the EditingContextReference of the shipping ribbon tab to ORDERS
+            // Otherwise set the EditingContextRreference to HIDDEN so it never shows up
+            if (shipmentDock != null && shipmentDock.IsOpen == true)
+            {
+                ribbonTabShipping.EditingContextReference = "ORDERS";
+            }
+            else
+            {
+                ribbonTabShipping.EditingContextReference = "HIDDEN";
+            }
 
+            // set the ribbon editing context to orders or customers based on which filter tree is selected
+            // only do so if orders or customers are selected
             if (gridControl.Selection.Count > 0)
             {
-                // Update context here to set contextual tabs
                 switch (gridControl.ActiveFilterTarget)
                 {
                     case FilterTarget.Customers:
@@ -1275,7 +1289,7 @@ namespace ShipWorks
             }
             else
             {
-                ribbon.SetEditingContext("NONE");
+                ribbon.SetEditingContext(null);
             }
         }
 
@@ -1311,11 +1325,13 @@ namespace ShipWorks
             }
         }
 
+        /// <summary>
+        /// Adds Editing Contexts to the ribbon
+        /// </summary>
         private void ApplyEditingContext()
         {
+            ribbon.EditingContexts.Add(new EditingContext("HIDDEN", "HIDDEN", System.Drawing.Color.Red));
             ribbon.EditingContexts.Add(new EditingContext("Order Tools", "ORDERS", System.Drawing.Color.LightBlue));
-
-            ribbonTabShipping.EditingContextReference = "ORDERS";
         }
 
         /// <summary>
