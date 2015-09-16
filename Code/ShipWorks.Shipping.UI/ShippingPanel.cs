@@ -53,9 +53,9 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public async void ChangeContent(IGridSelection selection)
+        public Task ChangeContent(IGridSelection selection)
         {
-            await viewModel.LoadOrder(selection.Keys.FirstOrDefault());
+            return TaskEx.Run(() => viewModel.LoadOrder(selection.Keys.FirstOrDefault()));
         }
 
         public void LoadState()
@@ -63,9 +63,9 @@ namespace ShipWorks.Shipping.UI
             //throw new NotImplementedException();
         }
 
-        public void ReloadContent()
+        public Task ReloadContent()
         {
-            //throw new NotImplementedException();
+            return TaskEx.FromResult(true);
         }
 
         public void SaveState()
@@ -73,9 +73,9 @@ namespace ShipWorks.Shipping.UI
             //throw new NotImplementedException();
         }
 
-        public void UpdateContent()
+        public Task UpdateContent()
         {
-            //throw new NotImplementedException();
+            return TaskEx.FromResult(true);
         }
 
         public void UpdateStoreDependentUI()

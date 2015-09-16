@@ -34,7 +34,7 @@ namespace ShipWorks.Tests.Shipping
                 .ReturnsAsync(ShippingPanelLoadedShipment);
 
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.SelectedShipmentType = mock.Mock<ShipmentType>().Object;
+            testObject.SelectedShipmentType = ShipmentTypeCode.Other;
 
             await testObject.LoadOrder(orderEntity.OrderID);
 

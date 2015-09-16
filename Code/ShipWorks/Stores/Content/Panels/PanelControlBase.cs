@@ -1,23 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Grid.Columns;
 using ShipWorks.UI.Utility;
 using ShipWorks.Filters;
 using Divelements.SandGrid;
-using System.Diagnostics;
-using ShipWorks.Data.Grid.Paging;
-using SD.LLBLGen.Pro.ORMSupportClasses;
-using System.Windows.Forms.VisualStyles;
 using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -129,7 +122,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Must be overridden by derived type. Completely reloads the grid based on the given selection.
         /// </summary>
-        public virtual void ChangeContent(IGridSelection selection)
+        public virtual Task ChangeContent(IGridSelection selection)
         {
             throw new NotImplementedException();
         }
@@ -138,18 +131,20 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public virtual void ReloadContent()
+        public virtual Task ReloadContent()
         {
             entityGrid.ReloadGridRows();
+            return TaskEx.FromResult(true);
         }
 
         /// <summary>
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
-        public virtual void UpdateContent()
+        public virtual Task UpdateContent()
         {
             entityGrid.UpdateGridRows();
+            return TaskEx.FromResult(true);
         }
 
         /// <summary>

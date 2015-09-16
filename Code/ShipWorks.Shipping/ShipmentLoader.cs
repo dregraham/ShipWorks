@@ -35,8 +35,12 @@ namespace ShipWorks.Shipping
         /// </summary>
         /// <param name="orderID"></param>
         /// <returns></returns>
-        public Task<ShippingPanelLoadedShipment> LoadAsync(long orderID) =>
-            TaskEx.Run(() => LoadShipments(orderID));
+        public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
+        {
+            var task = TaskEx.Run(() => LoadShipments(orderID));
+            return await task;
+        }
+            
 
         /// <summary>
         /// Load all the shipments on a background thread
