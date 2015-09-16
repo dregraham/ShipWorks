@@ -5,7 +5,7 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
-    /// Uniquely identifies an LemonStand Store order in the database
+    ///     Uniquely identifies an LemonStand Store order in the database
     /// </summary>
     public class LemonStandOrderIdentifier : OrderIdentifier
     {
@@ -13,7 +13,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly string lemonStandStoreOrderId = "";
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public LemonStandOrderIdentifier(string lemonStandStoreOrderId)
         {
@@ -21,7 +21,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Apply the order number to the order provided
+        ///     Apply the order number to the order provided
         /// </summary>
         public override void ApplyTo(OrderEntity order)
         {
@@ -29,14 +29,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             if (lemonStandStoreOrder == null)
             {
-                throw new InvalidOperationException("A non LemonStandStore order was passed to the LemonStandStore order identifier.");
+                throw new InvalidOperationException(
+                    "A non LemonStandStore order was passed to the LemonStandStore order identifier.");
             }
 
             lemonStandStoreOrder.LemonStandOrderID = lemonStandStoreOrderId;
         }
 
         /// <summary>
-        /// Apply the order number to the download log entity
+        ///     Apply the order number to the download log entity
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
@@ -44,7 +45,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// String representation
+        ///     String representation
         /// </summary>
         public override string ToString()
         {

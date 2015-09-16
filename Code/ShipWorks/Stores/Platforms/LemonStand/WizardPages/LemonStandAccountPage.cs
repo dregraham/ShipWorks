@@ -12,8 +12,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
         {
             InitializeComponent();
         }
+
         /// <summary>
-        /// User is moving to the next wizard page, perform any autoconfiguration or credentials saving
+        ///     User is moving to the next wizard page, perform any autoconfiguration or credentials saving
         /// </summary>
         private void OnStepNext(object sender, WizardStepEventArgs e)
         {
@@ -25,7 +26,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
             store.StoreURL = storeURLTextbox.Text;
             store.Token = accessTokenTextbox.Text;
 
-            if (storeURLTextbox.Text.Length == 0) 
+            if (storeURLTextbox.Text.Length == 0)
             {
                 MessageHelper.ShowError(this, "Please enter your Store URL");
                 e.NextPage = this;
@@ -50,13 +51,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
             {
                 ShowConnectionException(ex);
                 e.NextPage = this;
-                return;
             }
         }
 
         /// <summary>
-        /// Hook to allow derivatives add custom error handling for connectivity testing failures.
-        /// Return true to indicate the error has been handled.
+        ///     Hook to allow derivatives add custom error handling for connectivity testing failures.
+        ///     Return true to indicate the error has been handled.
         /// </summary>
         protected virtual void ShowConnectionException(LemonStandException ex)
         {

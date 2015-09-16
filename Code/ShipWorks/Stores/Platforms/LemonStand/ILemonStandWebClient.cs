@@ -1,5 +1,5 @@
-﻿using System;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     public interface ILemonStandWebClient

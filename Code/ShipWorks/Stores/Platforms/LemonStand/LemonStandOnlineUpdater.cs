@@ -8,18 +8,18 @@ using ShipWorks.Stores.Content;
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
-    /// Uploads shipment information to LemonStand
+    ///     Uploads shipment information to LemonStand
     /// </summary>
     public class LemonStandOnlineUpdater
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(LemonStandOnlineUpdater));
+        private static readonly ILog log = LogManager.GetLogger(typeof (LemonStandOnlineUpdater));
 
         // the store this instance is for
         private readonly LemonStandStoreEntity store;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public LemonStandOnlineUpdater(LemonStandStoreEntity store)
         {
@@ -27,7 +27,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Push the shipment details to the store.
+        ///     Push the shipment details to the store.
         /// </summary>
         public void UpdateShipmentDetails(IEnumerable<long> orderKeys)
         {
@@ -47,12 +47,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 OrderEntity order = shipment.Order;
                 string shipmentId = GetShipmentId(client, shipment);
 
-                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus, order.OrderNumber.ToString());
-            }            
+                client.UploadShipmentDetails(shipment.TrackingNumber, shipmentId, order.OnlineStatus,
+                    order.OrderNumber.ToString());
+            }
         }
 
         /// <summary>
-        /// Push the online status for an shipment.
+        ///     Push the online status for an shipment.
         /// </summary>
         public void UpdateShipmentDetails(ShipmentEntity shipment)
         {
@@ -70,15 +71,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Gets the LemonStand shipment ID as it is required to upload tracking information
+        ///     Gets the LemonStand shipment ID as it is required to upload tracking information
         /// </summary>
         /// <param name="client">The web client.</param>
         /// <param name="shipmentEntity">The shipment entity.</param>
         /// <returns>LemonStand API Shipment ID</returns>
-        private string GetShipmentId(LemonStandWebClient client, ShipmentEntity shipmentEntity) 
+        private string GetShipmentId(LemonStandWebClient client, ShipmentEntity shipmentEntity)
         {
             LemonStandOrderEntity order = (LemonStandOrderEntity) shipmentEntity.Order;
-            
+
             string orderId = order.OrderNumber.ToString();
             // use order id to get invoice
             JToken invoice = client.GetOrderInvoice(orderId);
@@ -86,9 +87,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             // use invoice id to get shipment
             JToken shipment = client.GetShipment(invoiceId);
-            string shipmentId = shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
+            string shipmentId =
+                shipment.SelectToken("data.shipments.data").Children().First().SelectToken("id").ToString();
 
             return shipmentId;
-        }          
+        }
     }
 }

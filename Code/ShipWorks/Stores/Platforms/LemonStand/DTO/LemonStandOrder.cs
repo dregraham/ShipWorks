@@ -40,14 +40,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         //"updated_by": null,
         //"created_at": "2015-09-02T14:43:34-0700",
         //"updated_at": "2015-09-02T14:43:35-0700"
-	    //}]
+        //}]
 
         [JsonProperty("id")]
         public string ID { get; set; }
 
         [JsonProperty("shop_order_id")]
         public string ShopOrderId { get; set; }
-        
+
         [JsonProperty("shop_order_status_id")]
         public string ShopOrderStatusId { get; set; }
 

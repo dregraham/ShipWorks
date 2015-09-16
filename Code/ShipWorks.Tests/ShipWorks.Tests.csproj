@@ -452,7 +452,6 @@
     <Compile Include="Stores\GenericStore\SchemaValidationTests.cs" />
     <Compile Include="Stores\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Stores\LemonStand\LemonStandDownloaderTest.cs" />
-    <Compile Include="Stores\LemonStand\LemonStandStoreTypeTest.cs" />
     <Compile Include="Stores\LemonStand\LemonStandWebClientTest.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
@@ -573,6 +572,11 @@
     <Content Include="Shipping\Carriers\Postal\Endicia\BestRate\Endicia_GetBestRates_DoesNotIncludeTypes.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\CustomerMissingBillingAddress.js" />
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\OrderMissingItems.js" />
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\ShipmentMissingShippingAddress.js" />
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandOrderWithMissingData.js" />
+    <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandOrderWithBadOrderStatusAndItemQuantity.js" />
     <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandInvoiceJson.js" />
     <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandProductJson.js" />
     <EmbeddedResource Include="Stores\LemonStand\Artifacts\LemonStandCustomerJson.js" />

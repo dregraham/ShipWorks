@@ -25,15 +25,15 @@ using ShipWorks.UI.Wizard;
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
     /// <summary>
-    /// LemonStand integration
+    ///     LemonStand integration
     /// </summary>
     public class LemonStandStoreType : StoreType
     {
         // Logger 
-        static readonly ILog log = LogManager.GetLogger(typeof(LemonStandStoreType));
+        private static readonly ILog log = LogManager.GetLogger(typeof (LemonStandStoreType));
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         public LemonStandStoreType(StoreEntity store)
             : base(store)
@@ -41,7 +41,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Indentifying type code
+        ///     Indentifying type code
         /// </summary>
         public override StoreTypeCode TypeCode
         {
@@ -49,13 +49,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Gets the license identifier for this store
+        ///     Gets the license identifier for this store
         /// </summary>
         protected override string InternalLicenseIdentifier
         {
             get
             {
-                LemonStandStoreEntity store = (LemonStandStoreEntity)Store;
+                LemonStandStoreEntity store = (LemonStandStoreEntity) Store;
 
                 string identifier = store.StoreURL;
 
@@ -64,19 +64,27 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Create menu commands for upload shipment details
+        ///     Gets the help URL to use in the account settings.
+        /// </summary>
+        public static string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
+        }
+
+        /// <summary>
+        ///     Create menu commands for upload shipment details
         /// </summary>
         public override List<MenuCommand> CreateOnlineUpdateInstanceCommands()
         {
             List<MenuCommand> commands = new List<MenuCommand>();
-            MenuCommand command = new MenuCommand("Upload Shipment Details", new MenuCommandExecutor(OnUploadDetails));
+            MenuCommand command = new MenuCommand("Upload Shipment Details", OnUploadDetails);
             commands.Add(command);
 
             return commands;
         }
 
         /// <summary>
-        /// Command handler for uploading shipment details
+        ///     Command handler for uploading shipment details
         /// </summary>
         private void OnUploadDetails(MenuCommandExecutionContext context)
         {
@@ -85,24 +93,22 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 "ShipWorks is uploading shipment information.",
                 string.Format("Updating {0} orders...", context.SelectedKeys.Count()));
 
-            executor.ExecuteCompleted += (o, e) =>
-            {
-                context.Complete(e.Issues, MenuCommandResult.Error);
-            };
+            executor.ExecuteCompleted += (o, e) => { context.Complete(e.Issues, MenuCommandResult.Error); };
 
             // kick off the execution
-            executor.ExecuteAsync(ShipmentUploadCallback, new IEnumerable<long>[] { context.SelectedKeys }, null);
+            executor.ExecuteAsync(ShipmentUploadCallback, new[] {context.SelectedKeys}, null);
         }
 
         /// <summary>
-        /// Worker thread method for uploading shipment details
+        ///     Worker thread method for uploading shipment details
         /// </summary>
-        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState, BackgroundIssueAdder<IEnumerable<long>> issueAdder)
+        private void ShipmentUploadCallback(IEnumerable<long> headers, object userState,
+            BackgroundIssueAdder<IEnumerable<long>> issueAdder)
         {
             // upload the tracking number for the most recent processed, not voided shipment
             try
             {
-                LemonStandOnlineUpdater shipmentUpdater = new LemonStandOnlineUpdater((LemonStandStoreEntity)Store);
+                LemonStandOnlineUpdater shipmentUpdater = new LemonStandOnlineUpdater((LemonStandStoreEntity) Store);
                 shipmentUpdater.UpdateShipmentDetails(headers);
             }
             catch (LemonStandException ex)
@@ -116,15 +122,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Create the control for generating the online update shipment tasks
+        ///     Create the control for generating the online update shipment tasks
         /// </summary>
         public override OnlineUpdateActionControlBase CreateAddStoreWizardOnlineUpdateActionControl()
-        {            
-            return new OnlineUpdateShipmentUpdateActionControl(typeof(LemonStandShipmentUploadTask));
+        {
+            return new OnlineUpdateShipmentUpdateActionControl(typeof (LemonStandShipmentUploadTask));
         }
 
         /// <summary>
-        /// Create the user control used in the Store Manager window.
+        ///     Create the user control used in the Store Manager window.
         /// </summary>
         public override AccountSettingsControlBase CreateAccountSettingsControl()
         {
@@ -134,7 +140,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Create the Wizard pages used in the setup wizard to configure the store.
+        ///     Create the Wizard pages used in the setup wizard to configure the store.
         /// </summary>
         public override List<WizardPage> CreateAddStoreWizardPages()
         {
@@ -145,7 +151,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Indicates if the StoreType supports the display of the given "Online" column.  
+        ///     Indicates if the StoreType supports the display of the given "Online" column.
         /// </summary>
         public override bool GridOnlineColumnSupported(OnlineGridColumnSupport column)
         {
@@ -158,15 +164,15 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Creates the order downloader
+        ///     Creates the order downloader
         /// </summary>
         public override StoreDownloader CreateDownloader()
-        {            
+        {
             return new LemonStandDownloader(Store);
         }
 
         /// <summary>
-        /// Create the store entity
+        ///     Create the store entity
         /// </summary>
         public override StoreEntity CreateStoreInstance()
         {
@@ -182,60 +188,54 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Create the LemonStand order entity
+        ///     Create the LemonStand order entity
         /// </summary>
         protected override OrderEntity CreateOrderInstance()
         {
-            return new LemonStandOrderEntity { LemonStandOrderID = string.Empty };
+            return new LemonStandOrderEntity {LemonStandOrderID = string.Empty};
         }
 
         /// <summary>
-        /// Creates an instance of an Order Item Entity
+        ///     Creates an instance of an Order Item Entity
         /// </summary>
         /// <returns></returns>
         public override OrderItemEntity CreateOrderItemInstance()
-        {  
+        {
             return new OrderItemEntity();
         }
 
         /// <summary>
-        /// Generate the template XML output for the given order
+        ///     Generate the template XML output for the given order
         /// </summary>
         public override void GenerateTemplateOrderElements(ElementOutline container, Func<OrderEntity> orderSource)
         {
-            var order = new Lazy<LemonStandOrderEntity>(() => (LemonStandOrderEntity)orderSource());
+            var order = new Lazy<LemonStandOrderEntity>(() => (LemonStandOrderEntity) orderSource());
 
             ElementOutline outline = container.AddElement("LemonStand");
             outline.AddElement("LemonStandOrderID", () => order.Value.LemonStandOrderID);
         }
 
         /// <summary>
-        /// Creates the OrderIdentifier for locating orders
+        ///     Creates the OrderIdentifier for locating orders
         /// </summary>
         public override OrderIdentifier CreateOrderIdentifier(OrderEntity order)
         {
-            return new LemonStandOrderIdentifier(((LemonStandOrderEntity)order).LemonStandOrderID);
+            return new LemonStandOrderIdentifier(((LemonStandOrderEntity) order).LemonStandOrderID);
         }
 
         /// <summary>
-        /// Indicates what basic grid fields we support hyperlinking for
+        ///     Indicates what basic grid fields we support hyperlinking for
         /// </summary>
         public override bool GridHyperlinkSupported(EntityField2 field)
         {
             return EntityUtility.IsSameField(field, OrderItemFields.Name);
-        }        
-
-        /// <summary>
-        /// Gets the help URL to use in the account settings.
-        /// </summary>
-        public static string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
         }
 
         /// <summary>
-        /// Get any filters that should be created as an initial filter set when the store is first created.  If the list is non-empty they will
-        /// be automatically put in a folder that is filtered on the store... so their is no need to test for that in the generated filter conditions.
+        ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
+        ///     non-empty they will
+        ///     be automatically put in a folder that is filtered on the store... so their is no need to test for that in the
+        ///     generated filter conditions.
         /// </summary>
         public override List<FilterEntity> CreateInitialFilters()
         {
@@ -247,7 +247,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Creates the filter shipped.
+        ///     Creates the filter shipped.
         /// </summary>
         private FilterEntity CreateFilterShipped()
         {
@@ -287,12 +287,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Name = "Shipped",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
         /// <summary>
-        /// Creates the filter ready to ship.
+        ///     Creates the filter ready to ship.
         /// </summary>
         /// <returns></returns>
         private FilterEntity CreateFilterReadyToShip()
@@ -320,12 +320,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 Name = "Ready to Ship",
                 Definition = definition.GetXml(),
                 IsFolder = false,
-                FilterTarget = (int)FilterTarget.Orders
+                FilterTarget = (int) FilterTarget.Orders
             };
         }
 
         /// <summary>
-        /// Create the search conditions for searching on LemonStand Order ID
+        ///     Create the search conditions for searching on LemonStand Order ID
         /// </summary>
         public override ConditionGroup CreateBasicSearchOrderConditions(string search)
         {

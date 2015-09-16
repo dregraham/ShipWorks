@@ -6,7 +6,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
     [Obfuscation(Feature = "PreserveLiteralValues", Exclude = true, StripAfterObfuscation = false)]
     public class LemonStandItem
     {
-
         //"id": 3,
         //"name": "Football helmet",
         //"shop_product_type_id": 1,
@@ -44,7 +43,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         //"updated_at": "2015-09-02T09:41:05-0700"
 
         [JsonProperty("id")]
-        public string ID { get; set; }        
+        public string ID { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -56,12 +55,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
         public string Description { get; set; }
 
         [JsonProperty("quantity")]
-        public string Quantity { get; set; }        
+        public string Quantity { get; set; }
 
         [JsonProperty("base_price")]
         public string BasePrice { get; set; }
 
         [JsonProperty("weight")]
-        public string Weight { get; set; }        
+        public string Weight { get; set; }
     }
 }

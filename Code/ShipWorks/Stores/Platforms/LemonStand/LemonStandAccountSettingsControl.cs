@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Data.Model;
 using Interapptive.Shared.UI;
+using ShipWorks.Data.Model;
+using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Stores.Management;
 
 namespace ShipWorks.Stores.Platforms.LemonStand
@@ -15,7 +15,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Load store settings from the entity to the GUI
+        ///     Load store settings from the entity to the GUI
         /// </summary>
         public override void LoadStore(StoreEntity store)
         {
@@ -29,7 +29,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// Saves the user selected settings back to the store entity;
+        ///     Saves the user selected settings back to the store entity;
         /// </summary>
         public override bool SaveToEntity(StoreEntity store)
         {
@@ -63,16 +63,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     return false;
                 }
             }
-            else
-            {
-                // Nothing changed
-                return true;
-            }
+            // Nothing changed
+            return true;
         }
 
         /// <summary>
-        /// Hook to allow derivatives add custom error handling for connectivity testing failures.
-        /// Return true to indicate the error has been handled.
+        ///     Hook to allow derivatives add custom error handling for connectivity testing failures.
+        ///     Return true to indicate the error has been handled.
         /// </summary>
         protected virtual void ShowConnectionException(LemonStandException ex)
         {
@@ -80,12 +77,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        /// For determining if the connection needs to be tested
+        ///     For determining if the connection needs to be tested
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(LemonStandStoreEntity store)
         {
-            return (store.Fields[(int)GrouponStoreFieldIndex.Token].IsChanged ||
-                    store.Fields[(int)GrouponStoreFieldIndex.SupplierID].IsChanged);
+            return (store.Fields[(int) GrouponStoreFieldIndex.Token].IsChanged ||
+                    store.Fields[(int) GrouponStoreFieldIndex.SupplierID].IsChanged);
         }
     }
 }
