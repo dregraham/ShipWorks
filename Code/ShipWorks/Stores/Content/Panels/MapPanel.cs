@@ -111,7 +111,6 @@ namespace ShipWorks.Stores.Content.Panels
 
                         selectedEntity = selectionID == 0 ? null : DataProvider.GetEntity(selectionID);
                         googleResponse = await GetImage();
-
                     }
 
                     googleImage.Invoke(new MethodInvoker(delegate

@@ -37,6 +37,7 @@ using log4net;
 using ShipWorks.Shipping.Policies;
 using Timer = System.Windows.Forms.Timer;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -84,21 +85,26 @@ namespace ShipWorks.Shipping
         private bool shipSenseNeedsUpdated = false;
         private MessengerToken uspsAccountConvertedToken;
         private readonly IMessenger messenger;
-        private ILifetimeScope lifetimeScope;
+        private readonly ILifetimeScope lifetimeScope;
         private readonly IShippingManager shippingManager;
-        private Func<IShipmentProcessor> createShipmentProcessor;
-        private ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
+        private readonly Func<IShipmentProcessor> createShipmentProcessor;
+        private readonly ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly ICustomsManager customsManager;
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingDlg(OpenShippingDialogMessage message, IShippingManager shippingManager, IShippingErrorManager errorManager, 
             IMessenger messenger, ILifetimeScope lifetimeScope, Func<IShipmentProcessor> createShipmentProcessor, 
-            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher)
+            ICarrierConfigurationShipmentRefresher carrierConfigurationShipmentRefresher, IShipmentTypeFactory shipmentTypeFactory,
+            ICustomsManager customsManager)
         {
             InitializeComponent();
 
             ErrorManager = errorManager;
+            this.customsManager = customsManager;
+            this.shipmentTypeFactory = shipmentTypeFactory;
             this.carrierConfigurationShipmentRefresher = carrierConfigurationShipmentRefresher;
             this.messenger = messenger;
             this.createShipmentProcessor = createShipmentProcessor;
@@ -276,11 +282,11 @@ namespace ShipWorks.Shipping
 
             if (selected != null && !enabledTypes.Any(p => p.Value == selected.Value))
             {
-                enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(ShipmentTypeManager.GetType(selected.Value).ShipmentTypeName, selected.Value));
+                enabledTypes.Add(new KeyValuePair<string, ShipmentTypeCode>(shipmentTypeFactory.Get(selected.Value).ShipmentTypeName, selected.Value));
                 SortShipmentTypes(enabledTypes);
             }
 
-            comboShipmentType.SelectedIndexChanged -= this.OnChangeShipmentType;
+            comboShipmentType.SelectedIndexChanged -= OnChangeShipmentType;
             comboShipmentType.DataSource = enabledTypes;
 
             if (multiValued)
@@ -439,7 +445,7 @@ namespace ShipWorks.Shipping
             // If we're already in the process of loading shipments, there is no need to process this
             if (loadingSelectedShipments)
             {
-                return TaskEx.FromResult<object>(null);
+                return TaskUtility.CompletedTask;
             }
 
             // We are now in the process of loading shipments
@@ -454,8 +460,7 @@ namespace ShipWorks.Shipping
             uiActivatedShipmentTypes.Add(ShipmentTypeCode.None);
 
             BackgroundExecutor<ShipmentEntity> executor = new BackgroundExecutor<ShipmentEntity>(this, "Preparing Shipments", "ShipWorks is preparing the shipments.", "Shipment {0} of {1}");
-
-
+            
             // User state that will get passed to the completed method
             Dictionary<string, object> userState = new Dictionary<string, object>();
             userState["loaded"] = loaded;
@@ -541,56 +546,7 @@ namespace ShipWorks.Shipping
             // For the one's that have been removed, ignore any concurrency\deleted errors
             SaveShipmentsToDatabase(removedNeedsSaved, false);
 
-            IEnumerable<EntityField2> fields = new[]
-            {
-                ShipmentFields.ShipStateProvCode, ShipmentFields.ShipCountryCode,
-                ShipmentFields.OriginStateProvCode, ShipmentFields.OriginCountryCode
-            };
-
-            // We also need to save changes to any whose state\country has changed, since that affects customs items requirements
-            List<ShipmentEntity> destinationChangeNeedsSaved = uiDisplayedShipments.Except(removedNeedsSaved)
-                                                                                   .Where(s => fields.Select(x => s.Fields[x.FieldIndex].IsChanged).Any()).ToList();
-
-            // We need to show the user if anything went wrong while doing that
-            IDictionary<ShipmentEntity, Exception> errors = SaveShipmentsToDatabase(destinationChangeNeedsSaved, false);
-
-            // When the destination address is changed we save the affected shipments to the database right away to ensure that any concurrency errors that could
-            // occur while generating customs items are caught right away.  This is why we do the Load here - if the customs items already exist, then this will do
-            // nothing.  Which means that this will do nothing unless the shipment changed from being a domestic to an international.
-            foreach (ShipmentEntity shipment in destinationChangeNeedsSaved.Except(errors.Keys))
-            {
-                try
-                {
-                    CustomsManager.LoadCustomsItems(shipment, false);
-                }
-                catch (SqlForeignKeyException ex)
-                {
-                    errors[shipment] = ex;
-                }
-                catch (ORMConcurrencyException ex)
-                {
-                    errors[shipment] = ex;
-                }
-            }
-
-            // Go through each one not known to be deleted and try to get it completely refreshed so we can update it's UI display
-            foreach (KeyValuePair<ShipmentEntity, Exception> pair in errors)
-            {
-                ShipmentEntity shipment = pair.Key;
-
-                // It we don't think its deleted, and it had a concurrency exception, try to refresh it
-                if (!shipment.DeletedFromDatabase)
-                {
-                    try
-                    {
-                        ShippingManager.RefreshShipment(shipment);
-                    }
-                    catch (ObjectDeletedException)
-                    {
-                        // We can ignore this for now - we'll deal with the deleted list in a minute
-                    }
-                }
-            }
+            IDictionary<ShipmentEntity, Exception> errors = customsManager.EnsureCustomsLoaded(uiDisplayedShipments.Except(removedNeedsSaved), validatedAddressScope);
 
             // See if we have to tell the user about the errors
             if (errors.Any())
@@ -669,7 +625,7 @@ namespace ShipWorks.Shipping
             // and the store address has since changed, we want to update to reflect that.
             foreach (ShipmentEntity shipment in loadedShipmentEntities.Where(x => !x.Processed))
             {
-                ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
+                shipmentTypeFactory.Get(shipment).UpdateDynamicShipmentData(shipment);
             }
 
             // Load the service control with the UI displayed shipments
@@ -1079,7 +1035,7 @@ namespace ShipWorks.Shipping
             try
             {
                 ShipmentEntity shipment = shipmentControl.SelectedShipments.First();
-                ShipmentTypeCode shipmentTypeCode = ((ShipmentTypeCode)shipment.ShipmentType);
+                ShipmentTypeCode shipmentTypeCode = shipment.ShipmentTypeCode;
 
                 // Check that the combo box has the shipment type in it
                 List<KeyValuePair<string, ShipmentTypeCode>> dataSource = (List<KeyValuePair<string, ShipmentTypeCode>>)comboShipmentType.DataSource;
@@ -1146,7 +1102,7 @@ namespace ShipWorks.Shipping
                     trackingProcessedDate.Text = shipment.ProcessedDate.Value.ToLocalTime().ToString("M/dd/yyy h:mm tt");
                     trackingCost.Text = StringUtility.FormatFriendlyCurrency(shipment.ShipmentCost);
 
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
                     List<string> trackingList = shipmentType.GetTrackingNumbers(shipment);
 
                     trackingNumbers.Height = 20 + (trackingList.Count - 1) * 14;
@@ -1221,7 +1177,7 @@ namespace ShipWorks.Shipping
             {
                 // We know only one shipment Type is selected at this point, so we can use the first shipment entity to 
                 // grab the shipment type and apply any applicable policies to the rate control
-                ShippingPolicies.Current.Apply((ShipmentTypeCode)this.loadedShipmentEntities.First().ShipmentType, rateControl);
+                ShippingPolicies.Current.Apply(loadedShipmentEntities.First().ShipmentTypeCode, rateControl);
                 rateControl.LoadRates(rateGroup);
                     
                 ServiceControl.SyncSelectedRate();
@@ -1510,13 +1466,14 @@ namespace ShipWorks.Shipping
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentTypeManager.GetType(shipment).UpdateDynamicShipmentData(shipment);
-                    ShipmentTypeManager.GetType(shipment).UpdateTotalWeight(shipment);
+                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment);
+                    shipmentType.UpdateDynamicShipmentData(shipment);
+                    shipmentType.UpdateTotalWeight(shipment);
 
                     // If the there is a specific shipment type selected, set it
                     if (!comboShipmentType.MultiValued)
                     {
-                        shipment.ShipmentType = (int)(ShipmentTypeCode)comboShipmentType.SelectedValue;
+                        shipment.ShipmentTypeCode = (ShipmentTypeCode)comboShipmentType.SelectedValue;
                     }
                 }
             }
@@ -1559,8 +1516,8 @@ namespace ShipWorks.Shipping
             {
                 foreach (ShippingProfileEntity profile in ShippingProfileManager.Profiles.OrderBy(p => p.ShipmentTypePrimary ? "zzzzz" : p.Name))
                 {
-                    if (profile.ShipmentType != (int) ShipmentTypeCode.None &&
-                        profile.ShipmentType == (int) shipmentTypeCode.Value)
+                    if (profile.ShipmentTypeCode != ShipmentTypeCode.None &&
+                        profile.ShipmentTypeCode == shipmentTypeCode.Value)
                     {
                         ToolStripMenuItem menuItem = new ToolStripMenuItem(profile.Name);
                         menuItem.Tag = profile;
@@ -1630,14 +1587,14 @@ namespace ShipWorks.Shipping
             // Check each shipment
             foreach (ShipmentEntity shipment in uiDisplayedShipments)
             {
-                if (shipment.ShipmentType != (int)ShipmentTypeCode.None)
+                if (shipment.ShipmentTypeCode != ShipmentTypeCode.None)
                 {
                     if (!shipment.Processed && securityCreateEditProcess)
                     {
                         canApplyProfile = true;
                     }
 
-                    if (!shipment.Processed && ShipmentTypeManager.GetType(shipment).SupportsGetRates)
+                    if (!shipment.Processed && shipmentTypeFactory.Get(shipment).SupportsGetRates)
                     {
                         canGetRates = true;
                     }
@@ -1760,7 +1717,7 @@ namespace ShipWorks.Shipping
                 return null;
             }
 
-            return ShipmentTypeManager.GetType((ShipmentTypeCode) typeCode);
+            return shipmentTypeFactory.Get((ShipmentTypeCode) typeCode);
         }
 
         /// <summary>
@@ -1983,7 +1940,7 @@ namespace ShipWorks.Shipping
         private void OnGetRatesTimerTick(object sender, EventArgs e)
         {
             ShipmentEntity clonedShipment = clonedShipmentEntityForRates;
-            ShipmentType uiShipmentType = ShipmentTypeManager.GetType(clonedShipment);
+            ShipmentType uiShipmentType = shipmentTypeFactory.Get(clonedShipment);
 
             getRatesTimer.Stop();
 

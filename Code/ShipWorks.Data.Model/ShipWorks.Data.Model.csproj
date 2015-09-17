@@ -133,6 +133,7 @@
     <Compile Include="Custom\EntityClasses\NullEntity.cs" />
     <Compile Include="Custom\EntityClasses\OnTracAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\OrderItemEntity.cs" />
+    <Compile Include="Custom\EntityClasses\ShippingProfileEntity.cs" />
     <Compile Include="Custom\EntityClasses\ShippingSettingsEntity.cs" />
     <Compile Include="Custom\EntityClasses\EmailAccountEntity.cs" />
     <Compile Include="Custom\EntityClasses\EntityCollection.cs" />

@@ -1,4 +1,6 @@
-﻿namespace ShipWorks.Shipping
+﻿using ShipWorks.Data.Model.EntityClasses;
+
+namespace ShipWorks.Shipping
 {
     /// <summary>
     /// Retrieve a shipment type based on its code
@@ -11,6 +13,11 @@
         /// <summary>
         /// Get the shipment type based on its code
         /// </summary>
-        ShipmentType GetType(ShipmentTypeCode shipmentTypeCode);
+        ShipmentType Get(ShipmentTypeCode shipmentTypeCode);
+
+        /// <summary>
+        /// Get the provider for the specified shipment
+        /// </summary>
+        ShipmentType Get(ShipmentEntity shipment);
     }
 }

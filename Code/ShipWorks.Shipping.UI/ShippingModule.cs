@@ -60,6 +60,10 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentTypeFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<CustomsManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

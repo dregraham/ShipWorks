@@ -73,7 +73,7 @@ namespace ShipWorks.Shipping
             ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList();
 
         /// <summary>
-        /// Get the StoreType instance of the specified ShipmentEntity
+        /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
         /// </summary>
         public static ShipmentType GetType(ShipmentEntity shipment)
         {
@@ -89,7 +89,7 @@ namespace ShipWorks.Shipping
         {
             return IoC.UnsafeGlobalLifetimeScope
                 .Resolve<IShipmentTypeFactory>()
-                .GetType(typeCode);
+                .Get(typeCode);
         }
 
         /// <summary>

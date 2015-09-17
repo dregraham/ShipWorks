@@ -1,4 +1,6 @@
 ﻿using Autofac.Features.Indexed;
+using ShipWorks.Data.Model.EntityClasses;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping
 {
@@ -22,8 +24,17 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Get the provider for the specified shipment
+        /// </summary>
+        public ShipmentType Get(ShipmentEntity shipment)
+        {
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
+            return Get(shipment.ShipmentTypeCode);
+        }
+        
+        /// <summary>
         /// Get the shipment type based on its code
         /// </summary>
-        public ShipmentType GetType(ShipmentTypeCode shipmentTypeCode) => lookup[shipmentTypeCode];
+        public ShipmentType Get(ShipmentTypeCode shipmentTypeCode) => lookup[shipmentTypeCode];
     }
 }

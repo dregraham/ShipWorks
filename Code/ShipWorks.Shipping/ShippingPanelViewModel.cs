@@ -24,12 +24,13 @@ namespace ShipWorks.Shipping
         private AddressViewModel origin;
         private AddressViewModel destination;
         private ShipmentViewModel shipmentViewModel;
-        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
-        private IMessenger messenger;
+        private readonly IMessenger messenger;
         private bool isProcessed;
-        private IShipmentTypeFactory shipmentTypeFactory;
-        private IShippingManager shipmentPersister;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly IShippingManager shippingManager;
+        private readonly ICustomsManager customsManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -45,11 +46,13 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IShipmentTypeFactory shipmentTypeFactory)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, 
+            IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
-            this.shipmentPersister = shipmentPersister;
+            this.customsManager = customsManager;
+            this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
@@ -66,7 +69,7 @@ namespace ShipWorks.Shipping
             }
 
             Save();
-            shipmentPersister.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
+            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
         }
 
         /// <summary>
@@ -190,10 +193,10 @@ namespace ShipWorks.Shipping
                 {
                     if (loadedShipment?.Shipment != null)
                     {
-                        shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
+                        shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
                     }
                     
-                    SupportsMultiplePackages = shipmentTypeFactory.GetType(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+                    SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
                     UpdateServices();
                     UpdatePackages();
                 }
@@ -231,10 +234,16 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Save()
         {
+            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
+            shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
+            shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
+
             loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
             ShipmentViewModel.Save(loadedShipment.Shipment);
+
+            customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
         }
 
         /// <summary>
@@ -243,7 +252,7 @@ namespace ShipWorks.Shipping
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(loadedShipment.Shipment);
+            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
 
             // Since we have a generic AddressViewModel whose properties do not match entity feild names,
             // we need to translate the Ship, Origin, and Street properties to know if the changed field
