@@ -31,7 +31,9 @@ namespace ShipWorks.Tests.Shipping
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
 
-            validatedAddressManager.Setup(s => s.ValidateShipment(It.IsAny<ShipmentEntity>(), It.IsAny<AddressValidator>())).Verifiable();
+            validatedAddressManager.Setup(s => s.ValidateShipmentAsync(It.IsAny<ShipmentEntity>(), It.IsAny<AddressValidator>()))
+                .Returns(TaskEx.FromResult(true))
+                .Verifiable();
 
             avwcvar = new AddressValidationWebClientValidateAddressResult();
             avwcvar.AddressValidationResults.Add(new AddressValidationResult()
@@ -48,7 +50,7 @@ namespace ShipWorks.Tests.Shipping
                 Street3 = ""
             });
 
-            addressValidationWebClient.Setup(s => s.ValidateAddress(It.IsAny<AddressAdapter>())).Returns(avwcvar);
+            addressValidationWebClient.Setup(s => s.ValidateAddressAsync(It.IsAny<AddressAdapter>())).ReturnsAsync(avwcvar);
 
             filterHelper = new Mock<IFilterHelper>();
             filterHelper.Setup(s => s.EnsureFiltersUpToDate(It.IsAny<TimeSpan>())).Returns(true);

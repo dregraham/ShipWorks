@@ -57,6 +57,10 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<CarrierConfigurationShipmentRefresher>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentTypeFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
         private bool isProcessed;
-        private IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes;
+        private IShipmentTypeFactory shipmentTypeFactory;
         private IShippingManager shipmentPersister;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -42,12 +42,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IShipmentTypeFactory shipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             this.shipmentPersister = shipmentPersister;
-            this.shipmentTypes = shipmentTypes;
+            this.shipmentTypeFactory = shipmentTypeFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
         }
@@ -117,10 +117,12 @@ namespace ShipWorks.Shipping
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    loadedShipment.Shipment.ShipmentTypeCode = value;
-                    shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
-
-                    SupportsMultiplePackages = shipmentTypes[selectedShipmentType]?.SupportsMultiplePackages ?? false;
+                    if (loadedShipment?.Shipment != null)
+                    {
+                        shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
+                    }
+                    
+                    SupportsMultiplePackages = shipmentTypeFactory.GetType(selectedShipmentType)?.SupportsMultiplePackages ?? false;
                 }
             }
         }

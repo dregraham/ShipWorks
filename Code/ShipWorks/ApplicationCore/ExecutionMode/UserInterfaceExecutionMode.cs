@@ -266,10 +266,9 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope(ConfigureShippingDialogDependencies))
             {
                 // Show the shipping window.  
-                using (ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(new TypedParameter(typeof(OpenShippingDialogMessage), message)))
-                {
-                    dlg.ShowDialog(Program.MainForm);
-                }
+                ShippingDlg dlg = lifetimeScope.Resolve<ShippingDlg>(new TypedParameter(typeof(OpenShippingDialogMessage), message));
+                
+                dlg.ShowDialog(Program.MainForm);
             }
         }
 		
@@ -281,7 +280,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             builder.RegisterType<ShippingDlg>()
                 .AsSelf()
                 .As<Control>()
-                .AsImplementedInterfaces()
                 .SingleInstance();
         }
     }

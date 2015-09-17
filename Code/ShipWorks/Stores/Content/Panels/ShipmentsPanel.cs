@@ -220,7 +220,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Add a new shipment
         /// </summary>
-        private void OnAddShipment(object sender, EventArgs e)
+        private async void OnAddShipment(object sender, EventArgs e)
         {
             Debug.Assert(EntityID != null);
             if (EntityID == null)
@@ -231,7 +231,7 @@ namespace ShipWorks.Stores.Content.Panels
             try
             {
                 ShipmentEntity shipment = ShippingManager.CreateShipment(EntityID.Value);
-                ValidatedAddressManager.ValidateShipment(shipment, new AddressValidator());
+                await ValidatedAddressManager.ValidateShipmentAsync(shipment, new AddressValidator());
 
                 Messenger.Current.Send(new OpenShippingDialogMessage(this, new[] { shipment }));
             }
@@ -240,7 +240,7 @@ namespace ShipWorks.Stores.Content.Panels
                 MessageHelper.ShowMessage(this, "The order of the shipment has been deleted.");
             }
 
-            ReloadContent();
+            await ReloadContent();
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Edit the shipment with the given ID
         /// </summary>
-        private void EditShipments(IEnumerable<long> shipmentKeys)
+        private async void EditShipments(IEnumerable<long> shipmentKeys)
         {
             if (shipmentKeys.Count() > ShipmentsLoader.MaxAllowedOrders)
             {
@@ -388,7 +388,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             ShipmentsLoader loader = new ShipmentsLoader(this);
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(shipmentKeys);
+            await loader.LoadAsync(shipmentKeys);
         }
 
         /// <summary>
