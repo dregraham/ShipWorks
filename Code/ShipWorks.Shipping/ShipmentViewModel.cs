@@ -30,11 +30,13 @@ namespace ShipWorks.Shipping.UI
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
+            Packages = new ObservableCollection<KeyValuePair<int, string>>();
         }
 
-        public ObservableCollection<KeyValuePair<int, string>> Services { get; private set; }
+        public ObservableCollection<KeyValuePair<int, string>> Services { get; }
 
-
+        public ObservableCollection<KeyValuePair<int,string>> Packages { get; }
+            
         [Obfuscation(Exclude = true)]
         public DateTime ShipDate
         {
@@ -65,6 +67,7 @@ namespace ShipWorks.Shipping.UI
             TotalWeight = shipment.TotalWeight;
             Insurance = shipment.Insurance;
             RefreshShipmentTypes(shipmentType, shipment);
+            RefreshPackageTypes(shipmentType, shipment);
         }
 
         /// <summary>
@@ -78,6 +81,20 @@ namespace ShipWorks.Shipping.UI
             foreach (KeyValuePair<int, string> entry in services)
             {
                 Services.Add(entry);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the package types.
+        /// </summary>
+        public void RefreshPackageTypes(ShipmentType shipmentType, ShipmentEntity shipment)
+        {
+            Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
+            Packages.Clear();
+
+            foreach (KeyValuePair<int, string> entry in packages)
+            {
+                Packages.Add(entry);
             }
         }
 
