@@ -29,7 +29,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await shipmentLoader.LoadAsync(orderID);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = shipmentLoader.Load(orderID);
 
             if (shipmentPanelLoadedShipment.Shipment != null)
             {

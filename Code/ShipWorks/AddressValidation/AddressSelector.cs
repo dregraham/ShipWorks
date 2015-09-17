@@ -15,6 +15,7 @@ using ShipWorks.Stores;
 using ShipWorks.Stores.Platforms.Amazon.WebServices.Associates;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -294,7 +295,7 @@ namespace ShipWorks.AddressValidation
                 selectedAddress.POBox == (int)ValidationDetailStatusType.Unknown)
             {
                 AddressValidator addressValidator = new AddressValidator();
-                addressValidator.Validate(selectedAddress, string.Empty, true, (entity, entities) =>
+                Task task = addressValidator.ValidateAsync(selectedAddress, string.Empty, true, (entity, entities) =>
                 {
                     // If we have updated statuses save them.
                     if ((selectedAddress.ResidentialStatus != (int)ValidationDetailStatusType.Unknown ||
@@ -308,6 +309,8 @@ namespace ShipWorks.AddressValidation
                         }
                     }
                 });
+
+                task.Wait();
             }
         }
 

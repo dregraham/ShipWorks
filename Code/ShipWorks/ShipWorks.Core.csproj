@@ -1056,6 +1056,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
+    <Compile Include="Shipping\CreateLabelMessage.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1103,6 +1104,7 @@
     </Compile>
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\EnabledCarriersChangedMessage.cs" />
+    <Compile Include="Shipping\ICarrierConfigurationShipmentRefresher.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1124,7 +1126,8 @@
     <Compile Include="Shipping\Insurance\InsureShipQuestionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Shipping\IShippingDialogInteraction.cs" />
+    <Compile Include="Shipping\IShipmentProcessor.cs" />
+    <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\ShipmentChangedMessage.cs" />
     <Compile Include="Shipping\OpenShippingDialogMessage.cs" />

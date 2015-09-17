@@ -23,6 +23,7 @@ using ShipWorks.Shipping.Carriers.Postal.Usps.WebServices;
 using ShipWorks.Shipping.Editing;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Insurance;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 {
@@ -441,7 +442,9 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
                 return address;
             }
 
-            UspsAddressValidationResults results = ValidateAddress(person, account);
+            Task<UspsAddressValidationResults> task = ValidateAddressAsync(person, account);
+            task.Wait();
+            UspsAddressValidationResults results = task.Result;
 
             if (!results.IsSuccessfulMatch)
             {
@@ -464,15 +467,15 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
         /// <summary>
         /// Validates the address of the given person
         /// </summary>
-        public UspsAddressValidationResults ValidateAddress(PersonAdapter person)
+        public Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person)
         {
-            return ValidateAddress(person, null);
+            return ValidateAddressAsync(person, null);
         }
 
         /// <summary>
         /// Validates the address of the given person using the specified stamps account
         /// </summary>
-        private UspsAddressValidationResults ValidateAddress(PersonAdapter person, UspsAccountEntity account)
+        private async Task<UspsAddressValidationResults> ValidateAddressAsync(PersonAdapter person, UspsAccountEntity account)
         {
             Address address = CreateAddress(person);
 
@@ -485,34 +488,20 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
             using (SwsimV49 webService = CreateWebService("CleanseAddress"))
             {
-                bool addressMatch;
-                bool cityStateZipOk;
-                ResidentialDeliveryIndicatorType residentialIndicator;
-                bool? isPoBox;
-                bool isPoBoxSpecified;
-                Address[] candidates;
-                StatusCodes statusCodes;
-            	RateV18[] rates;
                 string badAddressMessage = null;
 
                 webService.OnlyLogOnMagicKeys = true;
+
+                TaskCompletionSource<CleanseAddressCompletedEventArgs> taskCompletion = new TaskCompletionSource<CleanseAddressCompletedEventArgs>();
+                CleanseAddressCompletedEventArgs result = null;
 
                 try
                 {
                     using (new LoggedStopwatch(log, "UspsWebClient.ValidateAddress - webService.CleanseAddress"))
                     {
-                        webService.CleanseAddress(
-                            GetCredentials(account, true),
-                            ref address,
-                            null, // from zip code.  Sending the from zip code makes the call take longer and we don't use the extra that is returned. 
-                            out addressMatch,
-                            out cityStateZipOk,
-                            out residentialIndicator,
-                            out isPoBox,
-                            out isPoBoxSpecified,
-                            out candidates,
-                            out statusCodes,
-                            out rates);
+                        webService.CleanseAddressCompleted += (s, e) => taskCompletion.SetResult(e);
+                        webService.CleanseAddressAsync(GetCredentials(account, true), address, null);
+                        result = await taskCompletion.Task;
                     }
                 }
                 catch (SoapException ex)
@@ -536,22 +525,22 @@ namespace ShipWorks.Shipping.Carriers.Postal.Usps.Api.Net
 
                     throw WebHelper.TranslateWebException(ex, typeof(AddressValidationException));
                 }
-
-                if (!addressMatch)
+                
+                if (!result.AddressMatch)
                 {
-                    badAddressMessage = cityStateZipOk ?
+                    badAddressMessage = result.CityStateZipOK ?
                         "City, State and ZIP Code are valid, but street address is not a match." :
-                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name."; 
+                        "The address as submitted could not be found. Check for excessive abbreviations in the street address line or in the City name.";
                 }
 
                 return new UspsAddressValidationResults
                 {
-                    IsSuccessfulMatch = addressMatch,
-                    IsCityStateZipOk = cityStateZipOk,
-                    ResidentialIndicator = residentialIndicator,
-                    IsPoBox = isPoBox,
+                    IsSuccessfulMatch = result.AddressMatch,
+                    IsCityStateZipOk = result.CityStateZipOK,
+                    ResidentialIndicator = result.ResidentialDeliveryIndicator,
+                    IsPoBox = result.IsPOBox,
                     MatchedAddress = address,
-                    Candidates = candidates.ToList(),
+                    Candidates = result.CandidateAddresses,
                     BadAddressMessage = badAddressMessage
                 };
             }

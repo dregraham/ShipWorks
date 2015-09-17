@@ -70,11 +70,13 @@ namespace ShipWorks.Stores.Content.Panels
         /// Change the content of the panel based on the given keys.
         /// </summary>
         /// <param name="selection"></param>
-        public void ChangeContent(IGridSelection selection)
+        public Task ChangeContent(IGridSelection selection)
         {
             requestQueue.Enqueue(selection.Keys.FirstOrDefault());
 
             LoadSelection();
+            
+            return TaskEx.FromResult(true);
         }
 
         private void LoadSelection()
@@ -304,15 +306,19 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public void ReloadContent()
-        {}
+        public Task ReloadContent()
+        {
+            return TaskEx.FromResult(true);
+        }
 
         /// <summary>
         /// Refresh the existing displayed content.  Does not try to reset or look for new\deleted rows - just refreshes
         /// the known existing rows and their known corresponding entities.
         /// </summary>
-        public void UpdateContent()
-        {}
+        public Task UpdateContent()
+        {
+            return TaskEx.FromResult(true);
+        }
 
         /// <summary>
         /// Called when [size changed].

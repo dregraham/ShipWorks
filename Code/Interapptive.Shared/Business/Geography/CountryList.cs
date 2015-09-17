@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Interapptive.Shared.Utility;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Interapptive.Shared.Collections;
 
 namespace Interapptive.Shared.Business.Geography
 {
@@ -32,8 +33,7 @@ namespace Interapptive.Shared.Business.Geography
         /// <summary>
         /// Returns a readonly list of countries
         /// </summary>
-        public static IEnumerable<KeyValuePair<string, string>> Countries => 
-            new ReadOnlyCollection<KeyValuePair<string, string>>(countries.ToList());
+        public static IEnumerable<KeyValuePair<string, string>> Countries => countries.ToReadOnly();
 
         /// <summary>
         /// Get the code of the country with the given name.  If not found, the original name is returned.

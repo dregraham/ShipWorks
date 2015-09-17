@@ -33,7 +33,7 @@ namespace ShipWorks.Shipping.UI
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.rateControl);
-            this.Name = "RatesPanel";
+            this.Name = "RatingPanel";
             this.Size = new System.Drawing.Size(476, 184);
             this.ResumeLayout(false);
             this.PerformLayout();

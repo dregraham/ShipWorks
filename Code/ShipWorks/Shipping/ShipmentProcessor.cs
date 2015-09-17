@@ -2,6 +2,7 @@
 using Interapptive.Shared.UI;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.AddressValidation;
 using ShipWorks.ApplicationCore.Nudges;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data;
@@ -26,32 +27,35 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Shared code required to process a set of shipments
     /// </summary>
-    public class ShipmentProcessor
+    public class ShipmentProcessor : IShipmentProcessor
     {
-        private Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
         private bool showBestRateCounterRateSetupWizard;
         private bool cancelProcessing;
-        private readonly IShippingDialogInteraction dialogInteraction;
+        private readonly IShippingErrorManager errorManager;
+        private readonly IShippingManager shippingManager;
         private readonly Control owner;
-        private readonly CarrierConfigurationShipmentRefresher shipmentRefresher;
         private readonly ILifetimeScope lifetimeScope;
         private RateResult chosenRate;
         private int shipmentCount;
         private Action counterRateCarrierConfiguredWhileProcessing;
-        
-        public RateGroup FilteredRates { get; private set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentProcessor(IShippingDialogInteraction dialogInteraction, Control owner, CarrierConfigurationShipmentRefresher shipmentRefresher, ILifetimeScope lifetimeScope)
+        public ShipmentProcessor(Control owner, IShippingErrorManager errorManager, 
+            ILifetimeScope lifetimeScope, IShippingManager shippingManager)
         {
-            this.dialogInteraction = dialogInteraction;
+            this.shippingManager = shippingManager;
+            this.errorManager = errorManager;
             this.owner = owner;
-            this.shipmentRefresher = shipmentRefresher;
             this.lifetimeScope = lifetimeScope;
         }
         
+        /// <summary>
+        /// Filtered rates that should be displayed after shipping
+        /// </summary>
+        public RateGroup FilteredRates { get; private set; }
+
         /// <summary>
         /// Process the list of shipments
         /// </summary>
@@ -59,8 +63,11 @@ namespace ShipWorks.Shipping
         /// <param name="chosenRate">Rate that was chosen to use, if there was any</param>
         /// <param name="counterRateCarrierConfiguredWhileProcessing">Execute after a counter rate carrier was configured</param>
         /// <returns></returns>
-        public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
+        public Task<IEnumerable<ShipmentEntity>> Process(IEnumerable<ShipmentEntity> shipments, ICarrierConfigurationShipmentRefresher shipmentRefresher, RateResult chosenRate, Action counterRateCarrierConfiguredWhileProcessing)
         {
+            // Filter out the ones we know to be already processed, or are not ready
+            shipments = shipments.Where(s => !s.Processed && s.ShipmentType != (int)ShipmentTypeCode.None);
+
             this.counterRateCarrierConfiguredWhileProcessing = counterRateCarrierConfiguredWhileProcessing;
             this.chosenRate = chosenRate;
 
@@ -104,7 +111,7 @@ namespace ShipWorks.Shipping
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
             List<string> orderHashes = new List<string>();
-            IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = dialogInteraction.FetchShipmentsFromShipmentControl();
+            //IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = dialogInteraction.FetchShipmentsFromShipmentControl();
             
             TaskCompletionSource<IEnumerable<ShipmentEntity>> completionSource = new TaskCompletionSource<IEnumerable<ShipmentEntity>>();
 
@@ -112,7 +119,7 @@ namespace ShipWorks.Shipping
             executor.ExecuteStarting += (object s, EventArgs args) =>
             {
                 // Force the shipments to save - this weeds out any shipments early that have been edited by another user on another computer.
-                concurrencyErrors = dialogInteraction.SaveShipmentsToDatabase(shipments, true);
+                concurrencyErrors = shippingManager.SaveShipmentsToDatabase(shipments, ValidatedAddressScope.Current, true);
 
                 // Reset to true, so that we show the counter rate setup wizard for this batch.
                 showBestRateCounterRateSetupWizard = true;
@@ -133,7 +140,7 @@ namespace ShipWorks.Shipping
                 Knowledgebase knowledgebase = new Knowledgebase();
                 foreach (string hash in orderHashes.Distinct())
                 {
-                    knowledgebase.RefreshShipSenseStatus(hash, exludedShipmentsFromShipSenseRefresh.Select(s => s.ShipmentID));
+                    knowledgebase.RefreshShipSenseStatus(hash, shipmentRefresher.RetrieveShipments?.Invoke().Select(s => s.ShipmentID) ?? Enumerable.Empty<long>());
                 }
 
                 shipmentRefresher.FinishProcessing();
@@ -172,27 +179,26 @@ namespace ShipWorks.Shipping
                     ShippingManager.ProcessShipment(shipmentID, licenseCheckResults, ratesProcessing, selectedRate, lifetimeScope);
 
                     // Clear any previous errors
-                    processingErrors.Remove(shipmentID);
+                    errorManager.Remove(shipmentID);
 
                     // Special case - could refactor to abstract if necessary
                     worldshipExported |= shipment.ShipmentType == (int)ShipmentTypeCode.UpsWorldShip;
                 }
                 catch (ORMConcurrencyException ex)
                 {
-                    errorMessage = dialogInteraction.SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ObjectDeletedException ex)
                 {
-                    errorMessage = dialogInteraction.SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (SqlForeignKeyException ex)
                 {
-                    errorMessage = dialogInteraction.SetShipmentErrorMessage(shipmentID, ex, "processed");
+                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex, "processed");
                 }
                 catch (ShippingException ex)
                 {
-                    errorMessage = ex.Message;
-                    processingErrors[shipmentID] = ex;
+                    errorMessage = errorManager.SetShipmentErrorMessage(shipmentID, ex);
 
                     // Special case for out of funds
                     if (ex.InnerException != null)
@@ -212,7 +218,7 @@ namespace ShipWorks.Shipping
                     if (errorMessage == null)
                     {
                         errorMessage = "The shipment has been deleted.";
-                        processingErrors[shipmentID] = new ShippingException(errorMessage, ex);
+                        errorManager.SetShipmentErrorMessage(shipmentID, new ShippingException(errorMessage, ex));
                     }
                 }
 
@@ -322,7 +328,7 @@ namespace ShipWorks.Shipping
 
                     ShippingManager.EnsureShipmentLoaded(counterRatesProcessingArgs.Shipment);
 
-                    counterRateCarrierConfiguredWhileProcessing();
+                    counterRateCarrierConfiguredWhileProcessing?.Invoke();
                 }
                 else
                 {

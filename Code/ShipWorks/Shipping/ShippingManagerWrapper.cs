@@ -1,5 +1,12 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using ShipWorks.AddressValidation;
+using ShipWorks.Data.Model;
+using System.Linq;
+using ShipWorks.Data.Connection;
+using Interapptive.Shared.Utility;
+using SD.LLBLGen.Pro.ORMSupportClasses;
 
 namespace ShipWorks.Shipping
 {
@@ -29,9 +36,62 @@ namespace ShipWorks.Shipping
         /// Get the list of shipments that correspond to the given order key.  If no shipment exists for the order,
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
-        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone)
+        public List<ShipmentEntity> GetShipments(long orderID, bool createIfNone) =>
+            ShippingManager.GetShipments(orderID, createIfNone);
+
+        /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        public void EnsureShipmentLoaded(ShipmentEntity shipment) => 
+            ShippingManager.EnsureShipmentLoaded(shipment);
+
+        /// <summary>
+        /// Save the shipments to the database
+        /// </summary>
+        public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave)
         {
-            return ShippingManager.GetShipments(orderID, createIfNone);
+            if (shipments == null || !shipments.Any())
+            {
+                return new Dictionary<ShipmentEntity, Exception>();
+            }
+            
+            Dictionary<ShipmentEntity, Exception> errors = new Dictionary<ShipmentEntity, Exception>();
+
+            foreach (ShipmentEntity shipment in shipments)
+            {
+                try
+                {
+                    // Force the shipment to look dirty to its forced to save.  This is to make sure that if any other
+                    // changes had been made by other users we pick up the concurrency violation.
+                    if (forceSave && !shipment.IsDirty)
+                    {
+                        shipment.Fields[(int)ShipmentFieldIndex.ShipmentType].IsChanged = true;
+                        shipment.Fields.IsDirty = true;
+                    }
+
+                    ShippingManager.SaveShipment(shipment);
+
+                    using (SqlAdapter sqlAdapter = new SqlAdapter(true))
+                    {
+                        validatedAddressScope?.FlushAddressesToDatabase(sqlAdapter, shipment.ShipmentID, "Ship");
+                        sqlAdapter.Commit();
+                    }
+                }
+                catch (ObjectDeletedException ex)
+                {
+                    errors[shipment] = ex;
+                }
+                catch (SqlForeignKeyException ex)
+                {
+                    errors[shipment] = ex;
+                }
+                catch (ORMConcurrencyException ex)
+                {
+                    errors[shipment] = ex;
+                }
+            }
+
+            return errors;
         }
     }
 }

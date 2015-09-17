@@ -2,15 +2,14 @@
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.UI;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
-using ShipWorks.Data;
+using System.Collections.Generic;
+using Autofac.Features.Indexed;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Shipping
 {
@@ -20,7 +19,7 @@ namespace ShipWorks.Shipping
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
         private bool supportsMultiplePackages;
-        private ShipmentType selectedShipmentType;
+        private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
@@ -28,19 +27,43 @@ namespace ShipWorks.Shipping
         private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
+        private bool isProcessed;
+        private IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes;
+        private IShippingManager shipmentPersister;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
+        public ShippingPanelViewModel()
+        {
+
+        }
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger)
+        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
+            this.shipmentPersister = shipmentPersister;
+            this.shipmentTypes = shipmentTypes;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+        }
+
+        /// <summary>
+        /// Save the current shipment to the database
+        /// </summary>
+        public void SaveToDatabase()
+        {
+            if (loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+
+            Save();
+            shipmentPersister.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
         }
 
         /// <summary>
@@ -60,28 +83,44 @@ namespace ShipWorks.Shipping
 
             DisableRateCriteriaChanged();
 
-            //SelectedShipmentType = ShipmentTypes.FirstOrDefault();
+            SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
             Shipment.Load(loadedShipment.Shipment);
 
+            IsProcessed = loadedShipment.Shipment.Processed;
+
             EnableRateCriteriaChanged();
+        }
+
+        /// <summary>
+        /// Process the current shipment using the specified processor
+        /// </summary>
+        public async Task ProcessShipment(ShipmentProcessor shipmentProcessor, CarrierConfigurationShipmentRefresher refresher)
+        {
+            Save();
+            IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
+            await LoadOrder(loadedShipment.Shipment.OrderID);
+            IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
         }
 
         /// <summary>
         /// Selected shipment type for the current shipment
         /// </summary>
         [Obfuscation(Exclude = true)]
-        public ShipmentType SelectedShipmentType
+        public ShipmentTypeCode SelectedShipmentType
         {
             get { return selectedShipmentType; }
             set
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    SupportsMultiplePackages = selectedShipmentType?.SupportsMultiplePackages ?? false;
+                    loadedShipment.Shipment.ShipmentTypeCode = value;
+                    shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
+
+                    SupportsMultiplePackages = shipmentTypes[selectedShipmentType]?.SupportsMultiplePackages ?? false;
                 }
             }
         }
@@ -96,6 +135,16 @@ namespace ShipWorks.Shipping
             set { handler.Set(nameof(SupportsMultiplePackages), ref supportsMultiplePackages, value); }
         }
 
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool IsProcessed
+        {
+            get { return isProcessed; }
+            set { handler.Set(nameof(IsProcessed), ref isProcessed, value); }
+        }
+
         public AddressViewModel Origin => origin ?? (origin = new AddressViewModel());
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
@@ -107,6 +156,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void Save()
         {
+            loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
             Shipment.Save(loadedShipment.Shipment);

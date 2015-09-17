@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Interapptive.Shared.Utility;
+using System.Collections.ObjectModel;
 
 namespace Interapptive.Shared.Collections
 {
@@ -41,7 +42,7 @@ namespace Interapptive.Shared.Collections
                     {
                         chunk.Add(iter.Current);
                     }
-                    
+
                     yield return chunk;
                 }
             }
@@ -60,12 +61,12 @@ namespace Interapptive.Shared.Collections
             {
                 throw new ArgumentNullException("source");
             }
-                
+
             if (count < 0)
             {
                 throw new ArgumentOutOfRangeException("count");
             }
-            
+
             return RepeatIterator(source, count);
         }
 
@@ -82,7 +83,7 @@ namespace Interapptive.Shared.Collections
             {
                 foreach (var item in source)
                 {
-                    yield return item;        
+                    yield return item;
                 }
             }
         }
@@ -151,6 +152,14 @@ namespace Interapptive.Shared.Collections
         public static bool None<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             return !source.Any(predicate);
+        }
+
+        /// <summary>
+        /// Create a ReadOnlyCollection from the given enumerable
+        /// </summary>
+        public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> source)
+        {
+            return new ReadOnlyCollection<T>(source.ToList());
         }
     }
 }

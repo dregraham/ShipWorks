@@ -22,7 +22,8 @@ using ShipWorks.Shipping.Insurance;
 using ShipWorks.Stores;
 using ShipWorks.Data.Controls;
 using ShipWorks.ApplicationCore;
- 
+using ShipWorks.Shipping.Settings;
+
 namespace ShipWorks.Shipping.Carriers.FedEx
 {
     /// <summary>
@@ -55,8 +56,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
 
             LoadAccounts();
 
-            service.DisplayMember = "Key";
-            service.ValueMember = "Value";
+            service.DisplayMember = "Value";
+            service.ValueMember = "Key";
 
             packagingType.DisplayMember = "Key";
             packagingType.ValueMember = "Value";
@@ -160,13 +161,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void LoadShipmentDetails()
         {
-            bool allDomestic = true;
             bool anyDomestic = false;
-
-            bool allInternational = true;
             bool anyInternational = false;
-
-            bool allCanada = true;
 
             FedExServiceType? serviceType = null;
             bool allServicesSame = true;
@@ -187,17 +183,10 @@ namespace ShipWorks.Shipping.Carriers.FedEx
                 if (ShipmentTypeManager.GetType(shipment).IsDomestic(overriddenShipment)) 
                 {
                     anyDomestic = true;
-                    allInternational = false;
                 }
                 else
                 {
                     anyInternational = true;
-                    allDomestic = false;
-                }
-
-                if (overriddenShipment.AdjustedShipCountryCode() != "CA")
-                {
-                    allCanada = false;
                 }
 
                 FedExServiceType thisService = (FedExServiceType) shipment.FedEx.Service;
@@ -250,39 +239,8 @@ namespace ShipWorks.Shipping.Carriers.FedEx
             // Unhook events
             service.SelectedIndexChanged -= new EventHandler(OnChangeService);
 
-            List<FedExServiceType> availableServices = ShipmentTypeManager.GetType(ShipmentTypeCode).GetAvailableServiceTypes().Select(s => (FedExServiceType)s).ToList();
-
-            // If they are all of the same service class, we can load the service classes
-            if (allDomestic || allInternational || allCanada)
-            {
-                // The service types need to to be loaded based on the overridden shipment data to account
-                // for various shipping programs/rules offered by stores (i.e. eBay GSP)
-                List<ShipmentEntity> overriddenShipments = new List<ShipmentEntity>();
-                LoadedShipments.ForEach(s => overriddenShipments.Add(ShippingManager.GetOverriddenStoreShipment(s)));
-
-                // Get a list of all valid service types for the shipments
-                List<FedExServiceType> validServiceTypes = FedExUtility.GetValidServiceTypes(overriddenShipments);
-
-                // load shipment types that are valid and enabled (avaialbeServices)
-                List<FedExServiceType> fedexShipmentsToLoad = validServiceTypes.Intersect(availableServices).ToList();
-
-                if (LoadedShipments.Any())
-                {
-                    // Always include the service type that the shipment is currently configured in the 
-                    // event the shipment was configured prior to a service being excluded
-                    // Always include the service that the shipments are currently configured with
-                    // Only if the service type is a validServiceType
-                    IEnumerable<FedExServiceType> loadedServices = LoadedShipments.Select(s => (FedExServiceType)s.FedEx.Service).Intersect(validServiceTypes).Distinct();
-                    fedexShipmentsToLoad = fedexShipmentsToLoad.Union(loadedServices).ToList();
-                }
-
-                service.DataSource = fedexShipmentsToLoad
-                       .Select(type => new KeyValuePair<string, FedExServiceType>(EnumHelper.GetDescription(type), type)).ToList();
-            }
-            else
-            {
-                service.DataSource = new KeyValuePair<string, FedExServiceType>[0];
-            }
+            service.DataSource = ShipmentTypeManager.GetType(ShipmentTypeCode).BuildServiceTypeDictionary(LoadedShipments)
+                .Select(entry => new KeyValuePair<FedExServiceType, string>((FedExServiceType)entry.Key, entry.Value)).ToList();
 
             UpdatePackagingChoices(allServicesSame ? serviceType.Value : (FedExServiceType?) null);
             UpdatePayorChoices(anyGround, anyInternational);
@@ -482,15 +440,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// </summary>
         private void UpdateSectionDescription()
         {
-            FedExServiceType? serviceType = (FedExServiceType?) service.SelectedValue;
-
-            if (serviceType != null)
+            if (service.MultiValued)
             {
-                sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType.Value);
+                sectionShipment.ExtraText = "(Multiple Services)";
             }
             else
             {
-                sectionShipment.ExtraText = "(Multiple Services)";
+                FedExServiceType serviceType = (FedExServiceType)service.SelectedValue;
+                sectionShipment.ExtraText = EnumHelper.GetDescription(serviceType);
             }
         }
 

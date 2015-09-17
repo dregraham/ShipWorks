@@ -17,7 +17,13 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
+            builder.RegisterType<RatingPanelRegistration>()
+                .AsImplementedInterfaces()
+                .PreserveExistingDefaults();
+
             builder.RegisterType<ShippingPanelViewModel>();
+
+            builder.RegisterType<RatingPanelViewModel>();
 
             builder.RegisterType<ShippingPanelConfigurator>()
                 .AsImplementedInterfaces()
@@ -42,6 +48,15 @@ namespace ShipWorks.Shipping.UI
                 .PreserveExistingDefaults();
 
             builder.RegisterType<RatingPanelViewModel>();
+
+            builder.RegisterType<ShipmentProcessor>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShippingErrorManager>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<CarrierConfigurationShipmentRefresher>()
+                .AsImplementedInterfaces();
         }
     }
 }

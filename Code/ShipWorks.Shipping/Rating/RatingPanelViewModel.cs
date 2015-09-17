@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
 using ShipWorks.ApplicationCore;
@@ -190,7 +191,7 @@ namespace ShipWorks.Shipping.Rating
         /// <summary>
         /// Refreshes the selected shipments - Updates the rate control
         /// </summary>
-        public void RefreshSelectedShipments(List<ShipmentEntity> shipments)
+        public async Task RefreshSelectedShipments(List<ShipmentEntity> shipments)
         {
             int shipmentSelectionCount = shipments.Count;
 

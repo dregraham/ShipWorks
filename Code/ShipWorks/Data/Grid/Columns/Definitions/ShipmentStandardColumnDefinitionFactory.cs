@@ -37,7 +37,7 @@ namespace ShipWorks.Data.Grid.Columns.Definitions
                         {
                             ShipmentEntity shipment = (ShipmentEntity) e;
 
-                            if (ShippingDlg.ProcessingErrors.ContainsKey(shipment.ShipmentID))
+                            if (ShippingDlg.ErrorManager?.ShipmentHasError(shipment.ShipmentID) ?? false)
                             {
                                 return 3;
                             }

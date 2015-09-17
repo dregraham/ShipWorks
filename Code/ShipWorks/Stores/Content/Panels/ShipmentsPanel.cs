@@ -117,11 +117,12 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// When the content is called to be updated, we need to make sure our rates are up to date as well
         /// </summary>
-        public override void UpdateContent()
+        public override Task UpdateContent()
         {
-            base.UpdateContent();
+            Task task = base.UpdateContent();
 
             RefreshSelectedShipments();
+            return task;
         }
 
         /// <summary>
@@ -409,11 +410,12 @@ namespace ShipWorks.Stores.Content.Panels
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public override void ReloadContent()
+        public override Task ReloadContent()
         {
-            base.ReloadContent();
+            Task task = base.ReloadContent();
 
             RefreshSelectedShipments();
+            return task;
         }
 
         /// <summary>

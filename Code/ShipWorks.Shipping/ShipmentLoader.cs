@@ -31,21 +31,9 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
-        /// Load the shipment asychronously.
-        /// </summary>
-        /// <param name="orderID"></param>
-        /// <returns></returns>
-        public async Task<ShippingPanelLoadedShipment> LoadAsync(long orderID)
-        {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = LoadShipments(orderID);
-
-            return shipmentPanelLoadedShipment;
-        }
-
-        /// <summary>
         /// Load all the shipments on a background thread
         /// </summary>
-        private ShippingPanelLoadedShipment LoadShipments(long orderID)
+        public ShippingPanelLoadedShipment Load(long orderID)
         {
             ShippingPanelLoadedShipment shipmentPanelLoadedShipment = new ShippingPanelLoadedShipment();
             ShipmentEntity shipment = null;
@@ -62,6 +50,10 @@ namespace ShipWorks.Shipping
                 if (shipments.Count == 1)
                 {
                     shipment = shipments.FirstOrDefault();
+
+                    // Make sure the shipment type objects are fully loaded.
+                    shippingManager.EnsureShipmentLoaded(shipment);
+
                     shipmentPanelLoadedShipment.Shipment = shipment;
                     shipmentPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Success;
                 }
