@@ -167,7 +167,7 @@ namespace ShipWorks.Shipping
             int maxStreet2 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet2);
             int maxStreet3 = EntityFieldLengthProvider.GetMaxLength(EntityFieldLengthSource.PersonStreet3);
 
-            string[] lines = value.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            string[] lines = value?.Split(new[] { Environment.NewLine }, StringSplitOptions.None) ?? new string[0];
 
             string line1 = lines.Length > 0 ? lines[0] : string.Empty;
             string line2 = lines.Length > 1 ? lines[1] : string.Empty;

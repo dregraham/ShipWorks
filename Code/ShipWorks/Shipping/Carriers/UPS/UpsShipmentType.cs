@@ -425,6 +425,27 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
+        {
+            // Get valid packaging types
+            List<int> validPackageTypes = UpsUtility.GetValidPackagingTypes(ShipmentTypeCode).Select(x => (int)x).ToList();
+            IEnumerable<int> excludedPackageTypes = ShipmentTypeManager.GetType(ShipmentTypeCode).GetExcludedPackageTypes();
+
+            // If there's an existing shipment with a package type that has been excluded, we need to re-add it here
+            if (shipments != null && shipments.Any())
+            {
+                IEnumerable<int> neededPackageTypes = shipments.SelectMany(s => s.Ups.Packages.Select(p => p.PackagingType)).Distinct().ToList();
+                excludedPackageTypes = excludedPackageTypes.Except(neededPackageTypes);
+                validPackageTypes.AddRange(neededPackageTypes);
+            }
+
+            return validPackageTypes.Except(excludedPackageTypes)
+                .ToDictionary(t => t, t => EnumHelper.GetDescription((UpsPackagingType) t));
+        }
+
+        /// <summary>
         /// Get the default profile for the shipment type
         /// </summary>
         protected override void ConfigurePrimaryProfile(ShippingProfileEntity profile)

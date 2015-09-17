@@ -34,6 +34,7 @@ namespace ShipWorks.Shipping.UI
         private RatingPanelViewModel viewModel;
         private RateGroup rateGroup;
         private bool showAllRates;
+        private bool showSpinner;
         private bool actionLinkVisible;
         private string errorMessage;
 
@@ -112,7 +113,24 @@ namespace ShipWorks.Shipping.UI
                 }
             }
         }
-		
+
+        /// <summary>
+        /// Gets/Sets whether to show the spinner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowSpinner
+        {
+            get { return showSpinner; }
+            set
+            {
+                if (!Equals(showSpinner, value))
+                {
+                    showSpinner = value;
+                    rateControl.ShowSpinner = showSpinner;
+                }
+            }
+        }
+
         /// <summary>
         /// Handle control load event
         /// </summary>
@@ -126,7 +144,8 @@ namespace ShipWorks.Shipping.UI
             DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
             DataBindings.Add(nameof(ActionLinkVisible), viewModel, nameof(viewModel.ActionLinkVisible));
             DataBindings.Add(nameof(ShowAllRates), viewModel, nameof(viewModel.ShowAllRates));
-            
+            DataBindings.Add(nameof(ShowSpinner), viewModel, nameof(viewModel.ShowSpinner));
+
             // Force the rates to be refreshed when the rate control tells us
             rateControl.ReloadRatesRequired += (sender, args) => viewModel.RefreshRates(true);
 
@@ -134,8 +153,14 @@ namespace ShipWorks.Shipping.UI
 
         }
 
+        /// <summary>
+        /// Supported entity type
+        /// </summary>
         public EntityType EntityType => EntityType.ShipmentEntity;
 
+        /// <summary>
+        /// Supported filter targets
+        /// </summary>
         public FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Shipments };
 
         /// <summary>

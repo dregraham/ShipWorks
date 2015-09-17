@@ -23,7 +23,7 @@ namespace ShipWorks.Shipping
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
-        private ShipmentViewModel shipment;
+        private ShipmentViewModel shipmentViewModel;
         private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private IMessenger messenger;
@@ -34,6 +34,9 @@ namespace ShipWorks.Shipping
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShippingPanelViewModel"/> class.
+        /// </summary>
         public ShippingPanelViewModel()
         {
 
@@ -67,6 +70,34 @@ namespace ShipWorks.Shipping
         }
 
         /// <summary>
+        /// Called when [need to update services].
+        /// </summary>
+        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdateServices();
+        }
+
+        /// <summary>
+        /// Called when [need to update packages].
+        /// </summary>
+        private void OnNeedToUpdatePackages(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdatePackages();
+        }
+
+        /// <summary>
+        /// Updates the services.
+        /// </summary>
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(shipmentTypeFactory.GetType(selectedShipmentType), loadedShipment.Shipment);
+
+        /// <summary>
+        /// Updates the packages.
+        /// </summary>
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentTypeFactory.GetType(selectedShipmentType), loadedShipment.Shipment);
+
+        /// <summary>
         /// Load the shipment from the given order
         /// </summary>
         public async Task LoadOrder(long orderID)
@@ -82,17 +113,57 @@ namespace ShipWorks.Shipping
             }
 
             DisableRateCriteriaChanged();
+            DisableNeedToUpdateServices();
+            DisableNeedToUpdatePackages();
 
             SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            Shipment.Load(loadedShipment.Shipment);
+            ShipmentViewModel.Load(shipmentTypeFactory.GetType(SelectedShipmentType), loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
             EnableRateCriteriaChanged();
+            EnableNeedToUpdateServices();
+            EnableNeedToUpdatePackages();
+        }
+
+        /// <summary>
+        /// Enables the need to update packages.
+        /// </summary>
+        private void EnableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged += OnNeedToUpdatePackages;
+            Destination.PropertyChanged += OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Enables NeedToUpdateServices event
+        /// </summary>
+        private void EnableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged += OnNeedToUpdateServices;
+            Destination.PropertyChanged += OnNeedToUpdateServices;
+        }
+
+        /// <summary>
+        /// Disables the need to update packages.
+        /// </summary>
+        private void DisableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdatePackages;
+            Destination.PropertyChanged -= OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Disables NeedToUpdateServices event
+        /// </summary>
+        private void DisableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdateServices;
+            Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
 
         /// <summary>
@@ -123,6 +194,8 @@ namespace ShipWorks.Shipping
                     }
                     
                     SupportsMultiplePackages = shipmentTypeFactory.GetType(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+                    UpdateServices();
+                    UpdatePackages();
                 }
             }
         }
@@ -151,7 +224,7 @@ namespace ShipWorks.Shipping
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
 
-        public ShipmentViewModel Shipment => shipment ?? (shipment = new ShipmentViewModel());
+        public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = new ShipmentViewModel());
 
         /// <summary>
         /// Save the UI values to the shipment
@@ -161,7 +234,7 @@ namespace ShipWorks.Shipping
             loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-            Shipment.Save(loadedShipment.Shipment);
+            ShipmentViewModel.Save(loadedShipment.Shipment);
         }
 
         /// <summary>
@@ -198,7 +271,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged += OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged += OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged += OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged += OnRateCriteriaPropertyChanged;
         }
 
         /// <summary>
@@ -208,7 +281,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged -= OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged -= OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged -= OnRateCriteriaPropertyChanged;
         }
     }
 }

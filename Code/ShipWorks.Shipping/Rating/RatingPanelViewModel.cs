@@ -83,7 +83,10 @@ namespace ShipWorks.Shipping.Rating
         public bool ActionLinkVisible
         {
             get { return actionLinkVisible; }
-            set { actionLinkVisible = value; }
+            set
+            {
+                handler.Set(nameof(ActionLinkVisible), ref actionLinkVisible, value);
+            }
         }
 
         /// <summary>
@@ -93,7 +96,10 @@ namespace ShipWorks.Shipping.Rating
         public bool ShowAllRates
         {
             get { return showAllRates; }
-            set { showAllRates = value; }
+            set
+            {
+                handler.Set(nameof(ShowAllRates), ref showAllRates, value);
+            }
         }
 
         /// <summary>
