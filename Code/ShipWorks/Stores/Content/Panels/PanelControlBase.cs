@@ -11,6 +11,7 @@ using ShipWorks.UI.Controls.SandGrid;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -134,7 +135,7 @@ namespace ShipWorks.Stores.Content.Panels
         public virtual Task ReloadContent()
         {
             entityGrid.ReloadGridRows();
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace ShipWorks.Stores.Content.Panels
         public virtual Task UpdateContent()
         {
             entityGrid.UpdateGridRows();
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

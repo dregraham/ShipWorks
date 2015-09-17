@@ -9,6 +9,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -64,7 +65,7 @@ namespace ShipWorks.Shipping.UI
 
         public Task ReloadContent()
         {
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         public void SaveState()
@@ -74,7 +75,7 @@ namespace ShipWorks.Shipping.UI
 
         public Task UpdateContent()
         {
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         public void UpdateStoreDependentUI()

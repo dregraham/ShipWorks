@@ -92,6 +92,7 @@ using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared.Messaging;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks
 {
@@ -1277,7 +1278,7 @@ namespace ShipWorks
             // so we have to make sure we're logged on or updating would crash.
             if (!UserSession.IsLoggedOn)
             {
-                return TaskEx.FromResult(true);
+                return TaskUtility.CompletedTask;
             }
 
             DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
@@ -1288,7 +1289,7 @@ namespace ShipWorks
                 return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
             
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

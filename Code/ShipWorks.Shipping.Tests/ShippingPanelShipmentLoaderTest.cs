@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 using ShipWorks.Shipping;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -29,12 +29,9 @@ namespace ShipWorks.Tests.Shipping
 
             shipmentLoader = new Mock<IShipmentLoader>();
             shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(shippingPanelLoadedShipment);
-
-            var tcs = new TaskCompletionSource<bool>();
-            tcs.SetResult(true);
-
+            
             validator = new Mock<IValidator<ShipmentEntity>>();
-            validator.Setup(s => s.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(tcs.Task);
+            validator.Setup(s => s.ValidateAsync(It.IsAny<ShipmentEntity>())).Returns(TaskUtility.CompletedTask);
 
             testObject = new ShippingPanelShipmentLoader(shipmentLoader.Object, validator.Object);
         }

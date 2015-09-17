@@ -18,6 +18,7 @@ using TD.SandDock;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -190,7 +191,7 @@ namespace ShipWorks.Shipping.UI
         public Task UpdateContent()
         {
             //RefreshSelectedShipments();
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

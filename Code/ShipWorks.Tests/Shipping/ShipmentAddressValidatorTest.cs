@@ -9,6 +9,7 @@ using ShipWorks.Filters;
 using Xunit;
 using ShipWorks.Shipping;
 using ShipWorks.Users.Security;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -32,7 +33,7 @@ namespace ShipWorks.Tests.Shipping
             shipmentEntity.Order = orderEntity;
 
             validatedAddressManager.Setup(s => s.ValidateShipmentAsync(It.IsAny<ShipmentEntity>(), It.IsAny<AddressValidator>()))
-                .Returns(TaskEx.FromResult(true))
+                .Returns(TaskUtility.CompletedTask)
                 .Verifiable();
 
             avwcvar = new AddressValidationWebClientValidateAddressResult();

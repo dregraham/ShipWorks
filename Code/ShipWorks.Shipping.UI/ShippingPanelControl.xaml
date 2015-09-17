@@ -8,7 +8,7 @@
              xmlns:shippingcore="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Core"
              xmlns:shipping="clr-namespace:ShipWorks.Shipping;assembly=ShipWorks.Shipping"
              mc:Ignorable="d" d:DataContext="{d:DesignInstance Type=shipping:ShippingPanelViewModel}"
-             d:DesignHeight="888" d:DesignWidth="300"
+             d:DesignHeight="1304" d:DesignWidth="300"
              SnapsToDevicePixels="True">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -29,13 +29,13 @@
     <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Auto" 
                   IsEnabled="{Binding IsProcessed,Converter={StaticResource InvertBooleanConverter}}">
         <StackPanel>
-            <Grid>
+            <Grid Margin="6,6,6,0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <TextBlock>Carrier:</TextBlock>
+                <TextBlock VerticalAlignment="Center" Padding="0,0,6,0">Carrier:</TextBlock>
 
                 <ComboBox Grid.Column="1"
                           SelectedValuePath="ShipmentTypeCode"

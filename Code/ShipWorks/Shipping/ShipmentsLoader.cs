@@ -16,6 +16,7 @@ using ShipWorks.Users.Security;
 using ShipWorks.Filters;
 using System.Threading.Tasks;
 using Interapptive.Shared.Utility;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -101,7 +102,7 @@ namespace ShipWorks.Shipping
             }
             else
             {
-                validateTask = TaskEx.FromResult(true);
+                validateTask = TaskUtility.CompletedTask;
             }
 
             await TaskEx.WhenAll(loadShipmentsTask, validateTask);

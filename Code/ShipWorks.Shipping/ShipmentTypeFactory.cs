@@ -1,5 +1,4 @@
 ﻿using Autofac.Features.Indexed;
-using System;
 
 namespace ShipWorks.Shipping
 {
@@ -25,9 +24,6 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Get the shipment type based on its code
         /// </summary>
-        public ShipmentType GetType(ShipmentTypeCode shipmentTypeCode)
-        {
-            throw new NotImplementedException();
-        }
+        public ShipmentType GetType(ShipmentTypeCode shipmentTypeCode) => lookup[shipmentTypeCode];
     }
 }
