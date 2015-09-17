@@ -14,6 +14,7 @@ using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data;
 using ShipWorks.Data.Caching;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.ApplicationCore.Interaction
 {
@@ -159,7 +160,7 @@ namespace ShipWorks.ApplicationCore.Interaction
             }
             else
             {
-                task = TaskEx.FromResult(true);
+                task = TaskUtility.CompletedTask;
             }
 
             lastSelectionVersion = selection.Version;

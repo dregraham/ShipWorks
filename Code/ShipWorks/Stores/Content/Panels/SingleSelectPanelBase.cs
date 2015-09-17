@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using ShipWorks.Data.Grid.Paging;
 using ShipWorks.Data.Grid;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -79,7 +80,7 @@ namespace ShipWorks.Stores.Content.Panels
 
             entityGrid.OpenGateway(gateway);
 
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

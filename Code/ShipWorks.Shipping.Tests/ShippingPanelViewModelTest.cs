@@ -5,8 +5,6 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using Xunit;
 using Autofac.Extras.Moq;
-using Autofac.Features.Indexed;
-using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Tests.Shipping
 {
