@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
+﻿using System.Threading.Tasks;
 using Moq;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using Xunit;
 using ShipWorks.Shipping;
-using ShipWorks.Users.Security;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -33,7 +28,7 @@ namespace ShipWorks.Tests.Shipping
             };
 
             shipmentLoader = new Mock<IShipmentLoader>();
-            shipmentLoader.Setup(s => s.LoadAsync(It.IsAny<long>())).Returns(Task.FromResult(shippingPanelLoadedShipment));
+            shipmentLoader.Setup(s => s.Load(It.IsAny<long>())).Returns(shippingPanelLoadedShipment);
 
             var tcs = new TaskCompletionSource<bool>();
             tcs.SetResult(true);

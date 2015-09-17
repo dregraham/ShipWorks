@@ -280,7 +280,6 @@ namespace ShipWorks.ApplicationCore.ExecutionMode
             builder.RegisterType<ShippingDlg>()
                 .AsSelf()
                 .As<Control>()
-                .AsImplementedInterfaces()
                 .SingleInstance();
         }
     }

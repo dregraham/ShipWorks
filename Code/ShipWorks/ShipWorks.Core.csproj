@@ -1127,6 +1127,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\IShipmentProcessor.cs" />
+    <Compile Include="Shipping\IShipmentTypeFactory.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\ShipmentChangedMessage.cs" />

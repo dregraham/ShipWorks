@@ -280,11 +280,11 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        public static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator)
+        public static Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator)
         {
             // 3 retries is an arbitrary decision, but it should cover the case where we get a concurrency exception
             // validating the order and then the shipment, since the background process validates each at different times
-            ValidateShipment(shipment, validator, 3);
+            return ValidateShipmentAsync(shipment, validator, 3);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="shipment">Shipment to validate</param>
         /// <param name="validator">Address validator to use</param>
         /// <param name="retryCount">How many times should validation be retried</param>
-        private static void ValidateShipment(ShipmentEntity shipment, AddressValidator validator, int retryCount)
+        private static async Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator, int retryCount)
         {
             AddressAdapter shipmentAdapter = new AddressAdapter(shipment, "Ship");
 
@@ -316,7 +316,7 @@ namespace ShipWorks.AddressValidation
                 return;
             }
 
-
+            bool shouldRetry = false;
             bool canApplyChanges = store.AddressValidationSetting == (int)AddressValidationStoreSettingType.ValidateAndApply;
 
             try
@@ -330,7 +330,7 @@ namespace ShipWorks.AddressValidation
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    Task task = validator.ValidateAsync(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -344,7 +344,6 @@ namespace ShipWorks.AddressValidation
                             }
                         }
                     });
-                    task.Wait();
 
                     using (SqlAdapter sqlAdapter = new SqlAdapter())
                     {
@@ -359,7 +358,7 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    Task task = validator.ValidateAsync(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    await validator.ValidateAsync(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -373,24 +372,24 @@ namespace ShipWorks.AddressValidation
                             }
                         }
                     });
-
-                    task.Wait();
                 }
             }
             catch (ORMConcurrencyException)
             {
-                RetryValidation(shipment, order, validator, retryCount);
+                shouldRetry = true;
             }
             catch (SqlDeadlockException)
             {
-                RetryValidation(shipment, order, validator, retryCount);
+                shouldRetry = true;
             }
-            catch (SqlException ex)
+            catch (SqlException ex) when (ex.Message.Contains("deadlock"))
             {
-                if (ex.Message.Contains("deadlock"))
-                {
-                    RetryValidation(shipment, order, validator, retryCount);   
-                }
+                shouldRetry = true;
+            }
+            
+            if (shouldRetry)
+            {
+                await RetryValidation(shipment, order, validator, retryCount);
             }
         }
 
@@ -438,7 +437,7 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Attempt to retry validation if necessary
         /// </summary>
-        private static void RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, int retryCount)
+        private static async Task RetryValidation(ShipmentEntity shipment, OrderEntity order, AddressValidator validator, int retryCount)
         {
             if (retryCount == 0)
             {
@@ -458,7 +457,7 @@ namespace ShipWorks.AddressValidation
                 }
             }
 
-            ValidateShipment(shipment, validator, retryCount - 1);
+            await ValidateShipmentAsync(shipment, validator, retryCount - 1);
         }
 
         /// <summary>

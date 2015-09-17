@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ShipWorks.Data.Model.EntityClasses;
+﻿using ShipWorks.Data.Model.EntityClasses;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -11,6 +8,6 @@ namespace ShipWorks.AddressValidation
         /// <summary>
         /// Validate a single shipment
         /// </summary>
-        void ValidateShipment(ShipmentEntity shipment, AddressValidator validator);
+        Task ValidateShipmentAsync(ShipmentEntity shipment, AddressValidator validator);
     }
 }

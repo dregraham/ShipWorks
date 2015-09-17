@@ -5,6 +5,8 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using Xunit;
 using Autofac.Extras.Moq;
+using Autofac.Features.Indexed;
+using ShipWorks.Shipping.Carriers.Other;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -32,7 +34,7 @@ namespace ShipWorks.Tests.Shipping
             mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
                 .Setup(s => s.LoadAsync(It.IsAny<long>()))
                 .ReturnsAsync(ShippingPanelLoadedShipment);
-
+            
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             testObject.SelectedShipmentType = ShipmentTypeCode.Other;
 
@@ -131,6 +133,8 @@ namespace ShipWorks.Tests.Shipping
         {
             using (var mock = AutoMock.GetLoose())
             {
+                shipmentEntity.TotalWeight = 2.93;
+
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
                 testObject.Shipment.TotalWeight = 2.93;

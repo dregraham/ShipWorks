@@ -505,7 +505,7 @@ namespace ShipWorks.Shipping.Editing
         /// <summary>
         /// Choose more orders to add to the shipping window
         /// </summary>
-        private void OnChooseMore(object sender, EventArgs e)
+        private async void OnChooseMore(object sender, EventArgs e)
         {
             using (EntityPickerDlg dlg = new EntityPickerDlg(FilterTarget.Orders))
             {
@@ -515,7 +515,7 @@ namespace ShipWorks.Shipping.Editing
                 {
                     ShipmentsLoader loader = new ShipmentsLoader(this);
                     loader.LoadCompleted += OnLoadMoreShipmentsCompleted;
-                    loader.LoadAsync(dlg.Selection.OrderedKeys);
+                    await loader.LoadAsync(dlg.Selection.OrderedKeys);
                 }
             }
         }
