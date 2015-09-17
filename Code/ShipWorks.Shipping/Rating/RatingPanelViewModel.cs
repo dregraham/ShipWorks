@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using Interapptive.Shared.Utility;
+using log4net;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
@@ -30,12 +31,19 @@ namespace ShipWorks.Shipping.Rating
     /// </summary>
     public class RatingPanelViewModel : IDisposable, INotifyPropertyChanged
     {
+        // Logger
+        static readonly ILog log = LogManager.GetLogger(typeof(RatingPanelViewModel));
+
         private PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly MessengerToken uspsAccountConvertedToken;
         private readonly MessengerToken shipmentChangedMessageToken;
         private IMessenger messenger;
+
+        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private IShippingManager shippingManager;
+        private IShipmentTypeFactory shipmentTypeFactory;
 
         private long? selectedShipmentID;
         private bool consolidatePostalRates;
@@ -50,11 +58,15 @@ namespace ShipWorks.Shipping.Rating
         /// Constructor
         /// </summary>
         /// <param name="messenger"></param>
-        public RatingPanelViewModel(IMessenger messenger)
+        public RatingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
+            this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            this.shippingManager = shippingManager;
+            this.shipmentTypeFactory = shipmentTypeFactory;
+
             consolidatePostalRates = true;
             ActionLinkVisible = false;
             ShowAllRates = true;
@@ -148,20 +160,20 @@ namespace ShipWorks.Shipping.Rating
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
-        public void RefreshRates(bool ignoreCache)
+        public async Task RefreshRates(bool ignoreCache)
         {
             ShipmentEntity shipment = null;
 
             if (selectedShipmentID != null)
             {
-                shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
+                shipment = shippingManager.GetShipment(selectedShipmentID.Value);
             }
 
             if (shipment != null)
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentType shipmentType = ShipmentTypeManager.GetType(shipment);
+                    ShipmentType shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
 
                     if (!shipmentType.SupportsGetRates)
                     {
@@ -191,17 +203,21 @@ namespace ShipWorks.Shipping.Rating
         /// <summary>
         /// Refreshes the selected shipments - Updates the rate control
         /// </summary>
-        public async Task RefreshSelectedShipments(List<ShipmentEntity> shipments)
+        public async Task RefreshSelectedShipments(long orderID)
         {
-            int shipmentSelectionCount = shipments.Count;
-
-            if (shipmentSelectionCount == 1)
+            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderID);
+            
+            if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Success)
             {
-                ChangeShipment(shipments.First());
+                ChangeShipment(loadedShipment.Shipment);
             }
-            else if (shipmentSelectionCount > 1)
+            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple)
             {
                 ErrorMessage = "Multiple shipments selected.";
+            }
+            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Error)
+            {
+                ErrorMessage = "An error occurred while retrieving rates.";
             }
             else
             {
@@ -233,8 +249,8 @@ namespace ShipWorks.Shipping.Rating
             }
 
             // Refresh the shipment data and then the rates
-            ShipmentEntity shipment = ShippingManager.GetShipment(selectedShipmentID.Value);
-            ShippingManager.RefreshShipment(shipment);
+            ShipmentEntity shipment = shippingManager.GetShipment(selectedShipmentID.Value);
+            shippingManager.RefreshShipment(shipment);
 
             FetchRates(shipment, false);
         }
@@ -266,20 +282,20 @@ namespace ShipWorks.Shipping.Rating
                         // Load all the child shipment data otherwise we'll get null reference
                         // errors when getting rates; we're going to use the shipment in the
                         // completed event handler to see if we should load the grid or not
-                        ShippingManager.EnsureShipmentLoaded(shipment);
+                        shippingManager.EnsureShipmentLoaded(shipment);
                         args.Result = shipment;
 
                         // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
                         // footer raises the event and we want to include Express1 rates in that case
                         if (ignoreCache)
                         {
-                            ShippingManager.RemoveShipmentFromRatesCache(shipment);
+                            shippingManager.RemoveShipmentFromRatesCache(shipment);
                         }
 
                         // Fetch the rates and add them to the cache
                         shipmentType = PrepareShipmentAndGetShipmentType(shipment);
 
-                        rates = ShippingManager.GetRates(shipment, shipmentType);
+                        rates = shippingManager.GetRates(shipment, shipmentType);
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
                     }
                     catch (InvalidRateGroupShippingException ex)
@@ -309,11 +325,8 @@ namespace ShipWorks.Shipping.Rating
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            //using (ILifetimeScope lifetimeScope = IoC.BeginLifetimeScope())
-                            //{
-                                ShipmentType exceptionShipmentType = shipmentType ?? new NoneShipmentType();
-                                rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
-                            //}
+                            ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.GetType(ShipmentTypeCode.None);
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
                         }
 
                         panelRateGroup = new ShipmentRateGroup(rates, shipment);
@@ -378,7 +391,7 @@ namespace ShipWorks.Shipping.Rating
                 shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter> { new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter() }));
 
                 shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
-                ShippingManager.EnsureShipmentLoaded(shipment);
+                shippingManager.EnsureShipmentLoaded(shipment);
 
                 shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
                 shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
@@ -391,7 +404,7 @@ namespace ShipWorks.Shipping.Rating
             }
             else
             {
-                shipmentType = ShipmentTypeManager.GetType(shipment);
+                shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
             }
 
             return shipmentType;

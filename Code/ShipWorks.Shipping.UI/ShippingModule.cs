@@ -44,8 +44,7 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<RatingPanel>()
-                .AsImplementedInterfaces()
-                .PreserveExistingDefaults();
+                .AsSelf();
 
             builder.RegisterType<RatingPanelViewModel>();
 

@@ -168,30 +168,24 @@ namespace ShipWorks.Shipping.UI
             viewModel.ErrorMessage = string.Empty;
             rateControl.ShowSpinner = true;
 
-            List<ShipmentEntity> shipments = ShippingManager.GetShipments(selection.Keys.FirstOrDefault(), false);
-
-            await viewModel.RefreshSelectedShipments(shipments);
-
-            //RefreshSelectedShipments();
+            await viewModel.RefreshSelectedShipments(selection.Keys.FirstOrDefault());
         }
 
         /// <summary>
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public Task ReloadContent()
+        public async Task ReloadContent()
         {
-            //RefreshSelectedShipments();
-            return TaskEx.FromResult(true);
+            await viewModel.RefreshRates(true);
         }
 
         /// <summary>
         /// When the content is called to be updated, we need to make sure our rates are up to date as well
         /// </summary>
-        public Task UpdateContent()
+        public async Task UpdateContent()
         {
-            //RefreshSelectedShipments();
-            return TaskUtility.CompletedTask;
+            await viewModel.RefreshRates(true);
         }
 
         /// <summary>
