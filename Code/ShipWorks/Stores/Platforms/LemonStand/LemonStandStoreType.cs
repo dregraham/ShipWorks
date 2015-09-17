@@ -30,14 +30,20 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandStoreType : StoreType
     {
         // Logger 
-        private static readonly ILog log = LogManager.GetLogger(typeof (LemonStandStoreType));
+        private readonly ILog log;
 
         /// <summary>
         ///     Constructor
         /// </summary>
         public LemonStandStoreType(StoreEntity store)
+            : this(store, LogManager.GetLogger(typeof(LemonStandStoreType)))
+        {
+        }
+
+        public LemonStandStoreType(StoreEntity store, ILog log)
             : base(store)
         {
+            this.log = log;
         }
 
         /// <summary>
@@ -61,14 +67,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
                 return identifier;
             }
-        }
-
-        /// <summary>
-        ///     Gets the help URL to use in the account settings.
-        /// </summary>
-        public static string AccountSettingsHelpUrl
-        {
-            get { return "http://support.shipworks.com/support/solutions/articles/4000046208"; }
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     {
         private readonly ILemonStandWebClient client;
         private readonly ISqlAdapterRetry sqlAdapter;
+        private const int itemsPerPage = 250;
 
         public LemonStandDownloader(StoreEntity store)
             : this(
@@ -51,6 +52,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 bool allOrdersRetrieved = false;
                 int currentPage = 1;
 
+                // LemonStand does not return any information about number of pages, but by default returns 250 items per page
+                // So we get first 250 and if there are in fact 250 items, then get the next page
                 while (!allOrdersRetrieved)
                 {
                     // Check for cancellation
@@ -65,7 +68,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     // Get JSON result objects into a list
                     IList<JToken> orders = result["data"].Children().ToList();
                     jsonOrders.AddRange(orders);
-                    if (orders.Count < 250)
+
+                    if (orders.Count < itemsPerPage)
                     {
                         allOrdersRetrieved = true;
                     }

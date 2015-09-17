@@ -163,7 +163,8 @@ namespace ShipWorks.Tests.Stores.LemonStand
         }
 
         [TestMethod]
-        public void LoadOrder_DoesNotThrowException_WhenOrderStatusAndItemQuantityAreEmptyInResponse_Test()
+        [ExpectedException(typeof(LemonStandException))]
+        public void LoadOrder_ThrowsLemonStandException_WhenItemQuantityIsEmptyInResponse_Test()
         {
             FakeLemonStandDownloader testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(badDataOrder);
