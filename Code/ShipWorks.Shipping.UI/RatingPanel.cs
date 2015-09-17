@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using Autofac;
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
@@ -39,7 +40,7 @@ namespace ShipWorks.Shipping.UI
         {
             InitializeComponent();
 
-            viewModel = new RatingPanelViewModel(Messenger.Current);
+            viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
 
             DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
             DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
@@ -224,6 +225,6 @@ namespace ShipWorks.Shipping.UI
                 TabIndex = 0
             };
         }
-#endregion
+        #endregion
     }
 }

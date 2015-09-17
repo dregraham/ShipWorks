@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Rating;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -39,6 +40,8 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<RatingPanel>()
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
+
+            builder.RegisterType<RatingPanelViewModel>();
         }
     }
 }
