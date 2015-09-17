@@ -13,17 +13,26 @@ namespace ShipWorks.Stores.Platforms.LemonStand
     public class LemonStandOnlineUpdater
     {
         // Logger 
-        private static readonly ILog log = LogManager.GetLogger(typeof (LemonStandOnlineUpdater));
+        private readonly ILog log;
 
         // the store this instance is for
         private readonly LemonStandStoreEntity store;
+
+        private readonly ILemonStandWebClient client;
 
         /// <summary>
         ///     Constructor
         /// </summary>
         public LemonStandOnlineUpdater(LemonStandStoreEntity store)
+            : this(store, LogManager.GetLogger(typeof(LemonStandOnlineUpdater)), new LemonStandWebClient(store))
+        {
+        }
+
+        public LemonStandOnlineUpdater(LemonStandStoreEntity store, ILog log, ILemonStandWebClient client)
         {
             this.store = store;
+            this.log = log;
+            this.client = client;
         }
 
         /// <summary>

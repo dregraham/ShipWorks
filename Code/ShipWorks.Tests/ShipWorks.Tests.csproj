@@ -453,6 +453,7 @@
     <Compile Include="Stores\LemonStand\FakeLemonStandDownloader.cs" />
     <Compile Include="Stores\LemonStand\LemonStandDownloaderTest.cs" />
     <Compile Include="Stores\LemonStand\LemonStandStoreTypeTest.cs" />
+    <Compile Include="Stores\LemonStand\LemonStandOrderIdentifierTest.cs" />
     <Compile Include="Stores\Newegg\CancellationRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsRequestTest.cs" />
     <Compile Include="Stores\Newegg\CheckCredentialsResponseSerializerTest.cs" />

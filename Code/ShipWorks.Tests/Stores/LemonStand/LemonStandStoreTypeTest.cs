@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Stores;
+using ShipWorks.Filters.Content.Conditions;
 using ShipWorks.Stores.Platforms.LemonStand;
+using ShipWorks.Stores.Platforms.LemonStand.WizardPages;
 
 namespace ShipWorks.Tests.Stores.LemonStand
 {
@@ -12,6 +16,8 @@ namespace ShipWorks.Tests.Stores.LemonStand
     {
         Mock<LemonStandStoreEntity> store = new Mock<LemonStandStoreEntity>();
         string storeUrl = "shipworks.lemonstand.com";
+        LemonStandStoreType testObject;
+
         [TestInitialize]
         public void Initialize()
         {
@@ -23,15 +29,18 @@ namespace ShipWorks.Tests.Stores.LemonStand
         [TestMethod]
         public void InternalLicenseIdentifier_LicenseIdentifierMatchesStoreUrl_WhenStoreIsGivenStoreUrl_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
+            testObject = new LemonStandStoreType(store.Object);
             Assert.AreEqual(storeUrl, testObject.LicenseIdentifier);
         }
 
         [TestMethod]
-        public void CreateOnlineUpdateInstanceCommands_IsCalledOnce_WhenStoreIsInstantiated_Test()
+        public void CreateOnlineUpdateInstanceCommands_OnlyReturnsOneCommand_WhenStoreIsInstantiated_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-            
+            testObject = new LemonStandStoreType(store.Object);
+
+            List<MenuCommand> commands = testObject.CreateOnlineUpdateInstanceCommands();
+
+            Assert.AreEqual(1, commands.Count);
         }
 
         [TestMethod]
@@ -43,45 +52,41 @@ namespace ShipWorks.Tests.Stores.LemonStand
         }
 
         [TestMethod]
-        public void CreateAccountSettingsControl()
+        public void CreateAccountSettingsControl_ReturnsLemonStandAccountSettingsControl_WhenCalled_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-
+            testObject = new LemonStandStoreType(store.Object);
+            Assert.IsInstanceOfType(testObject.CreateAccountSettingsControl(), typeof(LemonStandAccountSettingsControl));
         }
 
         [TestMethod]
-        public void CreateAddStoreWizardPages()
+        public void CreateAddStoreWizardPages_ReturnsLemonStandAccountPage_WhenCalled_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
+            testObject = new LemonStandStoreType(store.Object);
 
+            var pages = testObject.CreateAddStoreWizardPages();
+            
+            Assert.IsInstanceOfType(pages.First(), typeof(LemonStandAccountPage));
         }
 
         [TestMethod]
-        public void CreateDownloader()
+        public void CreateDownloader_ReturnsLemonStandDownloader_WhenCalled_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-
+            testObject = new LemonStandStoreType(store.Object);
+            Assert.IsInstanceOfType(testObject.CreateDownloader(), typeof(LemonStandDownloader));
         }
 
         [TestMethod]
-        public void CreateStroreInstance()
+        public void CreateStoreInstance_ReturnsLemonStandStoreEntity_WhenCalled_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-
+            testObject = new LemonStandStoreType(store.Object);
+            Assert.IsInstanceOfType(testObject.CreateStoreInstance(), typeof(LemonStandStoreEntity));
         }
 
         [TestMethod]
-        public void GenerateTemplateOrderElements()
+        public void CreateBasicSearchOrderConditions_ReturnsConditionGroup_WhenCalled_Test()
         {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-
-        }
-
-        [TestMethod]
-        public void CreateBasicSearchOrderConditions()
-        {
-            LemonStandStoreType testObject = new LemonStandStoreType(store.Object);
-
+            testObject = new LemonStandStoreType(store.Object);
+            Assert.IsInstanceOfType(testObject.CreateBasicSearchOrderConditions("1"), typeof(ConditionGroup));
         }
     }
 }

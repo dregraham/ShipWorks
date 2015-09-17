@@ -32,11 +32,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Orders in Json</returns>
         public JToken GetOrders(int page)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "orders?sort=updated_at&order=desc&embed=invoices,customer,items&page=" + page);
-
-            return ProcessRequest(submitter, "GetOrders");
+            return ProcessRequest(CreateGetRequest("orders?sort=updated_at&order=desc&embed=invoices,customer,items&page=" + page), "GetOrders");
         }
 
         /// <summary>
@@ -46,11 +42,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Order in Json</returns>
         public JToken GetOrderInvoice(string orderId)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "order/" + orderId + "?embed=invoices");
-
-            return ProcessRequest(submitter, "GetOrderInvoice");
+            return ProcessRequest(CreateGetRequest("order/" + orderId + "?embed=invoices"), "GetOrderInvoice");
         }
 
         /// <summary>
@@ -60,11 +52,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Shipment in Json</returns>
         public JToken GetShipment(string invoiceId)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "invoices/" + invoiceId + "?embed=shipments");
-
-            return ProcessRequest(submitter, "GetShipment");
+            return ProcessRequest(CreateGetRequest("invoices/" + invoiceId + "?embed=shipments"), "GetShipment");
         }
 
         /// <summary>
@@ -74,11 +62,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Shipping Address in Json</returns>
         public JToken GetShippingAddress(string shipmentId)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "shipment/" + shipmentId + "?embed=shipping_address");
-
-            return ProcessRequest(submitter, "GetShippingAddress");
+            return ProcessRequest(CreateGetRequest("shipment/" + shipmentId + "?embed=shipping_address"), "GetShippingAddress");
         }
 
         /// <summary>
@@ -88,11 +72,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Billing Address in Json</returns>
         public JToken GetBillingAddress(string customerId)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "customer/" + customerId + "?embed=billing_addresses");
-
-            return ProcessRequest(submitter, "GetBillingAddress");
+            return ProcessRequest(CreateGetRequest("customer/" + customerId + "?embed=billing_addresses"), "GetBillingAddress");
         }
 
         /// <summary>
@@ -102,11 +82,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Product in Json</returns>
         public JToken GetProduct(string productId)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
-
-            ConfigureGetRequest(submitter, "product/" + productId);
-
-            return ProcessRequest(submitter, "GetBillingAddress");
+            return ProcessRequest(CreateGetRequest("product/" + productId), "GetBillingAddress");
         }
 
         /// <summary>
@@ -119,37 +95,36 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         public void UploadShipmentDetails(string trackingNumber, string shipmentId, string onlineStatus,
             string orderNumber)
         {
-            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             Dictionary<string, string> parameters = new Dictionary<string, string>();
 
             parameters.Add("tracking_code", trackingNumber);
-            ConfigurePostRequest(submitter, "shipment/" + shipmentId + "/trackingcode/", parameters);
-            ProcessRequest(submitter, "UploadShipmentDetails");
+            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode/", parameters), "UploadShipmentDetails");
 
-            submitter = new HttpVariableRequestSubmitter();
             parameters.Clear();
 
             parameters.Add("status", onlineStatus);
-            ConfigurePatchRequest(submitter, "order/" + orderNumber, parameters);
-            ProcessRequest(submitter, "UploadShipmentDetails");
+            ProcessRequest(CreatePatchRequest("order/" + orderNumber, parameters), "UploadShipmentDetails");
         }
 
         /// <summary>
         ///     Setup a get request.
         /// </summary>
-        private void ConfigureGetRequest(HttpVariableRequestSubmitter submitter, string operationName)
+        private HttpVariableRequestSubmitter CreateGetRequest(string operationName)
         {
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
             submitter.Verb = HttpVerb.Get;
             submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
+
+            return submitter;
         }
 
         /// <summary>
         ///     Setup a post request
         /// </summary>
-        private static void ConfigurePostRequest(HttpVariableRequestSubmitter submitter, string operationName,
-            Dictionary<string, string> parameters)
+        private HttpVariableRequestSubmitter CreatePostRequest(string operationName, Dictionary<string, string> parameters)
         {
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
             submitter.Verb = HttpVerb.Post;
             submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
@@ -159,14 +134,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 submitter.Variables.Add(parameter.Key, parameter.Value);
             }
+
+            return submitter;
         }
 
         /// <summary>
         ///     Setup a patch request
         /// </summary>
-        private static void ConfigurePatchRequest(HttpVariableRequestSubmitter submitter, string operationName,
-            Dictionary<string, string> parameters)
+        private HttpVariableRequestSubmitter CreatePatchRequest(string operationName, Dictionary<string, string> parameters)
         {
+            HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
             submitter.Verb = HttpVerb.Patch;
             submitter.Uri = new Uri(lemonStandEndpoint + "/" + operationName);
@@ -176,6 +153,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             {
                 submitter.Variables.Add(parameter.Key, parameter.Value);
             }
+
+            return submitter;
         }
 
         /// <summary>

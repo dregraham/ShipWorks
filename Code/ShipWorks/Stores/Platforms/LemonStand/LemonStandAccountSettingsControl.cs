@@ -9,6 +9,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 {
     public partial class LemonStandAccountSettingsControl : AccountSettingsControlBase
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LemonStandAccountSettingsControl"/> class.
+        /// </summary>
         public LemonStandAccountSettingsControl()
         {
             InitializeComponent();
@@ -50,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 try
                 {
                     LemonStandWebClient client = new LemonStandWebClient(lemonStandStore);
-                    //Check to see if we have access to Groupon with the new creds
+                    //Check to see if we have access to LemonStand with the new creds
                     //Ask for some orders
                     client.GetOrders(1);
 

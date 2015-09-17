@@ -22,6 +22,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         private readonly ISqlAdapterRetry sqlAdapter;
         private const int itemsPerPage = 250;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
+        /// </summary>
+        /// <param name="store"></param>
         public LemonStandDownloader(StoreEntity store)
             : this(
                 store, new LemonStandWebClient((LemonStandStoreEntity) store),
@@ -29,6 +33,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
+        /// </summary>
+        /// <param name="store">The store.</param>
+        /// <param name="webClient">The web client.</param>
+        /// <param name="sqlAdapter">The SQL adapter.</param>
         public LemonStandDownloader(StoreEntity store, ILemonStandWebClient webClient, ISqlAdapterRetry sqlAdapter)
             : base(store)
         {
@@ -43,7 +53,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </exception>
         protected override void Download()
         {
-            Progress.Detail = "Downloading New Orders...";
+            Progress.Detail = "Downloading new orders...";
 
             try
             {
@@ -87,11 +97,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                         return;
                     }
 
-                    LoadOrder(jsonOrder);
-
                     // Set the progress detail
-                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved, expectedCount);
+                    Progress.Detail = string.Format("Processing order {0} of {1}...", QuantitySaved+1, expectedCount);
                     Progress.PercentComplete = Math.Min(100, 100*QuantitySaved/expectedCount);
+
+                    LoadOrder(jsonOrder);
                 }
 
                 Progress.Detail = "Done";
@@ -117,6 +127,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             sqlAdapter.ExecuteWithRetry(() => SaveDownloadedOrder(order));
         }
 
+        /// <summary>
+        /// Prepares the order for loading.
+        /// </summary>
+        /// <param name="jsonOrder">The json order.</param>
+        /// <returns>Order Entity to be saved to database</returns>
+        /// <exception cref="LemonStandException"></exception>
         public LemonStandOrderEntity PrepareOrder(JToken jsonOrder)
         {
             //                              order

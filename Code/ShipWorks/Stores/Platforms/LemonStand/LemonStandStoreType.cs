@@ -178,9 +178,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             InitializeStoreDefaults(store);
             store.StoreURL = "";
-            store.APIKey = "";
             store.Token = "";
-            store.StoreName = "LemonStand";
+            store.StoreName = "My LemonStand Store";
 
             return store;
         }

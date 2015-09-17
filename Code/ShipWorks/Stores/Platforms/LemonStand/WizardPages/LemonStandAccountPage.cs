@@ -8,6 +8,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
 {
     public partial class LemonStandAccountPage : AddStoreWizardPage
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LemonStandAccountPage"/> class.
+        /// </summary>
         public LemonStandAccountPage()
         {
             InitializeComponent();
@@ -21,7 +24,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand.WizardPages
             Cursor.Current = Cursors.WaitCursor;
 
             LemonStandStoreEntity store = GetStore<LemonStandStoreEntity>();
-
 
             store.StoreURL = storeURLTextbox.Text;
             store.Token = accessTokenTextbox.Text;

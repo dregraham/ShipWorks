@@ -93,7 +93,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "LemonStandAccountPage";
-            this.Size = new System.Drawing.Size(500, 200);
+            this.Size = new System.Drawing.Size(487, 100);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -89,7 +89,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "LemonStandAccountSettingsControl";
-            this.Size = new System.Drawing.Size(500, 200);
+            this.Size = new System.Drawing.Size(487, 100);
             this.ResumeLayout(false);
             this.PerformLayout();
 
