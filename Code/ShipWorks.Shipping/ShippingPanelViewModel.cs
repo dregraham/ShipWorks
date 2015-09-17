@@ -117,7 +117,7 @@ namespace ShipWorks.Shipping
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    loadedShipment.Shipment.ShipmentTypeCode = value;
+                    //loadedShipment.Shipment.ShipmentTypeCode = value;
                     shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
 
                     SupportsMultiplePackages = shipmentTypes[selectedShipmentType]?.SupportsMultiplePackages ?? false;
