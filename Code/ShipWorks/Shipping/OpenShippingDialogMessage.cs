@@ -2,8 +2,7 @@
 using Interapptive.Shared.Messaging;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
-using System.Collections.ObjectModel;
-using System.Linq;
+using Interapptive.Shared.Collections;
 
 namespace ShipWorks.Shipping
 {
@@ -12,9 +11,6 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class OpenShippingDialogMessage : IShipWorksMessage
     {
-        private RatesPanel ratesPanel;
-        private ShipmentEntity shipment;
-
         /// <summary>
         /// Constructor
         /// </summary>
@@ -30,7 +26,7 @@ namespace ShipWorks.Shipping
         public OpenShippingDialogMessage(object sender, IEnumerable<ShipmentEntity> shipments, InitialShippingTabDisplay initialDisplay)
         {
             Sender = sender;
-            Shipments = new ReadOnlyCollection<ShipmentEntity>(shipments.ToList());
+            Shipments = shipments.ToReadOnly();
             InitialDisplay = initialDisplay;
         }
 

@@ -9,6 +9,7 @@ using ShipWorks.Data;
 using ShipWorks.Data.Connection;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -329,7 +330,7 @@ namespace ShipWorks.AddressValidation
                     AddressAdapter originalShippingAddress = new AddressAdapter();
                     orderAdapter.CopyTo(originalShippingAddress);
 
-                    validator.Validate(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    Task task = validator.ValidateAsync(order, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -343,6 +344,7 @@ namespace ShipWorks.AddressValidation
                             }
                         }
                     });
+                    task.Wait();
 
                     using (SqlAdapter sqlAdapter = new SqlAdapter())
                     {
@@ -357,7 +359,7 @@ namespace ShipWorks.AddressValidation
                 else if (!shipment.Processed)
                 {
                     // Since the addresses don't match, just validate the shipment
-                    validator.Validate(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
+                    Task task = validator.ValidateAsync(shipment, "Ship", canApplyChanges, (originalAddress, suggestedAddresses) =>
                     {
                         // Use a low priority for deadlocks, since we'll just try again
                         using (new SqlDeadlockPriorityScope(-4))
@@ -371,6 +373,8 @@ namespace ShipWorks.AddressValidation
                             }
                         }
                     });
+
+                    task.Wait();
                 }
             }
             catch (ORMConcurrencyException)

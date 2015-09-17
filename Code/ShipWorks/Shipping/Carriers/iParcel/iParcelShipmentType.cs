@@ -551,6 +551,21 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         }
 
         /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        {
+            iParcelShipmentType shipmentType = new iParcelShipmentType();
+            List<iParcelServiceType> availableServiceTypes = shipmentType.GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (iParcelServiceType)s).ToList();
+
+            // Always include the service that the shipments are currently configured with
+            IEnumerable<iParcelServiceType> loadedServices = shipments.Select(s => (iParcelServiceType)s.IParcel.Service).Distinct();
+            return availableServiceTypes
+                .Union(loadedServices)
+                .ToDictionary(service => (int) service, service => EnumHelper.GetDescription(service));
+        }
+
+        /// <summary>
         /// Ensures that the carrier specific data for the shipment, such as the IParcel data, are loaded for the shipment.  If the data
         /// already exists, nothing is done: it is not refreshed.  This method can throw SqlForeignKeyException if the root shipment
         /// or order has been deleted, ORMConcurrencyException if the shipment had been edited elsewhere, and ObjectDeletedException if the shipment

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using Autofac;
 using Interapptive.Shared.Enums;
 using Interapptive.Shared.Net;
 using Interapptive.Shared.Utility;
-using ShipWorks.ApplicationCore;
 using ShipWorks.Editions;
 using log4net;
 using ShipWorks.Common.IO.Hardware.Printers;
@@ -18,9 +15,6 @@ using ShipWorks.Shipping.Editing;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.ShipSense;
-using ShipWorks.Shipping.ShipSense.Hashing;
-using ShipWorks.Stores.Platforms.ChannelAdvisor.WebServices.Order;
-using ShipWorks.UI.Wizard;
 using System.Windows.Forms;
 using ShipWorks.Shipping.Profiles;
 using ShipWorks.Shipping.Settings;
@@ -31,17 +25,12 @@ using ShipWorks.Shipping.Settings.Origin;
 using ShipWorks.Stores;
 using ShipWorks.Data;
 using ShipWorks.Data.Model.HelperClasses;
-using System.Reflection;
 using SD.LLBLGen.Pro.ORMSupportClasses;
-using ShipWorks.Data.Model;
 using ShipWorks.Shipping.Tracking;
 using Interapptive.Shared.Business;
 using ShipWorks.Shipping.Insurance;
-using ShipWorks.Templates.Processing;
-using ShipWorks.Templates.Processing.TemplateXml;
 using ShipWorks.Templates.Processing.TemplateXml.ElementOutlines;
 using ShipWorks.Shipping.Carriers.BestRate;
-using System.Security.Cryptography;
 using ShipWorks.Shipping.ShipSense.Packaging;
 using System.Xml.Linq;
 using Interapptive.Shared.Business.Geography;
@@ -415,8 +404,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildServiceTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
+        public virtual Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository) 
             => new Dictionary<int, string>();
+
+        /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments)
+            => BuildServiceTypeDictionary(shipments, new ExcludedServiceTypeRepository());
 
         /// <summary>
         /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have 
@@ -468,8 +463,14 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
         /// </summary>
-        public virtual Dictionary<int, string> BuildPackageTypeDictionary(ShipmentEntity shipment, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        public virtual Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedServiceTypeRepository)
             => new Dictionary<int, string>();
+
+        /// <summary>
+        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments)
+            => BuildPackageTypeDictionary(shipments, new ExcludedPackageTypeRepository());
 
         /// <summary>
         /// Gets the package adapter for the shipment.

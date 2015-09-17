@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
+using System;
+using ShipWorks.AddressValidation;
 
 namespace ShipWorks.Shipping
 {
@@ -24,5 +26,15 @@ namespace ShipWorks.Shipping
         /// one will be created if autoCreate is true.  An OrderEntity will be attached to each shipment.
         /// </summary>
         List<ShipmentEntity> GetShipments(long orderID, bool createIfNone);
+
+        /// <summary>
+        /// Save the shipments to the database
+        /// </summary>
+        IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave);
+
+        /// <summary>
+        /// Ensure the specified shipment is fully loaded
+        /// </summary>
+        void EnsureShipmentLoaded(ShipmentEntity shipment);
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Grid.Paging;
+using System.Threading.Tasks;
 
 namespace ShipWorks.Stores.Content.Panels
 {
@@ -64,7 +65,7 @@ namespace ShipWorks.Stores.Content.Panels
         /// <summary>
         /// Update the content of the control 
         /// </summary>
-        public override void ChangeContent(IGridSelection selection)
+        public override Task ChangeContent(IGridSelection selection)
         {
             IEntityGateway gateway = null;
 
@@ -96,6 +97,8 @@ namespace ShipWorks.Stores.Content.Panels
 
             entityGrid.GroupingContext = groupBy.Checked ? CreateGroupingContext() : null;
             entityGrid.OpenGateway(gateway);
+
+            return TaskEx.FromResult(true);
         }
 
         /// <summary>

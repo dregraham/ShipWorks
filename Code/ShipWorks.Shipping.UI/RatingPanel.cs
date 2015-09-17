@@ -5,9 +5,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.ApplicationCore;
 using Autofac;
-using ShipWorks.Data.Model.EntityClasses;
 using System;
-using ShipWorks.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -51,9 +49,9 @@ namespace ShipWorks.Shipping.UI
 
         public bool SupportsMultiSelect => false;
 
-        public void ChangeContent(IGridSelection selection)
+        public async Task ChangeContent(IGridSelection selection)
         {
-            viewModel.LoadRates(selection.Keys.FirstOrDefault());
+            await viewModel.LoadRates(selection.Keys.FirstOrDefault());
         }
 
         public void LoadState()
@@ -61,9 +59,9 @@ namespace ShipWorks.Shipping.UI
             //throw new NotImplementedException();
         }
 
-        public void ReloadContent()
+        public Task ReloadContent()
         {
-            //throw new NotImplementedException();
+            return TaskEx.FromResult(true);
         }
 
         public void SaveState()
@@ -71,9 +69,9 @@ namespace ShipWorks.Shipping.UI
             //throw new NotImplementedException();
         }
 
-        public void UpdateContent()
+        public Task UpdateContent()
         {
-            //throw new NotImplementedException();
+            return TaskEx.FromResult(true);
         }
 
         public void UpdateStoreDependentUI()

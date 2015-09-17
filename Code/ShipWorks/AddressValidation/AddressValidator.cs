@@ -8,6 +8,7 @@ using Microsoft.Web.Services3.Addressing;
 using SD.LLBLGen.Pro.ORMSupportClasses;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Carriers.Postal;
+using System.Threading.Tasks;
 
 namespace ShipWorks.AddressValidation
 {
@@ -43,9 +44,9 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressPrefix"></param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public Task ValidateAsync(IEntity2 addressEntity, string addressPrefix, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
-            Validate(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
+            return ValidateAsync(new AddressAdapter(addressEntity, addressPrefix), canAdjustAddress, saveAction);
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace ShipWorks.AddressValidation
         /// <param name="addressAdapter">Address that should be validated</param>
         /// <param name="canAdjustAddress"></param>
         /// <param name="saveAction">Action that should save changes to the database</param>
-        public void Validate(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
+        public async Task ValidateAsync(AddressAdapter addressAdapter, bool canAdjustAddress, Action<ValidatedAddressEntity, IEnumerable<ValidatedAddressEntity>> saveAction)
         {
             // We don't want to validate already validated addresses because we'll lose the original address
             if (!ShouldValidateAddress(addressAdapter))
@@ -71,8 +72,7 @@ namespace ShipWorks.AddressValidation
 
             try
             {
-
-                AddressValidationWebClientValidateAddressResult validationResult = webClient.ValidateAddress(addressAdapter);
+                AddressValidationWebClientValidateAddressResult validationResult = await webClient.ValidateAddressAsync(addressAdapter);
 
                 // Store the original address so that the user can revert later if they want
                 ValidatedAddressEntity originalAddress = new ValidatedAddressEntity();

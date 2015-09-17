@@ -182,7 +182,7 @@ namespace ShipWorks.AddressValidation
                     StoreEntity store = StoreManager.GetRelatedStore((long)entityToValidate.Fields["OrderID"].CurrentValue);
                     bool shouldAutomaticallyAdjustAddress = store.AddressValidationSetting != (int)AddressValidationStoreSettingType.ValidateAndNotify;
 
-                    addressValidator.Validate(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
+                    Task task = addressValidator.ValidateAsync(entityToValidate, "Ship", shouldAutomaticallyAdjustAddress,
                         (originalAddress, suggestedAddresses) =>
                         {
                             using (SqlAdapter sqlAdapter = new SqlAdapter(true))
@@ -193,6 +193,7 @@ namespace ShipWorks.AddressValidation
                                 sqlAdapter.Commit();
                             }
                         });
+                    task.Wait();
                 }
             }
             catch (ObjectDeletedException)

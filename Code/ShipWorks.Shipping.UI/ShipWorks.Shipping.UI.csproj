@@ -127,6 +127,15 @@
     <Compile Include="AddressControl.xaml.cs">
       <DependentUpon>AddressControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Carriers\iParcel\iParcelShippingModule.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShippingModule.cs" />
+    <Compile Include="Carriers\BestRate\BestRateShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1ShippingModule.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShippingModule.cs" />
+    <Compile Include="Carriers\Postal\WebTools\WebToolsShippingModule.cs" />
+    <Compile Include="Carriers\Ups\UpsShippingModule.cs" />
+    <Compile Include="Carriers\FedEx\FedExShippingModule.cs" />
     <Compile Include="Carriers\None\NoneServiceControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,6 +193,7 @@
     <Compile Include="ShipmentPanelRegistration.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="StateProvinceConverter.cs" />
+    <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

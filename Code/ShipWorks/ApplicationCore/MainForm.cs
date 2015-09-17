@@ -91,6 +91,7 @@ using SandLabel = Divelements.SandRibbon.Label;
 using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared.Messaging;
+using System.Threading.Tasks;
 
 namespace ShipWorks
 {
@@ -1298,22 +1299,20 @@ namespace ShipWorks
         /// </summary>
         private void UpdatePanelState()
         {
-            foreach (DockControl dockControl in sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1))
-            {
-                UpdatePanelState(dockControl);
-            }
+            IEnumerable<DockControl> controls = sandDockManager.GetDockControls().Where(d => d.Controls.Count == 1).ToList();
+            IEnumerable<Task> updateTasks = controls.Select(x => UpdatePanelState(x)).ToList();
         }
 
         /// <summary>
         /// Update the state of the panel content for the given dock control, only if it contains a panel, and only if it's open.
         /// </summary>
-        private void UpdatePanelState(DockControl dockControl)
+        private Task UpdatePanelState(DockControl dockControl)
         {
             // This function can get called as panels are activating.  Activation can be changing as we are closing them during logoff,
             // so we have to make sure we're logged on or updating would crash.
             if (!UserSession.IsLoggedOn)
             {
-                return;
+                return TaskEx.FromResult(true);
             }
 
             DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
@@ -1321,8 +1320,10 @@ namespace ShipWorks
             {
                 // This happens to often to use GetOrderedSelectdKeys. If ordering becomes important, we'll need to improve
                 // the performance of that somehow for massive selections where there is virtual selection.
-                holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
+                return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
+            
+            return TaskEx.FromResult(true);
         }
 
         /// <summary>

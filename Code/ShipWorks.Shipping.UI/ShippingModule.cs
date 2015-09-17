@@ -41,6 +41,15 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<ShipmentProcessor>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<ShippingErrorManager>()
+                .AsImplementedInterfaces();
+
+            builder.RegisterType<CarrierConfigurationShipmentRefresher>()
+                .AsImplementedInterfaces();
         }
     }
 }

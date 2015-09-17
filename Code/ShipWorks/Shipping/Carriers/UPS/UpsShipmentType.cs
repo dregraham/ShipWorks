@@ -368,6 +368,51 @@ namespace ShipWorks.Shipping.Carriers.UPS
         }
 
         /// <summary>
+        /// Gets the AvailableServiceTypes for this shipment type and shipment along with their descriptions.
+        /// </summary>
+        public override Dictionary<int, string> BuildServiceTypeDictionary(List<ShipmentEntity> shipments, IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        {
+            List<ShipmentEntity> overriddenShipments = shipments.Select(ShippingManager.GetOverriddenStoreShipment).ToList();
+
+            List<UpsServiceType> availableServices = GetAvailableServiceTypes(excludedServiceTypeRepository).Select(s => (UpsServiceType)s).ToList();
+
+            // If a distinct on country code only returns a count of 1, all countries are the same
+            bool allSameCountry = overriddenShipments.Select(s => string.Format("{0} {1}", s.AdjustedShipCountryCode(), s.AdjustedOriginCountryCode())).Distinct().Count() == 1;
+
+            // If they are all of the same service class, we can load the service classes
+            if (allSameCountry)
+            {
+                ShipmentEntity overriddenShipment = overriddenShipments.First();
+
+                var upsServiceManagerFactory = new UpsServiceManagerFactory(overriddenShipment);
+                IUpsServiceManager carrierServiceManager = upsServiceManagerFactory.Create(overriddenShipment);
+
+                // Get a list of service types that are valid for the overriddenShipments
+                List<UpsServiceType> validServiceTypes = carrierServiceManager.GetServices(overriddenShipment)
+                    .Select(s => s.UpsServiceType).ToList();
+
+                // only include service types that are valid and enabled (availalbeServices)
+                List<UpsServiceType> upsServiceTypesToLoad = validServiceTypes.Intersect(availableServices).ToList();
+
+                if (shipments.Any())
+                {
+                    // Always include the service type that the shipment is currently configured in the 
+                    // event the shipment was configured prior to a service being excluded
+                    // Always include the service that the shipments are currently configured with
+                    // Only if the ServiceType is valid for the shipment type
+                    IEnumerable<UpsServiceType> loadedServices = shipments.Select(s => (UpsServiceType)s.Ups.Service)
+                        .Intersect(validServiceTypes).Distinct();
+                    upsServiceTypesToLoad = upsServiceTypesToLoad.Union(loadedServices).ToList();
+                }
+
+                return upsServiceTypesToLoad
+                    .ToDictionary(type=> (int) type, type=> EnumHelper.GetDescription(type));
+            }
+
+            return new Dictionary<int, string>();
+        }
+
+        /// <summary>
         /// Gets the package types that have been available for this shipment type (i.e have not 
         /// been excluded). The integer values are intended to correspond to the appropriate 
         /// enumeration values of the specific shipment type (i.e. the integer values would 

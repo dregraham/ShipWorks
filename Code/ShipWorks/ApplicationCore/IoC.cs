@@ -50,7 +50,7 @@ namespace ShipWorks.ApplicationCore
         /// <summary>
         /// Begin a lifetime scope from which dependencies can be resolved
         /// </summary>
-        internal static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction)
+        public static ILifetimeScope BeginLifetimeScope(Action<ContainerBuilder> configurationAction)
         {
             return current.BeginLifetimeScope(configurationAction);
         }
