@@ -52,7 +52,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                     LemonStandWebClient client = new LemonStandWebClient(lemonStandStore);
                     //Check to see if we have access to Groupon with the new creds
                     //Ask for some orders
-                    client.GetOrders();
+                    client.GetOrders(1);
 
                     return true;
                 }
@@ -81,8 +81,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         protected virtual bool ConnectionVerificationNeeded(LemonStandStoreEntity store)
         {
-            return (store.Fields[(int) GrouponStoreFieldIndex.Token].IsChanged ||
-                    store.Fields[(int) GrouponStoreFieldIndex.SupplierID].IsChanged);
+            return (store.Fields[(int) LemonStandStoreFieldIndex.Token].IsChanged ||
+                    store.Fields[(int) LemonStandStoreFieldIndex.StoreURL].IsChanged);
         }
     }
 }

@@ -46,17 +46,32 @@ namespace ShipWorks.Stores.Platforms.LemonStand
 
             try
             {
-                // Check for cancellation
-                if (Progress.IsCancelRequested)
+                List<JToken> jsonOrders = new List<JToken>();
+
+                bool allOrdersRetrieved = false;
+                int currentPage = 1;
+
+                while (!allOrdersRetrieved)
                 {
-                    return;
+                    // Check for cancellation
+                    if (Progress.IsCancelRequested)
+                    {
+                        return;
+                    }
+
+                    // Get orders from LemonStand 
+                    JToken result = client.GetOrders(currentPage);
+
+                    // Get JSON result objects into a list
+                    IList<JToken> orders = result["data"].Children().ToList();
+                    jsonOrders.AddRange(orders);
+                    if (orders.Count < 250)
+                    {
+                        allOrdersRetrieved = true;
+                    }
+                    currentPage++;
                 }
 
-                // Get orders from LemonStand 
-                JToken result = client.GetOrders();
-
-                // Get JSON result objects into a list
-                IList<JToken> jsonOrders = result["data"].Children().ToList();
                 int expectedCount = jsonOrders.Count;
 
                 // Load orders 
@@ -276,10 +291,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             item.Name = product.Name;
             item.Weight = (string.IsNullOrWhiteSpace(product.Weight)) ? 0 : Convert.ToDouble(product.Weight);
             item.UnitPrice = Convert.ToDecimal(product.BasePrice);
-
-            short result = 0;
-            Int16.TryParse(product.Quantity, out result);
-            item.Quantity = result;
+            item.Quantity = int.Parse(product.Quantity);
         }
     }
 }

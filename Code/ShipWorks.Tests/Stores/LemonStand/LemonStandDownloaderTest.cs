@@ -45,7 +45,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
             badDataOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandOrderWithBadOrderStatusAndItemQuantity.js");
             missingDataOrder = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.LemonStandOrderWithMissingData.js");
             missingItems = GetEmbeddedResourceJson("ShipWorks.Tests.Stores.LemonStand.Artifacts.OrderMissingItems.js");
-            webClient.Setup(w => w.GetOrders()).Returns(JObject.Parse(lemonStandOrders));
+            webClient.Setup(w => w.GetOrders(1)).Returns(JObject.Parse(lemonStandOrders));
             webClient.Setup(w => w.GetShipment("36")).Returns(JObject.Parse(invoice));
             webClient.Setup(w => w.GetShippingAddress("36")).Returns(JObject.Parse(shipment));
             webClient.Setup(w => w.GetBillingAddress("34")).Returns(JObject.Parse(customer));
@@ -172,7 +172,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
 
         [TestMethod]
         [ExpectedException(typeof(LemonStandException))]
-        public void LoadOrder_ThrowsNullReferenceException_WhenOrderIsMissingOrderNumber_Test()
+        public void LoadOrder_ThrowsLemonStandException_WhenOrderIsMissingOrderNumber_Test()
         {
             FakeLemonStandDownloader testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
             JObject jsonOrder = JObject.Parse(missingDataOrder);

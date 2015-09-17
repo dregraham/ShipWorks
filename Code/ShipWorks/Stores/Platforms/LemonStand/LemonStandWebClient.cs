@@ -30,11 +30,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         ///     Get all orders from LemonStand
         /// </summary>
         /// <returns>Orders in Json</returns>
-        public JToken GetOrders()
+        public JToken GetOrders(int page)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
 
-            ConfigureGetRequest(submitter, "orders?sort=updated_at&order=desc&embed=invoices,customer,items");
+            ConfigureGetRequest(submitter, "orders?sort=updated_at&order=desc&embed=invoices,customer,items&page=" + page);
 
             return ProcessRequest(submitter, "GetOrders");
         }
