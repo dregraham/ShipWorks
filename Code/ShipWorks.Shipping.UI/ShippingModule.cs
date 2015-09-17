@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -41,6 +42,11 @@ namespace ShipWorks.Shipping.UI
             builder.RegisterType<ShipmentAddressValidator>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
+
+            builder.RegisterType<RatingPanel>()
+                .AsSelf();
+
+            builder.RegisterType<RatingPanelViewModel>();
 
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();

@@ -164,23 +164,17 @@
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
     <Compile Include="ExpanderState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RateControlWrapper.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="RateControlWrapper.Designer.cs">
-      <DependentUpon>RateControlWrapper.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ShipmentControl.xaml.cs">
-      <DependentUpon>ShipmentControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="RatingPanelRegistration.cs" />
-    <Compile Include="ShipmentTypeProvider.cs" />
     <Compile Include="RatingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="RatingPanel.Designer.cs">
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="RatingPanelRegistration.cs" />
+    <Compile Include="ShipmentControl.xaml.cs">
+      <DependentUpon>ShipmentControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ShipmentTypeProvider.cs" />
     <Compile Include="ShippingPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -253,9 +247,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Carriers\Other\OtherSetupWizard.resx">
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RateControlWrapper.resx">
-      <DependentUpon>RateControlWrapper.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RatingPanel.resx">
       <DependentUpon>RatingPanel.cs</DependentUpon>

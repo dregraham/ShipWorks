@@ -124,10 +124,10 @@
     <Compile Include="ILoader.cs" />
     <Compile Include="IShippingPanelConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatingPanelViewModel.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
     <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShipmentViewModel.cs" />
-    <Compile Include="RatingPanelViewModel.cs" />
     <Compile Include="ShippingErrorManager.cs" />
     <Compile Include="ShippingPanelViewModel.cs" />
     <Compile Include="ShipmentLoader.cs" />
@@ -177,6 +177,7 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

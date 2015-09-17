@@ -1,10 +1,20 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Forms;
+using Autofac;
+using Interapptive.Shared.Messaging;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
-using ShipWorks.ApplicationCore;
-using Autofac;
+using ShipWorks.Shipping.Editing.Rating;
+using ShipWorks.Shipping;
+using TD.SandDock;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,18 +23,112 @@ using ShipWorks.Core.Common.Threading;
 namespace ShipWorks.Shipping.UI
 {
     /// <summary>
-    /// Rates panel container
+    /// User control that will fetch and 
+    /// show rates for an order that has been selected. If an order doesn't have 
+    /// any shipments, a message will be displayed. For orders that have multiple 
+    /// shipments, the first unprocessed shipment is used for rating. Rates are 
+    /// not retrieved for orders that only have processed shipments.
     /// </summary>
     public partial class RatingPanel : UserControl, IDockingPanelContent
     {
-        RatingPanelViewModel viewModel;
+        private RatingPanelViewModel viewModel;
+        private RateGroup rateGroup;
+        private bool showAllRates;
+        private bool showSpinner;
+        private bool actionLinkVisible;
+        private string errorMessage;
 
         /// <summary>
-        /// Constructor
+        /// Initializes a new instance of the <see cref="RatingPanel"/> class.
         /// </summary>
         public RatingPanel()
         {
             InitializeComponent();
+        }
+
+        /// <summary>
+        /// Gets/Sets the rate group 
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public RateGroup RateGroup
+        {
+            get { return rateGroup; }
+            set
+            {
+                if (!Equals(rateGroup, value))
+                {
+                    rateGroup = value;
+                    rateControl.LoadRates(rateGroup);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets any error message
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set
+            {
+                if (!value.Equals(errorMessage, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    errorMessage = value;
+                    rateControl.ClearRates(errorMessage);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets whether to show all rates
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowAllRates
+        {
+            get { return showAllRates; }
+            set
+            {
+                if (!Equals(showAllRates, value))
+                {
+                    showAllRates = value;
+                    rateControl.ShowAllRates = showAllRates;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets whether to show the action link
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ActionLinkVisible
+        {
+            get { return actionLinkVisible; }
+            set
+            {
+                if (!Equals(actionLinkVisible, value))
+                {
+                    actionLinkVisible = value;
+                    rateControl.ActionLinkVisible = actionLinkVisible;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets whether to show the spinner
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowSpinner
+        {
+            get { return showSpinner; }
+            set
+            {
+                if (!Equals(showSpinner, value))
+                {
+                    showSpinner = value;
+                    rateControl.ShowSpinner = showSpinner;
+                }
+            }
         }
 
         /// <summary>
@@ -36,48 +140,85 @@ namespace ShipWorks.Shipping.UI
 
             viewModel = IoC.UnsafeGlobalLifetimeScope.Resolve<RatingPanelViewModel>();
 
-            rateControlWrapper.DataBindings.Clear();
-            rateControlWrapper.DataBindings.Add("RateGroup", viewModel, "RateGroup");
-            rateControlWrapper.DataBindings.Add("ShowSpinner", viewModel, "ShowSpinner");
-            //rateControlWrapper.DataBindings.Add("ClearRates", viewModel, "ClearRates");
-            //rateControlWrapper.DataBindings.Add("ErrorMessage", viewModel, "ErrorMessage");
-            rateControlWrapper.DataBindings.Add("ShipmentType", viewModel, "ShipmentType");
+            DataBindings.Add(nameof(RateGroup), viewModel, nameof(viewModel.RateGroup));
+            DataBindings.Add(nameof(ErrorMessage), viewModel, nameof(viewModel.ErrorMessage));
+            DataBindings.Add(nameof(ActionLinkVisible), viewModel, nameof(viewModel.ActionLinkVisible));
+            DataBindings.Add(nameof(ShowAllRates), viewModel, nameof(viewModel.ShowAllRates));
+            DataBindings.Add(nameof(ShowSpinner), viewModel, nameof(viewModel.ShowSpinner));
+
+            // Force the rates to be refreshed when the rate control tells us
+            rateControl.ReloadRatesRequired += (sender, args) => viewModel.RefreshRates(true);
+
+            rateControl.Initialize(new FootnoteParameters(() => viewModel.RefreshRates(false), () => viewModel.Store));
+
         }
 
+        /// <summary>
+        /// Supported entity type
+        /// </summary>
         public EntityType EntityType => EntityType.ShipmentEntity;
 
+        /// <summary>
+        /// Supported filter targets
+        /// </summary>
         public FilterTarget[] SupportedTargets => new[] { FilterTarget.Orders, FilterTarget.Shipments };
 
+        /// <summary>
+        /// Supports multiple selections
+        /// </summary>
         public bool SupportsMultiSelect => false;
 
-        public async Task ChangeContent(IGridSelection selection)
-        {
-            await viewModel.LoadRates(selection.Keys.FirstOrDefault());
-        }
 
+        #region IDockingPanelContent
+        /// <summary>
+        /// Load state.  Currently nothing to load, but needed for IDockingPanelContent
+        /// </summary>
         public void LoadState()
         {
-            //throw new NotImplementedException();
         }
 
-        public Task ReloadContent()
-        {
-            return TaskUtility.CompletedTask;
-        }
-
+        /// <summary>
+        /// Save state.  Currently nothing to save, but needed for IDockingPanelContent
+        /// </summary>
         public void SaveState()
         {
-            //throw new NotImplementedException();
         }
 
-        public Task UpdateContent()
+        /// <summary>
+        /// Change the order selected
+        /// </summary>
+        public async Task ChangeContent(IGridSelection selection)
         {
-            return TaskUtility.CompletedTask;
+            // Reset the error message and show the spinner
+            viewModel.ErrorMessage = string.Empty;
+            rateControl.ShowSpinner = true;
+
+            await viewModel.RefreshSelectedShipments(selection.Keys.FirstOrDefault());
         }
 
+        /// <summary>
+        /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
+        /// list with up-to-date displayed entity content.
+        /// </summary>
+        public async Task ReloadContent()
+        {
+            await viewModel.RefreshRates(true);
+        }
+
+        /// <summary>
+        /// When the content is called to be updated, we need to make sure our rates are up to date as well
+        /// </summary>
+        public async Task UpdateContent()
+        {
+            await viewModel.RefreshRates(true);
+        }
+
+        /// <summary>
+        /// Currently nothing to save, but needed for IDockingPanelContent
+        /// </summary>
         public void UpdateStoreDependentUI()
         {
-            //throw new NotImplementedException();
         }
+        #endregion
     }
 }

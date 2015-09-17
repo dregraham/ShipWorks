@@ -7,7 +7,7 @@ using TD.SandDock;
 namespace ShipWorks.Shipping.UI
 {
     /// <summary>
-    /// Register the rates panel
+    /// Register the rating panel
     /// </summary>
     public class RatingPanelRegistration : IRegisterDockableWindow
     {
@@ -27,12 +27,12 @@ namespace ShipWorks.Shipping.UI
                 TabIndex = 1
             };
 
-            DockableWindow dockableWindowRates = new DockableWindow(dockManager, panelRating, "Rates")
+            DockableWindow dockableWindowRating = new DockableWindow(dockManager, panelRating, "Rating")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
-                Guid = new Guid("68C7B550-A30D-406E-9FE8-12224489FB2B"),
+                Guid = new Guid("B82A3A5F-931A-40E7-AB35-9189D564C187"),
                 Location = new Point(0, 25),
-                Name = "dockableWindowRates",
+                Name = "dockableWindowRating",
                 ShowOptions = false,
                 Size = new Size(378, 170),
                 TabImage = Properties.Resources.add16,

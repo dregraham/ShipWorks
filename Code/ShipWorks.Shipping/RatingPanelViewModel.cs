@@ -1,212 +1,444 @@
 ﻿using System;
-using ShipWorks.Core.UI;
-using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.Shipping.UI;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Net;
 using System.Reflection;
-using System.Threading;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
+using Interapptive.Shared.Utility;
 using log4net;
-using ShipWorks.Data;
+using ShipWorks.ApplicationCore;
+using ShipWorks.Core.UI;
+using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.Shipping.Carriers.BestRate;
+using ShipWorks.Shipping.Carriers.FedEx;
+using ShipWorks.Shipping.Carriers.FedEx.Api;
+using ShipWorks.Shipping.Carriers.None;
+using ShipWorks.Shipping.Carriers.Postal;
+using ShipWorks.Shipping.Carriers.Postal.BestRate;
+using ShipWorks.Shipping.Editing.Enums;
 using ShipWorks.Shipping.Editing.Rating;
 using ShipWorks.Shipping.Policies;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Stores;
 
 namespace ShipWorks.Shipping
 {
     /// <summary>
-    /// Main view model for the shipment panel
+    /// View model for getting rates
     /// </summary>
-    public class RatingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
+    public class RatingPanelViewModel : IDisposable, INotifyPropertyChanged
     {
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(RatingPanelViewModel));
 
-        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
-
         private PropertyChangedHandler handler;
-
         public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
 
-        private RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
-        private ShipmentEntity shipment;
+        private readonly MessengerToken uspsAccountConvertedToken;
+        private readonly MessengerToken shipmentChangedMessageToken;
         private IMessenger messenger;
+
+        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private IShippingManager shippingManager;
+        private IShipmentTypeFactory shipmentTypeFactory;
+
+        private long? selectedShipmentID;
+        private bool consolidatePostalRates;
+        private bool actionLinkVisible;
+        private bool showAllRates;
         private bool showSpinner;
-        private string clearRates;
-        private string errorMessage;
-        private ShipmentTypeCode shipmentType;
+        public StoreEntity store;
+        private RateGroup rateGroup = new RateGroup(Enumerable.Empty<RateResult>());
+        private string errorMessage = string.Empty;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RatingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger)
+        /// <param name="messenger"></param>
+        public RatingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory)
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+            handler = new PropertyChangedHandler(this, () => PropertyChanged);
 
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            this.shippingManager = shippingManager;
+            this.shipmentTypeFactory = shipmentTypeFactory;
 
-            messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
+            consolidatePostalRates = true;
+            ActionLinkVisible = false;
+            ShowAllRates = true;
 
-            //ClearRates = string.Empty;
+            uspsAccountConvertedToken = messenger.Handle<UspsAutomaticExpeditedChangedMessage>(this, HandleUspsAutomaticExpeditedChangedMessage);
+
+            shipmentChangedMessageToken = messenger.Handle<ShipmentChangedMessage>(this, HandleShipmentChangedMessage);
         }
 
         /// <summary>
-        /// Handle any filter node changed messages
+        /// Gets/Sets whether to show the action link
         /// </summary>
-        private async void HandleShipmentChangedMessage(ShipmentChangedMessage message)
-        {
-            this.shipment = message.Shipment;
-            RateGroup = await FetchRatesAsync();
-        }
-
         [Obfuscation(Exclude = true)]
-        public bool ShowSpinner
+        public bool ActionLinkVisible
         {
-            get { return showSpinner; }
-            private set { handler.Set(nameof(ShowSpinner), ref showSpinner, value); }
+            get { return actionLinkVisible; }
+            set
+            {
+                handler.Set(nameof(ActionLinkVisible), ref actionLinkVisible, value);
+            }
         }
 
+        /// <summary>
+        /// Gets/Sets whether to show all rates
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool ShowAllRates
+        {
+            get { return showAllRates; }
+            set
+            {
+                handler.Set(nameof(ShowAllRates), ref showAllRates, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets/Sets the rate group 
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public RateGroup RateGroup
         {
             get { return rateGroup; }
-            private set { handler.Set(nameof(RateGroup), ref rateGroup, value); }
+            set
+            {
+                handler.Set(nameof(RateGroup), ref rateGroup, value); 
+            }
         }
 
-        [Obfuscation(Exclude = true)]
-        public string ClearRates
-        {
-            get { return clearRates; }
-            private set { handler.Set(nameof(ClearRates), ref clearRates, value); }
-        }
-
-        [Obfuscation(Exclude = true)]
-        public ShipmentTypeCode ShipmentType
-        {
-            get { return shipmentType; }
-            private set { handler.Set(nameof(ShipmentType), ref shipmentType, value); }
-        }
-
+        /// <summary>
+        /// Gets/Sets any error message
+        /// </summary>
         [Obfuscation(Exclude = true)]
         public string ErrorMessage
         {
             get { return errorMessage; }
-            private set { handler.Set(nameof(ErrorMessage), ref errorMessage, value); }
+            set
+            {
+                handler.Set(nameof(ErrorMessage), ref errorMessage, value);
+            }
         }
 
         /// <summary>
-        /// Load the rates for an order's shipment
+        /// Gets/Sets whether to show the spinner
         /// </summary>
-        public async Task LoadRates(long orderID)
+        [Obfuscation(Exclude = true)]
+        public bool ShowSpinner
         {
-            //RateGroup = null;
-            //ClearRates = string.Empty;
-
-            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderID);
-
-            if (loadedShipment.Shipment == null)
+            get { return showSpinner; }
+            set
             {
-                // No shipment was created.  Show a message and return.
-                switch (loadedShipment.Result)
-                {
-                    case ShippingPanelLoadedShipmentResult.Multiple:
-                    case ShippingPanelLoadedShipmentResult.NotCreated:
-                        //ErrorMessage = "No unprocessed shipments exist to rate.";
-                        break;
-                    case ShippingPanelLoadedShipmentResult.Error:
-                        //ErrorMessage = "An error occurred while getting rates.";
-                        break;
-                }
+                handler.Set(nameof(ShowSpinner), ref showSpinner, value);
+            }
+        }
 
+        /// <summary>
+        /// Store for the shipment
+        /// </summary>
+        public StoreEntity Store
+        {
+            get { return store; }
+            set { store = value; }
+        }
+
+        /// <summary>
+        /// Change the content of the control to be the given shipment
+        /// </summary>
+        public void ChangeShipment(ShipmentEntity shipment)
+        {
+            selectedShipmentID = shipment.ShipmentID;
+
+            // Refresh the rates in the panel; using cached rates is fine here since nothing
+            // about the shipment has changed, so don't force a re-fetch
+            RefreshRates(false);
+        }
+
+        /// <summary>
+        /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
+        /// </summary>
+        /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        public async Task RefreshRates(bool ignoreCache)
+        {
+            ShipmentEntity shipment = null;
+
+            if (selectedShipmentID != null)
+            {
+                shipment = shippingManager.GetShipment(selectedShipmentID.Value);
+            }
+
+            if (shipment != null)
+            {
+                if (!shipment.Processed)
+                {
+                    ShipmentType shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
+
+                    if (!shipmentType.SupportsGetRates)
+                    {
+                        RateGroup rateGroupWithNoRatesFooter = new RateGroup(new List<RateResult>());
+
+                        rateGroupWithNoRatesFooter.AddFootnoteFactory(new InformationFootnoteFactory("Select another provider to get rates."));
+
+                        RateGroup = rateGroupWithNoRatesFooter;
+                    }
+                    else
+                    {
+                        // We need to fetch the rates from the provider
+                        FetchRates(shipment, ignoreCache);
+                    }
+                }
+                else
+                {
+                    ErrorMessage = "The shipment has already been processed.";
+                }
+            }
+            else
+            {
+                ErrorMessage = "No shipments are selected.";
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the selected shipments - Updates the rate control
+        /// </summary>
+        public async Task RefreshSelectedShipments(long orderID)
+        {
+            ShippingPanelLoadedShipment loadedShipment = await shipmentLoader.LoadAsync(orderID);
+            
+            if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Success)
+            {
+                ChangeShipment(loadedShipment.Shipment);
+            }
+            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple)
+            {
+                ErrorMessage = "Multiple shipments selected.";
+            }
+            else if (loadedShipment.Result == ShippingPanelLoadedShipmentResult.Error)
+            {
+                ErrorMessage = "An error occurred while retrieving rates.";
+            }
+            else
+            {
+                ErrorMessage = "No shipments are selected.";
+            }
+        }
+
+        /// <summary>
+        /// Called when the shipment values have changed. We need to refresh the
+        /// shipment data/rates being displayed to accurately.
+        /// </summary>
+        private void HandleShipmentChangedMessage(ShipmentChangedMessage message)
+        {
+            // Refresh the shipment data and then the rates
+            ShipmentEntity shipment = message.Shipment;
+
+            FetchRates(shipment, false);
+        }
+
+        /// <summary>
+        /// Called when the shipping settings for using USPS has changed. We need to refresh the
+        /// shipment data/rates being displayed to accurately reflect that the shipment type has changed to USPS.
+        /// </summary>
+        private void HandleUspsAutomaticExpeditedChangedMessage(UspsAutomaticExpeditedChangedMessage message)
+        {
+            if (!selectedShipmentID.HasValue)
+            {
                 return;
             }
 
-            shipment = loadedShipment.Shipment;
+            // Refresh the shipment data and then the rates
+            ShipmentEntity shipment = shippingManager.GetShipment(selectedShipmentID.Value);
+            shippingManager.RefreshShipment(shipment);
 
-            // Update the current shipment type
-            if (loadedShipment.Shipment.ShipmentType != shipment.ShipmentType)
-            {
-                ShipmentType = (ShipmentTypeCode)loadedShipment.Shipment.ShipmentType;
-            }
-
-            RateGroup newRateGroup = await FetchRatesAsync();
-
-            LoadRateGroup(newRateGroup);
+            FetchRates(shipment, false);
         }
 
         /// <summary>
-        /// Loads the rates.
+        /// Fetches the rates from the shipment type and 
         /// </summary>
-        /// <param name="newRateGroup">The rate group.</param>
-        private void LoadRateGroup(RateGroup newRateGroup)
+        /// <param name="shipment">The shipment.</param>
+        /// <param name="ignoreCache">Should the cached rates be ignored?</param>
+        private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
-            if (newRateGroup == null)
+            using (BackgroundWorker ratesWorker = new BackgroundWorker())
             {
-                if (shipment.Processed)
-                {
-                    //ErrorMessage = "The shipment has already been processed.";
-                }
-                else
-                {
-                    //ClearRates = string.Empty;
-                }
-            }
-            else if (newRateGroup.Rates.Count == 0)
-            {
-                if (!newRateGroup.FootnoteFactories.Any())
-                {
-                    //ErrorMessage = "No rates are available for the shipment.";
-                }
-                else
-                {
-                    //ClearRates = string.Empty;
-                }
-            }
+                ratesWorker.WorkerReportsProgress = false;
+                ratesWorker.WorkerSupportsCancellation = true;
 
-            RateGroup = newRateGroup;
+                // We're going to be going over the network to get rates from the provider, so show the spinner
+                // while rates are being fetched to give the user some indication that we're working
+                ShipmentRateGroup panelRateGroup = new ShipmentRateGroup(new RateGroup(new List<RateResult>()), shipment);
+
+                // Setup the worker with the work to perform asynchronously
+                ratesWorker.DoWork += (sender, args) =>
+                {
+                    RateGroup rates = null;
+                    ShipmentType shipmentType = null;
+
+                    try
+                    {
+                        // Load all the child shipment data otherwise we'll get null reference
+                        // errors when getting rates; we're going to use the shipment in the
+                        // completed event handler to see if we should load the grid or not
+                        shippingManager.EnsureShipmentLoaded(shipment);
+                        args.Result = shipment;
+
+                        // We want to ignore the cache primarily when changes come from the rate control, since only the promotion
+                        // footer raises the event and we want to include Express1 rates in that case
+                        if (ignoreCache)
+                        {
+                            shippingManager.RemoveShipmentFromRatesCache(shipment);
+                        }
+
+                        // Fetch the rates and add them to the cache
+                        shipmentType = PrepareShipmentAndGetShipmentType(shipment);
+
+                        rates = shippingManager.GetRates(shipment, shipmentType);
+                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
+                    }
+                    catch (InvalidRateGroupShippingException ex)
+                    {
+                        panelRateGroup = new ShipmentRateGroup(ex.InvalidRates, shipment);
+
+                        // Add the shipment ID to the exception data, so we can determine whether
+                        // to update the rate control
+                        ex.Data.Add("shipmentID", shipment.ShipmentID);
+                        args.Result = ex;
+                    }
+                    catch (FedExAddressValidationException ex)
+                    {
+                        panelRateGroup = new ShipmentRateGroup(new InvalidRateGroup(new FedExShipmentType(), ex),
+                            shipment);
+
+                        // Add the shipment ID to the exception data, so we can determine whether
+                        // to update the rate control
+                        ex.Data.Add("shipmentID", shipment.ShipmentID);
+                        args.Result = ex;
+
+                    }
+                    catch (ShippingException ex)
+                    {
+                        // While the rate group should be cached, there was a situation where getting credentials from Tango caused an exception,
+                        // which happened before exception handling kicked in.  So calling GetRates again and relying on cache was causing a crash.
+                        if (rates == null)
+                        {
+                            rates = new RateGroup(new List<RateResult>());
+                            ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.GetType(ShipmentTypeCode.None);
+                            rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
+                        }
+
+                        panelRateGroup = new ShipmentRateGroup(rates, shipment);
+                    }
+                };
+
+                // What to run when the work has been completed
+                ratesWorker.RunWorkerCompleted += (sender, args) =>
+                {
+                    ShippingException exception = args.Result as ShippingException;
+                    if (exception != null)
+                    {
+                        if (exception.Data.Contains("shipmentID") && (long)exception.Data["shipmentID"] == selectedShipmentID)
+                        {
+                            if (panelRateGroup.FootnoteFactories.OfType<ExceptionsRateFootnoteFactory>().Any())
+                            {
+                                RateGroup = panelRateGroup;
+                            }
+                            else
+                            {
+                                ErrorMessage = exception.Message;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ShipmentEntity ratedShipment = (ShipmentEntity)args.Result;
+                        if (ratedShipment != null && ratedShipment.ShipmentID == selectedShipmentID)
+                        {
+                            // Only update the rate control if the shipment is for the currently selected 
+                            // order to avoid the appearance of lag when a user is quickly clicking around
+                            // the rate grid
+                            RateGroup = panelRateGroup;
+                        }
+                    }
+
+                    ShowSpinner = false;
+                };
+
+                // Execute the work to get the rates
+                ratesWorker.RunWorkerAsync();
+            }
         }
 
         /// <summary>
-        /// Actually get the rates when the debounce timer has elapsed
+        /// Prepares the shipment for get rates and gets shipment type.
+        /// This handles consolidating of postal rates if required.
         /// </summary>
-        private async Task<RateGroup> FetchRatesAsync()
+        private ShipmentType PrepareShipmentAndGetShipmentType(ShipmentEntity shipment)
         {
-            ShipmentEntity clonedShipment = EntityUtility.CloneEntity(shipment);
+            ShipmentType shipmentType;
+            ShipmentTypeCode shipmentTypeCode = (ShipmentTypeCode)shipment.ShipmentType;
 
-            ShipmentType uiShipmentType = ShipmentTypeManager.GetType(clonedShipment);
-
-            if (!uiShipmentType.SupportsGetRates || clonedShipment.Processed)
+            // Only change this to best rate for non-USPS postal types
+            if (consolidatePostalRates &&
+                PostalUtility.IsPostalShipmentType(shipmentTypeCode) &&
+                !PostalUtility.IsPostalSetup() &&
+                shipmentTypeCode != ShipmentTypeCode.Usps &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Endicia &&
+                shipmentTypeCode != ShipmentTypeCode.Express1Usps)
             {
-                return new RateGroup(Enumerable.Empty<RateResult>());
+                shipmentType = new BestRateShipmentType(new BestRateShippingBrokerFactory(new List<IShippingBrokerFilter> { new PostalCounterBrokerFilter(), new PostalOnlyBrokerFilter() }));
+
+                shipment.ShipmentType = (int)ShipmentTypeCode.BestRate;
+                shippingManager.EnsureShipmentLoaded(shipment);
+
+                shipment.BestRate.DimsProfileID = shipment.Postal.DimsProfileID;
+                shipment.BestRate.DimsLength = shipment.Postal.DimsLength;
+                shipment.BestRate.DimsWidth = shipment.Postal.DimsWidth;
+                shipment.BestRate.DimsHeight = shipment.Postal.DimsHeight;
+                shipment.BestRate.DimsWeight = shipment.Postal.DimsWeight;
+                shipment.BestRate.DimsAddWeight = shipment.Postal.DimsAddWeight;
+                shipment.BestRate.ServiceLevel = (int)ServiceLevelType.Anytime;
+                shipment.BestRate.InsuranceValue = shipment.Postal.InsuranceValue;
+            }
+            else
+            {
+                shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
             }
 
-            ShowSpinner = true;
+            return shipmentType;
+        }
+        
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                messenger.Remove(uspsAccountConvertedToken);
+                messenger.Remove(shipmentChangedMessageToken);
+            }
+        }
 
-            try
-            {
-                RateGroup newRateGroup = await TaskEx.Run(() => ShippingManager.GetRates(clonedShipment));
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
 
-                return newRateGroup;
-            }
-            catch (InvalidRateGroupShippingException ex)
-            {
-                log.Error("Shipping exception encountered while getting rates", ex);
-                return ex.InvalidRates;
-            }
-            catch (ShippingException ex)
-            {
-                log.Error("Shipping exception encountered while getting rates", ex);
-                return null;
-            }
-            finally
-            {
-                ShowSpinner = false;
-            }
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
         }
     }
 }
