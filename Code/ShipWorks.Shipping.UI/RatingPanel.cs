@@ -10,6 +10,7 @@ using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -191,17 +192,19 @@ namespace ShipWorks.Shipping.UI
         /// Refresh the existing selected content by requerying for the relevant keys to ensure an up-to-date related row 
         /// list with up-to-date displayed entity content.
         /// </summary>
-        public async Task ReloadContent()
+        public Task ReloadContent()
         {
-            await viewModel.RefreshRates(true);
+            viewModel.RefreshRates(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
         /// When the content is called to be updated, we need to make sure our rates are up to date as well
         /// </summary>
-        public async Task UpdateContent()
+        public Task UpdateContent()
         {
-            await viewModel.RefreshRates(true);
+            viewModel.RefreshRates(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>

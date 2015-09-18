@@ -14,18 +14,18 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         static string numberRegex = @"-?([0-9]+(\.[0-9]*)?|\.[0-9]+)";
 
         // Match the case where both pounds and ounces are present
-        Regex poundsOzRegex = new Regex(
+        readonly Regex poundsOzRegex = new Regex(
             @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s+" +
             @"(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)?\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         // Match the case were only ounces is present
-        Regex ouncesRegex = new Regex(
+        readonly Regex ouncesRegex = new Regex(
             @"^(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         // Match the case were only pounds is present
-        Regex poundsRegex = new Regex(
+        readonly Regex poundsRegex = new Regex(
             @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
@@ -47,14 +47,13 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         /// </summary>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double? newWeight = 0.0;
-
             try
             {
                 // See if both pounds and ounces are present
                 Match poundsOzMatch = poundsOzRegex.Match(value.ToString());
 
                 // Did it match
+                double? newWeight = 0.0;
                 if (poundsOzMatch.Success)
                 {
                     double pounds = double.Parse(poundsOzMatch.Groups["Pounds"].Value);
@@ -115,13 +114,13 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
             {
-                result = string.Format("{0:0.0#} lbs", weight);
+                result = $"{weight:0.0#} lbs";
             }
             else
             {
                 WeightValue weightValue = new WeightValue(weight);
 
-                result = string.Format("{0} lbs  {1} oz", weightValue.PoundsOnly, Math.Round(weightValue.OuncesOnly, 1, MidpointRounding.AwayFromZero));
+                result = $"{weightValue.PoundsOnly} lbs  {Math.Round(weightValue.OuncesOnly, 1, MidpointRounding.AwayFromZero)} oz";
             }
 
             return result;

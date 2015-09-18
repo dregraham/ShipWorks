@@ -166,7 +166,7 @@ namespace ShipWorks.Shipping
         /// Forces rates to be refreshed by re-fetching the rates from the shipping provider.
         /// </summary>
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
-        public async Task RefreshRates(bool ignoreCache)
+        public void RefreshRates(bool ignoreCache)
         {
             ShipmentEntity shipment = null;
 

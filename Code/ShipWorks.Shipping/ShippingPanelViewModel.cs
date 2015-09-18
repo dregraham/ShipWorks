@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
-using ShipWorks.UI.Controls.Design;
-using System.Diagnostics;
 
 namespace ShipWorks.Shipping
 {
@@ -23,9 +21,6 @@ namespace ShipWorks.Shipping
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
-        private AddressViewModel origin;
-        private AddressViewModel destination;
-        private ShipmentViewModel shipmentViewModel;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private readonly IMessenger messenger;
@@ -43,18 +38,18 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingPanelViewModel()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ShippingPanelViewModel(
-            ILoader<ShippingPanelLoadedShipment> shipmentLoader, 
-            IMessenger messenger, 
-            IShippingManager shippingManager, 
+            ILoader<ShippingPanelLoadedShipment> shipmentLoader,
+            IMessenger messenger,
+            IShippingManager shippingManager,
             IShipmentTypeFactory shipmentTypeFactory,
-			ICustomsManager customsManager,
+            ICustomsManager customsManager,
             Func<ShipmentViewModel> shipmentViewModelFactory) : this()
         {
             this.customsManager = customsManager;
@@ -63,130 +58,12 @@ namespace ShipWorks.Shipping
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
-        }
 
-        /// <summary>
-        /// Save the current shipment to the database
-        /// </summary>
-        public void SaveToDatabase()
-        {
-            if (loadedShipment?.Shipment == null)
-            {
-                return;
-            }
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+            Origin = new AddressViewModel();
+            Destination = new AddressViewModel();
 
-            Save();
-            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
-        }
-
-        /// <summary>
-        /// Called when [need to update services].
-        /// </summary>
-        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
-        {
-            Save();
-            UpdateServices();
-        }
-
-        /// <summary>
-        /// Called when [need to update packages].
-        /// </summary>
-        private void OnNeedToUpdatePackages(object sender, PropertyChangedEventArgs e)
-        {
-            Save();
-            UpdatePackages();
-        }
-
-        /// <summary>
-        /// Updates the services.
-        /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(loadedShipment.Shipment);
-
-        /// <summary>
-        /// Updates the packages.
-        /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(loadedShipment.Shipment);
-
-        /// <summary>
-        /// Load the shipment from the given order
-        /// </summary>
-        public async Task LoadOrder(long orderID)
-        {
-            loadedShipment = await shipmentLoader.LoadAsync(orderID);
-
-            LoadResult = loadedShipment.Result;
-
-            if (loadedShipment.Shipment == null)
-            {
-                // No shipment was created.  Show a message and return.
-                // TODO: Show a message
-
-                return;
-            }
-
-            DisableRateCriteriaChanged();
-            DisableNeedToUpdateServices();
-            DisableNeedToUpdatePackages();
-
-            SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
-            Origin.Load(loadedShipment.Shipment.OriginPerson);
-
-            Destination.Load(loadedShipment.Shipment.ShipPerson);
-
-            ShipmentViewModel.Load(loadedShipment.Shipment);
-
-            IsProcessed = loadedShipment.Shipment.Processed;
-
-            EnableRateCriteriaChanged();
-            EnableNeedToUpdateServices();
-            EnableNeedToUpdatePackages();
-        }
-
-        /// <summary>
-        /// Enables the need to update packages.
-        /// </summary>
-        private void EnableNeedToUpdatePackages()
-        {
-            Origin.PropertyChanged += OnNeedToUpdatePackages;
-            Destination.PropertyChanged += OnNeedToUpdatePackages;
-        }
-
-        /// <summary>
-        /// Enables NeedToUpdateServices event
-        /// </summary>
-        private void EnableNeedToUpdateServices()
-        {
-            Origin.PropertyChanged += OnNeedToUpdateServices;
-            Destination.PropertyChanged += OnNeedToUpdateServices;
-        }
-
-        /// <summary>
-        /// Disables the need to update packages.
-        /// </summary>
-        private void DisableNeedToUpdatePackages()
-        {
-            Origin.PropertyChanged -= OnNeedToUpdatePackages;
-            Destination.PropertyChanged -= OnNeedToUpdatePackages;
-        }
-
-        /// <summary>
-        /// Disables NeedToUpdateServices event
-        /// </summary>
-        private void DisableNeedToUpdateServices()
-        {
-            Origin.PropertyChanged -= OnNeedToUpdateServices;
-            Destination.PropertyChanged -= OnNeedToUpdateServices;
-        }
-
-        /// <summary>
-        /// Process the current shipment using the specified processor
-        /// </summary>
-        public async Task ProcessShipment(ShipmentProcessor shipmentProcessor, CarrierConfigurationShipmentRefresher refresher)
-        {
-            Save();
-            IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
-            await LoadOrder(loadedShipment.Shipment.OrderID);
-            IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
+            ShipmentViewModel = shipmentViewModelFactory();
         }
 
         /// <summary>
@@ -204,7 +81,7 @@ namespace ShipWorks.Shipping
                     {
                         shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
                     }
-                    
+
                     SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
                     UpdateServices();
                     UpdatePackages();
@@ -242,21 +119,71 @@ namespace ShipWorks.Shipping
             set { handler.Set(nameof(IsProcessed), ref isProcessed, value); }
         }
 
-        public AddressViewModel Origin => origin ?? (origin = new AddressViewModel());
+        public AddressViewModel Origin { get; }
 
-        public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
+        public AddressViewModel Destination { get; }
 
-        public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = shipmentViewModelFactory());
+        public ShipmentViewModel ShipmentViewModel { get; }
 
-        ///// <summary>
-        ///// Are multiple packages supported
-        ///// </summary>
-        //[Obfuscation(Exclude = true)]
-        //public bool HasMultipleShipments
-        //{
-        //    get { return hasMultipleShipments; }
-        //    set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
-        //}
+        /// <summary>
+        /// Save the current shipment to the database
+        /// </summary>
+        public void SaveToDatabase()
+        {
+            if (loadedShipment?.Shipment == null)
+            {
+                return;
+            }
+
+            Save();
+            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
+        }
+
+        /// <summary>
+        /// Load the shipment from the given order
+        /// </summary>
+        public async Task LoadOrder(long orderID)
+        {
+            loadedShipment = await shipmentLoader.LoadAsync(orderID);
+
+            LoadResult = loadedShipment.Result;
+
+            if (loadedShipment.Shipment == null)
+            {
+                // No shipment was created.  Show a message and return.
+                // TODO: Show a message
+
+                return;
+            }
+
+            DisableRateCriteriaChanged();
+            DisableNeedToUpdateServices();
+            DisableNeedToUpdatePackages();
+
+            SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
+            Origin.Load(loadedShipment.Shipment.OriginPerson);
+
+            Destination.Load(loadedShipment.Shipment.ShipPerson);
+
+            ShipmentViewModel.Load(loadedShipment.Shipment);
+
+            IsProcessed = loadedShipment.Shipment.Processed;
+
+            EnableRateCriteriaChanged();
+            EnableNeedToUpdateServices();
+            EnableNeedToUpdatePackages();
+        }
+
+        /// <summary>
+        /// Process the current shipment using the specified processor
+        /// </summary>
+        public async Task ProcessShipment(ShipmentProcessor shipmentProcessor, CarrierConfigurationShipmentRefresher refresher)
+        {
+            Save();
+            IEnumerable<ShipmentEntity> shipments = await shipmentProcessor.Process(new[] { loadedShipment.Shipment }, refresher, null, null);
+            await LoadOrder(loadedShipment.Shipment.OrderID);
+            IsProcessed = shipments?.FirstOrDefault()?.Processed ?? false;
+        }
 
         /// <summary>
         /// Save the UI values to the shipment
@@ -273,6 +200,70 @@ namespace ShipWorks.Shipping
             ShipmentViewModel.Save(loadedShipment.Shipment);
 
             customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
+        }
+
+        /// <summary>
+        /// Called when [need to update services].
+        /// </summary>
+        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdateServices();
+        }
+
+        /// <summary>
+        /// Called when [need to update packages].
+        /// </summary>
+        private void OnNeedToUpdatePackages(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdatePackages();
+        }
+
+        /// <summary>
+        /// Updates the services.
+        /// </summary>
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(loadedShipment.Shipment);
+
+        /// <summary>
+        /// Updates the packages.
+        /// </summary>
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(loadedShipment.Shipment);
+
+        /// <summary>
+        /// Enables the need to update packages.
+        /// </summary>
+        private void EnableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged += OnNeedToUpdatePackages;
+            Destination.PropertyChanged += OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Enables NeedToUpdateServices event
+        /// </summary>
+        private void EnableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged += OnNeedToUpdateServices;
+            Destination.PropertyChanged += OnNeedToUpdateServices;
+        }
+
+        /// <summary>
+        /// Disables the need to update packages.
+        /// </summary>
+        private void DisableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdatePackages;
+            Destination.PropertyChanged -= OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Disables NeedToUpdateServices event
+        /// </summary>
+        private void DisableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdateServices;
+            Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
 
         /// <summary>

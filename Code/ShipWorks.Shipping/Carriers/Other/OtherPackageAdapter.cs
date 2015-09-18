@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public double Length
         {
             get { return 0; }
-            set { }
+            set { /* We don't care about this value */ }
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public double Width
         {
             get { return 0; }
-            set { }
+            set { /* We don't care about this value */ }
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public double Height
         {
             get { return 0; }
-            set { }
+            set { /* We don't care about this value */ }
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public double AdditionalWeight
         {
             get { return 0; }
-            set { }
+            set { /* We don't care about this value */ }
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         public bool ApplyAdditionalWeight
         {
             get { return true; }
-            set { }
+            set { /* We don't care about this value */ }
         }
 
         /// <summary>
