@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace ShipWorks.Shipping.UI.ValueConverters
 {
-    class WeightStringToDoubleValueConverter : IValueConverter
+    public class DoubleToWeightStringConverter : IValueConverter
     {
         // Match any integer or floating point number
         static string numberRegex = @"-?([0-9]+(\.[0-9]*)?|\.[0-9]+)";
@@ -30,12 +30,23 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// Convert from weight String (lbs and oz) to Double
+        /// Convert from Double to weight String (lbs and oz)
         /// </summary>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //throw new NotImplementedException();
+            if (!(value is double))
+            {
+                throw new InvalidOperationException("Value is not a double");
+            }
 
+            return FormatWeight((double)value, UserSession.User == null ? WeightDisplayFormat.FractionalPounds : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
+        }
+        
+        /// <summary>
+        /// Convert from weight String (lbs and oz) to Double
+        /// </summary>
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             double? newWeight = 0.0;
 
             try
@@ -94,18 +105,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 
             return null;
         }
-
-        /// <summary>
-        /// Convert from Double to weight String (lbs and oz)
-        /// </summary>
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            double weight;
-            double.TryParse(value.ToString(),out weight);
-
-            return FormatWeight(weight, UserSession.User == null ? WeightDisplayFormat.FractionalPounds : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
-        }
-
+        
         /// <summary>
         /// Format the given weight based on the specified display format.
         /// </summary>
