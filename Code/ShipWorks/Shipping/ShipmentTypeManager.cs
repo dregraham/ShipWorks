@@ -18,6 +18,7 @@ using ShipWorks.Shipping.Carriers.Postal.Endicia;
 using ShipWorks.Shipping.Carriers.FedEx;
 using ShipWorks.Shipping.Carriers.UPS.WorldShip;
 using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
+using Autofac.Features.OwnedInstances;
 
 namespace ShipWorks.Shipping
 {
@@ -132,6 +133,11 @@ namespace ShipWorks.Shipping
 
                 case ShipmentTypeCode.Usps:
                     return new UspsShipmentType();
+            }
+
+            if (IoC.UnsafeGlobalLifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))
+            {
+                return IoC.UnsafeGlobalLifetimeScope.ResolveKeyed<Owned<ShipmentType>>(typeCode).Value;
             }
 
             throw new InvalidOperationException($"Invalid shipment type {typeCode}.");
