@@ -2,6 +2,7 @@
 
 namespace ShipWorks.Stores.Platforms.LemonStand
 {
+    [Serializable]
     public class LemonStandException : Exception
     {
         public LemonStandException()

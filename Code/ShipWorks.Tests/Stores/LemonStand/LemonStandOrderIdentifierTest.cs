@@ -10,10 +10,11 @@ namespace ShipWorks.Tests.Stores.LemonStand
     public class LemonStandOrderIdentifierTest
     {
         Mock<OrderEntity> order = new Mock<OrderEntity>();
+        Mock<LemonStandOrderEntity> lemonStandOrder = new Mock<LemonStandOrderEntity>(); 
         private LemonStandOrderIdentifier testObject;
 
         [TestMethod]
-        public void ToString_ReturnsCorrectString_WhenCalled_Test()
+        public void ToString_ReturnsCorrectString_WhenGivenValidOrderID_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
 
@@ -29,18 +30,26 @@ namespace ShipWorks.Tests.Stores.LemonStand
 
         [ExpectedException(typeof(InvalidOperationException))]
         [TestMethod]
+        public void ApplyTo_ThrowsInvalidOperationException_WhenGivenNonLemonStandOrderEntity_Test()
+        {
+            testObject = new LemonStandOrderIdentifier("1");
+            testObject.ApplyTo(order.Object);
+        }
+
+        [ExpectedException(typeof(InvalidOperationException))]
+        [TestMethod]
         public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullOrderEntity_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
-            testObject.ApplyTo((OrderEntity) null);
+            testObject.ApplyTo((LemonStandOrderEntity) null);
         }
 
-        [ExpectedException(typeof(NullReferenceException))]
+        [ExpectedException(typeof(ArgumentNullException))]
         [TestMethod]
-        public void ApplyTo_ThrowsInvalidOperationException_WhenPassedNullDownloadDetailEntity_Test()
+        public void ApplyTo_ThrowsArgumentNullException_WhenPassedNullDownloadDetailEntity_Test()
         {
             testObject = new LemonStandOrderIdentifier("1");
-            testObject.ApplyTo((DownloadDetailEntity)null);
+            testObject.ApplyTo((DownloadDetailEntity) null);
         }
     }
 }

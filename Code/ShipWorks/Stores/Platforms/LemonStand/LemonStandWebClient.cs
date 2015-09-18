@@ -13,15 +13,16 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         //LemonStand API endpoint
         private static string lemonStandEndpoint;
         private static string accessToken;
-
-        private readonly LemonStandStoreEntity store;
-
+        
         /// <summary>
         ///     Constructor
         /// </summary>
         public LemonStandWebClient(LemonStandStoreEntity store)
         {
-            this.store = store;
+            if (store == null)
+            {
+                throw new ArgumentNullException("store");
+            }
             lemonStandEndpoint = store.StoreURL + "/api/v2";
             accessToken = store.Token;
         }
@@ -82,7 +83,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <returns>Product in Json</returns>
         public JToken GetProduct(string productId)
         {
-            return ProcessRequest(CreateGetRequest("product/" + productId), "GetBillingAddress");
+            return ProcessRequest(CreateGetRequest("product/" + productId + "?embed=images"), "GetProduct");
         }
 
         /// <summary>
@@ -109,7 +110,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a get request.
         /// </summary>
-        private HttpVariableRequestSubmitter CreateGetRequest(string operationName)
+        private static HttpVariableRequestSubmitter CreateGetRequest(string operationName)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
@@ -122,7 +123,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a post request
         /// </summary>
-        private HttpVariableRequestSubmitter CreatePostRequest(string operationName, Dictionary<string, string> parameters)
+        private static HttpVariableRequestSubmitter CreatePostRequest(string operationName, Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);
@@ -141,7 +142,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Setup a patch request
         /// </summary>
-        private HttpVariableRequestSubmitter CreatePatchRequest(string operationName, Dictionary<string, string> parameters)
+        private static HttpVariableRequestSubmitter CreatePatchRequest(string operationName, Dictionary<string, string> parameters)
         {
             HttpVariableRequestSubmitter submitter = new HttpVariableRequestSubmitter();
             submitter.Headers.Add(HttpRequestHeader.Authorization, "Bearer " + accessToken);

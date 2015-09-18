@@ -11,6 +11,7 @@ namespace ShipWorks.Tests.Stores.LemonStand
 {
     /// <summary>
     /// Used for unit testing only
+    /// Overrides the InstantiateOrder and SaveDownloadedOrder to get rid of the dependencies on the webClient and sqlAdapter
     /// </summary>
     class FakeLemonStandDownloader : LemonStandDownloader
     {

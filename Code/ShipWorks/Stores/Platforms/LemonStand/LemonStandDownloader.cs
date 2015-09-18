@@ -25,7 +25,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Initializes a new instance of the <see cref="LemonStandDownloader"/> class.
         /// </summary>
-        /// <param name="store"></param>
+        /// <param name="store">The store entity</param>
         public LemonStandDownloader(StoreEntity store)
             : this(
                 store, new LemonStandWebClient((LemonStandStoreEntity) store),
@@ -145,9 +145,13 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             
             try
             {
+                if (jsonOrder == null)
+                {
+                    throw new ArgumentNullException("jsonOrder");
+                }
+
                 //Deserialize Json Order into order DTO
                 LemonStandOrder lsOrder = JsonConvert.DeserializeObject<LemonStandOrder>(jsonOrder.ToString());
-
                 
                 int orderID = int.Parse(lsOrder.ID);
 
@@ -210,11 +214,11 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Converts LemonStand date to UTC
+        ///     Converts LemonStands date format to UTC
         /// </summary>
         /// <param name="date">The date from LemonStand</param>
         /// <returns>DateTime in UTC</returns>
-        public DateTime GetDate(string date)
+        public static DateTime GetDate(string date)
         {
             DateTime result = DateTime.MinValue;
 
@@ -229,8 +233,12 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
-        ///     Loads Shipping and Billing address into the order entity
+        /// Loads Shipping and Billing address into the order entity
         /// </summary>
+        /// <param name="order">The LemonStand order entity</param>
+        /// <param name="shipAddress">The shippping addres DTO</param>
+        /// <param name="billAddress">The billing address DTO</param>
+        /// <param name="email">The customers email address</param>
         private static void LoadAddressInfo(LemonStandOrderEntity order, LemonStandShippingAddress shipAddress,
             LemonStandBillingAddress billAddress, string email)
         {
@@ -261,8 +269,8 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         ///     Loads the order items.
         /// </summary>
-        /// <param name="jsonOrder">The json order.</param>
-        /// <param name="order">The order.</param>
+        /// <param name="jsonOrder">The json order</param>
+        /// <param name="order">The LemonStand order entity</param>
         private void LoadItems(JToken jsonOrder, LemonStandOrderEntity order)
         {
             //List of order items
@@ -277,13 +285,28 @@ namespace ShipWorks.Stores.Platforms.LemonStand
                 LemonStandItem product =
                     JsonConvert.DeserializeObject<LemonStandItem>(jsonProduct.SelectToken("data").ToString());
                 product.Quantity = jsonItem.SelectToken("quantity").ToString();
+                string thumbnail = jsonProduct.SelectToken("data.images.data")
+                        .Children()
+                        .First()
+                        .SelectToken("thumbnails")
+                        .Children()
+                        .First()
+                        .SelectToken("location")
+                        .ToString();
+
+                thumbnail = "http:" + thumbnail;
+
+                product.Thumbnail = thumbnail;
+                    
                 LoadItem(order, product);
             }
         }
 
         /// <summary>
-        ///     Load an order item
+        /// Load an order item
         /// </summary>
+        /// <param name="order">The LemonStand order entity</param>
+        /// <param name="product">The LemonStand item DTO</param>
         private void LoadItem(LemonStandOrderEntity order, LemonStandItem product)
         {
             OrderItemEntity item = InstantiateOrderItem(order);
@@ -306,12 +329,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             //    "extras": null
             //}]
 
+            item.Description = product.Description;
             item.SKU = product.Sku;
             item.Code = product.ID;
             item.Name = product.Name;
             item.Weight = (string.IsNullOrWhiteSpace(product.Weight)) ? 0 : Convert.ToDouble(product.Weight);
             item.UnitPrice = Convert.ToDecimal(product.BasePrice);
             item.Quantity = int.Parse(product.Quantity);
+            item.Thumbnail = product.Thumbnail;
         }
     }
 }

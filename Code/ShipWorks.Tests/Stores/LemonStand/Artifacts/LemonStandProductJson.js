@@ -38,6 +38,47 @@
 		"created_by": null,
 		"updated_by": null,
 		"created_at": "2015-09-02T09:41:05-0700",
-		"updated_at": "2015-09-08T09:42:28-0700"
+		"updated_at": "2015-09-08T09:42:28-0700",
+		"images": {
+		    "data": [{
+		        "id": 1,
+		        "field": "image",
+		        "sort_order": 1,
+		        "title": null,
+		        "name": "cap.jpg",
+		        "mime_type": "image\/jpeg",
+		        "size": null,
+		        "description": null,
+		        "is_public": 0,
+		        "thumbnails": [{
+		            "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e7277f9ced0_350x350-jpg-crop.jpg?1441212287"
+		        },
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e72785f2812_650x650-jpg-crop.jpg?1441212293"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e728b8ea9f4_24x24-jpg-crop.jpg?1441212600"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e768f5b63c5_61x61-jpg-crop.jpg?1441229045"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e768f6116d1_autox160-jpg-crop.jpg?1441229046"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e76bec4a020_100x100-jpg-keep-ratio.jpg?1441229804"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e76bfabd8d7_autoxauto-jpg-keep-ratio.jpg?1441229818"
+				},
+				{
+				    "location": "\/\/d10ozs3u95s3uj.cloudfront.net\/store-shipworks-55e72682188b3\/uploaded\/thumbnails\/cap_55e76d871afca_80x80-jpg-keep-ratio.jpg?1441230215"
+				}],
+		        "created_by": null,
+		        "updated_by": null,
+		        "created_at": "2015-09-02T09:41:05-0700",
+		        "updated_at": "2015-09-08T09:42:28-0700"
+		    }]
+		}
 	}
 }

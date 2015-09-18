@@ -90,16 +90,14 @@ namespace ShipWorks.Tests.Stores.LemonStand
         [TestMethod]
         public void GetDate_ReturnsCorrectDateTimeInUTC_WhenGivenLemonStandTimeFormat_Test()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
-            Assert.AreEqual(new DateTimeOffset(2015, 9, 10, 13, 59, 6, new TimeSpan(0, -5, 0, 0)), testObject.GetDate("2015-09-10T13:59:06-05:00"));
+            Assert.AreEqual(new DateTimeOffset(2015, 9, 10, 13, 59, 6, new TimeSpan(0, -5, 0, 0)), LemonStandDownloader.GetDate("2015-09-10T13:59:06-05:00"));
         }
 
         [TestMethod]
         [ExpectedException(typeof(LemonStandException))]
         public void GetDate_ThrowsLemonStandException_WhenGivenInvalidDate_Test()
         {
-            testObject = new FakeLemonStandDownloader(store.Object, webClient.Object, adapter.Object);
-            Assert.AreEqual(DateTime.MinValue.ToUniversalTime(), testObject.GetDate("A Bad Date"));
+            Assert.AreEqual(DateTime.MinValue.ToUniversalTime(), LemonStandDownloader.GetDate("A Bad Date"));
         }
 
         [TestMethod]

@@ -41,6 +41,10 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// </summary>
         public override void ApplyTo(DownloadDetailEntity downloadDetail)
         {
+            if (downloadDetail == null)
+            {
+                throw new ArgumentNullException("downloadDetail");
+            }
             downloadDetail.ExtraStringData1 = lemonStandStoreOrderId;
         }
 

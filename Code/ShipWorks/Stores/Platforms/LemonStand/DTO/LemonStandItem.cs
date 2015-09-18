@@ -62,5 +62,7 @@ namespace ShipWorks.Stores.Platforms.LemonStand.DTO
 
         [JsonProperty("weight")]
         public string Weight { get; set; }
+
+        public string Thumbnail { get; set; }
     }
 }
