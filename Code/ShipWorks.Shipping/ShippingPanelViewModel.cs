@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
 using ShipWorks.AddressValidation;
+using ShipWorks.UI.Controls.Design;
+using System.Diagnostics;
 
 namespace ShipWorks.Shipping
 {
@@ -41,7 +43,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingPanelViewModel()
         {
-
+            //Debug.Assert(DesignModeDetector.IsDesignerHosted(), "Default constructor is only for design and testing");
         }
 
         /// <summary>
@@ -115,9 +117,6 @@ namespace ShipWorks.Shipping
             loadedShipment = await shipmentLoader.LoadAsync(orderID);
 
             LoadResult = loadedShipment.Result;
-
-            //HasMultipleShipments = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple;
-            //HasSingleValidShipment = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Success;
 
             if (loadedShipment.Shipment == null)
             {

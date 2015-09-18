@@ -1,10 +1,11 @@
 ﻿using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.Design;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace ShipWorks.Shipping.UI
@@ -18,15 +19,22 @@ namespace ShipWorks.Shipping.UI
         private double totalWeight;
         private bool insurance;
         
-
         private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
+        /// Constructor for use by tests and WPF designer
+        /// </summary>
+        protected ShipmentViewModel()
+        {
+
+        }
+
+        /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilder shipmentServicesBuilder)
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilder)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();
@@ -61,7 +69,7 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Load the shipment
         /// </summary>
-        public void Load(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void Load(ShipmentType shipmentType, ShipmentEntity shipment)
         {
             ShipDate = shipment.ShipDate;
             TotalWeight = shipment.TotalWeight;
@@ -73,7 +81,7 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Refreshes the shipment types.
         /// </summary>
-        public void RefreshShipmentTypes(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void RefreshShipmentTypes(ShipmentType shipmentType, ShipmentEntity shipment)
         {
             Dictionary<int, string> services = shipmentType.BuildServiceTypeDictionary(new List<ShipmentEntity> { shipment });
             Services.Clear();
@@ -87,7 +95,7 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Refreshes the package types.
         /// </summary>
-        public void RefreshPackageTypes(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void RefreshPackageTypes(ShipmentType shipmentType, ShipmentEntity shipment)
         {
             Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
             Packages.Clear();
@@ -101,7 +109,7 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Save UI values to the shipment
         /// </summary>
-        public void Save(ShipmentEntity shipment)
+        public virtual void Save(ShipmentEntity shipment)
         {
             shipment.ShipDate = ShipDate;
             shipment.TotalWeight = TotalWeight;

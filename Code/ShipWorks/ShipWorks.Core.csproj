@@ -637,6 +637,7 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\NonDefaultConstructorFinder.cs" />
     <Compile Include="ApplicationCore\Nudges\Buttons\AcknowledgeNudgeOptionButton.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -5,7 +5,7 @@ namespace ShipWorks.Shipping
     /// <summary>
     /// Returns a ShipmentServiceBuilder
     /// </summary>
-    class ShipmentServicesBuilderFactory : IShipmentServicesBuilderFactory
+    public class ShipmentServicesBuilderFactory : IShipmentServicesBuilderFactory
     {
         private readonly IIndex<ShipmentTypeCode, IShipmentServicesBuilder> lookup;
 

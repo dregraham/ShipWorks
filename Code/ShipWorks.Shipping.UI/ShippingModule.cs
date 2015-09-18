@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Settings;
-using ShipWorks.Shipping;
+using ShipWorks.Core.ApplicationCode;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -22,7 +22,11 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
-            builder.RegisterType<ShippingPanelViewModel>();
+            builder.RegisterType<ShippingPanelViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
+            builder.RegisterType<ShipmentViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<RatingPanelViewModel>();
 
@@ -67,6 +71,10 @@ namespace ShipWorks.Shipping.UI
                 .SingleInstance();
 
             builder.RegisterType<CustomsManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentServicesBuilderFactory>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
         }

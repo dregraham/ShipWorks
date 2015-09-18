@@ -6,6 +6,7 @@ using ShipWorks.Shipping;
 using Xunit;
 using Autofac.Extras.Moq;
 using ShipWorks.Shipping.Carriers.Other;
+using ShipWorks.Shipping.UI;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -37,12 +38,13 @@ namespace ShipWorks.Tests.Shipping
             mock.Mock<IShipmentTypeFactory>()
                 .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
                 .Returns(mock.Create<ShipmentType>());
+
+            mock.Provide(mock.MockRepository.Create<ShipmentViewModel>().Object);
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-            testObject.SelectedShipmentType = ShipmentTypeCode.Other;
-
             await testObject.LoadOrder(orderEntity.OrderID);
-
+            testObject.SelectedShipmentType = ShipmentTypeCode.Other;
+            
             return testObject;
         }
 
