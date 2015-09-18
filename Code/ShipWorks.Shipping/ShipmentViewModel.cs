@@ -1,8 +1,11 @@
 ﻿using ShipWorks.Core.UI;
 using ShipWorks.Data.Model.EntityClasses;
+using ShipWorks.UI.Controls.Design;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace ShipWorks.Shipping.UI
@@ -15,19 +18,35 @@ namespace ShipWorks.Shipping.UI
         private DateTime shipDate;
         private double totalWeight;
         private bool insurance;
-
+        
         private readonly PropertyChangedHandler handler;
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
+        private IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+        public virtual event PropertyChangingEventHandler PropertyChanging;
+
+        /// <summary>
+        /// Constructor for use by tests and WPF designer
+        /// </summary>
+        protected ShipmentViewModel()
+        {
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+            Services = new ObservableCollection<KeyValuePair<int, string>>();
+            Packages = new ObservableCollection<KeyValuePair<int, string>>();
+        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel()
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory) : this()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+            this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
         }
 
+        public ObservableCollection<KeyValuePair<int, string>> Services { get; }
+
+        public ObservableCollection<KeyValuePair<int,string>> Packages { get; }
+            
         [Obfuscation(Exclude = true)]
         public DateTime ShipDate
         {
@@ -52,22 +71,54 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Load the shipment
         /// </summary>
-        public void Load(ShipmentEntity shipment)
+        public virtual void Load(ShipmentEntity shipment)
         {
             ShipDate = shipment.ShipDate;
             TotalWeight = shipment.TotalWeight;
             Insurance = shipment.Insurance;
+            RefreshShipmentTypes(shipment);
+            RefreshPackageTypes(shipment);
+        }
+
+        /// <summary>
+        /// Refreshes the shipment types.
+        /// </summary>
+        public virtual void RefreshShipmentTypes(ShipmentEntity shipment)
+        {
+            Dictionary<int, string> services = shipmentServicesBuilderFactory.Get(shipment.ShipmentTypeCode)
+                .BuildServiceTypeDictionary(new [] { shipment });
+
+            Services.Clear();
+            
+            foreach (KeyValuePair<int, string> entry in services)
+            {
+                Services.Add(entry);
+            }
+        }
+
+        /// <summary>
+        /// Refreshes the package types.
+        /// </summary>
+        public virtual void RefreshPackageTypes(ShipmentEntity shipment)
+        {
+            //TODO: Replace with the package factory that should be coming soon
+            //Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
+            //Packages.Clear();
+
+            //foreach (KeyValuePair<int, string> entry in packages)
+            //{
+            //    Packages.Add(entry);
+            //}
         }
 
         /// <summary>
         /// Save UI values to the shipment
         /// </summary>
-        public void Save(ShipmentEntity shipment)
+        public virtual void Save(ShipmentEntity shipment)
         {
             shipment.ShipDate = ShipDate;
             shipment.TotalWeight = TotalWeight;
             shipment.Insurance = Insurance;
         }
-
     }
 }

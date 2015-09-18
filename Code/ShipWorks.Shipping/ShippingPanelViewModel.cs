@@ -8,8 +8,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
-using Autofac.Features.Indexed;
 using ShipWorks.AddressValidation;
+using ShipWorks.UI.Controls.Design;
+using System.Diagnostics;
 
 namespace ShipWorks.Shipping
 {
@@ -18,36 +19,48 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
+        private ShippingPanelLoadedShipmentResult loadResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
         private AddressViewModel origin;
         private AddressViewModel destination;
-        private ShipmentViewModel shipment;
-        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private ShipmentViewModel shipmentViewModel;
+        private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
-        private IMessenger messenger;
+        private readonly IMessenger messenger;
         private bool isProcessed;
-        private IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes;
-        private IShippingManager shipmentPersister;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
+        private readonly IShippingManager shippingManager;
+        private readonly ICustomsManager customsManager;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShippingPanelViewModel"/> class.
+        /// </summary>
         public ShippingPanelViewModel()
         {
-
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, IShippingManager shipmentPersister, IIndex<ShipmentTypeCode, ShipmentType> shipmentTypes)
+        public ShippingPanelViewModel(
+            ILoader<ShippingPanelLoadedShipment> shipmentLoader, 
+            IMessenger messenger, 
+            IShippingManager shippingManager, 
+            IShipmentTypeFactory shipmentTypeFactory,
+			ICustomsManager customsManager,
+            Func<ShipmentViewModel> shipmentViewModelFactory) : this()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
-            this.shipmentPersister = shipmentPersister;
-            this.shipmentTypes = shipmentTypes;
+            this.customsManager = customsManager;
+            this.shippingManager = shippingManager;
+            this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
         }
@@ -63,8 +76,36 @@ namespace ShipWorks.Shipping
             }
 
             Save();
-            shipmentPersister.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
+            shippingManager.SaveShipmentsToDatabase(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current, false);
         }
+
+        /// <summary>
+        /// Called when [need to update services].
+        /// </summary>
+        private void OnNeedToUpdateServices(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdateServices();
+        }
+
+        /// <summary>
+        /// Called when [need to update packages].
+        /// </summary>
+        private void OnNeedToUpdatePackages(object sender, PropertyChangedEventArgs e)
+        {
+            Save();
+            UpdatePackages();
+        }
+
+        /// <summary>
+        /// Updates the services.
+        /// </summary>
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(loadedShipment.Shipment);
+
+        /// <summary>
+        /// Updates the packages.
+        /// </summary>
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(loadedShipment.Shipment);
 
         /// <summary>
         /// Load the shipment from the given order
@@ -72,6 +113,8 @@ namespace ShipWorks.Shipping
         public async Task LoadOrder(long orderID)
         {
             loadedShipment = await shipmentLoader.LoadAsync(orderID);
+
+            LoadResult = loadedShipment.Result;
 
             if (loadedShipment.Shipment == null)
             {
@@ -82,17 +125,57 @@ namespace ShipWorks.Shipping
             }
 
             DisableRateCriteriaChanged();
+            DisableNeedToUpdateServices();
+            DisableNeedToUpdatePackages();
 
             SelectedShipmentType = loadedShipment.Shipment.ShipmentTypeCode;
             Origin.Load(loadedShipment.Shipment.OriginPerson);
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            Shipment.Load(loadedShipment.Shipment);
+            ShipmentViewModel.Load(loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
             EnableRateCriteriaChanged();
+            EnableNeedToUpdateServices();
+            EnableNeedToUpdatePackages();
+        }
+
+        /// <summary>
+        /// Enables the need to update packages.
+        /// </summary>
+        private void EnableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged += OnNeedToUpdatePackages;
+            Destination.PropertyChanged += OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Enables NeedToUpdateServices event
+        /// </summary>
+        private void EnableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged += OnNeedToUpdateServices;
+            Destination.PropertyChanged += OnNeedToUpdateServices;
+        }
+
+        /// <summary>
+        /// Disables the need to update packages.
+        /// </summary>
+        private void DisableNeedToUpdatePackages()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdatePackages;
+            Destination.PropertyChanged -= OnNeedToUpdatePackages;
+        }
+
+        /// <summary>
+        /// Disables NeedToUpdateServices event
+        /// </summary>
+        private void DisableNeedToUpdateServices()
+        {
+            Origin.PropertyChanged -= OnNeedToUpdateServices;
+            Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
 
         /// <summary>
@@ -117,12 +200,26 @@ namespace ShipWorks.Shipping
             {
                 if (handler.Set(nameof(SelectedShipmentType), ref selectedShipmentType, value))
                 {
-                    loadedShipment.Shipment.ShipmentTypeCode = value;
-                    shipmentPersister.EnsureShipmentLoaded(loadedShipment.Shipment);
-
-                    SupportsMultiplePackages = shipmentTypes[selectedShipmentType]?.SupportsMultiplePackages ?? false;
+                    if (loadedShipment?.Shipment != null)
+                    {
+                        shippingManager.EnsureShipmentLoaded(loadedShipment.Shipment);
+                    }
+                    
+                    SupportsMultiplePackages = shipmentTypeFactory.Get(selectedShipmentType)?.SupportsMultiplePackages ?? false;
+                    UpdateServices();
+                    UpdatePackages();
                 }
             }
+        }
+
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public ShippingPanelLoadedShipmentResult LoadResult
+        {
+            get { return loadResult; }
+            set { handler.Set(nameof(LoadResult), ref loadResult, value); }
         }
 
         /// <summary>
@@ -149,17 +246,33 @@ namespace ShipWorks.Shipping
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
 
-        public ShipmentViewModel Shipment => shipment ?? (shipment = new ShipmentViewModel());
+        public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = shipmentViewModelFactory());
+
+        ///// <summary>
+        ///// Are multiple packages supported
+        ///// </summary>
+        //[Obfuscation(Exclude = true)]
+        //public bool HasMultipleShipments
+        //{
+        //    get { return hasMultipleShipments; }
+        //    set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
+        //}
 
         /// <summary>
         /// Save the UI values to the shipment
         /// </summary>
         public void Save()
         {
+            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
+            shipmentType.UpdateDynamicShipmentData(loadedShipment.Shipment);
+            shipmentType.UpdateTotalWeight(loadedShipment.Shipment);
+
             loadedShipment.Shipment.ShipmentTypeCode = SelectedShipmentType;
             Origin.SaveToEntity(loadedShipment.Shipment.OriginPerson);
             Destination.SaveToEntity(loadedShipment.Shipment.ShipPerson);
-            Shipment.Save(loadedShipment.Shipment);
+            ShipmentViewModel.Save(loadedShipment.Shipment);
+
+            customsManager.EnsureCustomsLoaded(new[] { loadedShipment.Shipment }, ValidatedAddressScope.Current);
         }
 
         /// <summary>
@@ -168,7 +281,7 @@ namespace ShipWorks.Shipping
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
-            ShipmentType shipmentType = ShipmentTypeManager.GetType(loadedShipment.Shipment);
+            ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
 
             // Since we have a generic AddressViewModel whose properties do not match entity feild names,
             // we need to translate the Ship, Origin, and Street properties to know if the changed field
@@ -196,7 +309,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged += OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged += OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged += OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged += OnRateCriteriaPropertyChanged;
         }
 
         /// <summary>
@@ -206,7 +319,7 @@ namespace ShipWorks.Shipping
         {
             Origin.PropertyChanged -= OnRateCriteriaPropertyChanged;
             Destination.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            Shipment.PropertyChanged -= OnRateCriteriaPropertyChanged;
+            ShipmentViewModel.PropertyChanged -= OnRateCriteriaPropertyChanged;
         }
     }
 }

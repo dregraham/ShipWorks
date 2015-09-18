@@ -1,6 +1,7 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Carriers.FedEx;
 
-namespace ShipWorks.Shipping.Carriers.FedEx
+namespace ShipWorks.Shipping.UI.Carriers.FedEx
 {
     public class FedExShippingModule : Module
     {
@@ -10,7 +11,16 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<FedExShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.FedEx);
+
+            builder.RegisterType<FedExShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.FedEx)
+                .SingleInstance();
+
+            builder.RegisterType<FedExUtilityWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

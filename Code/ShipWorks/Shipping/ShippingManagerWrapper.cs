@@ -7,6 +7,7 @@ using System.Linq;
 using ShipWorks.Data.Connection;
 using Interapptive.Shared.Utility;
 using SD.LLBLGen.Pro.ORMSupportClasses;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
 {
@@ -44,6 +45,32 @@ namespace ShipWorks.Shipping
         /// </summary>
         public void EnsureShipmentLoaded(ShipmentEntity shipment) => 
             ShippingManager.EnsureShipmentLoaded(shipment);
+
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        public ShipmentEntity GetShipment(long shipmentID)
+        {
+            return ShippingManager.GetShipment(shipmentID);
+        }
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        public RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType)
+        {
+            return ShippingManager.GetRates(shipment, shipmentType);
+        }
+
+        /// <summary>
+        /// Removes the specified shipment from the cache
+        /// </summary>
+        /// <param name="shipment">Shipment that should be removed from cache</param>
+        /// <returns></returns>
+        public void RemoveShipmentFromRatesCache(ShipmentEntity shipment)
+        {
+            ShippingManager.RemoveShipmentFromRatesCache(shipment);
+        }
 
         /// <summary>
         /// Save the shipments to the database
@@ -93,5 +120,11 @@ namespace ShipWorks.Shipping
 
             return errors;
         }
+
+        /// <summary>
+        /// Gets the overridden store shipment.
+        /// </summary>
+        public ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment) =>
+            ShippingManager.GetOverriddenStoreShipment(shipment);
     }
 }

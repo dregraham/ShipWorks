@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using Interapptive.Shared.Business;
 using Moq;
-using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Filters;
 using Xunit;
@@ -43,9 +40,9 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [Fact]
-        public async void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
+        public void ShipmentAndSuccess_WhenOrderHasOneShipment_ReturnsThatShipment_Test()
         {
-            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = await testObject.LoadAsync(orderEntity.OrderID);
+            ShippingPanelLoadedShipment shipmentPanelLoadedShipment = testObject.Load(orderEntity.OrderID);
 
             Assert.Equal(shipmentEntity.ShipmentID, shipmentPanelLoadedShipment.Shipment.ShipmentID);
             Assert.Equal(ShippingPanelLoadedShipmentResult.Success, shipmentPanelLoadedShipment.Result);

@@ -92,6 +92,7 @@ using SandMenuItem = Divelements.SandRibbon.MenuItem;
 using Autofac;
 using Interapptive.Shared.Messaging;
 using System.Threading.Tasks;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks
 {
@@ -1312,7 +1313,7 @@ namespace ShipWorks
             // so we have to make sure we're logged on or updating would crash.
             if (!UserSession.IsLoggedOn)
             {
-                return TaskEx.FromResult(true);
+                return TaskUtility.CompletedTask;
             }
 
             DockingPanelContentHolder holder = dockControl.Controls[0] as DockingPanelContentHolder;
@@ -1323,7 +1324,7 @@ namespace ShipWorks
                 return holder.UpdateContent(gridControl.ActiveFilterTarget, gridControl.Selection);
             }
             
-            return TaskEx.FromResult(true);
+            return TaskUtility.CompletedTask;
         }
 
         /// <summary>
@@ -3397,7 +3398,7 @@ namespace ShipWorks
         /// <summary>
         /// Ship the selected orders
         /// </summary>
-        private void OnShipOrders(object sender, EventArgs e)
+        private async void OnShipOrders(object sender, EventArgs e)
         {
             if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
             {
@@ -3409,13 +3410,13 @@ namespace ShipWorks
             loader.Tag = InitialShippingTabDisplay.Shipping;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            await loader.LoadAsync(gridControl.Selection.OrderedKeys);
         }
 
         /// <summary>
         /// Track shipments for the selected orders
         /// </summary>
-        private void OnTrackShipments(object sender, EventArgs e)
+        private async void OnTrackShipments(object sender, EventArgs e)
         {
             if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
             {
@@ -3427,13 +3428,13 @@ namespace ShipWorks
             loader.Tag = InitialShippingTabDisplay.Tracking;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            await loader.LoadAsync(gridControl.Selection.OrderedKeys);
         }
 
         /// <summary>
         /// Submit an insurance claim for the selected orders
         /// </summary>
-        private void OnSubmitClaim(object sender, EventArgs e)
+        private async void OnSubmitClaim(object sender, EventArgs e)
         {
             if (gridControl.Selection.Count > ShipmentsLoader.MaxAllowedOrders)
             {
@@ -3445,7 +3446,7 @@ namespace ShipWorks
             loader.Tag = InitialShippingTabDisplay.Insurance;
 
             loader.LoadCompleted += OnShipOrdersLoadShipmentsCompleted;
-            loader.LoadAsync(gridControl.Selection.OrderedKeys);
+            await loader.LoadAsync(gridControl.Selection.OrderedKeys);
         }
 
         /// <summary>

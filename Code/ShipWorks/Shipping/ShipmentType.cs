@@ -384,7 +384,7 @@ namespace ShipWorks.Shipping
         /// intended to correspond to the appropriate enumeration values of the specific shipment type 
         /// (i.e. the integer values would correspond to PostalServiceType values for a UspsShipmentType).
         /// </summary>
-        public IEnumerable<int> GetAvailableServiceTypes()
+        public virtual IEnumerable<int> GetAvailableServiceTypes()
         {
             return GetAvailableServiceTypes(new ExcludedServiceTypeRepository());
         }

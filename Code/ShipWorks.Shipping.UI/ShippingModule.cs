@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Settings;
+using ShipWorks.Core.ApplicationCode;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -20,7 +22,11 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .PreserveExistingDefaults();
 
-            builder.RegisterType<ShippingPanelViewModel>();
+            builder.RegisterType<ShippingPanelViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
+
+            builder.RegisterType<ShipmentViewModel>()
+                .FindConstructorsWith(new NonDefaultConstructorFinder());
 
             builder.RegisterType<RatingPanelViewModel>();
 
@@ -42,6 +48,11 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
+            builder.RegisterType<RatingPanel>()
+                .AsSelf();
+
+            builder.RegisterType<RatingPanelViewModel>();
+
             builder.RegisterType<ShipmentProcessor>()
                 .AsImplementedInterfaces();
 
@@ -50,6 +61,22 @@ namespace ShipWorks.Shipping.UI
 
             builder.RegisterType<CarrierConfigurationShipmentRefresher>()
                 .AsImplementedInterfaces();
+
+            builder.RegisterType<ShipmentTypeFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ExcludedServiceTypeRepository>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<CustomsManagerWrapper>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ShipmentServicesBuilderFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }

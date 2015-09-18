@@ -8,7 +8,7 @@ namespace ShipWorks.Shipping.Carriers.Postal.BestRate
     /// <summary>
     /// Filters for only Usps rates.
     /// </summary>
-    internal class PostalOnlyBrokerFilter : IShippingBrokerFilter
+    public class PostalOnlyBrokerFilter : IShippingBrokerFilter
     {
         /// <summary>
         /// Filters the incoming list of brokers

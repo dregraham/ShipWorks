@@ -39,13 +39,13 @@ namespace ShipWorks.Shipping
             }
 
             // Validate Shipment
-            return TaskEx.Run(() => ValidateShipments(shipment));
+            return ValidateShipmentsAsync(shipment);
         }
         
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
-        private void ValidateShipments(ShipmentEntity shipment)
+        private async Task ValidateShipmentsAsync(ShipmentEntity shipment)
         {
             if (shipment == null)
             {
@@ -56,7 +56,7 @@ namespace ShipWorks.Shipping
 
             AddressValidator addressValidator = new AddressValidator(addressValidationWebClient);
 
-            validatedAddressManager.ValidateShipment(shipment, addressValidator);
+            await validatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
         }
     }
 }

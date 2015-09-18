@@ -17,6 +17,8 @@ namespace ShipWorks.Shipping.UI
             null : 
             IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
 
+        private IShipmentTypeFactory shipmentTypeFactory;
+
         /// <summary>
         /// Get the current instance of the shipment type provider
         /// </summary>
@@ -25,8 +27,9 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentTypeProvider(IMessenger messenger)
+        public ShipmentTypeProvider(IMessenger messenger, IShipmentTypeFactory shipmentTypeFactory)
         {
+            this.shipmentTypeFactory = shipmentTypeFactory;
             messenger.Handle<EnabledCarriersChangedMessage>(this, UpdateAvailableCarriers);
             Available = new ObservableCollection<ShipmentType>(ShipmentTypeManager.EnabledShipmentTypes);
         }
@@ -66,7 +69,7 @@ namespace ShipWorks.Shipping.UI
         private void AddShipmentTypes(IEnumerable<ShipmentTypeCode> added)
         {
             List<ShipmentType> addItems = added.Except(Available.Select(x => x.ShipmentTypeCode))
-                .Select(x => ShipmentTypeManager.GetType(x))
+                .Select(x => shipmentTypeFactory.Get(x))
                 .ToList();
 
             foreach (ShipmentType shipmentType in addItems)

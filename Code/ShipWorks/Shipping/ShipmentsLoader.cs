@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.ComponentModel;
 using ShipWorks.AddressValidation;
 using ShipWorks.Data.Model.EntityClasses;
-using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Common.Threading;
 using ShipWorks.Data.Connection;
 using log4net;
@@ -18,8 +13,10 @@ using ShipWorks.Data;
 using ShipWorks.Stores;
 using ShipWorks.Users;
 using ShipWorks.Users.Security;
-using ShipWorks.Shipping.Editing;
 using ShipWorks.Filters;
+using System.Threading.Tasks;
+using Interapptive.Shared.Utility;
+using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping
 {
@@ -35,7 +32,6 @@ namespace ShipWorks.Shipping
         bool wasCanceled;
         bool finishedLoadingShipments;
         Control owner;
-        object tag;
 
         /// <summary>
         /// Raised when an asyn load as completed
@@ -47,12 +43,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShipmentsLoader(Control owner)
         {
-            if (owner == null)
-            {
-                throw new ArgumentNullException("owner");
-            }
-
-            this.owner = owner;
+            this.owner = MethodConditions.EnsureArgumentIsNotNull(owner, nameof(owner));
             globalShipments = new List<ShipmentEntity>();
             shipmentsToValidate = new ConcurrentQueue<ShipmentEntity>();
         }
@@ -60,29 +51,19 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// The maximum number of orders that we support loading at a time.
         /// </summary>
-        public static int MaxAllowedOrders
-        {
-            get { return 1000; }
-        }
+        public static int MaxAllowedOrders => 1000;
 
         /// <summary>
         /// User defined data that can be associated with the loader
         /// </summary>
-        public object Tag
-        {
-            get { return tag; }
-            set { tag = value; }
-        }
+        public object Tag { get; set; }
 
         /// <summary>
         /// Load the shipments for the given collection of orders or shipments
         /// </summary>
-        public void LoadAsync(IEnumerable<long> keys)
+        public async Task LoadAsync(IEnumerable<long> keys)
         {
-            if (keys == null)
-            {
-                throw new ArgumentNullException("keys");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(keys, nameof(keys));
 
             int count = keys.Count();
 
@@ -103,41 +84,34 @@ namespace ShipWorks.Shipping
             progressDlg.Title = "Load Shipments";
             progressDlg.Description = "ShipWorks is loading shipments for the selected orders.";
             progressDlg.Show(owner);
-
-            MethodInvoker<ProgressItem, int> validationInvoker = ValidateShipmentsInternal;
-            MethodInvoker<ProgressItem, IList<long>> invoker = LoadShipmentsInternal;
-
-            bool shouldValidate = StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
-
-            invoker.BeginInvoke(workProgress, keys.ToList(), ar =>
-            {
+            
+            Task loadShipmentsTask = TaskEx.Run(() => {
+                LoadShipmentsInternal(workProgress, keys.ToList());
                 finishedLoadingShipments = true;
+            });
+            
+            Task validateTask;
 
-                if (!shouldValidate)
-                {
-                    FinishLoadingShipments(progressDlg);
-                }
-            }, null);
-
-            if (shouldValidate)
+            if (ShouldValidate)
             {
                 // Validate Shipment Progress Item
                 ProgressItem validationProgress = new ProgressItem("Validate Shipment Addresses");
                 progressProvider.ProgressItems.Add(validationProgress);
 
-                validationInvoker.BeginInvoke(validationProgress, count, ar2 => FinishLoadingShipments(progressDlg), null);   
+                validateTask = ValidateShipmentsInternal(validationProgress, count); 
             }
-        }
+            else
+            {
+                validateTask = TaskUtility.CompletedTask;
+            }
 
-        /// <summary>
-        /// Finish the loading process
-        /// </summary>
-        private void FinishLoadingShipments(ProgressDlg progressDlg)
-        {
-            owner.Invoke((Action)(progressDlg.CloseForced));
-
+            await TaskEx.WhenAll(loadShipmentsTask, validateTask);
+            
+            progressDlg.CloseForced();
             OnLoadShipmentsCompleted();
         }
+
+        private bool ShouldValidate => StoreManager.DoAnyStoresHaveAutomaticValidationEnabled();
 
         /// <summary>
         /// Load all the shipments on a background thread
@@ -213,7 +187,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Validate all the shipments on a background thread
         /// </summary>
-        private void ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
+        private async Task ValidateShipmentsInternal(ProgressItem workProgress, int initialCount)
         {
             // We need to make sure filters are up to date so profiles being applied can be as accurate as possible.
             FilterHelper.EnsureFiltersUpToDate(TimeSpan.FromSeconds(15));
@@ -245,7 +219,7 @@ namespace ShipWorks.Shipping
 
                 workProgress.Detail = string.Format("Validating {0} of {1}", count + 1, total);
 
-                ValidatedAddressManager.ValidateShipment(shipment, addressValidator);
+                await ValidatedAddressManager.ValidateShipmentAsync(shipment, addressValidator);
 
                 count++;
 

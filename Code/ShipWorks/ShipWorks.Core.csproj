@@ -637,6 +637,7 @@
     <Compile Include="ApplicationCore\MessageBoxes\NeedUpgradeShipWorks.Designer.cs">
       <DependentUpon>NeedUpgradeShipWorks.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApplicationCore\NonDefaultConstructorFinder.cs" />
     <Compile Include="ApplicationCore\Nudges\Buttons\AcknowledgeNudgeOptionButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -719,6 +720,7 @@
     <Compile Include="ApplicationCore\Services\ServiceStatusEntityGridRow.cs" />
     <Compile Include="ApplicationCore\Services\ShipWorksServiceManager.cs" />
     <Compile Include="AddressValidation\AddressValidationDatabaseUpgrade.cs" />
+    <Compile Include="Common\Threading\TaskUtility.cs" />
     <Compile Include="Data\Administration\SqlChangeTracking.cs" />
     <Compile Include="Data\Connection\ReconnectResult.cs" />
     <Compile Include="Data\Utility\SqlAdapterExtensions.cs" />
@@ -1057,6 +1059,7 @@
     </Compile>
     <Compile Include="Shipping\ConfiguringCarrierMessage.cs" />
     <Compile Include="Shipping\CreateLabelMessage.cs" />
+    <Compile Include="Shipping\CustomsManagerWrapper.cs" />
     <Compile Include="Shipping\Editing\Rating\ExceptionsRateFootnoteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1105,6 +1108,7 @@
     <Compile Include="Shipping\Editing\ShipmentGridShipmentsChangedEventArgs.cs" />
     <Compile Include="Shipping\EnabledCarriersChangedMessage.cs" />
     <Compile Include="Shipping\ICarrierConfigurationShipmentRefresher.cs" />
+    <Compile Include="Shipping\ICustomsManager.cs" />
     <Compile Include="Shipping\Insurance\InsuranceSubmitClaimControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -1127,6 +1131,7 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Shipping\IShipmentProcessor.cs" />
+    <Compile Include="Shipping\IShipmentTypeFactory.cs" />
     <Compile Include="Shipping\IShippingErrorManager.cs" />
     <Compile Include="Shipping\IShippingManager.cs" />
     <Compile Include="Shipping\ShipmentChangedMessage.cs" />
@@ -10835,7 +10840,7 @@
     <None Include="Resources\user1_view2.png" />
     <None Include="Resources\user1_view.png" />
     <None Include="Resources\user1_edit.png" />
-    <None Include="Resources\weigh.png" />
+    <Resource Include="Resources\weigh.png" />
     <None Include="Resources\shoppingcart1.png" />
     <None Include="Resources\user12.png" />
     <None Include="Resources\shoppingcart.png" />

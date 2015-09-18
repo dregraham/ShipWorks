@@ -5,18 +5,8 @@ using Autofac;
 using ShipWorks.ApplicationCore;
 using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Editions;
-using ShipWorks.Shipping.Carriers.BestRate;
-using ShipWorks.Shipping.Carriers.FedEx;
-using ShipWorks.Shipping.Carriers.iParcel;
-using ShipWorks.Shipping.Carriers.OnTrac;
 using ShipWorks.Shipping.Carriers.Postal;
-using ShipWorks.Shipping.Carriers.Postal.Endicia;
-using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
-using ShipWorks.Shipping.Carriers.Postal.Usps;
-using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
-using ShipWorks.Shipping.Carriers.Postal.WebTools;
-using ShipWorks.Shipping.Carriers.UPS.OnLineTools;
-using ShipWorks.Shipping.Carriers.UPS.WorldShip;
+using Interapptive.Shared.Utility;
 
 namespace ShipWorks.Shipping
 {
@@ -79,22 +69,17 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Gets a list of enabled shipment types
         /// </summary>
-        public static List<ShipmentType> EnabledShipmentTypes
-        {
-            get { return ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList(); }
-        }
+        public static List<ShipmentType> EnabledShipmentTypes =>
+            ShipmentTypes.Where(s => ShippingManager.IsShipmentTypeEnabled(s.ShipmentTypeCode)).ToList();
 
         /// <summary>
-        /// Get the StoreType instance of the specified ShipmentEntity
+        /// Get the ShipmentTypeCode instance of the specified ShipmentEntity
         /// </summary>
         public static ShipmentType GetType(ShipmentEntity shipment)
         {
-            if (shipment == null)
-            {
-                throw new ArgumentNullException("shipment");
-            }
+            MethodConditions.EnsureArgumentIsNotNull(shipment, nameof(shipment));
 
-            return GetType((ShipmentTypeCode) shipment.ShipmentType);
+            return GetType(shipment.ShipmentTypeCode);
         }
 
         /// <summary>
@@ -102,56 +87,9 @@ namespace ShipWorks.Shipping
         /// </summary>
         public static ShipmentType GetType(ShipmentTypeCode typeCode)
         {
-            return GetType(typeCode, IoC.UnsafeGlobalLifetimeScope);
-        }
-
-        /// <summary>
-        /// Get the ShipmentType based on the given type code
-        /// </summary>
-        public static ShipmentType GetType(ShipmentTypeCode typeCode, ILifetimeScope lifetimeScope)
-        {
-            switch (typeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                    return new UpsOltShipmentType();
-
-                case ShipmentTypeCode.UpsWorldShip:
-                    return new WorldShipShipmentType();
-
-                case ShipmentTypeCode.FedEx:
-                    return new FedExShipmentType();
-
-                case ShipmentTypeCode.Endicia:
-                    return new EndiciaShipmentType();
-
-                case ShipmentTypeCode.Express1Endicia:
-                    return new Express1EndiciaShipmentType();
-
-                case ShipmentTypeCode.Express1Usps:
-                    return new Express1UspsShipmentType();
-
-                case ShipmentTypeCode.PostalWebTools:
-                    return new PostalWebShipmentType();
-
-                case ShipmentTypeCode.OnTrac:
-                    return new OnTracShipmentType();
-
-                case ShipmentTypeCode.iParcel:
-                    return new iParcelShipmentType();
-
-                case ShipmentTypeCode.BestRate:
-                    return new BestRateShipmentType();
-
-                case ShipmentTypeCode.Usps:
-                    return new UspsShipmentType();
-            }
-
-            if (lifetimeScope.IsRegisteredWithKey<ShipmentType>(typeCode))
-            {
-                return lifetimeScope.ResolveKeyed<ShipmentType>(typeCode);
-            }
-
-            throw new InvalidOperationException($"Invalid shipment type {typeCode}.");
+            return IoC.UnsafeGlobalLifetimeScope
+                .Resolve<IShipmentTypeFactory>()
+                .Get(typeCode);
         }
 
         /// <summary>
@@ -182,62 +120,34 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Indicates if the shipment type is FedEx
         /// </summary>
-        public static bool IsFedEx(ShipmentTypeCode shipmentTypeCode)
-        {
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.FedEx: return true;
-            }
-
-            return false;
-        }
+        public static bool IsFedEx(ShipmentTypeCode shipmentTypeCode) => shipmentTypeCode == ShipmentTypeCode.FedEx;
 
         /// <summary>
         /// Indicates if the shipment type is iParcel
         /// </summary>
-        public static bool IsiParcel(ShipmentTypeCode shipmentTypeCode)
-        {
-            return shipmentTypeCode == ShipmentTypeCode.iParcel;
-        }
+        public static bool IsiParcel(ShipmentTypeCode shipmentTypeCode) => shipmentTypeCode == ShipmentTypeCode.iParcel;
 
         /// <summary>
         /// Determines whether shipment is BestRate Shipment
         /// </summary>
-        public static bool IsBestRate(ShipmentTypeCode shipmentTypeCode)
-        {
-            return shipmentTypeCode == ShipmentTypeCode.BestRate;
-        }
+        public static bool IsBestRate(ShipmentTypeCode shipmentTypeCode) => shipmentTypeCode == ShipmentTypeCode.BestRate;
 
         /// <summary>
         /// Indicates if the shipment type is UPS
         /// </summary>
-        public static bool IsUps(ShipmentTypeCode shipmentTypeCode)
-        {
-            switch (shipmentTypeCode)
-            {
-                case ShipmentTypeCode.UpsOnLineTools:
-                case ShipmentTypeCode.UpsWorldShip:
-                    return true;
-            }
-
-            return false;
-        }
+        public static bool IsUps(ShipmentTypeCode shipmentTypeCode) =>
+            shipmentTypeCode == ShipmentTypeCode.UpsOnLineTools || shipmentTypeCode == ShipmentTypeCode.UpsWorldShip;
 
         /// <summary>
         /// Indicates if the shipment type is postal
         /// </summary>
-        public static bool IsPostal(ShipmentTypeCode shipmentTypeCode)
-        {
-            return PostalUtility.IsPostalShipmentType(shipmentTypeCode);
-        }
+        public static bool IsPostal(ShipmentTypeCode shipmentTypeCode) => PostalUtility.IsPostalShipmentType(shipmentTypeCode);
 
         /// <summary>
         /// Indicates if the shipment type code supports DHL
         /// </summary>
-        public static bool ShipmentTypeCodeSupportsDhl(ShipmentTypeCode shipmentTypeCode)
-        {
-            return shipmentTypeCode == ShipmentTypeCode.Endicia || shipmentTypeCode == ShipmentTypeCode.Usps;
-        }
+        public static bool ShipmentTypeCodeSupportsDhl(ShipmentTypeCode shipmentTypeCode) =>
+            shipmentTypeCode == ShipmentTypeCode.Endicia || shipmentTypeCode == ShipmentTypeCode.Usps;
 
         /// <summary>
         /// Indicates if the given service represents a DHL service provided through Endicia
@@ -287,10 +197,8 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Determines whether [is stamps DHL] or [is endicia DHL] [the specified postal service].
         /// </summary>
-        public static bool IsDhl(PostalServiceType postalService)
-        {
-            return  IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
-        }
+        public static bool IsDhl(PostalServiceType postalService) =>
+            IsEndiciaDhl(postalService) || IsStampsDhl(postalService);
 
         /// <summary>
         /// Indicates if the given service represents an Endicia consolidator service (that is NOT DHL GM)

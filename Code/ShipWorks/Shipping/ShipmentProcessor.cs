@@ -111,7 +111,6 @@ namespace ShipWorks.Shipping
             Dictionary<long, Exception> licenseCheckResults = new Dictionary<long, Exception>();
 
             List<string> orderHashes = new List<string>();
-            //IEnumerable<ShipmentEntity> exludedShipmentsFromShipSenseRefresh = dialogInteraction.FetchShipmentsFromShipmentControl();
             
             TaskCompletionSource<IEnumerable<ShipmentEntity>> completionSource = new TaskCompletionSource<IEnumerable<ShipmentEntity>>();
 

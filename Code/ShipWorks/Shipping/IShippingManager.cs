@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using ShipWorks.Data.Model.EntityClasses;
 using System;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Editing.Rating;
 
 namespace ShipWorks.Shipping
 {
@@ -36,5 +37,27 @@ namespace ShipWorks.Shipping
         /// Ensure the specified shipment is fully loaded
         /// </summary>
         void EnsureShipmentLoaded(ShipmentEntity shipment);
+
+        /// <summary>
+        /// Gets the overridden store shipment.
+        /// </summary>
+        ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment);
+		
+        /// <summary>
+        /// Get the shipment of the specified ID.  The Order will be attached.
+        /// </summary>
+        ShipmentEntity GetShipment(long shipmentID);
+
+        /// <summary>
+        /// Get rates for the given shipment using the appropriate ShipmentType
+        /// </summary>
+        RateGroup GetRates(ShipmentEntity shipment, ShipmentType shipmentType);
+
+        /// <summary>
+        /// Removes the specified shipment from the cache
+        /// </summary>
+        /// <param name="shipment">Shipment that should be removed from cache</param>
+        /// <returns></returns>
+        void RemoveShipmentFromRatesCache(ShipmentEntity shipment);
     }
 }
