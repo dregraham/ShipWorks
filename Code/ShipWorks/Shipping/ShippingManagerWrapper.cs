@@ -77,7 +77,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public IDictionary<ShipmentEntity, Exception> SaveShipmentsToDatabase(IEnumerable<ShipmentEntity> shipments, ValidatedAddressScope validatedAddressScope, bool forceSave)
         {
-            if (shipments == null || !shipments.Any())
+            if (shipments == null)
             {
                 return new Dictionary<ShipmentEntity, Exception>();
             }

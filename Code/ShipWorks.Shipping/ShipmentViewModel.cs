@@ -17,6 +17,8 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShipmentViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
+        private readonly IShipmentServicesBuilderFactory shipmentServicesBuilder;
+        private readonly IShipmentPackageBuilderFactory shipmentPackageBuilderFactory;
         private DateTime shipDate;
         private double totalWeight;
         private bool insurance;
@@ -46,8 +48,9 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IMessenger messenger, IRateSelectionFactory rateSelectionFactory) : this()
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory, IShipmentPackageBuilderFactory shipmentPackageBuilderFactory, IMessenger messenger, IRateSelectionFactory rateSelectionFactory) : this()
         {
+            this.shipmentPackageBuilderFactory = shipmentPackageBuilderFactory;
             this.rateSelectionFactory = rateSelectionFactory;
             this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
             this.messenger = messenger;
