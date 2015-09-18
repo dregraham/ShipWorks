@@ -72,6 +72,7 @@ namespace ShipWorks.Shipping
             Observable.FromEventPattern<PropertyChangedEventArgs>(ShipmentViewModel, "PropertyChanged")
                 .Where(evt => listenForRateCriteriaChanged)
                 .Throttle(TimeSpan.FromMilliseconds(2000))
+                .Where(evt => IsRatingField(evt.EventArgs.PropertyName))
                 .Subscribe(evt => {
                     OnRateCriteriaPropertyChanged(null, evt.EventArgs);
                 });
@@ -190,8 +191,6 @@ namespace ShipWorks.Shipping
             Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
 
-
-
         /// <summary>
         /// Process the current shipment using the specified processor
         /// </summary>
@@ -294,29 +293,28 @@ namespace ShipWorks.Shipping
         /// </summary>
         private void OnRateCriteriaPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            // Save UI values to the shipment so we can send the new values to the rates panel
+            Save();
+
+            messenger.Send(new ShipmentChangedMessage(this, loadedShipment.Shipment));
+        }
+
+        private bool IsRatingField(string propertyname)
+        {
             // Only send the ShipmentChangedMessage message if the field that changed is a rating field.
             ShipmentType shipmentType = shipmentTypeFactory.Get(loadedShipment.Shipment);
 
             // Since we have a generic AddressViewModel whose properties do not match entity feild names,
             // we need to translate the Ship, Origin, and Street properties to know if the changed field
             // is one rating cares about.
-            string name = e.PropertyName;
-            string shipName = string.Format("Ship{0}", e.PropertyName);
-            string origName = string.Format("Origin{0}", e.PropertyName);
+            string name = propertyname;
+            string shipName = string.Format("Ship{0}", name);
+            string origName = string.Format("Origin{0}", name);
 
-            if (shipmentType.RatingFields.FieldsContainName(name) ||
-                shipmentType.RatingFields.FieldsContainName(shipName) ||
-                shipmentType.RatingFields.FieldsContainName(origName) ||
-                name.Equals("Street", StringComparison.InvariantCultureIgnoreCase))
-            {
-                // Save UI values to the shipment so we can send the new values to the rates panel
-                Save();
-
-                messenger.Send(new ShipmentChangedMessage(this, loadedShipment.Shipment));
-            }
+            return shipmentType.RatingFields.FieldsContainName(name) ||
+                   shipmentType.RatingFields.FieldsContainName(shipName) ||
+                   shipmentType.RatingFields.FieldsContainName(origName) ||
+                   name.Equals("Street", StringComparison.InvariantCultureIgnoreCase);
         }
-
-
-
     }
 }
