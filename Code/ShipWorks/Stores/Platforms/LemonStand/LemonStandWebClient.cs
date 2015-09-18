@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using Interapptive.Shared.Net;
 using Newtonsoft.Json.Linq;
+using Quartz.Util;
 using ShipWorks.ApplicationCore.Logging;
 using ShipWorks.Data.Model.EntityClasses;
 
@@ -97,9 +98,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             string orderNumber)
         {
             Dictionary<string, string> parameters = new Dictionary<string, string>();
-
+            
+            // LemonStand returns a bad request error if a blank tracking number is uploaded
+            if (trackingNumber.IsNullOrWhiteSpace())
+            {
+                trackingNumber = "No tracking number was entered";
+            }
             parameters.Add("tracking_code", trackingNumber);
-            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode/", parameters), "UploadShipmentDetails");
+            ProcessRequest(CreatePostRequest("shipment/" + shipmentId + "/trackingcode", parameters), "UploadShipmentDetails");
 
             parameters.Clear();
 

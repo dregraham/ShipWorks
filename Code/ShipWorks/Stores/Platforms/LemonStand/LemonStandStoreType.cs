@@ -235,9 +235,9 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         /// <summary>
         /// Gets the help URL to use in the account settings.
         /// </summary>
-        public static string AccountSettingsHelpUrl
+        public static Uri AccountSettingsHelpUrl
         {
-            get { return "http://support.shipworks.com/support/solutions/articles/4000062623"; }
+            get { return new Uri("http://support.shipworks.com/support/solutions/articles/4000062623"); }
         }
 
         /// <summary>
