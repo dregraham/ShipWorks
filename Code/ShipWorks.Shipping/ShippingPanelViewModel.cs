@@ -8,9 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using ShipWorks.AddressValidation;
-using ShipWorks.Shipping.Carriers.FedEx;
 
 namespace ShipWorks.Shipping
 {
@@ -19,6 +17,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
+        private bool hasMultipleShipments;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
@@ -117,6 +116,7 @@ namespace ShipWorks.Shipping
 
             if (loadedShipment.Shipment == null)
             {
+                HasMultipleShipments = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple;
                 // No shipment was created.  Show a message and return.
                 // TODO: Show a message
 
@@ -236,6 +236,16 @@ namespace ShipWorks.Shipping
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
 
         public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = shipmentViewModelFactory());
+
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public bool HasMultipleShipments
+        {
+            get { return hasMultipleShipments; }
+            set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
+        }
 
         /// <summary>
         /// Save the UI values to the shipment

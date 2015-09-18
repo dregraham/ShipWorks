@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
-using Interapptive.Shared.Messaging;
-using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.ApplicationCore;
 using ShipWorks.ApplicationCore.Interaction;
 using ShipWorks.Data.Grid;
 using ShipWorks.Data.Model;
 using ShipWorks.Filters;
 using ShipWorks.Shipping.Editing.Rating;
-using ShipWorks.Shipping;
-using TD.SandDock;
-using System;
-using System.Linq;
 using System.Threading.Tasks;
-using ShipWorks.Core.Common.Threading;
 
 namespace ShipWorks.Shipping.UI
 {
