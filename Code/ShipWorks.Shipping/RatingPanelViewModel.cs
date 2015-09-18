@@ -268,6 +268,8 @@ namespace ShipWorks.Shipping
         /// <param name="ignoreCache">Should the cached rates be ignored?</param>
         private void FetchRates(ShipmentEntity shipment, bool ignoreCache)
         {
+            ShowSpinner = true;
+
             using (BackgroundWorker ratesWorker = new BackgroundWorker())
             {
                 ratesWorker.WorkerReportsProgress = false;
