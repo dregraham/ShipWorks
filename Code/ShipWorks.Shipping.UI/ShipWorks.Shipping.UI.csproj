@@ -178,6 +178,7 @@
       <DependentUpon>OtherSetupWizard.cs</DependentUpon>
     </Compile>
     <Compile Include="Carriers\Other\OtherShippingModule.cs" />
+    <Compile Include="ControlExtensions.cs" />
     <Compile Include="ExpanderState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingPanel.cs">

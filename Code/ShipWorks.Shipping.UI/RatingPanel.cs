@@ -49,7 +49,8 @@ namespace ShipWorks.Shipping.UI
                 if (!Equals(rateGroup, value))
                 {
                     rateGroup = value;
-                    rateControl.LoadRates(rateGroup);
+
+                    rateControl.InvokeIfRequired(() => rateControl.LoadRates(rateGroup), true);
                 }
             }
         }
@@ -66,7 +67,8 @@ namespace ShipWorks.Shipping.UI
                 if (!value.Equals(errorMessage, StringComparison.InvariantCultureIgnoreCase))
                 {
                     errorMessage = value;
-                    rateControl.ClearRates(errorMessage);
+
+                    rateControl.InvokeIfRequired(() => rateControl.ClearRates(errorMessage), true);
                 }
             }
         }
@@ -83,7 +85,7 @@ namespace ShipWorks.Shipping.UI
                 if (!Equals(showAllRates, value))
                 {
                     showAllRates = value;
-                    rateControl.ShowAllRates = showAllRates;
+                    rateControl.InvokeIfRequired(() => rateControl.ShowAllRates = showAllRates, true);
                 }
             }
         }
@@ -100,7 +102,7 @@ namespace ShipWorks.Shipping.UI
                 if (!Equals(actionLinkVisible, value))
                 {
                     actionLinkVisible = value;
-                    rateControl.ActionLinkVisible = actionLinkVisible;
+                    rateControl.InvokeIfRequired(() => rateControl.ActionLinkVisible = actionLinkVisible, true);
                 }
             }
         }
@@ -117,7 +119,7 @@ namespace ShipWorks.Shipping.UI
                 if (!Equals(showSpinner, value))
                 {
                     showSpinner = value;
-                    rateControl.ShowSpinner = showSpinner;
+                    rateControl.InvokeIfRequired(() => rateControl.ShowSpinner = showSpinner, true);
                 }
             }
         }

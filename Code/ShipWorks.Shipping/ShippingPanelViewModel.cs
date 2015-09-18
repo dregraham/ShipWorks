@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
+using System.Reactive.Linq;
 using ShipWorks.AddressValidation;
 using ShipWorks.UI.Controls.Design;
 using System.Diagnostics;
@@ -34,6 +35,8 @@ namespace ShipWorks.Shipping
         private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
         private readonly IShippingManager shippingManager;
         private readonly ICustomsManager customsManager;
+
+        private bool listenForRateCriteriaChanged = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
@@ -65,6 +68,13 @@ namespace ShipWorks.Shipping
             this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
+            
+            Observable.FromEventPattern<PropertyChangedEventArgs>(ShipmentViewModel, "PropertyChanged")
+                .Where(evt => listenForRateCriteriaChanged)
+                .Throttle(TimeSpan.FromMilliseconds(2000))
+                .Subscribe(evt => {
+                    OnRateCriteriaPropertyChanged(null, evt.EventArgs);
+                });
         }
 
         /// <summary>
@@ -126,7 +136,7 @@ namespace ShipWorks.Shipping
                 return;
             }
 
-            DisableRateCriteriaChanged();
+            listenForRateCriteriaChanged = false;
             DisableNeedToUpdateServices();
             DisableNeedToUpdatePackages();
 
@@ -139,7 +149,7 @@ namespace ShipWorks.Shipping
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
-            EnableRateCriteriaChanged();
+            listenForRateCriteriaChanged = true;
             EnableNeedToUpdateServices();
             EnableNeedToUpdatePackages();
         }
@@ -179,6 +189,8 @@ namespace ShipWorks.Shipping
             Origin.PropertyChanged -= OnNeedToUpdateServices;
             Destination.PropertyChanged -= OnNeedToUpdateServices;
         }
+
+
 
         /// <summary>
         /// Process the current shipment using the specified processor
@@ -304,24 +316,7 @@ namespace ShipWorks.Shipping
             }
         }
 
-        /// <summary>
-        /// Wire up the rate criteria changed event to the view models.
-        /// </summary>
-        private void EnableRateCriteriaChanged()
-        {
-            Origin.PropertyChanged += OnRateCriteriaPropertyChanged;
-            Destination.PropertyChanged += OnRateCriteriaPropertyChanged;
-            ShipmentViewModel.PropertyChanged += OnRateCriteriaPropertyChanged;
-        }
 
-        /// <summary>
-        /// Remove the rate criteria changed event from the view models.
-        /// </summary>
-        private void DisableRateCriteriaChanged()
-        {
-            Origin.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            Destination.PropertyChanged -= OnRateCriteriaPropertyChanged;
-            ShipmentViewModel.PropertyChanged -= OnRateCriteriaPropertyChanged;
-        }
+
     }
 }
