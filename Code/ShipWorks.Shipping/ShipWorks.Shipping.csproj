@@ -117,6 +117,7 @@
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
+    <Compile Include="Carriers\FedEx\FedExShipmentPackageBuilder.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentProcessingSynchronizer.cs" />
@@ -134,6 +135,8 @@
     <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
     <Compile Include="Rating\IRateSelection.cs" />
     <Compile Include="IShipmentLoader.cs" />
+    <Compile Include="IShipmentPackageBuilder.cs" />
+    <Compile Include="IShipmentPackageBuilderFactory.cs" />
     <Compile Include="IValidator.cs" />
     <Compile Include="ILoader.cs" />
     <Compile Include="IShippingPanelConfiguration.cs" />
@@ -143,6 +146,7 @@
     <Compile Include="Rating\RateSelectionFactory.cs" />
     <Compile Include="Rating\RatingPanelViewModel.cs" />
     <Compile Include="ShipmentAddressValidator.cs" />
+    <Compile Include="ShipmentPackageBuilderFactory.cs" />
     <Compile Include="ShipmentServicesBuilderFactory.cs" />
     <Compile Include="ShipmentTypeFactory.cs" />
     <Compile Include="ShipmentViewModel.cs" />

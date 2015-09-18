@@ -118,6 +118,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Carriers\FedEx\FedExShipmentPackageBuilderTest.cs" />
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
     <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />

@@ -14,6 +14,12 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Gets the valid service types.
         /// </summary>
         public List<FedExServiceType> GetValidServiceTypes(IEnumerable<ShipmentEntity> overriddenShipments) =>
-                    FedExUtility.GetValidServiceTypes(overriddenShipments.ToList());
+            FedExUtility.GetValidServiceTypes(overriddenShipments.ToList());
+
+        /// <summary>
+        /// Gets the valid packaging types.
+        /// </summary>
+        public List<FedExPackagingType> GetValidPackagingTypes(FedExServiceType serviceType) =>
+            FedExUtility.GetValidPackagingTypes(serviceType);
     }
 }

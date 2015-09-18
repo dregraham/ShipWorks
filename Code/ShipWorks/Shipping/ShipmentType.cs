@@ -443,7 +443,7 @@ namespace ShipWorks.Shipping
         /// intended to correspond to the appropriate enumeration values of the specific shipment type 
         /// (i.e. the integer values would correspond to PostalPackageType values for a UspsShipmentType).
         /// </summary>
-        public IEnumerable<int> GetAvailablePackageTypes()
+        public virtual IEnumerable<int> GetAvailablePackageTypes()
         {
             return GetAvailablePackageTypes(new ExcludedPackageTypeRepository());
         }

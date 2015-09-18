@@ -48,6 +48,7 @@ namespace ShipWorks.Shipping.Carriers.FedEx
     public class FedExShipmentType : ShipmentType
     {
         private readonly IExcludedServiceTypeRepository excludedServiceTypeRepository;
+        private readonly IExcludedPackageTypeRepository excludedPackageTypeRepository;
         private ICarrierSettingsRepository settingsRepository;
 
         /// <summary>
@@ -61,9 +62,11 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         /// Initializes a new instance of the <see cref="FedExShipmentType"/> class.
         /// </summary>
         /// <param name="excludedServiceTypeRepository">The excluded service type repository.</param>
-        public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository)
+        /// <param name="excludedPackageTypeRepository"></param>
+        public FedExShipmentType(IExcludedServiceTypeRepository excludedServiceTypeRepository, IExcludedPackageTypeRepository excludedPackageTypeRepository)
         {
             this.excludedServiceTypeRepository = excludedServiceTypeRepository;
+            this.excludedPackageTypeRepository = excludedPackageTypeRepository;
         }
 
         /// <summary>
@@ -173,35 +176,14 @@ namespace ShipWorks.Shipping.Carriers.FedEx
         }
 
         /// <summary>
-        /// Gets the AvailablePackageTypes for this shipment type and shipment along with their descriptions.
+        /// Uses the ExcludedPackageTypeRepository implementation to get the Package types that have
+        /// are available for this shipment type (i.e have not been excluded). The integer values are
+        /// intended to correspond to the appropriate enumeration values of the specific shipment type
+        /// (i.e. the integer values would correspond to PostalPackageType values for a UspsShipmentType).
         /// </summary>
-        public override Dictionary<int, string> BuildPackageTypeDictionary(List<ShipmentEntity> shipments, IExcludedPackageTypeRepository excludedPackageRepo)
+        public override IEnumerable<int> GetAvailablePackageTypes()
         {
-            List<FedExServiceType> distinctShipmentTypes = shipments.Select(shipment => (FedExServiceType) shipment.FedEx.Service).Distinct().ToList();
-
-            if (distinctShipmentTypes.Count()==1)
-            {
-                List<FedExPackagingType> validPackagingTypes = FedExUtility.GetValidPackagingTypes(distinctShipmentTypes.First());
-
-                IEnumerable<FedExPackagingType> availablePackageTypes =
-                    GetAvailablePackageTypes(excludedPackageRepo)
-                    .Union(shipments.Select(x => x.FedEx)
-                        .Where(x => x != null)
-                        .Select(x => x.PackagingType))
-                    .Cast<FedExPackagingType>();
-
-                return validPackagingTypes
-                    .Intersect(availablePackageTypes)
-                    .DefaultIfEmpty(validPackagingTypes.FirstOrDefault())
-                    .ToDictionary(p => (int) p, p => EnumHelper.GetDescription(p));
-            }
-            else
-            {
-                return new Dictionary<int, string>()
-                {
-                    { (int) FedExPackagingType.Custom, EnumHelper.GetDescription(FedExPackagingType.Custom) }
-                };
-            }
+            return GetAvailablePackageTypes(excludedPackageTypeRepository);
         }
 
         /// <summary>
