@@ -51,14 +51,13 @@ namespace ShipWorks.Shipping.UI.ValueConverters
             Justification = "We treat a format exception as just invalid data, so the exception should be eaten")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            double? newWeight = 0.0;
-
             try
             {
                 // See if both pounds and ounces are present
                 Match poundsOzMatch = poundsOzRegex.Match(value.ToString());
 
                 // Did it match
+                double? newWeight = 0.0;
                 if (poundsOzMatch.Success)
                 {
                     double pounds = double.Parse(poundsOzMatch.Groups["Pounds"].Value);
@@ -111,13 +110,13 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 
             if (displayFormat == WeightDisplayFormat.FractionalPounds)
             {
-                result = string.Format("{0:0.0#} lbs", weight);
+                result = $"{weight:0.0#} lbs";
             }
             else
             {
                 WeightValue weightValue = new WeightValue(weight);
 
-                result = string.Format("{0} lbs  {1} oz", weightValue.PoundsOnly, Math.Round(weightValue.OuncesOnly, 1, MidpointRounding.AwayFromZero));
+                result = $"{weightValue.PoundsOnly} lbs  {Math.Round(weightValue.OuncesOnly, 1, MidpointRounding.AwayFromZero)} oz";
             }
 
             return result;
