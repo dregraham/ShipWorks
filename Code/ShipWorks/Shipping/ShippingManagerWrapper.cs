@@ -69,7 +69,7 @@ namespace ShipWorks.Shipping
         /// <returns></returns>
         public void RemoveShipmentFromRatesCache(ShipmentEntity shipment)
         {
-            RemoveShipmentFromRatesCache(shipment);
+            ShippingManager.RemoveShipmentFromRatesCache(shipment);
         }
 
         /// <summary>
