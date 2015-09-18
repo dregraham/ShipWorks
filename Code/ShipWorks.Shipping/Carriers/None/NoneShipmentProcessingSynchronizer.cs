@@ -1,9 +1,6 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.Settings;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace ShipWorks.Shipping.Carriers.None
 {
@@ -12,7 +9,7 @@ namespace ShipWorks.Shipping.Carriers.None
     /// </summary>
     public class NoneShipmentProcessingSynchronizer : IShipmentProcessingSynchronizer
     {
-        private IShippingSettings shippingSettings;
+        private readonly IShippingSettings shippingSettings;
 
         /// <summary>
         /// Constructor

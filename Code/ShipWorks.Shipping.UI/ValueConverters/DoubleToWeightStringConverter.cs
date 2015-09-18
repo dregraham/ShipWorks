@@ -2,6 +2,7 @@
 using ShipWorks.UI.Controls;
 using ShipWorks.Users;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Data;
@@ -14,18 +15,18 @@ namespace ShipWorks.Shipping.UI.ValueConverters
         static string numberRegex = @"-?([0-9]+(\.[0-9]*)?|\.[0-9]+)";
 
         // Match the case where both pounds and ounces are present
-        Regex poundsOzRegex = new Regex(
+        readonly Regex poundsOzRegex = new Regex(
             @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s+" +
             @"(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)?\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         // Match the case were only ounces is present
-        Regex ouncesRegex = new Regex(
+        readonly Regex ouncesRegex = new Regex(
             @"^(?<Ounces>" + numberRegex + @")\s*(ounces|ounce|oz.|oz|o)\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
         // Match the case were only pounds is present
-        Regex poundsRegex = new Regex(
+        readonly Regex poundsRegex = new Regex(
             @"^(?<Pounds>" + numberRegex + @")\s*(lbs.|lbs|lb.|lb|l|pounds|pound)?\s*$",
             RegexOptions.IgnorePatternWhitespace | RegexOptions.IgnoreCase);
 
@@ -41,10 +42,13 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 
             return FormatWeight((double)value, UserSession.User == null ? WeightDisplayFormat.FractionalPounds : (WeightDisplayFormat)UserSession.User.Settings.ShippingWeightFormat);
         }
-        
+
+
         /// <summary>
         /// Convert from weight String (lbs and oz) to Double
         /// </summary>
+        [SuppressMessage("SonarQube", "S2486:Exceptions should not be ignored",
+            Justification = "We treat a format exception as just invalid data, so the exception should be eaten")]
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double? newWeight = 0.0;
@@ -80,15 +84,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
                         Match poundsMatch = poundsRegex.Match(value.ToString());
 
                         // Did it match
-                        if (poundsMatch.Success)
-                        {
-                            newWeight = double.Parse(poundsMatch.Groups["Pounds"].Value);
-                        }
-                        else
-                        {
-                            // Nothing worked!
-                            newWeight = null;
-                        }
+                        newWeight = poundsMatch.Success ? (double?)double.Parse(poundsMatch.Groups["Pounds"].Value) : null;
                     }
                 }
 
@@ -105,7 +101,7 @@ namespace ShipWorks.Shipping.UI.ValueConverters
 
             return null;
         }
-        
+
         /// <summary>
         /// Format the given weight based on the specified display format.
         /// </summary>

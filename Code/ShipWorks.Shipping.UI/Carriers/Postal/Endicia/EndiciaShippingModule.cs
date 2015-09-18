@@ -12,6 +12,10 @@ namespace ShipWorks.Shipping.Carriers.Endicia
         {
             builder.RegisterType<EndiciaShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Endicia);
+
+            builder.RegisterType<EndiciaShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Endicia)
+                .SingleInstance();
         }
     }
 }

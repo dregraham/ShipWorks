@@ -14,9 +14,9 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentAddressValidator));
 
-        private IValidatedAddressManager validatedAddressManager;
-        private IAddressValidationWebClient addressValidationWebClient;
-        private IFilterHelper filterHelper;
+        private readonly IValidatedAddressManager validatedAddressManager;
+        private readonly IAddressValidationWebClient addressValidationWebClient;
+        private readonly IFilterHelper filterHelper;
 
         /// <summary>
         /// Constructor

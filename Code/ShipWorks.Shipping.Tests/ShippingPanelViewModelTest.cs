@@ -11,9 +11,9 @@ namespace ShipWorks.Tests.Shipping
 {
     public class ShippingPanelViewModelTest
     {
-        private OrderEntity orderEntity;
-        private ShipmentEntity shipmentEntity;
-        private ShippingPanelLoadedShipment shippingPanelLoadedShipment;
+        private readonly OrderEntity orderEntity;
+        private readonly ShipmentEntity shipmentEntity;
+        private readonly ShippingPanelLoadedShipment shippingPanelLoadedShipment;
 
         public ShippingPanelViewModelTest()
         {

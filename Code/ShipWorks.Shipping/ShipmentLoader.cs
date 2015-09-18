@@ -16,9 +16,9 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShipmentLoader));
 
-        private IShippingPanelConfigurator shippingPanelConfigurator;
-        private IShippingManager shippingManager;
-        private IFilterHelper filterHelper;
+        private readonly IShippingPanelConfigurator shippingPanelConfigurator;
+        private readonly IShippingManager shippingManager;
+        private readonly IFilterHelper filterHelper;
 
         /// <summary>
         /// Constructor

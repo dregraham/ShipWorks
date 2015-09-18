@@ -117,12 +117,19 @@
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\FedEx\FedExUtilityWrapper.cs" />
     <Compile Include="Carriers\FedEx\IFedExUtility.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\None\NoneShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\None\NoneShipmentType.cs" />
+    <Compile Include="Carriers\OnTrac\OnTracShipmentServicesBuilder.cs" />
     <Compile Include="Carriers\Other\OtherPackageAdapter.cs" />
     <Compile Include="Carriers\Other\OtherShipmentProcessingSynchronizer.cs" />
     <Compile Include="Carriers\Other\OtherShipmentType.cs" />
+    <Compile Include="Carriers\Postal\Endicia\EndiciaShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Express1\Express1ShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\Usps\UspsShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Postal\WebTools\WebToolsShipmentServicesBuilder.cs" />
+    <Compile Include="Carriers\Ups\UpsShipmentServicesBuilder.cs" />
     <Compile Include="IShipmentLoader.cs" />
     <Compile Include="IShipmentServicesBuilder.cs" />
     <Compile Include="IShipmentServicesBuilderFactory.cs" />
@@ -184,7 +191,9 @@
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.Analyzers.dll" />
     <Analyzer Include="..\..\packages\System.Runtime.InteropServices.Analyzers.1.0.1\analyzers\dotnet\cs\System.Runtime.InteropServices.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Carriers\BestRate\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -6,7 +6,7 @@ namespace ShipWorks.Shipping.Tests
 {
     public class ShipmentViewModelTest
     {
-        ShipmentEntity shipment = new ShipmentEntity();
+        readonly ShipmentEntity shipment = new ShipmentEntity();
 
         [Fact]
         public void Save_UpdatesShipmentEntity_WhenTotalWeightChanged_Test()

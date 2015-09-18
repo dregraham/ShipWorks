@@ -167,6 +167,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         public void LoadState()
         {
+            // Rating panel does not have extra state
         }
 
         /// <summary>
@@ -174,6 +175,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         public void SaveState()
         {
+            // Rating panel does not have extra state
         }
 
         /// <summary>
@@ -212,6 +214,7 @@ namespace ShipWorks.Shipping.UI
         /// </summary>
         public void UpdateStoreDependentUI()
         {
+            // Rating panel does not have extra state
         }
         #endregion
     }

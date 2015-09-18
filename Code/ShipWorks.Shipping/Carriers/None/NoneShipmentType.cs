@@ -27,7 +27,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public override void LoadShipmentData(ShipmentEntity shipment, bool refreshIfPresent)
         {
-
+            // Loading shipment data does nothing for the none shipment type
         }
 
         /// <summary>

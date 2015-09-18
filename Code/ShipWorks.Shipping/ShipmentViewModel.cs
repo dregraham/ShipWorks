@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace ShipWorks.Shipping.UI
@@ -20,10 +21,12 @@ namespace ShipWorks.Shipping.UI
         private bool insurance;
         
         private readonly PropertyChangedHandler handler;
-        private IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
+        private readonly IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
 
+        [SuppressMessage("SonarQube", "S2290:Field-like events should not be virtual", 
+            Justification = "Event is virtual to allow tests to fire it")]
         public virtual event PropertyChangedEventHandler PropertyChanged;
-        public virtual event PropertyChangingEventHandler PropertyChanging;
+        public event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Constructor for use by tests and WPF designer
@@ -102,13 +105,6 @@ namespace ShipWorks.Shipping.UI
         public virtual void RefreshPackageTypes(ShipmentEntity shipment)
         {
             //TODO: Replace with the package factory that should be coming soon
-            //Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
-            //Packages.Clear();
-
-            //foreach (KeyValuePair<int, string> entry in packages)
-            //{
-            //    Packages.Add(entry);
-            //}
         }
 
         /// <summary>

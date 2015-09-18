@@ -11,6 +11,10 @@ namespace ShipWorks.Shipping.Carriers.OnTrac
         {
             builder.RegisterType<OnTracShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.OnTrac);
+
+            builder.RegisterType<OnTracShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.OnTrac)
+                .SingleInstance();
         }
     }
 }

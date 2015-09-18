@@ -12,7 +12,7 @@ namespace ShipWorks.Shipping
     /// relying on using Autofac's IIndex implementation.</remarks>
     public class ShipmentTypeFactory : IShipmentTypeFactory
     {
-        private IIndex<ShipmentTypeCode, ShipmentType> lookup;
+        private readonly IIndex<ShipmentTypeCode, ShipmentType> lookup;
 
         /// <summary>
         /// Constructor

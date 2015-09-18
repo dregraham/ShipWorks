@@ -20,7 +20,7 @@ namespace ShipWorks.Shipping
         private ShippingPanelLoadedShipmentResult loadResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
-        private PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
         private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
         private ShippingPanelLoadedShipment loadedShipment;
         private readonly IMessenger messenger;

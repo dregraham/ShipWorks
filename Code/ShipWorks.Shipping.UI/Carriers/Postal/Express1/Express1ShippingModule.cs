@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ShipWorks.Shipping.Carriers.Postal.Endicia.Express1;
+using ShipWorks.Shipping.Carriers.Postal.Express1;
 using ShipWorks.Shipping.Carriers.Postal.Usps.Express1;
 
 namespace ShipWorks.Shipping.Carriers.Express1
@@ -16,6 +17,11 @@ namespace ShipWorks.Shipping.Carriers.Express1
 
             builder.RegisterType<Express1EndiciaShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Express1Endicia);
+
+            builder.RegisterType<Express1ShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Express1Usps)
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Express1Endicia)
+                .SingleInstance();
         }
     }
 }

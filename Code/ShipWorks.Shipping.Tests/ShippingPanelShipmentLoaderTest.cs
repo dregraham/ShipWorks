@@ -8,11 +8,11 @@ namespace ShipWorks.Tests.Shipping
 {
     public class ShippingPanelShipmentLoaderTest
     {
-        private ShippingPanelShipmentLoader testObject;
-        private OrderEntity orderEntity;
-        private ShipmentEntity shipmentEntity;
-        private Mock<IShipmentLoader> shipmentLoader;
-        private Mock<IValidator<ShipmentEntity>> validator;
+        private readonly ShippingPanelShipmentLoader testObject;
+        private readonly OrderEntity orderEntity;
+        private readonly ShipmentEntity shipmentEntity;
+        private readonly Mock<IShipmentLoader> shipmentLoader;
+        private readonly Mock<IValidator<ShipmentEntity>> validator;
 
         public ShippingPanelShipmentLoaderTest()
         {

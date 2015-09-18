@@ -1,12 +1,15 @@
 ﻿using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping.ShipSense.Hashing;
 using ShipWorks.Shipping.ShipSense.Packaging;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.Carriers.Other
 {
     /// <summary>
     /// The OtherShipmentType only supports the weight field of the package adapter.
     /// </summary>
+    [SuppressMessage("SonarQube", "S3237:\"value\" parameters should be used", 
+        Justification = "This package adapter does not set much data, so the value parameter is not needed")]
     public class OtherPackageAdapter : IPackageAdapter
     {
         private readonly ShipmentEntity shipment;
@@ -64,6 +67,7 @@ namespace ShipWorks.Shipping.Carriers.Other
             get { return 0; }
             set { /* We don't care about this value */ }
         }
+
 
         /// <summary>
         /// Gets or sets the additional weight.

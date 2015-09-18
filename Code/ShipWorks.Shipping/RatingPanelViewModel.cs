@@ -34,19 +34,19 @@ namespace ShipWorks.Shipping
         // Logger
         static readonly ILog log = LogManager.GetLogger(typeof(RatingPanelViewModel));
 
-        private PropertyChangedHandler handler;
+        private readonly PropertyChangedHandler handler;
         public event PropertyChangedEventHandler PropertyChanged;
 
         private readonly MessengerToken uspsAccountConvertedToken;
         private readonly MessengerToken shipmentChangedMessageToken;
-        private IMessenger messenger;
+        private readonly IMessenger messenger;
 
-        private ILoader<ShippingPanelLoadedShipment> shipmentLoader;
-        private IShippingManager shippingManager;
-        private IShipmentTypeFactory shipmentTypeFactory;
+        private readonly ILoader<ShippingPanelLoadedShipment> shipmentLoader;
+        private readonly IShippingManager shippingManager;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
 
         private long? selectedShipmentID;
-        private bool consolidatePostalRates;
+        private readonly bool consolidatePostalRates;
         private bool actionLinkVisible;
         private bool showAllRates;
         private bool showSpinner;
@@ -144,11 +144,7 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Store for the shipment
         /// </summary>
-        public StoreEntity Store
-        {
-            get { return store; }
-            set { store = value; }
-        }
+        public StoreEntity Store { get; set; }
 
         /// <summary>
         /// Change the content of the control to be the given shipment

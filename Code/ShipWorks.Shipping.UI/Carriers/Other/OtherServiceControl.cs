@@ -46,7 +46,7 @@ namespace ShipWorks.Shipping.Carriers.Other
 
             originControl.LoadShipments(shipments);
 
-            using (MultiValueScope scope = new MultiValueScope())
+            using (new MultiValueScope())
             {
                 foreach (ShipmentEntity shipment in shipments)
                 {
@@ -78,7 +78,7 @@ namespace ShipWorks.Shipping.Carriers.Other
         /// </summary>
         public override void RefreshContentWeight()
         {
-            using (MultiValueScope scope = new MultiValueScope())
+            using (new MultiValueScope())
             {
                 foreach (ShipmentEntity shipment in LoadedShipments)
                 {

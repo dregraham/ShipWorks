@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using ShipWorks.ApplicationCore;
 using TD.SandDock;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ShipWorks.Shipping.UI
 {
@@ -14,6 +15,10 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Register a panel with the dock manager
         /// </summary>
+        [SuppressMessage("SonarQube", "S1848:Objects should not be created to be dropped immediately without being used",
+            Justification = "The DockableWindow is used by the dockManager")]
+        [SuppressMessage("SonarQube", "S2930:\"IDisposables\" should be disposed", 
+            Justification = "The dock manager owns the panel, so we can't dispose it")]
         public void Register(SandDockManager dockManager)
         {
             ShippingPanel panelShipment = new ShippingPanel
@@ -27,7 +32,7 @@ namespace ShipWorks.Shipping.UI
                 TabIndex = 1
             };
 
-            DockableWindow dockableWindowShipment = new DockableWindow(dockManager, panelShipment, "Shipment")
+            new DockableWindow(dockManager, panelShipment, "Shipment")
             {
                 BorderStyle = TD.SandDock.Rendering.BorderStyle.Flat,
                 Guid = new Guid("574C96CC-5D02-4689-9463-4FB4DBCE22AD"),
@@ -39,6 +44,5 @@ namespace ShipWorks.Shipping.UI
                 TabIndex = 0
             };
         }
-
     }
 }

@@ -12,6 +12,10 @@ namespace ShipWorks.Shipping.Carriers.WebTools
         {
             builder.RegisterType<PostalWebShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.PostalWebTools);
+
+            builder.RegisterType<WebToolsShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.PostalWebTools)
+                .SingleInstance();
         }
     }
 }

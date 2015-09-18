@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping.UI
             null : 
             IoC.UnsafeGlobalLifetimeScope.Resolve<ShipmentTypeProvider>();
 
-        private IShipmentTypeFactory shipmentTypeFactory;
+        private readonly IShipmentTypeFactory shipmentTypeFactory;
 
         /// <summary>
         /// Get the current instance of the shipment type provider

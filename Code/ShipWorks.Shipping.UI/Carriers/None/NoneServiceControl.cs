@@ -24,7 +24,7 @@ namespace ShipWorks.Shipping.Carriers.None
         /// </summary>
         public override void RefreshContentWeight()
         {
-
+            // None service type does not have content weight
         }
     }
 }

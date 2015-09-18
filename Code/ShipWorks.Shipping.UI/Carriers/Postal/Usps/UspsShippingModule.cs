@@ -12,6 +12,10 @@ namespace ShipWorks.Shipping.Carriers.Usps
         {
             builder.RegisterType<UspsShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.Usps);
+
+            builder.RegisterType<UspsShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.Usps)
+                .SingleInstance();
         }
     }
 }

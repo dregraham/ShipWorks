@@ -12,8 +12,8 @@ namespace ShipWorks.Shipping
     {
         static readonly ILog log = LogManager.GetLogger(typeof(ShippingPanelShipmentLoader));
 
-        private IShipmentLoader shipmentLoader;
-        private IValidator<ShipmentEntity> addressValidator;
+        private readonly IShipmentLoader shipmentLoader;
+        private readonly IValidator<ShipmentEntity> addressValidator;
 
         /// <summary>
         /// Constructor.

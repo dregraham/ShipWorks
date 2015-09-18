@@ -16,6 +16,11 @@ namespace ShipWorks.Shipping.Carriers.Ups
 
             builder.RegisterType<WorldShipShipmentType>()
                 .Keyed<ShipmentType>(ShipmentTypeCode.UpsWorldShip);
+            
+            builder.RegisterType<UpsShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsOnLineTools)
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.UpsWorldShip)
+                .SingleInstance();
         }
     }
 }

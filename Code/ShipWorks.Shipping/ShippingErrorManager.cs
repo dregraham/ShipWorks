@@ -19,7 +19,7 @@ namespace ShipWorks.Shipping
         };
 
         // The singleton list of the current set of shipping errors.
-        private Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
+        private readonly Dictionary<long, Exception> processingErrors = new Dictionary<long, Exception>();
 
         /// <summary>
         /// Is there currently an error for the specified shipment id?
