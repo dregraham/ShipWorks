@@ -101,12 +101,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(shipmentTypeFactory.GetType(selectedShipmentType), loadedShipment.Shipment);
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(shipmentTypeFactory.Get(selectedShipmentType), loadedShipment.Shipment);
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentTypeFactory.GetType(selectedShipmentType), loadedShipment.Shipment);
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentTypeFactory.Get(selectedShipmentType), loadedShipment.Shipment);
 
         /// <summary>
         /// Load the shipment from the given order
@@ -132,7 +132,7 @@ namespace ShipWorks.Shipping
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            ShipmentViewModel.Load(shipmentTypeFactory.GetType(SelectedShipmentType), loadedShipment.Shipment);
+            ShipmentViewModel.Load(shipmentTypeFactory.Get(SelectedShipmentType), loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 

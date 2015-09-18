@@ -179,7 +179,7 @@ namespace ShipWorks.Shipping
             {
                 if (!shipment.Processed)
                 {
-                    ShipmentType shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
+                    ShipmentType shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
 
                     if (!shipmentType.SupportsGetRates)
                     {
@@ -331,7 +331,7 @@ namespace ShipWorks.Shipping
                         if (rates == null)
                         {
                             rates = new RateGroup(new List<RateResult>());
-                            ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.GetType(ShipmentTypeCode.None);
+                            ShipmentType exceptionShipmentType = shipmentType ?? shipmentTypeFactory.Get(ShipmentTypeCode.None);
                             rates.AddFootnoteFactory(new ExceptionsRateFootnoteFactory(exceptionShipmentType, ex));
                         }
 
@@ -410,7 +410,7 @@ namespace ShipWorks.Shipping
             }
             else
             {
-                shipmentType = shipmentTypeFactory.GetType(shipment.ShipmentTypeCode);
+                shipmentType = shipmentTypeFactory.Get(shipment.ShipmentTypeCode);
             }
 
             return shipmentType;
