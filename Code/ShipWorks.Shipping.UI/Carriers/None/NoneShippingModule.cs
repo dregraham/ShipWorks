@@ -23,6 +23,11 @@ namespace ShipWorks.Shipping.UI.Carriers.None
             builder.RegisterType<NoneShipmentProcessingSynchronizer>()
                 .Keyed<IShipmentProcessingSynchronizer>(ShipmentTypeCode.None)
                 .SingleInstance();
+
+            builder.RegisterType<NoneShipmentServicesBuilder>()
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.None)
+                .AsImplementedInterfaces()
+                .SingleInstance();
         }
     }
 }
