@@ -20,25 +20,27 @@ namespace ShipWorks.Shipping.UI
         private bool insurance;
         
         private readonly PropertyChangedHandler handler;
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangingEventHandler PropertyChanging;
+        private IShipmentServicesBuilderFactory shipmentServicesBuilderFactory;
+
+        public virtual event PropertyChangedEventHandler PropertyChanged;
+        public virtual event PropertyChangingEventHandler PropertyChanging;
 
         /// <summary>
         /// Constructor for use by tests and WPF designer
         /// </summary>
         protected ShipmentViewModel()
         {
-
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
+            Services = new ObservableCollection<KeyValuePair<int, string>>();
+            Packages = new ObservableCollection<KeyValuePair<int, string>>();
         }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilder)
+        public ShipmentViewModel(IShipmentServicesBuilderFactory shipmentServicesBuilderFactory) : this()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-            Services = new ObservableCollection<KeyValuePair<int, string>>();
-            Packages = new ObservableCollection<KeyValuePair<int, string>>();
+            this.shipmentServicesBuilderFactory = shipmentServicesBuilderFactory;
         }
 
         public ObservableCollection<KeyValuePair<int, string>> Services { get; }
@@ -69,21 +71,23 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Load the shipment
         /// </summary>
-        public virtual void Load(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void Load(ShipmentEntity shipment)
         {
             ShipDate = shipment.ShipDate;
             TotalWeight = shipment.TotalWeight;
             Insurance = shipment.Insurance;
-            RefreshShipmentTypes(shipmentType, shipment);
-            RefreshPackageTypes(shipmentType, shipment);
+            RefreshShipmentTypes(shipment);
+            RefreshPackageTypes(shipment);
         }
 
         /// <summary>
         /// Refreshes the shipment types.
         /// </summary>
-        public virtual void RefreshShipmentTypes(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void RefreshShipmentTypes(ShipmentEntity shipment)
         {
-            Dictionary<int, string> services = shipmentType.BuildServiceTypeDictionary(new List<ShipmentEntity> { shipment });
+            Dictionary<int, string> services = shipmentServicesBuilderFactory.Get(shipment.ShipmentTypeCode)
+                .BuildServiceTypeDictionary(new [] { shipment });
+
             Services.Clear();
             
             foreach (KeyValuePair<int, string> entry in services)
@@ -95,15 +99,16 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Refreshes the package types.
         /// </summary>
-        public virtual void RefreshPackageTypes(ShipmentType shipmentType, ShipmentEntity shipment)
+        public virtual void RefreshPackageTypes(ShipmentEntity shipment)
         {
-            Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
-            Packages.Clear();
+            //TODO: Replace with the package factory that should be coming soon
+            //Dictionary<int, string> packages = shipmentType.BuildPackageTypeDictionary(new List<ShipmentEntity> { shipment });
+            //Packages.Clear();
 
-            foreach (KeyValuePair<int, string> entry in packages)
-            {
-                Packages.Add(entry);
-            }
+            //foreach (KeyValuePair<int, string> entry in packages)
+            //{
+            //    Packages.Add(entry);
+            //}
         }
 
         /// <summary>

@@ -43,7 +43,7 @@ namespace ShipWorks.Shipping
         /// </summary>
         public ShippingPanelViewModel()
         {
-            //Debug.Assert(DesignModeDetector.IsDesignerHosted(), "Default constructor is only for design and testing");
+            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
         }
 
         /// <summary>
@@ -55,10 +55,8 @@ namespace ShipWorks.Shipping
             IShippingManager shippingManager, 
             IShipmentTypeFactory shipmentTypeFactory,
 			ICustomsManager customsManager,
-            Func<ShipmentViewModel> shipmentViewModelFactory)
+            Func<ShipmentViewModel> shipmentViewModelFactory) : this()
         {
-            handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
-
             this.customsManager = customsManager;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
@@ -102,12 +100,12 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Updates the services.
         /// </summary>
-        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(shipmentTypeFactory.Get(selectedShipmentType), loadedShipment.Shipment);
+        private void UpdateServices() => ShipmentViewModel.RefreshShipmentTypes(loadedShipment.Shipment);
 
         /// <summary>
         /// Updates the packages.
         /// </summary>
-        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(shipmentTypeFactory.Get(selectedShipmentType), loadedShipment.Shipment);
+        private void UpdatePackages() => ShipmentViewModel.RefreshPackageTypes(loadedShipment.Shipment);
 
         /// <summary>
         /// Load the shipment from the given order
@@ -135,7 +133,7 @@ namespace ShipWorks.Shipping
 
             Destination.Load(loadedShipment.Shipment.ShipPerson);
 
-            ShipmentViewModel.Load(shipmentTypeFactory.Get(SelectedShipmentType), loadedShipment.Shipment);
+            ShipmentViewModel.Load(loadedShipment.Shipment);
 
             IsProcessed = loadedShipment.Shipment.Processed;
 
