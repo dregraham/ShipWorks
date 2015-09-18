@@ -33,6 +33,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.helpLink = new ShipWorks.ApplicationCore.Interaction.HelpLink();
+            this.label5 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // accessTokenTextbox
@@ -41,7 +43,7 @@
             this.accessTokenTextbox.Location = new System.Drawing.Point(116, 70);
             this.accessTokenTextbox.Name = "accessTokenTextbox";
             this.accessTokenTextbox.Size = new System.Drawing.Size(362, 21);
-            this.accessTokenTextbox.TabIndex = 21;
+            this.accessTokenTextbox.TabIndex = 19;
             // 
             // storeURLTextbox
             // 
@@ -49,7 +51,7 @@
             this.storeURLTextbox.Location = new System.Drawing.Point(116, 43);
             this.storeURLTextbox.Name = "storeURLTextbox";
             this.storeURLTextbox.Size = new System.Drawing.Size(362, 21);
-            this.storeURLTextbox.TabIndex = 19;
+            this.storeURLTextbox.TabIndex = 17;
             this.storeURLTextbox.Text = "https://<Your Store Here>.lemonstand.com";
             // 
             // label4
@@ -82,10 +84,35 @@
             this.label1.TabIndex = 15;
             this.label1.Text = "Enter your LemonStand account information";
             // 
+            // helpLink
+            // 
+            this.helpLink.AutoSize = true;
+            this.helpLink.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpLink.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Underline);
+            this.helpLink.ForeColor = System.Drawing.Color.Blue;
+            this.helpLink.Location = new System.Drawing.Point(281, 94);
+            this.helpLink.Name = "helpLink";
+            this.helpLink.Size = new System.Drawing.Size(55, 18);
+            this.helpLink.TabIndex = 20;
+            this.helpLink.TabStop = true;
+            this.helpLink.Text = "click here.";
+            this.helpLink.Url = "http://support.shipworks.com/support/solutions/articles/4000062623";
+            this.helpLink.UseCompatibleTextRendering = true;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(113, 94);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(223, 29);
+            this.label5.TabIndex = 23;
+            this.label5.Text = "For help with adding LemonStand";
+            // 
             // LemonStandAccountPage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.helpLink);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.accessTokenTextbox);
             this.Controls.Add(this.storeURLTextbox);
             this.Controls.Add(this.label4);
@@ -93,7 +120,7 @@
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F);
             this.Name = "LemonStandAccountPage";
-            this.Size = new System.Drawing.Size(487, 100);
+            this.Size = new System.Drawing.Size(487, 173);
             this.StepNext += new System.EventHandler<ShipWorks.UI.Wizard.WizardStepEventArgs>(this.OnStepNext);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -107,5 +134,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private ApplicationCore.Interaction.HelpLink helpLink;
+        private System.Windows.Forms.Label label5;
     }
 }

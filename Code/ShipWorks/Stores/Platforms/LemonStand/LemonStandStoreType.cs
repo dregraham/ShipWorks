@@ -233,6 +233,14 @@ namespace ShipWorks.Stores.Platforms.LemonStand
         }
 
         /// <summary>
+        /// Gets the help URL to use in the account settings.
+        /// </summary>
+        public static string AccountSettingsHelpUrl
+        {
+            get { return "http://support.shipworks.com/support/solutions/articles/4000062623"; }
+        }
+
+        /// <summary>
         ///     Get any filters that should be created as an initial filter set when the store is first created.  If the list is
         ///     non-empty they will
         ///     be automatically put in a folder that is filtered on the store... so their is no need to test for that in the
@@ -352,12 +360,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             onlineStatus.TargetValue = "Cancelled";
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
 
-            // [OR]
-            shippedDefinition.JoinType = ConditionGroupJoinType.Or;
-
-            // Shipped within Shipworks
-            shippedDefinition.SecondGroup = InitialDataLoader.CreateDefinitionShipped().RootContainer;
-
             return new FilterEntity
             {
                 Name = "Cancelled",
@@ -392,12 +394,6 @@ namespace ShipWorks.Stores.Platforms.LemonStand
             onlineStatus.Operator = StringOperator.Equals;
             onlineStatus.TargetValue = "Quote";
             shippedDefinition.FirstGroup.Conditions.Add(onlineStatus);
-
-            // [OR]
-            shippedDefinition.JoinType = ConditionGroupJoinType.Or;
-
-            // Shipped within Shipworks
-            shippedDefinition.SecondGroup = InitialDataLoader.CreateDefinitionShipped().RootContainer;
 
             return new FilterEntity
             {
