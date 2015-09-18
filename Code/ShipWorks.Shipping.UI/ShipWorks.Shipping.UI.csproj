@@ -187,7 +187,10 @@
     <Compile Include="ShipmentPanelRegistration.cs" />
     <Compile Include="ShippingModule.cs" />
     <Compile Include="StateProvinceConverter.cs" />
+    <Compile Include="ValueConverters\BooleanConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ValueConverters\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverters\VisibleWhenEqualToParameterConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Interapptive.Shared\Interapptive.Shared.csproj">

@@ -208,7 +208,7 @@ namespace ShipWorks.Tests.Shipping
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
                 await testObject.LoadOrder(3);
 
-                Assert.True(testObject.HasMultipleShipments);
+                Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadResult);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace ShipWorks.Shipping
     /// </summary>
     public class ShippingPanelViewModel : INotifyPropertyChanged, INotifyPropertyChanging
     {
-        private bool hasMultipleShipments;
+        private ShippingPanelLoadedShipmentResult loadResult;
         private bool supportsMultiplePackages;
         private ShipmentTypeCode selectedShipmentType;
         private PropertyChangedHandler handler;
@@ -114,9 +114,13 @@ namespace ShipWorks.Shipping
         {
             loadedShipment = await shipmentLoader.LoadAsync(orderID);
 
+            LoadResult = loadedShipment.Result;
+
+            //HasMultipleShipments = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple;
+            //HasSingleValidShipment = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Success;
+
             if (loadedShipment.Shipment == null)
             {
-                HasMultipleShipments = loadedShipment.Result == ShippingPanelLoadedShipmentResult.Multiple;
                 // No shipment was created.  Show a message and return.
                 // TODO: Show a message
 
@@ -215,6 +219,16 @@ namespace ShipWorks.Shipping
         /// Are multiple packages supported
         /// </summary>
         [Obfuscation(Exclude = true)]
+        public ShippingPanelLoadedShipmentResult LoadResult
+        {
+            get { return loadResult; }
+            set { handler.Set(nameof(LoadResult), ref loadResult, value); }
+        }
+
+        /// <summary>
+        /// Are multiple packages supported
+        /// </summary>
+        [Obfuscation(Exclude = true)]
         public bool SupportsMultiplePackages
         {
             get { return supportsMultiplePackages; }
@@ -237,15 +251,15 @@ namespace ShipWorks.Shipping
 
         public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = shipmentViewModelFactory());
 
-        /// <summary>
-        /// Are multiple packages supported
-        /// </summary>
-        [Obfuscation(Exclude = true)]
-        public bool HasMultipleShipments
-        {
-            get { return hasMultipleShipments; }
-            set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
-        }
+        ///// <summary>
+        ///// Are multiple packages supported
+        ///// </summary>
+        //[Obfuscation(Exclude = true)]
+        //public bool HasMultipleShipments
+        //{
+        //    get { return hasMultipleShipments; }
+        //    set { handler.Set(nameof(HasMultipleShipments), ref hasMultipleShipments, value); }
+        //}
 
         /// <summary>
         /// Save the UI values to the shipment
