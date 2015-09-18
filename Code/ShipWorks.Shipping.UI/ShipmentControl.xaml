@@ -46,8 +46,12 @@
             <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Packages}"  SelectedValuePath="Key" DisplayMemberPath="Value" />
 
             <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource GridLabel}" Width="40">Weight:</TextBlock>
-            <TextBox Grid.Row="4" Grid.Column="1"
-                     Text="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal">
+                <TextBox Width="100" Text="{Binding TotalWeight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <local:ScaleControl/>
+            </StackPanel>
+            
 
             <TextBlock Grid.Row="5" Grid.Column="0" Style="{StaticResource GridLabel}" Width="64">Dimensions:</TextBlock>
             <ComboBox Grid.Row="5" Grid.Column="1"/>

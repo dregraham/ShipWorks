@@ -171,6 +171,9 @@
       <DependentUpon>RatingPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="RatingPanelRegistration.cs" />
+    <Compile Include="ScaleControl.xaml.cs">
+      <DependentUpon>ScaleControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ShipmentControl.xaml.cs">
       <DependentUpon>ShipmentControl.xaml</DependentUpon>
     </Compile>
@@ -260,6 +263,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AddressControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ScaleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

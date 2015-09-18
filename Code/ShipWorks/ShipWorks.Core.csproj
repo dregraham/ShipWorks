@@ -10840,7 +10840,7 @@
     <None Include="Resources\user1_view2.png" />
     <None Include="Resources\user1_view.png" />
     <None Include="Resources\user1_edit.png" />
-    <None Include="Resources\weigh.png" />
+    <Resource Include="Resources\weigh.png" />
     <None Include="Resources\shoppingcart1.png" />
     <None Include="Resources\user12.png" />
     <None Include="Resources\shoppingcart.png" />
