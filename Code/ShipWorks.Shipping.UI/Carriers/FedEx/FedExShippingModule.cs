@@ -15,7 +15,7 @@ namespace ShipWorks.Shipping.UI.Carriers.FedEx
                 .Keyed<ShipmentType>(ShipmentTypeCode.FedEx);
 
             builder.RegisterType<FedExShipmentServicesBuilder>()
-                .Keyed<ShipmentType>(ShipmentTypeCode.FedEx)
+                .Keyed<IShipmentServicesBuilder>(ShipmentTypeCode.FedEx)
                 .SingleInstance();
 
             builder.RegisterType<FedExUtilityWrapper>()
