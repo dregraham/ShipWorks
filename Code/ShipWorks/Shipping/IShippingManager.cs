@@ -39,6 +39,11 @@ namespace ShipWorks.Shipping
         void EnsureShipmentLoaded(ShipmentEntity shipment);
 
         /// <summary>
+        /// Gets the overridden store shipment.
+        /// </summary>
+        ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment);
+		
+        /// <summary>
         /// Get the shipment of the specified ID.  The Order will be attached.
         /// </summary>
         ShipmentEntity GetShipment(long shipmentID);

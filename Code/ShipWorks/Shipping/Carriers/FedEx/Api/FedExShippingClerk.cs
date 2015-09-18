@@ -73,12 +73,6 @@ namespace ShipWorks.Shipping.Carriers.FedEx.Api
         /// <summary>
         /// Initializes a new instance of the <see cref="FedExShippingClerk" /> class.
         /// </summary>
-        /// <param name="settingsRepository">The settings repository.</param>
-        /// <param name="certificateInspector">The certificate inspector.</param>
-        /// <param name="requestFactory">The request factory.</param>
-        /// <param name="log">The log.</param>
-        /// <param name="forceVersionCapture">if set to <c>true</c> [force version capture] to occur rather than only performing the version capture once.</param>
-        /// <param name="labelRepository">Label repository for clearing old shipment references.</param>
         public FedExShippingClerk(ICarrierSettingsRepository settingsRepository, ICertificateInspector certificateInspector, IFedExRequestFactory requestFactory, ILog log, bool forceVersionCapture, ILabelRepository labelRepository, IExcludedServiceTypeRepository excludedServiceTypeRepository)
         {
             this.settingsRepository = settingsRepository;

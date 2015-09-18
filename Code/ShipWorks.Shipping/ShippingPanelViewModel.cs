@@ -8,8 +8,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Interapptive.Shared.Messaging;
 using System.Collections.Generic;
-using Autofac.Features.Indexed;
+using System.Windows.Forms;
 using ShipWorks.AddressValidation;
+using ShipWorks.Shipping.Carriers.FedEx;
 
 namespace ShipWorks.Shipping
 {
@@ -29,6 +30,7 @@ namespace ShipWorks.Shipping
         private readonly IMessenger messenger;
         private bool isProcessed;
         private readonly IShipmentTypeFactory shipmentTypeFactory;
+        private readonly Func<ShipmentViewModel> shipmentViewModelFactory;
         private readonly IShippingManager shippingManager;
         private readonly ICustomsManager customsManager;
 
@@ -46,14 +48,20 @@ namespace ShipWorks.Shipping
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShippingPanelViewModel(ILoader<ShippingPanelLoadedShipment> shipmentLoader, IMessenger messenger, 
-            IShippingManager shippingManager, IShipmentTypeFactory shipmentTypeFactory, ICustomsManager customsManager)
+        public ShippingPanelViewModel(
+            ILoader<ShippingPanelLoadedShipment> shipmentLoader, 
+            IMessenger messenger, 
+            IShippingManager shippingManager, 
+            IShipmentTypeFactory shipmentTypeFactory,
+			ICustomsManager customsManager,
+            Func<ShipmentViewModel> shipmentViewModelFactory)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
 
             this.customsManager = customsManager;
             this.shippingManager = shippingManager;
             this.shipmentTypeFactory = shipmentTypeFactory;
+            this.shipmentViewModelFactory = shipmentViewModelFactory;
             this.shipmentLoader = shipmentLoader;
             this.messenger = messenger;
         }
@@ -227,7 +235,7 @@ namespace ShipWorks.Shipping
 
         public AddressViewModel Destination => destination ?? (destination = new AddressViewModel());
 
-        public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = new ShipmentViewModel());
+        public ShipmentViewModel ShipmentViewModel => shipmentViewModel ?? (shipmentViewModel = shipmentViewModelFactory());
 
         /// <summary>
         /// Save the UI values to the shipment

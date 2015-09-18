@@ -26,7 +26,7 @@ namespace ShipWorks.Shipping.UI
         /// <summary>
         /// Constructor
         /// </summary>
-        public ShipmentViewModel()
+        public ShipmentViewModel(IShipmentServicesBuilder shipmentServicesBuilder)
         {
             handler = new PropertyChangedHandler(this, () => PropertyChanged, () => PropertyChanging);
             Services = new ObservableCollection<KeyValuePair<int, string>>();

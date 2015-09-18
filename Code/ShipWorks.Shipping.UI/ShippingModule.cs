@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ShipWorks.Shipping.Settings;
 using ShipWorks.Shipping;
 
 namespace ShipWorks.Shipping.UI
@@ -58,6 +59,10 @@ namespace ShipWorks.Shipping.UI
                 .AsImplementedInterfaces();
 
             builder.RegisterType<ShipmentTypeFactory>()
+                .AsImplementedInterfaces()
+                .SingleInstance();
+
+            builder.RegisterType<ExcludedServiceTypeRepository>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 

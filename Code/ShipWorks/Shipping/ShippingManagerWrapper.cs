@@ -120,5 +120,11 @@ namespace ShipWorks.Shipping
 
             return errors;
         }
+
+        /// <summary>
+        /// Gets the overridden store shipment.
+        /// </summary>
+        public ShipmentEntity GetOverriddenStoreShipment(ShipmentEntity shipment) =>
+            ShippingManager.GetOverriddenStoreShipment(shipment);
     }
 }
