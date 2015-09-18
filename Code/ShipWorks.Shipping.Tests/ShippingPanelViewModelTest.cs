@@ -5,11 +5,7 @@ using ShipWorks.Data.Model.EntityClasses;
 using ShipWorks.Shipping;
 using Xunit;
 using Autofac.Extras.Moq;
-using ShipWorks.Shipping.Carriers.Other;
-using ShipWorks.Shipping.UI;
-using ShipWorks.Shipping.Carriers;
 using ShipWorks.Shipping.Tests;
-using System.ComponentModel;
 
 namespace ShipWorks.Tests.Shipping
 {
@@ -17,41 +13,26 @@ namespace ShipWorks.Tests.Shipping
     {
         private OrderEntity orderEntity;
         private ShipmentEntity shipmentEntity;
-        private Mock<ShipmentViewModel> shipmentViewModelMock;
+        private ShippingPanelLoadedShipment shippingPanelLoadedShipment;
 
         public ShippingPanelViewModelTest()
         {
             orderEntity = new OrderEntity(1006);
             shipmentEntity = new ShipmentEntity(1031);
             shipmentEntity.Order = orderEntity;
+            shippingPanelLoadedShipment = new ShippingPanelLoadedShipment()
+            {
+                Shipment = shipmentEntity,
+                Result = ShippingPanelLoadedShipmentResult.Success,
+                Exception = null
+            };
         }
-
-        ShippingPanelLoadedShipment ShippingPanelLoadedShipment => new ShippingPanelLoadedShipment()
-        {
-            Shipment = shipmentEntity,
-            Result = ShippingPanelLoadedShipmentResult.Success,
-            Exception = null
-        };
 
         private async Task<ShippingPanelViewModel> GetViewModelWithLoadedShipment(AutoMock mock)
         {
             mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
                 .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                .ReturnsAsync(ShippingPanelLoadedShipment);
-            
-            Mock<ShipmentType> shipmentType = mock.MockRepository.Create<ShipmentType>();
-            shipmentType.SetupGet(x => x.RatingFields).Returns(new RatingFields());
-
-            mock.Mock<IShipmentTypeFactory>()
-                .Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
-                .Returns(shipmentType.Object);
-
-            mock.Mock<IShipmentTypeFactory>()
-                .Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
-                .Returns(shipmentType.Object);
-
-            shipmentViewModelMock = mock.MockRepository.Create<ShipmentViewModel>();
-            mock.Provide(shipmentViewModelMock.Object);
+                .ReturnsAsync(shippingPanelLoadedShipment);
             
             ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
             await testObject.LoadOrder(orderEntity.OrderID);
@@ -89,33 +70,13 @@ namespace ShipWorks.Tests.Shipping
         }
 
         [Fact]
-        public async void Save_SendsShipmentChangedMessage_WhenTotalWeightChanged_Test()
-        {
-            using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
-            {
-                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-
-                shipmentViewModelMock.Raise(x => x.PropertyChanged += null, new PropertyChangedEventArgs("TotalWeight"));
-                
-                mock.Mock<IMessenger>().Verify(s => s.Send(It.IsAny<IShipWorksMessage>()), Times.Once);
-            }
-        }
-
-        [Fact]
         public async void Save_DoesNotSendShipmentChangedMessage_WhenLoadingOrderTest()
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
                 mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
                     .Setup(s => s.LoadAsync(It.IsAny<long>()))
-                    .ReturnsAsync(ShippingPanelLoadedShipment);
-
-                var shipmentTypeFactory = mock.Mock<IShipmentTypeFactory>();
-                
-                shipmentTypeFactory.Setup(x => x.Get(It.IsAny<ShipmentEntity>()))
-                    .Returns(new OtherShipmentType());
-                shipmentTypeFactory.Setup(x => x.Get(It.IsAny<ShipmentTypeCode>()))
-                    .Returns(mock.Create<ShipmentType>());
+                    .ReturnsAsync(shippingPanelLoadedShipment);
 
                 ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
                 await testObject.LoadOrder(orderEntity.OrderID);
@@ -158,6 +119,8 @@ namespace ShipWorks.Tests.Shipping
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
+                mock.WithShipmentTypeFromFactory(type => type.SetupGet(x => x.RatingFields).CallBase());
+
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
                 
                 testObject.Origin.CountryCode = "XX";
@@ -174,10 +137,10 @@ namespace ShipWorks.Tests.Shipping
         {
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.Mock<IMessenger>().Setup(x => x.Send(It.IsAny<ShipmentChangedMessage>())).Verifiable();
+                mock.WithShipmentTypeFromFactory(type => type.SetupGet(x => x.RatingFields).CallBase());
 
                 ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
-                
+
                 testObject.Destination.CountryCode = "XX";
                 testObject.Destination.Street = "XX";
                 testObject.Destination.StateProvCode = "XX";
@@ -203,14 +166,11 @@ namespace ShipWorks.Tests.Shipping
         [Fact]
         public async void Load_ShowsMessage_WhenMultipleShipmentsAreLoaded()
         {
+            shippingPanelLoadedShipment.Result = ShippingPanelLoadedShipmentResult.Multiple;
+
             using (var mock = AutoMockExtensions.GetLooseThatReturnsMocks())
             {
-                mock.Mock<ILoader<ShippingPanelLoadedShipment>>()
-                    .Setup(x => x.LoadAsync(It.IsAny<long>()))
-                    .ReturnsAsync(new ShippingPanelLoadedShipment { Result = ShippingPanelLoadedShipmentResult.Multiple });
-
-                ShippingPanelViewModel testObject = mock.Create<ShippingPanelViewModel>();
-                await testObject.LoadOrder(3);
+                ShippingPanelViewModel testObject = await GetViewModelWithLoadedShipment(mock);
 
                 Assert.Equal(ShippingPanelLoadedShipmentResult.Multiple, testObject.LoadResult);
             }
