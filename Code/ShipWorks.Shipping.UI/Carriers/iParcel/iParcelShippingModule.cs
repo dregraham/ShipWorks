@@ -10,6 +10,7 @@ namespace ShipWorks.Shipping.Carriers.iParcel
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<iParcelShipmentType>()
+                .AsSelf()
                 .Keyed<ShipmentType>(ShipmentTypeCode.iParcel);
 
             builder.RegisterType<iParcelShipmentServicesBuilder>()

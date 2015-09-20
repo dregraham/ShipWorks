@@ -120,6 +120,7 @@
   <ItemGroup>
     <Compile Include="AutoMockExtensions.cs" />
     <Compile Include="Carriers\FedEx\FedExShipmentServicesBuilderTest.cs" />
+    <Compile Include="Carriers\iParcel\iParcelShipmentServicesBuilderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipmentViewModelTest.cs" />
     <Compile Include="ShippingPanelShipmentLoaderTest.cs" />
